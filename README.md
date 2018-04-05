@@ -30,7 +30,7 @@ Start date is 4/4/18, end date is 4/16/18.
 
 Before building app, here is the planned state shape:
 
-```JSON
+```
 {
   entities: {
     channels: {
