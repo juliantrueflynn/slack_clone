@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import configureStore from './store/store';
+import Root from './Root';
 
 // Just for testing, remove!
 import * as SessionAPIUtil from './util/session_api_util';
 import { signup, login, logout } from './actions/session_actions';
-
-const Root = <div><h1>Working!</h1></div>;
 
 document.addEventListener('DOMContentLoaded', () => {
   const rootEl = document.getElementById('root');
@@ -20,5 +19,5 @@ document.addEventListener('DOMContentLoaded', () => {
   window.getState = store.getState;
   window.dispatch = store.dispatch;
 
-  ReactDOM.render(Root, rootEl);
+  ReactDOM.render(<Root store={ store } />, rootEl);
 });
