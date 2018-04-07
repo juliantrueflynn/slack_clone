@@ -1,7 +1,12 @@
 import React from 'react';
+import NavBarContainer from './NavBarContainer';
+import MainPage from './MainPage';
 
 const App = () => (
-  <div><h1>Slack Clone</h1></div>
+  <div>
+    <NavBarContainer />
+    <MainPage />
+  </div>
 );
 
 export default App;
