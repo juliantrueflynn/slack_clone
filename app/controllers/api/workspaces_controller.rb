@@ -1,6 +1,8 @@
 class Api::WorkspacesController < ApplicationController
   def index
-    @workspaces = Workspace.all
+    if logged_in?
+      @workspaces = Workspace.for_current_user(current_user)
+    end
   end
 
   def create
@@ -17,6 +19,9 @@ class Api::WorkspacesController < ApplicationController
   end
 
   def destroy
+    @workspace = Workspace.find(params[:id])
+    @workspace.destroy
+    render json: @workspace
   end
 
   private
