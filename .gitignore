@@ -19,3 +19,4 @@ bundle.js.map
 /yarn-error.log
 
 .byebug_history
+.vscode
