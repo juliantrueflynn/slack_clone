@@ -6,7 +6,7 @@ class Api::SessionsController < ApplicationController
     )
 
     if @user.save
-      login(@user)
+      signin(@user)
       render json: @user
     else
       render json: ['invalid credentials'], status: 401
