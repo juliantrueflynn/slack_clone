@@ -8,6 +8,7 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 6 }, allow_nil: true
 
   has_many :channels, foreign_key: :owner_id
+  has_many :workspace_subs, dependent: :destroy
 
   def self.find_by_email_and_password(email, password)
     user = User.find_by(email: email)
