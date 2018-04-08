@@ -9,6 +9,7 @@ class User < ApplicationRecord
 
   has_many :channels, foreign_key: :owner_id
   has_many :workspace_subs, dependent: :destroy
+  has_many :channel_subs, dependent: :destroy
 
   def self.find_by_email_and_password(email, password)
     user = User.find_by(email: email)
@@ -19,6 +20,11 @@ class User < ApplicationRecord
   def is_workspace_sub?(workspace)
     workspaces_subbed = workspace_subs.where(workspace_subs: { workspace_id: workspace.id })
     workspaces_subbed.length > 0
+  end
+
+  def is_channel_sub?(channel)
+    channels_subbed = channel_subs.where(channel_subs: { channel_id: channel.id })
+    channels_subbed.length > 0
   end
 
   def password=(password)
