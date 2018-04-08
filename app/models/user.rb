@@ -16,6 +16,11 @@ class User < ApplicationRecord
     user.is_password?(password) ? user : nil
   end
 
+  def is_workspace_sub?(workspace)
+    workspaces_subbed = workspace_subs.where(workspace_subs: { workspace_id: workspace.id })
+    workspaces_subbed.length > 0
+  end
+
   def password=(password)
     @password = password
     self.password_digest = BCrypt::Password.create(password)
