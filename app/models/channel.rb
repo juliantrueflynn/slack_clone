@@ -4,6 +4,7 @@ class Channel < ApplicationRecord
   belongs_to :owner, foreign_key: :owner_id, class_name: 'User'
   belongs_to :workspace
   has_many :subs, class_name: 'ChannelSub'
+  has_many :members, class_name: 'User', foreign_key: :user_id, through: :subs, source: :user
 
   def is_user_subbed?(user)
     users_subbed = subs.where(channel_subs: { user_id: user.id })
