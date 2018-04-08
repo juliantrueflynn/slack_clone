@@ -12,7 +12,6 @@
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
-    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "webpack": "^4.5.0"
   },
@@ -39,6 +38,7 @@
   },
   "homepage": "https://github.com/juliantrueflynn/slack_clone#readme",
   "devDependencies": {
-    "webpack-cli": "^2.0.14"
+    "webpack-cli": "^2.0.14",
+    "redux-logger": "^3.0.6"
   }
 }
