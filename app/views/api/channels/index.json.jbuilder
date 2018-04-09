@@ -1,4 +1,4 @@
-json.array! @channels do |channel|
+@channels.each do |channel|
   json.set! channel.id do
     json.title channel.title
     json.topic channel.topic
