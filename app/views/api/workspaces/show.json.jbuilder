@@ -1,1 +1,1 @@
-json.(@workspace, :title, :slug, :owner_id)
+json.(@workspace, :id, :title, :slug, :owner_id)
