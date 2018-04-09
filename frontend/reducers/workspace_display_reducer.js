@@ -5,7 +5,7 @@ const workspaceDisplayReducer = (state = null, action) => {
 
   switch (action.type) {
     case RECEIVE_WORKSPACE :
-      return action.workspace.id;
+      return action.workspace.workspace.id;
     default :
       return state;
   }
