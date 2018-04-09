@@ -7,6 +7,8 @@ class Workspace < ApplicationRecord
     class_name: 'WorkspaceSub',
     dependent: :destroy
 
+  has_many :channels
+
   def self.for_current_user(current_user)
     # TODO: refactor to workspaces user created or invited to
     self.find_by(owner_id: current_user)
