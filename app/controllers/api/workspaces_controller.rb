@@ -10,7 +10,7 @@ class Api::WorkspacesController < ApplicationController
     if @workspace.save
       render json: @workspace
     else
-      render json: @workspace.errors.full_messages
+      render json: @workspace.errors.full_messages, status: 422
     end
   end
 
@@ -19,9 +19,13 @@ class Api::WorkspacesController < ApplicationController
   end
 
   def destroy
-    @workspace = Workspace.find(params[:id])
-    @workspace.destroy
-    render json: @workspace
+    @workspace = Workspace.find_by(id: params[:id]) # use 'find_by', 'find' causes error if not found
+    if @workspace
+      @workspace.destroy
+      render json: @workspace
+    else
+      render json: ['does not exist'], status: 404
+    end
   end
 
   private

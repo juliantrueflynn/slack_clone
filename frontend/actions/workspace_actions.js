@@ -27,18 +27,28 @@ export const removeWorkspace = workspace => ({
 
 export const fetchWorkspaces = () => dispatch => (
   WorkspaceAPIUtil.fetchAll().then(
-    workspaces => dispatch(receiveWorkspaces(workspaces))
+    workspaces => dispatch(receiveWorkspaces(workspaces)),
+    errors => dispatch(receiveWorkspaceErrors(errors.responseJSON))
   )
 );
 
 export const fetchWorkspace = workspaceId => dispatch => (
   WorkspaceAPIUtil.fetch(workspaceId).then(
-    workspace => dispatch(receiveWorkspace(workspace))
+    workspace => dispatch(receiveWorkspace(workspace)),
+    errors => dispatch(receiveWorkspaceErrors(errors.responseJSON))
+  )
+);
+
+export const createWorkspace = workspace => dispatch => (
+  WorkspaceAPIUtil.create(workspace).then(
+    newWorkspace => dispatch(receiveWorkspace(workspace)),
+    errors => dispatch(receiveWorkspaceErrors(errors.responseJSON))
   )
 );
 
 export const destroyWorkspace = workspaceId => dispatch => (
   WorkspaceAPIUtil.destroy(workspaceId).then(
-    delWorkspace => dispatch(removeWorkspace(delWorkspace))
+    delWorkspace => dispatch(removeWorkspace(delWorkspace)),
+    errors => dispatch(receiveWorkspaceErrors(errors.responseJSON))
   )
 );
