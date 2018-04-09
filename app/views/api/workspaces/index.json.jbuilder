@@ -1,4 +1,4 @@
-json.array! @workspaces do |workspace|
+@workspaces.each do |workspace|
   json.set! workspace.id do
     json.title workspace.title
     json.slug workspace.slug
