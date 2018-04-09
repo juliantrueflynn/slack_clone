@@ -7,6 +7,7 @@ import Root from './Root';
 import * as SessionAPIUtil from './util/session_api_util';
 import { signup, signin, logout } from './actions/session_actions';
 import * as WorkspaceActions from './actions/workspace_actions';
+import * as ChannelActions from './actions/channel_actions';
 
 document.addEventListener('DOMContentLoaded', () => {
   const rootEl = document.getElementById('root');
@@ -28,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.getState = store.getState;
   window.dispatch = store.dispatch;
   window.WorkspaceActions = WorkspaceActions;
+  window.ChannelActions = ChannelActions;
 
   ReactDOM.render(<Root store={ store } />, rootEl);
 });
