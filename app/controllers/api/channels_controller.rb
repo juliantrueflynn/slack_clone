@@ -13,14 +13,19 @@ class Api::ChannelsController < ApplicationController
     if @channel.save
       render json: @channel
     else
-      render json: @channel.errors.full_messages
+      render json: @channel.errors.full_messages, status: 422
     end
   end
 
   def destroy
-    @channel = Channel.find(params[:id])
-    @channel.destroy
-    render json: @channel
+    @channel = Channel.find_by(id: params[:id])
+
+    if @channel
+      @channel.destroy
+      render json: @channel
+    else
+      render json: ['does not exist'], status: 404
+    end
   end
 
   private
