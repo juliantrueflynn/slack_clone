@@ -1,8 +1,5 @@
 import merge from 'lodash/merge';
-import {
-  RECEIVE_WORKSPACES,
-  RECEIVE_WORKSPACE
-} from '../actions/workspace_actions';
+import { RECEIVE_WORKSPACES } from '../actions/workspace_actions';
 
 const workspaceReducer = (state = {}, action) => {
   Object.freeze(state);
