@@ -9,6 +9,7 @@ class User < ApplicationRecord
 
   has_many :channels, foreign_key: :owner_id
   has_many :workspace_subs, dependent: :destroy
+  has_many :workspaces, through: :workspace_subs, source: :workspace
   has_many :channel_subs, dependent: :destroy
   has_many :messages, foreign_key: :author_id
 

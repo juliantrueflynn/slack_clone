@@ -6,6 +6,7 @@ import Root from './Root';
 // Just for testing, remove!
 import * as SessionAPIUtil from './util/session_api_util';
 import { signup, signin, logout } from './actions/session_actions';
+import * as WorkspaceActions from './actions/workspace_actions';
 
 document.addEventListener('DOMContentLoaded', () => {
   const rootEl = document.getElementById('root');
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.logout = logout;
   window.getState = store.getState;
   window.dispatch = store.dispatch;
+  window.WorkspaceActions = WorkspaceActions;
 
   ReactDOM.render(<Root store={ store } />, rootEl);
 });

@@ -1,12 +1,12 @@
 class Api::WorkspacesController < ApplicationController
   def index
-    if logged_in?
-      @workspaces = Workspace.for_current_user(current_user)
-    end
+    @workspaces = current_user.workspaces if logged_in?
   end
 
   def create
     @workspace = Workspace.new(workspace_params)
+    @workspace.owner_id = current_user.id if logged_in?
+
     if @workspace.save
       render json: @workspace
     else
