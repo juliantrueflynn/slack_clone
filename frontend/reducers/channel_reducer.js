@@ -15,7 +15,9 @@ const channelReducer = (state = {}, action) => {
       nextState = { [channel.id]: channel };
       return Object.assign({}, state, nextState);
     case RECEIVE_WORKSPACE :
-      nextState = action.workspace.channels;
+      const { channels } = action.workspace;
+      nextState = {};
+      channels.forEach(item => { nextState[item.id] = item; });
       return Object.assign({}, state, nextState);
     default :
       return state;
