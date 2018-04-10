@@ -1,10 +1,3 @@
-export const fetchAll = () => (
-  $.ajax({
-    url: `api/channels`,
-    method: 'GET'
-  })
-);
-
 export const fetch = channelId => (
   $.ajax({
     url: `api/channels/${channelId}`,

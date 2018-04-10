@@ -1,4 +1,4 @@
-import { RECEIVE_CHANNELS, RECEIVE_CHANNEL } from '../actions/channel_actions';
+import { RECEIVE_CHANNEL } from '../actions/channel_actions';
 import { RECEIVE_WORKSPACE } from '../actions/workspace_actions';
 
 const channelReducer = (state = {}, action) => {
@@ -6,8 +6,6 @@ const channelReducer = (state = {}, action) => {
 
   let nextState;
   switch (action.type) {
-    case RECEIVE_CHANNELS :
-      return Object.assign({}, state, action.channels);
     case RECEIVE_CHANNEL :
       const { channel, messages, members } = action.channel;
       channel.messageIds = messages.map(msg => msg.id);
