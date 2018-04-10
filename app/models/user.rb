@@ -25,7 +25,7 @@ class User < ApplicationRecord
   end
 
   def is_channel_sub?(channel)
-    channels_subbed = channel_subs.where(channel_subs: { channel_id: channel.id })
+    channels_subbed = channel_subs.where(channel_subs: { channel_id: channel })
     channels_subbed.length > 0
   end
 
