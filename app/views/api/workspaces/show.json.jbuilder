@@ -5,7 +5,6 @@ end
 json.channels do
   json.array! @workspace.channels do |channel|
     json.extract! channel, :id, :title
-    json.workspaceId channel.workspace_id
     json.isSubbed current_user.is_channel_sub?(channel)
   end
 end
