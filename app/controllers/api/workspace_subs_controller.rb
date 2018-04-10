@@ -5,14 +5,19 @@ class Api::WorkspaceSubsController < ApplicationController
     if @workspace_sub.save
       render json: @workspace_sub
     else
-      render json: @workspace_sub.errors.full_messages
+      render json: @workspace_sub.errors.full_messages, status: 422
     end
   end
 
   def destroy
-    @workspace_sub = WorkspaceSub.find(params[:id])
-    @workspace_sub.destroy
-    render json: @workspace_sub
+    @workspace_sub = WorkspaceSub.find_by(params[:id])
+    
+    if @workspace_sub
+      @workspace_sub.destroy
+      render json: @workspace_sub
+    else
+      render json: ['not found'], status: 404
+    end
   end
 
   private
