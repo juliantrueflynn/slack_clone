@@ -9,10 +9,10 @@ const channelReducer = (state = {}, action) => {
     case RECEIVE_CHANNELS :
       return Object.assign({}, state, action.channels);
     case RECEIVE_CHANNEL :
-      let channel = action.channel.channel;
-      channel.messageIds = action.channel.messages.map(msg => msg.id);
-      channel.memberIds = action.channel.members.map(member => member.id);
-      nextState = { [action.channel.channel.id]: channel };
+      const { channel, messages, members } = action.channel;
+      channel.messageIds = messages.map(msg => msg.id);
+      channel.memberIds = members.map(member => member.id);
+      nextState = { [channel.id]: channel };
       return Object.assign({}, state, nextState);
     case RECEIVE_WORKSPACE :
       nextState = action.workspace.channels;
