@@ -2,6 +2,7 @@ json.set! :channel do
   json.extract! @channel, :id, :title, :topic
   json.ownerId @channel.owner_id
   json.workspaceId @channel.workspace_id
+  json.isSubbed current_user.is_channel_sub?(@channel)
 end
 
 json.set! :members do
