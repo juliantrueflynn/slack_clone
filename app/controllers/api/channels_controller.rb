@@ -1,8 +1,4 @@
 class Api::ChannelsController < ApplicationController
-  def index
-    @channels = Channel.subbed_by_user_in_workspace(current_user.id, params[:workspace_id])
-  end
-
   def show
     @channel = Channel.find(params[:id])
   end
