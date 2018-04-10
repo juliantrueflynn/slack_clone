@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import configureStore from './store/store';
-import Root from './Root';
+import Root from './root';
 
 // Just for testing, remove!
 import * as SessionAPIUtil from './util/session_api_util';
