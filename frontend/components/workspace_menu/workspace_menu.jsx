@@ -1,6 +1,7 @@
 import React from 'react';
 import WorkspaceMenuItem from './workspace_menu_item';
-import { Link } from 'react-router-dom';
+import { withRouter, Route, Link } from 'react-router-dom';
+import WorkspacePageContainer from '../workspace_page/workspace_page_container';
 
 class WorkspaceMenu extends React.Component {
   constructor(props) {
@@ -12,9 +13,12 @@ class WorkspaceMenu extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     const { workspaces } = this.props;
     const workspaceList = workspaces.map(workspace => (
-      <WorkspaceMenuItem workspace={ workspace } key={ workspace.id } />
+      <WorkspaceMenuItem
+        workspace={ workspace }
+        key={ workspace.id } />
     ));
 
     return (
@@ -23,6 +27,7 @@ class WorkspaceMenu extends React.Component {
         <ul>
           { workspaceList }
         </ul>
+        <Route path="/:workspaceSlug" component={ WorkspacePageContainer } />
       </div>
     );
   }

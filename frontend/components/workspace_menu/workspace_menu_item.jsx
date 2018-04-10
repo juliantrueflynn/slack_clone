@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter, Link } from 'react-router-dom';
 
 class WorkspaceMenuItem extends React.Component {
   constructor(props) {
@@ -9,10 +10,12 @@ class WorkspaceMenuItem extends React.Component {
     const { workspace } = this.props;
     return (
       <li>
-        <div>
-          <span>{ workspace.title }</span>
-        </div>
-        /{ workspace.slug } 
+        <Link to={ `/${workspace.id}` }>
+          <div>
+            <span>{ workspace.title }</span>
+          </div>
+          /{ workspace.slug }
+        </Link>
       </li>
     );
   }
