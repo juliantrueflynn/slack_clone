@@ -13,12 +13,9 @@ class WorkspaceMenu extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const { workspaces } = this.props;
     const workspaceList = workspaces.map(workspace => (
-      <WorkspaceMenuItem
-        workspace={ workspace }
-        key={ workspace.id } />
+      <WorkspaceMenuItem workspace={ workspace } key={ workspace.id } />
     ));
 
     return (
