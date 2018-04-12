@@ -1,9 +1,9 @@
 import "regenerator-runtime/runtime";
 import { createStore, applyMiddleware } from 'redux';
-import createSagaMiddleware from 'redux-saga';
 import thunk from 'redux-thunk';
 import rootReducer from '../reducers/root_reducer';
-import { initRootSaga } from '../sagas/root_saga';
+import createSagaMiddleware from 'redux-saga';
+import { rootSaga } from '../sagas/root_saga';
 
 const sagaMiddleware = createSagaMiddleware();
 const middlewares = [sagaMiddleware, thunk];
@@ -20,6 +20,8 @@ const configureStore = (preloadedState = {}) => {
     preloadedState,
     applyMiddleware(...middlewares)
   );
+
+  rootSaga(sagaMiddleware);
 
   return store;
 };
