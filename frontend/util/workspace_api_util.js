@@ -8,9 +8,14 @@ export const fetchWorkspaces = () => (
 );
 
 export const fetchWorkspace = workspaceId => (
-  $.ajax({
-    url: `api/workspaces/${workspaceId}`,
-    method: 'GET'
+  fetch(`api/workspaces/${workspaceId}`).then(response =>
+    response.json().then(json => ({ json, response }))
+  ).then(({ json, response }) => {
+    if (!response.ok) {
+      throw json;
+    }
+
+    return json;
   })
 );
 
