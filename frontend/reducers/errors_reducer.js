@@ -1,8 +1,10 @@
-import sessionErrorsReducer from './session_errors_reducer';
 import { combineReducers } from 'redux';
+import session from './session_errors_reducer';
+import workspace from './workspace_errors_reducer';
 
 const errorsReducer = combineReducers({
-  session: sessionErrorsReducer,
+  session,
+  workspace,
 });
 
 export default errorsReducer;
