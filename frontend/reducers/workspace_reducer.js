@@ -15,7 +15,9 @@ const workspaceReducer = (state = {}, action) => {
       nextState = action.workspaces;
       return Object.assign({}, state, nextState);
     case CREATE_WORKSPACE_SUCCESS :
-      nextState = { [action.workspace.id]: action.workspace };
+      nextState = {
+        [action.workspace.id]: action.workspace
+      };
       return Object.assign({}, state, nextState);
     case RECEIVE_WORKSPACE :
       const { workspace, channels } = action.workspace;

@@ -1,3 +1,5 @@
+import { camelizeKeys } from 'humps';
+
 export const fetchWorkspaces = () => (
   $.ajax({
     url: 'api/workspaces',
@@ -20,15 +22,21 @@ export const createWorkspace = workspace => (
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(workspace)
-  })
-  .then(response => response.json())
-  .then(newWorkspace => newWorkspace)
-  .catch(error => {
-    throw error;
+  }).then(response =>
+    response.json().then(json => ({ json, response }))
+  ).then(({ json, response }) => {
+    if (!response.ok) {
+      throw json;
+    }
+
+    const { id, title, slug, ownerId } = camelizeKeys(json);
+    return { id, title, slug, ownerId };
+  }).catch(errors => {
+    throw errors || ['Unknown workspace error!'];
   })
 );
 
-export const destroyWorkspace = workspaceId => (
+export const destroyworkspace = workspaceId => (
   $.ajax({
     url: `api/workspaces/${workspaceId}`,
     method: 'DELETE'
