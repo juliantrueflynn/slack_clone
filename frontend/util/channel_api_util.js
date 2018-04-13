@@ -1,19 +1,49 @@
-export const fetch = channelId => (
-  $.ajax({
-    url: `api/channels/${channelId}`,
-    method: 'GET'
+import { camelizeKeys } from 'humps';
+
+export const fetchChannel = channelId => (
+  fetch(`api/channels/${channelId}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include'
+  }).then(response =>
+    response.json().then(json => ({ json, response }))
+  ).then(({ json, response }) => {
+    if (!response.ok) {
+      throw json;
+    }
+
+    return camelizeKeys(json);
+  }).catch(error => {
+    throw error.message || ['Unknown channel error!'];
   })
 );
 
-export const create = channel => (
-  $.ajax({
-    url: 'api/channels',
+export const createChannel = channel => (
+  fetch('api/channels', {
     method: 'POST',
-    data: { channel }
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(channel)
+  }).then(response =>
+    response.json().then(json => ({ json, response }))
+  ).then(({ json, response }) => {
+    if (!response.ok) {
+      throw json;
+    }
+
+    const { id, title } = camelizeKeys(json);
+    return { id, title };
+  }).catch(error => {
+    throw error || ['Unknown channel error!'];
   })
 );
 
-export const destroy = channelId => (
+export const destroyChannel = channelId => (
   $.ajax({
     url: `api/channels/${channelId}`,
     method: 'DELETE'
