@@ -9,7 +9,7 @@ export const RECEIVE_CHANNEL = 'RECEIVE_CHANNEL';
 export const FAILURE_CHANNEL = 'FAILURE_CHANNEL';
 export const CREATE_CHANNEL = 'CREATE_CHANNEL';
 export const CREATE_CHANNEL_SUCCESS = 'CREATE_CHANNEL_SUCCESS';
-export const CREATE_CHANNEL_ERRORS = 'CREATE_CHANNEL_ERR ORS';
+export const CREATE_CHANNEL_ERRORS = 'CREATE_CHANNEL_ERRORS';
 export const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 
 export const requestChannels = (channels = {}) => ({
