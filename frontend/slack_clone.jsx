@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import configureStore from './store/store';
 import Root from './root';
+import rootSaga from './sagas/root_saga';
 
 // Just for testing, remove!
 import * as WorkspaceActions from './actions/workspace_actions';
@@ -20,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     store = configureStore();
   }
+
+  store.runSaga(rootSaga);
 
   // Just for testing, remove!
   window.getState = store.getState;
