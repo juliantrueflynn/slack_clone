@@ -3,7 +3,7 @@ import {
   RECEIVE_WORKSPACES,
   RECEIVE_WORKSPACE,
   CREATE_WORKSPACE,
-  CREATE_WORKSPACE_SUCCESS
+  CREATE_WORKSPACE_SUCCESS,
 } from '../actions/workspace_actions';
 
 const workspaceReducer = (state = {}, action) => {

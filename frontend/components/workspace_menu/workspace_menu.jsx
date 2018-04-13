@@ -1,15 +1,14 @@
 import React from 'react';
 import WorkspaceMenuItem from './workspace_menu_item';
 import { withRouter, Route, Link } from 'react-router-dom';
-import WorkspacePageContainer from '../workspace_page/workspace_page_container';
 
 class WorkspaceMenu extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  componentDidMount() {
-    this.props.fetchWorkspaces();
+  componentWillMount() {
+    this.props.requestWorkspaces();
   }
 
   render() {
@@ -24,7 +23,6 @@ class WorkspaceMenu extends React.Component {
         <ul>
           { workspaceList }
         </ul>
-        <Route path="/:workspaceSlug" component={ WorkspacePageContainer } />
       </div>
     );
   }

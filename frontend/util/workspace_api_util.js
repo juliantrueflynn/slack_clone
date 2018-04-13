@@ -1,21 +1,44 @@
 import { camelizeKeys } from 'humps';
 
 export const fetchWorkspaces = () => (
-  $.ajax({
-    url: 'api/workspaces',
-    method: 'GET'
-  })
-);
-
-export const fetchWorkspace = workspaceId => (
-  fetch(`api/workspaces/${workspaceId}`).then(response =>
+  fetch('api/workspaces', {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include'
+  }).then(response =>
     response.json().then(json => ({ json, response }))
   ).then(({ json, response }) => {
     if (!response.ok) {
       throw json;
     }
 
-    return json;
+    return camelizeKeys(json);
+  }).catch(error => {
+    throw error.message || ['Unknown workspaces error!'];
+  })
+);
+
+export const fetchWorkspace = workspaceId => (
+  fetch(`api/workspaces/${workspaceId}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include'
+  }).then(response =>
+    response.json().then(json => ({ json, response }))
+  ).then(({ json, response }) => {
+    if (!response.ok) {
+      throw json;
+    }
+
+    return camelizeKeys(json);
+  }).catch(error => {
+    throw error.message || ['Unknown workspaces error!'];
   })
 );
 

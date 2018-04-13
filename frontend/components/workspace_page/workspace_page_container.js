@@ -1,16 +1,19 @@
 import { connect } from 'react-redux';
 import WorkspacePage from './workspace_page';
-import { fetchWorkspace } from '../../actions/workspace_actions';
+import { loadWorkspacePage } from '../../actions/workspace_actions';
 
-const mapStateToProps = (dispatch, ownProps) => ({
+const mapStateToProps = (state, ownProps) => ({
   workspaceSlug: ownProps.match.workspaceSlug,
+  workspaces: state.entities.workspaces
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchWorkspace: workspaceId => dispatch(fetchWorkspace(workspaceId)),
+  loadWorkspacePage: (workspaceId, workspaces) => dispatch(
+    loadWorkspacePage(workspaceId, workspaces)
+  ),
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(WorkspacePage);

@@ -1,11 +1,15 @@
-import { RECEIVE_WORKSPACE_ERRORS } from '../actions/workspace_actions';
+import {
+  FAILURE_WORKSPACES,
+  FAILURE_WORKSPACE
+} from '../actions/workspace_actions';
 
 const workspaceErrorsReducer = (state = [], action) => {
   Object.freeze(state);
 
   let nextState;
   switch (action.type) {
-    case RECEIVE_WORKSPACE_ERRORS :
+    case FAILURE_WORKSPACES :
+    case FAILURE_WORKSPACE :
       return action.errors;
     default :
       return state;

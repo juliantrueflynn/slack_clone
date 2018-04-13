@@ -1,21 +1,51 @@
 import * as WorkspaceAPIUtil from '../util/workspace_api_util';
 
+export const REQUEST_WORKSPACES = 'REQUEST_WORKSPACES';
 export const RECEIVE_WORKSPACES = 'RECEIVE_WORKSPACES';
+export const FAILURE_WORKSPACES = 'FAILURE_WORKSPACES';
+export const LOAD_WORKSPACE_PAGE = 'LOAD_WORKSPACE_PAGE';
+export const REQUEST_WORKSPACE = 'REQUEST_WORKSPACE';
 export const RECEIVE_WORKSPACE = 'RECEIVE_WORKSPACE';
-export const RECEIVE_WORKSPACE_ERRORS = 'RECEIVE_WORKSPACE_ERRORS';
+export const FAILURE_WORKSPACE = 'FAILURE_WORKSPACE';
 export const CREATE_WORKSPACE = 'CREATE_WORKSPACE';
 export const CREATE_WORKSPACE_SUCCESS = 'CREATE_WORKSPACE_SUCCESS';
-export const CREATE_WORKSPACE_ERRORS = 'CREATE_WORKSPACE_ERRORS';
+export const CREATE_WORKSPACE_ERRORS = 'CREATE_WORKSPACE_ERR ORS';
 export const REMOVE_WORKSPACE = 'REMOVE_WORKSPACE';
+
+export const requestWorkspaces = (workspaces = {}) => ({
+  type: REQUEST_WORKSPACES,
+  workspaces
+});
 
 export const receiveWorkspaces = workspaces => ({
   type: RECEIVE_WORKSPACES,
   workspaces
 });
 
+export const failureWorkspaces = errors => ({
+  type: FAILURE_WORKSPACES,
+  errors
+});
+
+export const loadWorkspacePage = (workspaceId, workspaces) => ({
+  type: LOAD_WORKSPACE_PAGE,
+  workspaceId,
+  workspaces
+});
+
+export const requestWorkspace = workspaceId => ({
+  type: REQUEST_WORKSPACE,
+  workspaceId
+});
+
 export const receiveWorkspace = workspace => ({
   type: RECEIVE_WORKSPACE,
   workspace
+});
+
+export const failureWorkspace = errors => ({
+  type: FAILURE_WORKSPACE,
+  errors
 });
 
 export const createWorkspace = workspace => ({
@@ -28,40 +58,7 @@ export const createWorkspaceSuccess = workspace => ({
   workspace
 });
 
-export const receiveWorkspaceErrors = errors => ({
-  type: RECEIVE_WORKSPACE_ERRORS,
-  errors
-});
-
 export const removeWorkspace = workspace => ({
   type: REMOVE_WORKSPACE,
   workspace
 });
-
-export const fetchWorkspaces = () => dispatch => (
-  WorkspaceAPIUtil.fetchWorkspaces().then(
-    workspaces => dispatch(receiveWorkspaces(workspaces)),
-    errors => dispatch(receiveWorkspaceErrors(errors.responseJSON))
-  )
-);
-
-export const fetchWorkspace = workspaceId => dispatch => (
-  WorkspaceAPIUtil.fetchWorkspace(workspaceId).then(
-    workspace => dispatch(receiveWorkspace(workspace)),
-    errors => dispatch(receiveWorkspaceErrors(errors.responseJSON))
-  )
-);
-
-export const addNewWorkspace = workspace => dispatch => (
-  WorkspaceAPIUtil.createWorkspace(workspace).then(
-    newWorkspace => dispatch(createWorkspace(workspace)),
-    errors => dispatch(receiveWorkspaceErrors(errors.responseJSON))
-  )
-);
-
-export const destroyWorkspace = workspaceId => dispatch => (
-  WorkspaceAPIUtil.destroyWorkspace(workspaceId).then(
-    delWorkspace => dispatch(removeWorkspace(delWorkspace)),
-    errors => dispatch(receiveWorkspaceErrors(errors.responseJSON))
-  )
-);
