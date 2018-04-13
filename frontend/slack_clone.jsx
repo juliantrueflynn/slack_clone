@@ -9,6 +9,7 @@ import * as WorkspaceActions from './actions/workspace_actions';
 import * as ChannelActions from './actions/channel_actions';
 import * as WorkspaceSubActions from './actions/workspace_sub_actions';
 import * as WorkspaceAPIUtil from './util/workspace_api_util';
+import * as ChannelAPIUtil from './util/channel_api_util';
 
 document.addEventListener('DOMContentLoaded', () => {
   const rootEl = document.getElementById('root');
@@ -31,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.ChannelActions = ChannelActions;
   window.WorkspaceSubActions = WorkspaceSubActions;
   window.WorkspaceAPIUtil = WorkspaceAPIUtil;
+  window.ChannelAPIUtil = ChannelAPIUtil;
 
   ReactDOM.render(<Root store={ store } />, rootEl);
 });
