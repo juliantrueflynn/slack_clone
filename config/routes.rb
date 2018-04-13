@@ -8,5 +8,6 @@ Rails.application.routes.draw do
     resource :session, only: [:create, :destroy, :show]
     resources :channels, only: [:show, :create, :destroy]
     resources :workspace_subs, only: [:create, :destroy]
+    resources :channel_subs, only: [:create, :destroy]
   end
 end
