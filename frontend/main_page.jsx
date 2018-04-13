@@ -14,8 +14,8 @@ const MainPage = () => (
     <h2>Main Page</h2>
     <Switch>
       <Route exact path="/:workspaceSlug" component={ WorkspacePageContainer } />
-      <AuthRoute path="/signin" component={ ChannelSessionFormContainer } />
-      <AuthRoute path="/signup" component={ ChannelSessionFormContainer } />
+      <AuthRoute exact path="/signin" component={ ChannelSessionFormContainer } />
+      <AuthRoute exact path="/signup" component={ ChannelSessionFormContainer } />
     </Switch>
   </div>
 );

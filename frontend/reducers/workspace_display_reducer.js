@@ -6,6 +6,7 @@ const workspaceDisplayReducer = (state = null, action) => {
 
   switch (action.type) {
     case LOAD_WORKSPACE_PAGE :
+      console.log(action)
       return action.workspaceId;
     case RECEIVE_CHANNEL :
       return action.channel.channel.workspaceId;

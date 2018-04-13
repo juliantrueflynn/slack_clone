@@ -10,7 +10,7 @@ class WorkspaceMenuItem extends React.Component {
     const { workspace } = this.props;
     return (
       <li>
-        <Link to={ `/${workspace.slug}` }>
+        <Link to={ `/${workspace.id}` }>
           <div>
             <span>{ workspace.id } - { workspace.title }</span>
           </div>

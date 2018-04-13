@@ -5,7 +5,8 @@ import * as actions from '../actions/workspace_actions';
 import * as subActions from '../actions/workspace_sub_actions';
 import * as workspaceAPI from '../util/workspace_api_util';
 import * as subAPI from '../util/workspace_sub_api_util';
-import { getWorkspaces } from '../reducers/selectors';
+import { getWorkspaces, getWorkspacePageId } from '../reducers/selectors';
+import { receiveChannels } from '../actions/channel_actions';
 
 function* addNewWorkspace(action) {
   try {
@@ -41,6 +42,14 @@ function* watchCreateWorkspace() {
   );
 }
 
+function* watchWorkspaces() {
+  while(true) {
+    const { workspaces } = yield take(actions.REQUEST_WORKSPACES);
+
+    yield fork(loadWorkspaces, workspaces);
+  }
+}
+
 function* loadWorkspaces(workspaces) {
   const prevState = yield select(getWorkspaces);
   if (!prevState.length || Object.keys(workspaces).length !== prevState) {
@@ -63,6 +72,7 @@ function* fetchWorkspace(workspaceId) {
   try {
     const workspace = yield call(workspaceAPI.fetchWorkspace, workspaceId);
     yield put(actions.receiveWorkspace(workspace));
+    // yield put(receiveChannels(workspace.channels));
   } catch (errors) {
     yield put(actions.failureWorkspace(errors));
   }
@@ -70,11 +80,8 @@ function* fetchWorkspace(workspaceId) {
 
 function* watchWorkspacePage() {
   while(true) {
-    const {
-      workspaceId, workspaces
-    } = yield take(actions.LOAD_WORKSPACE_PAGE);
+    const { workspaceId } = yield take(actions.LOAD_WORKSPACE_PAGE);
 
-    yield fork(loadWorkspaces, workspaces);
     yield fork(fetchWorkspace, workspaceId);
   }
 }
@@ -82,6 +89,7 @@ function* watchWorkspacePage() {
 export function* workspaceSaga() {
   yield all([
     fork(watchCreateWorkspace),
+    fork(watchWorkspaces),
     fork(watchWorkspacePage)
   ]);
 }
