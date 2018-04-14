@@ -28,10 +28,9 @@ export const failureChannels = errors => ({
   errors
 });
 
-export const loadChannelPage = (channelId, channels) => ({
+export const loadChannelPage = channelId => ({
   type: LOAD_CHANNEL_PAGE,
-  channelId,
-  channels
+  channelId
 });
 
 export const requestChannel = channelId => ({

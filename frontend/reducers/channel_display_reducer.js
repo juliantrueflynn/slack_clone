@@ -1,12 +1,12 @@
 import merge from 'lodash/merge';
-import { RECEIVE_CHANNEL } from '../actions/channel_actions';
+import { LOAD_CHANNEL_PAGE } from '../actions/channel_actions';
 
 const channelDisplayReducer = (state = null, action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case RECEIVE_CHANNEL :
-      return action.channel.channel.id;
+    case LOAD_CHANNEL_PAGE :
+      return action.channelId;
     default :
       return state;
   }

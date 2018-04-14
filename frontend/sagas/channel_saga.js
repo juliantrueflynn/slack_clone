@@ -52,6 +52,7 @@ function* fetchChannels(prevState) {
 function* fetchChannel() {
   try {
     const channelId = yield select(getChannelPageId);
+    console.log(channelId);
     const channel = yield call(utilApi.fetchChannel, channelId);
     yield put(actions.receiveChannel(channel));
   } catch (error) {
