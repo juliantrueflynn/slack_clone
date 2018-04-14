@@ -3,7 +3,9 @@ import ChannelPage from './channel_page';
 import { loadChannelPage } from '../../actions/channel_actions';
 
 const mapDispatchToProps = dispatch => ({
-  loadChannelPage: channelId => dispatch(loadChannelPage(channelId))
+  loadChannelPage: (channelId, workspaceId) => dispatch(
+    loadChannelPage(channelId, workspaceId)
+  )
 });
 
 export default connect(

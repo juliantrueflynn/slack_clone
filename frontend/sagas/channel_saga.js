@@ -6,8 +6,9 @@ import * as utilApi from '../util/channel_api_util';
 import * as subActions from '../actions/channel_sub_actions';
 import * as subUtilApi from '../util/channel_sub_api_util';
 import {
-  getChannelPageId, getChannels, getWorkspacePageId
+  getChannelPageId, getChannels, getWorkspacePageId, getWorkspaces
 } from '../reducers/selectors';
+import { loadWorkspacePage } from '../actions/workspace_actions';
 
 function* addNewChannel({ channel }) {
   try {
@@ -33,23 +34,6 @@ function* subCreatorToNewChannel(action) {
   }
 }
 
-function* fetchChannels() {
-  try {
-    const workspaceId = yield select(getWorkspacePageId);
-    const channels = yield call(utilApi.fetchChannels, workspaceId);
-    yield put(actions.receiveChannels(channels));
-  } catch (error) {
-    yield put(actions.failureChannels(error));
-  }
-}
-
-function* loadChannels(channels) {
-  const prevState = yield select(getChannels);
-  if (!prevState.length || Object.keys(channels).length !== prevState) {
-    yield call(fetchChannels);
-  }
-}
-
 function* fetchChannel() {
   try {
     const channelId = yield select(getChannelPageId);
@@ -58,6 +42,12 @@ function* fetchChannel() {
   } catch (error) {
     yield put(actions.failureChannel(error));
   }
+}
+
+function* loadChannelEntities({ workspaceId }) {
+  const workspaces = yield select(getWorkspaces);
+  if (getWorkspaces.length) yield put(loadWorkspacePage(workspaceId));
+  yield call(fetchChannel);
 }
 
 function* fetchDeleteChannel({ channelId }) {
@@ -74,12 +64,8 @@ function* watchCreateChannel() {
   yield takeEvery(actions.CREATE_CHANNEL_SUCCESS, subCreatorToNewChannel);
 }
 
-function* watchFetchChannels() {
-  yield takeLatest(actions.REQUEST_CHANNELS, loadChannels);
-}
-
 function* watchChannelPage() {
-  yield takeLatest(actions.LOAD_CHANNEL_PAGE, fetchChannel);
+  yield takeLatest(actions.LOAD_CHANNEL_PAGE, loadChannelEntities);
 }
 
 function* watchDeleteChannel() {
@@ -89,7 +75,6 @@ function* watchDeleteChannel() {
 export function* channelSaga() {
   yield all([
     fork(watchCreateChannel),
-    fork(watchFetchChannels),
     fork(watchChannelPage),
     fork(watchDeleteChannel),
   ]);
