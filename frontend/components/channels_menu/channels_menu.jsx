@@ -11,9 +11,12 @@ class ChannelsMenu extends React.Component {
   }
 
   render() {
-    const { channels } = this.props;
+    const { workspaceId, channels } = this.props;
     const menuItems = channels.map(channel =>
-      <ChannelsMenuItem key={ channel.id } channel={ channel } />
+      <ChannelsMenuItem
+        key={ channel.id }
+        workspaceId={ workspaceId }
+        channel={ channel } />
     );
 
     return (

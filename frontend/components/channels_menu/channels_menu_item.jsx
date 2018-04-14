@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 class ChannelsMenuItem extends React.Component {
   constructor(props) {
@@ -6,10 +7,13 @@ class ChannelsMenuItem extends React.Component {
   }
 
   render() {
-    const { channel } = this.props;
-    
+    const { channel, workspaceId } = this.props;
     return (
-      <li>ID: #{ channel.id } - Title: { channel.title }</li>
+      <li>
+        <Link to={ `/${workspaceId}/${channel.id}` }>
+          ID: #{ channel.id } - Title: { channel.title }
+        </Link>
+      </li>
     );
   }
 }
