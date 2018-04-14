@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ChannelSessionForm from './channel_session_form';
-import { signup, signin } from '../../actions/session_actions';
+import { signUp, signIn } from '../../actions/session_actions';
 
 const mapStateToProps = (state, { location }) => ({
   loggedIn: Boolean(state.session.currentUser),
@@ -11,9 +11,9 @@ const mapStateToProps = (state, { location }) => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   processForm: user => {
     if (ownProps.location.pathname === '/signin') {
-      return dispatch(signin(user));
+      return dispatch(signIn(user));
     } else {
-      return dispatch(signup(user));
+      return dispatch(signUp(user));
     }
   }
 });

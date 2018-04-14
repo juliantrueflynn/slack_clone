@@ -7,7 +7,7 @@ class Api::SessionsController < ApplicationController
 
     if @user.save
       signin(@user)
-      render json: @user
+      render 'api/users/show'
     else
       render json: ['invalid credentials'], status: 401
     end
@@ -17,8 +17,9 @@ class Api::SessionsController < ApplicationController
     @user = current_user
     if @user
       logout
+      render 'api/users/show'
     else
-      render json: ["error logging out"], status: 404
+      render json: ['error logging out'], status: 404
     end   
   end
 end

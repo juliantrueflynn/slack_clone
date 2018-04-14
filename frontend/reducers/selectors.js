@@ -19,3 +19,7 @@ export const getChannels = state => (
 export const getChannelPageId = state => (
   state.ui.displayChannelId
 );
+
+export const getCurrentUser = state => (
+  state.session.currentUser
+);

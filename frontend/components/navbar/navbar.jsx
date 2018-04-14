@@ -5,11 +5,11 @@ class NavBar extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleLogout = this.handleLogout.bind(this);
+    this.handleSignOut = this.handleSignOut.bind(this);
   }
 
-  handleLogout() {
-    this.props.logout();
+  handleSignOut() {
+    this.props.requestSignOut();
   }
 
   render() {
@@ -22,7 +22,7 @@ class NavBar extends React.Component {
           <ul>
             { !loggedIn && <li><Link to="/signup">Sign up</Link></li> }
             { !loggedIn && <li><Link to="/signin">Sign in</Link></li> }
-            { loggedIn && <li><button onClick={ this.handleLogout }>Logout</button></li> }
+            { loggedIn && <li><button onClick={ this.handleSignOut }>Logout</button></li> }
           </ul>
         </nav>
       </header>
