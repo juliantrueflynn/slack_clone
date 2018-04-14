@@ -11,7 +11,7 @@ const configureStore = (preloadedState = {}) => {
   const store = createStore(
     rootReducer,
     preloadedState,
-    applyMiddleware(sagaMiddleware, thunk)
+    applyMiddleware(sagaMiddleware)
   );
 
   store.runSaga = sagaMiddleware.run;
