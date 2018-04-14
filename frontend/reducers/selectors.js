@@ -13,7 +13,7 @@ export const getWorkspacePageId = state => (
 );
 
 export const getChannels = state => (
-  values(state.entities.workspaces)
+  values(state.entities.channels)
 );
 
 export const getChannelPageId = state => (
