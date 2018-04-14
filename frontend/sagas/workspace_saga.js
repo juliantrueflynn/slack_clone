@@ -58,6 +58,15 @@ function* fetchWorkspace() {
   }
 }
 
+function* fetchDeleteWorkspace({ workspaceId }) {
+  try {
+    yield call(utilApi.deleteWorkspace, workspaceId);
+    yield put(actions.deleteWorkspaceSuccess(workspaceId));
+  } catch (error) {
+    yield put(actions.receiveWorkspaceErrors(error));
+  }
+}
+
 function* watchCreateWorkspace() {
   yield takeEvery(actions.CREATE_WORKSPACE, addNewWorkspace);
   yield takeEvery(actions.CREATE_WORKSPACE_SUCCESS, subCreatorToNewWorkspace);
@@ -71,10 +80,15 @@ function* watchWorkspacePage() {
   yield takeLatest(actions.LOAD_WORKSPACE_PAGE, fetchWorkspace);
 }
 
+function* watchDeleteWorkspace() {
+  yield takeLatest(actions.DELETE_WORKSPACE, fetchDeleteWorkspace);
+}
+
 export function* workspaceSaga() {
   yield all([
     fork(watchCreateWorkspace),
     fork(watchWorkspaces),
-    fork(watchWorkspacePage)
+    fork(watchWorkspacePage),
+    fork(watchDeleteWorkspace)
   ]);
 }

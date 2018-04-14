@@ -41,9 +41,18 @@ export const createChannel = channel => (
   })
 );
 
-export const destroyChannel = channelId => (
-  $.ajax({
-    url: `api/channels/${channelId}`,
-    method: 'DELETE'
+export const deleteChannel = channelId => (
+  fetch(`api/channels/${channelId}`, {
+    method: 'DELETE',
+    credentials: 'include'
+  }).then(response =>
+    response.json().then(json => ({ json, response }))
+  ).then(({ json, response }) => {
+    if (!response.ok) {
+      throw json;
+    }
+    return camelizeKeys(json);
+  }).catch(error => {
+    throw error || ['Unknown channel error!'];
   })
 );

@@ -59,12 +59,21 @@ function* fetchChannel() {
   }
 }
 
+function* fetchDeleteChannel({ channelId }) {
+  try {
+    yield call(utilApi.deleteChannel, channelId);
+    yield put(actions.deleteChannelSuccess(channelId));
+  } catch (error) {
+    yield put(actions.receiveChannelErrors(error));
+  }
+}
+
 function* watchCreateChannel() {
   yield takeEvery(actions.CREATE_CHANNEL, addNewChannel);
   yield takeEvery(actions.CREATE_CHANNEL_SUCCESS, subCreatorToNewChannel);
 }
 
-function* watchChannels() {
+function* watchFetchChannels() {
   yield takeLatest(actions.REQUEST_CHANNELS, loadChannels);
 }
 
@@ -72,10 +81,15 @@ function* watchChannelPage() {
   yield takeLatest(actions.LOAD_CHANNEL_PAGE, fetchChannel);
 }
 
+function* watchDeleteChannel() {
+  yield takeLatest(actions.DELETE_CHANNEL, fetchDeleteChannel);
+}
+
 export function* channelSaga() {
   yield all([
     fork(watchCreateChannel),
-    fork(watchChannels),
-    fork(watchChannelPage)
+    fork(watchFetchChannels),
+    fork(watchChannelPage),
+    fork(watchDeleteChannel),
   ]);
 }

@@ -64,9 +64,18 @@ export const createWorkspace = workspace => (
   })
 );
 
-export const destroyworkspace = workspaceId => (
-  $.ajax({
-    url: `api/workspaces/${workspaceId}`,
-    method: 'DELETE'
+export const deleteWorkspace = workspaceId => (
+  fetch(`api/workspaces/${workspaceId}`, {
+    method: 'DELETE',
+    credentials: 'include'
+  }).then(response =>
+    response.json().then(json => ({ json, response }))
+  ).then(({ json, response }) => {
+    if (!response.ok) {
+      throw json;
+    }
+    return camelizeKeys(json);
+  }).catch(error => {
+    throw error || ['Unknown workspace error!'];
   })
 );

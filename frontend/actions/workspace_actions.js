@@ -10,7 +10,8 @@ export const FAILURE_WORKSPACE = 'FAILURE_WORKSPACE';
 export const CREATE_WORKSPACE = 'CREATE_WORKSPACE';
 export const CREATE_WORKSPACE_SUCCESS = 'CREATE_WORKSPACE_SUCCESS';
 export const CREATE_WORKSPACE_ERRORS = 'CREATE_WORKSPACE_ERR ORS';
-export const REMOVE_WORKSPACE = 'REMOVE_WORKSPACE';
+export const DELETE_WORKSPACE = 'DELETE_WORKSPACE';
+export const DELETE_WORKSPACE_SUCCESS = 'DELETE_WORKSPACE_SUCCESS';
 
 export const requestWorkspaces = (workspaces = {}) => ({
   type: REQUEST_WORKSPACES,
@@ -57,7 +58,12 @@ export const createWorkspaceSuccess = workspace => ({
   workspace
 });
 
-export const removeWorkspace = workspace => ({
-  type: REMOVE_WORKSPACE,
-  workspace
+export const deleteWorkspace = workspaceId => ({
+  type: DELETE_WORKSPACE,
+  workspaceId
+});
+
+export const deleteWorkspaceSuccess = workspaceId => ({
+  type: DELETE_WORKSPACE_SUCCESS,
+  workspaceId
 });

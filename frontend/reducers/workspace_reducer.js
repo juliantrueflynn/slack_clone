@@ -2,8 +2,8 @@ import merge from 'lodash/merge';
 import {
   RECEIVE_WORKSPACES,
   RECEIVE_WORKSPACE,
-  CREATE_WORKSPACE,
   CREATE_WORKSPACE_SUCCESS,
+  DELETE_WORKSPACE_SUCCESS
 } from '../actions/workspace_actions';
 
 const workspaceReducer = (state = {}, action) => {
@@ -21,6 +21,10 @@ const workspaceReducer = (state = {}, action) => {
     case CREATE_WORKSPACE_SUCCESS :
       nextState = { [action.workspace.id]: action.workspace };
       return Object.assign({}, state, nextState);
+    case DELETE_WORKSPACE_SUCCESS :
+      nextState = Object.assign({}, state);
+      delete nextState[action.workspaceId];
+      return nextState;
     default :
       return state;
   }
