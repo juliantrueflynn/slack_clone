@@ -7,15 +7,18 @@ class WorkspaceMenu extends React.Component {
     super(props);
   }
 
-  componentWillMount() {
-    this.props.requestWorkspaces();
+  componentDidMount() {
+    const { loggedIn, requestWorkspaces } = this.props;
+    if (loggedIn) requestWorkspaces();
   }
 
   render() {
-    const { workspaces } = this.props;
+    const { workspaces, loggedIn } = this.props;
     const workspaceList = workspaces.map(workspace => (
       <WorkspaceMenuItem workspace={ workspace } key={ workspace.id } />
     ));
+
+    if ( !loggedIn ) return null;
 
     return (
       <div>

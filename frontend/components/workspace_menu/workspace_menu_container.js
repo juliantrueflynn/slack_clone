@@ -7,6 +7,7 @@ import {
 import { withRouter } from 'react-router-dom';
 
 const mapStateToProps = state => ({
+  loggedIn: Boolean(state.session.currentUser),
   workspaces: getWorkspaces(state),
 });
 
