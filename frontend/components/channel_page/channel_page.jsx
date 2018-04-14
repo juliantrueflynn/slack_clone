@@ -25,7 +25,6 @@ class ChannelPage extends React.Component {
     return (
       <div>
         <h1>Channel Page Working! #{ channelSlug }</h1>
-        <ChannelsMenuContainer />
       </div>
     );
   }

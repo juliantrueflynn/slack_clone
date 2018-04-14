@@ -6,10 +6,6 @@ class ChannelsMenu extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
-    this.props.requestChannels();
-  }
-
   render() {
     const { workspaceId, channels } = this.props;
     const menuItems = channels.map(channel =>

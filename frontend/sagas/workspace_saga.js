@@ -48,7 +48,7 @@ function* fetchWorkspaces(prevState) {
   }
 }
 
-function* fetchWorkspace() {
+export function* fetchWorkspace() {
   try {
     const stateWorkspaceId = yield select(getWorkspacePageId);
     const workspace = yield call(utilApi.fetchWorkspace, stateWorkspaceId);

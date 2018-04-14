@@ -6,9 +6,10 @@ import * as utilApi from '../util/channel_api_util';
 import * as subActions from '../actions/channel_sub_actions';
 import * as subUtilApi from '../util/channel_sub_api_util';
 import {
-  getChannelPageId, getChannels, getWorkspacePageId, getWorkspaces
+  getChannelPageId, getChannels, getWorkspacePageId
 } from '../reducers/selectors';
 import { loadWorkspacePage } from '../actions/workspace_actions';
+import { fetchWorkspace } from './workspace_saga';
 
 function* addNewChannel({ channel }) {
   try {
@@ -44,9 +45,12 @@ function* fetchChannel() {
   }
 }
 
-function* loadChannelEntities({ workspaceId }) {
-  const workspaces = yield select(getWorkspaces);
-  if (getWorkspaces.length) yield put(loadWorkspacePage(workspaceId));
+function* loadChannelEntities() {
+  const channels = yield select(getChannels);
+  if (channels.length < 1) {
+    yield put(actions.requestChannels());
+    yield call(fetchWorkspace);
+  }
   yield call(fetchChannel);
 }
 
