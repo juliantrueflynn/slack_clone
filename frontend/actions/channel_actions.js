@@ -58,6 +58,11 @@ export const createChannelSuccess = channel => ({
   channel
 });
 
+export const createChannelErrors = errors => ({
+  type: CREATE_CHANNEL_ERRORS,
+  errors
+});
+
 export const removeChannel = channel => ({
   type: REMOVE_CHANNEL,
   channel

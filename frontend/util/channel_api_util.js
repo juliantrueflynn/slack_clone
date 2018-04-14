@@ -35,9 +35,7 @@ export const createChannel = channel => (
     if (!response.ok) {
       throw json;
     }
-
-    const { id, title } = camelizeKeys(json);
-    return { id, title };
+    return camelizeKeys(json);
   }).catch(error => {
     throw error || ['Unknown channel error!'];
   })

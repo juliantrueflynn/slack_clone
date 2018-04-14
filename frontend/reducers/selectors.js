@@ -11,3 +11,11 @@ export const getWorkspacesWithKeys = state => (
 export const getWorkspacePageId = state => (
   state.ui.displayWorkspaceId
 );
+
+export const getChannels = state => (
+  values(state.entities.workspaces)
+);
+
+export const getChannelPageId = state => (
+  state.ui.displayChannelId
+);

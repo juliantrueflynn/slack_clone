@@ -16,7 +16,7 @@ const channelReducer = (state = {}, action) => {
       const { channels } = action.workspace;
       nextState = {};
       channels.forEach(item => { nextState[item.id] = item; });
-      return Object.assign({}, state, nextState);
+      return nextState;
     default :
       return state;
   }
