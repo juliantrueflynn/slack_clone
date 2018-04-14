@@ -5,7 +5,9 @@ import * as actions from '../actions/channel_actions';
 import * as utilApi from '../util/channel_api_util';
 import * as subActions from '../actions/channel_sub_actions';
 import * as subUtilApi from '../util/channel_sub_api_util';
-import { getChannelPageId, getChannels } from '../reducers/selectors';
+import {
+  getChannelPageId, getChannels, getWorkspacePageId
+} from '../reducers/selectors';
 
 function* addNewChannel({ channel }) {
   try {
@@ -31,28 +33,26 @@ function* subCreatorToNewChannel(action) {
   }
 }
 
-function* loadChannels(channels) {
-  const prevState = yield select(getChannels);
-  if (!prevState.length || Object.keys(channels).length !== prevState) {
-    yield call(fetchChannels, channels);
+function* fetchChannels() {
+  try {
+    const workspaceId = yield select(getWorkspacePageId);
+    const channels = yield call(utilApi.fetchChannels, workspaceId);
+    yield put(actions.receiveChannels(channels));
+  } catch (error) {
+    yield put(actions.failureChannels(error));
   }
 }
 
-function* fetchChannels(prevState) {
-  try {
-    const channels = yield call(utilApi.fetchChannels);
-    if (Object.keys(channels).length !== Object.keys(prevState).length) {
-      yield put(actions.receiveChannels(channels));
-    }
-  } catch (error) {
-    yield put(actions.failureChannels(error));
+function* loadChannels(channels) {
+  const prevState = yield select(getChannels);
+  if (!prevState.length || Object.keys(channels).length !== prevState) {
+    yield call(fetchChannels);
   }
 }
 
 function* fetchChannel() {
   try {
     const channelId = yield select(getChannelPageId);
-    console.log(channelId);
     const channel = yield call(utilApi.fetchChannel, channelId);
     yield put(actions.receiveChannel(channel));
   } catch (error) {

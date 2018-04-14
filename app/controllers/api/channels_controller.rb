@@ -1,4 +1,8 @@
 class Api::ChannelsController < ApplicationController
+  def index
+    @channels = Channel.where(workspace_id: params[:workspace_id])
+  end
+
   def show
     @channel = Channel.find_by(id: params[:id])
   end

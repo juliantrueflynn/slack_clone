@@ -1,5 +1,26 @@
 import { camelizeKeys } from 'humps';
 
+export const fetchChannels = workspaceId => (
+  fetch(`api/workspaces/${workspaceId}/channels`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include'
+  }).then(response =>
+    response.json().then(json => ({ json, response }))
+  ).then(({ json, response }) => {
+    if (!response.ok) {
+      throw json;
+    }
+
+    return camelizeKeys(json);
+  }).catch(error => {
+    throw error.message || ['Unknown channel error!'];
+  })
+);
+
 export const fetchChannel = channelId => (
   fetch(`api/channels/${channelId}`, {
     method: 'GET',
