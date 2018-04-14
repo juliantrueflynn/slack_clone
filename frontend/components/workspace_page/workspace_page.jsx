@@ -5,15 +5,16 @@ class WorkspacePage extends React.Component {
     super(props);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { workspaceSlug } = this.props.match.params;
-    this.props.loadWorkspacePage(workspaceSlug, this.props.workspaces);
+    this.props.loadWorkspacePage(workspaceSlug);
   }
 
   componentWillReceiveProps(nextProps) {
     const { workspaceSlug } = this.props.match.params;
-    if(workspaceSlug !== nextProps.match.params.workspaceSlug) {
-      this.props.loadWorkspacePage(workspaceSlug, this.props.workspaces);
+    const nextWorkspaceSlug = nextProps.match.params.workspaceSlug;
+    if(workspaceSlug !== nextWorkspaceSlug) {
+      this.props.loadWorkspacePage(nextWorkspaceSlug);
     }
   }
 

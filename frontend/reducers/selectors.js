@@ -8,6 +8,6 @@ export const getWorkspacesWithKeys = state => (
   state.entities.workspaces
 );
 
-export const getPageWorkspaceId = state => (
+export const getWorkspacePageId = state => (
   state.ui.displayWorkspaceId
 );

@@ -8,9 +8,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  loadWorkspacePage: (workspaceId, workspaces) => dispatch(
-    loadWorkspacePage(workspaceId, workspaces)
-  ),
+  loadWorkspacePage: workspaceId => dispatch(loadWorkspacePage(workspaceId)),
 });
 
 export default connect(

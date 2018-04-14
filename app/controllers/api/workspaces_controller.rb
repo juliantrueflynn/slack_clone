@@ -15,7 +15,7 @@ class Api::WorkspacesController < ApplicationController
   end
 
   def show
-    @workspace = Workspace.find_by(params[:slug])
+    @workspace = Workspace.find_by(id: params[:id])
   end
 
   def destroy

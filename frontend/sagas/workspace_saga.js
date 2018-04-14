@@ -3,15 +3,13 @@ import {
 } from 'redux-saga/effects';
 import * as actions from '../actions/workspace_actions';
 import * as subActions from '../actions/workspace_sub_actions';
-import * as workspaceAPI from '../util/workspace_api_util';
-import * as subAPI from '../util/workspace_sub_api_util';
-import { getWorkspaces } from '../reducers/selectors';
+import * as utilApi from '../util/workspace_api_util';
+import { createWorkspaceSub } from '../util/workspace_sub_api_util';
+import { getWorkspaces, getWorkspacePageId } from '../reducers/selectors';
 
-function* addNewWorkspace(action) {
+function* addNewWorkspace({ workspace }) {
   try {
-    const newWorkspace = yield call(
-      workspaceAPI.createWorkspace, action.workspace
-    );
+    const newWorkspace = yield call(utilApi.createWorkspace, workspace);
     yield put(actions.createWorkspaceSuccess(newWorkspace));
   } catch (error) {
     yield put(actions.receiveWorkspaceErrors(error));
@@ -22,23 +20,14 @@ function* subCreatorToNewWorkspace(action) {
   try {
     const { id, ownerId } = action.workspace;
     const workspaceSub = { user_id: ownerId, workspace_id: id };
-    const newWorkspaceSub = yield call(
-      subAPI.createWorkspaceSub, workspaceSub
-    );
+    const newSub = yield call(createWorkspaceSub, workspaceSub);
 
-    yield put(subActions.createWorkspaceSubSuccess(newWorkspaceSub));
+    yield put(subActions.createWorkspaceSubSuccess(newSub));
     action.channels = [];
     yield put(actions.receiveWorkspace(action));
-  } catch (errors) {
-    yield put(subActions.createWorkspaceSubErrors(errors));
+  } catch (error) {
+    yield put(subActions.createWorkspaceSubErrors(error));
   }
-}
-
-function* watchCreateWorkspace() {
-  yield takeEvery(actions.CREATE_WORKSPACE, addNewWorkspace);
-  yield takeEvery(
-    actions.CREATE_WORKSPACE_SUCCESS, subCreatorToNewWorkspace
-  );
 }
 
 function* loadWorkspaces(workspaces) {
@@ -50,38 +39,42 @@ function* loadWorkspaces(workspaces) {
 
 function* fetchWorkspaces(prevState) {
   try {
-    const workspaces = yield call(workspaceAPI.fetchWorkspaces);
+    const workspaces = yield call(utilApi.fetchWorkspaces);
     if (Object.keys(workspaces).length !== Object.keys(prevState).length) {
       yield put(actions.receiveWorkspaces(workspaces));
     }
   } catch (error) {
-    yield put(actions.failureWorkspaces([error.message]));
+    yield put(actions.failureWorkspaces(error));
   }
 }
 
-function* fetchWorkspace(workspaceId) {
+function* fetchWorkspace() {
   try {
-    const workspace = yield call(workspaceAPI.fetchWorkspace, workspaceId);
+    const stateWorkspaceId = yield select(getWorkspacePageId);
+    const workspace = yield call(utilApi.fetchWorkspace, stateWorkspaceId);
     yield put(actions.receiveWorkspace(workspace));
-  } catch (errors) {
-    yield put(actions.failureWorkspace(errors));
+  } catch (error) {
+    yield put(actions.failureWorkspace(error));
   }
+}
+
+function* watchCreateWorkspace() {
+  yield takeEvery(actions.CREATE_WORKSPACE, addNewWorkspace);
+  yield takeEvery(actions.CREATE_WORKSPACE_SUCCESS, subCreatorToNewWorkspace);
+}
+
+function* watchWorkspaces() {
+  yield takeLatest(actions.REQUEST_WORKSPACES, loadWorkspaces);
 }
 
 function* watchWorkspacePage() {
-  while(true) {
-    const {
-      workspaceId, workspaces
-    } = yield take(actions.LOAD_WORKSPACE_PAGE);
-
-    yield fork(loadWorkspaces, workspaces);
-    yield fork(fetchWorkspace, workspaceId);
-  }
+  yield takeLatest(actions.LOAD_WORKSPACE_PAGE, fetchWorkspace);
 }
 
 export function* workspaceSaga() {
   yield all([
     fork(watchCreateWorkspace),
+    fork(watchWorkspaces),
     fork(watchWorkspacePage)
   ]);
 }

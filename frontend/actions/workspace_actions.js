@@ -27,10 +27,9 @@ export const failureWorkspaces = errors => ({
   errors
 });
 
-export const loadWorkspacePage = (workspaceId, workspaces) => ({
+export const loadWorkspacePage = workspaceId => ({
   type: LOAD_WORKSPACE_PAGE,
-  workspaceId,
-  workspaces
+  workspaceId
 });
 
 export const requestWorkspace = workspaceId => ({
