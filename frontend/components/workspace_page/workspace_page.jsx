@@ -10,17 +10,14 @@ class WorkspacePage extends React.Component {
   }
 
   componentDidMount() {
-    const { location: { pathname }, match: { url, params } } = this.props;
-    if (isUrlForParentRoute(pathname, url)) {
-      this.props.loadWorkspacePage(params.workspaceSlug);
-    }
+    this.props.loadWorkspacePage(this.props.match.params.workspaceSlug);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { location: { pathname }, match: { url, params } } = this.props;
-    const nextWorkspaceSlug = nextProps.match.params.workspaceSlug;
-    if (isUrlForParentRoute(pathname, url) && url !== nextProps.match.url) {
-      this.props.loadWorkspacePage(nextWorkspaceSlug);
+    const slug = this.props.match.params.workspaceSlug;
+    const nextSlug = nextProps.match.params.workspaceSlug;
+    if (slug !== nextSlug && isUrlForParentRoute(this.props)) {
+      this.props.loadWorkspacePage(nextSlug);
     }
   }
 

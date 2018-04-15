@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
 import WorkspacePage from './workspace_page';
-import { loadWorkspacePage } from '../../actions/workspace_actions';
+import {
+  loadWorkspacePage, switchWorkspace
+} from '../../actions/workspace_actions';
 
 const mapStateToProps = (state, ownProps) => ({
   workspaceSlug: ownProps.match.workspaceSlug,
@@ -9,6 +11,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   loadWorkspacePage: workspaceId => dispatch(loadWorkspacePage(workspaceId)),
+  switchWorkspace: () => dispatch(switchWorkspace()),
 });
 
 export default connect(
