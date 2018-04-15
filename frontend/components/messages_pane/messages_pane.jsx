@@ -1,13 +1,10 @@
 import React from 'react';
 import MessageEntries from './message_entries';
+import MessageFormContainer from '../message_form/message_form_container';
 
 class MessagesPane extends React.Component {
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    this.props.loadMessages();
   }
 
   render() {
@@ -16,6 +13,7 @@ class MessagesPane extends React.Component {
     return (
       <div>
         <MessageEntries messages={ messages } />
+        <MessageFormContainer />
       </div>
     );
   }
