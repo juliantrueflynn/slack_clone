@@ -10,7 +10,7 @@ const messageReducer = (state = {}, action) => {
       action.channel.messages.map(message => {
         nextState[message.id] = message;
       });
-      return Object.assign({}, state, nextState);
+      return nextState;
     default :
       return state;
   }
