@@ -23,3 +23,7 @@ export const getChannelPageId = state => (
 export const getCurrentUser = state => (
   state.session.currentUser
 );
+
+export const getMessages = state => (
+  values(state.entities.messages)
+);

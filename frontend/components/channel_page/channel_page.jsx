@@ -1,5 +1,6 @@
 import React from 'react';
 import ChannelsMenuContainer from '../channels_menu/channels_menu_container';
+import MessagesPaneContainer from '../messages_pane/messages_pane_container';
 
 class ChannelPage extends React.Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class ChannelPage extends React.Component {
     return (
       <div>
         <h1>Channel Page Working! #{ channelSlug }</h1>
+        <MessagesPaneContainer />
       </div>
     );
   }
