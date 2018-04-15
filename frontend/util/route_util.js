@@ -30,7 +30,3 @@ export const AuthRoute = withRouter(connect(mapStateToProps, null)(Auth));
 export const ProtectedRoute = withRouter(
   connect(mapStateToProps, null)(Protected)
 );
-
-export const isUrlForParentRoute = ({ location, match }) => (
-  location.pathname === match.url
-);

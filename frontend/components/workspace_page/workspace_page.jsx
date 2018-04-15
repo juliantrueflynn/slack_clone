@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, matchPath } from 'react-router';
 import ChannelPageContainer from '../channel_page/channel_page_container';
 import ChannelsMenuContainer from '../channels_menu/channels_menu_container';
-import { isUrlForParentRoute } from '../../util/route_util';
 
 class WorkspacePage extends React.Component {
   constructor(props) {
@@ -16,7 +15,7 @@ class WorkspacePage extends React.Component {
   componentWillReceiveProps(nextProps) {
     const slug = this.props.match.params.workspaceSlug;
     const nextSlug = nextProps.match.params.workspaceSlug;
-    if (slug !== nextSlug && isUrlForParentRoute(this.props)) {
+    if (slug !== nextSlug) {
       this.props.loadWorkspacePage(nextSlug);
     }
   }
