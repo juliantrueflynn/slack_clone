@@ -32,6 +32,7 @@ class MessageForm extends React.Component {
 
   handleMessageSuccess(message) {
     this.props.createMessage(message);
+    this.setState({ body: "" });
   }
 
   render() {
