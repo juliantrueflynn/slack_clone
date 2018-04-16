@@ -4,7 +4,7 @@ import {
 import * as actions from '../actions/message_actions';
 import * as utilApi from '../util/message_api_util';
 import {
-  getChannelPageId, getMessages, getWorkspacePageId
+  getChannelPageId, getMessages, getWorkspacePageId, getCurrentUser
 } from '../reducers/selectors';
 import { loadWorkspacePage } from '../actions/workspace_actions';
 import { fetchWorkspace } from './workspace_saga';

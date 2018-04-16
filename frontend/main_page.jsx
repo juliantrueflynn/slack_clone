@@ -8,11 +8,14 @@ import WorkspaceMenuContainer
 import WorkspacePageContainer
   from './components/workspace_page/workspace_page_container';
 
+const HomePage = () => <div>Please sign in!</div>;
+
 const MainPage = () => (
   <div>
     <WorkspaceMenuContainer />
     <h2>Main Page</h2>
     <Switch>
+      <Route exact path="/" component={ HomePage } />
       <AuthRoute
         exact
         path="/signin"

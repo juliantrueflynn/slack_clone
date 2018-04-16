@@ -5,4 +5,8 @@ class Message < ApplicationRecord
   belongs_to :channel
   belongs_to :thread, class_name: 'Message', foreign_key: :parent_message_id, optional: true
   has_many :thread_entries, class_name: 'Message', foreign_key: :parent_message_id
+
+  after_create_commit do
+    MessageCreationEventBroadcastJob.perform_later(self)
+  end
 end
