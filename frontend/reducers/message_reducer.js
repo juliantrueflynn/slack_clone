@@ -1,4 +1,5 @@
 import { RECEIVE_CHANNEL } from '../actions/channel_actions';
+import { CREATE_MESSAGE_SUCCESS } from '../actions/message_actions';
 
 const messageReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -11,6 +12,10 @@ const messageReducer = (state = {}, action) => {
         nextState[message.id] = message;
       });
       return nextState;
+    case CREATE_MESSAGE_SUCCESS :
+      nextState = {};
+      nextState[action.message.id] = action.message;
+      return Object.assign({}, state, nextState);
     default :
       return state;
   }
