@@ -12,7 +12,7 @@ class MessageEntries extends React.Component {
     return (
       <div>
         {messages.map(message =>
-          <MessageEntry message={ message } key={ message.id } />
+          <MessageEntry message={ message } key={ message.id }  />
         )}
       </div>
     );
