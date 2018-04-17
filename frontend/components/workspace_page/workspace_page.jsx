@@ -1,7 +1,6 @@
 import React from 'react';
-import { Route, matchPath } from 'react-router';
+import { Route } from 'react-router';
 import ChannelPageContainer from '../channel_page/channel_page_container';
-import ChannelsMenuContainer from '../channels_menu/channels_menu_container';
 
 class WorkspacePage extends React.Component {
   constructor(props) {
@@ -25,9 +24,6 @@ class WorkspacePage extends React.Component {
     
     return (
       <div>
-        <aside>
-          <ChannelsMenuContainer />
-        </aside>
         You're on workspace ID #{ workspaceSlug }
         <Route
           workspaceSlug={ workspaceSlug }

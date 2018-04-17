@@ -15,7 +15,7 @@ class ChannelPage extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { channelSlug, workspaceSlug } = this.props.match.params;
     const nextChannelSlug = nextProps.match.params.channelSlug;
-    if(channelSlug !== nextChannelSlug) {
+    if (channelSlug !== nextChannelSlug) {
       this.props.loadChannelPage(nextChannelSlug, workspaceSlug);
     }
   }
@@ -26,6 +26,9 @@ class ChannelPage extends React.Component {
     return (
       <div>
         <h1>Channel Page Working! #{ channelSlug }</h1>
+        <aside>
+          <ChannelsMenuContainer />
+        </aside>
         <MessagesPaneContainer />
       </div>
     );
