@@ -3,12 +3,15 @@ import {
 } from 'redux-saga/effects';
 import * as actions from '../actions/channel_actions';
 import * as utilApi from '../util/channel_api_util';
-import * as subActions from '../actions/channel_sub_actions';
-import * as subUtilApi from '../util/channel_sub_api_util';
+import { createChannelSubSuccess } from '../actions/channel_sub_actions';
+import { createChannelSub } from '../util/channel_sub_api_util';
 import { getChannelPageId, getChannels } from '../reducers/selectors';
-import { loadWorkspacePage } from '../actions/workspace_actions';
 import { fetchWorkspace } from './workspace_saga';
 import { navigate } from '../actions/navigate_actions';
+
+function* fetchCreatorSub({ userId, channelId }) {
+  yield call(createChannelSub, { channelSub: { userId, channelId } });
+}
 
 function* addNewChannel({ channel }) {
   try {
@@ -21,16 +24,21 @@ function* addNewChannel({ channel }) {
 
 function* subCreatorToNewChannel(action) {
   try {
-    const { id, ownerId } = action.channel;
-    const channelSub = { user_id: ownerId, channel_id: id };
-    const newChannelSub = yield call(subUtilApi.createChannelSub, channelSub);
-
-    yield put(subActions.createChannelSubSuccess(newChannelSub));
-    action.members = [];
-    action.messages = [];
+    const newChannelSub = yield call(fetchCreatorSub, action);
+    yield put(createChannelSubSuccess(newChannelSub));
     yield put(navigate(`/${action.channel.workspaceId}/${action.channel.id}`));
   } catch (error) {
     yield put(actions.createChannelErrors(error));
+  }
+}
+
+function* addNewChannels({ channels }) {
+  for (let channel of channels) {
+    const newChannel = yield call(utilApi.createChannel, channel);
+    yield call(fetchCreatorSub, {
+      userId: newChannel.ownerId,
+      channelId: newChannel.id
+    });
   }
 }
 
@@ -67,6 +75,10 @@ function* watchCreateChannel() {
   yield takeEvery(actions.CREATE_CHANNEL_SUCCESS, subCreatorToNewChannel);
 }
 
+function* watchCreateChannels() {
+  yield takeEvery(actions.CREATE_CHANNELS, addNewChannels);
+}
+
 function* watchChannelPage() {
   yield takeLatest(actions.LOAD_CHANNEL_PAGE, loadChannelEntities);
 }
@@ -78,6 +90,7 @@ function* watchDeleteChannel() {
 export function* channelSaga() {
   yield all([
     fork(watchCreateChannel),
+    fork(watchCreateChannels),
     fork(watchChannelPage),
     fork(watchDeleteChannel),
   ]);
