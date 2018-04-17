@@ -10,14 +10,17 @@ import WorkspacePageContainer
 import WorkspaceFormContainer from
   './components/workspace_form/workspace_form_container';
 
-const HomePage = () => <div>Please sign in!</div>;
-
 const MainPage = () => (
   <div>
     <WorkspaceMenuContainer />
-    <h2>Main Page</h2>
     <Switch>
-      <Route exact path="/" component={ HomePage } />
+      <Route exact path="/" render={ () =>
+        <div>
+          <h1>Slack Clone with Rails & React</h1>
+          <p>More will go here later, stay-tuned!</p>
+          <Link to="/create-workspace">Create New Workspace</Link>
+        </div>
+      } />
       <AuthRoute
         path="/signin"
         component={ ChannelSessionFormContainer } />
