@@ -30,7 +30,6 @@ class WorkspacePage extends React.Component {
         </aside>
         You're on workspace ID #{ workspaceSlug }
         <Route
-          exact
           workspaceSlug={ workspaceSlug }
           path="/:workspaceSlug/:channelSlug"
           component={ ChannelPageContainer } />
