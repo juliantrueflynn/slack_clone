@@ -7,6 +7,8 @@ import WorkspaceMenuContainer
   from './components/workspace_menu/workspace_menu_container';
 import WorkspacePageContainer
   from './components/workspace_page/workspace_page_container';
+import WorkspaceFormContainer from
+  './components/workspace_form/workspace_form_container';
 
 const HomePage = () => <div>Please sign in!</div>;
 
@@ -17,13 +19,14 @@ const MainPage = () => (
     <Switch>
       <Route exact path="/" component={ HomePage } />
       <AuthRoute
-        exact
         path="/signin"
         component={ ChannelSessionFormContainer } />
       <AuthRoute
-        exact
         path="/signup"
         component={ ChannelSessionFormContainer } />
+      <Route
+        path="/create-workspace"
+        component={ WorkspaceFormContainer } />
       <Route
         path="/:workspaceSlug"
         component={ WorkspacePageContainer } />
