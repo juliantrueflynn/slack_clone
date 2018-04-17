@@ -5,11 +5,10 @@ import * as actions from '../actions/channel_actions';
 import * as utilApi from '../util/channel_api_util';
 import * as subActions from '../actions/channel_sub_actions';
 import * as subUtilApi from '../util/channel_sub_api_util';
-import {
-  getChannelPageId, getChannels, getWorkspacePageId
-} from '../reducers/selectors';
+import { getChannelPageId, getChannels } from '../reducers/selectors';
 import { loadWorkspacePage } from '../actions/workspace_actions';
 import { fetchWorkspace } from './workspace_saga';
+import { navigate } from '../actions/navigate_actions';
 
 function* addNewChannel({ channel }) {
   try {
@@ -29,7 +28,7 @@ function* subCreatorToNewChannel(action) {
     yield put(subActions.createChannelSubSuccess(newChannelSub));
     action.members = [];
     action.messages = [];
-    yield put(actions.receiveChannel(action));
+    yield put(navigate(`/${action.channel.workspaceId}/${action.channel.id}`));
   } catch (error) {
     yield put(actions.createChannelErrors(error));
   }
