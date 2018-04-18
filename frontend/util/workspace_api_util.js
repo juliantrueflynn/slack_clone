@@ -1,4 +1,4 @@
-import { camelizeKeys } from 'humps';
+import { decamelizeKeys, camelizeKeys } from 'humps';
 
 export const fetchWorkspaces = () => (
   fetch('api/workspaces', {
@@ -49,7 +49,7 @@ export const createWorkspace = workspace => (
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(workspace)
+    body: JSON.stringify(decamelizeKeys(workspace, { separator: '_' }))
   }).then(response =>
     response.json().then(json => ({ json, response }))
   ).then(({ json, response }) => {
