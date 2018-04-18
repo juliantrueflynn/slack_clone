@@ -8,8 +8,11 @@ import {
 import { createChannels } from '../actions/channel_actions';
 import * as api from '../util/workspace_api_util';
 import { createWorkspaceSub } from '../util/workspace_sub_api_util';
-import { getWorkspaces, getWorkspacePageId } from '../reducers/selectors';
+import {
+  getWorkspaces, getWorkspacePageId, getChannels
+} from '../reducers/selectors';
 import { addNewChannels } from './channel_saga';
+import { navigate } from '../actions/navigate_actions';
 
 function* addNewWorkspace({ workspace }) {
   try {
@@ -44,8 +47,8 @@ function* fetchWorkspaces(prevState) {
 
 export function* fetchWorkspace() {
   try {
-    const stateWorkspaceId = yield select(getWorkspacePageId);
-    const workspace = yield call(api.fetchWorkspace, stateWorkspaceId);
+    const workspaceId = yield select(getWorkspacePageId);
+    const workspace = yield call(api.fetchWorkspace, workspaceId);
     yield put(actions.receiveWorkspace(workspace));
   } catch (error) {
     yield put(actions.failureWorkspace(error));
@@ -61,16 +64,7 @@ function* fetchDeleteWorkspace({ workspaceId }) {
   }
 }
 
-function* fetchDefaultWorkspaceChannels({ workspace: { id, ownerId } }) {
-  // const defaultChannels = [{
-  //   title: '#general',
-  //   workspaceId: workspace.id,
-  //   ownerId: workspace.ownerId
-  // },{
-  //   title: '#random',
-  //   workspaceId: workspace.id,
-  //   ownerId: workspace.ownerId
-  // }];
+function* fetchDefaultChannels({ workspace: { id, ownerId } }) {
   let defaultChannels = [];
   const defaultChannelTitles = ['#general', '#random'];
   defaultChannelTitles.forEach(title => {
@@ -87,9 +81,19 @@ function* loadWorkspaces(workspaces) {
   }
 }
 
+function* loadWorkspace({ workspaceId }) {
+  yield call(fetchWorkspace, workspaceId);
+  const firstChannel = yield select(getChannels);
+  if (firstChannel.length) {
+    yield put(navigate(`/${workspaceId}/${firstChannel[0].id}`));
+  } else {
+    yield put(navigate(`/${workspaceId}/create-channel`));
+  }
+}
+
 function* watchCreateWorkspace() {
   yield takeEvery(actions.CREATE_WORKSPACE, addNewWorkspace);
-  yield takeEvery(actions.CREATE_WORKSPACE_SUCCESS, fetchDefaultWorkspaceChannels);
+  yield takeEvery(actions.CREATE_WORKSPACE_SUCCESS, fetchDefaultChannels);
 }
 
 function* watchWorkspaces() {
@@ -97,7 +101,7 @@ function* watchWorkspaces() {
 }
 
 function* watchWorkspacePage() {
-  yield takeLatest(actions.LOAD_WORKSPACE_PAGE, fetchWorkspace);
+  yield takeLatest(actions.LOAD_WORKSPACE_PAGE, loadWorkspace);
 }
 
 function* watchDeleteWorkspace() {

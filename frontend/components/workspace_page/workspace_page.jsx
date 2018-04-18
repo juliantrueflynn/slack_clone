@@ -1,6 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router';
-import ChannelPageContainer from '../channel_page/channel_page_container';
+import { Route, Redirect } from 'react-router-dom';
 
 class WorkspacePage extends React.Component {
   constructor(props) {
@@ -20,17 +19,7 @@ class WorkspacePage extends React.Component {
   }
 
   render() {
-    const { workspaceSlug } = this.props.match.params;
-    
-    return (
-      <div>
-        You're on workspace ID #{ workspaceSlug }
-        <Route
-          workspaceSlug={ workspaceSlug }
-          path="/:workspaceSlug/:channelSlug"
-          component={ ChannelPageContainer } />
-      </div>
-    );
+    return null;
   }
 }
 

@@ -9,6 +9,8 @@ import WorkspacePageContainer
   from './components/workspace_page/workspace_page_container';
 import WorkspaceFormContainer from
   './components/workspace_form/workspace_form_container';
+import ChannelPageContainer
+  from './components/channel_page/channel_page_container';
 
 const MainPage = () => (
   <div>
@@ -30,6 +32,9 @@ const MainPage = () => (
       <Route
         path="/create-workspace"
         component={ WorkspaceFormContainer } />
+      <Route
+        path="/:workspaceSlug/:channelSlug"
+        component={ ChannelPageContainer } />
       <Route
         path="/:workspaceSlug"
         component={ WorkspacePageContainer } />

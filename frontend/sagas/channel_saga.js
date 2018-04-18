@@ -5,7 +5,9 @@ import * as actions from '../actions/channel_actions';
 import * as utilApi from '../util/channel_api_util';
 import { createChannelSubSuccess } from '../actions/channel_sub_actions';
 import { createChannelSub } from '../util/channel_sub_api_util';
-import { getChannelPageId, getChannels } from '../reducers/selectors';
+import {
+  getChannelPageId, getChannels, getWorkspacePageId
+} from '../reducers/selectors';
 import { fetchWorkspace } from './workspace_saga';
 import { navigate } from '../actions/navigate_actions';
 
@@ -53,10 +55,11 @@ function* fetchChannel() {
 }
 
 function* loadChannelEntities() {
+  const workspaceId = yield select(getWorkspacePageId);
   const channels = yield select(getChannels);
   if (channels.length < 1) {
     yield put(actions.requestChannels());
-    yield call(fetchWorkspace);
+    yield call(fetchWorkspace, workspaceId);
   }
   yield call(fetchChannel);
 }
