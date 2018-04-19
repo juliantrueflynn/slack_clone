@@ -11,8 +11,8 @@ import {
 import { fetchWorkspace } from './workspace_saga';
 import { navigate } from '../actions/navigate_actions';
 
-function* fetchCreatorSub({ userId, channelId }) {
-  yield call(createChannelSub, { channelSub: { userId, channelId } });
+function* fetchCreatorSub(userId, channelId) {
+  yield call(createChannelSub, { userId, channelId });
 }
 
 function* addNewChannel({ channel }) {
@@ -24,11 +24,11 @@ function* addNewChannel({ channel }) {
   }
 }
 
-function* subCreatorToNewChannel(action) {
+function* subCreatorToNewChannel({ channel }) {
   try {
-    const newChannelSub = yield call(fetchCreatorSub, action);
-    yield put(createChannelSubSuccess(newChannelSub));
-    yield put(navigate(`/${action.channel.workspaceId}/${action.channel.id}`));
+    const newSub = yield call(fetchCreatorSub, channel.ownerId, channel.id);
+    yield put(createChannelSubSuccess(newSub));
+    yield put(navigate(`/${channel.workspaceId}/${channel.id}`));
   } catch (error) {
     yield put(actions.createChannelErrors(error));
   }
@@ -38,10 +38,7 @@ function* addNewChannels({ channels }) {
   let newChannels = [];
   for (let channel of channels) {
     const newChannel = yield call(utilApi.createChannel, channel);
-    yield call(fetchCreatorSub, {
-      userId: newChannel.ownerId,
-      channelId: newChannel.id
-    });
+    yield call(fetchCreatorSub, newChannel.ownerId, newChannel.id);
     newChannels.push(newChannel);
   }
   yield put(actions.createChannelsSuccess(newChannels));

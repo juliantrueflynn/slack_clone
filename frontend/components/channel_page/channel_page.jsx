@@ -1,6 +1,7 @@
 import React from 'react';
 import ChannelsMenuContainer from '../channels_menu/channels_menu_container';
 import MessagesPaneContainer from '../messages_pane/messages_pane_container';
+import ChannelFormContainer from '../channel_form/channel_form_container';
 
 class ChannelPage extends React.Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class ChannelPage extends React.Component {
           <ChannelsMenuContainer />
         </aside>
         <MessagesPaneContainer />
+        <ChannelFormContainer />
       </div>
     );
   }
