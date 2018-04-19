@@ -14,6 +14,7 @@ export const DELETE_CHANNEL = 'DELETE_CHANNEL';
 export const DELETE_CHANNEL_SUCCESS = 'DELETE_CHANNEL_SUCCESS';
 export const CREATE_CHANNELS = 'CREATE_CHANNELS';
 export const CREATE_CHANNELS_SUCCESS = 'CREATE_CHANNELS_SUCCESS';
+export const CREATE_CHANNELS_ERRORS = 'CREATE_CHANNELS_ERRORS';
 
 export const requestChannels = (channels = {}) => ({
   type: REQUEST_CHANNELS,
@@ -84,4 +85,9 @@ export const createChannels = channels => ({
 export const createChannelsSuccess = channels => ({
   type: CREATE_CHANNELS_SUCCESS,
   channels
+});
+
+export const createChannelsErrors = errors => ({
+  type: CREATE_CHANNELS_ERRORS,
+  errors
 });
