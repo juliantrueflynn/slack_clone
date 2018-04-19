@@ -2,6 +2,7 @@ import React from 'react';
 import MessageEntries from './message_entries';
 import MessageFormContainer from '../message_form/message_form_container';
 import { ActionCableProvider } from 'react-actioncable-provider';
+import './messages_pane.css';
 
 class MessagesPane extends React.Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class MessagesPane extends React.Component {
     const { messages } = this.props;
 
     return (
-      <div className="pane pane__messages">
+      <div className="messages-pane">
         <ActionCableProvider url="ws://localhost:3000/cable">
           <MessageEntries messages={ messages } />
           <MessageFormContainer />

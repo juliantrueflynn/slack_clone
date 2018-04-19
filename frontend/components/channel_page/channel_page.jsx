@@ -3,6 +3,7 @@ import MessagesPaneContainer from '../messages_pane/messages_pane_container';
 import ChannelFormContainer from '../channel_form/channel_form_container';
 import ChannelSidebarContainer from
   '../channel_sidebar/channel_sidebar_container';
+import './channel_page.css';
 
 class ChannelPage extends React.Component {
   constructor(props) {
@@ -26,9 +27,9 @@ class ChannelPage extends React.Component {
     const { channelSlug, workspaceSlug } = this.props.match.params;
 
     return (
-      <div className="page page__channel">
+      <div className="channel-page">
         <h1>Channel Page Working! #{ channelSlug }</h1>
-        <div className="page__channel-content">
+        <div className="channel-page__content">
           <ChannelSidebarContainer />
           <MessagesPaneContainer />
         </div>
