@@ -13,3 +13,19 @@
  *= require_tree .
  *= require_self
  */
+
+.page__channel-content {
+  display: -webkit-box!important;
+  display: -ms-flexbox!important;
+  display: flex!important;
+}
+
+.sidebar__channel {
+  width: 20%;
+  display: inline-block;
+}
+
+.pane__messages {
+  width: 80%;
+  display: inline-block;
+}

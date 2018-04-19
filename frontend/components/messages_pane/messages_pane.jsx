@@ -12,11 +12,11 @@ class MessagesPane extends React.Component {
     const { messages } = this.props;
 
     return (
-      <div>
+      <div className="pane pane__messages">
         <ActionCableProvider url="ws://localhost:3000/cable">
           <MessageEntries messages={ messages } />
           <MessageFormContainer />
-        </ActionCableProvider>
+          </ActionCableProvider>
       </div>
     );
   }
