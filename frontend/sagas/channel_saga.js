@@ -35,13 +35,16 @@ function* subCreatorToNewChannel(action) {
 }
 
 function* addNewChannels({ channels }) {
+  let newChannels = [];
   for (let channel of channels) {
     const newChannel = yield call(utilApi.createChannel, channel);
     yield call(fetchCreatorSub, {
       userId: newChannel.ownerId,
       channelId: newChannel.id
     });
+    newChannels.push(newChannel);
   }
+  yield put(actions.createChannelsSuccess(newChannels));
 }
 
 function* fetchChannel() {

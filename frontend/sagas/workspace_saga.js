@@ -5,7 +5,7 @@ import * as actions from '../actions/workspace_actions';
 import {
   createWorkspaceSubSuccess, createWorkspaceSubErrors
 } from '../actions/workspace_sub_actions';
-import { createChannels } from '../actions/channel_actions';
+import { createChannels, CREATE_CHANNELS } from '../actions/channel_actions';
 import * as api from '../util/workspace_api_util';
 import { createWorkspaceSub } from '../util/workspace_sub_api_util';
 import {
@@ -13,26 +13,6 @@ import {
 } from '../reducers/selectors';
 import { addNewChannels } from './channel_saga';
 import { navigate } from '../actions/navigate_actions';
-
-function* addNewWorkspace({ workspace }) {
-  try {
-    const newWorkspace = yield call(api.createWorkspace, workspace);
-    yield put(actions.createWorkspaceSuccess(newWorkspace));
-  } catch (error) {
-    yield put(actions.receiveWorkspaceErrors(error));
-  }
-}
-
-function* subCreatorToNewWorkspace({ workspace, channels }) {
-  try {
-    const sub = { user_id: workspace.ownerId, workspace_id: workspace.id };
-    const newSub = yield call(createWorkspaceSub, sub);
-
-    yield put(createWorkspaceSubSuccess(newSub));
-  } catch (error) {
-    yield put(createWorkspaceSubErrors(error));
-  }
-}
 
 function* fetchWorkspaces(prevState) {
   try {
@@ -64,13 +44,32 @@ function* fetchDeleteWorkspace({ workspaceId }) {
   }
 }
 
-function* fetchDefaultChannels({ workspace: { id, ownerId } }) {
+function* addNewWorkspace({ workspace }) {
+  try {
+    const newWorkspace = yield call(api.createWorkspace, workspace);
+    yield put(actions.createWorkspaceSuccess(newWorkspace));
+  } catch (error) {
+    yield put(actions.receiveWorkspaceErrors(error));
+  }
+}
+
+function* subCreatorToNewWorkspace({ workspace }) {
+  try {
+    const sub = { user_id: workspace.ownerId, workspace_id: workspace.id };
+    const newSub = yield call(createWorkspaceSub, sub);
+
+    yield put(createWorkspaceSubSuccess(newSub));
+  } catch (error) {
+    yield put(createWorkspaceSubErrors(error));
+  }
+}
+
+function* loadDefaultChannels({ workspace: { id, ownerId } }) {
   let defaultChannels = [];
   const defaultChannelTitles = ['#general', '#random'];
-  defaultChannelTitles.forEach(title => {
+  for (let title of defaultChannelTitles) {
     defaultChannels.push({ title, ownerId, workspaceId: id });
-  });
-
+  }
   yield put(createChannels(defaultChannels));
 }
 
@@ -92,8 +91,15 @@ function* loadWorkspace({ workspaceId }) {
 }
 
 function* watchCreateWorkspace() {
-  yield takeEvery(actions.CREATE_WORKSPACE, addNewWorkspace);
-  yield takeEvery(actions.CREATE_WORKSPACE_SUCCESS, fetchDefaultChannels);
+  while (true) {
+    const workspace = yield take(actions.CREATE_WORKSPACE);
+    yield fork(addNewWorkspace, workspace);
+  
+    const newWorkspace = yield take(actions.CREATE_WORKSPACE_SUCCESS);
+    yield call(subCreatorToNewWorkspace, newWorkspace);
+    yield call(loadDefaultChannels, newWorkspace);
+    yield put(navigate(`/${newWorkspace.workspace.id}`));
+  }
 }
 
 function* watchWorkspaces() {
