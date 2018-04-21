@@ -11,6 +11,7 @@ import * as WorkspaceSubActions from './actions/workspace_sub_actions';
 import * as WorkspaceAPIUtil from './util/workspace_api_util';
 import * as ChannelAPIUtil from './util/channel_api_util';
 import * as MessageAPIUtil from './util/message_api_util';
+import * as MessageActions from './actions/message_actions';
 
 document.addEventListener('DOMContentLoaded', () => {
   const rootEl = document.getElementById('root');
@@ -27,14 +28,17 @@ document.addEventListener('DOMContentLoaded', () => {
   store.runSaga(rootSaga);
 
   // Just for testing, remove!
-  window.getState = store.getState;
-  window.dispatch = store.dispatch;
-  window.WorkspaceActions = WorkspaceActions;
-  window.ChannelActions = ChannelActions;
-  window.WorkspaceSubActions = WorkspaceSubActions;
-  window.WorkspaceAPIUtil = WorkspaceAPIUtil;
-  window.ChannelAPIUtil = ChannelAPIUtil;
-  window.MessageAPIUtil = MessageAPIUtil;
+  if (process.env.NODE_ENV !== 'production') {
+    window.getState = store.getState;
+    window.dispatch = store.dispatch;
+    window.WorkspaceActions = WorkspaceActions;
+    window.ChannelActions = ChannelActions;
+    window.WorkspaceSubActions = WorkspaceSubActions;
+    window.WorkspaceAPIUtil = WorkspaceAPIUtil;
+    window.ChannelAPIUtil = ChannelAPIUtil;
+    window.MessageAPIUtil = MessageAPIUtil;
+    window.MessageActions = MessageActions;
+  }
 
   ReactDOM.render(<Root store={ store } />, rootEl);
 });
