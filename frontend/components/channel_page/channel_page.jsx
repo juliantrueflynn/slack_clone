@@ -27,9 +27,9 @@ class ChannelPage extends React.Component {
     const { channelSlug, workspaceSlug } = this.props.match.params;
 
     return (
-      <div className="channel-page">
+      <div className="page page__channel">
         <h1>Channel Page Working! #{ channelSlug }</h1>
-        <div className="channel-page__content">
+        <div className="page__channel-content">
           <ChannelSidebarContainer />
           <MessagesPaneContainer />
         </div>
