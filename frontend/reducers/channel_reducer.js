@@ -1,5 +1,5 @@
 import {
-  RECEIVE_CHANNEL, DELETE_CHANNEL, CREATE_CHANNELS_SUCCESS
+  RECEIVE_CHANNEL, DELETE_CHANNEL, CREATE_CHANNELS_SUCCESS, EDIT_CHANNEL_SUCCESS
 } from '../actions/channel_actions';
 import { RECEIVE_WORKSPACE } from '../actions/workspace_actions';
 
@@ -23,6 +23,10 @@ const channelReducer = (state = {}, action) => {
       nextState = {};
       action.channels.forEach(item => { nextState[item.id] = item; });
       return nextState;
+    case EDIT_CHANNEL_SUCCESS :
+      nextState = {};
+      nextState[action.channel.id] = action.channel;
+      return Object.assign({}, state, nextState);
     case DELETE_CHANNEL :
       nextState = Object.assign({}, state);
       delete nextState[action.channelId];

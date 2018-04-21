@@ -34,6 +34,7 @@ class ChannelForm extends React.Component {
       workspaceId: this.props.workspaceId,
     };
     this.props.createChannel(channel);
+    this.props.modalClose();
   }
 
   render() {

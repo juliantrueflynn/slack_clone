@@ -10,6 +10,8 @@ export const CREATE_MESSAGE_SUCCESS = 'CREATE_MESSAGE_SUCCESS';
 export const CREATE_MESSAGE_ERRORS = 'CREATE_MESSAGE_ERRORS';
 export const DELETE_MESSAGE = 'DELETE_MESSAGE';
 export const DELETE_MESSAGE_SUCCESS = 'DELETE_MESSAGE_SUCCESS';
+export const EDIT_MESSAGE = 'EDIT_MESSAGE';
+export const EDIT_MESSAGE_SUCCESS = 'EDIT_MESSAGE_SUCCESS';
 
 export const requestMessages = (messages = {}) => ({
   type: REQUEST_MESSAGES,
@@ -69,4 +71,14 @@ export const deleteMessage = messageId => ({
 export const deleteMessageSuccess = messageId => ({
   type: DELETE_MESSAGE_SUCCESS,
   messageId
+});
+
+export const editMessage = message => ({
+  type: EDIT_MESSAGE,
+  message
+});
+
+export const editMessageSuccess = message => ({
+  type: EDIT_MESSAGE_SUCCESS,
+  message
 });

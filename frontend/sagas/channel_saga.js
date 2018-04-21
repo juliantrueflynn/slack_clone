@@ -6,7 +6,7 @@ import * as utilApi from '../util/channel_api_util';
 import { createChannelSubSuccess } from '../actions/channel_sub_actions';
 import { createChannelSub } from '../util/channel_sub_api_util';
 import {
-  getChannelPageId, getChannels, getWorkspacePageId
+  getChannelPageId, getChannels, getWorkspacePageId, getChannelById
 } from '../reducers/selectors';
 import { fetchWorkspace } from './workspace_saga';
 import { navigate } from '../actions/navigate_actions';
@@ -31,6 +31,15 @@ function* subCreatorToNewChannel({ channel }) {
     yield put(navigate(`/${channel.workspaceId}/${channel.id}`));
   } catch (error) {
     yield put(actions.createChannelErrors(error));
+  }
+}
+
+function* fetchEditChannel({ channel }) {
+  try {
+    const newChannel = yield call(utilApi.editChannel, channel);
+    yield put(actions.editChannelSuccess(newChannel));
+  } catch (error) {
+    yield put(actions.receiveChannelErrors(error));
   }
 }
 
@@ -78,6 +87,10 @@ function* watchCreateChannel() {
   yield takeEvery(actions.CREATE_CHANNEL_SUCCESS, subCreatorToNewChannel);
 }
 
+function* watchEditChannel() {
+  yield takeLatest(actions.EDIT_CHANNEL, fetchEditChannel);
+}
+
 function* watchCreateChannels() {
   yield takeEvery(actions.CREATE_CHANNELS, addNewChannels);
 }
@@ -93,6 +106,7 @@ function* watchDeleteChannel() {
 export function* channelSaga() {
   yield all([
     fork(watchCreateChannel),
+    fork(watchEditChannel),
     fork(watchCreateChannels),
     fork(watchChannelPage),
     fork(watchDeleteChannel),

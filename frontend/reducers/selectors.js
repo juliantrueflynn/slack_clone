@@ -20,10 +20,18 @@ export const getChannelPageId = state => (
   parseInt(state.ui.displayChannelId)
 );
 
+export const getChannelById = (state, channelId) => (
+  state.entities.channels[channelId]
+);
+
 export const getCurrentUser = state => (
   state.session.currentUser
 );
 
 export const getMessages = state => (
   values(state.entities.messages)
+);
+
+export const getMessageById = (state, messageId) => (
+  state.entities.messages[messageId]
 );

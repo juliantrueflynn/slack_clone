@@ -62,6 +62,26 @@ export const createChannel = channel => (
   })
 );
 
+export const editChannel = channel => (
+  fetch('api/channels', {
+    method: 'PATCH',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(decamelizeKeys(channel, { separator: '_' }))
+  }).then(response =>
+    response.json().then(json => ({ json, response }))
+  ).then(({ json, response }) => {
+    if (!response.ok) {
+      throw json;
+    }
+    return camelizeKeys(json);
+  }).catch(error => {
+    throw error || ['Unknown channel error!'];
+  })
+);
+
 export const deleteChannel = channelId => (
   fetch(`api/channels/${channelId}`, {
     method: 'DELETE',
