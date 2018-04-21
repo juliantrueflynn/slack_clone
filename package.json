@@ -15,6 +15,7 @@
     "react": "^16.3.1",
     "react-actioncable-provider": "^1.0.3",
     "react-dom": "^16.3.1",
+    "react-modal": "^3.4.2",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
