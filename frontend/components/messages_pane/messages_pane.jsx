@@ -1,5 +1,6 @@
 import React from 'react';
-import MessageEntries from './message_entries';
+import MessageEntriesContainer
+  from '../message_entries/message_entries_container';
 import MessageFormContainer from '../message_form/message_form_container';
 import { ActionCableProvider } from 'react-actioncable-provider';
 import './messages_pane.css';
@@ -15,7 +16,7 @@ class MessagesPane extends React.Component {
     return (
       <div className="messages-pane">
         <ActionCableProvider url="ws://localhost:3000/cable">
-          <MessageEntries messages={ messages } />
+          <MessageEntriesContainer />
           <MessageFormContainer />
           </ActionCableProvider>
       </div>

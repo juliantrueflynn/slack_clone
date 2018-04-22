@@ -37,7 +37,6 @@ class MessageForm extends React.Component {
 
   render() {
     const { body } = this.state;
-
     return (
       <div>
         <ActionCable
