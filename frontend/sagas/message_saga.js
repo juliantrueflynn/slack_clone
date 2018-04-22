@@ -17,8 +17,7 @@ function* fetchNewMessage({ message }) {
 
 function* fetchEditMessage({ message }) {
   try {
-    const newMessage = yield call(utilApi.editMessage, message);
-    yield put(actions.editMessageSuccess(newMessage));
+    yield put(actions.editMessageSuccess(message));
   } catch (error) {
     yield put(actions.failureMessage(error));
   }
