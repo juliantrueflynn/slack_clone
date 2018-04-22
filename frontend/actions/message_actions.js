@@ -11,6 +11,8 @@ export const CREATE_MESSAGE_ERRORS = 'CREATE_MESSAGE_ERRORS';
 export const DELETE_MESSAGE = 'DELETE_MESSAGE';
 export const DELETE_MESSAGE_SUCCESS = 'DELETE_MESSAGE_SUCCESS';
 export const EDIT_MESSAGE = 'EDIT_MESSAGE';
+export const OPEN_EDIT_MESSAGE = 'OPEN_EDIT_MESSAGE';
+export const CLOSE_EDIT_MESSAGE = 'CLOSE_EDIT_MESSAGE';
 export const EDIT_MESSAGE_SUCCESS = 'EDIT_MESSAGE_SUCCESS';
 
 export const requestMessages = (messages = {}) => ({
@@ -76,6 +78,15 @@ export const deleteMessageSuccess = messageId => ({
 export const editMessage = message => ({
   type: EDIT_MESSAGE,
   message
+});
+
+export const openEditMessage = message => ({
+  type: OPEN_EDIT_MESSAGE,
+  message
+});
+
+export const closeEditMessage = () => ({
+  type: CLOSE_EDIT_MESSAGE,
 });
 
 export const editMessageSuccess = message => ({
