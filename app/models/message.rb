@@ -13,4 +13,10 @@ class Message < ApplicationRecord
   after_update_commit do
     MessageEditEventBroadcastJob.perform_later(self)
   end
+
+  # This works but after_destroy_commit does not for some reason
+  after_destroy :delete_message
+  def delete_message
+    MessageDeleteJob.perform_later(self)
+  end
 end

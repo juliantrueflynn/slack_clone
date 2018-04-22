@@ -2,7 +2,11 @@ import { connect } from 'react-redux';
 import MessageEntries from './message_entries';
 import { getMessages } from '../../reducers/selectors';
 import {
-  editMessage, openEditMessage, closeEditMessage
+  editMessage,
+  openEditMessage,
+  closeEditMessage,
+  deleteMessage,
+  deleteMessageSuccess
 } from '../../actions/message_actions';
 
 const mapStateToProps = state => ({
@@ -15,6 +19,8 @@ const mapDispatchToProps = dispatch => ({
   openEditMessage: message => dispatch(openEditMessage(message)),
   closeEditMessage: () => dispatch(closeEditMessage()),
   editMessage: message => dispatch(editMessage(message)),
+  deleteMessage: messageId => dispatch(deleteMessage(messageId)),
+  deleteMessageSuccess: messageId => dispatch(deleteMessageSuccess(messageId)),
 });
 
 export default connect(

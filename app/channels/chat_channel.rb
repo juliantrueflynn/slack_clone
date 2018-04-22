@@ -18,4 +18,9 @@ class ChatChannel < ApplicationCable::Channel
     message = Message.find_by(id: options.fetch('id'))
     message.update(body: options.fetch('body'))
   end
+
+  def delete(options)
+    message = Message.find_by(id: options.fetch('id'))
+    message.destroy
+  end
 end

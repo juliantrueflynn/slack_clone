@@ -33,15 +33,6 @@ function* fetchMessage() {
   }
 }
 
-function* fetchDeleteMessage({ messageId }) {
-  try {
-    yield call(utilApi.deleteMessage, messageId);
-    yield put(actions.deleteMessageSuccess(messageId));
-  } catch (error) {
-    yield put(actions.failureMessage(error));
-  }
-}
-
 function* watchCreateMessage() {
   yield takeEvery(actions.CREATE_MESSAGE, fetchNewMessage);
 }
@@ -50,14 +41,9 @@ function* watchEditMessage() {
   yield takeEvery(actions.EDIT_MESSAGE, fetchEditMessage);
 }
 
-function* watchDeleteMessage() {
-  yield takeEvery(actions.DELETE_MESSAGE, fetchDeleteMessage);
-}
-
 export function* messageSaga() {
   yield all([
     fork(watchCreateMessage),
     fork(watchEditMessage),
-    fork(watchDeleteMessage),
   ]);
 }
