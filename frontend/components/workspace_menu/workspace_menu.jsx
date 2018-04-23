@@ -5,11 +5,19 @@ import { withRouter, Route, Link } from 'react-router-dom';
 class WorkspaceMenu extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = { isDropdownOpen: false };
+    this.handleDropdownToggle = this.handleDropdownToggle.bind(this);
   }
 
   componentDidMount() {
     const { loggedIn, requestWorkspaces } = this.props;
     if (loggedIn) requestWorkspaces();
+  }
+
+  handleDropdownToggle(event) {
+    event.preventDefault();
+    this.setState({ isDropdownOpen: !this.state.isDropdownOpen });
   }
 
   render() {
@@ -18,14 +26,12 @@ class WorkspaceMenu extends React.Component {
       <WorkspaceMenuItem workspace={ workspace } key={ workspace.id } />
     ));
 
-    if ( !loggedIn ) return null;
+    if (!loggedIn) return null;
 
     return (
       <div>
-        <span>Your Workspaces:</span><br/>
-        <ul>
-          { workspaceList }
-        </ul>
+        <button onClick={ this.handleDropdownToggle }>Your Workspaces</button>
+        { this.state.isDropdownOpen && <ul>{ workspaceList }</ul> }
       </div>
     );
   }
