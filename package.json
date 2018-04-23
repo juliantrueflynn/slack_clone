@@ -12,6 +12,7 @@
     "humps": "^2.0.1",
     "lodash.merge": "^4.6.1",
     "lodash.values": "^4.3.0",
+    "normalize.css": "^8.0.0",
     "react": "^16.3.1",
     "react-actioncable-provider": "^1.0.3",
     "react-dom": "^16.3.1",
