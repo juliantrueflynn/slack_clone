@@ -3,8 +3,6 @@ import { AuthRoute } from './util/route_util';
 import { Switch, Link, Route } from 'react-router-dom';
 import ChannelSessionFormContainer
   from './components/channel_session_form/channel_session_form_container';
-import WorkspaceMenuContainer
-  from './components/workspace_menu/workspace_menu_container';
 import WorkspacePageContainer
   from './components/workspace_page/workspace_page_container';
 import WorkspaceFormContainer from
@@ -14,7 +12,6 @@ import ChannelPageContainer
 
 const MainPage = () => (
   <div>
-    <WorkspaceMenuContainer />
     <Switch>
       <Route exact path="/" render={ () =>
         <div>
