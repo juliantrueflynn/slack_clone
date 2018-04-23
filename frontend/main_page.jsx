@@ -9,12 +9,13 @@ import WorkspaceFormContainer from
   './components/workspace_form/workspace_form_container';
 import ChannelPageContainer
   from './components/channel_page/channel_page_container';
+import './main_page.css';
 
 const MainPage = () => (
   <div>
     <Switch>
       <Route exact path="/" render={ () =>
-        <div>
+        <div className="content-container content-container__boxed-width">
           <h1>Slack Clone with Rails & React</h1>
           <p>More will go here later, stay-tuned!</p>
           <Link to="/create-workspace">Create New Workspace</Link>
