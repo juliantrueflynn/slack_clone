@@ -18,6 +18,7 @@ class MessageEntry extends React.Component {
     this.handleMessageEditSuccess = this.handleMessageEditSuccess.bind(this);
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
     this.handleDeleteSuccess = this.handleDeleteSuccess.bind(this);
+    this.handleThreadOpenClick = this.handleThreadOpenClick.bind(this);
   }
 
   handleInputValue(property) {
@@ -69,6 +70,11 @@ class MessageEntry extends React.Component {
     this.props.deleteMessageSuccess(message.id);
   }
 
+  handleThreadOpenClick(event) {
+    event.preventDefault();
+    
+    this.props.openThread(this.props.message.id);
+  }
 
   render() {
     const { message, isEditing, editId, deleteMessageSuccess } = this.props;
@@ -78,7 +84,7 @@ class MessageEntry extends React.Component {
         channel={{ channel: 'ChatChannel' }}
         onReceived={ this.handleDeleteSuccess }
       />
-      <button>Start thread</button>
+      <button onClick={ this.handleThreadOpenClick }>Start thread</button>
       <button onClick={ this.handleEditClick }>Edit message</button>
       <button onClick={ this.handleDeleteClick }>Delete message</button>
     </div>;

@@ -4,6 +4,7 @@ import ChannelFormContainer from '../channel_form/channel_form_container';
 import ChannelSidebarContainer from
   '../channel_sidebar/channel_sidebar_container';
 import './channel_page.css';
+import ChannelRightSidebar from './channel_right_sidebar';
 
 class ChannelPage extends React.Component {
   constructor(props) {
@@ -24,14 +25,19 @@ class ChannelPage extends React.Component {
   }
 
   render() {
-    const { channelSlug, workspaceSlug } = this.props.match.params;
+    const { match, isRightSidebarOpen, closeThread, thread } = this.props;
 
     return (
       <div className="page page__channel">
-        <h1>Channel Page Working! #{ channelSlug }</h1>
+        <h1>Channel Page Working! #{ match.params.channelSlug }</h1>
         <div className="page__channel-content">
           <ChannelSidebarContainer />
           <MessagesPaneContainer />
+          <ChannelRightSidebar
+            closeThread={ closeThread }
+            isRightSidebarOpen={ isRightSidebarOpen }
+            thread={ thread }
+          />
         </div>
         <ChannelFormContainer />
       </div>

@@ -16,6 +16,7 @@ class MessageEntries extends React.Component {
       closeEditMessage,
       deleteMessage,
       deleteMessageSuccess,
+      openThread,
     } = this.props;
     
     return (
@@ -30,6 +31,7 @@ class MessageEntries extends React.Component {
             closeEditMessage={ closeEditMessage }
             deleteMessage={ deleteMessage }
             deleteMessageSuccess={ deleteMessageSuccess }
+            openThread={ openThread }
             key={ message.id }
           />
         )}

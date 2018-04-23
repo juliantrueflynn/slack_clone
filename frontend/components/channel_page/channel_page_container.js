@@ -1,14 +1,22 @@
 import { connect } from 'react-redux';
 import ChannelPage from './channel_page';
 import { loadChannelPage } from '../../actions/channel_actions';
+import { closeThread } from '../../actions/message_thread_actions';
+import { getMessageById } from '../../reducers/selectors';
+
+const mapStateToProps = state => ({
+  isRightSidebarOpen: Boolean(state.ui.displayThreadId),
+  thread: getMessageById(state, state.ui.displayThreadId),
+});
 
 const mapDispatchToProps = dispatch => ({
   loadChannelPage: (channelId, workspaceId) => dispatch(
     loadChannelPage(channelId, workspaceId)
-  )
+  ),
+  closeThread: threadId => dispatch(closeThread(threadId)),
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ChannelPage);

@@ -9,6 +9,8 @@ import {
   deleteMessageSuccess
 } from '../../actions/message_actions';
 
+import { openThread } from '../../actions/message_thread_actions';
+
 const mapStateToProps = state => ({
   messages: getMessages(state),
   editId: state.ui.editMessageId,
@@ -21,6 +23,7 @@ const mapDispatchToProps = dispatch => ({
   editMessage: message => dispatch(editMessage(message)),
   deleteMessage: messageId => dispatch(deleteMessage(messageId)),
   deleteMessageSuccess: messageId => dispatch(deleteMessageSuccess(messageId)),
+  openThread: threadId => dispatch(openThread(threadId)),
 });
 
 export default connect(
