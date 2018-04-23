@@ -1,4 +1,5 @@
 import React from 'react';
+import ThreadForm from './thread_form';
 
 class ChannelRightSidebar extends React.Component {
   constructor(props) {
@@ -26,6 +27,8 @@ class ChannelRightSidebar extends React.Component {
   }
 
   render() {
+    const { thread, createMessage } = this.props;
+
     if (!this.state.isOpen) return null;
   
     return (
@@ -34,8 +37,9 @@ class ChannelRightSidebar extends React.Component {
           <span className="h4">Thread</span>
           <button onClick={ this.handleCloseSidebar }>X</button>
         </header>
-        <div>{ this.props.thread.authorId }</div>
-        <div>{ this.props.thread.body }</div>
+        <div>{ thread.authorId }</div>
+        <div>{ thread.body }</div>
+        <ThreadForm createMessage={ createMessage } thread={ thread } />
       </aside>
     );
   }

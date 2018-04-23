@@ -1,4 +1,5 @@
 import React from 'react';
+import { ActionCableProvider } from 'react-actioncable-provider';
 import MessagesPaneContainer from '../messages_pane/messages_pane_container';
 import ChannelFormContainer from '../channel_form/channel_form_container';
 import ChannelSidebarContainer from
@@ -25,22 +26,27 @@ class ChannelPage extends React.Component {
   }
 
   render() {
-    const { match, isRightSidebarOpen, closeThread, thread } = this.props;
+    const {
+      createMessage, isRightSidebarOpen, closeThread, thread
+    } = this.props;
 
     return (
-      <div className="page page__channel">
-        <h1>Channel Page Working! #{ match.params.channelSlug }</h1>
-        <div className="page__channel-content">
-          <ChannelSidebarContainer />
-          <MessagesPaneContainer />
-          <ChannelRightSidebar
-            closeThread={ closeThread }
-            isRightSidebarOpen={ isRightSidebarOpen }
-            thread={ thread }
-          />
+      <ActionCableProvider url="ws://localhost:3000/cable">
+        <div className="page page__channel">
+          <h1>Channel #{ this.props.match.params.channelSlug }</h1>
+          <div className="page__channel-content">
+            <ChannelSidebarContainer />
+            <MessagesPaneContainer />
+            <ChannelRightSidebar
+              closeThread={ closeThread }
+              isRightSidebarOpen={ isRightSidebarOpen }
+              createMessage={ createMessage }
+              thread={ thread }
+            />
+          </div>
+          <ChannelFormContainer />
         </div>
-        <ChannelFormContainer />
-      </div>
+      </ActionCableProvider>
     );
   }
 }
