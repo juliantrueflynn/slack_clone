@@ -23,7 +23,7 @@ class ChannelRightSidebar extends React.Component {
   }
 
   handleCloseSidebar() {
-    this.props.closeThread(this.props.thread.id);
+    this.props.closeThread();
   }
 
   render() {

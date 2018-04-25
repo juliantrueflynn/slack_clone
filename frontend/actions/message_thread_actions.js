@@ -6,7 +6,6 @@ export const openThread = messageId => ({
   messageId
 });
 
-export const closeThread = messageId => ({
-  type: CLOSE_THREAD,
-  messageId
+export const closeThread = () => ({
+  type: CLOSE_THREAD
 });

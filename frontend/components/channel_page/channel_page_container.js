@@ -14,7 +14,7 @@ const mapDispatchToProps = dispatch => ({
   loadChannelPage: (channelId, workspaceId) => dispatch(
     loadChannelPage(channelId, workspaceId)
   ),
-  closeThread: threadId => dispatch(closeThread(threadId)),
+  closeThread: () => dispatch(closeThread()),
   createMessage: message => dispatch(createMessage(message)),
 });
 
