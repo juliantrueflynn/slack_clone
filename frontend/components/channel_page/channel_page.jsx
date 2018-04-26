@@ -27,7 +27,7 @@ class ChannelPage extends React.Component {
 
   render() {
     const {
-      createMessage, isRightSidebarOpen, closeThread, thread
+      createMessage, isRightSidebarOpen, closeThread, thread, threadEntries
     } = this.props;
 
     return (
@@ -42,6 +42,7 @@ class ChannelPage extends React.Component {
               isRightSidebarOpen={ isRightSidebarOpen }
               createMessage={ createMessage }
               thread={ thread }
+              threadEntries={ threadEntries }
             />
           </div>
           <ChannelFormContainer />

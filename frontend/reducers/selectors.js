@@ -37,3 +37,14 @@ export const getMessageById = (state, messageId) => (
 );
 
 export const getThreadId = state => state.ui.displayThreadId;
+
+export const getThreadEntries = state => {
+  const messages = state.entities.messages;
+  const threadId = state.ui.displayThreadId;
+
+  if (!threadId) return [];
+  
+  return values(messages).filter(message =>
+    messages[threadId].threadIds.includes(message.id)
+  );
+};

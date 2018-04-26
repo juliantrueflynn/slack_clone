@@ -1,5 +1,6 @@
 import React from 'react';
 import ThreadForm from './thread_form';
+import ThreadEntry from './thread_entry';
 
 class ChannelRightSidebar extends React.Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class ChannelRightSidebar extends React.Component {
   }
 
   render() {
-    const { thread, createMessage } = this.props;
+    const { thread, createMessage, threadEntries } = this.props;
 
     if (!this.state.isOpen) return null;
   
@@ -39,6 +40,11 @@ class ChannelRightSidebar extends React.Component {
         </header>
         <div>{ thread.authorId }</div>
         <div>{ thread.body }</div>
+        <ul>
+          { threadEntries.map(entry =>
+            <ThreadEntry key={ entry.id } thread={ entry } />
+          )}
+        </ul>
         <ThreadForm createMessage={ createMessage } thread={ thread } />
       </aside>
     );
