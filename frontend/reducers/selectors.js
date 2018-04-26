@@ -35,3 +35,5 @@ export const getMessages = state => (
 export const getMessageById = (state, messageId) => (
   state.entities.messages[messageId]
 );
+
+export const getThreadId = state => state.ui.displayThreadId;

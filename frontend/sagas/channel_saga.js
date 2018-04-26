@@ -6,7 +6,7 @@ import * as utilApi from '../util/channel_api_util';
 import { createChannelSubSuccess } from '../actions/channel_sub_actions';
 import { createChannelSub } from '../util/channel_sub_api_util';
 import {
-  getChannelPageId, getChannels, getWorkspacePageId, getChannelById
+  getChannelPageId, getChannels, getWorkspacePageId, getChannelById, getThreadId
 } from '../reducers/selectors';
 import { fetchWorkspace } from './workspace_saga';
 import { navigate } from '../actions/navigate_actions';
@@ -57,7 +57,8 @@ function* fetchChannel() {
   try {
     const channelId = yield select(getChannelPageId);
     const channel = yield call(utilApi.fetchChannel, channelId);
-    yield put(actions.receiveChannel(channel));
+    const threadId = yield select(getThreadId);
+    yield put(actions.receiveChannel(channel, threadId));
   } catch (error) {
     yield put(actions.failureChannel(error));
   }

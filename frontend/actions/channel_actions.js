@@ -44,9 +44,10 @@ export const requestChannel = channelId => ({
   channelId
 });
 
-export const receiveChannel = channel => ({
+export const receiveChannel = (channel, threadId) => ({
   type: RECEIVE_CHANNEL,
-  channel
+  channel,
+  threadId
 });
 
 export const failureChannel = errors => ({
