@@ -77,17 +77,32 @@ class MessageEntry extends React.Component {
   }
 
   render() {
-    const { message, isEditing, editId, deleteMessageSuccess } = this.props;
-    const plainMessage = this.state.isMouseOver && <div>
-      <ActionCable
-        ref="roomChannel"
-        channel={{ channel: 'ChatChannel' }}
-        onReceived={ this.handleDeleteSuccess }
-      />
-      <button onClick={ this.handleThreadOpenClick }>Start thread</button>
-      <button onClick={ this.handleEditClick }>Edit message</button>
-      <button onClick={ this.handleDeleteClick }>Delete message</button>
-    </div>;
+    const {
+      message, isEditing, editId, currentUserId, deleteMessageSuccess
+    } = this.props;
+
+    let editMessageButton, deleteMessageButton;
+    if (currentUserId === message.authorId) {
+      editMessageButton = <button onClick={ this.handleEditClick }>
+        Edit message
+      </button>;
+      deleteMessageButton = <button onClick={ this.handleDeleteClick }>
+        Delete message
+      </button>;
+    }
+    let plainMessage;
+    if (this.state.isMouseOver) {
+      plainMessage = <div>
+        <ActionCable
+          ref="roomChannel"
+          channel={{ channel: 'ChatChannel' }}
+          onReceived={ this.handleDeleteSuccess }
+        />
+        <button onClick={ this.handleThreadOpenClick }>Start thread</button>
+        { editMessageButton }
+        { deleteMessageButton }
+      </div>;
+    }
     const editMessageForm = <form onSubmit={ this.handleEditFormSubmit }>
       <div>
         <ActionCable

@@ -15,6 +15,7 @@ const mapStateToProps = state => ({
   messages: getMessages(state),
   editId: state.ui.editMessageId,
   isEditing: Boolean(state.ui.editMessageId),
+  currentUserId: state.session.currentUser.id,
 });
 
 const mapDispatchToProps = dispatch => ({
