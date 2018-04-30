@@ -2,10 +2,11 @@ import React from 'react';
 import { ActionCableProvider } from 'react-actioncable-provider';
 import MessagesPaneContainer from '../messages_pane/messages_pane_container';
 import ChannelFormContainer from '../channel_form/channel_form_container';
+import './channel_page.css';
 import ChannelSidebarContainer from
   '../channel_sidebar/channel_sidebar_container';
-import './channel_page.css';
-import ChannelRightSidebar from './channel_right_sidebar';
+import ChannelRightSidebarContainer from
+  '../channel_right_sidebar/channel_right_sidebar_container';
 
 class ChannelPage extends React.Component {
   constructor(props) {
@@ -26,10 +27,6 @@ class ChannelPage extends React.Component {
   }
 
   render() {
-    const {
-      createMessage, isRightSidebarOpen, closeThread, thread, threadEntries
-    } = this.props;
-
     return (
       <ActionCableProvider url="ws://localhost:3000/cable">
         <div className="page page__channel">
@@ -37,13 +34,7 @@ class ChannelPage extends React.Component {
           <div className="page__channel-content">
             <ChannelSidebarContainer />
             <MessagesPaneContainer />
-            <ChannelRightSidebar
-              closeThread={ closeThread }
-              isRightSidebarOpen={ isRightSidebarOpen }
-              createMessage={ createMessage }
-              thread={ thread }
-              threadEntries={ threadEntries }
-            />
+            <ChannelRightSidebarContainer />
           </div>
           <ChannelFormContainer />
         </div>

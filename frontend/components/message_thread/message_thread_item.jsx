@@ -7,8 +7,9 @@ class ThreadEntry extends React.Component {
 
   render() {
     const { thread } = this.props;
+    
     return (
-      <li key={ thread.id }>{ thread.body }</li>
+      <div>{ thread.id } - { thread.authorId } - { thread.body }</div>
     );
   }
 }

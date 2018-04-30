@@ -24,7 +24,7 @@ class MessageForm extends React.Component {
       body: this.state.body,
       author_id: this.props.authorId,
       channel_id: this.props.channelId,
-      parent_message_id: null,
+      parent_message_id: this.props.parentMessageId,
     };
 
     this.refs.roomChannel.perform('create', newMessage);
