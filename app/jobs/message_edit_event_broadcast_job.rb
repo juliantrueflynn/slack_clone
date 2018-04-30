@@ -7,7 +7,10 @@ class MessageEditEventBroadcastJob < ApplicationJob
       .broadcast(
         'chat_channel',
         id: message.id,
-        body: message.body
+        author_id: message.author_id,
+        channel_id: message.channel_id,
+        body: message.body,
+        parent_message_id: message.parent_message_id
       )
   end
 end
