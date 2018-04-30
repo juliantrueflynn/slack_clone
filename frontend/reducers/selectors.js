@@ -29,7 +29,9 @@ export const getCurrentUser = state => (
 );
 
 export const getMessages = state => (
-  values(state.entities.messages)
+  values(state.entities.messages).filter(message =>
+    message.parentMessageId === null
+  )
 );
 
 export const getMessageById = (state, messageId) => (
