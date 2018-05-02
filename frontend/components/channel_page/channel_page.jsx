@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActionCableProvider } from 'react-actioncable-provider';
-import MessagesPaneContainer from '../messages_pane/messages_pane_container';
+import MessagesPane from '../messages_pane/messages_pane';
 import ChannelFormContainer from '../channel_form/channel_form_container';
 import './channel_page.css';
 import ChannelSidebarContainer from
@@ -33,7 +33,7 @@ class ChannelPage extends React.Component {
           <h1>Channel #{ this.props.match.params.channelSlug }</h1>
           <div className="page__channel-content">
             <ChannelSidebarContainer />
-            <MessagesPaneContainer />
+            <MessagesPane />
             <ChannelRightSidebarContainer />
           </div>
           <ChannelFormContainer />
