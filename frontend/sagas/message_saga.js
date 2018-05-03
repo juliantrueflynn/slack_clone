@@ -1,6 +1,4 @@
-import {
-  take, all, call, fork, put, takeEvery, takeLatest, select
-} from 'redux-saga/effects';
+import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 import * as actions from '../actions/message_actions';
 import * as utilApi from '../util/message_api_util';
 import { getChannelPageId, getMessageById } from '../reducers/selectors';
@@ -9,7 +7,8 @@ import { camelizeKeys } from 'humps';
 function* fetchNewMessage({ message }) {
   try {
     const camelizedMessage = camelizeKeys(message);
-    yield put(actions.createMessageSuccess(camelizedMessage));
+    const newMessage = yield call(utilApi.createMessage, camelizedMessage);
+    yield put(actions.createMessageSuccess(newMessage));
   } catch (error) {
     yield put(actions.failureMessage(error));
   }
@@ -18,16 +17,6 @@ function* fetchNewMessage({ message }) {
 function* fetchEditMessage({ message }) {
   try {
     yield put(actions.editMessageSuccess(message));
-  } catch (error) {
-    yield put(actions.failureMessage(error));
-  }
-}
-
-function* fetchMessage() {
-  try {
-    const messageId = yield select(getChannelPageId);
-    const message = yield call(utilApi.fetchMessage, messageId);
-    yield put(actions.receiveMessage(message));
   } catch (error) {
     yield put(actions.failureMessage(error));
   }
