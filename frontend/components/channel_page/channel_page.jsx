@@ -1,7 +1,6 @@
 import React from 'react';
-import { ActionCable } from 'react-actioncable-provider';
+// import { ActionCable } from 'react-actioncable-provider';
 import ChannelFormContainer from '../channel_form/channel_form_container';
-import './channel_page.css';
 import ChannelSidebarContainer from
   '../channel_sidebar/channel_sidebar_container';
 import ChannelRightSidebarContainer from
@@ -9,11 +8,11 @@ import ChannelRightSidebarContainer from
 import MessageFormContainer from '../message_form/message_form_container';
 import ChannelMessages from './channel_messages';
 
+import './channel_page.css';
+
 class ChannelPage extends React.Component {
   constructor(props) {
     super(props);
-
-    this.handleReceived = this.handleReceived.bind(this);
   }
 
   componentDidMount() {
@@ -29,28 +28,11 @@ class ChannelPage extends React.Component {
     }
   }
 
-  handleReceived({ type, message }) {
-    this.props.onReceivedCallback(type, message);
-  }
-
   render() {
     const { channelSlug } = this.props.match.params;
     
     return (
       <div>
-        <ActionCable
-          channel={{ channel: 'ChatChannel', channel_id: channelSlug }}
-          onReceived={ this.handleReceived }
-        />
-
-        {this.props.messages.map(message =>
-          <ActionCable
-            key={ message.id }
-            channel={{ channel: 'ChatChannel', channel_id: message.channel_id }}
-            onReceived={ this.handleReceived }
-          />
-        )}
-
         <div className="page page__channel">
           <h1>Channel #{ channelSlug }</h1>
           <div className="page__channel-content">

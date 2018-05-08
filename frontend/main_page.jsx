@@ -1,4 +1,5 @@
 import React from 'react';
+import { ChannelsActionCables } from './util/action_cable_util';
 import { AuthRoute } from './util/route_util';
 import { Switch, Link, Route } from 'react-router-dom';
 import ChannelSessionFormContainer
@@ -9,10 +10,13 @@ import WorkspaceFormContainer from
   './components/workspace_form/workspace_form_container';
 import ChannelPageContainer
   from './components/channel_page/channel_page_container';
+
 import './main_page.css';
 
 const MainPage = () => (
-  <div className="main-page">    
+  <div className="main-page">
+    <ChannelsActionCables />
+
     <Switch>
       <Route exact path="/" render={ () =>
         <div className="content-container content-container__boxed-width">
