@@ -5,9 +5,9 @@ class MessageDeleteJob < ApplicationJob
     ActionCable
       .server
       .broadcast(
-        "message:#{message.id}",
+        "channel:#{message.channel_id}",
         type: "DELETE",
-        data: message.id
+        message: message
       )
   end
 end

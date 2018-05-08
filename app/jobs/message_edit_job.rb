@@ -5,9 +5,9 @@ class MessageEditJob < ApplicationJob
     ActionCable
       .server
       .broadcast(
-        "message:#{message.id}",
+        "channel:#{message.channel_id}",
         type: "EDIT",
-        data: message
+        message: message
       )
   end
 end

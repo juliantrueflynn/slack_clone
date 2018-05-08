@@ -12,8 +12,7 @@ class ChannelPage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleReceivedChannel = this.handleReceivedChannel.bind(this);
-    this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
+    this.handleReceived = this.handleReceived.bind(this);
   }
 
   componentDidMount() {
@@ -29,19 +28,8 @@ class ChannelPage extends React.Component {
     }
   }
 
-  handleReceivedChannel(message) {
-    this.props.createMessageSuccess(message);
-  }
-
-  handleReceivedMessage(cable) {
-    switch (cable.type) {
-      case "EDIT" :
-        this.props.editMessageSuccess(cable.data);
-        break;
-      case "DELETE" :
-        this.props.deleteMessageSuccess(cable.data);
-        break;
-    }
+  handleReceived({ type, message }) {
+    this.props.onReceivedCallback(type, message);
   }
 
   render() {
@@ -51,14 +39,14 @@ class ChannelPage extends React.Component {
       <div>
         <ActionCable
           channel={{ channel: 'ChatChannel', channel_id: channelSlug }}
-          onReceived={ this.handleReceivedChannel }
+          onReceived={ this.handleReceived }
         />
 
         {this.props.messages.map(message =>
           <ActionCable
             key={ message.id }
-            channel={{ channel: 'MessagesChannel', message_id: message.id }}
-            onReceived={ this.handleReceivedMessage }
+            channel={{ channel: 'ChatChannel', channel_id: message.channel_id }}
+            onReceived={ this.handleReceived }
           />
         )}
 

@@ -15,15 +15,18 @@ const mapDispatchToProps = dispatch => ({
   loadChannelPage: (channelId, workspaceId) => dispatch(
     loadChannelPage(channelId, workspaceId)
   ),
-  createMessageSuccess: message => dispatch(
-    createMessageSuccess(camelizeKeys(message))
-  ),
-  editMessageSuccess: message => dispatch(
-    editMessageSuccess(camelizeKeys(message))
-  ),
-  deleteMessageSuccess: messageId => dispatch(
-    deleteMessageSuccess(camelizeKeys(messageId))
-  ),
+  onReceivedCallback: (type, message) => {
+    const camelized = camelizeKeys(message);
+
+    switch (type) {
+      case "CREATE" :
+        return dispatch(createMessageSuccess(camelized));
+      case "EDIT" :
+        return dispatch(editMessageSuccess(camelized));
+      case "DELETE" :
+        return dispatch(deleteMessageSuccess(camelized.id));
+    }
+  }
 });
 
 export default connect(
