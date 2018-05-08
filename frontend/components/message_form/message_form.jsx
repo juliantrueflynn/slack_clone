@@ -1,6 +1,5 @@
 import React from 'react';
-import { ActionCable } from 'react-actioncable-provider';
-
+ 
 class MessageForm extends React.Component {
   constructor(props) {
     super(props);
@@ -9,7 +8,6 @@ class MessageForm extends React.Component {
 
     this.handleTextareaValue = this.handleTextareaValue.bind(this);
     this.handleMessageSubmit = this.handleMessageSubmit.bind(this);
-    this.handleMessageSuccess = this.handleMessageSuccess.bind(this);
   }
 
   handleTextareaValue(event) {
@@ -20,37 +18,25 @@ class MessageForm extends React.Component {
   handleMessageSubmit(event) {
     event.preventDefault();
     
-    const newMessage = {
-      body: this.state.body,
-      author_id: this.props.authorId,
-      channel_id: this.props.channelId,
-      parent_message_id: this.props.parentMessageId,
+    const { authorId, channelId, parentMessageId } = this.props;
+    const message = {
+      body: this.state.body, authorId, channelId, parentMessageId,
     };
-
-    this.refs.roomChannel.perform('create', newMessage);
-  }
-
-  handleMessageSuccess(message) {
+    
     this.props.createMessage(message);
     this.setState({ body: "" });
   }
 
   render() {
-    const { body } = this.state;
+    const { body, channelId } = this.state;
+    
     return (
-      <div>
-        <ActionCable
-          ref="roomChannel"
-          channel={{ channel: 'ChatChannel' }}
-          onReceived={this.handleMessageSuccess}
-        />
-        <form onSubmit={ this.handleMessageSubmit }>
-          <div>
-            <textarea onChange={ this.handleTextareaValue } value={ body } />
-          </div>
-          <input type="submit" value="Add Message" />
-        </form>
-      </div>
+      <form onSubmit={ this.handleMessageSubmit }>
+        <div>
+          <textarea onChange={ this.handleTextareaValue } value={ body } />
+        </div>
+        <input type="submit" value="Add Message" />
+      </form>
     );
   }
 }

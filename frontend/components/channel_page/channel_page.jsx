@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActionCableProvider } from 'react-actioncable-provider';
+import { ActionCable } from 'react-actioncable-provider';
 import MessagesPane from '../messages_pane/messages_pane';
 import ChannelFormContainer from '../channel_form/channel_form_container';
 import './channel_page.css';
@@ -11,6 +11,8 @@ import ChannelRightSidebarContainer from
 class ChannelPage extends React.Component {
   constructor(props) {
     super(props);
+
+    this.handleReceived = this.handleReceived.bind(this);
   }
 
   componentDidMount() {
@@ -26,9 +28,18 @@ class ChannelPage extends React.Component {
     }
   }
 
+  handleReceived(message) {
+    this.props.createMessageSuccess(message);
+  }
+
   render() {
     return (
-      <ActionCableProvider url="ws://localhost:3000/cable">
+      <div>
+        <ActionCable
+          channel={{ channel: 'ChatChannel' }}
+          onReceived={ this.handleReceived }
+        />
+
         <div className="page page__channel">
           <h1>Channel #{ this.props.match.params.channelSlug }</h1>
           <div className="page__channel-content">
@@ -38,7 +49,7 @@ class ChannelPage extends React.Component {
           </div>
           <ChannelFormContainer />
         </div>
-      </ActionCableProvider>
+      </div>
     );
   }
 }
