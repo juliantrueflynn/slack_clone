@@ -7,16 +7,16 @@ class Message < ApplicationRecord
   has_many :thread_entries, class_name: 'Message', foreign_key: :parent_message_id
 
   after_create_commit do
-    MessageCreateJob.perform_later(self)
+    MessageEventsJob.perform_later(event: "CREATE_MESSAGE", data: self)
   end
 
   after_update_commit do
-    MessageEditJob.perform_later(self)
+    MessageEventsJob.perform_later(event: "EDIT_MESSAGE", data: self)
   end
 
   # This works but after_destroy_commit does not for some reason
   after_destroy :delete_message
   def delete_message
-    MessageDeleteJob.perform_later(self)
+    MessageEventsJob.perform_later(event: "DELETE_MESSAGE", data: self)
   end
 end

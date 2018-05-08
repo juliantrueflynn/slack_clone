@@ -6,6 +6,7 @@ import {
 } from '../actions/message_actions';
 import { camelizeKeys } from 'humps';
 import { getChannels, getChannelPageId } from '../reducers/selectors';
+import { createChannelSuccess } from '../actions/channel_actions';
 
 const mapStateToProps = state => ({
   channels: getChannels(state),
@@ -13,16 +14,18 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onReceivedCallback: (type, message) => {
-    const camelized = camelizeKeys(message);
+  onReceivedCallback: ({event, data}) => {
+    const camelizedProps = camelizeKeys(data);
 
-    switch (type) {
-      case "CREATE" :
-        return dispatch(createMessageSuccess(camelized));
-      case "EDIT" :
-        return dispatch(editMessageSuccess(camelized));
-      case "DELETE" :
-        return dispatch(deleteMessageSuccess(camelized.id));
+    switch (event) {
+      case "CREATE_MESSAGE" :
+        return dispatch(createMessageSuccess(camelizedProps));
+      case "EDIT_MESSAGE" :
+        return dispatch(editMessageSuccess(camelizedProps));
+      case "DELETE_MESSAGE" :
+        return dispatch(deleteMessageSuccess(camelizedProps.id));
+      case "CREATE_CHANNEL" :
+        return dispatch(createChannelSuccess(camelizedProps));
     }
   }
 });
@@ -45,8 +48,8 @@ class SocketChatChannel extends React.Component {
     }
   }
 
-  handleReceived({ type, message }) {
-    this.props.onReceivedCallback(type, message);
+  handleReceived(received) {
+    this.props.onReceivedCallback(received);
   }
 
   render() {
