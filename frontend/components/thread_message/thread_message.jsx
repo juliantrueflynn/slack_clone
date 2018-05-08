@@ -1,7 +1,6 @@
 import React from 'react';
-import { ActionCable } from 'react-actioncable-provider';
 
-class MessageThreadItem extends React.Component {
+class Message extends React.Component {
   constructor(props) {
     super(props);
 
@@ -17,7 +16,6 @@ class MessageThreadItem extends React.Component {
     this.handleEditFormSubmit = this.handleEditFormSubmit.bind(this);
     this.handleMessageEditSuccess = this.handleMessageEditSuccess.bind(this);
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
-    this.handleDeleteSuccess = this.handleDeleteSuccess.bind(this);
   }
 
   handleInputValue(property) {
@@ -43,9 +41,7 @@ class MessageThreadItem extends React.Component {
   }
 
   handleMessageEditSuccess(message) {
-    if (message.id === this.props.editId) {
-      this.props.closeEditMessage();
-    }
+    this.props.closeEditMessage();
   }
 
   handleEditFormSubmit(event) {
@@ -56,17 +52,14 @@ class MessageThreadItem extends React.Component {
       body: this.state.body,
     };
 
-    this.refs.roomChannelMessageEdit.perform('update', message);
+    this.props.editMessage(message);
   }
 
   handleDeleteClick(event) {
     event.preventDefault();
-    const { message } = this.props;
-    this.refs.roomChannel.perform('delete', message);
-  }
-
-  handleDeleteSuccess(message) {
-    this.props.deleteMessageSuccess(message.id);
+    
+    const { message: { id }, deleteMessage } = this.props;
+    deleteMessage(id);
   }
 
   render() {
@@ -86,22 +79,12 @@ class MessageThreadItem extends React.Component {
     let plainMessage;
     if (this.state.isMouseOver) {
       plainMessage = <div>
-        <ActionCable
-          ref="roomChannel"
-          channel={{ channel: 'ChatChannel' }}
-          onReceived={ this.handleDeleteSuccess }
-        />
         { editMessageButton }
         { deleteMessageButton }
       </div>;
     }
     const editMessageForm = <form onSubmit={ this.handleEditFormSubmit }>
       <div>
-        <ActionCable
-          ref="roomChannelMessageEdit"
-          channel={{ channel: 'ChatChannel' }}
-          onReceived={ this.handleMessageEditSuccess }
-        />
         <textarea
           value={ this.state.body }
           onChange={ this.handleInputValue('body') }
@@ -112,7 +95,7 @@ class MessageThreadItem extends React.Component {
     </form>;
 
     return (
-      <div
+      <li
         className="message"
         onMouseEnter={ this.handleMouseEnterHover }
         onMouseLeave={ this.handleMouseLeaveHover }
@@ -121,9 +104,9 @@ class MessageThreadItem extends React.Component {
         { message.id } -
         { message.authorId }
         { message.body }
-      </div>
+      </li>
     );
   }
 }
 
-export default MessageThreadItem;
+export default Message;

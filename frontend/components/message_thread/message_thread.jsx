@@ -1,5 +1,5 @@
 import React from 'react';
-import MessageThreadItem from './message_thread_item';
+import ThreadMessageContainer from '../thread_message/thread_message_container';
 import MessageFormContainer from '../message_form/message_form_container';
 
 const MessageThread = props => {
@@ -10,19 +10,8 @@ const MessageThread = props => {
         <div>{ props.message.body }</div>
       </div>
       <div className="message-thread__entries">
-        {props.threadEntries.map(entry =>
-          <MessageThreadItem
-            key={ entry.id }
-            message={ entry }
-            currentUserId={ props.currentUserId }
-            editId={ props.editId }
-            isEditing={ props.isEditing }
-            openEditMessage={ props.openEditMessage }
-            closeEditMessage={ props.closeEditMessage }
-            editMessage={ props.editMessage }
-            deleteMessage={ props.deleteMessage }
-            deleteMessageSuccess={ props.deleteMessageSuccess }
-          />
+        {props.threadEntries.map(message =>
+          <ThreadMessageContainer key={ message.id } message={ message } />
         )}
       </div>
 
