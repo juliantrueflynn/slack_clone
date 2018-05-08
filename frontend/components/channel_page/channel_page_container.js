@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
 import ChannelPage from './channel_page';
 import { loadChannelPage } from '../../actions/channel_actions';
-import { createMessage } from '../../util/message_api_util';
 import { getMessages } from '../../reducers/selectors';
-import { createMessageSuccess } from '../../actions/message_actions';
+import {
+  createMessageSuccess, editMessageSuccess, deleteMessageSuccess
+} from '../../actions/message_actions';
 import { camelizeKeys } from 'humps';
 
 const mapStateToProps = state => ({
@@ -16,6 +17,12 @@ const mapDispatchToProps = dispatch => ({
   ),
   createMessageSuccess: message => dispatch(
     createMessageSuccess(camelizeKeys(message))
+  ),
+  editMessageSuccess: message => dispatch(
+    editMessageSuccess(camelizeKeys(message))
+  ),
+  deleteMessageSuccess: messageId => dispatch(
+    deleteMessageSuccess(camelizeKeys(messageId))
   ),
 });
 

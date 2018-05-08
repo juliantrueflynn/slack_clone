@@ -12,7 +12,8 @@ class ChannelPage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleReceived = this.handleReceived.bind(this);
+    this.handleReceivedChannel = this.handleReceivedChannel.bind(this);
+    this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
   }
 
   componentDidMount() {
@@ -28,8 +29,19 @@ class ChannelPage extends React.Component {
     }
   }
 
-  handleReceived(message) {
+  handleReceivedChannel(message) {
     this.props.createMessageSuccess(message);
+  }
+
+  handleReceivedMessage(cable) {
+    switch (cable.type) {
+      case "EDIT" :
+        this.props.editMessageSuccess(cable.data);
+        break;
+      case "DELETE" :
+        this.props.deleteMessageSuccess(cable.data);
+        break;
+    }
   }
 
   render() {
@@ -37,8 +49,16 @@ class ChannelPage extends React.Component {
       <div>
         <ActionCable
           channel={{ channel: 'ChatChannel' }}
-          onReceived={ this.handleReceived }
+          onReceived={ this.handleReceivedChannel }
         />
+
+        {this.props.messages.map(message =>
+          <ActionCable
+            key={ message.id }
+            channel={{ channel: 'MessagesChannel', message_id: message.id }}
+            onReceived={ this.handleReceivedMessage }
+          />
+        )}
 
         <div className="page page__channel">
           <h1>Channel #{ this.props.match.params.channelSlug }</h1>

@@ -17,7 +17,6 @@ class MessageEntry extends React.Component {
     this.handleEditFormSubmit = this.handleEditFormSubmit.bind(this);
     this.handleMessageEditSuccess = this.handleMessageEditSuccess.bind(this);
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
-    this.handleDeleteSuccess = this.handleDeleteSuccess.bind(this);
     this.handleThreadOpenClick = this.handleThreadOpenClick.bind(this);
   }
 
@@ -44,9 +43,7 @@ class MessageEntry extends React.Component {
   }
 
   handleMessageEditSuccess(message) {
-    if (message.id === this.props.editId) {
-      this.props.closeEditMessage();
-    }
+    this.props.closeEditMessage();
   }
 
   handleEditFormSubmit(event) {
@@ -57,17 +54,14 @@ class MessageEntry extends React.Component {
       body: this.state.body,
     };
 
-    this.refs.roomChannelMessageEdit.perform('update', message);
+    this.props.editMessage(message);
   }
 
   handleDeleteClick(event) {
     event.preventDefault();
-    const { message } = this.props;
-    this.refs.roomChannel.perform('delete', message);
-  }
-
-  handleDeleteSuccess(message) {
-    this.props.deleteMessageSuccess(message.id);
+    
+    const { message: { id }, deleteMessage } = this.props;
+    deleteMessage(id);
   }
 
   handleThreadOpenClick(event) {
@@ -93,11 +87,6 @@ class MessageEntry extends React.Component {
     let plainMessage;
     if (this.state.isMouseOver) {
       plainMessage = <div>
-        <ActionCable
-          ref="roomChannel"
-          channel={{ channel: 'ChatChannel' }}
-          onReceived={ this.handleDeleteSuccess }
-        />
         <button onClick={ this.handleThreadOpenClick }>Start thread</button>
         { editMessageButton }
         { deleteMessageButton }
@@ -105,11 +94,6 @@ class MessageEntry extends React.Component {
     }
     const editMessageForm = <form onSubmit={ this.handleEditFormSubmit }>
       <div>
-        <ActionCable
-          ref="roomChannelMessageEdit"
-          channel={{ channel: 'ChatChannel' }}
-          onReceived={ this.handleMessageEditSuccess }
-        />
         <textarea
           value={ this.state.body }
           onChange={ this.handleInputValue('body') }

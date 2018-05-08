@@ -7,6 +7,7 @@ const mapStateToDispatch = (state, ownProps) => ({
   authorId: state.session.currentUser.id,
   channelId: getChannelPageId(state),
   parentMessageId: ownProps.parentMessageId || null,
+  isParent: Boolean(ownProps.parentMessageId),
 });
 
 const mapDispatchToProps = dispatch => ({

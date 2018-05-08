@@ -12,8 +12,7 @@ function* fetchNewMessage({ message }) {
 
 function* fetchEditMessage({ message }) {
   try {
-    const newMessage = yield call(utilApi.editMessage, message);
-    yield put(actions.editMessageSuccess(newMessage));
+    yield call(utilApi.editMessage, message);
   } catch (error) {
     yield put(actions.failureMessage(error));
   }
@@ -22,7 +21,6 @@ function* fetchEditMessage({ message }) {
 function* fetchDeleteMessage({ messageId }) {
   try {
     yield call(utilApi.deleteMessage, messageId);
-    yield put(actions.deleteMessageSuccess(messageId));
   } catch (error) {
     yield put(actions.failureMessage(error));
   }
