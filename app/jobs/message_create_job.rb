@@ -5,7 +5,7 @@ class MessageCreateJob < ApplicationJob
     ActionCable
       .server
       .broadcast(
-        "chat_channel",
+        "channel:#{message.channel_id}",
         id: message.id,
         author_id: message.author_id,
         channel_id: message.channel_id,

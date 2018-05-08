@@ -45,10 +45,12 @@ class ChannelPage extends React.Component {
   }
 
   render() {
+    const { channelSlug } = this.props.match.params;
+    
     return (
       <div>
         <ActionCable
-          channel={{ channel: 'ChatChannel' }}
+          channel={{ channel: 'ChatChannel', channel_id: channelSlug }}
           onReceived={ this.handleReceivedChannel }
         />
 
@@ -61,7 +63,7 @@ class ChannelPage extends React.Component {
         )}
 
         <div className="page page__channel">
-          <h1>Channel #{ this.props.match.params.channelSlug }</h1>
+          <h1>Channel #{ channelSlug }</h1>
           <div className="page__channel-content">
             <ChannelSidebarContainer />
             <MessagesPane />

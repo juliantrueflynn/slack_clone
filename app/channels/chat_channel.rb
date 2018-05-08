@@ -1,6 +1,7 @@
 class ChatChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "chat_channel"
+    channel_id = params[:channel_id]
+    stream_from "channel:#{channel_id}"
   end
 
   def unsubscribed
