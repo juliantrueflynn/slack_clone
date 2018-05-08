@@ -24,8 +24,6 @@ const mapDispatchToProps = dispatch => ({
         return dispatch(editMessageSuccess(camelizedProps));
       case "DELETE_MESSAGE" :
         return dispatch(deleteMessageSuccess(camelizedProps.id));
-      case "CREATE_CHANNEL" :
-        return dispatch(createChannelSuccess(camelizedProps));
     }
   }
 });
@@ -35,17 +33,6 @@ class SocketChatChannel extends React.Component {
     super(props);
 
     this.handleReceived = this.handleReceived.bind(this);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const { channelId, channels } = this.props;
-    
-    if (
-      channelId !== nextProps.channelId ||
-      channels.length !== nextProps.length
-    ) {
-      return true;
-    }
   }
 
   handleReceived(received) {
