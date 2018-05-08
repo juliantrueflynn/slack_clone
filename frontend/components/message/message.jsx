@@ -1,7 +1,6 @@
 import React from 'react';
-import { ActionCable } from 'react-actioncable-provider';
 
-class MessageEntry extends React.Component {
+class Message extends React.Component {
   constructor(props) {
     super(props);
 
@@ -118,4 +117,4 @@ class MessageEntry extends React.Component {
   }
 }
 
-export default MessageEntry;
+export default Message;
