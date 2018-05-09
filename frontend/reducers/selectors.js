@@ -8,7 +8,7 @@ export const getWorkspacesWithKeys = state => (
   state.entities.workspaces
 );
 
-export const getWorkspacePageId = state => (
+export const getPageWorkspaceSlug = state => (
   state.ui.displayWorkspaceId
 );
 
@@ -17,7 +17,7 @@ export const getChannels = state => (
 );
 
 export const getChannelPageId = state => (
-  parseInt(state.ui.displayChannelId)
+  state.ui.displayChannelId
 );
 
 export const getChannelById = (state, channelId) => (
