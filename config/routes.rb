@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  namespace :api, defaults: {format: :json} do
+  namespace :api, defaults: {format: :json, param: :slug} do
     resources :users, only: [:index, :show]
     resources :workspaces, only: [:index, :show, :create, :update, :destroy]
     resource :user, only: [:create]
@@ -15,5 +15,6 @@ Rails.application.routes.draw do
   get '*path', to: 'static_pages#index', constraints: ->(request) do
     !request.xhr? && request.format.html?
   end
+
   root to: 'static_pages#index'
 end
