@@ -1,7 +1,5 @@
 json.set! :channel do
-  json.extract! @channel, :id, :title, :topic
-  json.owner_id @channel.owner_id
-  json.workspace_id @channel.workspace_id
+  json.(@channel, :id, :title, :slug, :topic, :owner_id, :workspace_id)
   json.is_subbed current_user.is_channel_sub?(@channel)
 end
 
