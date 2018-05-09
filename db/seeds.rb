@@ -1,5 +1,4 @@
 require 'faker'
-require 'active_support/inflector'
 
 User.create!(email: "jtf@gmail.com", username: "jtf", password: "123456")
 
@@ -11,11 +10,11 @@ def random_lorem_short_or_long
   rand < 0.7 ? Faker::Lorem.sentence : Faker::Lorem.sentence
 end
 
-3.times do
+5.times do
   title = Faker::Company.unique.name
   workspace = Workspace.create!(
     title: title,
-    slug: ActiveSupport::Inflector.parameterize(title),
+    slug: title.parameterize,
     owner_id: User.first.id
   )
 
@@ -23,7 +22,7 @@ end
     title = Faker::Company.unique.buzzword
     Channel.create!(
       title: title,
-      slug: ActiveSupport::Inflector.parameterize(title),
+      slug: title.parameterize,
       owner_id: User.first.id,
       topic: (is_random_true? ? Faker::Company.bs : nil),
       workspace_id: workspace.id
