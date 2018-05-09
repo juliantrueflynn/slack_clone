@@ -19,9 +19,11 @@ end
     owner_id: User.first.id
   )
 
-  [*2..4].sample.times do
+  [*2..5].sample.times do
+    title = Faker::Company.unique.buzzword
     Channel.create!(
-      title: Faker::Company.unique.buzzword,
+      title: title,
+      slug: ActiveSupport::Inflector.parameterize(title),
       owner_id: User.first.id,
       topic: (is_random_true? ? Faker::Company.bs : nil),
       workspace_id: workspace.id
@@ -29,7 +31,7 @@ end
   end
 end
 
-7.times do
+15.times do
   user = User.create!(
     email: Faker::Internet.unique.email,
     username: Faker::Internet.unique.user_name,
@@ -51,7 +53,7 @@ end
         user_id: user.id
       )
   
-      [*1..3].sample.times do
+      [*1..11].sample.times do
         next if is_random_true?
         Message.create!(
           body: random_lorem_short_or_long,
