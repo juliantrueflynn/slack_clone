@@ -15,4 +15,8 @@ class Channel < ApplicationRecord
   def self.subbed_by_user_in_workspace(user_id, workspace_id)
     self.joins(:subs).where(channel_subs: {user_id: user_id})
   end
+
+  def parent_messages
+    messages.where(parent_message_id: nil)
+  end
 end
