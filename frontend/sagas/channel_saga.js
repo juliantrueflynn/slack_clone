@@ -11,8 +11,8 @@ import {
 import { fetchWorkspace } from './workspace_saga';
 import { navigate } from '../actions/navigate_actions';
 
-function* fetchCreatorSub(userId, channelSlug) {
-  yield call(createChannelSub, { userId, channelSlug });
+function* fetchCreatorSub(userId, channelId) {
+  yield call(createChannelSub, { userId, channelId });
 }
 
 function* addNewChannel({ channel }) {
