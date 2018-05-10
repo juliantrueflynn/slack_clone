@@ -16,10 +16,9 @@ class Workspace < ApplicationRecord
     users_subbed
   end
 
-  # May not be necessary and do this through redux
-  # def to_param
-  #   slug
-  # end
+  def to_param
+    slug
+  end
 
   private
 

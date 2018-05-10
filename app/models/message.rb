@@ -23,10 +23,9 @@ class Message < ApplicationRecord
     MessageEventsJob.perform_later(event: "DELETE_MESSAGE", data: self)
   end
 
-  # May not be necessary and do this through redux
-  # def to_param
-  #   slug
-  # end
+  def to_param
+    slug
+  end
 
   private
 
