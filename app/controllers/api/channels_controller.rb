@@ -1,10 +1,11 @@
 class Api::ChannelsController < ApplicationController
+  before_action :set_channel, only: [:show, :update, :destroy]
+
   def index
     @channels = Channel.where(workspace_id: params[:workspace_id])
   end
 
   def show
-    @channel = Channel.find_by(id: params[:id])
   end
 
   def create
@@ -18,8 +19,6 @@ class Api::ChannelsController < ApplicationController
   end
 
   def update
-    @channel = Channel.find_by(id: params[:id])
-    
     if @channel.update(channel_params)
       render json: @channel
     else
@@ -28,8 +27,6 @@ class Api::ChannelsController < ApplicationController
   end
 
   def destroy
-    @channel = Channel.find_by(id: params[:id])
-
     if @channel
       @channel.destroy
       render json: @channel
@@ -40,7 +37,11 @@ class Api::ChannelsController < ApplicationController
 
   private
 
+  def set_channel
+    @channel = Channel.find_by(id: params[:id])
+  end
+
   def channel_params
-    params.require(:channel).permit(:title, :topic, :owner_id, :workspace_id)
+    params.require(:channel).permit(:title, :slug, :topic, :owner_id, :workspace_id)
   end
 end

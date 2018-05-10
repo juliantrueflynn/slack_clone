@@ -1,10 +1,11 @@
 class Api::MessagesController < ApplicationController
+  before_action :set_channel, only: [:show, :update, :destroy]
+
   def index
     @messages = Message.all
   end
 
   def show
-    @message = Message.find_by(id: params[:id])
   end
 
   def create
@@ -18,8 +19,6 @@ class Api::MessagesController < ApplicationController
   end
 
   def update
-    @message = Message.find_by(id: params[:id])
-
     if @message.update(message_params)
       render json: @message
     else
@@ -28,8 +27,6 @@ class Api::MessagesController < ApplicationController
   end
 
   def destroy
-    @message = Message.find_by(id: params[:id])
-
     if @message
       @message.destroy
       render json: @message
@@ -40,7 +37,11 @@ class Api::MessagesController < ApplicationController
 
   private
 
+  def set_message
+    @message = Message.find_by(id: params[:id])
+  end
+
   def message_params
-    params.require(:message).permit(:body, :parent_message_id, :channel_id, :author_id)
+    params.require(:message).permit(:body, :slug, :parent_message_id, :channel_id, :author_id)
   end
 end
