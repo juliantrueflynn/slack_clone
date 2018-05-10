@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
-  namespace :api, defaults: {format: :json, param: :slug} do
+  namespace :api, defaults: {format: :json} do
     resources :users, only: [:index, :show]
-    resources :workspaces, only: [:index, :show, :create, :update, :destroy]
+    resources :workspaces, only: [:index, :show, :create, :update, :destroy], param: :slug
     resource :user, only: [:create]
     resource :session, only: [:create, :destroy, :show]
-    resources :channels, only: [:show, :create, :update, :destroy]
+    resources :channels, only: [:show, :create, :update, :destroy], param: :slug
     resources :workspace_subs, only: [:create, :destroy]
     resources :channel_subs, only: [:create, :destroy]
-    resources :messages, only: [:create, :update, :destroy, :show]
+    resources :messages, only: [:create, :update, :destroy, :show], param: :slug
   end
 
   mount ActionCable.server => '/cable'
