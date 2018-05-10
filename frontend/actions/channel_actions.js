@@ -1,5 +1,3 @@
-import * as ChannelAPIUtil from '../util/channel_api_util';
-
 export const REQUEST_CHANNELS = 'REQUEST_CHANNELS';
 export const RECEIVE_CHANNELS = 'RECEIVE_CHANNELS';
 export const FAILURE_CHANNELS = 'FAILURE_CHANNELS';
@@ -33,15 +31,15 @@ export const failureChannels = errors => ({
   errors
 });
 
-export const loadChannelPage = (channelId, workspaceId) => ({
+export const loadChannelPage = (channelSlug, workspaceSlug) => ({
   type: LOAD_CHANNEL_PAGE,
-  channelId,
-  workspaceId
+  channelSlug,
+  workspaceSlug
 });
 
-export const requestChannel = channelId => ({
+export const requestChannel = channelSlug => ({
   type: REQUEST_CHANNEL,
-  channelId
+  channelSlug
 });
 
 export const receiveChannel = (channel, threadId) => ({
@@ -70,14 +68,14 @@ export const createChannelErrors = errors => ({
   errors
 });
 
-export const deleteChannel = channelId => ({
+export const deleteChannel = channelSlug => ({
   type: DELETE_CHANNEL,
-  channelId
+  channelSlug
 });
 
-export const deleteChannelSuccess = channelId => ({
+export const deleteChannelSuccess = channelSlug => ({
   type: DELETE_CHANNEL_SUCCESS,
-  channelId
+  channelSlug
 });
 
 export const createChannels = channels => ({

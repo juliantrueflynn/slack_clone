@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import ChannelsMenu from './channels_menu';
 import { requestChannels } from '../../actions/channel_actions';
-import { getChannels, getWorkspacePageId } from '../../reducers/selectors';
+import { getChannels, getPageWorkspaceSlug } from '../../reducers/selectors';
 import { modalOpen, CREATE_CHANNEL_MODAL } from '../../actions/modal_actions';
 
 const mapStateToProps = state => ({
   channels: getChannels(state),
-  workspaceId: getWorkspacePageId(state),
+  workspaceSlug: getPageWorkspaceSlug(state),
 });
 
 const mapDispatchToProps = dispatch => ({

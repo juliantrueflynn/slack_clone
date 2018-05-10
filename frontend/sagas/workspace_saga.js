@@ -9,7 +9,7 @@ import { createChannels, CREATE_CHANNELS } from '../actions/channel_actions';
 import * as api from '../util/workspace_api_util';
 import { createWorkspaceSub } from '../util/workspace_sub_api_util';
 import {
-  getWorkspaces, getWorkspacePageId, getChannels
+  getWorkspaces, getPageWorkspaceSlug, getChannels
 } from '../reducers/selectors';
 import { addNewChannels } from './channel_saga';
 import { navigate } from '../actions/navigate_actions';
@@ -27,18 +27,18 @@ function* fetchWorkspaces(prevState) {
 
 export function* fetchWorkspace() {
   try {
-    const workspaceId = yield select(getWorkspacePageId);
-    const workspace = yield call(api.fetchWorkspace, workspaceId);
+    const workspaceSlug = yield select(getPageWorkspaceSlug);
+    const workspace = yield call(api.fetchWorkspace, workspaceSlug);
     yield put(actions.receiveWorkspace(workspace));
   } catch (error) {
     yield put(actions.failureWorkspace(error));
   }
 }
 
-function* fetchDeleteWorkspace({ workspaceId }) {
+function* fetchDeleteWorkspace({ workspaceSlug }) {
   try {
-    yield call(api.deleteWorkspace, workspaceId);
-    yield put(actions.deleteWorkspaceSuccess(workspaceId));
+    yield call(api.deleteWorkspace, workspaceSlug);
+    yield put(actions.deleteWorkspaceSuccess(workspaceSlug));
   } catch (error) {
     yield put(actions.receiveWorkspaceErrors(error));
   }
@@ -68,7 +68,7 @@ function* loadDefaultChannels({ workspace: { id, ownerId } }) {
   let defaultChannels = [];
   const defaultChannelTitles = ['#general', '#random'];
   for (let title of defaultChannelTitles) {
-    defaultChannels.push({ title, ownerId, workspaceId: id });
+    defaultChannels.push({ title, ownerId, workspaceSlug: id });
   }
   yield put(createChannels(defaultChannels));
 }
@@ -80,13 +80,13 @@ function* loadWorkspaces(workspaces) {
   }
 }
 
-function* loadWorkspace({ workspaceId }) {
-  yield call(fetchWorkspace, workspaceId);
+function* loadWorkspace({ workspaceSlug }) {
+  yield call(fetchWorkspace, workspaceSlug);
   const firstChannel = yield select(getChannels);
   if (firstChannel.length) {
-    yield put(navigate(`/${workspaceId}/${firstChannel[0].id}`));
+    yield put(navigate(`/${workspaceSlug}/${firstChannel[0].id}`));
   } else {
-    yield put(navigate(`/${workspaceId}/create-channel`));
+    yield put(navigate(`/${workspaceSlug}/create-channel`));
   }
 }
 

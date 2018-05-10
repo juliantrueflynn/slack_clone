@@ -30,9 +30,9 @@ export const failureMessages = errors => ({
   errors
 });
 
-export const loadMessages = channelId => ({
+export const loadMessages = channelSlug => ({
   type: LOAD_MESSAGES,
-  channelId
+  channelSlug
 });
 
 export const requestMessage = messageId => ({

@@ -6,13 +6,13 @@ import * as utilApi from '../util/channel_api_util';
 import { createChannelSubSuccess } from '../actions/channel_sub_actions';
 import { createChannelSub } from '../util/channel_sub_api_util';
 import {
-  getChannelPageId, getChannels, getWorkspacePageId, getChannelById, getThreadId
+  getPageChannelSlug, getChannels, getPageWorkspaceSlug, getThreadId
 } from '../reducers/selectors';
 import { fetchWorkspace } from './workspace_saga';
 import { navigate } from '../actions/navigate_actions';
 
-function* fetchCreatorSub(userId, channelId) {
-  yield call(createChannelSub, { userId, channelId });
+function* fetchCreatorSub(userId, channelSlug) {
+  yield call(createChannelSub, { userId, channelSlug });
 }
 
 function* addNewChannel({ channel }) {
@@ -26,9 +26,10 @@ function* addNewChannel({ channel }) {
 
 function* subCreatorToNewChannel({ channel }) {
   try {
+    const workspaceSlug = yield select(getPageWorkspaceSlug);
     const newSub = yield call(fetchCreatorSub, channel.ownerId, channel.id);
     yield put(createChannelSubSuccess(newSub));
-    yield put(navigate(`/${channel.workspaceId}/${channel.id}`));
+    yield put(navigate(`/${ workspaceSlug }/${ channel.slug }`));
   } catch (error) {
     yield put(actions.createChannelErrors(error));
   }
@@ -55,8 +56,8 @@ function* addNewChannels({ channels }) {
 
 function* fetchChannel() {
   try {
-    const channelId = yield select(getChannelPageId);
-    const channel = yield call(utilApi.fetchChannel, channelId);
+    const channelSlug = yield select(getPageChannelSlug);
+    const channel = yield call(utilApi.fetchChannel, channelSlug);
     const threadId = yield select(getThreadId);
     yield put(actions.receiveChannel(channel, threadId));
   } catch (error) {
@@ -65,19 +66,19 @@ function* fetchChannel() {
 }
 
 function* loadChannelEntities() {
-  const workspaceId = yield select(getWorkspacePageId);
+  const workspaceSlug = yield select(getPageWorkspaceSlug);
   const channels = yield select(getChannels);
   if (channels.length < 1) {
     yield put(actions.requestChannels());
-    yield call(fetchWorkspace, workspaceId);
+    yield call(fetchWorkspace, workspaceSlug);
   }
   yield call(fetchChannel);
 }
 
-function* fetchDeleteChannel({ channelId }) {
+function* fetchDeleteChannel({ channelSlug }) {
   try {
-    yield call(utilApi.deleteChannel, channelId);
-    yield put(actions.deleteChannelSuccess(channelId));
+    yield call(utilApi.deleteChannel, channelSlug);
+    yield put(actions.deleteChannelSuccess(channelSlug));
   } catch (error) {
     yield put(actions.receiveChannelErrors(error));
   }

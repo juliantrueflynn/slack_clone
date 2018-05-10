@@ -1,5 +1,4 @@
 import React from 'react';
-// import { ActionCable } from 'react-actioncable-provider';
 import ChannelFormContainer from '../channel_form/channel_form_container';
 import ChannelSidebarContainer from
   '../channel_sidebar/channel_sidebar_container';
@@ -29,16 +28,16 @@ class ChannelPage extends React.Component {
   }
 
   render() {
-    const { channelSlug } = this.props.match.params;
+    const { messages, match: { params } } = this.props;
     
     return (
       <div>
         <div className="page page__channel">
-          <h1>Channel #{ channelSlug }</h1>
+          <h1>Channel #{ params.channelSlug }</h1>
           <div className="page__channel-content">
             <ChannelSidebarContainer />
             <div className="messages-pane">
-              <ChannelMessages messages={ this.props.messages } />
+              <ChannelMessages messages={ messages } />
               <MessageFormContainer />
             </div>
             <ChannelRightSidebarContainer />

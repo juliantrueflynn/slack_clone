@@ -12,8 +12,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadChannelPage: (channelId, workspaceId) => dispatch(
-    loadChannelPage(channelId, workspaceId)
+  loadChannelPage: (channelSlug, workspaceSlug) => dispatch(
+    loadChannelPage(channelSlug, workspaceSlug)
   ),
   onReceivedCallback: (type, message) => {
     const camelized = camelizeKeys(message);

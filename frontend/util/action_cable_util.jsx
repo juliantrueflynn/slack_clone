@@ -5,12 +5,12 @@ import {
   createMessageSuccess, editMessageSuccess, deleteMessageSuccess
 } from '../actions/message_actions';
 import { camelizeKeys } from 'humps';
-import { getChannels, getChannelPageId } from '../reducers/selectors';
+import { getChannels, getPageChannelSlug } from '../reducers/selectors';
 import { createChannelSuccess } from '../actions/channel_actions';
 
 const mapStateToProps = state => ({
   channels: getChannels(state),
-  channelId: getChannelPageId(state),
+  channelSlug: getPageChannelSlug(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -40,7 +40,7 @@ class SocketChatChannel extends React.Component {
   }
 
   render() {
-    const { channelId, channels } = this.props;
+    const { channelSlug, channels } = this.props;
     
     return (
       <Fragment>

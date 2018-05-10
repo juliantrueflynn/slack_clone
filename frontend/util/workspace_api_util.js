@@ -21,8 +21,8 @@ export const fetchWorkspaces = () => (
   })
 );
 
-export const fetchWorkspace = workspaceId => (
-  fetch(`api/workspaces/${workspaceId}`, {
+export const fetchWorkspace = workspaceSlug => (
+  fetch(`api/workspaces/${workspaceSlug}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -64,8 +64,8 @@ export const createWorkspace = workspace => (
   })
 );
 
-export const deleteWorkspace = workspaceId => (
-  fetch(`api/workspaces/${workspaceId}`, {
+export const deleteWorkspace = workspaceSlug => (
+  fetch(`api/workspaces/${workspaceSlug}`, {
     method: 'DELETE',
     credentials: 'include'
   }).then(response =>

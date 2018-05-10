@@ -1,28 +1,7 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
 
-// export const fetchChannels = workspaceId => (
-//   fetch(`api/workspaces/${workspaceId}/channels`, {
-//     method: 'GET',
-//     headers: {
-//       'Accept': 'application/json',
-//       'Content-Type': 'application/json',
-//     },
-//     credentials: 'include'
-//   }).then(response =>
-//     response.json().then(json => ({ json, response }))
-//   ).then(({ json, response }) => {
-//     if (!response.ok) {
-//       throw json;
-//     }
-
-//     return camelizeKeys(json);
-//   }).catch(error => {
-//     throw error.message || ['Unknown channel error!'];
-//   })
-// );
-
-export const fetchChannel = channelId => (
-  fetch(`api/channels/${channelId}`, {
+export const fetchChannel = channelSlug => (
+  fetch(`api/channels/${channelSlug}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -82,8 +61,8 @@ export const editChannel = channel => (
   })
 );
 
-export const deleteChannel = channelId => (
-  fetch(`api/channels/${channelId}`, {
+export const deleteChannel = channelSlug => (
+  fetch(`api/channels/${channelSlug}`, {
     method: 'DELETE',
     credentials: 'include'
   }).then(response =>

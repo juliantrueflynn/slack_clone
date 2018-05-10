@@ -15,8 +15,8 @@ export const createChannelSub = channelSub => (
       throw json;
     }
 
-    const { id, channelId, userId } = camelizeKeys(json);
-    return { id, channelId, userId };
+    const { id, channelSlug, userId } = camelizeKeys(json);
+    return { id, channelSlug, userId };
   }).catch(errors => {
     throw errors || ['Unknown channel error!'];
   })

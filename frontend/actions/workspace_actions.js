@@ -1,5 +1,3 @@
-import * as WorkspaceAPIUtil from '../util/workspace_api_util';
-
 export const REQUEST_WORKSPACES = 'REQUEST_WORKSPACES';
 export const RECEIVE_WORKSPACES = 'RECEIVE_WORKSPACES';
 export const FAILURE_WORKSPACES = 'FAILURE_WORKSPACES';
@@ -28,14 +26,14 @@ export const failureWorkspaces = errors => ({
   errors
 });
 
-export const loadWorkspacePage = workspaceId => ({
+export const loadWorkspacePage = workspaceSlug => ({
   type: LOAD_WORKSPACE_PAGE,
-  workspaceId
+  workspaceSlug
 });
 
-export const requestWorkspace = workspaceId => ({
+export const requestWorkspace = workspaceSlug => ({
   type: REQUEST_WORKSPACE,
-  workspaceId
+  workspaceSlug
 });
 
 export const receiveWorkspace = workspace => ({
@@ -58,12 +56,12 @@ export const createWorkspaceSuccess = workspace => ({
   workspace
 });
 
-export const deleteWorkspace = workspaceId => ({
+export const deleteWorkspace = workspaceSlug => ({
   type: DELETE_WORKSPACE,
-  workspaceId
+  workspaceSlug
 });
 
-export const deleteWorkspaceSuccess = workspaceId => ({
+export const deleteWorkspaceSuccess = workspaceSlug => ({
   type: DELETE_WORKSPACE_SUCCESS,
-  workspaceId
+  workspaceSlug
 });

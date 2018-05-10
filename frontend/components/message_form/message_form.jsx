@@ -20,7 +20,7 @@ class MessageForm extends React.Component {
     
     const { authorId, channelId, parentMessageId } = this.props;
     const message = {
-      body: this.state.body, authorId, channelId, parentMessageId,
+      body: this.state.body, authorId, channelId, parentMessageId
     };
     
     this.props.createMessage(message);
@@ -28,12 +28,13 @@ class MessageForm extends React.Component {
   }
 
   render() {
-    const { body, channelId } = this.state;
-    
     return (
       <form onSubmit={ this.handleMessageSubmit }>
         <div>
-          <textarea onChange={ this.handleTextareaValue } value={ body } />
+          <textarea
+            onChange={ this.handleTextareaValue }
+            value={ this.state.body }
+          />
         </div>
         <input type="submit" value="Add Message" />
       </form>

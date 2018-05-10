@@ -7,10 +7,11 @@ class ChannelsMenuItem extends React.Component {
   }
 
   render() {
-    const { channel, workspaceId } = this.props;
+    const { channel, workspaceSlug } = this.props;
+    
     return (
       <li>
-        <Link to={ `/${workspaceId}/${channel.id}` }>
+        <Link to={ `/${ workspaceSlug }/${ channel.slug }` }>
           ID: #{ channel.id } - Title: { channel.title }
         </Link>
       </li>
