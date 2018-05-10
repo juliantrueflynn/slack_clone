@@ -9,19 +9,29 @@ export const getWorkspacesWithKeys = state => (
 );
 
 export const getPageWorkspaceSlug = state => (
-  state.ui.displayWorkspaceId
+  state.ui.displayWorkspaceSlug
 );
+
+export const getCurrentWorkspaceId = ({ ui, entities }) => {
+  const workspace = entities.workspaces[ui.displayWorkspaceSlug];
+  return workspace ? workspace.id : null;
+};
 
 export const getChannels = state => (
   values(state.entities.channels)
 );
 
-export const getChannelPageId = state => (
-  state.ui.displayChannelId
+export const getPageChannelSlug = state => (
+  state.ui.displayChannelSlug
 );
 
-export const getChannelById = (state, channelId) => (
-  state.entities.channels[channelId]
+export const getCurrentChannelId = ({ ui, entities }) => {
+  const channel = entities.channels[ui.displayChannelSlug];
+  return channel ? channel.id : null;
+};
+
+export const getChannelById = (state, channelSlug) => (
+  state.entities.channels[channelSlug]
 );
 
 export const getCurrentUser = state => (
