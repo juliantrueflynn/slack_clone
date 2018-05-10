@@ -1,5 +1,8 @@
 class Message < ApplicationRecord
+  before_validation :generate_slug
+
   validates :author_id, :channel_id, presence: true
+  validates :slug, uniqueness: true, presence: true
 
   belongs_to :author, class_name: 'User'
   belongs_to :channel
@@ -18,5 +21,21 @@ class Message < ApplicationRecord
   after_destroy :delete_message
   def delete_message
     MessageEventsJob.perform_later(event: "DELETE_MESSAGE", data: self)
+  end
+
+  # May not be necessary and do this through redux
+  # def to_param
+  #   slug
+  # end
+
+  private
+
+  def generate_slug
+    return slug if slug
+    
+    loop do
+      self.slug = SecureRandom.urlsafe_base64(8)
+      break unless Message.where(slug: slug).exists?
+    end
   end
 end
