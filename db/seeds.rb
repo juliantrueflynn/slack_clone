@@ -14,7 +14,6 @@ end
   title = Faker::Company.unique.name
   workspace = Workspace.create!(
     title: title,
-    slug: title.parameterize,
     owner_id: User.first.id
   )
 
@@ -22,7 +21,6 @@ end
     title = Faker::Company.unique.buzzword
     Channel.create!(
       title: title,
-      slug: title.parameterize,
       owner_id: User.first.id,
       topic: (is_random_true? ? Faker::Company.bs : nil),
       workspace_id: workspace.id
