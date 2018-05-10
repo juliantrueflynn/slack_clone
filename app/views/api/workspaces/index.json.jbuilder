@@ -1,7 +1,5 @@
 @workspaces.each do |workspace|
-  json.set! workspace.id do
-    json.id workspace.id
-    json.title workspace.title
-    json.slug workspace.slug
+  json.set! workspace.slug do
+    json.(workspace, :id, :title, :slug)
   end
 end
