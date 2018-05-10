@@ -31,7 +31,7 @@ class Api::WorkspacesController < ApplicationController
   private
 
   def set_workspace
-    @workspace = Workspace.find_by(id: params[:id])
+    @workspace = Workspace.find_by(slug: params[:slug])
   end
 
   def workspace_params

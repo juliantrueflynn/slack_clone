@@ -38,7 +38,7 @@ class Api::ChannelsController < ApplicationController
   private
 
   def set_channel
-    @channel = Channel.find_by(id: params[:id])
+    @channel = Channel.find_by(slug: params[:slug])
   end
 
   def channel_params
