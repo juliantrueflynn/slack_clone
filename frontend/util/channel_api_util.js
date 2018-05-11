@@ -1,7 +1,7 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
 
 export const fetchChannel = channelSlug => (
-  fetch(`api/channels/${channelSlug}`, {
+  fetch(`api/channels/${ channelSlug }`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -14,7 +14,6 @@ export const fetchChannel = channelSlug => (
     if (!response.ok) {
       throw json;
     }
-
     return camelizeKeys(json);
   }).catch(error => {
     throw error.message || ['Unknown channel error!'];
@@ -28,6 +27,7 @@ export const createChannel = channel => (
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
+    credentials: 'include',
     body: JSON.stringify(decamelizeKeys(channel, { separator: '_' }))
   }).then(response =>
     response.json().then(json => ({ json, response }))
@@ -48,6 +48,7 @@ export const editChannel = channel => (
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
+    credentials: 'include',
     body: JSON.stringify(decamelizeKeys(channel, { separator: '_' }))
   }).then(response =>
     response.json().then(json => ({ json, response }))
@@ -62,7 +63,7 @@ export const editChannel = channel => (
 );
 
 export const deleteChannel = channelSlug => (
-  fetch(`api/channels/${channelSlug}`, {
+  fetch(`api/channels/${ channelSlug }`, {
     method: 'DELETE',
     credentials: 'include'
   }).then(response =>

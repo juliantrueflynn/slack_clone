@@ -10,6 +10,7 @@ class Api::ChannelsController < ApplicationController
 
   def create
     @channel = Channel.new(channel_params)
+    @channel.owner_id = current_user.id
 
     if @channel.save
       render json: @channel
@@ -42,6 +43,6 @@ class Api::ChannelsController < ApplicationController
   end
 
   def channel_params
-    params.require(:channel).permit(:title, :slug, :topic, :owner_id, :workspace_id)
+    params.require(:channel).permit(:title, :slug, :topic, :workspace_id)
   end
 end
