@@ -30,11 +30,14 @@ export const getCurrentChannelId = ({ ui, entities }) => {
   return channel ? channel.id : null;
 };
 
-export const getMessages = state => (
-  values(state.entities.messages).filter(message =>
-    message.parentMessageId === null
-  )
-);
+export const getMessages = ({ entities: { messages, channels }, ui }) => {
+  const currentChannel = channels[ui.displayChannelSlug];
+  if (!currentChannel) return [];
+
+  return values(messages).filter(message => 
+    !message.parentMessageId && currentChannel.id === message.channelId
+  );
+};
 
 export const getMessageBySlug = (state, messageSlug) => (
   state.entities.messages[messageSlug]
