@@ -45,8 +45,11 @@ export const getMessageBySlug = (state, messageSlug) => (
 
 export const getMessageSlug = state => state.ui.displayMessageSlug;
 
-export const getThreadEntries = state => (
-  values(state.entities.messages).filter(message =>
-    message.parentMessageId === state.ui.displayMessageSlug
-  )
-);
+export const getThreadEntries = ({ entities: { messages }, ui }) => {
+  const currentMessage = messages[ui.displayMessageSlug];
+  if (!currentMessage) return [];
+  
+  return values(messages).filter(message =>
+    message.parentMessageId === currentMessage.id
+  );
+};
