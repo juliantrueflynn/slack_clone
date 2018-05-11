@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import ChannelsMenu from './channels_menu';
 import { requestChannels } from '../../actions/channel_actions';
 import { getChannels, getPageWorkspaceSlug } from '../../reducers/selectors';
@@ -14,7 +15,7 @@ const mapDispatchToProps = dispatch => ({
   modalOpen: () => dispatch(modalOpen(CREATE_CHANNEL_MODAL)),
 });
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(ChannelsMenu);
+)(ChannelsMenu));

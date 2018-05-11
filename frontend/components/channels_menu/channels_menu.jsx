@@ -26,9 +26,9 @@ class ChannelsMenu extends React.Component {
           <ul>
             {channels.map(channel =>
               <ChannelsMenuItem
-                key={ channel.id }
+                key={ channel.slug }
                 channel={ channel }
-                workspaceSlug={ workspaceSlug }
+                { ...this.props }
               />
             )}
           </ul>

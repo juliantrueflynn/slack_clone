@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 class WorkspaceMenuItem extends React.Component {
   constructor(props) {
@@ -11,9 +11,9 @@ class WorkspaceMenuItem extends React.Component {
   
     return (
       <li>
-        <Link to={ `/${ slug }` }>
+        <NavLink to={ `/${ slug }` }>
           { id } - { title } - { slug }
-        </Link>
+        </NavLink>
       </li>
     );
   }
