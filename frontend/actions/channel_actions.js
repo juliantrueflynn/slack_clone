@@ -42,10 +42,10 @@ export const requestChannel = channelSlug => ({
   channelSlug
 });
 
-export const receiveChannel = (channel, threadId) => ({
+export const receiveChannel = (channel, MessageSlug) => ({
   type: RECEIVE_CHANNEL,
   channel,
-  threadId
+  MessageSlug
 });
 
 export const failureChannel = errors => ({

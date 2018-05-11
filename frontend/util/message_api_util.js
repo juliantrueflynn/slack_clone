@@ -1,7 +1,7 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
 
-export const fetchMessage = messageId => (
-  fetch(`api/messages/${messageId}`, {
+export const fetchMessage = messageSlug => (
+  fetch(`api/messages/${messageSlug}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -61,8 +61,8 @@ export const editMessage = message => (
   })
 );
 
-export const deleteMessage = messageId => (
-  fetch(`api/messages/${messageId}`, {
+export const deleteMessage = messageSlug => (
+  fetch(`api/messages/${messageSlug}`, {
     method: 'DELETE',
     credentials: 'include'
   }).then(response =>

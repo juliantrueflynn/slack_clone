@@ -1,9 +1,9 @@
 export const OPEN_THREAD = 'OPEN_THREAD';
 export const CLOSE_THREAD = 'CLOSE_THREAD';
 
-export const openThread = messageId => ({
+export const openThread = messageSlug => ({
   type: OPEN_THREAD,
-  messageId
+  messageSlug
 });
 
 export const closeThread = () => ({

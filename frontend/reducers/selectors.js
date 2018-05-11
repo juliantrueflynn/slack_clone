@@ -30,28 +30,20 @@ export const getCurrentChannelId = ({ ui, entities }) => {
   return channel ? channel.id : null;
 };
 
-export const getChannelById = (state, channelSlug) => (
-  state.entities.channels[channelSlug]
-);
-
-export const getCurrentUser = state => (
-  state.session.currentUser
-);
-
 export const getMessages = state => (
   values(state.entities.messages).filter(message =>
     message.parentMessageId === null
   )
 );
 
-export const getMessageById = (state, messageId) => (
-  state.entities.messages[messageId]
+export const getMessageBySlug = (state, messageSlug) => (
+  state.entities.messages[messageSlug]
 );
 
-export const getThreadId = state => state.ui.displayThreadId;
+export const getMessageSlug = state => state.ui.displayMessageSlug;
 
 export const getThreadEntries = state => (
   values(state.entities.messages).filter(message =>
-    message.parentMessageId === state.ui.displayThreadId
+    message.parentMessageId === state.ui.displayMessageSlug
   )
 );

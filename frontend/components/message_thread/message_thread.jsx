@@ -2,20 +2,20 @@ import React from 'react';
 import ThreadMessageContainer from '../thread_message/thread_message_container';
 import MessageFormContainer from '../message_form/message_form_container';
 
-const MessageThread = props => {
+const MessageThread = ({ message, threadEntries }) => {
   return (
     <div className="message-thread">
       <div className="thread-message">
-        <div>{ props.message.authorId }</div>
-        <div>{ props.message.body }</div>
+        <div>{ message.authorId }</div>
+        <div>{ message.body }</div>
       </div>
       <div className="message-thread__entries">
-        {props.threadEntries.map(message =>
-          <ThreadMessageContainer key={ message.id } message={ message } />
+        {threadEntries.map(entry =>
+          <ThreadMessageContainer key={ entry.id } message={ entry } />
         )}
       </div>
 
-      <MessageFormContainer parentMessageId={ props.message.id } />
+      <MessageFormContainer parentMessageId={ message.id } />
     </div>
   );
 };

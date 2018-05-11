@@ -11,8 +11,8 @@ import {
 import { openThread } from '../../actions/message_thread_actions';
 
 const mapStateToProps = state => ({
-  editId: state.ui.editMessageId,
-  isEditing: Boolean(state.ui.editMessageId),
+  editSlug: state.ui.editMessageSlug,
+  isEditing: Boolean(state.ui.editMessageSlug),
   currentUserId: state.session.currentUser.id,
 });
 
@@ -20,8 +20,8 @@ const mapDispatchToProps = dispatch => ({
   editMessage: message => dispatch(editMessage(message)),
   openEditMessage: message => dispatch(openEditMessage(message)),
   closeEditMessage: () => dispatch(closeEditMessage()),
-  deleteMessage: messageId => dispatch(deleteMessage(messageId)),
-  openThread: threadId => dispatch(openThread(threadId)),
+  deleteMessage: messageSlug => dispatch(deleteMessage(messageSlug)),
+  openThread: MessageSlug => dispatch(openThread(MessageSlug)),
 });
 
 export default connect(

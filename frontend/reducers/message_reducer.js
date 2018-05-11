@@ -17,9 +17,9 @@ const messageReducer = (state = {}, action) => {
         nextState[message.id] = message;
       });
 
-      if (action.threadId) {
-        const threadedMessage = prevState[action.threadId];
-        nextState[action.threadId] = threadedMessage;
+      if (action.MessageSlug) {
+        const threadedMessage = prevState[action.MessageSlug];
+        nextState[action.MessageSlug] = threadedMessage;
         Object.values(prevState).map(message => {
           if (threadedMessage.threadIds.includes(message.id))
             nextState[message.id] = message;
@@ -37,17 +37,17 @@ const messageReducer = (state = {}, action) => {
       return Object.assign({}, state, nextState);
     case DELETE_MESSAGE_SUCCESS :
       nextState = Object.assign({}, state);
-      delete nextState[action.messageId];
+      delete nextState[action.messageSlug];
       return nextState;
     case OPEN_THREAD :
       nextState = Object.assign({}, state);
       const threadIds = [];
       Object.values(state).map(message => {
-        if (message.parentMessageId === action.messageId) {
+        if (message.parentMessageId === action.messageSlug) {
           threadIds.push(message.id);
         }
       });
-      nextState[action.messageId].threadIds = threadIds;
+      nextState[action.messageSlug].threadIds = threadIds;
       return nextState;
     default :
       return state;

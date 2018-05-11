@@ -18,9 +18,9 @@ function* fetchEditMessage({ message }) {
   }
 }
 
-function* fetchDeleteMessage({ messageId }) {
+function* fetchDeleteMessage({ messageSlug }) {
   try {
-    yield call(utilApi.deleteMessage, messageId);
+    yield call(utilApi.deleteMessage, messageSlug);
   } catch (error) {
     yield put(actions.failureMessage(error));
   }

@@ -71,7 +71,7 @@ class Message extends React.Component {
 
   render() {
     const {
-      message, isEditing, editId, currentUserId, deleteMessageSuccess
+      message, isEditing, editSlug, currentUserId, deleteMessageSuccess
     } = this.props;
 
     let editMessageButton, deleteMessageButton;
@@ -108,7 +108,12 @@ class Message extends React.Component {
         onMouseEnter={ this.handleMouseEnterHover }
         onMouseLeave={ this.handleMouseLeaveHover }
       >
-        { isEditing && message.id === editId ? editMessageForm : plainMessage }
+        {
+          isEditing &&
+          message.id === editSlug ?
+          editMessageForm :
+          plainMessage
+        }
         { message.id } -
         { message.authorId }
         { message.body }

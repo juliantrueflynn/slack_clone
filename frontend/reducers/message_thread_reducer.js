@@ -5,7 +5,7 @@ const messageThreadReducer = (state = null, action) => {
 
   switch (action.type) {
     case OPEN_THREAD :
-      return action.messageId;
+      return action.messageSlug;
     case CLOSE_THREAD :
       return null;
     default :

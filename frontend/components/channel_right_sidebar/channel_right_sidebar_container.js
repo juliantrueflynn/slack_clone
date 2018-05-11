@@ -4,7 +4,7 @@ import { createMessage } from '../../actions/message_actions';
 import { closeThread } from '../../actions/message_thread_actions';
 
 const mapStateToProps = state => ({
-  isRightSidebarOpen: Boolean(state.ui.displayThreadId),
+  isRightSidebarOpen: Boolean(state.ui.displayMessageSlug),
 });
 
 const mapDispatchToProps = dispatch => ({
