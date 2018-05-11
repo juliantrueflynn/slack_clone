@@ -8,7 +8,7 @@ const memberReducer = (state = {}, action) => {
     case RECEIVE_CHANNEL :
       nextState = {};
       action.channel.members.map(member => {
-        nextState[member.id] = member;
+        nextState[member.slug] = member;
       });
       return nextState;
     default :
