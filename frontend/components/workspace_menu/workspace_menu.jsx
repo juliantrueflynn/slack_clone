@@ -1,6 +1,5 @@
 import React from 'react';
 import WorkspaceMenuItem from './workspace_menu_item';
-import { withRouter, Route, Link } from 'react-router-dom';
 
 class WorkspaceMenu extends React.Component {
   constructor(props) {
@@ -22,16 +21,22 @@ class WorkspaceMenu extends React.Component {
 
   render() {
     const { workspaces, loggedIn } = this.props;
-    const workspaceList = workspaces.map(workspace => (
-      <WorkspaceMenuItem workspace={ workspace } key={ workspace.slug } />
-    ));
 
     if (!loggedIn) return null;
 
     return (
       <div>
         <button onClick={ this.handleDropdownToggle }>Your Workspaces</button>
-        { this.state.isDropdownOpen && <ul>{ workspaceList }</ul> }
+        {this.state.isDropdownOpen &&
+          <ul>
+            {workspaces.map(workspace => (
+              <WorkspaceMenuItem
+                workspace={ workspace }
+                key={ workspace.slug }
+              />
+            ))}
+          </ul>
+        }
       </div>
     );
   }

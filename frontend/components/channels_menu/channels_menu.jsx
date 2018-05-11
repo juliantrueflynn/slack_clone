@@ -28,7 +28,7 @@ class ChannelsMenu extends React.Component {
               <ChannelsMenuItem
                 key={ channel.slug }
                 channel={ channel }
-                { ...this.props }
+                workspaceSlug={ workspaceSlug }
               />
             )}
           </ul>
