@@ -57,9 +57,7 @@ class Message extends React.Component {
 
   handleDeleteClick(event) {
     event.preventDefault();
-    
-    const { message: { id }, deleteMessage } = this.props;
-    deleteMessage(id);
+    this.props.deleteMessage(this.props.message.slug);
   }
 
   render() {

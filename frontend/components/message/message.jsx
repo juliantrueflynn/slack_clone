@@ -58,14 +58,11 @@ class Message extends React.Component {
 
   handleDeleteClick(event) {
     event.preventDefault();
-    
-    const { message: { slug }, deleteMessage } = this.props;
-    deleteMessage(slug);
+    this.props.deleteMessage(this.props.message.slug);
   }
 
   handleThreadOpenClick(event) {
     event.preventDefault();
-    
     this.props.openThread(this.props.message.slug);
   }
 

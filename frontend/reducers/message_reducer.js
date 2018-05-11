@@ -33,7 +33,6 @@ const messageReducer = (state = {}, action) => {
       return Object.assign({}, state, nextState);
     case EDIT_MESSAGE_SUCCESS :
       nextState = {};
-      console.log(action);
       nextState[action.message.slug] = action.message;
       return Object.assign({}, state, nextState);
     case DELETE_MESSAGE_SUCCESS :
