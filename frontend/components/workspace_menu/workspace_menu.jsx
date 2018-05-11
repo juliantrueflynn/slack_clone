@@ -6,12 +6,19 @@ class WorkspaceMenu extends React.Component {
     super(props);
 
     this.state = { isDropdownOpen: false };
+    this.setNodeToDropdown = this.setNodeToDropdown.bind(this);
+    this.handleDropdownClickOut = this.handleDropdownClickOut.bind(this);
     this.handleDropdownToggle = this.handleDropdownToggle.bind(this);
   }
 
   componentDidMount() {
+    document.addEventListener('mousedown', this.handleDropdownClickOut);
     const { loggedIn, requestWorkspaces } = this.props;
     if (loggedIn) requestWorkspaces();
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleDropdownClickOut);
   }
 
   handleDropdownToggle(event) {
@@ -19,16 +26,28 @@ class WorkspaceMenu extends React.Component {
     this.setState({ isDropdownOpen: !this.state.isDropdownOpen });
   }
 
+  setNodeToDropdown(node) {
+    this.wrapperRef = node;
+  }
+
+  handleDropdownClickOut(event) {
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+      this.setState({ isDropdownOpen: false });
+    }
+  }
+
   render() {
     const { workspaces, loggedIn } = this.props;
-
+    const { isDropdownOpen, classNames } = this.state;
+    
     if (!loggedIn) return null;
-
     return (
-      <div>
-        <button onClick={ this.handleDropdownToggle }>Your Workspaces</button>
-        {this.state.isDropdownOpen &&
-          <ul>
+      <div className="dropdown dropdown__workspaces">
+        <button className="dropdown" onClick={ this.handleDropdownToggle }>
+          Your Workspaces
+        </button>
+        {isDropdownOpen &&
+          <ul ref={ this.setNodeToDropdown }>
             {workspaces.map(workspace => (
               <WorkspaceMenuItem
                 workspace={ workspace }
