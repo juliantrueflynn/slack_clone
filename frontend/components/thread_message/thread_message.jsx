@@ -48,7 +48,7 @@ class Message extends React.Component {
     event.preventDefault();
     
     const message = {
-      id: this.props.message.id,
+      slug: this.props.message.slug,
       body: this.state.body,
     };
 

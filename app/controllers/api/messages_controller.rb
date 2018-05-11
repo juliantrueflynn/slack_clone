@@ -43,6 +43,6 @@ class Api::MessagesController < ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:id, :body, :slug, :parent_message_id, :channel_id)
+    params.require(:message).permit(:body, :slug, :parent_message_id, :channel_id)
   end
 end
