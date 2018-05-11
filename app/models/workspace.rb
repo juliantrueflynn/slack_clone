@@ -16,10 +16,6 @@ class Workspace < ApplicationRecord
     users_subbed
   end
 
-  def to_param
-    slug
-  end
-
   private
 
   def generate_slug

@@ -47,10 +47,6 @@ class User < ApplicationRecord
     self.session_token
   end
 
-  def to_param
-    slug
-  end
-
   private
 
   def generate_slug

@@ -7,6 +7,7 @@ export const createChannelSub = channelSub => (
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
+    credentials: 'include',
     body: JSON.stringify(decamelizeKeys({ channelSub }, { separator: '_' }))
   }).then(response =>
     response.json().then(json => ({ json, response }))
@@ -14,9 +15,7 @@ export const createChannelSub = channelSub => (
     if (!response.ok) {
       throw json;
     }
-
-    const { id, channelSlug, userId } = camelizeKeys(json);
-    return { id, channelSlug, userId };
+    return camelizeKeys(json);
   }).catch(errors => {
     throw errors || ['Unknown channel error!'];
   })

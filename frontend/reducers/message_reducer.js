@@ -14,26 +14,26 @@ const messageReducer = (state = {}, action) => {
       nextState = {};
       
       action.channel.messages.map(message => {
-        nextState[message.id] = message;
+        nextState[message.slug] = message;
       });
 
       if (action.MessageSlug) {
         const threadedMessage = prevState[action.MessageSlug];
         nextState[action.MessageSlug] = threadedMessage;
         Object.values(prevState).map(message => {
-          if (threadedMessage.threadIds.includes(message.id))
-            nextState[message.id] = message;
+          if (threadedMessage.threadIds.includes(message.slug))
+            nextState[message.slug] = message;
         });
       }
       
       return nextState;
     case CREATE_MESSAGE_SUCCESS :
       nextState = {};
-      nextState[action.message.id] = action.message;
+      nextState[action.message.slug] = action.message;
       return Object.assign({}, state, nextState);
     case EDIT_MESSAGE_SUCCESS :
       nextState = {};
-      nextState[action.message.id] = action.message;
+      nextState[action.message.slug] = action.message;
       return Object.assign({}, state, nextState);
     case DELETE_MESSAGE_SUCCESS :
       nextState = Object.assign({}, state);
@@ -44,7 +44,7 @@ const messageReducer = (state = {}, action) => {
       const threadIds = [];
       Object.values(state).map(message => {
         if (message.parentMessageId === action.messageSlug) {
-          threadIds.push(message.id);
+          threadIds.push(message.slug);
         }
       });
       nextState[action.messageSlug].threadIds = threadIds;

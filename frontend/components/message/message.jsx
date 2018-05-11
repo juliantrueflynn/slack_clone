@@ -49,7 +49,7 @@ class Message extends React.Component {
     event.preventDefault();
     
     const message = {
-      id: this.props.message.id,
+      slug: this.props.message.slug,
       body: this.state.body,
     };
 
@@ -59,19 +59,19 @@ class Message extends React.Component {
   handleDeleteClick(event) {
     event.preventDefault();
     
-    const { message: { id }, deleteMessage } = this.props;
-    deleteMessage(id);
+    const { message: { slug }, deleteMessage } = this.props;
+    deleteMessage(slug);
   }
 
   handleThreadOpenClick(event) {
     event.preventDefault();
     
-    this.props.openThread(this.props.message.id);
+    this.props.openThread(this.props.message.slug);
   }
 
   render() {
     const {
-      message, isEditing, editSlug, currentUserId, deleteMessageSuccess
+      message, isEditing, editSlug, currentUserId
     } = this.props;
 
     let editMessageButton, deleteMessageButton;
@@ -110,7 +110,7 @@ class Message extends React.Component {
       >
         {
           isEditing &&
-          message.id === editSlug ?
+          message.slug === editSlug ?
           editMessageForm :
           plainMessage
         }

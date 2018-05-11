@@ -23,10 +23,6 @@ class Message < ApplicationRecord
     MessageEventsJob.perform_later(event: "DELETE_MESSAGE", data: self)
   end
 
-  def to_param
-    slug
-  end
-
   private
 
   def generate_slug

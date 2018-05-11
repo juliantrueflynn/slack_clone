@@ -1,5 +1,5 @@
 class Api::MessagesController < ApplicationController
-  before_action :set_channel, only: [:show, :update, :destroy]
+  before_action :set_message, only: [:show, :update, :destroy]
 
   def index
     @messages = Message.all
@@ -10,6 +10,7 @@ class Api::MessagesController < ApplicationController
 
   def create
     @message = Message.new(message_params)
+    @message.author_id = current_user.id
     
     if @message.save
       render json: @message
@@ -42,6 +43,6 @@ class Api::MessagesController < ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:body, :slug, :parent_message_id, :channel_id, :author_id)
+    params.require(:message).permit(:id, :body, :slug, :parent_message_id, :channel_id)
   end
 end

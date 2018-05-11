@@ -23,10 +23,6 @@ class Channel < ApplicationRecord
     messages.where(parent_message_id: nil)
   end
 
-  def to_param
-    slug
-  end
-
   private
 
   def generate_slug

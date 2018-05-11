@@ -100,7 +100,12 @@ class Message extends React.Component {
         onMouseEnter={ this.handleMouseEnterHover }
         onMouseLeave={ this.handleMouseLeaveHover }
       >
-        { isEditing && message.id === editSlug ? editMessageForm : plainMessage }
+        {
+          isEditing &&
+          message.slug === editSlug ?
+          editMessageForm :
+          plainMessage
+        }
         { message.id } -
         { message.authorId }
         { message.body }

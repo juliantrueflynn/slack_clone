@@ -55,7 +55,7 @@ function* addNewWorkspace({ workspace }) {
 
 function* subCreatorToNewWorkspace({ workspace }) {
   try {
-    const sub = { user_id: workspace.ownerId, workspace_id: workspace.id };
+    const sub = { workspace_id: workspace.id };
     const newSub = yield call(createWorkspaceSub, sub);
 
     yield put(createWorkspaceSubSuccess(newSub));
@@ -64,11 +64,11 @@ function* subCreatorToNewWorkspace({ workspace }) {
   }
 }
 
-function* loadDefaultChannels({ workspace: { id, ownerId } }) {
+function* loadDefaultChannels({ workspace: { id } }) {
   let defaultChannels = [];
   const defaultChannelTitles = ['#general', '#random'];
   for (let title of defaultChannelTitles) {
-    defaultChannels.push({ title, ownerId, workspaceSlug: id });
+    defaultChannels.push({ title, workspaceId: id });
   }
   yield put(createChannels(defaultChannels));
 }
