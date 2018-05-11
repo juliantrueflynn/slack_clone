@@ -14,7 +14,7 @@ export const fetchWorkspaces = () => (
     if (!response.ok) {
       throw json;
     }
-    return camelizeKeys(json);
+    return camelizeKeysSkipSlugsDepth(json);
   }).catch(error => {
     throw error.message || ['Unknown workspaces error!'];
   })
@@ -76,3 +76,11 @@ export const deleteWorkspace = workspaceSlug => (
     throw error || ['Unknown workspace error!'];
   })
 );
+
+function camelizeKeysSkipSlugsDepth(json) {
+  const camelized = {};
+  Object.keys(json).forEach((key) => {
+    camelized[key] = camelizeKeys(json[key]);
+  });
+  return camelized;
+}
