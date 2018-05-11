@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   attr_reader :password
 
+  before_validation :generate_slug
   after_initialize :ensure_session_token
 
   validates :username, :email, :password_digest, :session_token, presence: true
@@ -46,7 +47,22 @@ class User < ApplicationRecord
     self.session_token
   end
 
+  def to_param
+    slug
+  end
+
   private
+
+  def generate_slug
+    return slug if slug
+    
+    loop do
+      slug_token = SecureRandom.urlsafe_base64(8)
+      username_slugged = username.parameterize
+      self.slug = "#{username_slugged}-#{slug_token}"
+      break unless User.where(slug: slug).exists?
+    end
+  end
 
   def ensure_session_token
     generate_unique_session_token unless self.session_token
