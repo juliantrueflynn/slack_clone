@@ -20,7 +20,7 @@ const workspaceReducer = (state = {}, action) => {
       return Object.assign({}, state, nextState);
     case CREATE_WORKSPACE_SUCCESS :
       nextState = {
-        [action.workspace.workspace.slug]: action.workspace.workspace
+        [action.workspace.slug]: action.workspace
       };
       return Object.assign({}, state, nextState);
     case DELETE_WORKSPACE_SUCCESS :

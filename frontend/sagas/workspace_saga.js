@@ -1,17 +1,16 @@
 import {
-  take, all, call, fork, put, takeEvery, select, takeLatest
+  take, all, call, fork, put, select, takeLatest
 } from 'redux-saga/effects';
 import * as actions from '../actions/workspace_actions';
+import * as api from '../util/workspace_api_util';
 import {
   createWorkspaceSubSuccess, createWorkspaceSubErrors
 } from '../actions/workspace_sub_actions';
-import { createChannels, CREATE_CHANNELS } from '../actions/channel_actions';
-import * as api from '../util/workspace_api_util';
+import { createChannels } from '../actions/channel_actions';
 import { createWorkspaceSub } from '../util/workspace_sub_api_util';
 import {
   getWorkspaces, getPageWorkspaceSlug, getChannels
 } from '../reducers/selectors';
-import { addNewChannels } from './channel_saga';
 import { navigate } from '../actions/navigate_actions';
 
 function* fetchWorkspaces(prevState) {
@@ -66,7 +65,7 @@ function* subCreatorToNewWorkspace({ workspace }) {
 
 function* loadDefaultChannels({ workspace: { id } }) {
   let defaultChannels = [];
-  const defaultChannelTitles = ['#general', '#random'];
+  const defaultChannelTitles = ['general', 'random'];
   for (let title of defaultChannelTitles) {
     defaultChannels.push({ title, workspaceId: id });
   }
@@ -84,9 +83,9 @@ function* loadWorkspace({ workspaceSlug }) {
   yield call(fetchWorkspace, workspaceSlug);
   const firstChannel = yield select(getChannels);
   if (firstChannel.length) {
-    yield put(navigate(`/${workspaceSlug}/${firstChannel[0].id}`));
+    yield put(navigate(`/${ workspaceSlug }/${ firstChannel[0].slug }`));
   } else {
-    yield put(navigate(`/${workspaceSlug}/create-channel`));
+    yield put(navigate(`/${ workspaceSlug }/create-channel`));
   }
 }
 
@@ -98,7 +97,7 @@ function* watchCreateWorkspace() {
     const newWorkspace = yield take(actions.CREATE_WORKSPACE_SUCCESS);
     yield call(subCreatorToNewWorkspace, newWorkspace);
     yield call(loadDefaultChannels, newWorkspace);
-    yield put(navigate(`/${newWorkspace.workspace.id}`));
+    yield put(navigate(`/${ newWorkspace.workspace.slug }`));
   }
 }
 
