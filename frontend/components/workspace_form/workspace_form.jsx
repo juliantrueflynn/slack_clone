@@ -20,11 +20,8 @@ class WorkspaceForm extends React.Component {
     event.preventDefault();
 
     const { title, slug } = this.state;
-    const workspace = {
-      title, slug, ownerId: this.props.currentUserId
-    };
-
-    this.props.createWorkspace({workspace});
+    const workspace = { title, slug };
+    this.props.createWorkspace({ workspace });
   }
 
   render() {
@@ -37,7 +34,8 @@ class WorkspaceForm extends React.Component {
             <input type="text"
               value={ this.state.title }
               placeholder="Title"
-              onChange={ this.handleInputValueUpdate('title') } />
+              onChange={ this.handleInputValueUpdate('title') }
+            />
           </div>
           <div>
             <label>Workspace URL</label>
@@ -45,7 +43,8 @@ class WorkspaceForm extends React.Component {
               type="text"
               value={ this.state.slug }
               placeholder="Workspace URL"
-              onChange={ this.handleInputValueUpdate('slug') } />
+              onChange={ this.handleInputValueUpdate('slug') }
+            />
           </div>
           <input type="submit" value="Create Workspace" />
         </form>

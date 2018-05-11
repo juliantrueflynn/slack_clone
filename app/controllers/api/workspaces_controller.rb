@@ -2,7 +2,7 @@ class Api::WorkspacesController < ApplicationController
   before_action :set_workspace, only: [:show, :update, :destroy]
 
   def index
-    @workspaces = current_user.workspaces if logged_in?
+    @workspaces = current_user.workspaces
   end
 
   def show
@@ -10,7 +10,7 @@ class Api::WorkspacesController < ApplicationController
 
   def create
     @workspace = Workspace.new(workspace_params)
-    @workspace.owner_id = current_user.id if logged_in?
+    @workspace.owner_id = current_user.id
 
     if @workspace.save
       render json: @workspace
