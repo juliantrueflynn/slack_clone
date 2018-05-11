@@ -19,7 +19,7 @@ class NavBar extends React.Component {
     const { loggedIn, currentUser } = this.props;
 
     return (
-      <header class="header header__home">
+      <header className="header header__home">
         <div className="content-container content-container__boxed-width">
           <nav className="navbar navbar__primary">
             <Link to="/">Slack Clone</Link>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 class WorkspaceMenuItem extends React.Component {
   constructor(props) {
@@ -7,15 +7,13 @@ class WorkspaceMenuItem extends React.Component {
   }
 
   render() {
-    const { workspace } = this.props;
+    const { workspace: { id, title, slug } } = this.props;
+  
     return (
       <li>
-        <Link to={ `/${workspace.id}` }>
-          <div>
-            <span>{ workspace.id } - { workspace.title }</span>
-          </div>
-          /{ workspace.slug }
-        </Link>
+        <NavLink to={ `/${ slug }` }>
+          { id } - { title } - { slug }
+        </NavLink>
       </li>
     );
   }

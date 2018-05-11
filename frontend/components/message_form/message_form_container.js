@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import MessageForm from './message_form';
 import { createMessage } from '../../actions/message_actions';
-import { getChannelPageId } from '../../reducers/selectors';
+import { getCurrentChannelId } from '../../reducers/selectors';
 
-const mapStateToDispatch = state => ({
-  authorId: state.session.currentUser.id,
-  channelId: getChannelPageId(state),
+const mapStateToDispatch = (state, ownProps) => ({
+  channelId: getCurrentChannelId(state),
+  parentMessageId: ownProps.parentMessageId || null,
 });
 
 const mapDispatchToProps = dispatch => ({

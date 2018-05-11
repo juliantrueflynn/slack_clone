@@ -14,14 +14,8 @@ class ChannelsMenu extends React.Component {
   }
 
   render() {
-    const { workspaceId, channels } = this.props;
-    const menuItems = channels.map(channel =>
-      <ChannelsMenuItem
-        key={ channel.id }
-        workspaceId={ workspaceId }
-        channel={ channel } />
-    );
-
+    const { channels, workspaceSlug } = this.props;
+  
     return (
       <div>
         <header>
@@ -29,7 +23,15 @@ class ChannelsMenu extends React.Component {
           <button onClick={ this.handleModalOpen }>+</button>
         </header>
         <div>
-          <ul>{ menuItems }</ul>
+          <ul>
+            {channels.map(channel =>
+              <ChannelsMenuItem
+                key={ channel.slug }
+                channel={ channel }
+                workspaceSlug={ workspaceSlug }
+              />
+            )}
+          </ul>
         </div>
       </div>
     );

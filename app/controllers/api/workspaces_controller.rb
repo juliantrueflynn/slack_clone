@@ -1,11 +1,16 @@
 class Api::WorkspacesController < ApplicationController
+  before_action :set_workspace, only: [:show, :update, :destroy]
+
   def index
-    @workspaces = current_user.workspaces if logged_in?
+    @workspaces = current_user.workspaces
+  end
+
+  def show
   end
 
   def create
     @workspace = Workspace.new(workspace_params)
-    @workspace.owner_id = current_user.id if logged_in?
+    @workspace.owner_id = current_user.id
 
     if @workspace.save
       render json: @workspace
@@ -14,12 +19,7 @@ class Api::WorkspacesController < ApplicationController
     end
   end
 
-  def show
-    @workspace = Workspace.find_by(id: params[:id])
-  end
-
   def destroy
-    @workspace = Workspace.find_by(id: params[:id]) # use 'find_by', 'find' causes error if not found
     if @workspace
       @workspace.destroy
       render json: @workspace
@@ -29,6 +29,10 @@ class Api::WorkspacesController < ApplicationController
   end
 
   private
+
+  def set_workspace
+    @workspace = Workspace.find_by(slug: params[:slug])
+  end
 
   def workspace_params
     params.require(:workspace).permit(:title, :slug, :owner_id)

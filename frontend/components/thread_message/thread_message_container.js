@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
-import MessageEntries from './message_entries';
-import { getMessages } from '../../reducers/selectors';
+import ThreadMessage from './thread_message';
 import {
   editMessage,
   openEditMessage,
@@ -10,20 +9,19 @@ import {
 } from '../../actions/message_actions';
 
 const mapStateToProps = state => ({
-  messages: getMessages(state),
-  editId: state.ui.editMessageId,
-  isEditing: Boolean(state.ui.editMessageId),
+  editSlug: state.ui.editMessageSlug,
+  isEditing: Boolean(state.ui.editMessageSlug),
+  currentUserId: state.session.currentUser.id,
 });
 
 const mapDispatchToProps = dispatch => ({
+  editMessage: message => dispatch(editMessage(message)),
   openEditMessage: message => dispatch(openEditMessage(message)),
   closeEditMessage: () => dispatch(closeEditMessage()),
-  editMessage: message => dispatch(editMessage(message)),
-  deleteMessage: messageId => dispatch(deleteMessage(messageId)),
-  deleteMessageSuccess: messageId => dispatch(deleteMessageSuccess(messageId)),
+  deleteMessage: messageSlug => dispatch(deleteMessage(messageSlug)),
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MessageEntries);
+)(ThreadMessage);

@@ -1,8 +1,11 @@
 import React from 'react';
-import MessagesPaneContainer from '../messages_pane/messages_pane_container';
 import ChannelFormContainer from '../channel_form/channel_form_container';
-import ChannelSidebarContainer from
-  '../channel_sidebar/channel_sidebar_container';
+import ChannelSidebar from '../channel_sidebar/channel_sidebar';
+import ChannelRightSidebarContainer from
+  '../channel_right_sidebar/channel_right_sidebar_container';
+import MessageFormContainer from '../message_form/message_form_container';
+import ChannelMessages from './channel_messages';
+
 import './channel_page.css';
 
 class ChannelPage extends React.Component {
@@ -24,16 +27,22 @@ class ChannelPage extends React.Component {
   }
 
   render() {
-    const { channelSlug, workspaceSlug } = this.props.match.params;
-
+    const { messages, match } = this.props;
+    
     return (
-      <div className="page page__channel">
-        <h1>Channel Page Working! #{ channelSlug }</h1>
-        <div className="page__channel-content">
-          <ChannelSidebarContainer />
-          <MessagesPaneContainer />
+      <div>
+        <div className="page page__channel">
+          <h1>Channel #{ match.params.channelSlug }</h1>
+          <div className="page__channel-content">
+            <ChannelSidebar />
+            <div className="messages-pane">
+              <ChannelMessages messages={ messages } />
+              <MessageFormContainer />
+            </div>
+            <ChannelRightSidebarContainer />
+          </div>
+          <ChannelFormContainer />
         </div>
-        <ChannelFormContainer />
       </div>
     );
   }

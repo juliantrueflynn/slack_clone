@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 class ChannelsMenuItem extends React.Component {
   constructor(props) {
@@ -7,12 +7,13 @@ class ChannelsMenuItem extends React.Component {
   }
 
   render() {
-    const { channel, workspaceId } = this.props;
+    const { channel: { id, title, slug }, workspaceSlug } = this.props;
+
     return (
       <li>
-        <Link to={ `/${workspaceId}/${channel.id}` }>
-          ID: #{ channel.id } - Title: { channel.title }
-        </Link>
+        <NavLink exact to={ `/${ workspaceSlug }/${ slug }` }>
+          ID: #{ id } - Title: { title }
+        </NavLink>
       </li>
     );
   }

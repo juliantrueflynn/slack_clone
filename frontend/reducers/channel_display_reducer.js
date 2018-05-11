@@ -9,7 +9,7 @@ const channelDisplayReducer = (state = null, action) => {
     case LOAD_WORKSPACE_PAGE :
       return null;
     case LOAD_CHANNEL_PAGE :
-      return action.channelId;
+      return action.channelSlug;
     default :
       return state;
   }

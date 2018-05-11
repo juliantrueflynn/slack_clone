@@ -1,22 +1,21 @@
-import { camelizeKeys } from 'humps';
+import { decamelizeKeys, camelizeKeys } from 'humps';
 
-export const createWorkspaceSub = workspace => (
+export const createWorkspaceSub = workspaceSub => (
   fetch('api/workspace_subs', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(workspace)
+    credentials: 'include',
+    body: JSON.stringify(decamelizeKeys(workspaceSub, { separator: '_' }))
   }).then(response =>
     response.json().then(json => ({ json, response }))
   ).then(({ json, response }) => {
     if (!response.ok) {
       throw json;
     }
-
-    const { id, title, slug, ownerId } = camelizeKeys(json);
-    return { id, title, slug, ownerId };
+    return camelizeKeys(json);
   }).catch(errors => {
     throw errors || ['Unknown workspace error!'];
   })

@@ -28,13 +28,11 @@ class ChannelForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const channel = {
-      title: this.state.title,
-      ownerId: this.props.currentUserId,
-      workspaceId: this.props.workspaceId,
-    };
-    this.props.createChannel(channel);
-    this.props.modalClose();
+
+    const { workspaceId, modalClose, createChannel } = this.props;
+    const channel = { title: this.state.title, workspaceId };
+    createChannel(channel);
+    modalClose();
   }
 
   render() {

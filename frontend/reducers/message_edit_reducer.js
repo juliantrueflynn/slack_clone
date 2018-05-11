@@ -11,7 +11,7 @@ const messageUiReducer = (state = defaultState, action) => {
 
   switch (action.type) {
     case OPEN_EDIT_MESSAGE :
-      return action.message.id;
+      return action.message.slug;
     case EDIT_MESSAGE_SUCCESS :
     case CLOSE_EDIT_MESSAGE :
     case LOAD_CHANNEL_PAGE :

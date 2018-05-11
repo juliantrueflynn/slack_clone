@@ -1,7 +1,7 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
 
-export const fetchMessage = messageId => (
-  fetch(`api/messages/${messageId}`, {
+export const fetchMessage = messageSlug => (
+  fetch(`api/messages/${ messageSlug }`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -14,7 +14,6 @@ export const fetchMessage = messageId => (
     if (!response.ok) {
       throw json;
     }
-
     return camelizeKeys(json);
   }).catch(error => {
     throw error.message || ['Unknown message error!'];
@@ -28,6 +27,7 @@ export const createMessage = message => (
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
+    credentials: 'include',
     body: JSON.stringify(decamelizeKeys(message, { separator: '_' }))
   }).then(response =>
     response.json().then(json => ({ json, response }))
@@ -42,12 +42,13 @@ export const createMessage = message => (
 );
 
 export const editMessage = message => (
-  fetch(`api/messages/${message.id}`, {
+  fetch(`api/messages/${ message.slug }`, {
     method: 'PATCH',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
+    credentials: 'include',
     body: JSON.stringify(decamelizeKeys(message, { separator: '_' }))
   }).then(response =>
     response.json().then(json => ({ json, response }))
@@ -61,8 +62,8 @@ export const editMessage = message => (
   })
 );
 
-export const deleteMessage = messageId => (
-  fetch(`api/messages/${messageId}`, {
+export const deleteMessage = messageSlug => (
+  fetch(`api/messages/${ messageSlug }`, {
     method: 'DELETE',
     credentials: 'include'
   }).then(response =>

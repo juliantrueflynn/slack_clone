@@ -30,14 +30,14 @@ export const failureMessages = errors => ({
   errors
 });
 
-export const loadMessages = channelId => ({
+export const loadMessages = channelSlug => ({
   type: LOAD_MESSAGES,
-  channelId
+  channelSlug
 });
 
-export const requestMessage = messageId => ({
+export const requestMessage = messageSlug => ({
   type: REQUEST_MESSAGE,
-  messageId
+  messageSlug
 });
 
 export const receiveMessage = message => ({
@@ -65,14 +65,14 @@ export const createMessageErrors = errors => ({
   errors
 });
 
-export const deleteMessage = messageId => ({
+export const deleteMessage = messageSlug => ({
   type: DELETE_MESSAGE,
-  messageId
+  messageSlug
 });
 
-export const deleteMessageSuccess = messageId => ({
+export const deleteMessageSuccess = messageSlug => ({
   type: DELETE_MESSAGE_SUCCESS,
-  messageId
+  messageSlug
 });
 
 export const editMessage = message => ({

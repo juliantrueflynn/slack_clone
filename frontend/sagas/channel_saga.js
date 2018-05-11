@@ -6,13 +6,13 @@ import * as utilApi from '../util/channel_api_util';
 import { createChannelSubSuccess } from '../actions/channel_sub_actions';
 import { createChannelSub } from '../util/channel_sub_api_util';
 import {
-  getChannelPageId, getChannels, getWorkspacePageId, getChannelById
+  getPageChannelSlug, getChannels, getPageWorkspaceSlug, getMessageSlug
 } from '../reducers/selectors';
 import { fetchWorkspace } from './workspace_saga';
 import { navigate } from '../actions/navigate_actions';
 
-function* fetchCreatorSub(userId, channelId) {
-  yield call(createChannelSub, { userId, channelId });
+function* fetchCreatorSub(channelId) {
+  yield call(createChannelSub, { channelId });
 }
 
 function* addNewChannel({ channel }) {
@@ -26,9 +26,10 @@ function* addNewChannel({ channel }) {
 
 function* subCreatorToNewChannel({ channel }) {
   try {
-    const newSub = yield call(fetchCreatorSub, channel.ownerId, channel.id);
+    const workspaceSlug = yield select(getPageWorkspaceSlug);
+    const newSub = yield call(fetchCreatorSub, channel.id);
     yield put(createChannelSubSuccess(newSub));
-    yield put(navigate(`/${channel.workspaceId}/${channel.id}`));
+    yield put(navigate(`/${ workspaceSlug }/${ channel.slug }`));
   } catch (error) {
     yield put(actions.createChannelErrors(error));
   }
@@ -47,7 +48,7 @@ function* addNewChannels({ channels }) {
   let newChannels = [];
   for (let channel of channels) {
     const newChannel = yield call(utilApi.createChannel, channel);
-    yield call(fetchCreatorSub, newChannel.ownerId, newChannel.id);
+    yield call(fetchCreatorSub, newChannel.id);
     newChannels.push(newChannel);
   }
   yield put(actions.createChannelsSuccess(newChannels));
@@ -55,28 +56,29 @@ function* addNewChannels({ channels }) {
 
 function* fetchChannel() {
   try {
-    const channelId = yield select(getChannelPageId);
-    const channel = yield call(utilApi.fetchChannel, channelId);
-    yield put(actions.receiveChannel(channel));
+    const channelSlug = yield select(getPageChannelSlug);
+    const channel = yield call(utilApi.fetchChannel, channelSlug);
+    const MessageSlug = yield select(getMessageSlug);
+    yield put(actions.receiveChannel(channel, MessageSlug));
   } catch (error) {
     yield put(actions.failureChannel(error));
   }
 }
 
 function* loadChannelEntities() {
-  const workspaceId = yield select(getWorkspacePageId);
+  const workspaceSlug = yield select(getPageWorkspaceSlug);
   const channels = yield select(getChannels);
   if (channels.length < 1) {
     yield put(actions.requestChannels());
-    yield call(fetchWorkspace, workspaceId);
+    yield call(fetchWorkspace, workspaceSlug);
   }
   yield call(fetchChannel);
 }
 
-function* fetchDeleteChannel({ channelId }) {
+function* fetchDeleteChannel({ channelSlug }) {
   try {
-    yield call(utilApi.deleteChannel, channelId);
-    yield put(actions.deleteChannelSuccess(channelId));
+    yield call(utilApi.deleteChannel, channelSlug);
+    yield put(actions.deleteChannelSuccess(channelSlug));
   } catch (error) {
     yield put(actions.receiveChannelErrors(error));
   }

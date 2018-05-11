@@ -1,14 +1,35 @@
 import { connect } from 'react-redux';
 import ChannelPage from './channel_page';
 import { loadChannelPage } from '../../actions/channel_actions';
+import { getMessages } from '../../reducers/selectors';
+import {
+  createMessageSuccess, editMessageSuccess, deleteMessageSuccess
+} from '../../actions/message_actions';
+import { camelizeKeys } from 'humps';
+
+const mapStateToProps = state => ({
+  messages: getMessages(state),
+});
 
 const mapDispatchToProps = dispatch => ({
-  loadChannelPage: (channelId, workspaceId) => dispatch(
-    loadChannelPage(channelId, workspaceId)
-  )
+  loadChannelPage: (channelSlug, workspaceSlug) => dispatch(
+    loadChannelPage(channelSlug, workspaceSlug)
+  ),
+  onReceivedCallback: (type, message) => {
+    const camelized = camelizeKeys(message);
+
+    switch (type) {
+      case "CREATE" :
+        return dispatch(createMessageSuccess(camelized));
+      case "EDIT" :
+        return dispatch(editMessageSuccess(camelized));
+      case "DELETE" :
+        return dispatch(deleteMessageSuccess(camelized.slug));
+    }
+  }
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ChannelPage);

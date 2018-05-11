@@ -8,11 +8,11 @@ const workspaceDisplayReducer = (state = null, action) => {
 
   switch (action.type) {
     case CREATE_WORKSPACE_SUCCESS :
-      return action.workspace.id;
+      return action.workspace.slug;
     case LOAD_WORKSPACE_PAGE :
-      return action.workspaceId;
+      return action.workspaceSlug;
     case LOAD_CHANNEL_PAGE :
-      return action.workspaceId;
+      return action.workspaceSlug;
     default :
       return state;
   }
