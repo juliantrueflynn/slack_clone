@@ -3,6 +3,9 @@ class Workspace < ApplicationRecord
 
   validates :title, :owner_id, presence: true
   validates :slug, uniqueness: true, presence: true
+  validates_exclusion_of :slug,
+    in: %w(api create-workspace assets sign-in sign-out stylesheets javascripts images ),
+    message: "Taken, sorry!"
 
   has_many :subs,
     foreign_key: :workspace_id,
