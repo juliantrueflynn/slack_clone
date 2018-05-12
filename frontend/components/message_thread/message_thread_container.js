@@ -1,16 +1,12 @@
 import { connect } from 'react-redux';
 import MessageThread from './message_thread';
-import { getThreadEntries, getMessageBySlug } from '../../reducers/selectors';
 import {
-  editMessage,
-  openEditMessage,
-  closeEditMessage,
-  deleteMessage,
-} from '../../actions/message_actions';
+  getThread, getCurrentSidebarThread
+} from '../../reducers/selectors';
 
 const mapStateToProps = state => ({
-  threadEntries: getThreadEntries(state),
-  message: getMessageBySlug(state, state.ui.displayMessageSlug),
+  threadEntries: getThread(state),
+  message: getCurrentSidebarThread(state),
 });
 
 export default connect(

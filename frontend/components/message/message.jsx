@@ -63,7 +63,9 @@ class Message extends React.Component {
 
   handleThreadOpenClick(event) {
     event.preventDefault();
-    this.props.openThread(this.props.message.slug);
+    const { message: { slug }, openRightSidebar } = this.props;
+    const sidebarProps = { messageSlug: slug };
+    openRightSidebar(sidebarProps);
   }
 
   render() {

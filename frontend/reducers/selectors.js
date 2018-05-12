@@ -39,14 +39,19 @@ export const getMessages = ({ entities: { messages, channels }, ui }) => {
   );
 };
 
-export const getMessageBySlug = (state, messageSlug) => (
-  state.entities.messages[messageSlug]
+export const getCurrentSidebarThread = ({ entities, ui: { rightSidebar } }) => (
+  rightSidebar && entities.messages[rightSidebar.sidebarProps.messageSlug]
 );
 
-export const getMessageSlug = state => state.ui.displayMessageSlug;
+export const getMessageSlug = ({ ui: { rightSidebar } }) => (
+  rightSidebar && rightSidebar.sidebarType === "THREAD" ?
+  rightSidebar.sidebarProps.messageSlug :
+  null
+);
 
-export const getThreadEntries = ({ entities: { messages }, ui }) => {
-  const currentMessage = messages[ui.displayMessageSlug];
+export const getThread = ({ entities: { messages }, ui: { rightSidebar } }) => {
+  if (!rightSidebar || rightSidebar.sidebarType !== "THREAD") return [];
+  const currentMessage = messages[rightSidebar.sidebarProps.messageSlug];
   if (!currentMessage) return [];
   
   return values(messages).filter(message =>

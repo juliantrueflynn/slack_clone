@@ -63,8 +63,8 @@ function* fetchChannel() {
   try {
     const channelSlug = yield select(getPageChannelSlug);
     const channel = yield call(utilApi.fetchChannel, channelSlug);
-    const MessageSlug = yield select(getMessageSlug);
-    yield put(actions.receiveChannel(channel, MessageSlug));
+    const messageSlug = yield select(getMessageSlug);
+    yield put(actions.receiveChannel(channel, messageSlug));
   } catch (error) {
     yield put(actions.failureChannel(error));
   }

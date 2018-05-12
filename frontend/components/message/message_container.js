@@ -7,8 +7,7 @@ import {
   deleteMessage,
   deleteMessageSuccess
 } from '../../actions/message_actions';
-
-import { openThread } from '../../actions/message_thread_actions';
+import { openRightSidebar } from '../../actions/right_sidebar_actions';
 
 const mapStateToProps = state => ({
   editSlug: state.ui.editMessageSlug,
@@ -21,7 +20,10 @@ const mapDispatchToProps = dispatch => ({
   openEditMessage: message => dispatch(openEditMessage(message)),
   closeEditMessage: () => dispatch(closeEditMessage()),
   deleteMessage: messageSlug => dispatch(deleteMessage(messageSlug)),
-  openThread: MessageSlug => dispatch(openThread(MessageSlug)),
+  openRightSidebar: (sidebarProps) => {
+    const defaultProps = Object.assign({}, { title: "Thread" }, sidebarProps);
+    return dispatch(openRightSidebar('THREAD', defaultProps));
+  }
 });
 
 export default connect(

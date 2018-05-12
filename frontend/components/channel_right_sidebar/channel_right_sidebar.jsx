@@ -1,5 +1,5 @@
 import React from 'react';
-import MessageThreadContainer from '../message_thread/message_thread_container';
+import MessageThread from '../message_thread/message_thread';
 
 class ChannelRightSidebar extends React.Component {
   constructor(props) {
@@ -9,21 +9,22 @@ class ChannelRightSidebar extends React.Component {
   }
 
   handleCloseSidebar() {
-    this.props.closeThread();
+    this.props.closeRightSidebar();
   }
 
   render() {
-    const { thread, isRightSidebarOpen } = this.props;
+    const {
+      isRightSidebarOpen, rightSidebar, message, threadEntries
+    } = this.props;
 
     if (!isRightSidebarOpen) return null;
-  
     return (
       <aside className="channel-right-sidebar">
         <header className="channel-right-sidebar__header">
-          <span className="h4">Thread</span>
+          <span className="h4">{ rightSidebar.sidebarProps.title }</span>
           <button onClick={ this.handleCloseSidebar }>X</button>
         </header>
-        <MessageThreadContainer />
+        <MessageThread message={ message } threadEntries={ threadEntries } />
       </aside>
     );
   }
