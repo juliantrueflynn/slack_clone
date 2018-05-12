@@ -15,6 +15,7 @@ const messageReducer = (state = {}, action) => {
       
       action.channel.messages.map(message => {
         nextState[message.slug] = message;
+        nextState[message.slug].thread = [];
       });
 
       if (action.messageSlug) {
@@ -28,9 +29,17 @@ const messageReducer = (state = {}, action) => {
       
       return nextState;
     case CREATE_MESSAGE_SUCCESS :
-      nextState = {};
+      nextState = Object.assign({}, state);
+      action.message.threads = [];
       nextState[action.message.slug] = action.message;
-      return Object.assign({}, state, nextState);
+      if (
+        action.message.parentMessageId &&
+        nextState[action.message.parentMessageId]
+      ) {
+        nextState[action.message.parentMessageId].threads
+          .push(action.message.id);
+      }
+      return nextState;
     case EDIT_MESSAGE_SUCCESS :
       nextState = {};
       nextState[action.message.slug] = action.message;
@@ -43,13 +52,11 @@ const messageReducer = (state = {}, action) => {
       const { sidebarProps, sidebarType } = action;
       if (sidebarType !== 'THREAD') return state;
       nextState = Object.assign({}, state);
-      const threads = [];
-      console.log(state);
-      Object.values(state).map(message => 
+
+      Object.values(state).map(message =>
         message.parentMessageId === nextState[sidebarProps.messageSlug].id &&
-          threads.push(message.slug)
+          nextState[sidebarProps.messageSlug].threads.push(message.slug)
       );
-      nextState[sidebarProps.messageSlug].threads = threads;
       return nextState;
     default :
       return state;
