@@ -7,6 +7,7 @@ def is_random_true?
 end
 
 def random_lorem_short_or_long
+  return Faker::Lorem.paragraph if rand < 0.1
   rand < 0.7 ? Faker::Lorem.sentence : Faker::Lorem.sentence
 end
 
@@ -35,14 +36,14 @@ end
     password: "123456"
   )
 
-  Workspace.all.each do |workspace|
+  Workspace.all.shuffle.each do |workspace|
     next if user.is_workspace_sub?(workspace) || is_random_true?
     WorkspaceSub.create!(
       workspace_id: workspace.id,
       user_id: user.id
     )
 
-    workspace.channels.each do |channel|
+    workspace.channels.shuffle.each do |channel|
       next if user.is_channel_sub?(channel) || is_random_true?
   
       ChannelSub.create!(
@@ -50,7 +51,7 @@ end
         user_id: user.id
       )
   
-      [*1..11].sample.times do
+      [*1..10].sample.times do
         next if is_random_true?
         Message.create!(
           body: random_lorem_short_or_long,
@@ -60,7 +61,7 @@ end
       end
   
       random_parent_message = channel.parent_messages.sample
-      next if random_parent_message.nil? || is_random_true?
+      next if random_parent_message.nil? || rand < 0.60
       Message.create!(
         body: random_lorem_short_or_long,
         author_id: user.id,
