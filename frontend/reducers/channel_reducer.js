@@ -1,5 +1,8 @@
 import {
-  RECEIVE_CHANNEL, DELETE_CHANNEL, CREATE_CHANNELS_SUCCESS, EDIT_CHANNEL_SUCCESS
+  RECEIVE_CHANNEL,
+  DELETE_CHANNEL,
+  EDIT_CHANNEL_SUCCESS,
+  RECEIVE_DEFAULT_CHANNELS
 } from '../actions/channel_actions';
 import { RECEIVE_WORKSPACE } from '../actions/workspace_actions';
 
@@ -10,8 +13,8 @@ const channelReducer = (state = {}, action) => {
   switch (action.type) {
     case RECEIVE_CHANNEL :
       const { channel, messages, members } = action.channel;
-      channel.messageIds = messages.map(message => message.slug);
-      channel.memberIds = members.map(member => member.id);
+      channel.messages = messages.map(message => message.slug);
+      channel.members = members.map(member => member.slug);
       nextState = { [channel.slug]: channel };
       return Object.assign({}, state, nextState);
     case RECEIVE_WORKSPACE :
@@ -20,7 +23,7 @@ const channelReducer = (state = {}, action) => {
         nextState[item.slug] = item;
       });
       return nextState;
-    case CREATE_CHANNELS_SUCCESS :
+    case RECEIVE_DEFAULT_CHANNELS :
       nextState = {};
       action.channels.forEach(item => { nextState[item.slug] = item; });
       return nextState;

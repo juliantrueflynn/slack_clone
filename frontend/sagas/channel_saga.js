@@ -51,7 +51,12 @@ function* addNewChannels({ channels }) {
     yield call(fetchCreatorSub, newChannel.id);
     newChannels.push(newChannel);
   }
-  yield put(actions.createChannelsSuccess(newChannels));
+  yield put(actions.receiveDefaultChannels(newChannels));
+}
+
+function* loadFirstDefaultChannel({ channels }) {
+  const workspaceSlug = yield select(getPageWorkspaceSlug);
+  yield put(navigate(`/${ workspaceSlug }/${ channels[0].slug }`));
 }
 
 function* fetchChannel() {
@@ -94,7 +99,8 @@ function* watchEditChannel() {
 }
 
 function* watchCreateChannels() {
-  yield takeEvery(actions.CREATE_CHANNELS, addNewChannels);
+  yield takeLatest(actions.REQUEST_DEFAULT_CHANNELS, addNewChannels);
+  yield takeLatest(actions.RECEIVE_DEFAULT_CHANNELS, loadFirstDefaultChannel);
 }
 
 function* watchChannelPage() {

@@ -10,9 +10,8 @@ export const CREATE_CHANNEL_SUCCESS = 'CREATE_CHANNEL_SUCCESS';
 export const CREATE_CHANNEL_ERRORS = 'CREATE_CHANNEL_ERRORS';
 export const DELETE_CHANNEL = 'DELETE_CHANNEL';
 export const DELETE_CHANNEL_SUCCESS = 'DELETE_CHANNEL_SUCCESS';
-export const CREATE_CHANNELS = 'CREATE_CHANNELS';
-export const CREATE_CHANNELS_SUCCESS = 'CREATE_CHANNELS_SUCCESS';
-export const CREATE_CHANNELS_ERRORS = 'CREATE_CHANNELS_ERRORS';
+export const REQUEST_DEFAULT_CHANNELS = 'REQUEST_DEFAULT_CHANNELS';
+export const RECEIVE_DEFAULT_CHANNELS = 'RECEIVE_DEFAULT_CHANNELS';
 export const EDIT_CHANNEL = 'EDIT_CHANNEL';
 export const EDIT_CHANNEL_SUCCESS = 'EDIT_CHANNEL_SUCCESS';
 
@@ -78,19 +77,14 @@ export const deleteChannelSuccess = channelSlug => ({
   channelSlug
 });
 
-export const createChannels = channels => ({
-  type: CREATE_CHANNELS,
+export const requestDefaultChannels = channels => ({
+  type: REQUEST_DEFAULT_CHANNELS,
   channels
 });
 
-export const createChannelsSuccess = channels => ({
-  type: CREATE_CHANNELS_SUCCESS,
+export const receiveDefaultChannels = channels => ({
+  type: RECEIVE_DEFAULT_CHANNELS,
   channels
-});
-
-export const createChannelsErrors = errors => ({
-  type: CREATE_CHANNELS_ERRORS,
-  errors
 });
 
 export const editChannel = channel => ({

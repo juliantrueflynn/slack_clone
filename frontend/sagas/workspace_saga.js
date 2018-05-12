@@ -6,7 +6,7 @@ import * as api from '../util/workspace_api_util';
 import {
   createWorkspaceSubSuccess, createWorkspaceSubErrors
 } from '../actions/workspace_sub_actions';
-import { createChannels } from '../actions/channel_actions';
+import { requestDefaultChannels } from '../actions/channel_actions';
 import { createWorkspaceSub } from '../util/workspace_sub_api_util';
 import {
   getWorkspaces, getPageWorkspaceSlug, getChannels
@@ -69,7 +69,7 @@ function* loadDefaultChannels({ workspace: { id } }) {
   for (let title of defaultChannelTitles) {
     defaultChannels.push({ title, workspaceId: id });
   }
-  yield put(createChannels(defaultChannels));
+  yield put(requestDefaultChannels(defaultChannels));
 }
 
 function* loadWorkspaces(workspaces) {
@@ -81,9 +81,9 @@ function* loadWorkspaces(workspaces) {
 
 function* loadWorkspace({ workspaceSlug }) {
   yield call(fetchWorkspace, workspaceSlug);
-  const firstChannel = yield select(getChannels);
-  if (firstChannel.length) {
-    yield put(navigate(`/${ workspaceSlug }/${ firstChannel[0].slug }`));
+  const channels = yield select(getChannels);
+  if (channels.length) {
+    yield put(navigate(`/${ workspaceSlug }/${ channels[0].slug }`));
   } else {
     yield put(navigate(`/${ workspaceSlug }/create-channel`));
   }
@@ -97,7 +97,6 @@ function* watchCreateWorkspace() {
     const newWorkspace = yield take(actions.CREATE_WORKSPACE_SUCCESS);
     yield call(subCreatorToNewWorkspace, newWorkspace);
     yield call(loadDefaultChannels, newWorkspace);
-    yield put(navigate(`/${ newWorkspace.workspace.slug }`));
   }
 }
 
