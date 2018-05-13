@@ -16,14 +16,6 @@ class Message < ApplicationRecord
     primary_key: :slug,
     foreign_key: :parent_message_slug
 
-  def is_parent_message?
-    !parent_message_slug
-  end
-
-  def thread_slugs
-    thread_entries.pluck(:slug)
-  end
-
   private
 
   def generate_slug
