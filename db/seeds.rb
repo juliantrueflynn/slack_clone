@@ -66,7 +66,7 @@ end
         body: random_lorem_short_or_long,
         author_id: user.id,
         channel_id: channel.id,
-        parent_message_id: random_parent_message.id
+        parent_message_slug: random_parent_message.slug
       )
     end
   end

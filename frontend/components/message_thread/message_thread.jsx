@@ -15,7 +15,7 @@ const MessageThread = ({ message, threadEntries }) => {
         )}
       </div>
 
-      <MessageFormContainer parentMessageId={ message.id } />
+      <MessageFormContainer parentMessageSlug={ message.slug } />
     </div>
   );
 };

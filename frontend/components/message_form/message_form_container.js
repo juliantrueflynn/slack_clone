@@ -5,7 +5,7 @@ import { getCurrentChannelId } from '../../reducers/selectors';
 
 const mapStateToDispatch = (state, ownProps) => ({
   channelId: getCurrentChannelId(state),
-  parentMessageId: ownProps.parentMessageId || null,
+  parentMessageSlug: ownProps.parentMessageSlug || null,
 });
 
 const mapDispatchToProps = dispatch => ({

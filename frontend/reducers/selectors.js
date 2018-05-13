@@ -35,7 +35,7 @@ export const getMessages = ({ entities: { messages, channels }, ui }) => {
   if (!currentChannel) return [];
 
   return values(messages).filter(message => 
-    !message.parentMessageId && currentChannel.id === message.channelId
+    !message.parentMessageSlug && currentChannel.id === message.channelId
   );
 };
 
@@ -55,6 +55,6 @@ export const getThread = ({ entities: { messages }, ui: { rightSidebar } }) => {
   if (!currentMessage) return [];
   
   return values(messages).filter(message =>
-    message.parentMessageId === currentMessage.id
+    message.parentMessageSlug === currentMessage.slug
   );
 };

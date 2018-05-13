@@ -20,7 +20,7 @@ class Channel < ApplicationRecord
   end
 
   def parent_messages
-    messages.where(parent_message_id: nil)
+    messages.where(parent_message_slug: nil)
   end
 
   private

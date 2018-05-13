@@ -6,8 +6,34 @@ class Message < ApplicationRecord
 
   belongs_to :author, class_name: 'User'
   belongs_to :channel
-  belongs_to :thread, class_name: 'Message', foreign_key: :parent_message_id, optional: true
-  has_many :thread_entries, class_name: 'Message', foreign_key: :parent_message_id
+  belongs_to :thread,
+    class_name: 'Message',
+    primary_key: :slug,
+    foreign_key: :parent_message_slug,
+    optional: true
+  has_many :thread_entries,
+    class_name: 'Message',
+    primary_key: :slug,
+    foreign_key: :parent_message_slug
+
+  def is_parent_message?
+    !parent_message_slug
+  end
+
+  def thread_slugs
+    thread_entries.pluck(:slug)
+  end
+
+  private
+
+  def generate_slug
+    return slug if slug
+    
+    loop do
+      self.slug = SecureRandom.urlsafe_base64(8)
+      break unless Message.where(slug: slug).exists?
+    end
+  end
 
   after_create_commit do
     MessageEventsJob.perform_later(event: "CREATE_MESSAGE", data: self)
@@ -21,16 +47,5 @@ class Message < ApplicationRecord
   after_destroy :delete_message
   def delete_message
     MessageEventsJob.perform_later(event: "DELETE_MESSAGE", data: self)
-  end
-
-  private
-
-  def generate_slug
-    return slug if slug
-    
-    loop do
-      self.slug = SecureRandom.urlsafe_base64(8)
-      break unless Message.where(slug: slug).exists?
-    end
   end
 end

@@ -11,6 +11,7 @@ end
 
 json.set! :messages do
   json.array! @channel.messages do |message|
-    json.(message, :id, :body, :slug, :author_id, :channel_id, :parent_message_id, :created_at)
+    json.(message, :id, :body, :slug, :author_id, :channel_id, :parent_message_slug, :created_at)
+    json.thread message.is_parent_message? ? [message.thread_slugs] : nil
   end
 end
