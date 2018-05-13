@@ -1,15 +1,13 @@
-import {
-  take, all, call, fork, put, takeEvery, select, takeLatest
-} from 'redux-saga/effects';
+import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/session_actions';
 import * as utilApi from '../util/session_api_util';
-import { REQUEST_WORKSPACES } from '../actions/workspace_actions';
+import { workspacesRequest } from '../actions/workspace_actions';
 
 function* fetchSignIn({ currentUser }) {
   try {
     const user = yield call(utilApi.signIn, currentUser);
     yield put(actions.receiveCurrentUser(user));
-    yield put({type: 'REQUEST_WORKSPACES'});
+    yield put(workspacesRequest());
   } catch (error) {
     yield put(actions.receiveSessionErrors(error));
   }

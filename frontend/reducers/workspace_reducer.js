@@ -1,8 +1,8 @@
 import {
-  RECEIVE_WORKSPACES,
-  RECEIVE_WORKSPACE,
-  CREATE_WORKSPACE_SUCCESS,
-  DELETE_WORKSPACE_SUCCESS
+  WORKSPACES_RECEIVE,
+  WORKSPACE_RECEIVE,
+  CREATE_WORKSPACE_RECEIVE,
+  DELETE_WORKSPACE_RECEIVE
 } from '../actions/workspace_actions';
 
 const workspaceReducer = (state = {}, action) => {
@@ -10,20 +10,20 @@ const workspaceReducer = (state = {}, action) => {
 
   let nextState;
   switch (action.type) {
-    case RECEIVE_WORKSPACES :
+    case WORKSPACES_RECEIVE :
       nextState = action.workspaces;
       return Object.assign({}, state, nextState);
-    case RECEIVE_WORKSPACE :
+    case WORKSPACE_RECEIVE :
       nextState = {
         [action.workspace.workspace.slug]: action.workspace.workspace
       };
       return Object.assign({}, state, nextState);
-    case CREATE_WORKSPACE_SUCCESS :
+    case CREATE_WORKSPACE_RECEIVE :
       nextState = {
         [action.workspace.slug]: action.workspace
       };
       return Object.assign({}, state, nextState);
-    case DELETE_WORKSPACE_SUCCESS :
+    case DELETE_WORKSPACE_RECEIVE :
       nextState = Object.assign({}, state);
       delete nextState[action.workspaceSlug];
       return nextState;

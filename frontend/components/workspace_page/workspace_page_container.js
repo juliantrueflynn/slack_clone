@@ -1,22 +1,14 @@
 import { connect } from 'react-redux';
 import WorkspacePage from './workspace_page';
-import { loadWorkspacePage } from '../../actions/workspace_actions';
+import { workspaceRequest } from '../../actions/workspace_actions';
 import { navigate } from '../../actions/navigate_actions';
-import { getChannels } from '../../reducers/selectors';
 
-const mapStateToProps = (state, ownProps) => ({
-  workspaceSlug: ownProps.match.workspaceSlug,
-  workspaces: state.entities.workspaces,
-});
-
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  loadWorkspacePage: workspaceSlug => dispatch(
-    loadWorkspacePage(workspaceSlug)
-  ),
+const mapDispatchToProps = dispatch => ({
+  workspaceRequest: workspaceSlug => dispatch(workspaceRequest(workspaceSlug)),
   navigate: path => dispatch(navigate(path)),
 });
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(WorkspacePage);

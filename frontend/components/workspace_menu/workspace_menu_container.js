@@ -1,9 +1,7 @@
 import { connect } from 'react-redux';
 import WorkspaceMenu from './workspace_menu';
 import { getWorkspaces } from '../../reducers/selectors';
-import {
-  requestWorkspaces
-} from '../../actions/workspace_actions';
+import { workspacesRequest } from '../../actions/workspace_actions';
 import { withRouter } from 'react-router-dom';
 
 const mapStateToProps = state => ({
@@ -12,7 +10,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  requestWorkspaces: () => dispatch(requestWorkspaces()),
+  workspacesRequest: () => dispatch(workspacesRequest()),
 });
 
 export default withRouter(connect(

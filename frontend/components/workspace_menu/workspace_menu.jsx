@@ -13,8 +13,8 @@ class WorkspaceMenu extends React.Component {
 
   componentDidMount() {
     document.addEventListener('mousedown', this.handleDropdownClickOut);
-    const { loggedIn, requestWorkspaces } = this.props;
-    if (loggedIn) requestWorkspaces();
+    const { loggedIn, workspacesRequest } = this.props;
+    if (loggedIn) workspacesRequest();
   }
 
   componentWillUnmount() {

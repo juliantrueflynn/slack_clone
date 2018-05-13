@@ -1,67 +1,89 @@
-export const REQUEST_WORKSPACES = 'REQUEST_WORKSPACES';
-export const RECEIVE_WORKSPACES = 'RECEIVE_WORKSPACES';
-export const FAILURE_WORKSPACES = 'FAILURE_WORKSPACES';
-export const LOAD_WORKSPACE_PAGE = 'LOAD_WORKSPACE_PAGE';
-export const REQUEST_WORKSPACE = 'REQUEST_WORKSPACE';
-export const RECEIVE_WORKSPACE = 'RECEIVE_WORKSPACE';
-export const FAILURE_WORKSPACE = 'FAILURE_WORKSPACE';
-export const CREATE_WORKSPACE = 'CREATE_WORKSPACE';
-export const CREATE_WORKSPACE_SUCCESS = 'CREATE_WORKSPACE_SUCCESS';
-export const CREATE_WORKSPACE_ERRORS = 'CREATE_WORKSPACE_ERR ORS';
-export const DELETE_WORKSPACE = 'DELETE_WORKSPACE';
-export const DELETE_WORKSPACE_SUCCESS = 'DELETE_WORKSPACE_SUCCESS';
+export const WORKSPACES_REQUEST = 'WORKSPACES_REQUEST';
+export const WORKSPACES_RECEIVE = 'WORKSPACES_RECEIVE';
+export const WORKSPACES_FAILURE = 'WORKSPACES_FAILURE';
+export const WORKSPACE_REQUEST = 'WORKSPACE_REQUEST';
+export const WORKSPACE_RECEIVE = 'WORKSPACE_RECEIVE';
+export const WORKSPACE_FAILURE = 'WORKSPACE_FAILURE';
+export const CREATE_WORKSPACE_REQUEST = 'CREATE_WORKSPACE_REQUEST';
+export const CREATE_WORKSPACE_RECEIVE = 'CREATE_WORKSPACE_RECEIVE';
+export const CREATE_WORKSPACE_FAILURE = 'CREATE_WORKSPACE_FAILURE';
+export const UPDATE_WORKSPACE_REQUEST = 'UPDATE_WORKSPACE_REQUEST';
+export const UPDATE_WORKSPACE_SUCCESS = 'UPDATE_WORKSPACE_SUCCESS';
+export const UPDATE_WORKSPACE_FAILURE = 'UPDATE_WORKSPACE_FAILURE';
+export const DELETE_WORKSPACE_REQUEST = 'DELETE_WORKSPACE_REQUEST';
+export const DELETE_WORKSPACE_RECEIVE = 'DELETE_WORKSPACE_RECEIVE';
+export const DELETE_WORKSPACE_FAILURE = 'DELETE_WORKSPACE_FAILURE';
 
-export const requestWorkspaces = (workspaces = {}) => ({
-  type: REQUEST_WORKSPACES,
+export const workspacesRequest = () => ({
+  type: WORKSPACES_REQUEST
+});
+
+export const workspacesReceive = workspaces => ({
+  type: WORKSPACES_RECEIVE,
   workspaces
 });
 
-export const receiveWorkspaces = workspaces => ({
-  type: RECEIVE_WORKSPACES,
-  workspaces
-});
-
-export const failureWorkspaces = errors => ({
-  type: FAILURE_WORKSPACES,
+export const workspacesFailure = errors => ({
+  type: WORKSPACES_FAILURE,
   errors
 });
 
-export const loadWorkspacePage = workspaceSlug => ({
-  type: LOAD_WORKSPACE_PAGE,
-  workspaceSlug
-});
-
-export const requestWorkspace = workspaceSlug => ({
-  type: REQUEST_WORKSPACE,
-  workspaceSlug
-});
-
-export const receiveWorkspace = workspace => ({
-  type: RECEIVE_WORKSPACE,
+export const createWorkspaceRequest = workspace => ({
+  type: CREATE_WORKSPACE_REQUEST,
   workspace
 });
 
-export const failureWorkspace = errors => ({
-  type: FAILURE_WORKSPACE,
+export const createWorkspaceReceive = workspace => ({
+  type: CREATE_WORKSPACE_RECEIVE,
+  workspace
+});
+
+export const createWorkspaceFailure = errors => ({
+  type: CREATE_WORKSPACE_FAILURE,
   errors
 });
 
-export const createWorkspace = workspace => ({
-  type: CREATE_WORKSPACE,
+export const workspaceRequest = workspaceSlug => ({
+  type: WORKSPACE_REQUEST,
+  workspaceSlug
+});
+
+export const workspaceReceive = workspace => ({
+  type: WORKSPACE_RECEIVE,
   workspace
 });
 
-export const createWorkspaceSuccess = workspace => ({
-  type: CREATE_WORKSPACE_SUCCESS,
+export const workspaceFailure = errors => ({
+  type: WORKSPACE_FAILURE,
+  errors
+});
+
+export const updateWorkspaceRequest = workspace => ({
+  type: UPDATE_WORKSPACE_REQUEST,
   workspace
 });
 
-export const deleteWorkspace = workspaceSlug => ({
-  type: DELETE_WORKSPACE,
+export const updateWorkspaceSuccess = workspace => ({
+  type: UPDATE_WORKSPACE_SUCCESS,
+  workspace
+});
+
+export const updateWorkspaceFailure = workspace => ({
+  type: UPDATE_WORKSPACE_FAILURE,
+  workspace
+});
+
+export const deleteWorkspaceRequest = workspaceSlug => ({
+  type: DELETE_WORKSPACE_REQUEST,
   workspaceSlug
 });
 
 export const deleteWorkspaceSuccess = workspaceSlug => ({
-  type: DELETE_WORKSPACE_SUCCESS,
+  type: DELETE_WORKSPACE_RECEIVE,
+  workspaceSlug
+});
+
+export const deleteWorkspaceFailure = workspaceSlug => ({
+  type: DELETE_WORKSPACE_FAILURE,
   workspaceSlug
 });

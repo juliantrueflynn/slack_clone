@@ -1,9 +1,11 @@
 import { connect } from 'react-redux';
 import WorkspaceForm from './workspace_form';
-import { createWorkspace } from '../../actions/workspace_actions';
+import { createWorkspaceRequest } from '../../actions/workspace_actions';
 
 const mapDispatchToProps = dispatch => ({
-  createWorkspace: workspace => dispatch(createWorkspace(workspace))
+  createWorkspaceRequest: workspace => dispatch(
+    createWorkspaceRequest(workspace)
+  )
 });
 
 export default connect(

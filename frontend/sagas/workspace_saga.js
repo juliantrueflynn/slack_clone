@@ -4,33 +4,20 @@ import {
 import * as actions from '../actions/workspace_actions';
 import * as api from '../util/workspace_api_util';
 import {
-  createWorkspaceSubSuccess, createWorkspaceSubErrors
+  createWorkspaceSubSuccess,
+  createWorkspaceSubErrors
 } from '../actions/workspace_sub_actions';
 import { requestDefaultChannels } from '../actions/channel_actions';
 import { createWorkspaceSub } from '../util/workspace_sub_api_util';
-import {
-  getWorkspaces, getPageWorkspaceSlug, getChannels
-} from '../reducers/selectors';
+import { getWorkspaces, getChannels } from '../reducers/selectors';
 import { navigate } from '../actions/navigate_actions';
 
-function* fetchWorkspaces(prevState) {
+export function* fetchWorkspace(workspaceSlug) {
   try {
-    const workspaces = yield call(api.fetchWorkspaces);
-    if (Object.keys(workspaces).length !== Object.keys(prevState).length) {
-      yield put(actions.receiveWorkspaces(workspaces));
-    }
-  } catch (error) {
-    yield put(actions.failureWorkspaces(error));
-  }
-}
-
-export function* fetchWorkspace() {
-  try {
-    const workspaceSlug = yield select(getPageWorkspaceSlug);
     const workspace = yield call(api.fetchWorkspace, workspaceSlug);
-    yield put(actions.receiveWorkspace(workspace));
+    yield put(actions.workspaceReceive(workspace));
   } catch (error) {
-    yield put(actions.failureWorkspace(error));
+    yield put(actions.workspaceFailure(error));
   }
 }
 
@@ -39,7 +26,7 @@ function* fetchDeleteWorkspace({ workspaceSlug }) {
     yield call(api.deleteWorkspace, workspaceSlug);
     yield put(actions.deleteWorkspaceSuccess(workspaceSlug));
   } catch (error) {
-    yield put(actions.receiveWorkspaceErrors(error));
+    yield put(actions.deleteWorkspaceFailure(error));
   }
 }
 
@@ -48,7 +35,7 @@ function* addNewWorkspace({ workspace }) {
     const newWorkspace = yield call(api.createWorkspace, workspace);
     yield put(actions.createWorkspaceSuccess(newWorkspace));
   } catch (error) {
-    yield put(actions.receiveWorkspaceErrors(error));
+    yield put(actions.createWorkspaceFailure(error));
   }
 }
 
@@ -72,10 +59,12 @@ function* loadDefaultChannels({ workspace: { id } }) {
   yield put(requestDefaultChannels(defaultChannels));
 }
 
-function* loadWorkspaces(workspaces) {
-  const prevState = yield select(getWorkspaces);
-  if (!prevState.length || Object.keys(workspaces).length !== prevState) {
-    yield call(fetchWorkspaces, workspaces);
+function* loadWorkspaces() {
+  try {
+    const workspaces = yield call(api.fetchWorkspaces);
+    yield put(actions.workspacesReceive(workspaces));
+  } catch (error) {
+    yield put(actions.workspacesFailure(error));
   }
 }
 
@@ -83,33 +72,33 @@ function* loadWorkspace({ workspaceSlug }) {
   yield call(fetchWorkspace, workspaceSlug);
   const channels = yield select(getChannels);
   if (channels.length) {
-    yield put(navigate(`/${ workspaceSlug }/${ channels[0].slug }`));
+    yield put(navigate(`/${workspaceSlug}/${channels[0].slug}`));
   } else {
-    yield put(navigate(`/${ workspaceSlug }/create-channel`));
+    yield put(navigate(`/${workspaceSlug}/create-channel`));
   }
 }
 
 function* watchCreateWorkspace() {
   while (true) {
-    const workspace = yield take(actions.CREATE_WORKSPACE);
+    const workspace = yield take(actions.CREATE_WORKSPACE_REQUEST);
     yield fork(addNewWorkspace, workspace);
   
-    const newWorkspace = yield take(actions.CREATE_WORKSPACE_SUCCESS);
+    const newWorkspace = yield take(actions.CREATE_WORKSPACE_RECEIVE);
     yield call(subCreatorToNewWorkspace, newWorkspace);
     yield call(loadDefaultChannels, newWorkspace);
   }
 }
 
 function* watchWorkspaces() {
-  yield takeLatest(actions.REQUEST_WORKSPACES, loadWorkspaces);
+  yield takeLatest(actions.WORKSPACES_REQUEST, loadWorkspaces);
 }
 
 function* watchWorkspacePage() {
-  yield takeLatest(actions.LOAD_WORKSPACE_PAGE, loadWorkspace);
+  yield takeLatest(actions.WORKSPACE_REQUEST, loadWorkspace);
 }
 
 function* watchDeleteWorkspace() {
-  yield takeLatest(actions.DELETE_WORKSPACE, fetchDeleteWorkspace);
+  yield takeLatest(actions.DELETE_WORKSPACE_REQUEST, fetchDeleteWorkspace);
 }
 
 export function* workspaceSaga() {

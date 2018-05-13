@@ -1,5 +1,4 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
 
 class WorkspacePage extends React.Component {
   constructor(props) {
@@ -7,14 +6,14 @@ class WorkspacePage extends React.Component {
   }
 
   componentDidMount() {
-    this.props.loadWorkspacePage(this.props.match.params.workspaceSlug);
+    this.props.workspaceRequest(this.props.match.params.workspaceSlug);
   }
 
   componentWillReceiveProps(nextProps) {
     const slug = this.props.match.params.workspaceSlug;
     const nextSlug = nextProps.match.params.workspaceSlug;
     if (slug !== nextSlug) {
-      this.props.loadWorkspacePage(nextSlug);
+      this.props.workspaceRequest(nextSlug);
     }
   }
 

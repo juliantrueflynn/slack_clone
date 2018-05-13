@@ -1,5 +1,3 @@
-import * as WorkspaceSubAPIUtil from '../util/workspace_sub_api_util';
-
 export const RECEIVE_WORKSPACE_SUB = 'RECEIVE_WORKSPACE_SUB';
 export const CREATE_WORKSPACE_SUB = 'CREATE_WORKSPACE_SUB';
 export const CREATE_WORKSPACE_SUB_SUCCESS = 'CREATE_WORKSPACE_SUB_SUCCESS';
@@ -24,9 +22,3 @@ export const createWorkspaceSubErrors = errors => ({
   type: CREATE_WORKSPACE_SUB_ERRORS,
   errors
 });
-
-export const createNewWorkspaceSub = workspaceSub => dispatch => (
-  WorkspaceSubAPIUtil.createWorkspaceSub(workspaceSub).then(
-    newWorkspaceSub => dispatch(createWorkspaceSub(newWorkspaceSub))
-  )
-);

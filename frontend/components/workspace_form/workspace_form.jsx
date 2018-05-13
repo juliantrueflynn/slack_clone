@@ -21,7 +21,7 @@ class WorkspaceForm extends React.Component {
 
     const { title, slug } = this.state;
     const workspace = { title, slug };
-    this.props.createWorkspace({ workspace });
+    this.props.createWorkspaceRequest({ workspace });
   }
 
   render() {
