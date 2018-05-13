@@ -1,7 +1,7 @@
-import { camelizeKeys, decamelizeKeys } from 'humps';
+import { decamelizeKeys } from 'humps';
 
 export const fetchMessage = messageSlug => (
-  fetch(`api/messages/${ messageSlug }`, {
+  fetch(`api/messages/${messageSlug}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -14,7 +14,7 @@ export const fetchMessage = messageSlug => (
     if (!response.ok) {
       throw json;
     }
-    return camelizeKeys(json);
+    return json;
   }).catch(error => {
     throw error.message || ['Unknown message error!'];
   })
@@ -35,14 +35,14 @@ export const createMessage = message => (
     if (!response.ok) {
       throw json;
     }
-    return camelizeKeys(json);
+    return json;
   }).catch(error => {
     throw error || ['Unknown message error!'];
   })
 );
 
 export const editMessage = message => (
-  fetch(`api/messages/${ message.slug }`, {
+  fetch(`api/messages/${message.slug}`, {
     method: 'PATCH',
     headers: {
       'Accept': 'application/json',
@@ -56,14 +56,14 @@ export const editMessage = message => (
     if (!response.ok) {
       throw json;
     }
-    return camelizeKeys(json);
+    return json;
   }).catch(error => {
     throw error || ['Unknown message error!'];
   })
 );
 
 export const deleteMessage = messageSlug => (
-  fetch(`api/messages/${ messageSlug }`, {
+  fetch(`api/messages/${messageSlug}`, {
     method: 'DELETE',
     credentials: 'include'
   }).then(response =>
@@ -72,7 +72,7 @@ export const deleteMessage = messageSlug => (
     if (!response.ok) {
       throw json;
     }
-    return camelizeKeys(json);
+    return json;
   }).catch(error => {
     throw error || ['Unknown message error!'];
   })

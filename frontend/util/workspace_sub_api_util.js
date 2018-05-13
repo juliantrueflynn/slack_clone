@@ -1,4 +1,4 @@
-import { decamelizeKeys, camelizeKeys } from 'humps';
+import { decamelizeKeys } from 'humps';
 
 export const createWorkspaceSub = workspaceSub => (
   fetch('api/workspace_subs', {
@@ -15,7 +15,7 @@ export const createWorkspaceSub = workspaceSub => (
     if (!response.ok) {
       throw json;
     }
-    return camelizeKeys(json);
+    return json;
   }).catch(errors => {
     throw errors || ['Unknown workspace error!'];
   })

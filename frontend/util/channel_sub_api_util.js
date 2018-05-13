@@ -1,4 +1,4 @@
-import { decamelizeKeys, camelizeKeys } from 'humps';
+import { decamelizeKeys } from 'humps';
 
 export const createChannelSub = channelSub => (
   fetch('api/channel_subs', {
@@ -15,7 +15,7 @@ export const createChannelSub = channelSub => (
     if (!response.ok) {
       throw json;
     }
-    return camelizeKeys(json);
+    return json;
   }).catch(errors => {
     throw errors || ['Unknown channel error!'];
   })

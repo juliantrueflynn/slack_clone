@@ -1,4 +1,4 @@
-import { decamelizeKeys, camelizeKeys } from 'humps';
+import { decamelizeKeys } from 'humps';
 
 export const fetchWorkspaces = () => (
   fetch('api/workspaces', {
@@ -14,14 +14,14 @@ export const fetchWorkspaces = () => (
     if (!response.ok) {
       throw json;
     }
-    return camelizeKeysSkipSlugsDepth(json);
+    return json;
   }).catch(error => {
     throw error.message || ['Unknown workspaces error!'];
   })
 );
 
 export const fetchWorkspace = workspaceSlug => (
-  fetch(`api/workspaces/${ workspaceSlug }`, {
+  fetch(`api/workspaces/${workspaceSlug}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -34,7 +34,7 @@ export const fetchWorkspace = workspaceSlug => (
     if (!response.ok) {
       throw json;
     }
-    return camelizeKeys(json);
+    return json;
   }).catch(error => {
     throw error.message || ['Unknown workspaces error!'];
   })
@@ -55,14 +55,14 @@ export const createWorkspace = workspace => (
     if (!response.ok) {
       throw json;
     }
-    return camelizeKeys(json);
+    return json;
   }).catch(errors => {
     throw errors || ['Unknown workspace error!'];
   })
 );
 
 export const deleteWorkspace = workspaceSlug => (
-  fetch(`api/workspaces/${ workspaceSlug }`, {
+  fetch(`api/workspaces/${workspaceSlug}`, {
     method: 'DELETE',
     credentials: 'include'
   }).then(response =>
@@ -71,16 +71,8 @@ export const deleteWorkspace = workspaceSlug => (
     if (!response.ok) {
       throw json;
     }
-    return camelizeKeys(json);
+    return json;
   }).catch(error => {
     throw error || ['Unknown workspace error!'];
   })
 );
-
-function camelizeKeysSkipSlugsDepth(json) {
-  const camelized = {};
-  Object.keys(json).forEach((key) => {
-    camelized[key] = camelizeKeys(json[key]);
-  });
-  return camelized;
-}

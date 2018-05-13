@@ -1,5 +1,3 @@
-import { camelizeKeys } from 'humps';
-
 export const signUp = user => (
   fetch('api/user', {
     method: 'POST',

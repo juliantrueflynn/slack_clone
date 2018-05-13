@@ -1,7 +1,7 @@
-import { camelizeKeys, decamelizeKeys } from 'humps';
+import { decamelizeKeys } from 'humps';
 
 export const fetchChannel = channelSlug => (
-  fetch(`api/channels/${ channelSlug }`, {
+  fetch(`api/channels/${channelSlug}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -14,7 +14,7 @@ export const fetchChannel = channelSlug => (
     if (!response.ok) {
       throw json;
     }
-    return camelizeKeys(json);
+    return json;
   }).catch(error => {
     throw error.message || ['Unknown channel error!'];
   })
@@ -35,7 +35,7 @@ export const createChannel = channel => (
     if (!response.ok) {
       throw json;
     }
-    return camelizeKeys(json);
+    return json;
   }).catch(error => {
     throw error || ['Unknown channel error!'];
   })
@@ -56,14 +56,14 @@ export const editChannel = channel => (
     if (!response.ok) {
       throw json;
     }
-    return camelizeKeys(json);
+    return json;
   }).catch(error => {
     throw error || ['Unknown channel error!'];
   })
 );
 
 export const deleteChannel = channelSlug => (
-  fetch(`api/channels/${ channelSlug }`, {
+  fetch(`api/channels/${channelSlug}`, {
     method: 'DELETE',
     credentials: 'include'
   }).then(response =>
@@ -72,7 +72,7 @@ export const deleteChannel = channelSlug => (
     if (!response.ok) {
       throw json;
     }
-    return camelizeKeys(json);
+    return json;
   }).catch(error => {
     throw error || ['Unknown channel error!'];
   })
