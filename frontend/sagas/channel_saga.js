@@ -12,9 +12,9 @@ import {
 import { fetchWorkspace } from './workspace_saga';
 import { navigate } from '../actions/navigate_actions';
 
-function* fetchCreatorSub(channelSlug) {
-  yield call(createChannelSub, { channelSlug });
-}
+// function* fetchCreatorSub(channelSlug) {
+//   yield call(createChannelSub, { channelSlug });
+// }
 
 function* addNewChannel({ channel }) {
   try {
@@ -50,7 +50,7 @@ function* addNewChannels({ channels }) {
   let newChannels = [];
   for (let channel of channels) {
     const newChannel = yield call(api.createChannel, channel);
-    yield call(fetchCreatorSub, newChannel.slug);
+    yield call(createChannelSub, newChannel.slug);
     newChannels.push(newChannel);
   }
   yield put(actions.defaultChannelsReceive(newChannels));
