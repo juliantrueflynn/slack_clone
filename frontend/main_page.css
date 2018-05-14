@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans');
+
+body {
+  font-family: 'Noto Sans', sans-serif;
+}
+
 @media only screen and (min-width : 1250px) {
   .content-container__boxed-width {
     width: 920px;

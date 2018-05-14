@@ -1,0 +1,19 @@
+.modal__new-channel {
+  margin: 5em 2.5em;
+  position: relative;
+}
+
+.modal__new-channel:focus {
+  outline: none;
+}
+
+.modal__title {
+  margin: 0;
+}
+
+.modal__close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
+}
