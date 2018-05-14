@@ -47,11 +47,11 @@ function* subCreatorToNewWorkspace(workspace) {
   }
 }
 
-function* loadDefaultChannels({ id }) {
+function* loadDefaultChannels({ slug }) {
   let defaultChannels = [];
   const defaultChannelTitles = ['general', 'random'];
   for (let title of defaultChannelTitles) {
-    defaultChannels.push({ title, workspaceSlug: id });
+    defaultChannels.push({ title, workspaceSlug: slug });
   }
   yield put(defaultChannelsRequest(defaultChannels));
 }
