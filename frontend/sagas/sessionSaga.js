@@ -6,41 +6,41 @@ import { workspacesRequest } from '../actions/workspaceActions';
 function* fetchSignIn({ currentUser }) {
   try {
     const user = yield call(api.signIn, currentUser);
-    yield put(actions.receiveCurrentUser(user));
+    yield put(actions.sessionReceive(user));
     yield put(workspacesRequest());
   } catch (error) {
-    yield put(actions.receiveSessionErrors(error));
+    yield put(actions.sessionFailure(error));
   }
 }
 
 function* fetchSignUp({ currentUser }) {
   try {
     const user = yield call(api.signUp, currentUser);
-    yield put(actions.receiveCurrentUser(user));
+    yield put(actions.sessionReceive(user));
   } catch (error) {
-    yield put(actions.receiveSessionErrors(error));
+    yield put(actions.sessionFailure(error));
   }
 }
 
 function* fetchSignOut() {
   try {
     yield call(api.signOut);
-    yield put(actions.receiveCurrentUser(null));
+    yield put(actions.sessionReceive(null));
   } catch (error) {
-    yield put(actions.receiveSessionErrors(error));
+    yield put(actions.sessionFailure(error));
   }
 }
 
 function* watchSignIn() {
-  yield takeLatest(actions.SIGN_IN, fetchSignIn);
+  yield takeLatest(actions.SESSION_SIGN_IN, fetchSignIn);
 }
 
 function* watchSignUp() {
-  yield takeLatest(actions.SIGN_UP, fetchSignUp);
+  yield takeLatest(actions.SIGN_UP_REQUEST, fetchSignUp);
 }
 
 function* watchSignOut() {
-  yield takeLatest(actions.SIGN_OUT, fetchSignOut);
+  yield takeLatest(actions.SESSION_SIGN_OUT, fetchSignOut);
 }
 
 export function* sessionSaga() {

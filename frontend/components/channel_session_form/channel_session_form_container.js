@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
-import ChannelSessionForm from './SessionForm';
+import ChannelSessionForm from './channel_session_form';
 import { signUp, signInRequest } from '../../actions/sessionActions';
 
 const mapStateToProps = (state, { location }) => ({
-  isSignInPage: location.pathname === '/signin',
-  errors: state.errors.session
+  loggedIn: Boolean(state.session.currentUser),
+  errors: state.errors.session,
+  formType: location.pathname
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

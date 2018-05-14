@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import NavBar from './NavBar';
-import { requestSignOut } from '../actions/sessionActions';
+import { sessionSignOut } from '../actions/sessionActions';
 
 const mapStateToProps = state => ({
   currentUser: state.session.currentUser,
@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  requestSignOut: () => dispatch(requestSignOut()),
+  sessionSignOut: () => dispatch(sessionSignOut()),
 });
 
 export default connect(
