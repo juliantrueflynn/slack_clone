@@ -1,10 +1,10 @@
 import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/message_actions';
-import * as utilApi from '../util/message_api_util';
+import * as api from '../util/message_api_util';
 
 function* fetchNewMessage({ message }) {
   try {
-    yield call(utilApi.createMessage, message);
+    yield call(api.createMessage, message);
   } catch (error) {
     yield put(actions.failureMessage(error));
   }
@@ -12,7 +12,7 @@ function* fetchNewMessage({ message }) {
 
 function* fetchEditMessage({ message }) {
   try {
-    yield call(utilApi.editMessage, message);
+    yield call(api.editMessage, message);
   } catch (error) {
     yield put(actions.failureMessage(error));
   }
@@ -20,7 +20,7 @@ function* fetchEditMessage({ message }) {
 
 function* fetchDeleteMessage({ messageSlug }) {
   try {
-    yield call(utilApi.deleteMessage, messageSlug);
+    yield call(api.deleteMessage, messageSlug);
   } catch (error) {
     yield put(actions.failureMessage(error));
   }

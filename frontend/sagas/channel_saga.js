@@ -1,12 +1,13 @@
-import {
-  take, all, call, fork, put, takeEvery, select, takeLatest
-} from 'redux-saga/effects';
+import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/channel_actions';
-import * as utilApi from '../util/channel_api_util';
+import * as api from '../util/channel_api_util';
 import { createChannelSubSuccess } from '../actions/channel_sub_actions';
 import { createChannelSub } from '../util/channel_sub_api_util';
 import {
-  getPageChannelSlug, getChannels, getPageWorkspaceSlug, getMessageSlug
+  getPageChannelSlug,
+  getChannels,
+  getPageWorkspaceSlug,
+  getMessageSlug
 } from '../reducers/selectors';
 import { fetchWorkspace } from './workspace_saga';
 import { navigate } from '../actions/navigate_actions';
@@ -17,7 +18,7 @@ function* fetchCreatorSub(channelId) {
 
 function* addNewChannel({ channel }) {
   try {
-    const newChannel = yield call(utilApi.createChannel, channel);
+    const newChannel = yield call(api.createChannel, channel);
     yield put(actions.createChannelReceive(newChannel));
   } catch (error) {
     yield put(actions.createChannelFailure(error));
@@ -29,7 +30,7 @@ function* subCreatorToNewChannel({ channel }) {
     const workspaceSlug = yield select(getPageWorkspaceSlug);
     const newSub = yield call(fetchCreatorSub, channel.id);
     yield put(createChannelSubSuccess(newSub));
-    yield put(navigate(`/${ workspaceSlug }/${ channel.slug }`));
+    yield put(navigate(`/${workspaceSlug}/${channel.slug}`));
   } catch (error) {
     yield put(actions.createChannelFailure(error));
   }
@@ -37,7 +38,7 @@ function* subCreatorToNewChannel({ channel }) {
 
 function* fetchEditChannel({ channel }) {
   try {
-    const newChannel = yield call(utilApi.editChannel, channel);
+    const newChannel = yield call(api.editChannel, channel);
     yield put(actions.updateChannelReceive(newChannel));
   } catch (error) {
     yield put(actions.updateChannelFailure(error));
@@ -47,7 +48,7 @@ function* fetchEditChannel({ channel }) {
 function* addNewChannels({ channels }) {
   let newChannels = [];
   for (let channel of channels) {
-    const newChannel = yield call(utilApi.createChannel, channel);
+    const newChannel = yield call(api.createChannel, channel);
     yield call(fetchCreatorSub, newChannel.id);
     newChannels.push(newChannel);
   }
@@ -56,13 +57,13 @@ function* addNewChannels({ channels }) {
 
 function* loadFirstDefaultChannel({ channels }) {
   const workspaceSlug = yield select(getPageWorkspaceSlug);
-  yield put(navigate(`/${ workspaceSlug }/${ channels[0].slug }`));
+  yield put(navigate(`/${workspaceSlug}/${channels[0].slug}`));
 }
 
 function* fetchChannel() {
   try {
     const channelSlug = yield select(getPageChannelSlug);
-    const channel = yield call(utilApi.fetchChannel, channelSlug);
+    const channel = yield call(api.fetchChannel, channelSlug);
     const messageSlug = yield select(getMessageSlug);
     yield put(actions.channelReceive(channel, messageSlug));
   } catch (error) {
@@ -82,7 +83,7 @@ function* loadChannelEntities() {
 
 function* fetchDeleteChannel({ channelSlug }) {
   try {
-    yield call(utilApi.deleteChannel, channelSlug);
+    yield call(api.deleteChannel, channelSlug);
     yield put(actions.deleteChannelReceive(channelSlug));
   } catch (error) {
     yield put(actions.deleteChannelFailure(error));
@@ -90,8 +91,8 @@ function* fetchDeleteChannel({ channelSlug }) {
 }
 
 function* watchCreateChannel() {
-  yield takeEvery(actions.CREATE_CHANNEL_REQUEST, addNewChannel);
-  yield takeEvery(actions.CREATE_CHANNEL_RECEIVE, subCreatorToNewChannel);
+  yield takeLatest(actions.CREATE_CHANNEL_REQUEST, addNewChannel);
+  yield takeLatest(actions.CREATE_CHANNEL_RECEIVE, subCreatorToNewChannel);
 }
 
 function* watchEditChannel() {
