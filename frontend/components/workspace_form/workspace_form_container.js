@@ -2,6 +2,10 @@ import { connect } from 'react-redux';
 import WorkspaceForm from './workspace_form';
 import { createWorkspaceRequest } from '../../actions/workspace_actions';
 
+const mapStateToProps = state => ({
+  errors: state.errors.workspace,
+});
+
 const mapDispatchToProps = dispatch => ({
   createWorkspaceRequest: workspace => dispatch(
     createWorkspaceRequest(workspace)
@@ -9,6 +13,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(WorkspaceForm);

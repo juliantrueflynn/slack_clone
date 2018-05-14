@@ -83,7 +83,7 @@ export const deleteWorkspaceSuccess = workspaceSlug => ({
   workspaceSlug
 });
 
-export const deleteWorkspaceFailure = workspaceSlug => ({
+export const deleteWorkspaceFailure = errors => ({
   type: DELETE_WORKSPACE_FAILURE,
-  workspaceSlug
+  errors
 });

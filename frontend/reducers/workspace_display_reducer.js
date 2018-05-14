@@ -1,5 +1,6 @@
 import {
-  WORKSPACE_REQUEST, CREATE_WORKSPACE_RECEIVE
+  WORKSPACE_REQUEST,
+  CREATE_WORKSPACE_RECEIVE
 } from '../actions/workspace_actions';
 import { LOAD_CHANNEL_PAGE } from '../actions/channel_actions';
 
