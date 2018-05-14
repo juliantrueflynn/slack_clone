@@ -7,7 +7,7 @@ import {
   createWorkspaceSubSuccess,
   createWorkspaceSubErrors
 } from '../actions/workspace_sub_actions';
-import { requestDefaultChannels } from '../actions/channel_actions';
+import { defaultChannelsRequest } from '../actions/channel_actions';
 import { createWorkspaceSub } from '../util/workspace_sub_api_util';
 import { getWorkspaces, getChannels } from '../reducers/selectors';
 import { navigate } from '../actions/navigate_actions';
@@ -56,7 +56,7 @@ function* loadDefaultChannels({ workspace: { id } }) {
   for (let title of defaultChannelTitles) {
     defaultChannels.push({ title, workspaceId: id });
   }
-  yield put(requestDefaultChannels(defaultChannels));
+  yield put(defaultChannelsRequest(defaultChannels));
 }
 
 function* loadWorkspaces() {

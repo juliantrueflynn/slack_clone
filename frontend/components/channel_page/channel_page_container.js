@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ChannelPage from './channel_page';
-import { loadChannelPage } from '../../actions/channel_actions';
+import { channelRequest } from '../../actions/channel_actions';
 import { getMessages } from '../../reducers/selectors';
 import {
   createMessageSuccess, editMessageSuccess, deleteMessageSuccess
@@ -12,8 +12,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadChannelPage: (channelSlug, workspaceSlug) => dispatch(
-    loadChannelPage(channelSlug, workspaceSlug)
+  channelRequest: (channelSlug, workspaceSlug) => dispatch(
+    channelRequest(channelSlug, workspaceSlug)
   ),
   onReceivedCallback: (type, message) => {
     const camelized = camelizeKeys(message);

@@ -1,5 +1,4 @@
-import merge from 'lodash/merge';
-import { LOAD_CHANNEL_PAGE } from '../actions/channel_actions';
+import { CHANNEL_REQUEST } from '../actions/channel_actions';
 import { WORKSPACE_REQUEST } from '../actions/workspace_actions';
 
 const channelDisplayReducer = (state = null, action) => {
@@ -8,7 +7,7 @@ const channelDisplayReducer = (state = null, action) => {
   switch (action.type) {
     case WORKSPACE_REQUEST :
       return null;
-    case LOAD_CHANNEL_PAGE :
+    case CHANNEL_REQUEST :
       return action.channelSlug;
     default :
       return state;

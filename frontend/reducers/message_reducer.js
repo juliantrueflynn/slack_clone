@@ -1,7 +1,9 @@
-import { RECEIVE_CHANNEL } from '../actions/channel_actions';
 import {
-  CREATE_MESSAGE_SUCCESS, EDIT_MESSAGE_SUCCESS, DELETE_MESSAGE_SUCCESS
+  CREATE_MESSAGE_SUCCESS,
+  EDIT_MESSAGE_SUCCESS,
+  DELETE_MESSAGE_SUCCESS
 } from '../actions/message_actions';
+import { CHANNEL_RECEIVE } from '../actions/channel_actions';
 import { OPEN_RIGHT_SIDEBAR } from '../actions/right_sidebar_actions';
 
 const messageReducer = (state = {}, action) => {
@@ -9,7 +11,7 @@ const messageReducer = (state = {}, action) => {
 
   let nextState;
   switch (action.type) {
-    case RECEIVE_CHANNEL :
+    case CHANNEL_RECEIVE :
       nextState = {};
       
       action.channel.messages.map(message => {

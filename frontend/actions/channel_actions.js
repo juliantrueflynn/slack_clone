@@ -1,98 +1,110 @@
-export const REQUEST_CHANNELS = 'REQUEST_CHANNELS';
-export const RECEIVE_CHANNELS = 'RECEIVE_CHANNELS';
-export const FAILURE_CHANNELS = 'FAILURE_CHANNELS';
-export const LOAD_CHANNEL_PAGE = 'LOAD_CHANNEL_PAGE';
-export const REQUEST_CHANNEL = 'REQUEST_CHANNEL';
-export const RECEIVE_CHANNEL = 'RECEIVE_CHANNEL';
-export const FAILURE_CHANNEL = 'FAILURE_CHANNEL';
-export const CREATE_CHANNEL = 'CREATE_CHANNEL';
-export const CREATE_CHANNEL_SUCCESS = 'CREATE_CHANNEL_SUCCESS';
-export const CREATE_CHANNEL_ERRORS = 'CREATE_CHANNEL_ERRORS';
-export const DELETE_CHANNEL = 'DELETE_CHANNEL';
-export const DELETE_CHANNEL_SUCCESS = 'DELETE_CHANNEL_SUCCESS';
-export const REQUEST_DEFAULT_CHANNELS = 'REQUEST_DEFAULT_CHANNELS';
-export const RECEIVE_DEFAULT_CHANNELS = 'RECEIVE_DEFAULT_CHANNELS';
-export const EDIT_CHANNEL = 'EDIT_CHANNEL';
-export const EDIT_CHANNEL_SUCCESS = 'EDIT_CHANNEL_SUCCESS';
+export const CHANNELS_REQUEST = 'CHANNELS_REQUEST';
+export const CHANNELS_RECEIVE = 'CHANNELS_RECEIVE';
+export const CHANNELS_FAILURE = 'CHANNELS_FAILURE';
+export const CHANNEL_REQUEST = 'CHANNEL_REQUEST';
+export const CHANNEL_RECEIVE = 'CHANNEL_RECEIVE';
+export const CHANNEL_FAILURE = 'CHANNEL_FAILURE';
+export const CREATE_CHANNEL_REQUEST = 'CREATE_CHANNEL_REQUEST';
+export const CREATE_CHANNEL_RECEIVE = 'CREATE_CHANNEL_RECEIVE';
+export const CREATE_CHANNEL_FAILURE = 'CREATE_CHANNEL_FAILURE';
+export const UPDATE_CHANNEL_REQUEST = 'UPDATE_CHANNEL_REQUEST';
+export const UPDATE_CHANNEL_RECEIVE = 'UPDATE_CHANNEL_RECEIVE';
+export const UPDATE_CHANNEL_FAILURE = 'UPDATE_CHANNEL_FAILURE';
+export const DELETE_CHANNEL_REQUEST = 'DELETE_CHANNEL_REQUEST';
+export const DELETE_CHANNEL_RECEIVE = 'DELETE_CHANNEL_RECEIVE';
+export const DELETE_CHANNEL_FAILURE = 'DELETE_CHANNEL_FAILURE';
+export const DEFAULT_CHANNELS_REQUEST = 'DEFAULT_CHANNELS_REQUEST';
+export const DEFAULT_CHANNELS_RECEIVE = 'DEFAULT_CHANNELS_RECEIVE';
+export const DEFAULT_CHANNELS_FAILURE = 'DEFAULT_CHANNELS_FAILURE';
 
-export const requestChannels = (channels = {}) => ({
-  type: REQUEST_CHANNELS,
+export const channelsRequest = (channels = {}) => ({
+  type: CHANNELS_REQUEST,
   channels
 });
 
-export const receiveChannels = channels => ({
-  type: RECEIVE_CHANNELS,
+export const channelsReceive = channels => ({
+  type: CHANNELS_RECEIVE,
   channels
 });
 
-export const failureChannels = errors => ({
-  type: FAILURE_CHANNELS,
+export const channelsFailure = errors => ({
+  type: CHANNELS_FAILURE,
   errors
 });
 
-export const loadChannelPage = (channelSlug, workspaceSlug) => ({
-  type: LOAD_CHANNEL_PAGE,
+export const channelRequest = (channelSlug, workspaceSlug) => ({
+  type: CHANNEL_REQUEST,
   channelSlug,
   workspaceSlug
 });
 
-export const requestChannel = channelSlug => ({
-  type: REQUEST_CHANNEL,
-  channelSlug
-});
-
-export const receiveChannel = (channel, messageSlug) => ({
-  type: RECEIVE_CHANNEL,
+export const channelReceive = (channel, messageSlug) => ({
+  type: CHANNEL_RECEIVE,
   channel,
   messageSlug
 });
 
-export const failureChannel = errors => ({
-  type: FAILURE_CHANNEL,
+export const channelFailure = errors => ({
+  type: CHANNEL_FAILURE,
   errors
 });
 
-export const createChannel = channel => ({
-  type: CREATE_CHANNEL,
+export const createChannelRequest = channel => ({
+  type: CREATE_CHANNEL_REQUEST,
   channel
 });
 
-export const createChannelSuccess = channel => ({
-  type: CREATE_CHANNEL_SUCCESS,
+export const createChannelReceive = channel => ({
+  type: CREATE_CHANNEL_RECEIVE,
   channel
 });
 
-export const createChannelErrors = errors => ({
-  type: CREATE_CHANNEL_ERRORS,
+export const createChannelFailure = errors => ({
+  type: CREATE_CHANNEL_FAILURE,
   errors
 });
 
-export const deleteChannel = channelSlug => ({
-  type: DELETE_CHANNEL,
-  channelSlug
-});
-
-export const deleteChannelSuccess = channelSlug => ({
-  type: DELETE_CHANNEL_SUCCESS,
-  channelSlug
-});
-
-export const requestDefaultChannels = channels => ({
-  type: REQUEST_DEFAULT_CHANNELS,
-  channels
-});
-
-export const receiveDefaultChannels = channels => ({
-  type: RECEIVE_DEFAULT_CHANNELS,
-  channels
-});
-
-export const editChannel = channel => ({
-  type: EDIT_CHANNEL,
+export const updateChannelRequest = channel => ({
+  type: UPDATE_CHANNEL_REQUEST,
   channel
 });
 
-export const editChannelSuccess = channel => ({
-  type: EDIT_CHANNEL_SUCCESS,
+export const updateChannelReceive = channel => ({
+  type: UPDATE_CHANNEL_RECEIVE,
   channel
+});
+
+export const updateChannelFailure = errors => ({
+  type: UPDATE_CHANNEL_FAILURE,
+  errors
+});
+
+export const deleteChannelRequest = channelSlug => ({
+  type: DELETE_CHANNEL_REQUEST,
+  channelSlug
+});
+
+export const deleteChannelReceive = channelSlug => ({
+  type: DELETE_CHANNEL_RECEIVE,
+  channelSlug
+});
+
+export const deleteChannelFailure = errors => ({
+  type: DELETE_CHANNEL_FAILURE,
+  errors
+});
+
+export const defaultChannelsRequest = channels => ({
+  type: DEFAULT_CHANNELS_REQUEST,
+  channels
+});
+
+export const defaultChannelsReceive = channels => ({
+  type: DEFAULT_CHANNELS_RECEIVE,
+  channels
+});
+
+export const defaultChannelsFailure = errors => ({
+  type: DEFAULT_CHANNELS_FAILURE,
+  errors
 });

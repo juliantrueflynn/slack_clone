@@ -15,14 +15,14 @@ class ChannelPage extends React.Component {
 
   componentDidMount() {
     const { channelSlug, workspaceSlug } = this.props.match.params;
-    this.props.loadChannelPage(channelSlug, workspaceSlug);
+    this.props.channelRequest(channelSlug, workspaceSlug);
   }
 
   componentWillReceiveProps(nextProps) {
     const { channelSlug, workspaceSlug } = this.props.match.params;
     const nextChannelSlug = nextProps.match.params.channelSlug;
     if (channelSlug !== nextChannelSlug) {
-      this.props.loadChannelPage(nextChannelSlug, workspaceSlug);
+      this.props.channelRequest(nextChannelSlug, workspaceSlug);
     }
   }
 

@@ -18,9 +18,9 @@ function* fetchCreatorSub(channelId) {
 function* addNewChannel({ channel }) {
   try {
     const newChannel = yield call(utilApi.createChannel, channel);
-    yield put(actions.createChannelSuccess(newChannel));
+    yield put(actions.createChannelReceive(newChannel));
   } catch (error) {
-    yield put(actions.receiveChannelErrors(error));
+    yield put(actions.createChannelFailure(error));
   }
 }
 
@@ -31,16 +31,16 @@ function* subCreatorToNewChannel({ channel }) {
     yield put(createChannelSubSuccess(newSub));
     yield put(navigate(`/${ workspaceSlug }/${ channel.slug }`));
   } catch (error) {
-    yield put(actions.createChannelErrors(error));
+    yield put(actions.createChannelFailure(error));
   }
 }
 
 function* fetchEditChannel({ channel }) {
   try {
     const newChannel = yield call(utilApi.editChannel, channel);
-    yield put(actions.editChannelSuccess(newChannel));
+    yield put(actions.updateChannelReceive(newChannel));
   } catch (error) {
-    yield put(actions.receiveChannelErrors(error));
+    yield put(actions.updateChannelFailure(error));
   }
 }
 
@@ -51,7 +51,7 @@ function* addNewChannels({ channels }) {
     yield call(fetchCreatorSub, newChannel.id);
     newChannels.push(newChannel);
   }
-  yield put(actions.receiveDefaultChannels(newChannels));
+  yield put(actions.defaultChannelsReceive(newChannels));
 }
 
 function* loadFirstDefaultChannel({ channels }) {
@@ -64,9 +64,9 @@ function* fetchChannel() {
     const channelSlug = yield select(getPageChannelSlug);
     const channel = yield call(utilApi.fetchChannel, channelSlug);
     const messageSlug = yield select(getMessageSlug);
-    yield put(actions.receiveChannel(channel, messageSlug));
+    yield put(actions.channelReceive(channel, messageSlug));
   } catch (error) {
-    yield put(actions.failureChannel(error));
+    yield put(actions.channelFailure(error));
   }
 }
 
@@ -74,7 +74,7 @@ function* loadChannelEntities() {
   const workspaceSlug = yield select(getPageWorkspaceSlug);
   const channels = yield select(getChannels);
   if (channels.length < 1) {
-    yield put(actions.requestChannels());
+    yield put(actions.channelsRequest());
     yield call(fetchWorkspace, workspaceSlug);
   }
   yield call(fetchChannel);
@@ -83,32 +83,32 @@ function* loadChannelEntities() {
 function* fetchDeleteChannel({ channelSlug }) {
   try {
     yield call(utilApi.deleteChannel, channelSlug);
-    yield put(actions.deleteChannelSuccess(channelSlug));
+    yield put(actions.deleteChannelReceive(channelSlug));
   } catch (error) {
-    yield put(actions.receiveChannelErrors(error));
+    yield put(actions.deleteChannelFailure(error));
   }
 }
 
 function* watchCreateChannel() {
-  yield takeEvery(actions.CREATE_CHANNEL, addNewChannel);
-  yield takeEvery(actions.CREATE_CHANNEL_SUCCESS, subCreatorToNewChannel);
+  yield takeEvery(actions.CREATE_CHANNEL_REQUEST, addNewChannel);
+  yield takeEvery(actions.CREATE_CHANNEL_RECEIVE, subCreatorToNewChannel);
 }
 
 function* watchEditChannel() {
-  yield takeLatest(actions.EDIT_CHANNEL, fetchEditChannel);
+  yield takeLatest(actions.UPDATE_CHANNEL_REQUEST, fetchEditChannel);
 }
 
 function* watchCreateChannels() {
-  yield takeLatest(actions.REQUEST_DEFAULT_CHANNELS, addNewChannels);
-  yield takeLatest(actions.RECEIVE_DEFAULT_CHANNELS, loadFirstDefaultChannel);
+  yield takeLatest(actions.DEFAULT_CHANNELS_REQUEST, addNewChannels);
+  yield takeLatest(actions.DEFAULT_CHANNELS_RECEIVE, loadFirstDefaultChannel);
 }
 
 function* watchChannelPage() {
-  yield takeLatest(actions.LOAD_CHANNEL_PAGE, loadChannelEntities);
+  yield takeLatest(actions.CHANNEL_REQUEST, loadChannelEntities);
 }
 
 function* watchDeleteChannel() {
-  yield takeLatest(actions.DELETE_CHANNEL, fetchDeleteChannel);
+  yield takeLatest(actions.DELETE_CHANNEL_REQUEST, fetchDeleteChannel);
 }
 
 export function* channelSaga() {

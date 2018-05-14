@@ -1,11 +1,11 @@
-import { RECEIVE_CHANNEL } from '../actions/channel_actions';
+import { CHANNEL_RECEIVE } from '../actions/channel_actions';
 
 const memberReducer = (state = {}, action) => {
   Object.freeze(state);
 
   let nextState;
   switch (action.type) {
-    case RECEIVE_CHANNEL :
+    case CHANNEL_RECEIVE :
       nextState = {};
       action.channel.members.map(member => {
         nextState[member.slug] = member;

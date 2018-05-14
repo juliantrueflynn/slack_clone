@@ -6,7 +6,7 @@ import {
   createMessageSuccess, editMessageSuccess, deleteMessageSuccess
 } from '../actions/message_actions';
 import { getChannels, getPageChannelSlug } from '../reducers/selectors';
-import { createChannelSuccess } from '../actions/channel_actions';
+import { createChannelReceive } from '../actions/channel_actions';
 
 const mapStateToProps = state => ({
   channels: getChannels(state),

@@ -1,7 +1,9 @@
 import {
-  OPEN_EDIT_MESSAGE, CLOSE_EDIT_MESSAGE, EDIT_MESSAGE_SUCCESS
+  OPEN_EDIT_MESSAGE,
+  CLOSE_EDIT_MESSAGE,
+  EDIT_MESSAGE_SUCCESS
 } from '../actions/message_actions';
-import { LOAD_CHANNEL_PAGE } from '../actions/channel_actions';
+import { CHANNEL_REQUEST } from '../actions/channel_actions';
 import { WORKSPACE_REQUEST } from '../actions/workspace_actions';
 
 const defaultState = null;
@@ -14,7 +16,7 @@ const messageUiReducer = (state = defaultState, action) => {
       return action.message.slug;
     case EDIT_MESSAGE_SUCCESS :
     case CLOSE_EDIT_MESSAGE :
-    case LOAD_CHANNEL_PAGE :
+    case CHANNEL_REQUEST :
     case WORKSPACE_REQUEST :
       return defaultState;
     default :

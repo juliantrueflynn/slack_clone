@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ChannelsMenu from './channels_menu';
-import { requestChannels } from '../../actions/channel_actions';
+import { channelsRequest } from '../../actions/channel_actions';
 import { getChannels, getPageWorkspaceSlug } from '../../reducers/selectors';
 import { modalOpen, CREATE_CHANNEL_MODAL } from '../../actions/modal_actions';
 
@@ -11,7 +11,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  requestChannels: () => dispatch(requestChannels()),
+  channelsRequest: () => dispatch(channelsRequest()),
   modalOpen: () => dispatch(modalOpen(CREATE_CHANNEL_MODAL)),
 });
 

@@ -2,7 +2,7 @@ import {
   WORKSPACE_REQUEST,
   CREATE_WORKSPACE_RECEIVE
 } from '../actions/workspace_actions';
-import { LOAD_CHANNEL_PAGE } from '../actions/channel_actions';
+import { CHANNEL_REQUEST } from '../actions/channel_actions';
 
 const workspaceDisplayReducer = (state = null, action) => {
   Object.freeze(state);
@@ -12,7 +12,7 @@ const workspaceDisplayReducer = (state = null, action) => {
       return action.workspace.slug;
     case WORKSPACE_REQUEST :
       return action.workspaceSlug;
-    case LOAD_CHANNEL_PAGE :
+    case CHANNEL_REQUEST :
       return action.workspaceSlug;
     default :
       return state;
