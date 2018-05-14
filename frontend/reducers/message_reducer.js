@@ -12,11 +12,12 @@ const messageReducer = (state = {}, action) => {
   let nextState;
   switch (action.type) {
     case CHANNEL_RECEIVE :
-      nextState = {};
+      nextState = Object.assign({}, state);
       
       action.channel.messages.map(message => {
         nextState[message.slug] = message;
-        nextState[message.slug].thread = [];
+        nextState[message.slug].thread = nextState[message.slug].thread || [];
+
         if (message.parentMesasgeSlug) {
           const parentSlug = message.parentMessageSlug;
           nextState[message.slug].thread = null;
@@ -43,10 +44,10 @@ const messageReducer = (state = {}, action) => {
   
       return nextState;
     case CREATE_MESSAGE_SUCCESS :
-      const parentSlug = action.message.parentMessageSlug;
       nextState = Object.assign({}, state);
       nextState[action.message.slug] = action.message;
       
+      const parentSlug = action.message.parentMessageSlug;
       if (parentSlug) {
         nextState[parentSlug].thread.push(action.message.slug);
       } else {

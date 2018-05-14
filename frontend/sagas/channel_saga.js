@@ -12,10 +12,6 @@ import {
 import { fetchWorkspace } from './workspace_saga';
 import { navigate } from '../actions/navigate_actions';
 
-// function* fetchCreatorSub(channelSlug) {
-//   yield call(createChannelSub, { channelSlug });
-// }
-
 function* addNewChannel({ channel }) {
   try {
     const newChannel = yield call(api.createChannel, channel);
@@ -25,17 +21,6 @@ function* addNewChannel({ channel }) {
     yield put(actions.createChannelFailure(error));
   }
 }
-
-// function* subCreatorToNewChannel({ channel }) {
-//   try {
-//     const workspaceSlug = yield select(getPageWorkspaceSlug);
-//     const newSub = yield call(fetchCreatorSub, channel.slug);
-//     // yield put(createChannelSubReceive(newSub));
-//     // yield put(navigate(`/${workspaceSlug}/${channel.slug}`));
-//   } catch (error) {
-//     yield put(actions.createChannelFailure(error));
-//   }
-// }
 
 function* fetchEditChannel({ channel }) {
   try {
@@ -93,7 +78,6 @@ function* fetchDeleteChannel({ channelSlug }) {
 
 function* watchCreateChannel() {
   yield takeLatest(actions.CREATE_CHANNEL_REQUEST, addNewChannel);
-  // yield takeLatest(actions.CREATE_CHANNEL_RECEIVE, subCreatorToNewChannel);
 }
 
 function* watchEditChannel() {
