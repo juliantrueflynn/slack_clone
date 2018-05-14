@@ -6,9 +6,7 @@ class ChannelForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      title: ""
-    };
+    this.state = { title: "" };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
@@ -34,6 +32,7 @@ class ChannelForm extends React.Component {
     const channel = { title: this.state.title, workspaceId };
     createChannel(channel);
     modalClose();
+    this.setState({ title: "" });
   }
 
   errors() {
