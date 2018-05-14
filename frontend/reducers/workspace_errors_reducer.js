@@ -1,7 +1,8 @@
 import {
   WORKSPACES_FAILURE,
   WORKSPACE_FAILURE,
-  CREATE_WORKSPACE_FAILURE
+  CREATE_WORKSPACE_FAILURE,
+  CREATE_WORKSPACE_REQUEST
 } from '../actions/workspace_actions';
 
 const workspaceErrorsReducer = (state = [], action) => {
@@ -12,7 +13,9 @@ const workspaceErrorsReducer = (state = [], action) => {
     case WORKSPACES_FAILURE :
     case WORKSPACE_FAILURE :
     case CREATE_WORKSPACE_FAILURE :
-      return action.errors;
+      return [...action.errors];
+    case CREATE_WORKSPACE_REQUEST :
+      return [];
     default :
       return state;
   }

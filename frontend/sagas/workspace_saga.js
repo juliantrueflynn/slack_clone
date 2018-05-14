@@ -1,6 +1,4 @@
-import {
-  take, all, call, fork, put, select, takeLatest
-} from 'redux-saga/effects';
+import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/workspace_actions';
 import * as api from '../util/workspace_api_util';
 import {
@@ -24,7 +22,7 @@ export function* fetchWorkspace(workspaceSlug) {
 function* fetchDeleteWorkspace({ workspaceSlug }) {
   try {
     yield call(api.deleteWorkspace, workspaceSlug);
-    yield put(actions.deleteWorkspaceSuccess(workspaceSlug));
+    yield put(actions.deleteWorkspaceReceive(workspaceSlug));
   } catch (error) {
     yield put(actions.deleteWorkspaceFailure(error));
   }
@@ -33,24 +31,23 @@ function* fetchDeleteWorkspace({ workspaceSlug }) {
 function* addNewWorkspace({ workspace }) {
   try {
     const newWorkspace = yield call(api.createWorkspace, workspace);
-    yield put(actions.createWorkspaceSuccess(newWorkspace));
+    yield put(actions.createWorkspaceReceive(newWorkspace));
   } catch (error) {
     yield put(actions.createWorkspaceFailure(error));
   }
 }
 
-function* subCreatorToNewWorkspace({ workspace }) {
+function* subCreatorToNewWorkspace(workspace) {
   try {
     const sub = { workspace_id: workspace.id };
     const newSub = yield call(createWorkspaceSub, sub);
-
     yield put(createWorkspaceSubSuccess(newSub));
   } catch (error) {
     yield put(createWorkspaceSubErrors(error));
   }
 }
 
-function* loadDefaultChannels({ workspace: { id } }) {
+function* loadDefaultChannels({ id }) {
   let defaultChannels = [];
   const defaultChannelTitles = ['general', 'random'];
   for (let title of defaultChannelTitles) {
@@ -78,15 +75,16 @@ function* loadWorkspace({ workspaceSlug }) {
   }
 }
 
-function* watchCreateWorkspace() {
-  while (true) {
-    const workspace = yield take(actions.CREATE_WORKSPACE_REQUEST);
-    yield fork(addNewWorkspace, workspace);
-  
-    const newWorkspace = yield take(actions.CREATE_WORKSPACE_RECEIVE);
-    yield call(subCreatorToNewWorkspace, newWorkspace);
-    yield call(loadDefaultChannels, newWorkspace);
-  }
+function* loadDefaultsAndSubCreator({ workspace }) {
+  yield all([
+    fork(subCreatorToNewWorkspace, workspace),
+    fork(loadDefaultChannels, workspace)
+  ]);
+}
+
+function* newWorkspaceFlow() {
+  yield takeLatest(actions.CREATE_WORKSPACE_REQUEST, addNewWorkspace);
+  yield takeLatest(actions.CREATE_WORKSPACE_RECEIVE, loadDefaultsAndSubCreator);
 }
 
 function* watchWorkspaces() {
@@ -103,7 +101,7 @@ function* watchDeleteWorkspace() {
 
 export function* workspaceSaga() {
   yield all([
-    fork(watchCreateWorkspace),
+    fork(newWorkspaceFlow),
     fork(watchWorkspaces),
     fork(watchWorkspacePage),
     fork(watchDeleteWorkspace)
