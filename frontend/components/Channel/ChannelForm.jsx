@@ -84,6 +84,8 @@ class ChannelForm extends React.Component {
           <h1 className="modal__title">Create a channel</h1>
         </header>
 
+        {this.errors()}
+
         <form
           className="form form__new-channel"
           onSubmit={this.handleSubmit}

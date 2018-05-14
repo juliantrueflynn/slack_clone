@@ -3,6 +3,10 @@ class Channel < ApplicationRecord
 
   validates :title, :owner_slug, :workspace_slug, presence: true
   validates :slug, uniqueness: true, presence: true
+  validates_length_of :title,
+    within: 2..55,
+    too_long: 'title too long (max: 55 characters)',
+    too_short: 'title too short (min: 3 characters)'
 
   belongs_to :owner,
     class_name: 'User',
