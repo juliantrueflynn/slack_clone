@@ -1,7 +1,7 @@
 import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/channel_actions';
 import * as api from '../util/channel_api_util';
-import { createChannelSubSuccess } from '../actions/channel_sub_actions';
+import { createChannelSubRequest } from '../actions/channel_sub_actions';
 import { createChannelSub } from '../util/channel_sub_api_util';
 import {
   getPageChannelSlug,
@@ -20,21 +20,22 @@ function* addNewChannel({ channel }) {
   try {
     const newChannel = yield call(api.createChannel, channel);
     yield put(actions.createChannelReceive(newChannel));
+    yield put(createChannelSubRequest(newChannel.slug));
   } catch (error) {
     yield put(actions.createChannelFailure(error));
   }
 }
 
-function* subCreatorToNewChannel({ channel }) {
-  try {
-    const workspaceSlug = yield select(getPageWorkspaceSlug);
-    const newSub = yield call(fetchCreatorSub, channel.slug);
-    yield put(createChannelSubSuccess(newSub));
-    yield put(navigate(`/${workspaceSlug}/${channel.slug}`));
-  } catch (error) {
-    yield put(actions.createChannelFailure(error));
-  }
-}
+// function* subCreatorToNewChannel({ channel }) {
+//   try {
+//     const workspaceSlug = yield select(getPageWorkspaceSlug);
+//     const newSub = yield call(fetchCreatorSub, channel.slug);
+//     // yield put(createChannelSubReceive(newSub));
+//     // yield put(navigate(`/${workspaceSlug}/${channel.slug}`));
+//   } catch (error) {
+//     yield put(actions.createChannelFailure(error));
+//   }
+// }
 
 function* fetchEditChannel({ channel }) {
   try {
@@ -92,7 +93,7 @@ function* fetchDeleteChannel({ channelSlug }) {
 
 function* watchCreateChannel() {
   yield takeLatest(actions.CREATE_CHANNEL_REQUEST, addNewChannel);
-  yield takeLatest(actions.CREATE_CHANNEL_RECEIVE, subCreatorToNewChannel);
+  // yield takeLatest(actions.CREATE_CHANNEL_RECEIVE, subCreatorToNewChannel);
 }
 
 function* watchEditChannel() {

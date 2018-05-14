@@ -1,26 +1,18 @@
-import * as ChannelSubAPIUtil from '../util/channel_sub_api_util';
+export const CREATE_CHANNEL_SUB_REQUEST = 'CREATE_CHANNEL_SUB_REQUEST';
+export const CREATE_CHANNEL_SUB_RECEIVE = 'CREATE_CHANNEL_SUB_RECEIVE';
+export const CREATE_CHANNEL_SUB_FAILURE = 'CREATE_CHANNEL_SUB_FAILURE';
 
-export const RECEIVE_CHANNEL_SUB = 'RECEIVE_CHANNEL_SUB';
-export const CREATE_CHANNEL_SUB = 'CREATE_CHANNEL_SUB';
-export const CREATE_CHANNEL_SUB_SUCCESS = 'CREATE_CHANNEL_SUB_SUCCESS';
-export const CREATE_CHANNEL_SUB_ERRORS = 'CREATE_CHANNEL_SUB_ERRORS';
-
-export const receiveChannelSub = channelSub => ({
-  type: RECEIVE_CHANNEL_SUB,
+export const createChannelSubRequest = channelSub => ({
+  type: CREATE_CHANNEL_SUB_REQUEST,
   channelSub
 });
 
-export const createChannelSub = channelSub => ({
-  type: CREATE_CHANNEL_SUB,
+export const createChannelSubReceive = channelSub => ({
+  type: CREATE_CHANNEL_SUB_RECEIVE,
   channelSub
 });
 
-export const createChannelSubSuccess = channelSub => ({
-  type: CREATE_CHANNEL_SUB_SUCCESS,
-  channelSub
-});
-
-export const createChannelSubErrors = errors => ({
-  type: CREATE_CHANNEL_SUB_ERRORS,
+export const createChannelSubFailure = errors => ({
+  type: CREATE_CHANNEL_SUB_FAILURE,
   errors
 });

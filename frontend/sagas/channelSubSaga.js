@@ -2,12 +2,14 @@ import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/channel_sub_actions';
 import * as api from '../util/channel_sub_api_util';
 import { getPageWorkspaceSlug } from '../reducers/selectors';
+import { navigate } from '../actions/navigate_actions';
 
 function* addChannelSub({ channelSlug }) {
   try {
-    yield 
+    const workspaceSlug = yield select(getPageWorkspaceSlug);
     const newChannelSub = yield call(api.createChannelSub, channelSlug);
     yield put(actions.createChannelSubReceive(newChannelSub));
+    yield put(navigate(`/${workspaceSlug}/${channelSlug}`));
   } catch (error) {
     yield put(actions.createChannelSubFailure(error));
   }
