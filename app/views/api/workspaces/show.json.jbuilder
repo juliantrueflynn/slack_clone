@@ -1,5 +1,5 @@
 json.workspace do
-  json.(@workspace, :id, :title, :slug, :owner_id)
+  json.(@workspace, :id, :title, :slug, :owner_slug)
 end
 
 json.channels do

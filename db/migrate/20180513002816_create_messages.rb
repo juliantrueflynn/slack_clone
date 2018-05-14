@@ -3,16 +3,16 @@ class CreateMessages < ActiveRecord::Migration[5.1]
     create_table :messages do |t|
       t.text :body
       t.string :parent_message_slug, default: nil
-      t.integer :author_id, null: false
+      t.string :author_slug, null: false
       t.string :slug, null: false
-      t.references :channel, foreign_key: true, index: true, null: false
+      t.string :channel_slug, null: false
 
       t.timestamps
     end
 
     add_index :messages, :slug, unique: true
 
-    add_foreign_key :messages, :messages, column: :parent_message_slug, primary_key: :slug
-    add_foreign_key :messages, :users, column: :author_id
+    add_foreign_key :messages, :channels, column: :channel_slug, primary_key: :slug
+    add_foreign_key :messages, :users, column: :author_slug, primary_key: :slug
   end
 end

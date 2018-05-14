@@ -1,11 +1,11 @@
 class Message < ApplicationRecord
   before_validation :generate_slug
 
-  validates :author_id, :channel_id, presence: true
+  validates :author_slug, :channel_slug, presence: true
   validates :slug, uniqueness: true, presence: true
 
-  belongs_to :author, class_name: 'User'
-  belongs_to :channel
+  belongs_to :author, class_name: 'User', primary_key: :slug, foreign_key: :author_slug
+  belongs_to :channel, primary_key: :slug, foreign_key: :channel_slug
   belongs_to :thread,
     class_name: 'Message',
     primary_key: :slug,

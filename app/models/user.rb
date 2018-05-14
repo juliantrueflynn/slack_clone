@@ -8,12 +8,29 @@ class User < ApplicationRecord
   validates :username, :email, uniqueness: true
   validates :password, length: { minimum: 6 }, allow_nil: true
 
-  has_many :created_channels, class_name: 'Channel', foreign_key: :owner_id
-  has_many :workspace_subs, dependent: :destroy
-  has_many :workspaces, through: :workspace_subs, source: :workspace
-  has_many :channel_subs, dependent: :destroy
-  has_many :channels, through: :channel_subs, source: :channel
-  has_many :messages, foreign_key: :author_id
+  has_many :created_channels,
+    class_name: 'Channel',
+    primary_key: :slug,
+    foreign_key: :owner_slug
+  has_many :workspace_subs,
+    dependent: :destroy,
+    primary_key: :slug,
+    foreign_key: :user_slug
+  has_many :workspaces,
+    through: :workspace_subs,
+    source: :workspace,
+    primary_key: :slug
+  has_many :channel_subs,
+    primary_key: :slug,
+    foreign_key: :user_slug,
+    dependent: :destroy
+  has_many :channels,
+    primary_key: :slug,
+    through: :channel_subs,
+    source: :channel
+  has_many :messages,
+    primary_key: :slug,
+    foreign_key: :author_slug
 
   def self.find_by_email_and_password(email, password)
     user = User.find_by(email: email)
@@ -22,12 +39,12 @@ class User < ApplicationRecord
   end
 
   def is_workspace_sub?(workspace)
-    workspaces_subbed = workspace_subs.where(workspace_subs: { workspace_id: workspace.id })
+    workspaces_subbed = workspace_subs.where(workspace_subs: { workspace_slug: workspace.slug })
     workspaces_subbed.length > 0
   end
 
   def is_channel_sub?(channel)
-    channels_subbed = channel_subs.where(channel_subs: { channel_id: channel })
+    channels_subbed = channel_subs.where(channel_subs: { channel_slug: channel })
     channels_subbed.length > 0
   end
 

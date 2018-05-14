@@ -10,7 +10,7 @@ class Api::WorkspacesController < ApplicationController
 
   def create
     @workspace = Workspace.new(workspace_params)
-    @workspace.owner_id = current_user.id
+    @workspace.owner_slug = current_user.slug
 
     if @workspace.save
       render json: @workspace
@@ -35,6 +35,6 @@ class Api::WorkspacesController < ApplicationController
   end
 
   def workspace_params
-    params.require(:workspace).permit(:title, :slug, :owner_id)
+    params.require(:workspace).permit(:title, :slug, :owner_slug)
   end
 end

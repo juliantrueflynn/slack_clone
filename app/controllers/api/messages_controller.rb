@@ -10,7 +10,7 @@ class Api::MessagesController < ApplicationController
 
   def create
     @message = Message.new(message_params)
-    @message.author_id = current_user.id
+    @message.author_slug = current_user.slug
     
     if @message.save
       render json: @message
@@ -43,6 +43,6 @@ class Api::MessagesController < ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:body, :slug, :parent_message_slug, :channel_id)
+    params.require(:message).permit(:body, :slug, :parent_message_slug, :channel_slug)
   end
 end

@@ -1,7 +1,7 @@
 class Api::ChannelSubsController < ApplicationController
   def create
     @channel_sub = ChannelSub.new(channel_sub_params)
-    @channel_sub.user_id = current_user.id
+    @channel_sub.user_slug = current_user.slug
     
     if @channel_sub.save
       render json: @channel_sub
@@ -24,6 +24,6 @@ class Api::ChannelSubsController < ApplicationController
   private
 
   def channel_sub_params
-    params.require(:channel_sub).permit(:channel_id)
+    params.require(:channel_sub).permit(:channel_slug)
   end
 end

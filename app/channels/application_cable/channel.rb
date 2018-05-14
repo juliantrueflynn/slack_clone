@@ -3,8 +3,8 @@ module ApplicationCable
     def create(data)
       Message.create(
         body: data.fetch('body'),
-        author_id: data.fetch('author_id'),
-        channel_id: data.fetch('channel_id'),
+        author_slug: data.fetch('author_slug'),
+        channel_slug: data.fetch('channel_slug'),
         parent_message_slug: data.fetch('parent_message_slug')
       )
     end

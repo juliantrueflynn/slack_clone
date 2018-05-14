@@ -1,22 +1,36 @@
 class Channel < ApplicationRecord
   before_validation :generate_slug
 
-  validates :title, :owner_id, :workspace_id, presence: true
+  validates :title, :owner_slug, :workspace_slug, presence: true
   validates :slug, uniqueness: true, presence: true
 
-  belongs_to :owner, foreign_key: :owner_id, class_name: 'User'
-  belongs_to :workspace
-  has_many :subs, class_name: 'ChannelSub'
-  has_many :members, class_name: 'User', foreign_key: :user_id, through: :subs, source: :user
-  has_many :messages
+  belongs_to :owner,
+    class_name: 'User',
+    primary_key: :slug,
+    foreign_key: :owner_slug
+  belongs_to :workspace,
+    primary_key: :slug,
+    foreign_key: :workspace_slug
+  has_many :subs,
+    class_name: 'ChannelSub',
+    primary_key: :slug,
+    foreign_key: :user_slug
+  has_many :members,
+    class_name: 'User',
+    primary_key: :slug,
+    through: :subs,
+    source: :user
+  has_many :messages,
+    primary_key: :slug,
+    foreign_key: :channel_slug
 
   def is_user_subbed?(user)
-    users_subbed = subs.where(channel_subs: { user_id: user.id })
+    users_subbed = subs.where(channel_subs: { user_slug: user.slug })
     users_subbed.length > 0
   end
 
-  def self.subbed_by_user_in_workspace(user_id, workspace_id)
-    self.joins(:subs).where(channel_subs: { user_id: user_id })
+  def self.subbed_by_user_in_workspace(user_slug, workspace_slug)
+    self.joins(:subs).where(channel_subs: { user_slug: user_slug })
   end
 
   def parent_messages
