@@ -1,0 +1,20 @@
+import { connect } from 'react-redux';
+import ChannelForm from './ChannelForm';
+import { createChannelRequest } from '../../actions/channelActions';
+import { NEW_CHANNEL_MODAL, modalClose } from '../../actions/modalActions';
+
+const mapStateToProps = state => ({
+  errors: state.errors.channel,
+  workspaceSlug: state.ui.displayWorkspaceSlug,
+  isModalOpen: state.ui.displayModal === NEW_CHANNEL_MODAL,
+});
+
+const mapDispatchToProps = dispatch => ({
+  createChannelRequest: channel => dispatch(createChannelRequest(channel)),
+  modalClose: () => dispatch(modalClose(NEW_CHANNEL_MODAL))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ChannelForm);

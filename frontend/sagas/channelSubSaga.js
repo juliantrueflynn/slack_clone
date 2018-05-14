@@ -1,8 +1,8 @@
 import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
-import * as actions from '../actions/channel_sub_actions';
-import * as api from '../util/channel_sub_api_util';
+import * as actions from '../actions/channelSubActions';
+import * as api from '../util/channelSubAPIUtil';
 import { getPageWorkspaceSlug } from '../reducers/selectors';
-import { navigate } from '../actions/navigate_actions';
+import { navigate } from '../actions/navigateActions';
 
 function* addChannelSub({ channelSlug }) {
   try {
