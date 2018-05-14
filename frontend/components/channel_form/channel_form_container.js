@@ -2,10 +2,9 @@ import { connect } from 'react-redux';
 import ChannelForm from './channel_form';
 import { createChannelRequest } from '../../actions/channel_actions';
 import { CREATE_CHANNEL_MODAL, modalClose } from '../../actions/modal_actions';
-import { getCurrentWorkspaceId } from '../../reducers/selectors';
 
 const mapStateToProps = state => ({
-  workspaceId: getCurrentWorkspaceId(state),
+  workspaceSlug: state.ui.displayWorkspaceSlug,
   isModalOpen: state.ui.displayModal === CREATE_CHANNEL_MODAL,
 });
 

@@ -11,7 +11,7 @@ class Api::WorkspaceSubsController < ApplicationController
   end
 
   def destroy
-    @workspace_sub = WorkspaceSub.find_by(params[:id])
+    @workspace_sub = WorkspaceSub.find_by(slug: params[:slug])
     
     if @workspace_sub
       @workspace_sub.destroy

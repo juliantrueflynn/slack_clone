@@ -5,7 +5,7 @@ import { camelizeKeys } from 'humps';
 import {
   createMessageSuccess, editMessageSuccess, deleteMessageSuccess
 } from '../actions/message_actions';
-import { getChannels, getPageChannelSlug } from '../reducers/selectors';
+import { getChannels } from '../reducers/selectors';
 import { createChannelReceive } from '../actions/channel_actions';
 
 const mapStateToProps = state => ({

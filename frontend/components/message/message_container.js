@@ -12,7 +12,7 @@ import { openRightSidebar } from '../../actions/right_sidebar_actions';
 const mapStateToProps = state => ({
   editSlug: state.ui.editMessageSlug,
   isEditing: Boolean(state.ui.editMessageSlug),
-  currentUserId: state.session.currentUser.id,
+  currentUserSlug: state.session.currentUser.slug,
 });
 
 const mapDispatchToProps = dispatch => ({

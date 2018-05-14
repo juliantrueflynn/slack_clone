@@ -11,14 +11,14 @@ import {
 const mapStateToProps = state => ({
   editSlug: state.ui.editMessageSlug,
   isEditing: Boolean(state.ui.editMessageSlug),
-  currentUserId: state.session.currentUser.id,
+  currentUserSlug: state.session.currentUser.slug
 });
 
 const mapDispatchToProps = dispatch => ({
   editMessage: message => dispatch(editMessage(message)),
   openEditMessage: message => dispatch(openEditMessage(message)),
   closeEditMessage: () => dispatch(closeEditMessage()),
-  deleteMessage: messageSlug => dispatch(deleteMessage(messageSlug)),
+  deleteMessage: messageSlug => dispatch(deleteMessage(messageSlug))
 });
 
 export default connect(

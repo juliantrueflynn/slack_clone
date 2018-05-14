@@ -17,7 +17,7 @@ const messageReducer = (state = {}, action) => {
       action.channel.messages.map(message => {
         nextState[message.slug] = message;
         nextState[message.slug].thread = [];
-        if (message.parentMesasgeId) {
+        if (message.parentMesasgeSlug) {
           const parentSlug = message.parentMessageSlug;
           nextState[message.slug].thread = null;
           nextState[parentSlug] = Object.assign(

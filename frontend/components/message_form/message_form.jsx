@@ -18,9 +18,9 @@ class MessageForm extends React.Component {
   handleMessageSubmit(event) {
     event.preventDefault();
     
-    const { channelId, parentMessageSlug } = this.props;
+    const { channelSlug, parentMessageSlug } = this.props;
     const message = {
-      body: this.state.body, channelId, parentMessageSlug
+      body: this.state.body, channelSlug, parentMessageSlug
     };
     
     this.props.createMessage(message);

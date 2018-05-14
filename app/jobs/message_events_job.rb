@@ -2,7 +2,7 @@ class MessageEventsJob < ApplicationJob
   queue_as :default
 
   def perform(args)
-    channel = Channel.find_by(id: args[:data].channel_slug)
+    channel = Channel.find_by(slug: args[:data].channel_slug)
     
     ActionCable
       .server

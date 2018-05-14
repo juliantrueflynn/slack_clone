@@ -62,11 +62,11 @@ class Message extends React.Component {
 
   render() {
     const {
-      message, isEditing, editSlug, currentUserId, deleteMessageSuccess
+      message, isEditing, editSlug, currentUserSlug, deleteMessageSuccess
     } = this.props;
 
     let editMessageButton, deleteMessageButton;
-    if (currentUserId === message.authorId) {
+    if (currentUserSlug === message.authorSlug) {
       editMessageButton = <button onClick={ this.handleEditClick }>
         Edit message
       </button>;
@@ -104,8 +104,8 @@ class Message extends React.Component {
           editMessageForm :
           plainMessage
         }
-        { message.id } -
-        { message.authorId }
+        { message.slug } -
+        { message.authorSlug }
         { message.body }
       </li>
     );

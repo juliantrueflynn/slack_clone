@@ -39,7 +39,7 @@ function* addNewWorkspace({ workspace }) {
 
 function* subCreatorToNewWorkspace(workspace) {
   try {
-    const sub = { workspace_id: workspace.id };
+    const sub = { workspace_slug: workspace.slug };
     const newSub = yield call(createWorkspaceSub, sub);
     yield put(createWorkspaceSubSuccess(newSub));
   } catch (error) {
@@ -51,7 +51,7 @@ function* loadDefaultChannels({ id }) {
   let defaultChannels = [];
   const defaultChannelTitles = ['general', 'random'];
   for (let title of defaultChannelTitles) {
-    defaultChannels.push({ title, workspaceId: id });
+    defaultChannels.push({ title, workspaceSlug: id });
   }
   yield put(defaultChannelsRequest(defaultChannels));
 }

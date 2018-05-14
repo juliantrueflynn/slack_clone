@@ -6,12 +6,12 @@ const MessageThread = ({ message, threadEntries }) => {
   return (
     <div className="message-thread">
       <div className="thread-message">
-        <div>{ message.authorId }</div>
+        <div>{ message.authorSlug }</div>
         <div>{ message.body }</div>
       </div>
       <div className="message-thread__entries">
         {threadEntries.map(entry =>
-          <ThreadMessageContainer key={ entry.id } message={ entry } />
+          <ThreadMessageContainer key={ entry.slug } message={ entry } />
         )}
       </div>
 
