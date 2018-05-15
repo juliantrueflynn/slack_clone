@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { ActionCable } from 'react-actioncable-provider';
 import { camelizeKeys } from 'humps';
 import {
-  createMessageSuccess, editMessageSuccess, deleteMessageSuccess
+  createMessageReceive, updateMessageReceive, deleteMessageReceive
 } from '../actions/messageActions';
 import { getChannels } from '../reducers/selectors';
 import { createChannelReceive } from '../actions/channelActions';
@@ -18,11 +18,11 @@ const mapDispatchToProps = dispatch => ({
 
     switch (event) {
       case "CREATE_MESSAGE" :
-        return dispatch(createMessageSuccess(camelizedProps));
+        return dispatch(createMessageReceive(camelizedProps));
       case "EDIT_MESSAGE" :
-        return dispatch(editMessageSuccess(camelizedProps));
+        return dispatch(updateMessageReceive(camelizedProps));
       case "DELETE_MESSAGE" :
-        return dispatch(deleteMessageSuccess(camelizedProps.slug));
+        return dispatch(deleteMessageReceive(camelizedProps.slug));
     }
   }
 });

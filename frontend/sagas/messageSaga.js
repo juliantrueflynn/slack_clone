@@ -6,7 +6,7 @@ function* fetchNewMessage({ message }) {
   try {
     yield call(api.createMessage, message);
   } catch (error) {
-    yield put(actions.failureMessage(error));
+    yield put(actions.createMessageFailure(error));
   }
 }
 
@@ -14,28 +14,28 @@ function* fetchEditMessage({ message }) {
   try {
     yield call(api.editMessage, message);
   } catch (error) {
-    yield put(actions.failureMessage(error));
+    yield put(actions.editMessageFailure(error));
   }
 }
 
 function* fetchDeleteMessage({ messageSlug }) {
   try {
-    yield call(api.deleteMessage, messageSlug);
+    yield call(api.deleteMessageRequest, messageSlug);
   } catch (error) {
-    yield put(actions.failureMessage(error));
+    yield put(actions.deleteMessageFailure(error));
   }
 }
 
 function* watchCreateMessage() {
-  yield takeLatest(actions.CREATE_MESSAGE, fetchNewMessage);
+  yield takeLatest(actions.CREATE_MESSAGE_REQUEST, fetchNewMessage);
 }
 
 function* watchEditMessage() {
-  yield takeLatest(actions.EDIT_MESSAGE, fetchEditMessage);
+  yield takeLatest(actions.UPDATE_MESSAGE_REQUEST, fetchEditMessage);
 }
 
 function* watchDeleteMessage() {
-  yield takeLatest(actions.DELETE_MESSAGE, fetchDeleteMessage);
+  yield takeLatest(actions.DELETE_MESSAGE_REQUEST, fetchDeleteMessage);
 }
 
 export function* messageSaga() {

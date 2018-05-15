@@ -1,5 +1,5 @@
 import React from 'react';
-import ThreadMessageContainer from './ThreadMessageContainer';
+import MessageContainer from './MessageContainer';
 import MessageFormContainer from './MessageFormContainer';
 
 const MessageThread = ({ message, threadEntries }) => {
@@ -10,9 +10,9 @@ const MessageThread = ({ message, threadEntries }) => {
         <div>{message.body}</div>
       </div>
       <div className="thread-entries">
-        {threadEntries.map(entry =>
-          <ThreadMessageContainer key={entry.slug} message={entry} />
-        )}
+        {threadEntries.map(entry => (
+          <MessageContainer message={entry} key={entry.slug} />
+        ))}
       </div>
 
       <MessageFormContainer parentMessageSlug={message.slug} />

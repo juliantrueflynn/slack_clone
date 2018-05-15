@@ -4,6 +4,12 @@ body {
   font-family: 'Noto Sans', sans-serif;
 }
 
+ul {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+
 @media only screen and (min-width : 1250px) {
   .content-container__boxed-width {
     width: 920px;

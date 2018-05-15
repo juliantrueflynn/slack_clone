@@ -1,7 +1,7 @@
 import {
-  CREATE_MESSAGE_SUCCESS,
-  EDIT_MESSAGE_SUCCESS,
-  DELETE_MESSAGE_SUCCESS
+  CREATE_MESSAGE_RECEIVE,
+  UPDATE_MESSAGE_RECEIVE,
+  DELETE_MESSAGE_RECEIVE
 } from '../actions/messageActions';
 import { CHANNEL_RECEIVE } from '../actions/channelActions';
 import { OPEN_RIGHT_SIDEBAR } from '../actions/rightSidebarActions';
@@ -11,10 +11,11 @@ const messageReducer = (state = {}, action) => {
 
   let nextState;
   switch (action.type) {
-    case CHANNEL_RECEIVE :
+    case CHANNEL_RECEIVE : {
       nextState = Object.assign({}, state);
+      const { channel, messageSlug } = action;
       
-      action.channel.messages.map(message => {
+      channel.messages.map(message => {
         nextState[message.slug] = message;
         nextState[message.slug].thread = nextState[message.slug].thread || [];
 
@@ -28,41 +29,42 @@ const messageReducer = (state = {}, action) => {
         }
       });
       
-      if (action.messageSlug) {
-        const parentSlug = action.messageSlug;
-        nextState[parentSlug] = Object.assign(
+      if (messageSlug) {
+        nextState[messageSlug] = Object.assign(
           {},
-          state[parentSlug],
-          nextState[parentSlug]
+          state[messageSlug],
+          nextState[messageSlug]
         );
         Object.values(state).map(message => {
-          if (nextState[parentSlug].thread.includes(message.slug)) {
+          if (nextState[messageSlug].thread.includes(message.slug)) {
             nextState[message.slug] = message;
           }
         });
       }
   
       return nextState;
-    case CREATE_MESSAGE_SUCCESS :
+    }
+    case CREATE_MESSAGE_RECEIVE : {
+      const { message } = action;
       nextState = Object.assign({}, state);
-      nextState[action.message.slug] = action.message;
-      
-      const parentSlug = action.message.parentMessageSlug;
-      if (parentSlug) {
-        nextState[parentSlug].thread.push(action.message.slug);
+      nextState[message.slug] = message;
+
+      if (message.parentMessageSlug) {
+        nextState[message.parentMessageSlug].thread.push(message.slug);
       } else {
-        action.message.thread = [];
+        nextState[message.slug].thread = [];
       }
       
       return nextState;
-    case EDIT_MESSAGE_SUCCESS :
+    }
+    case UPDATE_MESSAGE_RECEIVE :
       nextState = { [action.message.slug]: action.message };
       return Object.assign({}, state, nextState);
-    case DELETE_MESSAGE_SUCCESS :
+    case DELETE_MESSAGE_RECEIVE :
       nextState = Object.assign({}, state);
       delete nextState[action.messageSlug];
       return nextState;
-    case OPEN_RIGHT_SIDEBAR :
+    case OPEN_RIGHT_SIDEBAR : {
       const { sidebarProps, sidebarType } = action;
       
       if (sidebarType !== 'THREAD') {
@@ -76,6 +78,7 @@ const messageReducer = (state = {}, action) => {
       }
   
       return state;
+    }
     default :
       return state;
   }

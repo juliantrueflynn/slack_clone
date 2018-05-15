@@ -1,95 +1,49 @@
-export const REQUEST_MESSAGES = 'REQUEST_MESSAGES';
-export const RECEIVE_MESSAGES = 'RECEIVE_MESSAGES';
-export const FAILURE_MESSAGES = 'FAILURE_MESSAGES';
-export const LOAD_MESSAGES = 'LOAD_MESSAGES';
-export const REQUEST_MESSAGE = 'REQUEST_MESSAGE';
-export const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';
-export const FAILURE_MESSAGE = 'FAILURE_MESSAGE';
-export const CREATE_MESSAGE = 'CREATE_MESSAGE';
-export const CREATE_MESSAGE_SUCCESS = 'CREATE_MESSAGE_SUCCESS';
-export const CREATE_MESSAGE_ERRORS = 'CREATE_MESSAGE_ERRORS';
-export const DELETE_MESSAGE = 'DELETE_MESSAGE';
-export const DELETE_MESSAGE_SUCCESS = 'DELETE_MESSAGE_SUCCESS';
-export const EDIT_MESSAGE = 'EDIT_MESSAGE';
-export const OPEN_EDIT_MESSAGE = 'OPEN_EDIT_MESSAGE';
-export const CLOSE_EDIT_MESSAGE = 'CLOSE_EDIT_MESSAGE';
-export const EDIT_MESSAGE_SUCCESS = 'EDIT_MESSAGE_SUCCESS';
+export const CREATE_MESSAGE_REQUEST = 'CREATE_MESSAGE_REQUEST';
+export const CREATE_MESSAGE_RECEIVE = 'CREATE_MESSAGE_RECEIVE';
+export const CREATE_MESSAGE_FAILURE = 'CREATE_MESSAGE_FAILURE';
+export const UPDATE_MESSAGE_REQUEST = 'UPDATE_MESSAGE_REQUEST';
+export const UPDATE_MESSAGE_RECEIVE = 'UPDATE_MESSAGE_RECEIVE';
+export const UPDATE_MESSAGE_FAILURE = 'UPDATE_MESSAGE_FAILURE';
+export const DELETE_MESSAGE_REQUEST = 'DELETE_MESSAGE_REQUEST';
+export const DELETE_MESSAGE_RECEIVE = 'DELETE_MESSAGE_RECEIVE';
+export const DELETE_MESSAGE_FAILURE = 'DELETE_MESSAGE_FAILURE';
 
-export const requestMessages = (messages = {}) => ({
-  type: REQUEST_MESSAGES,
-  messages
+export const createMessageRequest = message => ({
+  type: CREATE_MESSAGE_REQUEST,
+  message
 });
 
-export const receiveMessages = messages => ({
-  type: RECEIVE_MESSAGES,
-  messages
+export const createMessageReceive = message => ({
+  type: CREATE_MESSAGE_RECEIVE,
+  message
 });
 
-export const failureMessages = errors => ({
-  type: FAILURE_MESSAGES,
+export const createMessageFailure = errors => ({
+  type: CREATE_MESSAGE_FAILURE,
   errors
 });
 
-export const loadMessages = channelSlug => ({
-  type: LOAD_MESSAGES,
-  channelSlug
+export const updateMessageRequest = message => ({
+  type: UPDATE_MESSAGE_REQUEST,
+  message
 });
 
-export const requestMessage = messageSlug => ({
-  type: REQUEST_MESSAGE,
+export const updateMessageReceive = message => ({
+  type: UPDATE_MESSAGE_RECEIVE,
+  message
+});
+
+export const deleteMessageRequest = messageSlug => ({
+  type: DELETE_MESSAGE_REQUEST,
   messageSlug
 });
 
-export const receiveMessage = message => ({
-  type: RECEIVE_MESSAGE,
-  message
-});
-
-export const failureMessage = errors => ({
-  type: FAILURE_MESSAGE,
-  errors
-});
-
-export const createMessage = message => ({
-  type: CREATE_MESSAGE,
-  message
-});
-
-export const createMessageSuccess = message => ({
-  type: CREATE_MESSAGE_SUCCESS,
-  message
-});
-
-export const createMessageErrors = errors => ({
-  type: CREATE_MESSAGE_ERRORS,
-  errors
-});
-
-export const deleteMessage = messageSlug => ({
-  type: DELETE_MESSAGE,
+export const deleteMessageReceive = messageSlug => ({
+  type: DELETE_MESSAGE_RECEIVE,
   messageSlug
 });
 
-export const deleteMessageSuccess = messageSlug => ({
-  type: DELETE_MESSAGE_SUCCESS,
+export const deleteMessageFailure = messageSlug => ({
+  type: DELETE_MESSAGE_FAILURE,
   messageSlug
-});
-
-export const editMessage = message => ({
-  type: EDIT_MESSAGE,
-  message
-});
-
-export const openEditMessage = message => ({
-  type: OPEN_EDIT_MESSAGE,
-  message
-});
-
-export const closeEditMessage = () => ({
-  type: CLOSE_EDIT_MESSAGE,
-});
-
-export const editMessageSuccess = message => ({
-  type: EDIT_MESSAGE_SUCCESS,
-  message
 });

@@ -62,7 +62,7 @@ export const editMessage = message => (
   })
 );
 
-export const deleteMessage = messageSlug => (
+export const deleteMessageRequest = messageSlug => (
   fetch(`api/messages/${messageSlug}`, {
     method: 'DELETE',
     credentials: 'include'

@@ -4,7 +4,7 @@ class MessageForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { body: "" };
+    this.state = { body: '' };
 
     this.handleTextareaValue = this.handleTextareaValue.bind(this);
     this.handleMessageSubmit = this.handleMessageSubmit.bind(this);
@@ -23,8 +23,8 @@ class MessageForm extends React.Component {
       body: this.state.body, channelSlug, parentMessageSlug
     };
     
-    this.props.createMessage(message);
-    this.setState({ body: "" });
+    this.props.createMessageRequest(message);
+    this.setState({ body: '' });
   }
 
   render() {
