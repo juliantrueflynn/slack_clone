@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import ChannelSessionForm from './SessionForm';
-import { signUp, signInRequest } from '../../actions/sessionActions';
+import SessionForm from './SessionForm';
+import { sessionSignIn, sessionSignUp } from '../../actions/sessionActions';
 
 const mapStateToProps = (state, { location }) => ({
   isSignInPage: location.pathname === '/signin',
@@ -10,9 +10,9 @@ const mapStateToProps = (state, { location }) => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   processForm: user => {
     if (ownProps.location.pathname === '/signin') {
-      return dispatch(signInRequest(user));
+      return dispatch(sessionSignIn(user));
     } else {
-      return dispatch(signUp(user));
+      return dispatch(sessionSignUp(user));
     }
   }
 });
@@ -20,4 +20,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ChannelSessionForm);
+)(SessionForm);

@@ -5,11 +5,11 @@ class Api::SessionsController < ApplicationController
       params[:user][:password]
     )
 
-    if @user.save
+    if @user && @user.save
       signin(@user)
       render 'api/users/show'
     else
-      render json: ['invalid credentials'], status: 401
+      render json: ['Invalid credentials'], status: 401
     end
   end
 
@@ -19,7 +19,7 @@ class Api::SessionsController < ApplicationController
       logout
       render 'api/users/show'
     else
-      render json: ['error logging out'], status: 404
+      render json: ['Error logging out'], status: 404
     end   
   end
 end

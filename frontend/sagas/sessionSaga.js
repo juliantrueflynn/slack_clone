@@ -36,7 +36,7 @@ function* watchSignIn() {
 }
 
 function* watchSignUp() {
-  yield takeLatest(actions.SIGN_UP_REQUEST, fetchSignUp);
+  yield takeLatest(actions.SESSION_SIGN_UP, fetchSignUp);
 }
 
 function* watchSignOut() {

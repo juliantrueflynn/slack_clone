@@ -1,6 +1,6 @@
 import {
-  SESSION_FAILURE,
-  SESSION_RECEIVE
+  SESSION_RECEIVE,
+  SESSION_FAILURE
 } from '../actions/sessionActions';
 
 const _nullErrors = [];
@@ -10,7 +10,7 @@ const sessionErrorsReducer = (state = [], action) => {
 
   switch (action.type) {
     case SESSION_FAILURE :
-      return action.errors;
+      return [...action.errors];
     case SESSION_RECEIVE :
       return _nullErrors;
     default :

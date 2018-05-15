@@ -1,17 +1,31 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-class ChannelSessionForm extends React.Component {
+class SessionForm extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      errors: [],
       username: '',
       email: '',
       password: '',
+      pathname: '',
     };
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.errors.length !== prevState.errors.length) {
+      return { errors: [...nextProps.errors] };
+    }
+  
+    if (nextProps.location.pathname !== prevState.pathname) {
+      return { errors: [] };
+    }
+    
+    return null;
   }
 
   handleFormSubmit(event) {
@@ -25,10 +39,10 @@ class ChannelSessionForm extends React.Component {
   }
 
   errors() {
-    if (this.props.errors.length) {
+    if (this.state.errors.length) {
       return (
         <ul className="errors errors__form">
-          {this.props.errors.map((error, i) => (
+          {this.state.errors.map((error, i) => (
             <li className="errors__item" key={`error${i}`}>
               {error}
             </li>
@@ -92,4 +106,4 @@ class ChannelSessionForm extends React.Component {
   }
 }
 
-export default withRouter(ChannelSessionForm);
+export default SessionForm;
