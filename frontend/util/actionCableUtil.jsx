@@ -44,7 +44,7 @@ class SocketChatChannel extends React.Component {
         {this.props.channels.map(channel =>
           <ActionCable
             key={ channel.slug }
-            channel={{ channel: 'ChatChannel', channel_slug: channel.slug }}
+            channel={{ channel: 'ChatChannel', channel_id: channel.slug }}
             onReceived={ this.handleReceived }
           />
         )}

@@ -20,7 +20,7 @@ const messageReducer = (state = {}, action) => {
         nextState[message.slug].thread = nextState[message.slug].thread || [];
 
         if (message.parentMesasgeSlug) {
-          const parentSlug = message.parentMessageSlug;
+          const parentSlug = message.parentMessageId;
           nextState[message.slug].thread = null;
           nextState[parentSlug] = Object.assign(
             [message.slug],
@@ -49,8 +49,8 @@ const messageReducer = (state = {}, action) => {
       nextState = Object.assign({}, state);
       nextState[message.slug] = message;
 
-      if (message.parentMessageSlug) {
-        nextState[message.parentMessageSlug].thread.push(message.slug);
+      if (message.parentMessageId) {
+        nextState[message.parentMessageId].thread.push(message.slug);
       } else {
         nextState[message.slug].thread = [];
       }
@@ -69,8 +69,8 @@ const messageReducer = (state = {}, action) => {
       
       if (sidebarType !== 'THREAD') {
         nextState = Object.assign({}, state);
-        Object.values(state).map(({ slug, parentMessageSlug }) => {
-          if (parentMessageSlug === sidebarProps.messageSlug) {
+        Object.values(state).map(({ slug, parentMessageId }) => {
+          if (parentMessageId === sidebarProps.messageSlug) {
             nextState[sidebarProps.messageSlug].thread.push(slug);
           }
         });

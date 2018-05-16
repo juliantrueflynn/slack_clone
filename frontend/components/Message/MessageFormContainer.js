@@ -4,7 +4,7 @@ import { createMessageRequest } from '../../actions/messageActions';
 
 const mapStateToDispatch = (state, ownProps) => ({
   channelSlug: state.ui.displayChannelSlug,
-  parentMessageSlug: ownProps.parentMessageSlug || null
+  parentMessageId: ownProps.parentMessageId || null
 });
 
 const mapDispatchToProps = dispatch => ({

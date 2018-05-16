@@ -16,31 +16,31 @@ ActiveRecord::Schema.define(version: 20180513003532) do
   enable_extension "plpgsql"
 
   create_table "channel_subs", force: :cascade do |t|
-    t.string "user_slug", null: false
-    t.string "channel_slug", null: false
+    t.integer "user_id", null: false
+    t.integer "channel_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["channel_slug", "user_slug"], name: "index_channel_subs_on_channel_slug_and_user_slug", unique: true
+    t.index ["channel_id", "user_id"], name: "index_channel_subs_on_channel_id_and_user_id", unique: true
   end
 
   create_table "channels", force: :cascade do |t|
     t.string "title", null: false
     t.text "topic"
     t.string "slug", null: false
-    t.string "owner_slug", null: false
-    t.string "workspace_slug", null: false
+    t.integer "owner_id", null: false
+    t.integer "workspace_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["owner_slug"], name: "index_channels_on_owner_slug"
+    t.index ["owner_id"], name: "index_channels_on_owner_id"
     t.index ["slug"], name: "index_channels_on_slug", unique: true
   end
 
   create_table "messages", force: :cascade do |t|
     t.text "body"
-    t.string "parent_message_slug"
-    t.string "author_slug", null: false
+    t.string "parent_message_id"
+    t.integer "author_id", null: false
     t.string "slug", null: false
-    t.string "channel_slug", null: false
+    t.integer "channel_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_messages_on_slug", unique: true
@@ -61,30 +61,30 @@ ActiveRecord::Schema.define(version: 20180513003532) do
   end
 
   create_table "workspace_subs", force: :cascade do |t|
-    t.string "user_slug", null: false
-    t.string "workspace_slug", null: false
+    t.integer "user_id", null: false
+    t.integer "workspace_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["workspace_slug", "user_slug"], name: "index_workspace_subs_on_workspace_slug_and_user_slug", unique: true
+    t.index ["workspace_id", "user_id"], name: "index_workspace_subs_on_workspace_id_and_user_id", unique: true
   end
 
   create_table "workspaces", force: :cascade do |t|
     t.string "title", null: false
     t.string "slug", null: false
-    t.string "owner_slug", null: false
+    t.integer "owner_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["owner_slug"], name: "index_workspaces_on_owner_slug"
+    t.index ["owner_id"], name: "index_workspaces_on_owner_id"
     t.index ["slug"], name: "index_workspaces_on_slug", unique: true
   end
 
-  add_foreign_key "channel_subs", "channels", column: "channel_slug", primary_key: "slug"
-  add_foreign_key "channel_subs", "users", column: "user_slug", primary_key: "slug"
-  add_foreign_key "channels", "users", column: "owner_slug", primary_key: "slug"
-  add_foreign_key "channels", "workspaces", column: "workspace_slug", primary_key: "slug"
-  add_foreign_key "messages", "channels", column: "channel_slug", primary_key: "slug"
-  add_foreign_key "messages", "users", column: "author_slug", primary_key: "slug"
-  add_foreign_key "workspace_subs", "users", column: "user_slug", primary_key: "slug"
-  add_foreign_key "workspace_subs", "workspaces", column: "workspace_slug", primary_key: "slug"
-  add_foreign_key "workspaces", "users", column: "owner_slug", primary_key: "slug"
+  add_foreign_key "channel_subs", "channels"
+  add_foreign_key "channel_subs", "users"
+  add_foreign_key "channels", "users", column: "owner_id"
+  add_foreign_key "channels", "workspaces"
+  add_foreign_key "messages", "channels"
+  add_foreign_key "messages", "users", column: "author_id"
+  add_foreign_key "workspace_subs", "users"
+  add_foreign_key "workspace_subs", "workspaces"
+  add_foreign_key "workspaces", "users", column: "owner_id"
 end

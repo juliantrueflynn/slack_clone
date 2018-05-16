@@ -1,1 +1,1 @@
-json.(@message, :id, :body, :slug, :author_slug, :channel_slug, :parent_message_slug)
+json.(@message, :id, :body, :slug, :author_id, :channel_id, :parent_message_id)

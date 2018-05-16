@@ -1,5 +1,6 @@
 json.workspace do
-  json.(@workspace, :id, :title, :slug, :owner_slug)
+  json.(@workspace, :id, :title, :slug)
+  json.owner_id User.find_by(id: @workspace.owner_id).slug
 end
 
 json.channels do

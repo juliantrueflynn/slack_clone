@@ -31,7 +31,7 @@ class MessageHoverMenu extends React.Component {
     return (
       <div className="message-hover-menu">
         <ul className="message-hover-menu__buttons">
-          {!message.parentMessageSlug && (
+          {!message.parentMessageId && (
             <button onClick={this.handleThreadOpenClick}>Start thread</button>
           )}
           {isUserAuthor && (

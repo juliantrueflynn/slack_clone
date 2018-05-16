@@ -10,7 +10,13 @@ class Api::MessagesController < ApplicationController
 
   def create
     @message = Message.new(message_params)
-    @message.author_slug = current_user.slug
+    @message.author_id = current_user.id
+    @message.channel_id = Channel.find_by(slug: params[:channel_id])
+
+    unless params[:parent_message_id].nil?
+      parent_message = Message.find_by(slug: params[:parent_message_id])
+      @message.parent_message_id = parent_message.id
+    end
     
     if @message.save
       render json: @message
@@ -43,6 +49,6 @@ class Api::MessagesController < ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:body, :slug, :parent_message_slug, :channel_slug)
+    params.require(:message).permit(:body, :slug, :parent_message_id, :channel_id)
   end
 end

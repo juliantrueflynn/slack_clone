@@ -1,7 +1,7 @@
 class Message < ApplicationRecord
-  before_validation :generate_slug
+  before_validation :generate_id
 
-  validates :author_slug, :channel_slug, presence: true
+  validates :author_id, :channel_id, presence: true
   validates :slug, uniqueness: true, presence: true
   validates_length_of :body,
     within: 1..50000,
@@ -10,24 +10,19 @@ class Message < ApplicationRecord
 
   belongs_to :author,
     class_name: 'User',
-    primary_key: :slug,
-    foreign_key: :author_slug
-  belongs_to :channel,
-    primary_key: :slug,
-    foreign_key: :channel_slug
+    foreign_key: :author_id
+  belongs_to :channel
   belongs_to :thread,
     class_name: 'Message',
-    primary_key: :slug,
-    foreign_key: :parent_message_slug,
+    foreign_key: :parent_message_id,
     optional: true
   has_many :thread_entries,
     class_name: 'Message',
-    primary_key: :slug,
-    foreign_key: :parent_message_slug
+    foreign_key: :parent_message_id
 
   private
 
-  def generate_slug
+  def generate_id
     return slug if slug
     
     loop do

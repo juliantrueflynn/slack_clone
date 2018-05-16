@@ -9,6 +9,7 @@ import WorkspacePageContainer
 import WorkspaceFormContainer from
   './components/Workspace/WorkspaceFormContainer';
 import ChannelPageContainer from './components/Channel/ChannelPageContainer';
+import MessagePageContainer from './components/Message/MessagePageContainer';
 import './MainPage.css';
 
 const MainPage = () => (
@@ -34,6 +35,10 @@ const MainPage = () => (
       <Route
         path="/create-workspace"
         component={WorkspaceFormContainer}
+      />
+      <ProtectedRoute
+        path="/:workspaceSlug/:channelSlug/:messageSlug"
+        component={MessagePageContainer}
       />
       <ProtectedRoute
         path="/:workspaceSlug/:channelSlug"

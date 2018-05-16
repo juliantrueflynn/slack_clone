@@ -23,16 +23,16 @@ end
   workspace = Workspace.create!(
     title: title,
     slug: "#{title.parameterize}",
-    owner_slug: User.first.slug
+    owner_id: User.first.id
   )
 
   [*2..5].sample.times do
     title = Faker::Company.unique.buzzword
     Channel.create!(
       title: title,
-      owner_slug: User.first.slug,
+      owner_id: User.first.id,
       topic: (is_random_true? ? Faker::Company.bs : nil),
-      workspace_slug: workspace.slug
+      workspace_id: workspace.id
     )
   end
 end
@@ -47,24 +47,24 @@ end
   Workspace.all.shuffle.each do |workspace|
     next if user.is_workspace_sub?(workspace) || is_random_true?
     WorkspaceSub.create!(
-      workspace_slug: workspace.slug,
-      user_slug: user.slug
+      workspace_id: workspace.id,
+      user_id: user.id
     )
 
     workspace.channels.shuffle.each do |channel|
       next if user.is_channel_sub?(channel) || is_random_true?
   
       ChannelSub.create!(
-        channel_slug: channel.slug,
-        user_slug: user.slug
+        channel_id: channel.id,
+        user_id: user.id
       )
   
       [*1..10].sample.times do
         next if is_random_true?
         Message.create!(
           body: random_lorem_short_or_long,
-          author_slug: user.slug,
-          channel_slug: channel.slug
+          author_id: user.id,
+          channel_id: channel.id
         )
       end
   
@@ -72,9 +72,9 @@ end
       next if random_parent_message.nil? || rand < 0.60
       Message.create!(
         body: random_lorem_short_or_long,
-        author_slug: user.slug,
-        channel_slug: channel.slug,
-        parent_message_slug: random_parent_message.slug
+        author_id: user.id,
+        channel_id: channel.id,
+        parent_message_id: random_parent_message.id
       )
     end
   end
@@ -82,9 +82,9 @@ end
 
 # Subscribe first user to all workspaces and channels
 Workspace.all.each do |workspace|
-  WorkspaceSub.create!(workspace_slug: workspace.slug, user_slug: User.first.slug)
+  WorkspaceSub.create!(workspace_id: workspace.id, user_id: User.first.id)
 end
 
 Channel.all.each do |channel|
-  ChannelSub.create!(channel_slug: channel.slug, user_slug: User.first.slug)
+  ChannelSub.create!(channel_id: channel.id, user_id: User.first.id)
 end

@@ -1,7 +1,8 @@
 class Api::WorkspaceSubsController < ApplicationController
   def create
     @workspace_sub = WorkspaceSub.new(workspace_sub_params)
-    @workspace_sub.user_slug = current_user.slug
+    @workspace_sub.user_id = current_user.id
+    @workspace_sub.workspace_id = Workspace.find_by(slug: params[:workspace_id])
     
     if @workspace_sub.save
       render json: @workspace_sub
@@ -24,6 +25,6 @@ class Api::WorkspaceSubsController < ApplicationController
   private
 
   def workspace_sub_params
-    params.require(:workspace_sub).permit(:workspace_slug)
+    params.require(:workspace_sub).permit(:workspace_id)
   end
 end

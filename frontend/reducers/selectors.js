@@ -17,11 +17,12 @@ export const getPageChannelSlug = state => (
 );
 
 export const getMessages = ({ entities: { messages, channels }, ui }) => {
-  const currentChannel = channels[ui.displayChannelSlug];
-  if (!currentChannel) return [];
+  if (!channels[ui.displayChannelSlug]) {
+    return [];
+  }
 
   return values(messages).filter(message => 
-    !message.parentMessageSlug && currentChannel.slug === message.channelSlug
+    !message.parentMessageId && ui.displayChannelSlug === message.channelId
   );
 };
 
@@ -41,6 +42,6 @@ export const getThread = ({ entities: { messages }, ui: { rightSidebar } }) => {
   if (!currentMessage) return [];
   
   return values(messages).filter(message =>
-    message.parentMessageSlug === currentMessage.slug
+    message.parentMessageId === currentMessage.slug
   );
 };

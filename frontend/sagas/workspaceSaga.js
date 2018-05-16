@@ -39,7 +39,7 @@ function* addNewWorkspace({ workspace }) {
 
 function* subCreatorToNewWorkspace(workspace) {
   try {
-    const sub = { workspace_slug: workspace.slug };
+    const sub = { workspace_id: workspace.slug };
     const newSub = yield call(createWorkspaceSub, sub);
     yield put(createWorkspaceSubSuccess(newSub));
   } catch (error) {
