@@ -4,12 +4,11 @@ import { createMessageRequest } from '../../actions/messageActions';
 
 const mapStateToDispatch = (state, ownProps) => ({
   channelSlug: state.ui.displayChannelSlug,
-  parentMessageSlug: ownProps.parentMessageSlug || null,
-  errors: state.errors.message
+  parentMessageSlug: ownProps.parentMessageSlug || null
 });
 
 const mapDispatchToProps = dispatch => ({
-  createMessageRequest: message => dispatch(createMessageRequest(message)),
+  createMessageRequest: message => dispatch(createMessageRequest(message))
 });
 
 export default connect(

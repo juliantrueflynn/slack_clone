@@ -1,4 +1,5 @@
 import React from 'react';
+import FormErrors from '../FormErrors';
  
 class MessageForm extends React.Component {
   constructor(props) {
@@ -29,15 +30,17 @@ class MessageForm extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleMessageSubmit}>
-        <div>
+      <div className="message-form-pane">
+        <FormErrors entity="message" />
+
+        <form onSubmit={this.handleMessageSubmit}>
           <textarea
             onChange={this.handleTextareaValue}
             value={this.state.body}
           />
-        </div>
-        <input type="submit" value="Add Message" />
-      </form>
+          <input type="submit" value="Add Message" />
+        </form>
+      </div>
     );
   }
 }

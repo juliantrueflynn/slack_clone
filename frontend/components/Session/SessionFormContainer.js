@@ -3,17 +3,16 @@ import SessionForm from './SessionForm';
 import { sessionSignIn, sessionSignUp } from '../../actions/sessionActions';
 
 const mapStateToProps = (state, { location }) => ({
-  isSignInPage: location.pathname === '/signin',
-  errors: state.errors.session
+  isSignInPage: location.pathname === '/signin'
 });
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  processForm: user => {
-    if (ownProps.location.pathname === '/signin') {
+const mapDispatchToProps = (dispatch, { location }) => ({
+  sessionRequest: user => {
+    if (location.pathname === '/signin') {
       return dispatch(sessionSignIn(user));
-    } else {
-      return dispatch(sessionSignUp(user));
     }
+    
+    return dispatch(sessionSignUp(user));
   }
 });
 

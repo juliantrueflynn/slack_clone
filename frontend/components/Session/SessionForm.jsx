@@ -7,32 +7,19 @@ class SessionForm extends React.Component {
     super(props);
 
     this.state = {
-      errors: [],
       username: '',
       email: '',
       password: '',
-      pathname: '',
     };
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.errors.length !== prevState.errors.length) {
-      return { errors: [...nextProps.errors] };
-    }
-  
-    if (nextProps.location.pathname !== prevState.pathname) {
-      return { errors: [] };
-    }
-    
-    return null;
-  }
-
   handleFormSubmit(event) {
     event.preventDefault();
-    const user = Object.assign({}, this.state);
-    this.props.processForm(user);
+    const { username, email, password } = this.state;
+    const user = { username, email, password };
+    this.props.sessionRequest(user);
   }
 
   handleInputValue(field) {
@@ -43,16 +30,13 @@ class SessionForm extends React.Component {
     const { isSignInPage } = this.props;
 
     return (
-      <div className="form form__session">
-        {isSignInPage ? (
-          <h1>Sign in to your workspace</h1>
-        ) : (
-          <h1>Create a new workspace</h1>
-        )}
+      <div className={`page page__${isSignInPage ? 'sigin' : 'signup'}`}>
+        {isSignInPage && (<h1>Sign in to your workspace</h1>)}
+        {isSignInPage || (<h1>Create a new workspace</h1>)}
 
-        <FormErrors errors={this.state.errors} />
+        <FormErrors entity="session" />
 
-        <form onSubmit={this.handleFormSubmit}>
+        <form className="form form__session" onSubmit={this.handleFormSubmit}>
           <div className="form__group">
             <input
               type="text"
@@ -83,11 +67,8 @@ class SessionForm extends React.Component {
           />
         </form>
 
-        {isSignInPage ? (
-          <Link to="/signup">Create a new workspace</Link>
-        ) : (
-          <Link to="/signin">Sign in</Link>
-        )}
+        {isSignInPage && (<Link to="/signup">Create a new workspace</Link>)}
+        {isSignInPage || (<Link to="/signin">Sign in</Link>)}
       </div>
     );
   }

@@ -6,6 +6,7 @@ import {
   UPDATE_MESSAGE_REQUEST,
   DELETE_MESSAGE_REQUEST
 } from "../actions/messageActions";
+import { CHANNEL_RECEIVE } from "../actions/channelActions";
 
 const messageErrorsReducer = (state = [], action) => {
   Object.freeze(state);
