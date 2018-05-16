@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import FormErrors from '../FormErrors';
 
 class SessionForm extends React.Component {
   constructor(props) {
@@ -38,20 +39,6 @@ class SessionForm extends React.Component {
     return e => this.setState({ [field]: e.target.value });
   }
 
-  errors() {
-    if (this.state.errors.length) {
-      return (
-        <ul className="errors errors__form">
-          {this.state.errors.map((error, i) => (
-            <li className="errors__item" key={`error${i}`}>
-              {error}
-            </li>
-          ))}
-        </ul>
-      );
-    }
-  }
-
   render() {
     const { isSignInPage } = this.props;
 
@@ -63,7 +50,7 @@ class SessionForm extends React.Component {
           <h1>Create a new workspace</h1>
         )}
 
-        {this.errors()}
+        <FormErrors errors={this.state.errors} />
 
         <form onSubmit={this.handleFormSubmit}>
           <div className="form__group">

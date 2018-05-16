@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
+import FormErrors from '../FormErrors';
 import './ChannelForm.css';
 
 class ChannelForm extends React.Component {
@@ -51,20 +52,6 @@ class ChannelForm extends React.Component {
     this.props.createChannelRequest(channel);
   }
 
-  errors() {
-    if (this.props.errors.length) {
-      return (
-        <ul className="errors errors__form">
-          {this.props.errors.map((error, i) => (
-            <li className="errors__item" key={`error${i}`}>
-              {error}
-            </li>
-          ))}
-        </ul>
-      );
-    }
-  }
-
   render() {
     return (
       <Modal
@@ -84,7 +71,7 @@ class ChannelForm extends React.Component {
           <h1 className="modal__title">Create a channel</h1>
         </header>
 
-        {this.errors()}
+        <FormErrors entity="channel" />
 
         <form
           className="form form__new-channel"

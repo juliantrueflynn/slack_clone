@@ -1,12 +1,13 @@
 import React from 'react';
+import FormErrors from '../FormErrors';
 
 class WorkspaceForm extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      title: "",
-      slug: "",
+      title: '',
+      slug: '',
     };
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -24,26 +25,12 @@ class WorkspaceForm extends React.Component {
     this.props.createWorkspaceRequest({ workspace });
   }
 
-  errors() {
-    if (this.props.errors.length) {
-      return (
-        <ul className="errors errors__form">
-          {this.props.errors.map((error, i) => (
-            <li className="errors__item" key={`newWorkspaceError${i}`}>
-              {error}
-            </li>
-          ))}
-        </ul>
-      );
-    }
-  }
-
   render() {
     return (
       <div className="page page__new-workspace">
         <h1 className="page__title">Create New Workspace</h1>
 
-        {this.errors()}
+        <FormErrors entity="workspace" />
         
         <form onSubmit={this.handleFormSubmit}>
           <div>
