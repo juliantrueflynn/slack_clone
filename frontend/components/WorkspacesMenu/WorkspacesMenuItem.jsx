@@ -9,7 +9,8 @@ class WorkspacesMenuItem extends React.Component {
   }
 
   handleClick() {
-    this.props.handleDropDownCloseClick();
+    const { dropdownToggle, isDropdownOpen } = this.props;
+    dropdownToggle(!isDropdownOpen);
   }
 
   render() {

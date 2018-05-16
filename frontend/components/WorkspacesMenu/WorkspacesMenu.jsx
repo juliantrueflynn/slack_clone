@@ -21,13 +21,8 @@ class WorkspacesMenu extends React.Component {
     document.removeEventListener('mousedown', this.handleDropdownClickOut);
   }
 
-  handleDropdownToggle(event) {
-    event.preventDefault();
+  handleDropdownToggle() {
     this.setState({ isDropdownOpen: !this.state.isDropdownOpen });
-  }
-
-  handleDropDownCloseClick() {
-    return () => this.setState({ isDropdownOpen: false });
   }
 
   setNodeToDropdown(node) {
@@ -42,7 +37,7 @@ class WorkspacesMenu extends React.Component {
 
   render() {
     const { workspaces, loggedIn } = this.props;
-    const { isDropdownOpen, classNames } = this.state;
+    const { isDropdownOpen } = this.state;
     
     if (!loggedIn) {
       return null;
@@ -50,7 +45,10 @@ class WorkspacesMenu extends React.Component {
 
     return (
       <div className="dropdown dropdown__workspaces">
-        <button className="dropdown" onClick={this.handleDropdownToggle}>
+        <button
+          className="button button__dropdown"
+          onClick={this.handleDropdownToggle}
+        >
           Your Workspaces
         </button>
         {isDropdownOpen && (
@@ -59,7 +57,8 @@ class WorkspacesMenu extends React.Component {
               <WorkspacesMenuItem
                 workspace={workspace}
                 key={workspace.slug}
-                handleDropDownCloseClick={this.handleDropDownCloseClick}
+                isDropdownOpen={isDropdownOpen}
+                dropdownToggle={this.handleDropdownToggle}
               />
             ))}
           </ul>
