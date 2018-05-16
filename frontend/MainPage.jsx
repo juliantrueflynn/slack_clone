@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChannelsActionCables } from './util/actionCableUtil';
-import { AuthRoute } from './util/routeUtil';
+import { AuthRoute, ProtectedRoute } from './util/routeUtil';
 import { Switch, Link, Route } from 'react-router-dom';
 import ChannelSessionFormContainer
   from './components/Session/SessionFormContainer';
@@ -35,11 +35,11 @@ const MainPage = () => (
         path="/create-workspace"
         component={WorkspaceFormContainer}
       />
-      <Route
+      <ProtectedRoute
         path="/:workspaceSlug/:channelSlug"
         component={ChannelPageContainer}
       />
-      <Route
+      <ProtectedRoute
         path="/:workspaceSlug"
         component={WorkspacePageContainer}
       />
