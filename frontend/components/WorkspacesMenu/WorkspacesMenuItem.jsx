@@ -4,6 +4,12 @@ import { NavLink } from 'react-router-dom';
 class WorkspacesMenuItem extends React.Component {
   constructor(props) {
     super(props);
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    this.props.handleDropDownCloseClick();
   }
 
   render() {
@@ -11,7 +17,7 @@ class WorkspacesMenuItem extends React.Component {
   
     return (
       <li className="menu-item menu-item__workspace">
-        <NavLink to={`/${slug}`}>
+        <NavLink onClick={this.handleClick} to={`/${slug}`}>
           {id} - {title} - {slug}
         </NavLink>
       </li>

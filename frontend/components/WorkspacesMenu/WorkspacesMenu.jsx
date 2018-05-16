@@ -26,6 +26,10 @@ class WorkspacesMenu extends React.Component {
     this.setState({ isDropdownOpen: !this.state.isDropdownOpen });
   }
 
+  handleDropDownCloseClick() {
+    return () => this.setState({ isDropdownOpen: false });
+  }
+
   setNodeToDropdown(node) {
     this.wrapperRef = node;
   }
@@ -49,16 +53,17 @@ class WorkspacesMenu extends React.Component {
         <button className="dropdown" onClick={this.handleDropdownToggle}>
           Your Workspaces
         </button>
-        {isDropdownOpen &&
+        {isDropdownOpen && (
           <ul ref={this.setNodeToDropdown}>
             {workspaces.map(workspace => (
               <WorkspacesMenuItem
                 workspace={workspace}
                 key={workspace.slug}
+                handleDropDownCloseClick={this.handleDropDownCloseClick}
               />
             ))}
           </ul>
-        }
+        )}
       </div>
     );
 
