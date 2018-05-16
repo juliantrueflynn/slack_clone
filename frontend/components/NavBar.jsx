@@ -12,7 +12,7 @@ class NavBar extends React.Component {
   }
 
   handleSignOut() {
-    this.props.sessionSignOut();
+    this.props.signOutRequest();
   }
 
   render() {

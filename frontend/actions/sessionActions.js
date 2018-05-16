@@ -1,29 +1,52 @@
-export const SESSION_SIGN_IN = 'SESSION_SIGN_IN';
-export const SESSION_SIGN_UP = 'SESSION_SIGN_UP';
-export const SESSION_RECEIVE = 'SESSION_RECEIVE';
-export const SESSION_SIGN_OUT = 'SESSION_SIGN_OUT';
-export const SESSION_FAILURE = 'SESSION_FAILURE';
+export const SIGN_IN_REQUEST = 'SIGN_IN_REQUEST';
+export const SIGN_IN_RECEIVE = 'SIGN_IN_RECEIVE';
+export const SIGN_IN_FAILURE = 'SIGN_IN_FAILURE';
+export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST';
+export const SIGN_UP_RECEIVE = 'SIGN_UP_RECEIVE';
+export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
+export const SIGN_OUT_REQUEST = 'SIGN_OUT_REQUEST';
+export const SIGN_OUT_RECEIVE = 'SIGN_OUT_RECEIVE';
+export const SIGN_OUT_FAILURE = 'SIGN_OUT_FAILURE';
 
-export const sessionSignIn = currentUser => ({
-  type: SESSION_SIGN_IN,
+export const signInRequest = currentUser => ({
+  type: SIGN_IN_REQUEST,
   currentUser
 });
 
-export const sessionSignUp = currentUser => ({
-  type: SESSION_SIGN_UP,
+export const signInReceive = currentUser => ({
+  type: SIGN_IN_RECEIVE,
   currentUser
 });
 
-export const sessionReceive = currentUser => ({
-  type: SESSION_RECEIVE,
+export const signInFailure = errors => ({
+  type: SIGN_IN_FAILURE,
+  errors
+});
+
+export const signUpRequest = currentUser => ({
+  type: SIGN_UP_REQUEST,
   currentUser
 });
 
-export const sessionSignOut = () => ({
-  type: SESSION_SIGN_OUT
+export const signUpReceive = currentUser => ({
+  type: SIGN_UP_RECEIVE,
+  currentUser
 });
 
-export const sessionFailure = errors => ({
-  type: SESSION_FAILURE,
+export const signUpFailure = errors => ({
+  type: SIGN_UP_FAILURE,
+  errors
+});
+
+export const signOutRequest = () => ({
+  type: SIGN_OUT_REQUEST
+});
+
+export const signOutReceive = () => ({
+  type: SIGN_OUT_RECEIVE
+});
+
+export const signOutFailure = errors => ({
+  type: SIGN_OUT_FAILURE,
   errors
 });

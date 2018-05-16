@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import SessionForm from './SessionForm';
-import { sessionSignIn, sessionSignUp } from '../../actions/sessionActions';
+import { signInRequest, signUpRequest } from '../../actions/sessionActions';
 
 const mapStateToProps = (state, { location }) => ({
   isSignInPage: location.pathname === '/signin'
@@ -9,10 +9,10 @@ const mapStateToProps = (state, { location }) => ({
 const mapDispatchToProps = (dispatch, { location }) => ({
   sessionRequest: user => {
     if (location.pathname === '/signin') {
-      return dispatch(sessionSignIn(user));
+      return dispatch(signInRequest(user));
     }
     
-    return dispatch(sessionSignUp(user));
+    return dispatch(signUpRequest(user));
   }
 });
 

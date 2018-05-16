@@ -6,8 +6,8 @@ import {
 } from '../../actions/messageActions';
 import { openRightSidebar } from '../../actions/rightSidebarActions';
 
-const mapStateToProps = ({ session }, { message }) => ({
-  isUserAuthor: session.currentUser.slug === message.authorSlug
+const mapStateToProps = ({ session: currentUser }, { message }) => ({
+  isUserAuthor: currentUser && currentUser.slug === message.authorSlug
 });
 
 const mapDispatchToProps = dispatch => ({
