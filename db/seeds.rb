@@ -7,8 +7,15 @@ def is_random_true?
 end
 
 def random_lorem_short_or_long
-  return Faker::Lorem.paragraphs if rand < 0.1
-  rand < 0.7 ? Faker::Lorem.sentence : Faker::Lorem.sentence
+  if rand < 0.1
+    return Faker::Lorem.paragraph(4, false, 10)
+  elsif rand < 0.1
+    return Faker::Lorem.paragraph(15)
+  elsif rand < 0.7
+    return Faker::Lorem.sentence
+  end
+  
+  Faker::Lorem.word
 end
 
 5.times do
