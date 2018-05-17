@@ -13,9 +13,10 @@ export const createMessageRequest = message => ({
   message
 });
 
-export const createMessageReceive = message => ({
+export const createMessageReceive = (message, parentMessageSlug = null) => ({
   type: CREATE_MESSAGE_RECEIVE,
-  message
+  message,
+  parentMessageSlug
 });
 
 export const createMessageFailure = errors => ({

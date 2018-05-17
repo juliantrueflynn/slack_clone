@@ -17,12 +17,14 @@ export const getPageChannelSlug = state => (
 );
 
 export const getMessages = ({ entities: { messages, channels }, ui }) => {
-  if (!channels[ui.displayChannelSlug]) {
+  const currentChannel = channels[ui.displayChannelSlug];
+  
+  if (!currentChannel) {
     return [];
   }
 
   return values(messages).filter(message => 
-    !message.parentMessageId && ui.displayChannelSlug === message.channelId
+    !message.parentMessageId && currentChannel.id === message.channelId
   );
 };
 

@@ -11,12 +11,14 @@ const channelReducer = (state = {}, action) => {
   
   let nextState;
   switch (action.type) {
-    case CHANNEL_RECEIVE :
+    case CHANNEL_RECEIVE : {
       const { channel, messages, members } = action.channel;
       channel.messages = messages.map(message => message.slug);
       channel.members = members.map(member => member.slug);
       nextState = { [channel.slug]: channel };
+      
       return Object.assign({}, state, nextState);
+    }
     case WORKSPACE_RECEIVE :
       nextState = {};
       action.workspace.channels.forEach(item => {

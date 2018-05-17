@@ -27,19 +27,12 @@ class MessageHoverMenu extends React.Component {
   }
 
   render() {
-    const {
-      message,
-      isUserAuthor,
-      workspaceSlug,
-    } = this.props;
-  
+    const { message, isUserAuthor, match } = this.props;
     return (
       <div className="message-hover-menu">
         <ul className="message-hover-menu__buttons">
           {!message.parentMessageId && (
-            <Link to={
-              `/${workspaceSlug}/${message.channelId}/thread/${message.slug}`
-            }>
+            <Link to={`${match.url}/thread/${message.slug}`}>
               Start thread
             </Link>
           )}

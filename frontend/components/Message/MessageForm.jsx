@@ -25,7 +25,7 @@ class MessageForm extends React.Component {
       parentMessageId: this.props.parentMessageId
     };
     
-    this.props.createMessageRequest(message);
+    this.props.createMessageRequest(message, this.props.parentMessageSlug);
     this.setState({ body: '' });
   }
 

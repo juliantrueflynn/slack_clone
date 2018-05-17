@@ -10,9 +10,10 @@ const mapStateToProps = (state, { match: { params } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  openRightSidebar: sidebarProps => dispatch(
-    openRightSidebar('Thread', sidebarProps)
-  )
+  openRightSidebar: sidebarProps => {
+    const defaults = Object.assign({ title: 'Thread' }, sidebarProps);
+    return dispatch(openRightSidebar('Thread', defaults));
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessagePage);

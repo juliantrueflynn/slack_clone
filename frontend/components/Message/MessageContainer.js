@@ -7,12 +7,11 @@ import {
 } from '../../actions/messageActions';
 import { openRightSidebar } from '../../actions/rightSidebarActions';
 
-const mapStateToProps = (state, { message, match }) => ({
+const mapStateToProps = (state, { message }) => ({
   isUserAuthor: () => {
     const currentUser = state.session.currentUser;
     return currentUser && currentUser.slug === message.authorSlug;
   },
-  workspaceSlug: match.params.workspaceSlug
 });
 
 const mapDispatchToProps = dispatch => ({

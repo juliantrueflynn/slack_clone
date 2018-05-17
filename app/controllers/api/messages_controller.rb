@@ -1,19 +1,12 @@
 class Api::MessagesController < ApplicationController
   before_action :set_message, only: [:show, :update, :destroy]
 
-  def index
-    @messages = Message.all
-  end
-
-  def show
-  end
-
   def create
     @message = Message.new(message_params)
     @message.author_id = current_user.id
-    @message.channel_id = Channel.find_by(slug: params[:channel_id])
-
-    unless params[:parent_message_id].nil?
+    @message.channel_id = Channel.find_by(slug: params[:channel_id]).id
+    
+    if params[:parent_message_id]  
       parent_message = Message.find_by(slug: params[:parent_message_id])
       @message.parent_message_id = parent_message.id
     end
@@ -49,6 +42,6 @@ class Api::MessagesController < ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:body, :slug, :parent_message_id, :channel_id)
+    params.require(:message).permit(:body, :slug, :parent_message_id, :parent_message_slug, :channel_id)
   end
 end

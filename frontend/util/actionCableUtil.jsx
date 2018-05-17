@@ -6,23 +6,25 @@ import {
   createMessageReceive, updateMessageReceive, deleteMessageReceive
 } from '../actions/messageActions';
 import { getChannels } from '../reducers/selectors';
-import { createChannelReceive } from '../actions/channelActions';
 
 const mapStateToProps = state => ({
   channels: getChannels(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  onReceivedCallback: ({event, data}) => {
-    const camelizedProps = camelizeKeys(data);
-
-    switch (event) {
+  onReceivedCallback: (received) => {
+    const camelized = camelizeKeys(received);
+  
+    switch (received.event) {
       case "CREATE_MESSAGE" :
-        return dispatch(createMessageReceive(camelizedProps));
+        return dispatch(createMessageReceive(
+          camelized.message,
+          camelized.parentMessageSlug
+        ));
       case "EDIT_MESSAGE" :
-        return dispatch(updateMessageReceive(camelizedProps));
+        return dispatch(updateMessageReceive(camelized.message));
       case "DELETE_MESSAGE" :
-        return dispatch(deleteMessageReceive(camelizedProps.slug));
+        return dispatch(deleteMessageReceive(camelized.slug));
     }
   }
 });
@@ -44,7 +46,7 @@ class SocketChatChannel extends React.Component {
         {this.props.channels.map(channel =>
           <ActionCable
             key={ channel.slug }
-            channel={{ channel: 'ChatChannel', channel_id: channel.slug }}
+            channel={{ channel: 'ChatChannel', channel_id: channel.id }}
             onReceived={ this.handleReceived }
           />
         )}

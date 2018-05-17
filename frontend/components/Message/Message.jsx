@@ -47,7 +47,7 @@ class Message extends React.Component {
               openRightSidebar={this.props.openRightSidebar}
               toggleEditMessage={this.handleEditToggle}
               deleteMessageRequest={this.props.deleteMessageRequest}
-              workspaceSlug={this.props.workspaceSlug}
+              match={this.props.match}
             />
           )}
           {!isEditing && (

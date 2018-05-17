@@ -19,16 +19,22 @@ const messageReducer = (state = {}, action) => {
         nextState[message.slug] = message;
         nextState[message.slug].thread = nextState[message.slug].thread || [];
 
-        if (message.parentMesasgeSlug) {
-          const parentSlug = message.parentMessageId;
+        if (message.parentMessageSlug) {
           nextState[message.slug].thread = null;
-          nextState[parentSlug] = Object.assign(
-            [message.slug],
-            nextState[parentSlug].thread
-          );
+
+          nextState.every(oldMessage => {
+            if (message.parentMessageId === nextState[oldMessage.slug].id) {
+              nextState[oldMessage.slug] = Object.assign(
+                [ message.slug ],
+                nextState[oldMessage.slug].thread
+              );
+              
+              return false;
+            }
+          });
         }
       });
-      
+
       if (messageSlug) {
         nextState[messageSlug] = Object.assign(
           {},
@@ -45,12 +51,12 @@ const messageReducer = (state = {}, action) => {
       return nextState;
     }
     case CREATE_MESSAGE_RECEIVE : {
-      const { message } = action;
+      const { message, parentMessageSlug } = action;
       nextState = Object.assign({}, state);
       nextState[message.slug] = message;
 
-      if (message.parentMessageId) {
-        nextState[message.parentMessageId].thread.push(message.slug);
+      if (parentMessageSlug) {
+        nextState[parentMessageSlug].thread.push(message.slug);
       } else {
         nextState[message.slug].thread = [];
       }

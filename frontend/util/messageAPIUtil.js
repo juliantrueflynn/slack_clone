@@ -35,6 +35,7 @@ export const createMessage = message => (
     if (!response.ok) {
       throw json;
     }
+    console.log(json);
     return json;
   }).catch(error => {
     throw error || ['Unknown message error!'];
