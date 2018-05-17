@@ -31,13 +31,13 @@ export const getCurrentSidebarThread = ({ entities, ui: { rightSidebar } }) => (
 );
 
 export const getMessageSlug = ({ ui: { rightSidebar } }) => (
-  rightSidebar && rightSidebar.sidebarType === "THREAD" ?
+  rightSidebar && rightSidebar.sidebarType === 'Thread' ?
   rightSidebar.sidebarProps.messageSlug :
   null
 );
 
 export const getThread = ({ entities: { messages }, ui: { rightSidebar } }) => {
-  if (!rightSidebar || rightSidebar.sidebarType !== "THREAD") return [];
+  if (!rightSidebar || rightSidebar.sidebarType !== 'Thread') return [];
   const currentMessage = messages[rightSidebar.sidebarProps.messageSlug];
   if (!currentMessage) return [];
   

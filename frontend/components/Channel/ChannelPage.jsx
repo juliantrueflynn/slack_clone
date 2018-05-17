@@ -1,9 +1,11 @@
 import React from 'react';
+import { Route } from 'react-router-dom';
 import ChannelFormContainer from './ChannelFormContainer';
 import ChannelSidebar from './ChannelSidebar';
 import ChannelRightSidebarContainer from './ChannelRightSidebarContainer';
 import MessageFormContainer from '../Message/MessageFormContainer';
 import ChannelMessages from './ChannelMessages';
+import MessagePageContainer from '../Message/MessagePageContainer';
 import './ChannelPage.css';
 
 class ChannelPage extends React.Component {
@@ -29,6 +31,10 @@ class ChannelPage extends React.Component {
     
     return (
       <div>
+        <Route
+          path="/:workspaceSlug/:channelSlug/thread/:messageSlug"
+          component={MessagePageContainer}
+        />
         <div className="page page__channel">
           <h1>Channel #{match.params.channelSlug}</h1>
           <div className="page__channel-content">

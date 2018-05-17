@@ -37,10 +37,6 @@ const MainPage = () => (
         component={WorkspaceFormContainer}
       />
       <ProtectedRoute
-        path="/:workspaceSlug/:channelSlug/:messageSlug"
-        component={MessagePageContainer}
-      />
-      <ProtectedRoute
         path="/:workspaceSlug/:channelSlug"
         component={ChannelPageContainer}
       />
@@ -51,5 +47,9 @@ const MainPage = () => (
     </Switch>
   </div>
 );
+
+        // render={({ location, match: { params } }) => (
+        //   <Redirect to={`${params.workspaceSlug}${location.pathname}`} />
+        // )}
 
 export default MainPage;

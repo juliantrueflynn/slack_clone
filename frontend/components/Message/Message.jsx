@@ -47,13 +47,14 @@ class Message extends React.Component {
               openRightSidebar={this.props.openRightSidebar}
               toggleEditMessage={this.handleEditToggle}
               deleteMessageRequest={this.props.deleteMessageRequest}
+              workspaceSlug={this.props.workspaceSlug}
             />
           )}
           {!isEditing && (
             <div className="message-body">
               ID: #{this.props.message.id}<br/>
               Slug: {this.props.message.slug}<br/>
-              Author: {this.props.message.authorSlug}<br/>
+              Author: {this.props.message.authorId}<br/>
               Body: {this.props.message.body}
             </div>
           )}

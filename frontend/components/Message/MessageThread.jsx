@@ -3,11 +3,17 @@ import MessageContainer from './MessageContainer';
 import MessageFormContainer from './MessageFormContainer';
 
 const MessageThread = ({ message, threadEntries }) => {
+  if (!message) {
+    return null;
+  }
+
   return (
     <div className="thread">
       <div className="thread__message">
-        <div>{message.authorSlug}</div>
-        <div>{message.body}</div>
+        <div>
+          {message.authorId}<br/>
+          {message.body}
+        </div>
       </div>
       <div className="thread-entries">
         {threadEntries.map(entry => (

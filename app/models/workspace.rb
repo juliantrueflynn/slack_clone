@@ -6,8 +6,10 @@ class Workspace < ApplicationRecord
     too_short: 'title too short (min: 3 characters)'
   validates :slug, uniqueness: true, presence: true
   validates_exclusion_of :slug,
-    in: %w(api create-workspace assets signin signout stylesheets javascripts images ),
+    in: %w(api create-workspace assets signin signout stylesheets javascripts
+        images messages),
     message: "Taken, sorry!"
+  
   has_many :subs,
     class_name: 'WorkspaceSub',
     dependent: :destroy

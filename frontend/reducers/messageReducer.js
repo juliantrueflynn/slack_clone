@@ -67,7 +67,7 @@ const messageReducer = (state = {}, action) => {
     case OPEN_RIGHT_SIDEBAR : {
       const { sidebarProps, sidebarType } = action;
       
-      if (sidebarType !== 'THREAD') {
+      if (sidebarType !== 'Thread') {
         nextState = Object.assign({}, state);
         Object.values(state).map(({ slug, parentMessageId }) => {
           if (parentMessageId === sidebarProps.messageSlug) {

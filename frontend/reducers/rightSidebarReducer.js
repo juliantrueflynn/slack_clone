@@ -7,12 +7,12 @@ const rightSidebarReducer = (state = null, action) => {
 
   let nextState;
   switch (action.type) {
-    case OPEN_RIGHT_SIDEBAR :
-      nextState = {
-        sidebarType: action.sidebarType,
-        sidebarProps: action.sidebarProps,
-      };
+    case OPEN_RIGHT_SIDEBAR : {
+      const { sidebarType, sidebarProps} = action;
+      nextState = { sidebarType, sidebarProps };
+
       return nextState;
+    }
     case CLOSE_RIGHT_SIDEBAR :
       return null;
     default :
