@@ -8,10 +8,7 @@ import {
 import { openRightSidebar } from '../../actions/rightSidebarActions';
 
 const mapStateToProps = (state, { message }) => ({
-  isUserAuthor: () => {
-    const currentUser = state.session.currentUser;
-    return currentUser && currentUser.slug === message.authorSlug;
-  },
+  isUserAuthor: state.session.currentUser.id === message.authorId
 });
 
 const mapDispatchToProps = dispatch => ({
