@@ -14,7 +14,7 @@ class Message < ApplicationRecord
     class_name: 'User',
     foreign_key: :author_id
   belongs_to :channel
-  belongs_to :thread,
+  belongs_to :parent_message,
     class_name: 'Message',
     foreign_key: :parent_message_id,
     optional: true
