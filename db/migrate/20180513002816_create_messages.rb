@@ -2,7 +2,7 @@ class CreateMessages < ActiveRecord::Migration[5.1]
   def change
     create_table :messages do |t|
       t.text :body
-      t.string :parent_message_id, default: nil
+      t.integer :parent_message_id, default: nil
       t.integer :author_id, null: false
       t.string :slug, null: false
       t.integer :channel_id, null: false

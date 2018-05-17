@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20180513003532) do
 
   create_table "messages", force: :cascade do |t|
     t.text "body"
-    t.string "parent_message_id"
+    t.integer "parent_message_id"
     t.integer "author_id", null: false
     t.string "slug", null: false
     t.integer "channel_id", null: false
