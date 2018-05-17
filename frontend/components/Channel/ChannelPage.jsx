@@ -1,11 +1,10 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
 import ChannelFormContainer from './ChannelFormContainer';
 import ChannelSidebar from './ChannelSidebar';
 import ChannelRightSidebarContainer from './ChannelRightSidebarContainer';
 import MessageFormContainer from '../Message/MessageFormContainer';
 import ChannelMessages from './ChannelMessages';
-import MessagePageContainer from '../Message/MessagePageContainer';
+import { RouteWithSubRoutes } from '../../util/routeUtil';
 import './ChannelPage.css';
 
 class ChannelPage extends React.Component {
@@ -14,12 +13,12 @@ class ChannelPage extends React.Component {
   }
 
   componentDidMount() {
-    const { channelSlug, workspaceSlug } = this.props.match.params;
+    const { messageSlug, channelSlug, workspaceSlug } = this.props.match.params;
     this.props.channelRequest(channelSlug, workspaceSlug);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { channelSlug, workspaceSlug } = this.props.match.params;
+    const { messageSlug, channelSlug, workspaceSlug } = this.props.match.params;
     const nextChannelSlug = nextProps.match.params.channelSlug;
     if (channelSlug !== nextChannelSlug) {
       this.props.channelRequest(nextChannelSlug, workspaceSlug);
@@ -27,14 +26,12 @@ class ChannelPage extends React.Component {
   }
 
   render() {
-    const { messages, match } = this.props;
-    
+    const { routes, messages, match, location } = this.props;
+
     return (
       <div>
-        <Route
-          path="/:workspaceSlug/:channelSlug/thread/:messageSlug"
-          component={MessagePageContainer}
-        />
+        {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
+
         <div className="page page__channel">
           <h1>Channel #{match.params.channelSlug}</h1>
           <div className="page__channel-content">

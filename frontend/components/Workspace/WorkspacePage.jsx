@@ -1,4 +1,7 @@
 import React from 'react';
+import ChannelPageContainer from '../Channel/ChannelPageContainer';
+import { ProtectedRoute, RouteWithSubRoutes } from '../../util/routeUtil';
+import NavBarContainer from '../NavBarContainer';
 
 class WorkspacePage extends React.Component {
   constructor(props) {
@@ -19,7 +22,14 @@ class WorkspacePage extends React.Component {
   }
 
   render() {
-    return null;
+    return (
+      <div>
+        <NavBarContainer />
+        {this.props.routes.map((route, i) => (
+          <RouteWithSubRoutes key={i} {...route} />
+        ))}
+      </div>
+    );
   }
 }
 

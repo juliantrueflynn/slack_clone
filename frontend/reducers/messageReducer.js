@@ -20,18 +20,16 @@ const messageReducer = (state = {}, action) => {
         nextState[message.slug].thread = nextState[message.slug].thread || [];
 
         if (message.parentMessageSlug) {
-          nextState[message.slug].thread = null;
-
-          nextState.every(oldMessage => {
-            if (message.parentMessageId === nextState[oldMessage.slug].id) {
-              nextState[oldMessage.slug] = Object.assign(
-                [ message.slug ],
-                nextState[oldMessage.slug].thread
-              );
-              
-              return false;
-            }
-          });
+          const { parentMessageSlug, parentMessageId, slug } = message;
+          nextState[slug].thread = null;
+          if (parentMessageId === nextState[parentMessageSlug].id) {
+            nextState[parentMessageSlug] = Object.assign(
+              [ slug ],
+              nextState[parentMessageSlug].thread
+            );
+            
+            return false;
+          }
         }
       });
 

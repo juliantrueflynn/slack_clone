@@ -5,16 +5,10 @@ class MessageHoverMenu extends React.Component {
   constructor(props) {
     super(props);
 
-    // this.handleThreadOpenClick = this.handleThreadOpenClick.bind(this);
     this.handleEditClick = this.handleEditClick.bind(this);
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
+    this.handleLinkClick = this.handleLinkClick.bind(this);
   }
-
-  // handleThreadOpenClick(event) {
-  //   event.preventDefault();
-  //   const sidebarProps = { messageSlug: this.props.message.slug };
-  //   this.props.openRightSidebar(sidebarProps);
-  // }
 
   handleEditClick(event) {
     event.preventDefault();
@@ -26,13 +20,20 @@ class MessageHoverMenu extends React.Component {
     this.props.deleteMessageRequest(this.props.message.slug);
   }
 
+  handleLinkClick() {
+    // this.props.openRightSidebar({ messageSlug: this.props.message.slug });
+  }
+
   render() {
     const { message, isUserAuthor, match } = this.props;
     return (
       <div className="message-hover-menu">
         <ul className="message-hover-menu__buttons">
           {!message.parentMessageId && (
-            <Link to={`${match.url}/thread/${message.slug}`}>
+            <Link
+              to={`${match.url}/thread/${message.slug}`}
+              onClick={this.handleLinkClick}
+            >
               Start thread
             </Link>
           )}

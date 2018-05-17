@@ -28,8 +28,8 @@ export const getMessages = ({ entities: { messages, channels }, ui }) => {
   );
 };
 
-export const getCurrentSidebarThread = ({ entities, ui: { rightSidebar } }) => (
-  rightSidebar && entities.messages[rightSidebar.sidebarProps.messageSlug]
+export const getCurrentMessageBySlug = ({ entities }, messageSlug) => (
+  entities.messages[messageSlug] || null
 );
 
 export const getMessageSlug = ({ ui: { rightSidebar } }) => (
@@ -39,11 +39,17 @@ export const getMessageSlug = ({ ui: { rightSidebar } }) => (
 );
 
 export const getThread = ({ entities: { messages }, ui: { rightSidebar } }) => {
-  if (!rightSidebar || rightSidebar.sidebarType !== 'Thread') return [];
-  const currentMessage = messages[rightSidebar.sidebarProps.messageSlug];
-  if (!currentMessage) return [];
+  if (!rightSidebar || rightSidebar.sidebarType !== 'Thread') {
+    return [];
+  }
+
+  const messageSlug = rightSidebar.sidebarProps.messageSlug;
   
-  return values(messages).filter(message =>
-    message.parentMessageId === currentMessage.slug
-  );
+  if (!messages[messageSlug] || !messageSlug) {
+    return [];
+  }
+  
+  return values(messages).filter(message => {
+    return message.parentMessageId === messages[messageSlug].id;
+  });
 };

@@ -8,13 +8,24 @@ class ChannelRightSidebar extends React.Component {
     this.handleCloseSidebar = this.handleCloseSidebar.bind(this);
   }
 
+  componentDidMount() {
+    const { openRightSidebar, match: { params } } = this.props;
+    
+    if (params.messageSlug) {
+      openRightSidebar({ messageSlug: params.messageSlug });
+    }
+  }
+
   handleCloseSidebar() {
     this.props.closeRightSidebar();
   }
 
   render() {
     const {
-      isRightSidebarOpen, rightSidebar, message, threadEntries
+      isRightSidebarOpen,
+      rightSidebar,
+      message,
+      threadEntries
     } = this.props;
 
     if (!isRightSidebarOpen) {
@@ -27,7 +38,10 @@ class ChannelRightSidebar extends React.Component {
           <span className="h4">{rightSidebar.sidebarProps.title}</span>
           <button onClick={this.handleCloseSidebar}>&#10006;</button>
         </header>
-        <MessageThread message={message} threadEntries={threadEntries} />
+        
+        {message && (
+          <MessageThread message={message} threadEntries={threadEntries} />
+        )}
       </aside>
     );
   }
