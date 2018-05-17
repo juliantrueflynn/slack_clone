@@ -20,18 +20,16 @@ class MessageHoverMenu extends React.Component {
     this.props.deleteMessageRequest(this.props.message.slug);
   }
 
-  handleLinkClick() {
-    // this.props.openRightSidebar({ messageSlug: this.props.message.slug });
-  }
-
   render() {
-    const { message, isUserAuthor, match } = this.props;
+    const { message, isUserAuthor, match: { params } } = this.props;
+    const baseUrl = `/${params.workspaceSlug}/${params.channelSlug}`;
+    
     return (
       <div className="message-hover-menu">
         <ul className="message-hover-menu__buttons">
           {!message.parentMessageId && (
             <Link
-              to={`${match.url}/thread/${message.slug}`}
+              to={`${baseUrl}/thread/${message.slug}`}
               onClick={this.handleLinkClick}
             >
               Start thread
