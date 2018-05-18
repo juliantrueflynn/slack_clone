@@ -46,7 +46,7 @@ class ChannelPage extends React.Component {
 
   render() {
     const { routes, messages, match, location } = this.props;
-    
+
     return (
       <div>
         <div className="page page__channel">

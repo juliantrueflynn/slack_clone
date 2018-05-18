@@ -3,12 +3,16 @@ import WorkspacePage from './WorkspacePage';
 import { workspaceRequest } from '../../actions/workspaceActions';
 import { navigate } from '../../actions/navigateActions';
 
+const mapStateToProps = state => ({
+  workspaceSlug: state.ui.displayWorkspaceSlug,
+  defaultChannel: state.entities.channels && Object.values(state.entities.channels)[0]
+});
+
 const mapDispatchToProps = dispatch => ({
-  workspaceRequest: workspaceSlug => dispatch(workspaceRequest(workspaceSlug)),
-  navigate: path => dispatch(navigate(path)),
+  workspaceRequest: workspaceSlug => dispatch(workspaceRequest(workspaceSlug))
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(WorkspacePage);

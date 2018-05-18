@@ -1,23 +1,27 @@
 import React from 'react';
 import ChannelPageContainer from '../Channel/ChannelPageContainer';
+import { Redirect } from 'react-router-dom';
 import { ProtectedRoute, RouteWithSubRoutes } from '../../util/routeUtil';
 import NavBarContainer from '../NavBarContainer';
 
 class WorkspacePage extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = { isUserOnPage: false };
   }
 
   componentDidMount() {
-    const { workspaceRequest, match: { params }} = this.props;
-    workspaceRequest(params.workspaceSlug);
+    const { location, workspaceRequest, match } = this.props;
+    if (location.pathname === match.url) {
+      workspaceRequest(match.params.workspaceSlug);
+    }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const slug = this.props.match.params.workspaceSlug;
-    const nextSlug = nextProps.match.params.workspaceSlug;
-    if (slug !== nextSlug) {
-      this.props.workspaceRequest(nextSlug);
+  componentDidUpdate(prevProps) {
+    const { location, workspaceRequest, match } = this.props;
+    if (location.pathname === match.url && prevProps.match.url !== match.url) {
+      workspaceRequest(match.params.workspaceSlug);
     }
   }
 
@@ -26,7 +30,7 @@ class WorkspacePage extends React.Component {
       <div>
         <NavBarContainer />
         {this.props.routes.map((route, i) => (
-          <RouteWithSubRoutes key={i} {...route} />
+          <RouteWithSubRoutes key={`workspaceRoute${i}`} {...route} />
         ))}
       </div>
     );
