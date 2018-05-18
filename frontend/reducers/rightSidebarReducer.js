@@ -17,21 +17,10 @@ const rightSidebarReducer = (state = _defaultSidebar, action) => {
 
       return nextState;
     }
-    case CHANNEL_REQUEST :
-    case CHANNEL_RECEIVE : {
-      const { messageSlug } = action;
-      if (messageSlug) {
-        const sidebarProps = { messageSlug };
-        nextState = { sidebarType: 'Thread', sidebarProps };
-        return nextState;
-      }
-
-      return _defaultSidebar;
-    }
     case CLOSE_RIGHT_SIDEBAR :
       return null;
     default :
-      return _defaultSidebar;
+      return state;
   }
 };
 
