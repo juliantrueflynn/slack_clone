@@ -7,7 +7,6 @@ class MessageHoverMenu extends React.Component {
 
     this.handleEditClick = this.handleEditClick.bind(this);
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
-    this.handleLinkClick = this.handleLinkClick.bind(this);
   }
 
   handleEditClick(event) {
@@ -28,10 +27,7 @@ class MessageHoverMenu extends React.Component {
       <div className="message-hover-menu">
         <ul className="message-hover-menu__buttons">
           {!message.parentMessageId && (
-            <Link
-              to={`${baseUrl}/thread/${message.slug}`}
-              onClick={this.handleLinkClick}
-            >
+            <Link to={`${baseUrl}/thread/${message.slug}`}>
               Start thread
             </Link>
           )}
