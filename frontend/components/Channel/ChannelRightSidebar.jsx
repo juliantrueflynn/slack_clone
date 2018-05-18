@@ -16,6 +16,12 @@ class ChannelRightSidebar extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.messageSlug !== nextProps.messageSlug) {
+      this.props.openRightSidebar({ messageSlug: nextProps.messageSlug });
+    }
+  }
+
   handleCloseSidebar() {
     this.props.closeRightSidebar();
   }
@@ -25,6 +31,7 @@ class ChannelRightSidebar extends React.Component {
       isRightSidebarOpen,
       rightSidebar,
       message,
+      messageSlug,
       threadEntries
     } = this.props;
 

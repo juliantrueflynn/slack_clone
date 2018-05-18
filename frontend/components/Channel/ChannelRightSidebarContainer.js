@@ -10,6 +10,7 @@ import { getThread } from '../../reducers/selectors';
 const mapStateToProps = (state, { match }) => ({
   rightSidebar: state.ui.rightSidebar,
   isRightSidebarOpen: Boolean(state.ui.rightSidebar),
+  messageSlug: match.params.messageSlug,
   threadEntries: getThread(state),
   message: state.entities.messages[match.params.messageSlug] || null
 });
