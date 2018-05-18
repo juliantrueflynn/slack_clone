@@ -9,34 +9,28 @@ import WorkspaceFormContainer from
 import ChannelPageContainer from '../components/Channel/ChannelPageContainer';
 import PageMessageContainer from '../components/Views/PageMessageContainer';
 import MessagePageContainer from '../components/Message/MessagePageContainer';
-import NavBarContainer from '../components/NavBarContainer';
-
-const Home = () => (
-  <div>
-    <NavBarContainer />
-    <h1>Slack Clone</h1>
-    I'm a temporary homepage!<br/>
-    <Link to="/create-workspace">Create Workspace</Link>
-  </div>
-);
+import PageHome from '../components/Views/PageHome';
 
 const routes = [
   {
-    exact: true,
     path: '/',
-    component: Home
+    component: PageHome,
+    exact: true
   },
   {
     path: '/signin',
-    component: SessionFormContainer
+    component: SessionFormContainer,
+    exact: true
   },
   {
     path: '/signup',
-    component: SessionFormContainer
+    component: SessionFormContainer,
+    exact: true
   },
   {
     path: '/create-workspace',
-    component: WorkspaceFormContainer
+    component: WorkspaceFormContainer,
+    exact: true
   },
   {
     path: '/:workspaceSlug',
@@ -86,39 +80,8 @@ export const ProtectedRoute = withRouter(
   connect(mapStateToProps, null)(Protected)
 );
 
-export const PageRoutes = () => {console.log(routes);return (
+export const PageRoutes = () => (
   <Switch>
     {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
-    {/* <Route exact path="/" render={() =>
-      <div className="content-container content-container__boxed-width">
-        <h1>Slack Clone with Rails & React</h1>
-        <p>More will go here later, stay-tuned!</p>
-        <Link to="/create-workspace">Create New Workspace</Link>
-      </div>
-    } />
-    <AuthRoute
-      path="/signin"
-      component={SessionFormContainer}
-    />
-    <AuthRoute
-      path="/signup"
-      component={SessionFormContainer}
-    />
-    <Route
-      path="/create-workspace"
-      component={WorkspaceFormContainer}
-    />
-    <Route
-      path="/:workspaceSlug/:channelSlug/thread/:messageSlug"
-      component={PageMessageContainer}
-    />
-    <ProtectedRoute
-      path="/:workspaceSlug/:channelSlug"
-      component={ChannelPageContainer}
-    />
-    <ProtectedRoute
-      path="/:workspaceSlug"
-      component={WorkspacePageContainer}
-    /> */}
   </Switch>
-)};
+);
