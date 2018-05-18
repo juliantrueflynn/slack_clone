@@ -7,9 +7,10 @@ import WorkspacePageContainer
 import WorkspaceFormContainer from
   '../components/Workspace/WorkspaceFormContainer';
 import ChannelPageContainer from '../components/Channel/ChannelPageContainer';
-import PageMessageContainer from '../components/Views/PageMessageContainer';
 import MessagePageContainer from '../components/Message/MessagePageContainer';
 import PageHome from '../components/Views/PageHome';
+import ChannelRightSidebarContainer
+  from '../components/Channel/ChannelRightSidebarContainer';
 
 const routes = [
   {
@@ -42,7 +43,7 @@ const routes = [
         routes: [
           {
             path: '/:workspaceSlug/:channelSlug/thread/:messageSlug',
-            component: ChannelPageContainer
+            component: ChannelRightSidebarContainer
           }
         ]
       }

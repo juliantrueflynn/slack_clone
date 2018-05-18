@@ -1,5 +1,7 @@
 import React from 'react';
 import MessageThread from '../Message/MessageThread';
+import ChannelPageContainer from './ChannelPageContainer';
+import ChannelPage from './ChannelPage';
 
 class ChannelRightSidebar extends React.Component {
   constructor(props) {
@@ -47,7 +49,7 @@ class ChannelRightSidebar extends React.Component {
           <span className="h4">{rightSidebar.sidebarProps.title}</span>
           <button onClick={this.handleCloseSidebar}>&#10006;</button>
         </header>
-        
+
         {message && (
           <MessageThread message={message} threadEntries={threadEntries} />
         )}

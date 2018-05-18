@@ -13,14 +13,28 @@ class ChannelPage extends React.Component {
   }
 
   componentDidMount() {
-    const { messageSlug, channelSlug, workspaceSlug } = this.props.match.params;
-    this.props.channelRequest(channelSlug, workspaceSlug, messageSlug);
+    const { channelRequest, match } = this.props;
+    
+    if (!match) {
+      return false;
+    }
+    
+    channelRequest(
+      match.params.channelSlug,
+      match.params.workspaceSlug,
+      match.params.messageSlug
+    );
   }
 
   componentWillReceiveProps(nextProps) {
+    if (!this.props.match) {
+      return false;
+    }
+  
     const { messageSlug, channelSlug, workspaceSlug } = this.props.match.params;
     const nextChannelSlug = nextProps.match.params.channelSlug;
     const nextMessageSlug = nextProps.match.params.messageSlug;
+  
     if (channelSlug !== nextChannelSlug) {
       this.props.channelRequest(
         nextChannelSlug,
@@ -36,14 +50,18 @@ class ChannelPage extends React.Component {
     return (
       <div>
         <div className="page page__channel">
-          <h1>Channel #{match.params.channelSlug}</h1>
+          <h1>Channel</h1>
           <div className="page__channel-content">
             <ChannelSidebar />
             <div className="messages-pane">
               <ChannelMessages messages={messages} />
               <MessageFormContainer />
             </div>
-            <ChannelRightSidebarContainer />
+
+            {this.props.routes && this.props.routes.map((route, i) => (
+              <RouteWithSubRoutes key={i} {...route} />
+            ))}
+
           </div>
           <ChannelFormContainer />
         </div>
