@@ -17,6 +17,8 @@ const mapDispatchToProps = dispatch => ({
   
     switch (received.event) {
       case "CREATE_MESSAGE" :
+        camelized.message.channelSlug = camelized.channelSlug;
+        
         return dispatch(createMessageReceive(
           camelized.message,
           camelized.parentMessageSlug
