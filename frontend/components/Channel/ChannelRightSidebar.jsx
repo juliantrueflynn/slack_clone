@@ -23,7 +23,9 @@ class ChannelRightSidebar extends React.Component {
   }
 
   handleCloseSidebar() {
+    const { match: { params } } = this.props;
     this.props.closeRightSidebar();
+    this.props.navigate(`/${params.workspaceSlug}/${params.channelSlug}`);
   }
 
   render() {

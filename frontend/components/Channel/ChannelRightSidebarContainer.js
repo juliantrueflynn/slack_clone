@@ -6,6 +6,7 @@ import {
   openRightSidebar
 } from '../../actions/rightSidebarActions';
 import { getThread } from '../../reducers/selectors';
+import { navigate } from '../../actions/navigateActions';
 
 const mapStateToProps = (state, { match }) => ({
   rightSidebar: state.ui.rightSidebar,
@@ -21,6 +22,7 @@ const mapDispatchToProps = dispatch => ({
     return dispatch(openRightSidebar('Thread', defaults));
   },
   closeRightSidebar: () => dispatch(closeRightSidebar()),
+  navigate: path => dispatch(navigate(path))
 });
 
 export default withRouter(
