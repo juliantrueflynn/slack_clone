@@ -8,8 +8,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  channelRequest: (channelSlug, workspaceSlug) => dispatch(
-    channelRequest(channelSlug, workspaceSlug)
+  channelRequest: (channelSlug, workspaceSlug, messageSlug) => dispatch(
+    channelRequest(channelSlug, workspaceSlug, messageSlug)
   )
 });
 

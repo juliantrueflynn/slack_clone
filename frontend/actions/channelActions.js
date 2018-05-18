@@ -32,15 +32,17 @@ export const channelsFailure = errors => ({
   errors
 });
 
-export const channelRequest = (channelSlug, workspaceSlug) => ({
+export const channelRequest = (channelSlug, workspaceSlug, messageSlug) => ({
   type: CHANNEL_REQUEST,
   channelSlug,
-  workspaceSlug
+  workspaceSlug,
+  messageSlug
 });
 
-export const channelReceive = (channel, messageSlug) => ({
+export const channelReceive = (channel, workspaceSlug, messageSlug) => ({
   type: CHANNEL_RECEIVE,
   channel,
+  workspaceSlug,
   messageSlug
 });
 

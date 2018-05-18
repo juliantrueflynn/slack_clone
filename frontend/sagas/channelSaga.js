@@ -51,9 +51,10 @@ function* loadFirstDefaultChannel({ channels }) {
 function* fetchChannel() {
   try {
     const channelSlug = yield select(getPageChannelSlug);
+    const workspaceSlug = yield select(getPageWorkspaceSlug);
     const channel = yield call(api.fetchChannel, channelSlug);
     const messageSlug = yield select(getMessageSlug);
-    yield put(actions.channelReceive(channel, messageSlug));
+    yield put(actions.channelReceive(channel, workspaceSlug, messageSlug));
   } catch (error) {
     yield put(actions.channelFailure(error));
   }

@@ -14,24 +14,27 @@ class ChannelPage extends React.Component {
 
   componentDidMount() {
     const { messageSlug, channelSlug, workspaceSlug } = this.props.match.params;
-    this.props.channelRequest(channelSlug, workspaceSlug);
+    this.props.channelRequest(channelSlug, workspaceSlug, messageSlug);
   }
 
   componentWillReceiveProps(nextProps) {
     const { messageSlug, channelSlug, workspaceSlug } = this.props.match.params;
     const nextChannelSlug = nextProps.match.params.channelSlug;
+    const nextMessageSlug = nextProps.match.params.messageSlug;
     if (channelSlug !== nextChannelSlug) {
-      this.props.channelRequest(nextChannelSlug, workspaceSlug);
+      this.props.channelRequest(
+        nextChannelSlug,
+        workspaceSlug,
+        nextMessageSlug || null
+      );
     }
   }
 
   render() {
     const { routes, messages, match, location } = this.props;
-
+    
     return (
       <div>
-        {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
-
         <div className="page page__channel">
           <h1>Channel #{match.params.channelSlug}</h1>
           <div className="page__channel-content">
