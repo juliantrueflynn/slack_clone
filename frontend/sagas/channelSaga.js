@@ -55,6 +55,11 @@ function* fetchChannel() {
     const channel = yield call(api.fetchChannel, channelSlug);
     const messageSlug = yield select(getMessageSlug);
     yield put(actions.channelReceive(channel, workspaceSlug, messageSlug));
+    
+    if (messageSlug) {
+      const baseUrl = `/${workspaceSlug}/${channelSlug}`;
+      yield put(navigate(`${baseUrl}/thread/${messageSlug}`));
+    }
   } catch (error) {
     yield put(actions.channelFailure(error));
   }
