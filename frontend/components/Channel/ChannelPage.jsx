@@ -15,10 +15,6 @@ class ChannelPage extends React.Component {
   componentDidMount() {
     const { channelRequest, match } = this.props;
     
-    if (!match) {
-      return false;
-    }
-    
     channelRequest(
       match.params.channelSlug,
       match.params.workspaceSlug,
@@ -26,45 +22,35 @@ class ChannelPage extends React.Component {
     );
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.match) {
-      return false;
-    }
+  componentDidUpdate(prevProps, prevState) {
+    const { channelSlug, messageSlug } = this.props;
   
-    const { messageSlug, channelSlug, workspaceSlug } = this.props.match.params;
-    const nextChannelSlug = nextProps.match.params.channelSlug;
-    const nextMessageSlug = nextProps.match.params.messageSlug;
-  
-    if (channelSlug !== nextChannelSlug) {
+    if (channelSlug !== prevProps.channelSlug) {
       this.props.channelRequest(
-        nextChannelSlug,
-        workspaceSlug,
-        nextMessageSlug || null
+        channelSlug,
+        this.props.workspaceSlug,
+        messageSlug || null
       );
     }
   }
 
   render() {
-    const { routes, messages, match, location } = this.props;
-
     return (
-      <div>
-        <div className="page page__channel">
-          <h1>Channel</h1>
-          <div className="page__channel-content">
-            <ChannelSidebar />
-            <div className="messages-pane">
-              <ChannelMessages messages={messages} />
-              <MessageFormContainer />
-            </div>
-
-            {this.props.routes && this.props.routes.map((route, i) => (
-              <RouteWithSubRoutes key={i} {...route} />
-            ))}
-
+      <div className="page page__channel">
+        <h1>Channel {this.props.channelSlug}</h1>
+        <div className="page__channel-content">
+          <ChannelSidebar />
+          <div className="messages-pane">
+            <ChannelMessages messages={this.props.messages} />
+            <MessageFormContainer />
           </div>
-          <ChannelFormContainer />
+
+          {this.props.routes && this.props.routes.map((route, i) => (
+            <RouteWithSubRoutes key={`channelRoute${i}`} {...route} />
+          ))}
+
         </div>
+        <ChannelFormContainer />
       </div>
     );
   }

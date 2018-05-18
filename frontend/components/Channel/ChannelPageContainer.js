@@ -3,8 +3,12 @@ import ChannelPage from './ChannelPage';
 import { channelRequest } from '../../actions/channelActions';
 import { getMessages } from '../../reducers/selectors';
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, { match }) => ({
   messages: getMessages(state),
+  workspaceSlug: match.params.workspaceSlug,
+  channelSlug: match.params.channelSlug,
+  messageSlug: match.params.messageSlug,
+  isRightSidebarOpen: Boolean(state.ui.rightSidebar)
 });
 
 const mapDispatchToProps = dispatch => ({

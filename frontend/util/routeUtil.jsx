@@ -51,7 +51,7 @@ const routes = [
   }
 ];
 
-export const RouteWithSubRoutes = route => (
+export const RouteWithSubRoutes = (route, exact = false) => (
   <Route
     path={route.path}
     render={props => (
@@ -83,6 +83,8 @@ export const ProtectedRoute = withRouter(
 
 export const PageRoutes = () => (
   <Switch>
-    {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
+    {routes.map((route, i) => (
+      <RouteWithSubRoutes key={`pageRoute${i}`} {...route} />
+    ))}
   </Switch>
 );

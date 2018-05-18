@@ -1,0 +1,7 @@
+.nav-item__link {
+  color: inherit;
+}
+
+.nav-item__link--active {
+  pointer-events: none;
+}

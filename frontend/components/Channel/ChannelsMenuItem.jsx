@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import './ChannelsMenuItem.css';
 
 class ChannelsMenuItem extends React.Component {
   constructor(props) {
@@ -7,12 +8,17 @@ class ChannelsMenuItem extends React.Component {
   }
 
   render() {
-    const { channel: { id, title, slug }, workspaceSlug } = this.props;
+    const { channel, workspaceSlug } = this.props;
+    const channelUrl = `/${workspaceSlug}/${channel.slug}`;
 
     return (
-      <li className="menu-item menu-item__channel">
-        <NavLink exact to={`/${workspaceSlug}/${slug}`}>
-          ID: #{id} - Title: {title}
+      <li className="nav-item nav-item__channel">
+        <NavLink
+          className="nav-item__link"
+          activeClassName="nav-item__link--active"
+          to={channelUrl}
+        >
+          ID: #{channel.id} - Title: {channel.title}
         </NavLink>
       </li>
     );

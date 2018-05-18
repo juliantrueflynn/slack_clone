@@ -1,4 +1,5 @@
 import React from 'react';
+import { matchPath } from 'react-router-dom';
 import MessageThread from '../Message/MessageThread';
 import ChannelPageContainer from './ChannelPageContainer';
 import ChannelPage from './ChannelPage';
@@ -11,16 +12,16 @@ class ChannelRightSidebar extends React.Component {
   }
 
   componentDidMount() {
-    const { openRightSidebar, match: { params } } = this.props;
+    const { openRightSidebar, messageSlug } = this.props;
     
-    if (params.messageSlug) {
-      openRightSidebar({ messageSlug: params.messageSlug });
+    if (messageSlug) {
+      openRightSidebar({ messageSlug });
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.messageSlug !== nextProps.messageSlug) {
-      this.props.openRightSidebar({ messageSlug: nextProps.messageSlug });
+  componentDidUpdate(prevProps) {
+    if (this.props.messageSlug !== prevProps.messageSlug) {
+      this.props.openRightSidebar({ messageSlug: prevProps.messageSlug });
     }
   }
 
