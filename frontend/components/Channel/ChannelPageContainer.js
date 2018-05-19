@@ -7,8 +7,7 @@ const mapStateToProps = (state, { match }) => ({
   messages: getMessages(state),
   workspaceSlug: match.params.workspaceSlug,
   channelSlug: match.params.channelSlug,
-  messageSlug: match.params.messageSlug,
-  isRightSidebarOpen: Boolean(state.ui.rightSidebar)
+  messageSlug: match.params.messageSlug
 });
 
 const mapDispatchToProps = dispatch => ({

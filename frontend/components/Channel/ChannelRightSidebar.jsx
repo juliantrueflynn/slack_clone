@@ -1,5 +1,4 @@
 import React from 'react';
-import { matchPath } from 'react-router-dom';
 import MessageThread from '../Message/MessageThread';
 import ChannelPageContainer from './ChannelPageContainer';
 import ChannelPage from './ChannelPage';

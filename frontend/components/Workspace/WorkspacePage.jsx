@@ -1,14 +1,11 @@
 import React from 'react';
 import ChannelPageContainer from '../Channel/ChannelPageContainer';
-import { Redirect } from 'react-router-dom';
-import { ProtectedRoute, RouteWithSubRoutes } from '../../util/routeUtil';
+import { RouteWithSubRoutes } from '../../util/routeUtil';
 import NavBarContainer from '../NavBarContainer';
 
 class WorkspacePage extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = { isUserOnPage: false };
   }
 
   componentDidMount() {

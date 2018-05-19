@@ -7,7 +7,6 @@ import WorkspacePageContainer
 import WorkspaceFormContainer from
   '../components/Workspace/WorkspaceFormContainer';
 import ChannelPageContainer from '../components/Channel/ChannelPageContainer';
-import MessagePageContainer from '../components/Message/MessagePageContainer';
 import PageHome from '../components/Views/PageHome';
 import ChannelRightSidebarContainer
   from '../components/Channel/ChannelRightSidebarContainer';
@@ -51,7 +50,7 @@ const routes = [
   }
 ];
 
-export const RouteWithSubRoutes = (route, exact = false) => (
+export const RouteWithSubRoutes = route => (
   <Route
     path={route.path}
     render={props => (
