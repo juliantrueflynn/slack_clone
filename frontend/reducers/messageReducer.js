@@ -1,3 +1,4 @@
+import merge from 'lodash.merge';
 import {
   CREATE_MESSAGE_RECEIVE,
   UPDATE_MESSAGE_RECEIVE,
@@ -13,17 +14,17 @@ const messageReducer = (state = {}, action) => {
   switch (action.type) {
     case CHANNEL_RECEIVE : {
       nextState = Object.assign({}, state);
-      const { channel, messageSlug } = action;
+      const { channel: { messages }, messageSlug } = action;
       
-      channel.messages.map(message => {
+      messages.map(message => {
         nextState[message.slug] = message;
         nextState[message.slug].thread = nextState[message.slug].thread || [];
 
         if (message.parentMessageSlug) {
           const { parentMessageSlug, parentMessageId, slug } = message;
           nextState[slug].thread = null;
-          if (parentMessageId === nextState[parentMessageSlug].id) {
-            nextState[parentMessageSlug] = Object.assign(
+          if (nextState[parentMessageSlug] && parentMessageId === nextState[parentMessageSlug].id) {
+            nextState[parentMessageSlug].thread = Object.assign(
               [ slug ],
               nextState[parentMessageSlug].thread
             );
@@ -39,6 +40,7 @@ const messageReducer = (state = {}, action) => {
           state[messageSlug],
           nextState[messageSlug]
         );
+        
         Object.values(state).map(message => {
           if (nextState[messageSlug].thread.includes(message.slug)) {
             nextState[message.slug] = message;
@@ -50,16 +52,12 @@ const messageReducer = (state = {}, action) => {
     }
     case CREATE_MESSAGE_RECEIVE : {
       const { message, parentMessageSlug } = action;
-      nextState = Object.assign({}, state);
-      nextState[message.slug] = message;
-
+      nextState = { [message.slug]: message };
       if (parentMessageSlug) {
-        nextState[parentMessageSlug].thread.push(message.slug);
-      } else {
-        nextState[message.slug].thread = [];
+        nextState[parentMessageSlug] = { thread: [ message.slug ] };
       }
       
-      return nextState;
+      return merge({}, state, nextState);
     }
     case UPDATE_MESSAGE_RECEIVE :
       nextState = { [action.message.slug]: action.message };
@@ -73,8 +71,8 @@ const messageReducer = (state = {}, action) => {
       
       if (sidebarType !== 'Thread') {
         nextState = Object.assign({}, state);
-        Object.values(state).map(({ slug, parentMessageId }) => {
-          if (parentMessageId === sidebarProps.messageSlug) {
+        Object.values(state).map(({ slug, parentMessageSlug }) => {
+          if (parentMessageSlug === sidebarProps.messageSlug) {
             nextState[sidebarProps.messageSlug].thread.push(slug);
           }
         });

@@ -16,7 +16,7 @@ const MessageThread = ({ message, threadEntries }) => {
         </div>
       </div>
       <div className="thread-entries">
-        {threadEntries.map(entry => (
+        {threadEntries && threadEntries.map(entry => (
           <MessageContainer message={entry} key={entry.slug} />
         ))}
       </div>
