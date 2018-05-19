@@ -26,7 +26,7 @@ const mapDispatchToProps = dispatch => ({
       case "EDIT_MESSAGE" :
         return dispatch(updateMessageReceive(camelized.message));
       case "DELETE_MESSAGE" :
-        return dispatch(deleteMessageReceive(camelized.slug));
+        return dispatch(deleteMessageReceive(camelized.message.slug));
     }
   }
 });
