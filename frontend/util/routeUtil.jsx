@@ -20,29 +20,35 @@ const routes = [
   {
     path: '/signin',
     component: SessionFormContainer,
-    exact: true
+    exact: true,
+    isAuth: true
   },
   {
     path: '/signup',
     component: SessionFormContainer,
-    exact: true
+    exact: true,
+    isAuth: true
   },
   {
     path: '/create-workspace',
     component: WorkspaceFormContainer,
-    exact: true
+    exact: true,
+    isProtected: true
   },
   {
     path: '/:workspaceSlug',
     component: WorkspacePageContainer,
+    isProtected: true,
     routes: [
       {
         path: '/:workspaceSlug/:channelSlug',
         component: ChannelPageContainer,
+        isProtected: true,      
         routes: [
           {
             path: '/:workspaceSlug/:channelSlug/thread/:messageSlug',
-            component: ChannelRightSidebarContainer
+            component: ChannelRightSidebarContainer,
+            isProtected: true           
           }
         ]
       }
@@ -50,35 +56,24 @@ const routes = [
   }
 ];
 
-export const RouteWithSubRoutes = route => (
-  <Route
-    path={route.path}
-    render={props => (
-      <route.component {...props} routes={route.routes} />
-    )}
-  />
-);
+export const RouteSubRoutes = route => {
+  if (route.isAuth && !route.loggedIn) {
+    return (<Redirect to="/signin" />);
+  }
 
-const Auth = ({ component: Component, path, loggedIn }) => (
-  <Route path={path} render={props => (
-    loggedIn ? (<Redirect to="/" />) : (<Component {...props} />)
-  )}/>
-);
+  if (route.isProtected && !route.loggedIn) {
+    return (<Redirect to="/" />);
+  }
 
-const Protected = ({ component: Component, path, loggedIn }) => (
-  <Route path={path} render={props => (
-    loggedIn ? (<Component {...props} />) : (<Redirect to="/signin" />)
-  )} />
-);
-
-const mapStateToProps = state => ({
-  loggedIn: Boolean(state.session.currentUser)
-});
-
-export const AuthRoute = withRouter(connect(mapStateToProps, null)(Auth));
-export const ProtectedRoute = withRouter(
-  connect(mapStateToProps, null)(Protected)
-);
+  return (
+    <Route
+      path={route.path}
+      render={props => (
+        <route.component {...props} routes={route.routes} />
+      )}
+    />
+  );
+};
 
 export const PageRoutes = () => (
   <Switch>
@@ -86,4 +81,12 @@ export const PageRoutes = () => (
       <RouteWithSubRoutes key={`pageRoute${i}`} {...route} />
     ))}
   </Switch>
+);
+
+const mapStateToProps = state => ({
+  loggedIn: Boolean(state.session.currentUser)
+});
+
+export const RouteWithSubRoutes = withRouter(
+  connect(mapStateToProps, null)(RouteSubRoutes)
 );
