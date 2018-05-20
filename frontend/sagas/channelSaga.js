@@ -37,7 +37,7 @@ function* addNewChannels({ channels }) {
   let newChannels = [];
   for (let channel of channels) {
     const newChannel = yield call(api.createChannel, channel);
-    yield call(createChannelSub, newChannel.slug);
+    yield call(createChannelSub, { channelId: newChannel.slug });
     newChannels.push(newChannel);
   }
   yield put(actions.defaultChannelsReceive(newChannels));
