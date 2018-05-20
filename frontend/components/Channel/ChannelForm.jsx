@@ -48,7 +48,7 @@ class ChannelForm extends React.Component {
     event.preventDefault();
 
     const { workspaceSlug } = this.props;
-    const channel = { title: this.state.title, workspaceSlug };
+    const channel = { title: this.state.title, workspaceId: workspaceSlug };
     this.props.createChannelRequest(channel);
   }
 

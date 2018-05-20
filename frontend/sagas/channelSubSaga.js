@@ -7,7 +7,10 @@ import { navigate } from '../actions/navigateActions';
 function* addChannelSub({ channelSlug }) {
   try {
     const workspaceSlug = yield select(getPageWorkspaceSlug);
-    const newChannelSub = yield call(api.createChannelSub, { channelSlug });
+    const newChannelSub = yield call(
+      api.createChannelSub,
+      { channelId: channelSlug }
+    );
     yield put(actions.createChannelSubReceive(newChannelSub));
     yield put(navigate(`/${workspaceSlug}/${channelSlug}`));
   } catch (error) {

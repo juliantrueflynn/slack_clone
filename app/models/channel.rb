@@ -12,7 +12,9 @@ class Channel < ApplicationRecord
     class_name: 'User',
     foreign_key: :owner_id
   belongs_to :workspace
-  has_many :subs, class_name: 'ChannelSub'
+  has_many :subs,
+    class_name: 'ChannelSub',
+    foreign_key: :channel_id
   has_many :members,
     class_name: 'User',
     through: :subs,

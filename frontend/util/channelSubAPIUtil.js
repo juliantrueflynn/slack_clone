@@ -8,7 +8,7 @@ export const createChannelSub = channelSub => (
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-    body: JSON.stringify((decamelizeKeys({ channelSub }, { separator: '_' })))
+    body: JSON.stringify((decamelizeKeys(channelSub, { separator: '_' })))
   }).then(response =>
     response.json().then(json => ({ json, response }))
   ).then(({ json, response }) => {
