@@ -20,6 +20,9 @@ class User < ApplicationRecord
     through: :channel_subs,
     source: :channel
   has_many :messages, foreign_key: :author_id
+  has_many :favs,
+    class_name: 'MessageFav',
+    foreign_key: :user_id
 
   def self.find_by_email_and_password(email, password)
     user = User.find_by(email: email)

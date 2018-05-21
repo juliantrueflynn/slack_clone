@@ -14,6 +14,8 @@ class Workspace < ApplicationRecord
     class_name: 'WorkspaceSub',
     dependent: :destroy
   has_many :channels
+  has_many :favs,
+      through: :channels
 
   def is_user_subbed?(user)
     users_subbed = subs.where(workspace_subs: { user_id: user.id })
