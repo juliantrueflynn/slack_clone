@@ -21,8 +21,8 @@ export const createFavorite = messageId => (
   })
 );
 
-export const deleteFavorite = favoriteId => (
-  fetch(`api/message_favs/${favoriteId}`, {
+export const deleteFavorite = messageSlug => (
+  fetch(`api/message_favs/${messageSlug}`, {
     method: 'DELETE',
     credentials: 'include'
   }).then(response =>

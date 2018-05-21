@@ -12,11 +12,12 @@ class Api::MessageFavsController < ApplicationController
   end
 
   def destroy
-    @message_fav = MessageFav.find_by(id: params[:id])
-
+    message = Message.find_by(slug: params[:message_slug])
+    @message_fav = message.favs.find_by(user_id: current_user.id)
+    
     if @message_fav
       @message_fav.destroy
-      render json: @message_fav
+      render 'api/message_favs/show'
     else
       render json: ['not found']
     end

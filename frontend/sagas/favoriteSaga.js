@@ -2,18 +2,18 @@ import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/favoriteActions';
 import * as api from '../util/favoriteAPIUtil';
 
-function* fetchCreateFavorite({ messageId }) {
+function* fetchCreateFavorite({ messageSlug }) {
   try {
-    const newFavorite = yield call(api.createFavorite, { messageId });
+    const newFavorite = yield call(api.createFavorite, { messageSlug });
     yield put(actions.createFavoriteReceive(newFavorite));
   } catch (error) {
     yield put(actions.createFavoriteFailure(error));
   }
 }
 
-function* fetchDeleteFavorite({ favoriteId }) {
+function* fetchDeleteFavorite({ messageSlug }) {
   try {
-    const favorite = yield call(api.deleteFavorite, favoriteId);
+    const favorite = yield call(api.deleteFavorite, messageSlug);
     yield put(actions.deleteFavoriteReceive(favorite));
   } catch (error) {
     yield put(actions.deleteFavoriteFailure(error));
