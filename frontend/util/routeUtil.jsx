@@ -57,12 +57,12 @@ const routes = [
 ];
 
 export const RouteSubRoutes = route => {
-  if (route.isAuth && !route.loggedIn) {
-    return (<Redirect to="/signin" />);
+  if (route.isAuth && route.loggedIn) {
+    return (<Redirect to="/" />);
   }
 
   if (route.isProtected && !route.loggedIn) {
-    return (<Redirect to="/" />);
+    return (<Redirect to="/signin" />);
   }
 
   return (
