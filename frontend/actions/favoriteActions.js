@@ -20,9 +20,9 @@ export const createFavoriteFailure = errors => ({
   errors
 });
 
-export const deleteFavoriteRequest = messageId => ({
+export const deleteFavoriteRequest = favoriteId => ({
   type: DELETE_FAVORITE_REQUEST,
-  messageId
+  favoriteId
 });
 
 export const deleteFavoriteReceive = favorite => ({

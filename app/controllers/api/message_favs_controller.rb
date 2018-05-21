@@ -12,7 +12,7 @@ class Api::MessageFavsController < ApplicationController
   end
 
   def destroy
-    @message_fav = MessageFav.find_by(slug: params[:slug])
+    @message_fav = MessageFav.find_by(id: params[:id])
 
     if @message_fav
       @message_fav.destroy
