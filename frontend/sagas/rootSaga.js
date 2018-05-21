@@ -4,6 +4,7 @@ import { workspaceSaga } from './workspaceSaga';
 import { channelSaga } from './channelSaga';
 import { channelSubSaga } from './channelSubSaga';
 import { messageSaga } from './messageSaga';
+import { favoriteSaga } from './favoriteSaga';
 import { navigateSaga } from './navigateSaga';
 
 export default function* root() {
@@ -14,5 +15,6 @@ export default function* root() {
     fork(channelSaga),
     fork(channelSubSaga),
     fork(messageSaga),
+    fork(favoriteSaga),
   ]);
 }
