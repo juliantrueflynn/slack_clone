@@ -15,3 +15,10 @@ json.set! :messages do
     json.parent_message_slug message.is_child? ? message.parent_message.slug : nil
   end
 end
+
+json.set! :favorites do
+  json.array! @channel.favs do |fav|
+    json.(fav, :id, :message_id, :user_id)
+    json.message_slug fav.message.slug
+  end
+end
