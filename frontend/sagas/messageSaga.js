@@ -20,7 +20,7 @@ function* fetchEditMessage({ message }) {
 
 function* fetchDeleteMessage({ messageSlug }) {
   try {
-    yield call(api.deleteMessageRequest, messageSlug);
+    yield call(api.deleteMessage, messageSlug);
   } catch (error) {
     yield put(actions.deleteMessageFailure(error));
   }
