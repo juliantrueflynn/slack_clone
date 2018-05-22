@@ -20,7 +20,7 @@ class ChannelRightSidebar extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.messageSlug !== prevProps.messageSlug) {
-      this.props.openRightSidebar({ messageSlug: prevProps.messageSlug });
+      this.props.openRightSidebar({ messageSlug: this.props.messageSlug });
     }
   }
 

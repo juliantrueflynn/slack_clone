@@ -1,7 +1,6 @@
 import React from 'react';
 import ChannelFormContainer from './ChannelFormContainer';
 import ChannelSidebar from './ChannelSidebar';
-import ChannelRightSidebarContainer from './ChannelRightSidebarContainer';
 import MessageFormContainer from '../Message/MessageFormContainer';
 import ChannelMessages from './ChannelMessages';
 import { RouteWithSubRoutes } from '../../util/routeUtil';
@@ -13,43 +12,42 @@ class ChannelPage extends React.Component {
   }
 
   componentDidMount() {
-    const { channelRequest, match } = this.props;
-    
-    channelRequest(
-      match.params.channelSlug,
-      match.params.workspaceSlug,
-      match.params.messageSlug
-    );
+    const { workspaceSlug, channelSlug, messageSlug } = this.props;
+    this.props.channelRequest(channelSlug, workspaceSlug, messageSlug);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { channelSlug, messageSlug } = this.props;
+    const { workspaceSlug, channelSlug, messageSlug } = this.props;
   
     if (channelSlug !== prevProps.channelSlug) {
       this.props.channelRequest(
         channelSlug,
-        this.props.workspaceSlug,
+        workspaceSlug,
         messageSlug || null
       );
     }
   }
 
   render() {
+    const { routes, messages, channelSlug } = this.props;
+
     return (
       <div className="page page__channel">
-        <h1>Channel {this.props.channelSlug}</h1>
+        <h1>Channel: {channelSlug}</h1>
+        
         <div className="page__channel-content">
           <ChannelSidebar />
+          
           <div className="messages-pane">
-            <ChannelMessages messages={this.props.messages} />
+            <ChannelMessages messages={messages} />
             <MessageFormContainer />
           </div>
 
-          {this.props.routes && this.props.routes.map((route, i) => (
+          {routes && routes.map((route, i) => (
             <RouteWithSubRoutes key={`channelRoute${i}`} {...route} />
           ))}
-
         </div>
+        
         <ChannelFormContainer />
       </div>
     );
