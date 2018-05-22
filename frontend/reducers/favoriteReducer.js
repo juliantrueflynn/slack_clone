@@ -2,6 +2,7 @@ import {
   CREATE_FAVORITE_RECEIVE,
   DELETE_FAVORITE_RECEIVE
 } from '../actions/favoriteActions';
+import { CHANNEL_RECEIVE } from '../actions/channelActions';
 
 const favoriteReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -21,6 +22,21 @@ const favoriteReducer = (state = {}, action) => {
       
       return nextState;
     }
+    case CHANNEL_RECEIVE :
+      const { channel: { favorites }, messageSlug } = action;
+      nextState = {};
+
+      Object.values(state).map(fav => {
+        if (fav.messageSlug === messageSlug) {
+          nextState[fav.id] = fav;
+        }
+      });
+
+      favorites.map(fav => {
+        nextState[fav.id] = fav;
+      });
+
+      return nextState;
     default :
       return state;
   }

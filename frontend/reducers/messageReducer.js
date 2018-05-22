@@ -2,7 +2,8 @@ import merge from 'lodash.merge';
 import {
   CREATE_MESSAGE_RECEIVE,
   UPDATE_MESSAGE_RECEIVE,
-  DELETE_MESSAGE_RECEIVE
+  DELETE_MESSAGE_RECEIVE,
+  MESSAGE_RECEIVE
 } from '../actions/messageActions';
 import { CHANNEL_RECEIVE } from '../actions/channelActions';
 import { OPEN_RIGHT_SIDEBAR } from '../actions/rightSidebarActions';
@@ -20,34 +21,34 @@ const messageReducer = (state = {}, action) => {
         nextState[message.slug] = message;
         nextState[message.slug].thread = nextState[message.slug].thread || [];
 
-        if (message.parentMessageSlug) {
+        if (messageSlug) {
           const { parentMessageSlug, parentMessageId, slug } = message;
           nextState[slug].thread = null;
-          if (nextState[parentMessageSlug] && parentMessageId === nextState[parentMessageSlug].id) {
-            nextState[parentMessageSlug].thread = Object.assign(
+          
+          if (nextState[messageSlug] && parentMessageSlug === messageSlug) {
+            nextState[messageSlug].thread = Object.assign(
               [ slug ],
-              nextState[parentMessageSlug].thread
+              nextState[messageSlug].thread
             );
-            
-            return false;
           }
         }
       });
-
-      if (messageSlug) {
-        nextState[messageSlug] = Object.assign(
-          {},
-          state[messageSlug],
-          nextState[messageSlug]
-        );
-        
-        Object.values(state).map(message => {
-          if (nextState[messageSlug].thread.includes(message.slug)) {
-            nextState[message.slug] = message;
-          }
+  
+      return nextState;
+    }
+    case MESSAGE_RECEIVE : {
+      const { message: { message, thread, favorites } } = action;
+      nextState = Object.assign({}, state);
+      nextState[message.slug] = message;
+      nextState[message.slug].thread = [];
+      
+      if (thread) {
+        thread.map(entry => {
+          nextState[entry.slug] = entry;
+          nextState[message.slug].thread.push(entry.slug);
         });
       }
-  
+
       return nextState;
     }
     case CREATE_MESSAGE_RECEIVE : {
@@ -66,21 +67,6 @@ const messageReducer = (state = {}, action) => {
       nextState = Object.assign({}, state);
       delete nextState[action.messageSlug];
       return nextState;
-    case OPEN_RIGHT_SIDEBAR : {
-      const { sidebarProps, sidebarType } = action;
-      
-      if (sidebarType !== 'Thread') {
-        nextState = Object.assign({}, state);
-        Object.values(state).map(({ slug, parentMessageSlug }) => {
-          if (parentMessageSlug === sidebarProps.messageSlug) {
-            nextState[sidebarProps.messageSlug].thread.push(slug);
-          }
-        });
-        return nextState; 
-      }
-  
-      return state;
-    }
     default :
       return state;
   }

@@ -6,6 +6,7 @@ import { channelSubSaga } from './channelSubSaga';
 import { messageSaga } from './messageSaga';
 import { favoriteSaga } from './favoriteSaga';
 import { navigateSaga } from './navigateSaga';
+import { rightSidebarSaga } from './rightSidebarSaga';
 
 export default function* root() {
   yield all([
@@ -16,5 +17,6 @@ export default function* root() {
     fork(channelSubSaga),
     fork(messageSaga),
     fork(favoriteSaga),
+    fork(rightSidebarSaga)
   ]);
 }
