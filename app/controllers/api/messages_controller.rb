@@ -1,6 +1,9 @@
 class Api::MessagesController < ApplicationController
   before_action :set_message, only: [:show, :update, :destroy]
 
+  def show
+  end
+
   def create
     @message = Message.new(message_params)
     @message.author_id = current_user.id

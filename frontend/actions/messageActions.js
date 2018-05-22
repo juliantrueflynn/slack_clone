@@ -1,3 +1,6 @@
+export const MESSAGE_REQUEST = 'MESSAGE_REQUEST';
+export const MESSAGE_RECEIVE = 'MESSAGE_RECEIVE';
+export const MESSAGE_FAILURE = 'MESSAGE_FAILURE';
 export const CREATE_MESSAGE_REQUEST = 'CREATE_MESSAGE_REQUEST';
 export const CREATE_MESSAGE_RECEIVE = 'CREATE_MESSAGE_RECEIVE';
 export const CREATE_MESSAGE_FAILURE = 'CREATE_MESSAGE_FAILURE';
@@ -7,6 +10,21 @@ export const UPDATE_MESSAGE_FAILURE = 'UPDATE_MESSAGE_FAILURE';
 export const DELETE_MESSAGE_REQUEST = 'DELETE_MESSAGE_REQUEST';
 export const DELETE_MESSAGE_RECEIVE = 'DELETE_MESSAGE_RECEIVE';
 export const DELETE_MESSAGE_FAILURE = 'DELETE_MESSAGE_FAILURE';
+
+export const messageRequest = messageSlug => ({
+  type: MESSAGE_REQUEST,
+  messageSlug
+});
+
+export const messageReceive = message => ({
+  type: MESSAGE_RECEIVE,
+  message
+});
+
+export const messageFailure = errors => ({
+  type: MESSAGE_FAILURE,
+  errors
+});
 
 export const createMessageRequest = message => ({
   type: CREATE_MESSAGE_REQUEST,

@@ -11,8 +11,10 @@ const MessageThread = ({ message, threadEntries }) => {
     <div className="thread">
       <div className="thread__message">
         <div>
-          {message.authorId}<br/>
-          {message.body}
+          ID: {message.id}<br/>
+          Slug: {message.slug}<br/>
+          Author: {message.authorId}<br/>
+          Body: {message.body}<br/>
         </div>
       </div>
       <div className="thread-entries">
