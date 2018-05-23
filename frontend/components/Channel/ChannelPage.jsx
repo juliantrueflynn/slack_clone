@@ -3,12 +3,15 @@ import ChannelFormContainer from './ChannelFormContainer';
 import ChannelSidebar from './ChannelSidebar';
 import MessageFormContainer from '../Message/MessageFormContainer';
 import ChannelMessages from './ChannelMessages';
+import { Link } from 'react-router-dom';
 import { RouteWithSubRoutes } from '../../util/routeUtil';
 import './ChannelPage.css';
 
 class ChannelPage extends React.Component {
   constructor(props) {
     super(props);
+
+    this.handleFavsClick = this.handleFavsClick.bind(this);
   }
 
   componentDidMount() {
@@ -28,12 +31,24 @@ class ChannelPage extends React.Component {
     }
   }
 
+  handleFavsClick() {
+    this.props.openRightSidebar({});
+  }
+
   render() {
-    const { routes, messages, channelSlug } = this.props;
+    const { routes, messages, workspaceSlug, channelSlug } = this.props;
 
     return (
       <div className="page page__channel">
-        <h1>Channel: {channelSlug}</h1>
+        <header>
+          <h1>Channel: {channelSlug}</h1>
+          <Link
+            to={`/${workspaceSlug}/${channelSlug}/favorites`}
+            onClick={this.handleFavsClick}
+          >
+            Favorites
+          </Link>
+        </header>
         
         <div className="page__channel-content">
           <ChannelSidebar />

@@ -3,10 +3,17 @@ import * as actions from '../actions/rightSidebarActions';
 import { messageRequest, messageFailure } from '../actions/messageActions';
 import { fetchMessage } from '../util/messageAPIUtil';
 import * as api from '../util/favoriteAPIUtil';
+import { favoritesRequest } from '../actions/favoriteActions';
 
 function* fetchOpenRightSidebar({ sidebarType, sidebarProps }) {
   try {
-    yield put(messageRequest(sidebarProps.messageSlug));
+    if (sidebarType === 'Thread') {
+      yield put(messageRequest(sidebarProps.messageSlug));
+    }
+
+    if (sidebarType === 'Favorites') {
+      yield put(favoritesRequest());
+    }
   } catch (error) {
     yield put(messageFailure(error));
   }

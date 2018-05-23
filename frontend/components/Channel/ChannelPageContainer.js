@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import ChannelPage from './ChannelPage';
 import { channelRequest } from '../../actions/channelActions';
 import { getMessages } from '../../reducers/selectors';
+import { openRightSidebar } from '../../actions/rightSidebarActions';
 
 const mapStateToProps = (state, { match }) => ({
   messages: getMessages(state),
@@ -13,6 +14,9 @@ const mapStateToProps = (state, { match }) => ({
 const mapDispatchToProps = dispatch => ({
   channelRequest: (channelSlug, workspaceSlug, messageSlug) => dispatch(
     channelRequest(channelSlug, workspaceSlug, messageSlug)
+  ),
+  openRightSidebar: sidebarProps => dispatch(
+    openRightSidebar('Favorites', sidebarProps)
   )
 });
 

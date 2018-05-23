@@ -5,7 +5,7 @@ import {
   closeRightSidebar,
   openRightSidebar
 } from '../../actions/rightSidebarActions';
-import { getThread } from '../../reducers/selectors';
+import { getThread, getUserFavorites } from '../../reducers/selectors';
 import { navigate } from '../../actions/navigateActions';
 
 const mapStateToProps = (state, { match }) => ({
@@ -13,14 +13,14 @@ const mapStateToProps = (state, { match }) => ({
   isRightSidebarOpen: Boolean(state.ui.rightSidebar),
   messageSlug: match.params.messageSlug,
   threadEntries: getThread(state),
-  message: state.entities.messages[match.params.messageSlug] || null
+  message: state.entities.messages[match.params.messageSlug] || null,
+  favorites: getUserFavorites(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  openRightSidebar: sidebarProps => {
-    const defaults = Object.assign({ title: 'Thread' }, sidebarProps);
-    return dispatch(openRightSidebar('Thread', defaults));
-  },
+  openRightSidebar: (sidebarType, sidebarProps) => dispatch(
+    openRightSidebar(sidebarType, sidebarProps)
+  ),
   closeRightSidebar: () => dispatch(closeRightSidebar()),
   navigate: path => dispatch(navigate(path))
 });

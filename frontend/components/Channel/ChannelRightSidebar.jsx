@@ -14,13 +14,16 @@ class ChannelRightSidebar extends React.Component {
     const { openRightSidebar, messageSlug } = this.props;
     
     if (messageSlug) {
-      openRightSidebar({ messageSlug });
+      openRightSidebar('Thread', { messageSlug });
     }
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.messageSlug !== prevProps.messageSlug) {
-      this.props.openRightSidebar({ messageSlug: this.props.messageSlug });
+      this.props.openRightSidebar(
+        'Thread',
+        { messageSlug: this.props.messageSlug }
+      );
     }
   }
 
@@ -36,7 +39,8 @@ class ChannelRightSidebar extends React.Component {
       rightSidebar,
       message,
       messageSlug,
-      threadEntries
+      threadEntries,
+      favorites
     } = this.props;
 
     if (!isRightSidebarOpen) {
@@ -46,12 +50,23 @@ class ChannelRightSidebar extends React.Component {
     return (
       <aside className="channel-right-sidebar">
         <header className="channel-right-sidebar__header">
-          <span className="h4">{rightSidebar.sidebarProps.title}</span>
+          <h4>{rightSidebar.sidebarType}</h4>
           <button onClick={this.handleCloseSidebar}>&#10006;</button>
         </header>
 
-        {message && (
+        {message && rightSidebar.sidebarType === 'Thread' && (
           <MessageThread message={message} threadEntries={threadEntries} />
+        )}
+        {favorites && rightSidebar.sidebarType === 'Favorites' && (
+          <ul>
+            {favorites.map(fav => (
+              <li key={fav.id}>
+                id: {fav.id}<br/>
+                messageId: {fav.messageId}<br/>
+                userId: {fav.userId}
+              </li>
+            ))}
+          </ul>
         )}
       </aside>
     );
