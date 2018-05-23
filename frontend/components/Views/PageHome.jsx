@@ -1,5 +1,5 @@
 import React from 'react';
-import NavBarContainer from '../NavBarContainer';
+import NavBarContainer from '../Layout/NavBarContainer';
 import { Link } from 'react-router-dom';
 
 const PageHome = () => (

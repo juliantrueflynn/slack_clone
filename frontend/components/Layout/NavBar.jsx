@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import WorkspacesMenuContainer from './WorkspacesMenu/WorkspacesMenuContainer';
+import WorkspacesMenuContainer from '../WorkspacesMenu/WorkspacesMenuContainer';
 import './NavBar.css';
 
 class NavBar extends React.Component {
