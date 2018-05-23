@@ -1,6 +1,7 @@
 import {
+  FAVORITES_RECEIVE,
   CREATE_FAVORITE_RECEIVE,
-  DELETE_FAVORITE_RECEIVE
+  DELETE_FAVORITE_RECEIVE,
 } from '../actions/favoriteActions';
 import { CHANNEL_RECEIVE } from '../actions/channelActions';
 
@@ -9,6 +10,10 @@ const favoriteReducer = (state = {}, action) => {
 
   let nextState;
   switch (action.type) {
+    case FAVORITES_RECEIVE : {
+      const { favorites } = action;
+      return Object.assign({}, state, favorites);
+    }
     case CREATE_FAVORITE_RECEIVE : {
       const { favorite } = action;
       nextState = { [favorite.messageSlug]: favorite };
