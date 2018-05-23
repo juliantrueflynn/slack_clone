@@ -3,7 +3,6 @@ import NavBar from './NavBar';
 import { signOutRequest } from '../actions/sessionActions';
 
 const mapStateToProps = state => ({
-  currentUser: state.session.currentUser,
   loggedIn: Boolean(state.session.currentUser)
 });
 
