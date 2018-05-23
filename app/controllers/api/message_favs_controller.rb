@@ -1,4 +1,8 @@
 class Api::MessageFavsController < ApplicationController
+  def index
+    @message_favs = current_user.favs
+  end
+
   def create
     @message_fav = MessageFav.new(message_fav_params)
     @message_fav.user_id = current_user.id
