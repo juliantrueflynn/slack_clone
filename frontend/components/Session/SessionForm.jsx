@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import FormErrors from '../FormErrors';
+import FormErrors from '../Layout/FormErrors';
 
 class SessionForm extends React.Component {
   constructor(props) {

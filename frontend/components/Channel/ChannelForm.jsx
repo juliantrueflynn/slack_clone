@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-import FormErrors from '../FormErrors';
+import FormErrors from '../Layout/FormErrors';
 import './ChannelForm.css';
 
 class ChannelForm extends React.Component {

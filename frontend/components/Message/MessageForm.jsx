@@ -1,5 +1,5 @@
 import React from 'react';
-import FormErrors from '../FormErrors';
+import FormErrors from '../Layout/FormErrors';
  
 class MessageForm extends React.Component {
   constructor(props) {
