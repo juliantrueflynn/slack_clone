@@ -49,6 +49,11 @@ const routes = [
             path: '/:workspaceSlug/:channelSlug/thread/:messageSlug',
             component: ChannelRightSidebarContainer,
             isProtected: true           
+          },
+          {
+            path: '/:workspaceSlug/:channelSlug/favorites',
+            component: ChannelRightSidebarContainer,
+            isProtected: true
           }
         ]
       }
