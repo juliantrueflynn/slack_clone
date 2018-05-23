@@ -3,7 +3,7 @@ class Api::MessageFavsController < ApplicationController
     @message_fav = MessageFav.new(message_fav_params)
     @message_fav.user_id = current_user.id
     @message_fav.message_id = Message.find_by(slug: params[:message_id]).id
-
+    
     if @message_fav.save
       render 'api/message_favs/show'
     else

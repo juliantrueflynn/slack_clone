@@ -11,14 +11,14 @@ const favoriteReducer = (state = {}, action) => {
   switch (action.type) {
     case CREATE_FAVORITE_RECEIVE : {
       const { favorite } = action;
-      nextState = { [favorite.id]: favorite };
+      nextState = { [favorite.messageSlug]: favorite };
 
       return Object.assign({}, state, nextState);
     }
     case DELETE_FAVORITE_RECEIVE : {
       const { favorite } = action;
       nextState = Object.assign({}, state);
-      delete nextState[favorite.id];
+      delete nextState[favorite.messageSlug];
       
       return nextState;
     }
@@ -28,12 +28,12 @@ const favoriteReducer = (state = {}, action) => {
 
       Object.values(state).map(fav => {
         if (fav.messageSlug === messageSlug) {
-          nextState[fav.id] = fav;
+          nextState[fav.messageSlug] = fav;
         }
       });
 
       favorites.map(fav => {
-        nextState[fav.id] = fav;
+        nextState[fav.messageSlug] = fav;
       });
 
       return nextState;

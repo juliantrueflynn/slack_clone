@@ -43,10 +43,13 @@ class Message extends React.Component {
           {isMouseOver && !isEditing && (
             <MessageHoverMenu
               message={this.props.message}
-              isUserAuthor={this.props.isUserAuthor}
+              isAuthor={this.props.isAuthor}
               openRightSidebar={this.props.openRightSidebar}
               toggleEditMessage={this.handleEditToggle}
               deleteMessageRequest={this.props.deleteMessageRequest}
+              createFavoriteRequest={this.props.createFavoriteRequest}
+              deleteFavoriteRequest={this.props.deleteFavoriteRequest}
+              isFavorited={this.props.isFavorited}
               match={this.props.match}
             />
           )}

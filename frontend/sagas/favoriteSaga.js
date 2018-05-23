@@ -2,9 +2,9 @@ import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/favoriteActions';
 import * as api from '../util/favoriteAPIUtil';
 
-function* fetchCreateFavorite({ messageSlug }) {
+function* fetchCreateFavorite({ messageSlug: messageId }) {
   try {
-    const newFavorite = yield call(api.createFavorite, { messageSlug });
+    const newFavorite = yield call(api.createFavorite, { messageId });
     yield put(actions.createFavoriteReceive(newFavorite));
   } catch (error) {
     yield put(actions.createFavoriteFailure(error));

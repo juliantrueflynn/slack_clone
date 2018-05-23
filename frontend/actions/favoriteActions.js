@@ -5,9 +5,9 @@ export const DELETE_FAVORITE_REQUEST = 'DELETE_FAVORITE_REQUEST';
 export const DELETE_FAVORITE_RECEIVE = 'DELETE_FAVORITE_RECEIVE';
 export const DELETE_FAVORITE_FAILURE = 'DELETE_FAVORITE_FAILURE';
 
-export const createFavoriteRequest = messageId => ({
+export const createFavoriteRequest = messageSlug => ({
   type: CREATE_FAVORITE_REQUEST,
-  messageId
+  messageSlug
 });
 
 export const createFavoriteReceive = favorite => ({

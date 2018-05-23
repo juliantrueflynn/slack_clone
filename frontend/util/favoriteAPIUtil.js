@@ -1,6 +1,6 @@
 import { decamelizeKeys } from 'humps';
 
-export const createFavorite = messageId => (
+export const createFavorite = messageFav => (
   fetch('api/message_favs', {
     method: 'POST',
     headers: {
@@ -8,7 +8,7 @@ export const createFavorite = messageId => (
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-    body: JSON.stringify(decamelizeKeys(messageId, { separator: '_' }))
+    body: JSON.stringify(decamelizeKeys(messageFav, { separator: '_' }))
   }).then(response =>
     response.json().then(json => ({ json, response }))
   ).then(({ json, response }) => {

@@ -6,9 +6,15 @@ import {
   deleteMessageRequest
 } from '../../actions/messageActions';
 import { openRightSidebar } from '../../actions/rightSidebarActions';
+import {
+  createFavoriteRequest,
+  deleteFavoriteRequest
+} from '../../actions/favoriteActions';
+import { getFavoriteStatus } from '../../reducers/selectors';
 
 const mapStateToProps = (state, { message }) => ({
-  isUserAuthor: state.session.currentUser.id === message.authorId
+  isAuthor: state.session.currentUser.id === message.authorId,
+  isFavorited: getFavoriteStatus(state, message.slug)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -18,6 +24,12 @@ const mapDispatchToProps = dispatch => ({
   ),
   openRightSidebar: sidebarProps => dispatch(
     openRightSidebar('Thread', sidebarProps)
+  ),
+  createFavoriteRequest: messageId => dispatch(
+    createFavoriteRequest(messageId)
+  ),
+  deleteFavoriteRequest: messageId => dispatch(
+    deleteFavoriteRequest(messageId)
   )
 });
 

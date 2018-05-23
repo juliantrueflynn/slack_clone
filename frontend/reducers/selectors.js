@@ -53,3 +53,11 @@ export const getThread = ({ entities: { messages }, ui: { rightSidebar } }) => {
     return message.parentMessageId === messages[messageSlug].id;
   });
 };
+
+export const getFavoriteStatus = (state, messageSlug) => {
+  const { entities, session: { currentUser } } = state;
+
+  return Object.values(entities.favorites).some(fav => {
+    return fav.messageSlug === messageSlug && fav.userId === currentUser.id;
+  });
+};
