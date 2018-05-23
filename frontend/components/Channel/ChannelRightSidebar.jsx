@@ -10,29 +10,23 @@ class ChannelRightSidebar extends React.Component {
     this.handleCloseSidebar = this.handleCloseSidebar.bind(this);
   }
 
-  componentDidMount() {
-    const { openRightSidebar, messageSlug, match } = this.props;
-  
-    if (match.path === '/:workspaceSlug/:channelSlug/favorites') {
-      openRightSidebar('Favorites', {});
-    }
-  
-    if (messageSlug) {
-      openRightSidebar('Thread', { messageSlug });
-    }
-  }
+  // componentDidMount() {
+  //   const { openRightSidebar, messageSlug, match } = this.props;
+  //   if (match.path === '/:workspaceSlug/:channelSlug/favorites') {
+  //     openRightSidebar('Favorites', {});
+  //   }
+  // }
 
-  componentDidUpdate(prevProps) {
-    const { messageSlug, match, openRightSidebar } = this.props;
+  // componentDidUpdate(prevProps) {
+  //   const { sidebarTitle, messageSlug, match, openRightSidebar } = this.props;
 
-    if (match.path === '/:workspaceSlug/:channelSlug/favorites' && prevProps.match.path !== '/:workspaceSlug/:channelSlug/favorites') {
-      openRightSidebar('Favorites', {});
-    }
-  
-    if (messageSlug !== prevProps.messageSlug) {
-      openRightSidebar('Thread', { messageSlug });
-    }
-  }
+  //   if (
+  //     match.path === '/:workspaceSlug/:channelSlug/favorites'
+  //     && prevProps.match.path !== '/:workspaceSlug/:channelSlug/favorites'
+  //   ) {
+  //     openRightSidebar(sidebarTitle, {});
+  //   }
+  // }
 
   handleCloseSidebar() {
     const { match: { params } } = this.props;
@@ -57,14 +51,12 @@ class ChannelRightSidebar extends React.Component {
     return (
       <aside className="channel-right-sidebar">
         <header className="channel-right-sidebar__header">
-          <h4>{rightSidebar.sidebarType}</h4>
+          <h4>{this.props.sidebarTitle}</h4>
           <button onClick={this.handleCloseSidebar}>&#10006;</button>
         </header>
-
-        {message && rightSidebar.sidebarType === 'Thread' && (
-          <MessageThread message={message} threadEntries={threadEntries} />
-        )}
-        {favorites && rightSidebar.sidebarType === 'Favorites' && (
+        
+        {this.props.children}
+        {/* {favorites && rightSidebar.sidebarType === 'Favorites' && (
           <ul>
             {favorites.map(fav => (
               <li key={fav.id}>
@@ -74,7 +66,7 @@ class ChannelRightSidebar extends React.Component {
               </li>
             ))}
           </ul>
-        )}
+        )} */}
       </aside>
     );
   }

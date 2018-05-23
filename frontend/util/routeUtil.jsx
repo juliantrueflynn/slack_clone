@@ -10,6 +10,8 @@ import ChannelPageContainer from '../components/Channel/ChannelPageContainer';
 import PageHome from '../components/Views/PageHome';
 import ChannelRightSidebarContainer
   from '../components/Channel/ChannelRightSidebarContainer';
+import MessageThreadContainer
+  from '../components/Message/MessageThreadContainer';
 
 const routes = [
   {
@@ -47,7 +49,7 @@ const routes = [
         routes: [
           {
             path: '/:workspaceSlug/:channelSlug/thread/:messageSlug',
-            component: ChannelRightSidebarContainer,
+            component: MessageThreadContainer,
             isProtected: true           
           },
           {
