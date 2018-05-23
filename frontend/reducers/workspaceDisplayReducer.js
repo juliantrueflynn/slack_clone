@@ -12,8 +12,9 @@ const workspaceDisplayReducer = (state = null, action) => {
       return action.workspace.slug;
     case WORKSPACE_REQUEST :
       return action.workspaceSlug;
-    case CHANNEL_REQUEST :
-      return action.workspaceSlug;
+    case CHANNEL_REQUEST : {
+      return action.ui.workspaceSlug;
+    }
     default :
       return state;
   }

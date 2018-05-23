@@ -54,6 +54,10 @@ export const getThread = ({ entities: { messages }, ui: { rightSidebar } }) => {
   });
 };
 
+export const getCurrentUserId = state => (
+  state.session.currentUser ? state.session.currentUser.id : null
+);
+
 export const getUserFavorites = ({ entities, session }) => (
   Object.values(entities.favorites).filter(fav => (
     session.currentUserId !== fav.userId

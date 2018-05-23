@@ -15,7 +15,7 @@ const messageReducer = (state = {}, action) => {
   switch (action.type) {
     case CHANNEL_RECEIVE : {
       nextState = Object.assign({}, state);
-      const { channel: { messages }, messageSlug } = action;
+      const { channel: { messages }, ui: { messageSlug } } = action;
       
       messages.map(message => {
         nextState[message.slug] = message;

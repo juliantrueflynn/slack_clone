@@ -12,8 +12,8 @@ const mapStateToProps = (state, { match }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  channelRequest: (channelSlug, workspaceSlug, messageSlug) => dispatch(
-    channelRequest(channelSlug, workspaceSlug, messageSlug)
+  channelRequest: (channelSlug, ui) => dispatch(
+    channelRequest(channelSlug, ui)
   ),
   openRightSidebar: sidebarProps => dispatch(
     openRightSidebar('Favorites', sidebarProps)

@@ -28,14 +28,20 @@ const favoriteReducer = (state = {}, action) => {
       return nextState;
     }
     case CHANNEL_RECEIVE :
-      const { channel: { favorites }, messageSlug } = action;
+      const { channel: { favorites }, ui: { messageSlug, userId } } = action;
       nextState = {};
 
       Object.values(state).map(fav => {
         if (fav.messageSlug === messageSlug) {
           nextState[fav.messageSlug] = fav;
         }
+
+        if (fav.userId === userId) {
+          nextState[fav.messageSlug] = fav;
+        }
       });
+
+      console.log(nextState)
 
       favorites.map(fav => {
         nextState[fav.messageSlug] = fav;

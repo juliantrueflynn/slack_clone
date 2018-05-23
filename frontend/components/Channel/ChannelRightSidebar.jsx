@@ -11,19 +11,26 @@ class ChannelRightSidebar extends React.Component {
   }
 
   componentDidMount() {
-    const { openRightSidebar, messageSlug } = this.props;
-    
+    const { openRightSidebar, messageSlug, match } = this.props;
+  
+    if (match.path === '/:workspaceSlug/:channelSlug/favorites') {
+      openRightSidebar('Favorites', {});
+    }
+  
     if (messageSlug) {
       openRightSidebar('Thread', { messageSlug });
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.messageSlug !== prevProps.messageSlug) {
-      this.props.openRightSidebar(
-        'Thread',
-        { messageSlug: this.props.messageSlug }
-      );
+    const { messageSlug, match, openRightSidebar } = this.props;
+
+    if (match.path === '/:workspaceSlug/:channelSlug/favorites' && prevProps.match.path !== '/:workspaceSlug/:channelSlug/favorites') {
+      openRightSidebar('Favorites', {});
+    }
+  
+    if (messageSlug !== prevProps.messageSlug) {
+      openRightSidebar('Thread', { messageSlug });
     }
   }
 

@@ -7,7 +7,8 @@ import {
   getPageChannelSlug,
   getChannels,
   getPageWorkspaceSlug,
-  getMessageSlug
+  getMessageSlug,
+  getCurrentUserId
 } from '../reducers/selectors';
 import { fetchWorkspace } from './workspaceSaga';
 import { navigate } from '../actions/navigateActions';
@@ -52,9 +53,11 @@ function* fetchChannel() {
   try {
     const channelSlug = yield select(getPageChannelSlug);
     const workspaceSlug = yield select(getPageWorkspaceSlug);
+    const userId = yield select(getCurrentUserId);
+    const ui = { workspaceSlug, channelSlug, userId };
     const channel = yield call(api.fetchChannel, channelSlug);
     const messageSlug = yield select(getMessageSlug);
-    yield put(actions.channelReceive(channel, workspaceSlug, messageSlug));
+    yield put(actions.channelReceive(channel, ui));
     
     if (messageSlug) {
       const baseUrl = `/${workspaceSlug}/${channelSlug}`;

@@ -2,7 +2,6 @@ import {
   OPEN_RIGHT_SIDEBAR,
   CLOSE_RIGHT_SIDEBAR
 } from "../actions/rightSidebarActions";
-import { CHANNEL_RECEIVE, CHANNEL_REQUEST } from "../actions/channelActions";
 
 const _defaultSidebar = null;
 

@@ -16,7 +16,7 @@ class ChannelPage extends React.Component {
 
   componentDidMount() {
     const { workspaceSlug, channelSlug, messageSlug } = this.props;
-    this.props.channelRequest(channelSlug, workspaceSlug, messageSlug);
+    this.props.channelRequest(channelSlug, { workspaceSlug, messageSlug });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -25,8 +25,7 @@ class ChannelPage extends React.Component {
     if (channelSlug !== prevProps.channelSlug) {
       this.props.channelRequest(
         channelSlug,
-        workspaceSlug,
-        messageSlug || null
+        { workspaceSlug, messageSlug: messageSlug || null }
       );
     }
   }
