@@ -41,8 +41,6 @@ const favoriteReducer = (state = {}, action) => {
         }
       });
 
-      console.log(nextState)
-
       favorites.map(fav => {
         nextState[fav.messageSlug] = fav;
       });
