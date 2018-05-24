@@ -1,6 +1,9 @@
 .sidebar__right {
   width: 450px;
   border-left: 1px solid #E9E9E9;
+  margin-top: 55px;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar__header {

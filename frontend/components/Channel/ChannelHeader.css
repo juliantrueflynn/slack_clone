@@ -1,0 +1,28 @@
+.ch-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid #E9E9E9;
+  width: inherit;
+  max-width: inherit;
+  height: 55px;
+  position: fixed;
+  background-color: #FFF;
+  padding: .625em .5em;
+}
+
+.ch-header__name {
+  font-size: 16px;
+  margin: 0;
+}
+
+.ch-header-menu {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  margin: 0;
+}
+
+.ch-header-menu__link {
+  padding: .25em .5em;
+}

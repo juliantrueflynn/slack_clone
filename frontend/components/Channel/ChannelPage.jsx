@@ -3,15 +3,13 @@ import ChannelFormContainer from './ChannelFormContainer';
 import ChannelSidebar from './ChannelSidebar';
 import MessageFormContainer from '../Message/MessageFormContainer';
 import ChannelMessages from './ChannelMessages';
-import { Link } from 'react-router-dom';
+import ChannelHeader from './ChannelHeader';
 import { RouteWithSubRoutes } from '../../util/routeUtil';
 import './ChannelPage.css';
 
 class ChannelPage extends React.Component {
   constructor(props) {
     super(props);
-
-    this.handleFavsClick = this.handleFavsClick.bind(this);
   }
 
   componentDidMount() {
@@ -30,37 +28,28 @@ class ChannelPage extends React.Component {
     }
   }
 
-  handleFavsClick() {
-    this.props.openRightSidebar({});
-  }
-
   render() {
     const { routes, messages, workspaceSlug, channelSlug } = this.props;
 
     return (
       <div className="page page__channel">
-        <header>
-          <h1>Channel: {channelSlug}</h1>
-          <Link
-            to={`/${workspaceSlug}/${channelSlug}/favorites`}
-            onClick={this.handleFavsClick}
-          >
-            Favorites
-          </Link>
-        </header>
+        <ChannelSidebar />
         
-        <div className="page__channel-content">
-          <ChannelSidebar />
-          
-          <div className="messages-pane">
+        <div className="messages-pane">
+          <ChannelHeader
+            workspaceSlug={workspaceSlug}
+            channelSlug={channelSlug}
+            openRightSidebar={this.props.openRightSidebar}
+          />
+          <div className="messages-pane-body">
             <ChannelMessages messages={messages} />
             <MessageFormContainer />
           </div>
-
-          {routes && routes.map((route, i) => (
-            <RouteWithSubRoutes key={`channelRoute${i}`} {...route} />
-          ))}
         </div>
+
+        {routes && routes.map((route, i) => (
+          <RouteWithSubRoutes key={`channelRoute${i}`} {...route} />
+        ))}
         
         <ChannelFormContainer />
       </div>

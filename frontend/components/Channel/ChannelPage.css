@@ -1,5 +1,9 @@
-.page__channel-content {
+.page__channel {
   display: -webkit-box!important;
   display: -ms-flexbox!important;
   display: flex!important;
+}
+
+.messages-pane {
+  width: 100%;
 }
