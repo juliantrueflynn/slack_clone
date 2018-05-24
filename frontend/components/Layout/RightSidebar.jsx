@@ -2,7 +2,7 @@ import React from 'react';
 import { camelize } from 'humps';
 import './RightSidebar.css';
 
-class SidebarRight extends React.Component {
+class RightSidebar extends React.Component {
   constructor(props) {
     super(props);
 
@@ -28,12 +28,12 @@ class SidebarRight extends React.Component {
         className={`sidebar__right sidebar__${camelizedTitle}`}
       >
         <header className="sidebar__header">
-          <div class="sidebar__headings">
+          <div className="sidebar__headings">
             {sidebarTitle && (
               <h4 className="sidebar__title">{sidebarTitle}</h4>
             )}
             {sidebarSubtitle && (
-              <span class="sidebar__subtitle">
+              <span className="sidebar__subtitle">
                 <small>{sidebarSubtitle}</small>
               </span>
             )}
@@ -44,7 +44,7 @@ class SidebarRight extends React.Component {
           </button>
         </header>
         
-        <div class="sidebar__body">
+        <div className="sidebar__body">
           {this.props.children}
         </div>
       </aside>
@@ -52,4 +52,4 @@ class SidebarRight extends React.Component {
   }
 }
 
-export default SidebarRight;
+export default RightSidebar;
