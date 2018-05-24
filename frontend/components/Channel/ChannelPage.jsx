@@ -40,6 +40,11 @@ class ChannelPage extends React.Component {
             workspaceSlug={workspaceSlug}
             channelSlug={channelSlug}
             openRightSidebar={this.props.openRightSidebar}
+            closeRightSidebar={this.props.closeRightSidebar}
+            match={this.props.match}
+            rightSidebar={this.props.rightSidebar}
+            location={this.props.location}            
+            navigate={this.props.navigate}
           />
           <div className="messages-pane-body">
             <ChannelMessages messages={messages} />

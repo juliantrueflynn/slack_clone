@@ -1,16 +1,23 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './ChannelHeader.css';
 
 class ChannelHeader extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleFavsClick = this.handleFavsClick.bind(this);
+    this.handleFavsToggle = this.handleFavsToggle.bind(this);
   }
 
-  handleFavsClick() {
-    this.props.openRightSidebar({});
+  handleFavsToggle() {
+    const { workspaceSlug, channelSlug, rightSidebar } = this.props;
+
+    if (rightSidebar && rightSidebar.sidebarType === 'Favorites') {
+      this.props.closeRightSidebar();
+      this.props.navigate(`/${workspaceSlug}/${channelSlug}`);
+    } else {
+      this.props.openRightSidebar();
+      this.props.navigate(`/${workspaceSlug}/${channelSlug}/favorites`);
+    }
   }
 
   render() {
@@ -22,13 +29,12 @@ class ChannelHeader extends React.Component {
 
         <ul className="ch-header-menu">
           <li className="ch-header-menu__item">
-            <Link
-              className="ch-header-menu__link"
-              to={`/${workspaceSlug}/${channelSlug}/favorites`}
-              onClick={this.handleFavsClick}
+            <button
+              className="btn btn__favs"
+              onClick={this.handleFavsToggle}
             >
               Favorites
-            </Link>
+            </button>
           </li>
         </ul>
       </header>

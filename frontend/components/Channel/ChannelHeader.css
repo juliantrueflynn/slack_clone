@@ -23,6 +23,6 @@
   margin: 0;
 }
 
-.ch-header-menu__link {
+.ch-header .btn__favs {
   padding: .25em .5em;
 }
