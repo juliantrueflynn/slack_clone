@@ -16,7 +16,7 @@ class SidebarRight extends React.Component {
   }
 
   render() {
-    const { isRightSidebarOpen, sidebarTitle } = this.props;
+    const { isRightSidebarOpen, sidebarTitle, sidebarSubtitle } = this.props;
     const camelizedTitle = camelize(sidebarTitle);
 
     if (!isRightSidebarOpen) {
@@ -28,7 +28,17 @@ class SidebarRight extends React.Component {
         className={`sidebar__right sidebar__${camelizedTitle}`}
       >
         <header className="sidebar__header">
-          <h4 className="sidebar__title">{sidebarTitle}</h4>
+          <div class="sidebar__headings">
+            {sidebarTitle && (
+              <h4 className="sidebar__title">{sidebarTitle}</h4>
+            )}
+            {sidebarSubtitle && (
+              <span class="sidebar__subtitle">
+                <small>{sidebarSubtitle}</small>
+              </span>
+            )}
+          </div>
+          
           <button className="btn btn__close" onClick={this.handleCloseSidebar}>
             &#10006;
           </button>

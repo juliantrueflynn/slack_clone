@@ -33,6 +33,7 @@ class MessageThread extends React.Component {
     return (
       <SidebarRightContainer
         sidebarTitle="Thread"
+        sidebarSubtitle={`Author: ${message.authorId}`}
         match={this.props.match}
       >
         <div className="thread">
