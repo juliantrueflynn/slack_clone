@@ -12,6 +12,7 @@ import ChannelRightSidebarContainer
   from '../components/Channel/ChannelRightSidebarContainer';
 import MessageThreadContainer
   from '../components/Message/MessageThreadContainer';
+import UserFavoritesContainer from '../components/Views/UserFavoritesContainer';
 
 const routes = [
   {
@@ -54,7 +55,7 @@ const routes = [
           },
           {
             path: '/:workspaceSlug/:channelSlug/favorites',
-            component: ChannelRightSidebarContainer,
+            component: UserFavoritesContainer,
             isProtected: true
           }
         ]

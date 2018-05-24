@@ -2,6 +2,7 @@ import React from 'react';
 import MessageThread from '../Message/MessageThread';
 import ChannelPageContainer from './ChannelPageContainer';
 import ChannelPage from './ChannelPage';
+import { camelize } from 'humps';
 
 class ChannelRightSidebar extends React.Component {
   constructor(props) {
@@ -10,24 +11,6 @@ class ChannelRightSidebar extends React.Component {
     this.handleCloseSidebar = this.handleCloseSidebar.bind(this);
   }
 
-  // componentDidMount() {
-  //   const { openRightSidebar, messageSlug, match } = this.props;
-  //   if (match.path === '/:workspaceSlug/:channelSlug/favorites') {
-  //     openRightSidebar('Favorites', {});
-  //   }
-  // }
-
-  // componentDidUpdate(prevProps) {
-  //   const { sidebarTitle, messageSlug, match, openRightSidebar } = this.props;
-
-  //   if (
-  //     match.path === '/:workspaceSlug/:channelSlug/favorites'
-  //     && prevProps.match.path !== '/:workspaceSlug/:channelSlug/favorites'
-  //   ) {
-  //     openRightSidebar(sidebarTitle, {});
-  //   }
-  // }
-
   handleCloseSidebar() {
     const { match: { params } } = this.props;
     this.props.closeRightSidebar();
@@ -35,38 +18,23 @@ class ChannelRightSidebar extends React.Component {
   }
 
   render() {
-    const {
-      isRightSidebarOpen,
-      rightSidebar,
-      message,
-      messageSlug,
-      threadEntries,
-      favorites
-    } = this.props;
+    const { isRightSidebarOpen, sidebarTitle } = this.props;
+    const camelizedTitle = camelize(sidebarTitle);
 
     if (!isRightSidebarOpen) {
       return null;
     }
 
     return (
-      <aside className="channel-right-sidebar">
-        <header className="channel-right-sidebar__header">
-          <h4>{this.props.sidebarTitle}</h4>
+      <aside
+        className={`sidebar__channel-right sidebar__${camelizedTitle}`}
+      >
+        <header className="sidebar__header">
+          <h4>{sidebarTitle}</h4>
           <button onClick={this.handleCloseSidebar}>&#10006;</button>
         </header>
         
         {this.props.children}
-        {/* {favorites && rightSidebar.sidebarType === 'Favorites' && (
-          <ul>
-            {favorites.map(fav => (
-              <li key={fav.id}>
-                id: {fav.id}<br/>
-                messageId: {fav.messageId}<br/>
-                userId: {fav.userId}
-              </li>
-            ))}
-          </ul>
-        )} */}
       </aside>
     );
   }
