@@ -10,6 +10,10 @@ ul {
   list-style-type: none;
 }
 
+.btn:hover, .btn:focus {
+  cursor: pointer;
+}
+
 @media only screen and (min-width : 1250px) {
   .content-container__boxed-width {
     width: 920px;

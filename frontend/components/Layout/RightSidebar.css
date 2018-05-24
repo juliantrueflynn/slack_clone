@@ -1,0 +1,30 @@
+.sidebar__right {
+  width: 450px;
+  border-left: 1px solid #E9E9E9;
+}
+
+.sidebar__header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: row;
+}
+
+.sidebar__header {
+  background-color: #F5F5F5;
+  padding: .75em .625em;
+  border-bottom: 1px solid #E9E9E9;
+}
+
+.btn__close {
+  margin-left: auto;
+  border: none;
+}
+
+.sidebar__title {
+  margin: 0;
+}
+
+.sidebar__body {
+  padding: .75em .625em;
+}

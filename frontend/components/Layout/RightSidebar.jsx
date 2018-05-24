@@ -1,5 +1,6 @@
 import React from 'react';
 import { camelize } from 'humps';
+import './RightSidebar.css';
 
 class SidebarRight extends React.Component {
   constructor(props) {
@@ -24,14 +25,18 @@ class SidebarRight extends React.Component {
 
     return (
       <aside
-        className={`sidebar__channel-right sidebar__${camelizedTitle}`}
+        className={`sidebar__right sidebar__${camelizedTitle}`}
       >
         <header className="sidebar__header">
-          <h4>{sidebarTitle}</h4>
-          <button onClick={this.handleCloseSidebar}>&#10006;</button>
+          <h4 className="sidebar__title">{sidebarTitle}</h4>
+          <button className="btn btn__close" onClick={this.handleCloseSidebar}>
+            &#10006;
+          </button>
         </header>
         
-        {this.props.children}
+        <div class="sidebar__body">
+          {this.props.children}
+        </div>
       </aside>
     );
   }
