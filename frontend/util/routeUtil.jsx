@@ -8,8 +8,6 @@ import WorkspaceFormContainer from
   '../components/Workspace/WorkspaceFormContainer';
 import ChannelPageContainer from '../components/Channel/ChannelPageContainer';
 import PageHome from '../components/Views/PageHome';
-import ChannelRightSidebarContainer
-  from '../components/Channel/ChannelRightSidebarContainer';
 import MessageThreadContainer
   from '../components/Message/MessageThreadContainer';
 import UserFavoritesContainer from '../components/Views/UserFavoritesContainer';

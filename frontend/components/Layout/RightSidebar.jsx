@@ -1,10 +1,7 @@
 import React from 'react';
-import MessageThread from '../Message/MessageThread';
-import ChannelPageContainer from './ChannelPageContainer';
-import ChannelPage from './ChannelPage';
 import { camelize } from 'humps';
 
-class ChannelRightSidebar extends React.Component {
+class SidebarRight extends React.Component {
   constructor(props) {
     super(props);
 
@@ -40,4 +37,4 @@ class ChannelRightSidebar extends React.Component {
   }
 }
 
-export default ChannelRightSidebar;
+export default SidebarRight;

@@ -1,8 +1,7 @@
 import React from 'react';
 import MessageContainer from './MessageContainer';
 import MessageFormContainer from './MessageFormContainer';
-import ChannelRightSidebarContainer
-  from '../Channel/ChannelRightSidebarContainer';
+import SidebarRightContainer from '../Layout/RightSidebarContainer';
 
 class MessageThread extends React.Component {
   constructor(props) {
@@ -32,7 +31,7 @@ class MessageThread extends React.Component {
     }
   
     return (
-      <ChannelRightSidebarContainer
+      <SidebarRightContainer
         sidebarTitle="Thread"
         match={this.props.match}
       >
@@ -54,7 +53,7 @@ class MessageThread extends React.Component {
   
           <MessageFormContainer parentMessageId={message.slug} />
         </div>
-      </ChannelRightSidebarContainer>
+      </SidebarRightContainer>
     );
   }
 }

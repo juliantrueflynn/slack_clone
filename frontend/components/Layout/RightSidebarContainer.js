@@ -1,13 +1,11 @@
 import { connect } from 'react-redux';
-import ChannelRightSidebar from './ChannelRightSidebar';
+import RightSidebar from './RightSidebar';
 import { closeRightSidebar } from '../../actions/rightSidebarActions';
 import { getUserFavorites } from '../../reducers/selectors';
 import { navigate } from '../../actions/navigateActions';
 
 const mapStateToProps = state => ({
-  rightSidebar: state.ui.rightSidebar,
-  isRightSidebarOpen: Boolean(state.ui.rightSidebar),
-  favorites: getUserFavorites(state)
+  isRightSidebarOpen: Boolean(state.ui.rightSidebar)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -15,7 +13,4 @@ const mapDispatchToProps = dispatch => ({
   navigate: path => dispatch(navigate(path))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ChannelRightSidebar);
+export default connect(mapStateToProps, mapDispatchToProps)(RightSidebar);

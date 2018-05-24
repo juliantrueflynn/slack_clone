@@ -1,6 +1,5 @@
 import React from 'react';
-import ChannelRightSidebarContainer
-  from '../Channel/ChannelRightSidebarContainer';
+import SidebarRightContainer from '../Layout/RightSidebarContainer';
 
 class UserFavorites extends React.Component {
   constructor(props) {
@@ -28,7 +27,7 @@ class UserFavorites extends React.Component {
     }
 
     return (
-      <ChannelRightSidebarContainer sidebarTitle="Favorites" match={match}>
+      <SidebarRightContainer sidebarTitle="Favorites" match={match}>
         <ul className="user-favorites">
           {favorites.map(fav => (
             <li key={fav.id}>
@@ -38,7 +37,7 @@ class UserFavorites extends React.Component {
             </li>
           ))}
         </ul>
-      </ChannelRightSidebarContainer>
+      </SidebarRightContainer>
     );
   }
 }
