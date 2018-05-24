@@ -9,23 +9,23 @@ class ChannelHeader extends React.Component {
   }
 
   handleFavsToggle() {
-    const { workspaceSlug, channelSlug, rightSidebar } = this.props;
+    const { navigate, match: { params }, rightSidebar } = this.props;
 
     if (rightSidebar && rightSidebar.sidebarType === 'Favorites') {
       this.props.closeRightSidebar();
-      this.props.navigate(`/${workspaceSlug}/${channelSlug}`);
+      navigate(`/${params.workspaceSlug}/${params.channelSlug}`);
     } else {
       this.props.openRightSidebar();
-      this.props.navigate(`/${workspaceSlug}/${channelSlug}/favorites`);
+      navigate(`/${params.workspaceSlug}/${params.channelSlug}/favorites`);
     }
   }
 
   render() {
-    const { workspaceSlug, channelSlug } = this.props;
+    const { match: { params } } = this.props;
   
     return (
       <header className="ch-header">
-        <h1 className="ch-header__name">Channel: {channelSlug}</h1>
+        <h1 className="ch-header__name">{params.channelSlug}</h1>
 
         <ul className="ch-header-menu">
           <li className="ch-header-menu__item">
