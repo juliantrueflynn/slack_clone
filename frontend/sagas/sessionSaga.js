@@ -16,7 +16,7 @@ function* fetchSignIn({ currentUser }) {
 function* fetchSignUp({ currentUser }) {
   try {
     const user = yield call(api.signUp, currentUser);
-    yield put(actions.signUpRequest(user));
+    yield put(actions.signUpReceive(user));
   } catch (error) {
     yield put(actions.signUpFailure(error));
   }
