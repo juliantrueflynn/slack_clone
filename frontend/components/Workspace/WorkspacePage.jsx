@@ -9,6 +9,7 @@ class WorkspacePage extends React.Component {
 
   componentDidMount() {
     const { location, workspaceRequest, match } = this.props;
+    
     if (location.pathname === match.url) {
       workspaceRequest(match.params.workspaceSlug);
     }
@@ -16,6 +17,7 @@ class WorkspacePage extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { location, workspaceRequest, match } = this.props;
+    
     if (location.pathname === match.url && prevProps.match.url !== match.url) {
       workspaceRequest(match.params.workspaceSlug);
     }
@@ -23,7 +25,7 @@ class WorkspacePage extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="workspace">
         {this.props.routes.map((route, i) => (
           <RouteWithSubRoutes key={`workspaceRoute${i}`} {...route} />
         ))}

@@ -1,18 +1,12 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import WorkspacePage from './WorkspacePage';
 import { workspaceRequest } from '../../actions/workspaceActions';
-import { navigate } from '../../actions/navigateActions';
-
-const mapStateToProps = state => ({
-  workspaceSlug: state.ui.displayWorkspaceSlug,
-  defaultChannel: state.entities.channels && Object.values(state.entities.channels)[0]
-});
 
 const mapDispatchToProps = dispatch => ({
   workspaceRequest: workspaceSlug => dispatch(workspaceRequest(workspaceSlug))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(WorkspacePage);
+export default withRouter(
+  connect(null, mapDispatchToProps)(WorkspacePage)
+);
