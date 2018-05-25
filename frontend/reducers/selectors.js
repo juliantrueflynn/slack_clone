@@ -71,3 +71,7 @@ export const getFavoriteStatus = (state, messageSlug) => {
     return fav.messageSlug === messageSlug && fav.userId === currentUser.id;
   });
 };
+
+export const getRightSidebarType = state => (
+  state.ui.rightSidebar ? state.ui.rightSidebar.sidebarType : null
+);

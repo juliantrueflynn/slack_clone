@@ -8,7 +8,8 @@ import {
   getChannels,
   getPageWorkspaceSlug,
   getMessageSlug,
-  getCurrentUserId
+  getCurrentUserId,
+  getRightSidebarType
 } from '../reducers/selectors';
 import { fetchWorkspace } from './workspaceSaga';
 import { navigate } from '../actions/navigateActions';
@@ -53,15 +54,21 @@ function* fetchChannel() {
   try {
     const channelSlug = yield select(getPageChannelSlug);
     const workspaceSlug = yield select(getPageWorkspaceSlug);
+    const rightSidebarType = yield select(getRightSidebarType);
     const userId = yield select(getCurrentUserId);
     const ui = { workspaceSlug, channelSlug, userId };
     const channel = yield call(api.fetchChannel, channelSlug);
     const messageSlug = yield select(getMessageSlug);
     yield put(actions.channelReceive(channel, ui));
     
-    if (messageSlug) {
+    if (rightSidebarType === 'Thread') {
       const baseUrl = `/${workspaceSlug}/${channelSlug}`;
       yield put(navigate(`${baseUrl}/thread/${messageSlug}`));
+    }
+
+    if (rightSidebarType === 'Favorites') {
+      const baseUrl = `/${workspaceSlug}/${channelSlug}`;
+      yield put(navigate(`${baseUrl}/favorites`));
     }
   } catch (error) {
     yield put(actions.channelFailure(error));
