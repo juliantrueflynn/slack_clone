@@ -1,3 +1,4 @@
+import merge from 'lodash.merge';
 import {
   FAVORITES_RECEIVE,
   CREATE_FAVORITE_RECEIVE,
@@ -12,7 +13,13 @@ const favoriteReducer = (state = {}, action) => {
   switch (action.type) {
     case FAVORITES_RECEIVE : {
       const { favorites } = action;
-      return Object.assign({}, state, favorites);
+      nextState = {};
+
+      favorites.map(fav => {
+        nextState[fav.messageSlug] = fav;
+      });
+
+      return Object.assign({}, state, nextState);
     }
     case CREATE_FAVORITE_RECEIVE : {
       const { favorite } = action;
@@ -29,9 +36,10 @@ const favoriteReducer = (state = {}, action) => {
     }
     case CHANNEL_RECEIVE :
       const { channel: { favorites }, ui: { messageSlug, userId } } = action;
+      let prevState = Object.assign({}, state);
       nextState = {};
 
-      Object.values(state).map(fav => {
+      Object.values(prevState).map(fav => {
         if (fav.messageSlug === messageSlug) {
           nextState[fav.messageSlug] = fav;
         }
