@@ -1,5 +1,5 @@
 import React from 'react';
-import SidebarRightContainer from '../Layout/RightSidebarContainer';
+import RightSidebarContainer from '../Layout/RightSidebarContainer';
 
 class UserFavorites extends React.Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class UserFavorites extends React.Component {
   componentDidUpdate(prevProps) {
     const { match: { path }, openRightSidebar } = this.props;
     const favPath = '/:workspaceSlug/:channelSlug/favorites';
-  
+    
     if (path === favPath && prevProps.match.path !== favPath) {
       openRightSidebar();
     }
@@ -27,7 +27,7 @@ class UserFavorites extends React.Component {
     }
 
     return (
-      <SidebarRightContainer sidebarTitle="Favorites" match={match}>
+      <RightSidebarContainer sidebarTitle="Favorites" match={match}>
         <ul className="user-favorites">
           {favorites.map(fav => (
             <li key={fav.id}>
@@ -37,7 +37,7 @@ class UserFavorites extends React.Component {
             </li>
           ))}
         </ul>
-      </SidebarRightContainer>
+      </RightSidebarContainer>
     );
   }
 }

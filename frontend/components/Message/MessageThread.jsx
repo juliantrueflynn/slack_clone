@@ -1,7 +1,7 @@
 import React from 'react';
 import MessageContainer from './MessageContainer';
 import MessageFormContainer from './MessageFormContainer';
-import SidebarRightContainer from '../Layout/RightSidebarContainer';
+import RightSidebarContainer from '../Layout/RightSidebarContainer';
 
 class MessageThread extends React.Component {
   constructor(props) {
@@ -31,7 +31,7 @@ class MessageThread extends React.Component {
     }
   
     return (
-      <SidebarRightContainer
+      <RightSidebarContainer
         sidebarTitle="Thread"
         sidebarSubtitle={`Author: ${message.authorId}`}
         match={this.props.match}
@@ -54,7 +54,7 @@ class MessageThread extends React.Component {
   
           <MessageFormContainer parentMessageId={message.slug} />
         </div>
-      </SidebarRightContainer>
+      </RightSidebarContainer>
     );
   }
 }
