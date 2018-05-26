@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import DropdownMenu from './Layout/DropdownMenu';
 
 class UsersMenu extends React.Component {
@@ -10,7 +11,16 @@ class UsersMenu extends React.Component {
     return (
       <DropdownMenu menuFor="user" togglerText={this.props.workspaceSlug}>
         <li>
-          Works
+          Set Status
+        </li>
+        <li>
+          <NavLink to="/account/settings">Profile & Account</NavLink>
+        </li>
+        <li>
+          <button>Preferences</button>          
+        </li>
+        <li>
+          Switch Workspace
         </li>
       </DropdownMenu>
     );
