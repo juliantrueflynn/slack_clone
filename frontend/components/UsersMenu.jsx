@@ -5,10 +5,16 @@ import DropdownMenu from './Layout/DropdownMenu';
 class UsersMenu extends React.Component {
   constructor(props) {
     super(props);
+
+    this.handleOpenSidebar = this.handleOpenSidebar.bind(this);
+  }
+
+  handleOpenSidebar() {
+    this.props.openRightSidebar();
   }
 
   render() {
-    const { workspaceSlug, workspaces } = this.props;
+    const { workspaceSlug, workspaces, channelSlug, userSlug } = this.props;
   
     return (
       <DropdownMenu menuFor="user" togglerText={workspaceSlug}>
@@ -16,7 +22,12 @@ class UsersMenu extends React.Component {
           Set Status
         </li>
         <li>
-          <NavLink to="/account/settings">Profile & Account</NavLink>
+          <NavLink
+            to={`/${workspaceSlug}/${channelSlug}/team/${userSlug}`}
+            onClick={this.handleOpenSidebar}
+          >
+            Profile & Account
+          </NavLink>
         </li>
         <li>
           <button>Preferences</button>          

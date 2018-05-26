@@ -11,6 +11,7 @@ import PageHome from '../components/Views/PageHome';
 import MessageThreadContainer
   from '../components/Message/MessageThreadContainer';
 import UserFavoritesContainer from '../components/Views/UserFavoritesContainer';
+import UserViewContainer from '../components/UserViewContainer';
 
 const routes = [
   {
@@ -46,6 +47,11 @@ const routes = [
         component: ChannelPageContainer,
         isProtected: true,      
         routes: [
+          {
+            path: '/:workspaceSlug/:channelSlug/team/:userSlug',
+            component: UserViewContainer,
+            isProtected: true
+          },
           {
             path: '/:workspaceSlug/:channelSlug/thread/:messageSlug',
             component: MessageThreadContainer,
