@@ -11,7 +11,9 @@ class WorkspacesMenu extends React.Component {
   }
 
   componentDidMount() {
-    this.props.workspacesRequest();
+    if (this.props.loggedIn) {
+      this.props.workspacesRequest();
+    }
   }
 
   handleDropdownToggle() {
