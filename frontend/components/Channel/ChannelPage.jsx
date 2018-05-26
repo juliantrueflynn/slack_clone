@@ -1,6 +1,6 @@
 import React from 'react';
 import ChannelHeaderContainer from './ChannelHeaderContainer';
-import ChannelSidebar from './ChannelSidebar';
+import ChannelSidebarContainer from './ChannelSidebarContainer';
 import ChannelMessages from './ChannelMessages';
 import MessageFormContainer from '../Message/MessageFormContainer';
 import ChannelFormContainer from './ChannelFormContainer';
@@ -29,11 +29,11 @@ class ChannelPage extends React.Component {
   }
 
   render() {
-    const { routes, messages, workspaceSlug, workspaces } = this.props;
+    const { routes, messages } = this.props;
 
     return (
       <div className="page page__channel">
-        <ChannelSidebar workspaceSlug={workspaceSlug} workspaces={workspaces} />
+        <ChannelSidebarContainer />
         
         <div className="messages-pane">
           <ChannelHeaderContainer />

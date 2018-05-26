@@ -8,8 +8,10 @@ class UsersMenu extends React.Component {
   }
 
   render() {
+    const { workspaceSlug, workspaces } = this.props;
+  
     return (
-      <DropdownMenu menuFor="user" togglerText={this.props.workspaceSlug}>
+      <DropdownMenu menuFor="user" togglerText={workspaceSlug}>
         <li>
           Set Status
         </li>
@@ -23,7 +25,7 @@ class UsersMenu extends React.Component {
           Switch Workspace
         </li>
 
-        {this.props.workspaces.map(workspace => (
+        {workspaces && workspaces.map(workspace => (
           <li key={workspace.slug}>
             {workspace.title}
           </li>
