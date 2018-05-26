@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const Root = ({ store }) => (
   <Provider store={store}>
-    <ActionCableProvider url={cable}>
+    <ActionCableProvider cable={cable}>
       <Router basename="/" history={history}>
         <App />
       </Router>
