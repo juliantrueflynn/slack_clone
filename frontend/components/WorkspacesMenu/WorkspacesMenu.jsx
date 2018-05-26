@@ -22,7 +22,7 @@ class WorkspacesMenu extends React.Component {
 
   render() {
     return (
-      <DropdownMenu menuFor="workspaces" togglerText="Workspaces">        
+      <DropdownMenu menuFor="workspaces" togglerText="Workspaces">
         {this.props.workspaces.map(workspace => (
           <WorkspacesMenuItem
             workspace={workspace}

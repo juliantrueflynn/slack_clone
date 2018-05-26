@@ -22,6 +22,12 @@ class UsersMenu extends React.Component {
         <li>
           Switch Workspace
         </li>
+
+        {this.props.workspaces.map(workspace => (
+          <li key={workspace.slug}>
+            {workspace.title}
+          </li>
+        ))}
       </DropdownMenu>
     );
   }

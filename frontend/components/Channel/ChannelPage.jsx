@@ -29,11 +29,11 @@ class ChannelPage extends React.Component {
   }
 
   render() {
-    const { routes, messages, workspaceSlug } = this.props;
+    const { routes, messages, workspaceSlug, workspaces } = this.props;
 
     return (
       <div className="page page__channel">
-        <ChannelSidebar workspaceSlug={workspaceSlug} />
+        <ChannelSidebar workspaceSlug={workspaceSlug} workspaces={workspaces} />
         
         <div className="messages-pane">
           <ChannelHeaderContainer />

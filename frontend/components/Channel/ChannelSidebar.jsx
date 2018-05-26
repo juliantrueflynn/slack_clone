@@ -10,9 +10,11 @@ class ChannelSidebar extends React.Component {
   }
 
   render() {
+    const { workspaceSlug, workspaces } = this.props;
+  
     return (
       <aside className="sidebar sidebar__channel">
-        <UsersMenu workspaceSlug={this.props.workspaceSlug} />
+        <UsersMenu workspaceSlug={workspaceSlug} workspaces={workspaces} />
         
         <ul className="quicklinks">
           <li className="quicklinks__item quicklinks__threads">
