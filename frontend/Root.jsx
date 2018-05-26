@@ -5,10 +5,15 @@ import { Router } from 'react-router-dom';
 import history from './util/history';
 import App from './App';
 
+let cable = 'ws://localhost:3000/cable';
+if (process.env.NODE_ENV === 'production') {
+  cable = 'ws://slack-clone-julian.herokuapp.com/cable';
+}
+
 const Root = ({ store }) => (
-  <Provider store={ store }>
-    <ActionCableProvider url="ws://localhost:3000/cable">
-      <Router basename="/" history={ history }>
+  <Provider store={store}>
+    <ActionCableProvider url={cable}>
+      <Router basename="/" history={history}>
         <App />
       </Router>
     </ActionCableProvider>
