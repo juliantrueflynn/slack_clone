@@ -7,7 +7,7 @@ import App from './App';
 
 let cable = 'ws://localhost:3000/cable';
 if (process.env.NODE_ENV === 'production') {
-  cable = 'ws://slack-clone-julian.herokuapp.com/cable';
+  cable = 'wss://slack-clone-julian.herokuapp.com/cable';
 }
 
 const Root = ({ store }) => (
