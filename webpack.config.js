@@ -1,7 +1,7 @@
 var path = require("path");
 var webpack = require("webpack");
 
-var plugins = ["transform-es2015-arrow-functions"]; // dev and prod plugins
+var plugins = []; // dev and prod plugins
 var devPlugins = []; // if using any plugins for development
 
 var prodPlugins = [
