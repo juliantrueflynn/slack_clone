@@ -26,8 +26,10 @@ class DropdownMenu extends React.Component {
     this.wrapperRef = node;
   }
 
-  handleDropdownClickOut(event) {
-    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+  handleDropdownClickOut(e) {
+    const ref = this.wrapperRef;
+    
+    if (ref && !ref.contains(e.target) && !this.state.isDropdownOpen) {
       this.setState({ isDropdownOpen: false });
     }
   }

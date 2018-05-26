@@ -8,7 +8,7 @@ class UsersMenu extends React.Component {
 
   render() {
     return (
-      <DropdownMenu togglerText={this.props.workspaceSlug}>
+      <DropdownMenu menuFor="user" togglerText={this.props.workspaceSlug}>
         <li>
           Works
         </li>
