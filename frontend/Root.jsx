@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'production') {
   cable = 'wss://slack-clone-julian.herokuapp.com/cable';
 }
 
-const Root = ({ store }) => {
+function Root({ store }) {
   return (
     <Provider store={store}>
       <ActionCableProvider url={cable}>
@@ -20,6 +20,6 @@ const Root = ({ store }) => {
       </ActionCableProvider>
     </Provider>
   );
-};
+}
 
 export default Root;
