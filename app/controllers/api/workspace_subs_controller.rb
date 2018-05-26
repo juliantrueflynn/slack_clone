@@ -2,7 +2,6 @@ class Api::WorkspaceSubsController < ApplicationController
   def create
     @workspace_sub = WorkspaceSub.new(workspace_sub_params)
     @workspace_sub.user_id = current_user.id
-    @workspace_sub.workspace_id = Workspace.find_by(slug: params[:workspace_id])
     
     if @workspace_sub.save
       render json: @workspace_sub

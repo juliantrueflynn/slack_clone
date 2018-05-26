@@ -1,10 +1,7 @@
 import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/workspaceActions';
 import * as api from '../util/workspaceAPIUtil';
-import {
-  createWorkspaceSubSuccess,
-  createWorkspaceSubErrors
-} from '../actions/workspaceSubActions';
+import { createWorkspaceSubRequest } from '../actions/workspaceSubActions';
 import { defaultChannelsRequest } from '../actions/channelActions';
 import { createWorkspaceSub } from '../util/workspaceSubAPIUtil';
 import { getWorkspaces, getChannels } from '../reducers/selectors';
@@ -32,22 +29,13 @@ function* addNewWorkspace({ workspace }) {
   try {
     const newWorkspace = yield call(api.createWorkspace, workspace);
     yield put(actions.createWorkspaceReceive(newWorkspace));
+    yield put(createWorkspaceSubRequest(newWorkspace.id));
   } catch (error) {
     yield put(actions.createWorkspaceFailure(error));
   }
 }
 
-function* subCreatorToNewWorkspace(workspace) {
-  try {
-    const creatorAsSub = { workspaceId: workspace.slug };
-    const newSub = yield call(createWorkspaceSub, creatorAsSub);
-    yield put(createWorkspaceSubSuccess(newSub));
-  } catch (error) {
-    yield put(createWorkspaceSubErrors(error));
-  }
-}
-
-function* loadDefaultChannels({ slug }) {
+function* loadDefaultChannels({ workspace: { slug } }) {
   let defaultChannels = [];
   const defaultChannelTitles = ['general', 'random'];
   for (let title of defaultChannelTitles) {
@@ -75,16 +63,9 @@ function* loadWorkspace({ workspaceSlug }) {
   }
 }
 
-function* loadDefaultsAndSubCreator({ workspace }) {
-  yield all([
-    fork(subCreatorToNewWorkspace, workspace),
-    fork(loadDefaultChannels, workspace)
-  ]);
-}
-
 function* newWorkspaceFlow() {
   yield takeLatest(actions.CREATE_WORKSPACE_REQUEST, addNewWorkspace);
-  yield takeLatest(actions.CREATE_WORKSPACE_RECEIVE, loadDefaultsAndSubCreator);
+  yield takeLatest(actions.CREATE_WORKSPACE_RECEIVE, loadDefaultChannels);
 }
 
 function* watchWorkspaces() {

@@ -3,6 +3,7 @@ import { sessionSaga } from './sessionSaga';
 import { workspaceSaga } from './workspaceSaga';
 import { channelSaga } from './channelSaga';
 import { channelSubSaga } from './channelSubSaga';
+import { workspaceSubSaga } from './workspaceSubSaga';
 import { messageSaga } from './messageSaga';
 import { favoriteSaga } from './favoriteSaga';
 import { navigateSaga } from './navigateSaga';
@@ -15,6 +16,7 @@ export default function* root() {
     fork(workspaceSaga),
     fork(channelSaga),
     fork(channelSubSaga),
+    fork(workspaceSubSaga),
     fork(messageSaga),
     fork(favoriteSaga),
     fork(rightSidebarSaga)

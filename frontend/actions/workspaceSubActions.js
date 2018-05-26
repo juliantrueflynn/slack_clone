@@ -1,24 +1,18 @@
-export const RECEIVE_WORKSPACE_SUB = 'RECEIVE_WORKSPACE_SUB';
-export const CREATE_WORKSPACE_SUB = 'CREATE_WORKSPACE_SUB';
-export const CREATE_WORKSPACE_SUB_SUCCESS = 'CREATE_WORKSPACE_SUB_SUCCESS';
-export const CREATE_WORKSPACE_SUB_ERRORS = 'CREATE_WORKSPACE_SUB_ERRORS';
+export const CREATE_WORKSPACE_SUB_REQUEST = 'CREATE_WORKSPACE_SUB_REQUEST';
+export const CREATE_WORKSPACE_SUB_RECEIVE = 'CREATE_WORKSPACE_SUB_RECEIVE';
+export const CREATE_WORKSPACE_SUB_FAILURE = 'CREATE_WORKSPACE_SUB_FAILURE';
 
-export const receiveWorkspaceSub = workspaceSub => ({
-  type: RECEIVE_WORKSPACE_SUB,
+export const createWorkspaceSubRequest = workspaceId => ({
+  type: CREATE_WORKSPACE_SUB_REQUEST,
+  workspaceId
+});
+
+export const createWorkspaceSubReceive = workspaceSub => ({
+  type: CREATE_WORKSPACE_SUB_RECEIVE,
   workspaceSub
 });
 
-export const createWorkspaceSub = workspaceSub => ({
-  type: CREATE_WORKSPACE_SUB,
-  workspaceSub
-});
-
-export const createWorkspaceSubSuccess = workspaceSub => ({
-  type: CREATE_WORKSPACE_SUB_SUCCESS,
-  workspaceSub
-});
-
-export const createWorkspaceSubErrors = errors => ({
-  type: CREATE_WORKSPACE_SUB_ERRORS,
+export const createWorkspaceSubFailure = errors => ({
+  type: CREATE_WORKSPACE_SUB_FAILURE,
   errors
 });
