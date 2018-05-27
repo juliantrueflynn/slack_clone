@@ -1,3 +1,4 @@
+import { WORKSPACE_RECEIVE } from '../actions/workspaceActions';
 import { CHANNEL_RECEIVE } from '../actions/channelActions';
 
 const memberReducer = (state = {}, action) => {
@@ -5,12 +6,16 @@ const memberReducer = (state = {}, action) => {
 
   let nextState;
   switch (action.type) {
-    case CHANNEL_RECEIVE :
+    case WORKSPACE_RECEIVE : {
+      const { workspace } = action;
+      
       nextState = {};
-      action.channel.members.map(member => {
+      workspace.members.map(member => {
         nextState[member.slug] = member;
       });
+      
       return nextState;
+    }
     default :
       return state;
   }
