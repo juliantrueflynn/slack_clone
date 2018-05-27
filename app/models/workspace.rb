@@ -13,6 +13,10 @@ class Workspace < ApplicationRecord
   has_many :subs,
     class_name: 'WorkspaceSub',
     dependent: :destroy
+  has_many :members,
+    class_name: 'User',
+    through: :subs,
+    source: :user
   has_many :channels
   has_many :favs,
       through: :channels
