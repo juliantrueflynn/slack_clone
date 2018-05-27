@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import UsersMenu from '../UsersMenu';
 import ChannelsMenuContainer from './ChannelsMenuContainer';
+import PreferencesModal from '../PreferencesModal';
 import './ChannelSidebar.css';
 
 class ChannelSidebar extends React.Component {
@@ -20,6 +21,12 @@ class ChannelSidebar extends React.Component {
           modalOpen={this.props.modalOpen}
           modalClose={this.props.modalClose}
           openRightSidebar={this.props.openRightSidebar}
+        />
+
+        <PreferencesModal
+          workspaceSlug={this.props.workspaceSlug}
+          modalClose={this.props.modalClose}
+          isModalOpen={this.props.isModalOpen}
         />
         
         <ul className="quicklinks">

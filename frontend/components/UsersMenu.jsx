@@ -7,10 +7,15 @@ class UsersMenu extends React.Component {
     super(props);
 
     this.handleOpenSidebar = this.handleOpenSidebar.bind(this);
+    this.handleModalOpenClick = this.handleModalOpenClick.bind(this);
   }
 
   handleOpenSidebar() {
     this.props.openRightSidebar();
+  }
+
+  handleModalOpenClick() {
+    this.props.modalOpen();
   }
 
   render() {
@@ -30,7 +35,12 @@ class UsersMenu extends React.Component {
           </NavLink>
         </li>
         <li>
-          <button>Preferences</button>          
+          <button
+            className="btn btn__pref btn__modal"
+            onClick={this.handleModalOpenClick}
+          >
+            Preferences
+          </button>          
         </li>
         <li>
           Switch Workspace
