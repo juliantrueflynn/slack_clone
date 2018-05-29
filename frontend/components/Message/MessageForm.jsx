@@ -1,6 +1,6 @@
 import React from 'react';
 import Editor from 'draft-js-plugins-editor';
-import { EditorState, convertToRaw } from 'draft-js';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import createEmojiPlugin from 'draft-js-emoji-plugin';
 import FormErrors from '../Layout/FormErrors';
 import 'draft-js/dist/Draft.css';
@@ -15,9 +15,7 @@ class MessageForm extends React.Component {
 
     this.state = { editorState: EditorState.createEmpty() };
 
-    this.onChange = editorState => this.setState({
-      editorState
-    });
+    this.onChange = editorState => this.setState({ editorState });
 
     this.handleMessageSubmit = this.handleMessageSubmit.bind(this);
   }
@@ -25,7 +23,8 @@ class MessageForm extends React.Component {
   handleMessageSubmit(event) {
     event.preventDefault();
 
-    const currentContent = this.state.editorState.getCurrentContent();
+    const { editorState } = this.state;
+    const currentContent = editorState.getCurrentContent();
     const body = JSON.stringify(convertToRaw(currentContent));
   
     const message = {
@@ -35,14 +34,20 @@ class MessageForm extends React.Component {
     };
 
     this.props.createMessageRequest(message, this.props.parentMessageSlug);
+    
+    const clearEditorState = EditorState.push(
+      editorState,
+      ContentState.createFromText(''),
+      'remove-range'
+    );
+
+    this.setState({ editorState: clearEditorState });
   }
 
   render() {
     return (
       <div className="msg-form-container">
         <FormErrors entity="message" />
-        
-        {this.state.htmlMessageBody}
         
         <form className="msg-form" onSubmit={this.handleMessageSubmit}>
           <Editor
