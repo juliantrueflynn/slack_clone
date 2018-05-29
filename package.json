@@ -9,6 +9,8 @@
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.11",
     "draft-js": "^0.10.5",
+    "draft-js-emoji-plugin": "^2.0.6",
+    "draft-js-plugins-editor": "^2.0.8",
     "emoji-js": "^3.4.0",
     "emoji-picker-react": "^2.0.4",
     "history": "^4.7.2",
