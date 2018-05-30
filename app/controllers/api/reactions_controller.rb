@@ -8,7 +8,7 @@ class Api::ReactionsController < ApplicationController
     @reaction = Reaction.new(reaction_params)
 
     if @reaction.save
-      render json: @reaction
+      render 'api/reactions/show'
     else
       render json: @reaction.errors.full_messages, status: 422
     end
@@ -17,7 +17,7 @@ class Api::ReactionsController < ApplicationController
   def destroy
     if @reaction
       @reaction.destroy
-      render json: @reaction
+      render 'api/reactions/show'
     else
       render json: ["doesn't exist"]
     end
