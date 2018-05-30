@@ -15,7 +15,7 @@ const messageReducer = (state = {}, action) => {
   switch (action.type) {
     case CHANNEL_RECEIVE : {
       nextState = Object.assign({}, state);
-      const { channel: { messages }, ui: { messageSlug } } = action;
+      const { channel: { messages, reactions }, ui: { messageSlug } } = action;
       
       messages.map(message => {
         nextState[message.slug] = message;
@@ -33,19 +33,41 @@ const messageReducer = (state = {}, action) => {
           }
         }
       });
+
+      reactions.map(reaction => {
+        if (nextState[reaction.messageSlug]) {
+          nextState[reaction.messageSlug].reactions = Object.assign(
+            [],
+            nextState[reaction.messageSlug].reactions,
+            [ reaction.id ]
+          );
+        }
+      });
   
       return nextState;
     }
     case MESSAGE_RECEIVE : {
-      const { message: { message, thread, favorites } } = action;
+      const { message: { message, thread, favorites, reactions } } = action;
       nextState = Object.assign({}, state);
-      nextState[message.slug] = message;
-      nextState[message.slug].thread = [];
+      const slug = message.slug;
+      nextState[slug] = message;
+      nextState[slug].thread = [];
       
+      const newReactions = [];
+      reactions.map(reaction => {
+        newReactions.push(reaction.id);
+      });
+
+      nextState[slug].reactions = Object.assign(
+        [],
+        nextState[slug].reactions,
+        newReactions
+      );
+
       if (thread) {
         thread.map(entry => {
           nextState[entry.slug] = entry;
-          nextState[message.slug].thread.push(entry.slug);
+          nextState[slug].thread.push(entry.slug);
         });
       }
 
