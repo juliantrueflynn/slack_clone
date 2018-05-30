@@ -94,6 +94,8 @@ class Message extends React.Component {
               createFavoriteRequest={this.props.createFavoriteRequest}
               deleteFavoriteRequest={this.props.deleteFavoriteRequest}
               isFavorited={this.props.isFavorited}
+              createReactionRequest={this.props.createReactionRequest}
+              deleteReactionRequest={this.props.deleteReactionRequest}
               match={this.props.match}
             />
           )}

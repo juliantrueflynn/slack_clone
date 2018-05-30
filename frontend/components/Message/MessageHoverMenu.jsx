@@ -1,30 +1,57 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import JSEMOJI from 'emoji-js';
+import EmojiPicker from 'emoji-picker-react';
+
+const emojiOneImgPath = 'https://cdn.jsdelivr.net/emojione/assets/3.0/png/32/';
+let jsemoji = new JSEMOJI();
+jsemoji.img_set = 'emojione';
+jsemoji.img_sets.emojione.path = emojiOneImgPath;
+jsemoji.supports_css = false;
+jsemoji.allow_native = false;
+jsemoji.replace_mode = 'unified';
 
 class MessageHoverMenu extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = { isEmojiOpen: false };
+
+    this.handleReactionClick = this.handleReactionClick.bind(this);
+    this.handleEmojiToggle = this.handleEmojiToggle.bind(this);
     this.handleFavClick = this.handleFavClick.bind(this);
     this.handleUnfavClick = this.handleUnfavClick.bind(this);
     this.handleEditClick = this.handleEditClick.bind(this);
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
   }
 
-  handleFavClick(event) {
+  handleReactionClick(id, emoji) {
+    const reaction = {
+      messageId: this.props.message.id,
+      emoji: emoji.name
+    };
+
+    this.props.createReactionRequest(reaction);
+    this.setState({ isEmojiOpen: false });
+  }
+
+  handleEmojiToggle() {
+    this.setState({ isEmojiOpen: !this.state.isEmojiOpen });
+  }
+
+  handleFavClick() {
     this.props.createFavoriteRequest(this.props.message.slug);
   }
 
-  handleUnfavClick(event) {
+  handleUnfavClick() {
     this.props.deleteFavoriteRequest(this.props.message.slug);
   }
 
-  handleEditClick(event) {
+  handleEditClick() {
     this.props.toggleEditMessage(true);
   }
 
-  handleDeleteClick(event) {
-    event.preventDefault();
+  handleDeleteClick() {
     this.props.deleteMessageRequest(this.props.message.slug);
   }
 
@@ -35,6 +62,17 @@ class MessageHoverMenu extends React.Component {
     return (
       <div className="message-hover-menu">
         <ul className="message-hover-menu__buttons">
+          <button
+            className="btn btn__reaction"
+            onClick={this.handleEmojiToggle}
+          >
+            Add reaction
+          </button>
+          
+          {this.state.isEmojiOpen && (
+            <EmojiPicker onEmojiClick={this.handleReactionClick} />
+          )}
+
           {!message.parentMessageId && (
             <Link to={`${baseUrl}/thread/${message.slug}`}>
               Start thread

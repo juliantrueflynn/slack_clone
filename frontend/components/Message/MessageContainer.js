@@ -11,6 +11,10 @@ import {
   deleteFavoriteRequest
 } from '../../actions/favoriteActions';
 import { getFavoriteStatus } from '../../reducers/selectors';
+import {
+  createReactionRequest,
+  deleteReactionRequest
+} from '../../actions/reactionActions';
 
 const mapStateToProps = (state, { message }) => ({
   isAuthor: state.session.currentUser.id === message.authorId,
@@ -30,6 +34,12 @@ const mapDispatchToProps = dispatch => ({
   ),
   deleteFavoriteRequest: messageId => dispatch(
     deleteFavoriteRequest(messageId)
+  ),
+  createReactionRequest: reaction => dispatch(
+    createReactionRequest(reaction)
+  ),
+  deleteReactionRequest: reactionId => dispatch(
+    deleteReactionRequest(reactionId)
   )
 });
 
