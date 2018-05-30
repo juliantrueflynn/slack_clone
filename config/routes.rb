@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     resources :channel_subs, only: [:create, :destroy]
     resources :messages, only: [:create, :update, :destroy, :show], param: :slug
     resources :message_favs, only: [:index, :create, :destroy], param: :message_slug
+    resources :reactions, only: [:show, :create, :destroy]
   end
 
   mount ActionCable.server => '/cable'
