@@ -9,10 +9,10 @@ json.thread do
 end
 
 json.favorites do
-    json.array! @message.favs do |fav|
-      json.(fav, :id, :message_id, :user_id)
-      json.message_slug @message.slug
-    end
+  json.array! @message.favs do |fav|
+    json.(fav, :id, :message_id, :user_id)
+    json.message_slug @message.slug
+  end
 
   @message.thread_entries.each do |message|
     json.array! message.favs do |fav|
@@ -20,4 +20,8 @@ json.favorites do
       json.message_slug message.slug
     end
   end
+end
+
+json.reactions do
+  json.array! @message.reactions, :id, :message_id, :user_id, :emoji
 end
