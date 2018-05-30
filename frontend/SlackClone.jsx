@@ -15,7 +15,7 @@ import * as MessageActions from './actions/messageActions';
 import * as FavoriteAPIUtil from './util/favoriteAPIUtil';
 import * as FavoriteActions from './actions/favoriteActions';
 import * as ReactionActions from './actions/reactionActions';
-import * as ReactionAPIUtil from './util/reactionUtil';
+import * as ReactionAPIUtil from './util/reactionAPIUtil';
 
 document.addEventListener('DOMContentLoaded', () => {
   const rootEl = document.getElementById('root');
