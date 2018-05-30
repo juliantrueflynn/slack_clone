@@ -6,6 +6,7 @@ class Api::ReactionsController < ApplicationController
 
   def create
     @reaction = Reaction.new(reaction_params)
+    @reaction.user_id = current_user.id
 
     if @reaction.save
       render 'api/reactions/show'
@@ -30,6 +31,6 @@ class Api::ReactionsController < ApplicationController
   end
 
   def reaction_params
-    params.require(:reaction).permit(:message_id, :user_id, :emoji)
+    params.require(:reaction).permit(:message_id, :emoji)
   end
 end
