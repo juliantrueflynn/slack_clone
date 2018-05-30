@@ -75,3 +75,9 @@ export const getFavoriteStatus = (state, messageSlug) => {
 export const getRightSidebarType = state => (
   state.ui.rightSidebar ? state.ui.rightSidebar.sidebarType : null
 );
+
+export const getMessageReactions = ({ entities }, messageId) => (
+  Object.values(entities.reactions).filter(reaction => (
+    reaction.messageId === messageId
+  ))
+);

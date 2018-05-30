@@ -115,6 +115,16 @@ class Message extends React.Component {
               readOnly
             />
           </div>
+
+          <div className="reactions">
+            <ul className="reactions-list">
+              {this.props.reactions.map(reaction => (
+                <li key={reaction.id}>
+                  {reaction.id}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </li>
     );
