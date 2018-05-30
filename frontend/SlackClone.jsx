@@ -14,6 +14,8 @@ import * as MessageAPIUtil from './util/messageAPIUtil';
 import * as MessageActions from './actions/messageActions';
 import * as FavoriteAPIUtil from './util/favoriteAPIUtil';
 import * as FavoriteActions from './actions/favoriteActions';
+import * as ReactionActions from './actions/reactionActions';
+import * as ReactionAPIUtil from './util/reactionUtil';
 
 document.addEventListener('DOMContentLoaded', () => {
   const rootEl = document.getElementById('root');
@@ -42,6 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.MessageAPIUtil = MessageAPIUtil;
     window.FavoriteActions = FavoriteActions;
     window.FavoriteAPIUtil = FavoriteAPIUtil;
+    window.ReactionActions = ReactionActions;
+    window.ReactionAPIUtil = ReactionAPIUtil;
   }
 
   ReactDOM.render(<Root store={store} />, rootEl);
