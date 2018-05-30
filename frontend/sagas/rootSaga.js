@@ -8,6 +8,7 @@ import { messageSaga } from './messageSaga';
 import { favoriteSaga } from './favoriteSaga';
 import { navigateSaga } from './navigateSaga';
 import { rightSidebarSaga } from './rightSidebarSaga';
+import { reactionSaga } from './reactionSaga';
 
 export default function* root() {
   yield all([
@@ -19,6 +20,7 @@ export default function* root() {
     fork(workspaceSubSaga),
     fork(messageSaga),
     fork(favoriteSaga),
+    fork(reactionSaga),
     fork(rightSidebarSaga)
   ]);
 }
