@@ -23,6 +23,9 @@ class Channel < ApplicationRecord
   has_many :favs,
     through: :messages,
     source: :favs
+  has_many :reactions,
+    through: :messages,
+    source: :reactions
 
   def is_user_subbed?(user)
     users_subbed = subs.where(channel_subs: { user_id: user.id })
