@@ -30,6 +30,6 @@ class Api::ReactionsController < ApplicationController
   end
 
   def reaction_params
-    params.require(:reaction).permit(:message_id, :user_id, :reaction)
+    params.require(:reaction).permit(:message_id, :user_id, :emoji)
   end
 end
