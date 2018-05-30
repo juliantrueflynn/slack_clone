@@ -1,1 +1,1 @@
-json.(:id, :message_id, :user_id, :emoji)
+json.(@reaction, :id, :message_id, :user_id, :emoji)
