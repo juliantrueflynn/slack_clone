@@ -23,6 +23,7 @@ class User < ApplicationRecord
   has_many :favs,
     class_name: 'MessageFav',
     foreign_key: :user_id
+  has_many :reactions
 
   def self.find_by_email_and_password(email, password)
     user = User.find_by(email: email)

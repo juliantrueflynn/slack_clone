@@ -24,6 +24,7 @@ class Message < ApplicationRecord
   has_many :favs,
     class_name: 'MessageFav',
     foreign_key: :message_id
+  has_many :reactions
 
   def is_child?
     !!parent_message_id
