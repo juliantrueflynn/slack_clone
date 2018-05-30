@@ -27,7 +27,7 @@ class Api::ReactionsController < ApplicationController
   private
 
   def set_reaction
-    @reaction = Reaction.find_by(params[:id])
+    @reaction = Reaction.find_by(id: params[:id])
   end
 
   def reaction_params
