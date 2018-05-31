@@ -1,15 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import JSEMOJI from 'emoji-js';
 import EmojiPicker from 'emoji-picker-react';
-
-const emojiOneImgPath = 'https://cdn.jsdelivr.net/emojione/assets/3.0/png/32/';
-let jsemoji = new JSEMOJI();
-jsemoji.img_set = 'emojione';
-jsemoji.img_sets.emojione.path = emojiOneImgPath;
-jsemoji.supports_css = false;
-jsemoji.allow_native = false;
-jsemoji.replace_mode = 'unified';
 
 class MessageHoverMenu extends React.Component {
   constructor(props) {

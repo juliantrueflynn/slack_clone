@@ -1,4 +1,5 @@
 import React from 'react';
+import Emojify from 'react-emojione';
 import './Reactions.css';
 
 class Reactions extends React.Component {
@@ -18,7 +19,13 @@ class Reactions extends React.Component {
       <ul className="reactions">
         {emojiNames.map(emoji => (
           <li className="reactions__item" key={emoji}>
-            {emoji} ({reactions[emoji].length}) 
+            <div className="reaction-badge">
+              <Emojify style={{ height: 17, width: 17 }}>
+                {`:${emoji}:`}
+              </Emojify>
+              
+              {reactions[emoji].length}
+            </div>
           </li>
         ))}
       </ul>
