@@ -18,7 +18,15 @@ def random_lorem_short_or_long
   Faker::Lorem.word
 end
 
-5.times do
+def random_message_body
+  '{"blocks":[{"key":"' +
+  Faker::Lorem.unique.word +
+  '","text":"' +
+  random_lorem_short_or_long +
+  '","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'
+end
+
+3.times do
   title = Faker::Company.unique.name
   workspace = Workspace.create!(
     title: title,
@@ -26,7 +34,7 @@ end
     owner_id: User.first.id
   )
 
-  [*2..5].sample.times do
+  3.times do
     title = Faker::Company.unique.buzzword
     Channel.create!(
       title: title,
@@ -37,7 +45,7 @@ end
   end
 end
 
-15.times do
+8.times do
   user = User.create!(
     email: Faker::Internet.unique.email,
     username: Faker::Internet.unique.user_name,
@@ -59,10 +67,10 @@ end
         user_id: user.id
       )
   
-      [*1..10].sample.times do
+      [*1..4].sample.times do
         next if is_random_true?
         Message.create!(
-          body: random_lorem_short_or_long,
+          body: random_message_body,
           author_id: user.id,
           channel_id: channel.id
         )
@@ -71,7 +79,7 @@ end
       random_parent_message = channel.parent_messages.sample
       next if random_parent_message.nil? || rand < 0.60
       Message.create!(
-        body: random_lorem_short_or_long,
+        body: random_message_body,
         author_id: user.id,
         channel_id: channel.id,
         parent_message_id: random_parent_message.id
