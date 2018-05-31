@@ -3,6 +3,7 @@ import MessageHoverMenu from './MessageHoverMenu';
 import Editor from 'draft-js-plugins-editor';
 import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import createEmojiPlugin from 'draft-js-emoji-plugin';
+import Reactions from '../Reactions';
 import 'draft-js/dist/Draft.css';
 import 'draft-js-emoji-plugin/lib/plugin.css';
 
@@ -116,15 +117,7 @@ class Message extends React.Component {
             />
           </div>
 
-          <div className="reactions">
-            <ul className="reactions-list">
-              {this.props.reactions.map(reaction => (
-                <li key={reaction.id}>
-                  {reaction.id}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <Reactions reactions={this.props.reactions} />
         </div>
       </li>
     );
