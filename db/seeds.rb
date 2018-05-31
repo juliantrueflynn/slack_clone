@@ -2,6 +2,8 @@ require 'faker'
 
 User.create!(email: "jtf@gmail.com", username: "jtf", password: "123456")
 
+REACTIONS = %w(joy smile heart_eyes innocent +1 point_up)
+
 def is_random_true?
   rand < 0.25
 end
@@ -84,6 +86,18 @@ end
         channel_id: channel.id,
         parent_message_id: random_parent_message.id
       )
+
+      3.times do
+        10.times do
+          reaction = Reaction.new(
+            user_id: user.id,
+            message_id: channel.messages.sample.id,
+            emoji: REACTIONS.sample
+          )
+  
+          break if reaction.save
+        end
+      end
     end
   end
 end
