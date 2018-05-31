@@ -1,4 +1,5 @@
 import React from 'react';
+import './Reactions.css';
 
 class Reactions extends React.Component {
   constructor(props) {
@@ -14,15 +15,13 @@ class Reactions extends React.Component {
     }
 
     return (
-      <div className="reactions">
-        <ul className="reactions-list">
-          {emojiNames.map(emoji => (
-            <li key={emoji}>
-              {emoji} ({reactions[emoji].length}) 
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ul className="reactions">
+        {emojiNames.map(emoji => (
+          <li className="reactions__item" key={emoji}>
+            {emoji} ({reactions[emoji].length}) 
+          </li>
+        ))}
+      </ul>
     );
   }
 }
