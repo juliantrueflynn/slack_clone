@@ -76,8 +76,20 @@ export const getRightSidebarType = state => (
   state.ui.rightSidebar ? state.ui.rightSidebar.sidebarType : null
 );
 
-export const getMessageReactions = ({ entities }, messageId) => (
-  Object.values(entities.reactions).filter(reaction => (
-    reaction.messageId === messageId
-  ))
-);
+export const getReactionCounts = (state, messageId) => {
+  let newReactions = {};
+  
+  Object.values(state.entities.reactions).forEach(reaction => {
+    if (reaction.messageId !== messageId) {
+      return;
+    }
+  
+    if (!newReactions[reaction.emoji]) {
+      newReactions[reaction.emoji] = [];
+    }
+
+    newReactions[reaction.emoji].push(reaction.userId);
+  });
+
+  return newReactions;
+};
