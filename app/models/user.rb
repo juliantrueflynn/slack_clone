@@ -61,6 +61,22 @@ class User < ApplicationRecord
     self.session_token
   end
 
+  def online
+    self.appearance = 'ONLINE'
+  end
+
+  def offline
+    self.appearance = 'ONLINE'
+  end
+
+  def away
+    self.appearance = 'AWAY'
+  end
+
+  def busy
+    self.appearance = 'BUSY'
+  end
+
   private
 
   def generate_slug

@@ -1,6 +1,7 @@
 import React from 'react';
 import ChannelPageContainer from '../Channel/ChannelPageContainer';
 import { ActionCable } from 'react-actioncable-provider';
+import { UserActionCable } from '../../util/actionCableUtil';
 
 class WorkspacePage extends React.Component {
   constructor(props) {
@@ -41,6 +42,7 @@ class WorkspacePage extends React.Component {
           }}
           onReceived={this.handleReceived}
         />
+        <UserActionCable />
 
         {this.props.children}
       </div>

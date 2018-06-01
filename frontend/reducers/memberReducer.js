@@ -1,5 +1,6 @@
 import { WORKSPACE_RECEIVE } from '../actions/workspaceActions';
 import { CHANNEL_RECEIVE } from '../actions/channelActions';
+import { SET_APPEARANCE } from '../actions/memberActions';
 
 const memberReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -15,6 +16,12 @@ const memberReducer = (state = {}, action) => {
       });
       
       return nextState;
+    }
+    case SET_APPEARANCE : {
+      const { userSlug, appearance } = action;
+      nextState = { [userSlug]: { appearance } };
+
+      return Object.assign({}, state, nextState);
     }
     default :
       return state;
