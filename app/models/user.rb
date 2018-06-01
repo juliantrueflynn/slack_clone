@@ -1,10 +1,14 @@
 class User < ApplicationRecord
+  APPEARANCE_STATES = %w(OFFLINE ONLINE AWAY BUSY).freeze
+
   attr_reader :password
 
-  before_validation :generate_id
+  before_validation :generate_slug
+  after_initialize :assign_default_appearance
   after_initialize :ensure_session_token
 
-  validates :username, :email, :password_digest, :session_token, presence: true
+  validates :username, :email, :password_digest, :session_token, :appearance, presence: true
+  validates :appearance, inclusion: APPEARANCE_STATES
   validates :username, :email, uniqueness: true
   validates :password, length: { minimum: 6 }, allow_nil: true
 
@@ -59,7 +63,7 @@ class User < ApplicationRecord
 
   private
 
-  def generate_id
+  def generate_slug
     return slug if slug
     
     loop do
@@ -68,6 +72,10 @@ class User < ApplicationRecord
       self.slug = "#{username_slugged}-#{slug_token}"
       break unless User.where(slug: slug).exists?
     end
+  end
+
+  def assign_default_appearance
+    self.appearance ||= 'OFFLINE'
   end
 
   def ensure_session_token
