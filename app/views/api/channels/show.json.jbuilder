@@ -5,7 +5,7 @@ end
 
 json.members do
   json.array! @channel.members do |member|
-    json.(member, :id, :slug, :username, :email)
+    json.(member, :id, :slug, :username, :email, :appearance)
   end
 end
 

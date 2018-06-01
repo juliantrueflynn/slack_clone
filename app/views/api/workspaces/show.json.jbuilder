@@ -10,5 +10,5 @@ json.channels do
 end
 
 json.members do
-  json.array! @workspace.members, :id, :username, :email, :slug
+  json.array! @workspace.members, :id, :username, :email, :slug, :appearance
 end
