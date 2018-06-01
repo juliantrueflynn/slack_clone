@@ -1,3 +1,4 @@
+import merge from 'lodash.merge';
 import { WORKSPACE_RECEIVE } from '../actions/workspaceActions';
 import { CHANNEL_RECEIVE } from '../actions/channelActions';
 import { SET_APPEARANCE } from '../actions/memberActions';
@@ -21,7 +22,7 @@ const memberReducer = (state = {}, action) => {
       const { userSlug, appearance } = action;
       nextState = { [userSlug]: { appearance } };
 
-      return Object.assign({}, state, nextState);
+      return merge({}, state, nextState);
     }
     default :
       return state;
