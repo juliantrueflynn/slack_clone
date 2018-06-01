@@ -1,10 +1,12 @@
 import React from 'react';
 import ChannelPageContainer from '../Channel/ChannelPageContainer';
-import { RouteWithSubRoutes } from '../../util/routeUtil';
+import { ActionCable } from 'react-actioncable-provider';
 
 class WorkspacePage extends React.Component {
   constructor(props) {
     super(props);
+
+    this.handleReceived = this.handleReceived.bind(this);
   }
 
   componentDidMount() {
@@ -18,17 +20,29 @@ class WorkspacePage extends React.Component {
   componentDidUpdate(prevProps) {
     const { location, workspaceRequest, match } = this.props;
     
-    if (location.pathname === match.url && prevProps.match.url !== match.url) {
+    if (prevProps.match.url !== match.url) {
       workspaceRequest(match.params.workspaceSlug);
     }
   }
 
+  handleReceived(received) {
+    console.log(received);
+  }
+
   render() {
+    const { match: { params } } = this.props;
+
     return (
-      <div className="workspace">
-        {this.props.routes.map((route, i) => (
-          <RouteWithSubRoutes key={`workspaceRoute${i}`} {...route} />
-        ))}
+      <div className="workspace-view">
+        <ActionCable 
+          channel={{
+            channel: 'WorkspaceChannel',
+            workspace_slug: params.workspaceSlug
+          }}
+          onReceived={this.handleReceived}
+        />
+
+        {this.props.children}
       </div>
     );
   }
