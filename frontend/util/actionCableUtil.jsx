@@ -6,7 +6,7 @@ import {
   createMessageReceive, updateMessageReceive, deleteMessageReceive
 } from '../actions/messageActions';
 import { getChannels } from '../reducers/selectors';
-import { setAppearance } from '../actions/memberActions';
+import { statusRequest, setStatus } from '../actions/memberActions';
 
 const mapStateToProps = state => ({
   channels: getChannels(state),
@@ -27,33 +27,48 @@ const mapDispatchToProps = dispatch => ({
         return dispatch(updateMessageReceive(camelized.message));
       case 'DELETE_MESSAGE' :
         return dispatch(deleteMessageReceive(camelized.message.slug));
+      case 'STATUS' :
+        return dispatch(setStatus(
+          camelized.user.slug,
+          camelized.user.appearance
+        ));
     }
-  },
-  onConnected: (userId, appearance) => dispatch(
-    setAppearance(userId, appearance)
-  )
+  }
 });
 
 class SocketUser extends React.Component {
   constructor(props) {
     super(props);
 
+    this.handleReceived = this.handleReceived.bind(this);
     this.handleConnected = this.handleConnected.bind(this);
+    this.handleDisconnected = this.handleDisconnected.bind(this);
+  }
+
+  handleReceived(received) {
+    this.props.onReceivedCallback(received);
   }
 
   handleConnected() {
-    const { currentUser, onConnected } = this.props;
+    this.refs.appearance.perform('online', { status: 'ONLINE' });
+  }
 
-    if (currentUser) {
-      onConnected(currentUser.slug, 'ONLINE');
-    }
+  handleDisconnected() {
+    this.refs.appearance.perform('offline', { status: 'OFFLINE' });
   }
 
   render() {
+    if (!this.props.currentUser) {
+      return null;
+    }
+
     return (
       <ActionCable
+        ref="appearance"
         channel={{ channel: 'UserAppearanceChannel' }}
-        onConnected={ this.handleConnected }
+        onReceived={this.handleReceived}
+        onConnected={this.handleConnected}
+        onDisconnected={this.handleDisconnected}
       />
     );
   }

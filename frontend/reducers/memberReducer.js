@@ -1,7 +1,7 @@
 import merge from 'lodash.merge';
 import { WORKSPACE_RECEIVE } from '../actions/workspaceActions';
 import { CHANNEL_RECEIVE } from '../actions/channelActions';
-import { SET_APPEARANCE } from '../actions/memberActions';
+import { SET_STATUS } from '../actions/memberActions';
 
 const memberReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -18,7 +18,7 @@ const memberReducer = (state = {}, action) => {
       
       return nextState;
     }
-    case SET_APPEARANCE : {
+    case SET_STATUS : {
       const { userSlug, appearance } = action;
       nextState = { [userSlug]: { appearance } };
 

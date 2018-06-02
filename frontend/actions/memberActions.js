@@ -1,7 +1,7 @@
-export const SET_APPEARANCE = 'SET_APPEARANCE';
+export const SET_STATUS = 'SET_STATUS';
 
-export const setAppearance = (userSlug, appearance) => ({
-  type: SET_APPEARANCE,
+export const setStatus = (userSlug, status) => ({
+  type: SET_STATUS,
   userSlug,
-  appearance
+  status
 });

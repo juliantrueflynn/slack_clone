@@ -1,13 +1,21 @@
 class UserAppearanceChannel < ApplicationCable::Channel
   def subscribed
-    current_user.online
+    stream_from "user_appearances"
   end
 
   def unsubscribed
-    current_user.offline
+    current_user.appear('OFFLINE')
+  end
+
+  def online
+    current_user.appear('ONLINE')
+  end
+
+  def offline
+    current_user.appear('OFFLINE')
   end
 
   def away
-    current_user.away
+    current_user.appear('AWAY')
   end
 end

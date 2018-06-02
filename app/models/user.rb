@@ -99,4 +99,10 @@ class User < ApplicationRecord
     end
     self.session_token
   end
+
+  after_update_commit do
+    if saved_change_to_appearance?
+      AppearanceEventsJob.perform_later(event: 'STATUS', user: self)
+    end
+  end
 end
