@@ -20,10 +20,10 @@ function* loadCreateSub({ channelSlug }) {
 
 function* loadDeleteSub({ channelSlug }) {
   try {
-    yield call(api.deleteChannel, channelSlug);
-    // yield put(actions.deleteChannelReceive(channelSlug));
+    yield call(api.deleteChannelSub, channelSlug);
+    // yield put(actions.deleteChannelSubReceive(channelSlug));
   } catch (error) {
-    yield put(actions.deleteChannelFailure(error));
+    yield put(actions.deleteChannelSubFailure(error));
   }
 }
 
@@ -38,6 +38,6 @@ function* watchDeleteSubChannel() {
 export function* channelSubSaga() {
   yield all([
     fork(watchCreateChannelSub),
-    fork(watchDeleteSubChannel),
+    // fork(watchDeleteSubChannel),
   ]);
 }
