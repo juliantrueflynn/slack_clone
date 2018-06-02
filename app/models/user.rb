@@ -61,20 +61,10 @@ class User < ApplicationRecord
     self.session_token
   end
 
-  def online
-    self.appearance = 'ONLINE'
-  end
-
-  def offline
-    self.appearance = 'ONLINE'
-  end
-
-  def away
-    self.appearance = 'AWAY'
-  end
-
-  def busy
-    self.appearance = 'BUSY'
+  def appear(online_status)
+    self.appearance = online_status
+    save!
+    self.appearance
   end
 
   private
