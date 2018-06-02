@@ -30,12 +30,13 @@ function* addNewWorkspace({ workspace }) {
     const newWorkspace = yield call(api.createWorkspace, workspace);
     // yield put(actions.createWorkspaceReceive(newWorkspace));
     yield put(createWorkspaceSubRequest(newWorkspace.id));
+    yield call(loadDefaultChannels, newWorkspace.slug);
   } catch (error) {
     yield put(actions.createWorkspaceFailure(error));
   }
 }
 
-function* loadDefaultChannels({ workspace: { slug } }) {
+function* loadDefaultChannels(slug) {
   let defaultChannels = [];
   const defaultChannelTitles = ['general', 'random'];
   for (let title of defaultChannelTitles) {
@@ -65,7 +66,7 @@ function* loadWorkspace({ workspaceSlug }) {
 
 function* newWorkspaceFlow() {
   yield takeLatest(actions.CREATE_WORKSPACE_REQUEST, addNewWorkspace);
-  yield takeLatest(actions.CREATE_WORKSPACE_RECEIVE, loadDefaultChannels);
+  // yield takeLatest(actions.CREATE_WORKSPACE_RECEIVE, loadDefaultChannels);
 }
 
 function* watchWorkspaces() {

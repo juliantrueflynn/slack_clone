@@ -12,7 +12,7 @@ function* loadCreateSub({ channelSlug }) {
       { channelId: channelSlug }
     );
     // yield put(actions.createChannelSubReceive(newChannelSub));
-    yield put(navigate(`/${workspaceSlug}/${channelSlug}`));
+    // yield put(navigate(`/${workspaceSlug}/${channelSlug}`));
   } catch (error) {
     yield put(actions.createChannelSubFailure(error));
   }
