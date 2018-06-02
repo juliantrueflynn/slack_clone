@@ -25,4 +25,20 @@ class Workspace < ApplicationRecord
     users_subbed = subs.where(workspace_subs: { user_id: user.id })
     users_subbed
   end
+
+  private
+
+  after_create_commit do
+    WorkspaceEventsJob.perform_later(event: "CREATE_WORKSPACE", workspace: self)
+  end
+
+  after_update_commit do
+    WorkspaceEventsJob.perform_later(event: "UPDATE_WORKSPACE", workspace: self)
+  end
+
+  # This works but after_destroy_commit does not for some reason
+  after_destroy :delete_workspace
+  def delete_workspace
+    WorkspaceEventsJob.perform_later(event: "DELETE_WORKSPACE", workspace: self)
+  end
 end

@@ -7,6 +7,7 @@ import {
 } from '../actions/messageActions';
 import { getChannels } from '../reducers/selectors';
 import { statusRequest, setStatus } from '../actions/memberActions';
+import { createWorkspaceReceive } from '../actions/workspaceActions';
 
 const mapStateToProps = state => ({
   channels: getChannels(state),
@@ -27,6 +28,8 @@ const mapDispatchToProps = dispatch => ({
         return dispatch(updateMessageReceive(camelized.message));
       case 'DELETE_MESSAGE' :
         return dispatch(deleteMessageReceive(camelized.message.slug));
+      case 'CREATE_WORKSPACE' :
+        return dispatch(createWorkspaceReceive(camelized.workspace));
       case 'STATUS' :
         return dispatch(setStatus(
           camelized.user.slug,
@@ -74,6 +77,27 @@ class SocketUser extends React.Component {
   }
 }
 
+class SocketWorkspace extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleReceived = this.handleReceived.bind(this);
+  }
+
+  handleReceived(received) {
+    this.props.onReceivedCallback(received);
+  }
+
+  render() {
+    return (
+      <ActionCable
+        channel={{ channel: 'WorkspaceChannel' }}
+        onReceived={this.handleReceived}
+      />
+    );
+  }
+}
+
 class SocketChatChannel extends React.Component {
   constructor(props) {
     super(props);
@@ -92,7 +116,7 @@ class SocketChatChannel extends React.Component {
           <ActionCable
             key={ channel.slug }
             channel={{ channel: 'ChatChannel', channel_id: channel.id }}
-            onReceived={ this.handleReceived }
+            onReceived={this.handleReceived}
           />
         )}
       </Fragment>
@@ -101,6 +125,11 @@ class SocketChatChannel extends React.Component {
 }
 
 export const ChannelsActionCables = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SocketWorkspace);
+
+export const WorkspaceActionCable = connect(
   mapStateToProps,
   mapDispatchToProps
 )(SocketChatChannel);
