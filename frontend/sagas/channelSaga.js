@@ -18,7 +18,7 @@ import { modalClose, NEW_CHANNEL_MODAL } from '../actions/modalActions';
 function* addNewChannel({ channel }) {
   try {
     const newChannel = yield call(api.createChannel, channel);
-    yield put(actions.createChannelReceive(newChannel));
+    // yield put(actions.createChannelReceive(newChannel));
     yield put(createChannelSubRequest(newChannel.slug));
     yield put(modalClose(NEW_CHANNEL_MODAL));
   } catch (error) {
@@ -29,7 +29,7 @@ function* addNewChannel({ channel }) {
 function* fetchEditChannel({ channel }) {
   try {
     const newChannel = yield call(api.editChannel, channel);
-    yield put(actions.updateChannelReceive(newChannel));
+    // yield put(actions.updateChannelReceive(newChannel));
   } catch (error) {
     yield put(actions.updateChannelFailure(error));
   }

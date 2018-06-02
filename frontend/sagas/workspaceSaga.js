@@ -28,7 +28,7 @@ function* fetchDeleteWorkspace({ workspaceSlug }) {
 function* addNewWorkspace({ workspace }) {
   try {
     const newWorkspace = yield call(api.createWorkspace, workspace);
-    yield put(actions.createWorkspaceReceive(newWorkspace));
+    // yield put(actions.createWorkspaceReceive(newWorkspace));
     yield put(createWorkspaceSubRequest(newWorkspace.id));
   } catch (error) {
     yield put(actions.createWorkspaceFailure(error));

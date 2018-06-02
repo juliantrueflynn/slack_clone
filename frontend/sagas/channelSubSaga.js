@@ -4,40 +4,40 @@ import * as api from '../util/channelSubAPIUtil';
 import { getPageWorkspaceSlug } from '../reducers/selectors';
 import { navigate } from '../actions/navigateActions';
 
-function* addChannelSub({ channelSlug }) {
+function* loadCreateSub({ channelSlug }) {
   try {
     const workspaceSlug = yield select(getPageWorkspaceSlug);
     const newChannelSub = yield call(
       api.createChannelSub,
       { channelId: channelSlug }
     );
-    yield put(actions.createChannelSubReceive(newChannelSub));
+    // yield put(actions.createChannelSubReceive(newChannelSub));
     yield put(navigate(`/${workspaceSlug}/${channelSlug}`));
   } catch (error) {
     yield put(actions.createChannelSubFailure(error));
   }
 }
 
-// function* fetchDeleteChannelSub({ channelSlug }) {
-//   try {
-//     yield call(api.deleteChannel, channelSlug);
-//     yield put(actions.deleteChannelReceive(channelSlug));
-//   } catch (error) {
-//     yield put(actions.deleteChannelFailure(error));
-//   }
-// }
-
-function* watchCreateChannelSub() {
-  yield takeLatest(actions.CREATE_CHANNEL_SUB_REQUEST, addChannelSub);
+function* loadDeleteSub({ channelSlug }) {
+  try {
+    yield call(api.deleteChannel, channelSlug);
+    // yield put(actions.deleteChannelReceive(channelSlug));
+  } catch (error) {
+    yield put(actions.deleteChannelFailure(error));
+  }
 }
 
-// function* watchDeleteSubChannel() {
-//   yield takeLatest(actions.DELETE_CHANNEL_SUB_REQUEST, fetchDeleteChannelSub);
-// }
+function* watchCreateChannelSub() {
+  yield takeLatest(actions.CREATE_CHANNEL_SUB_REQUEST, loadCreateSub);
+}
+
+function* watchDeleteSubChannel() {
+  yield takeLatest(actions.DELETE_CHANNEL_SUB_REQUEST, loadDeleteSub);
+}
 
 export function* channelSubSaga() {
   yield all([
     fork(watchCreateChannelSub),
-    // fork(watchDeleteSubChannel),
+    fork(watchDeleteSubChannel),
   ]);
 }
