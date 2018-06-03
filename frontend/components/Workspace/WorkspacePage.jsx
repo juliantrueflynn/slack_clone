@@ -28,8 +28,6 @@ class WorkspacePage extends React.Component {
 
     return (
       <div className="workspace-view">
-        <UserActionCable />
-
         {this.props.children}
       </div>
     );
