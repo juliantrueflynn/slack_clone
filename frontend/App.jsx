@@ -8,11 +8,10 @@ import { PageRoutes } from './util/routeUtil';
 import './App.css';
 import 'sanitize.css';
 
-const App = props => (
+const App = () => (
   <div className="app">
     <ChannelsActionCables />
     <WorkspaceActionCable />
-    <UserActionCable />
     <PageRoutes />
   </div>
 );

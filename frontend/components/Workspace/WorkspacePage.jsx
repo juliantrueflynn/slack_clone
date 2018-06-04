@@ -28,6 +28,7 @@ class WorkspacePage extends React.Component {
 
     return (
       <div className="workspace-view">
+        <UserActionCable workspaceSlug={params.workspaceSlug} />
         {this.props.children}
       </div>
     );
