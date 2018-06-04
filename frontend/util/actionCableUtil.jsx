@@ -3,15 +3,16 @@ import { connect } from 'react-redux';
 import { ActionCable } from 'react-actioncable-provider';
 import { camelizeKeys } from 'humps';
 import {
-  createMessageReceive, updateMessageReceive, deleteMessageReceive
+  createMessageReceive,
+  updateMessageReceive,
+  deleteMessageReceive
 } from '../actions/messageActions';
 import { getChannels } from '../reducers/selectors';
 import { statusRequest, setStatus } from '../actions/memberActions';
 import { createWorkspaceReceive } from '../actions/workspaceActions';
 
 const mapStateToProps = state => ({
-  channels: getChannels(state),
-  currentUser: state.session.currentUser
+  channels: getChannels(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -39,7 +40,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-class SocketUser extends React.Component {
+class SocketWorkspace extends React.Component {
   constructor(props) {
     super(props);
 
@@ -53,46 +54,28 @@ class SocketUser extends React.Component {
   }
 
   handleConnected() {
-    this.refs.appearance.perform('online', { status: 'ONLINE' });
+    this.refs.workspaceCable.perform('online', {
+      workspace_slug: this.props.workspaceSlug
+    });
   }
 
   handleDisconnected() {
-    this.refs.appearance.perform('offline', { status: 'OFFLINE' });
+    this.refs.workspaceCable.perform('offline', {
+      workspace_slug: this.props.workspaceSlug
+    });
   }
 
   render() {
-    if (!this.props.currentUser) {
-      return null;
-    }
-
     return (
       <ActionCable
-        ref="appearance"
-        channel={{ channel: 'UserAppearanceChannel' }}
+        ref="workspaceCable"
+        channel={{
+          channel: 'WorkspaceChannel',
+          workspace_slug: this.props.workspaceSlug
+        }}
         onReceived={this.handleReceived}
         onConnected={this.handleConnected}
         onDisconnected={this.handleDisconnected}
-      />
-    );
-  }
-}
-
-class SocketWorkspace extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.handleReceived = this.handleReceived.bind(this);
-  }
-
-  handleReceived(received) {
-    this.props.onReceivedCallback(received);
-  }
-
-  render() {
-    return (
-      <ActionCable
-        channel={{ channel: 'WorkspaceChannel' }}
-        onReceived={this.handleReceived}
       />
     );
   }
@@ -127,14 +110,9 @@ class SocketChatChannel extends React.Component {
 export const ChannelsActionCables = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SocketWorkspace);
+)(SocketChatChannel);
 
 export const WorkspaceActionCable = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SocketChatChannel);
-
-export const UserActionCable = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SocketUser);
+)(SocketWorkspace);

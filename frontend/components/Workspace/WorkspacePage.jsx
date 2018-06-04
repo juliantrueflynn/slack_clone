@@ -1,6 +1,6 @@
 import React from 'react';
 import ChannelPageContainer from '../Channel/ChannelPageContainer';
-import { UserActionCable } from '../../util/actionCableUtil';
+import { WorkspaceActionCable } from '../../util/actionCableUtil';
 
 class WorkspacePage extends React.Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class WorkspacePage extends React.Component {
 
     return (
       <div className="workspace-view">
-        <UserActionCable workspaceSlug={params.workspaceSlug} />
+        <WorkspaceActionCable workspaceSlug={params.workspaceSlug} />        
         {this.props.children}
       </div>
     );

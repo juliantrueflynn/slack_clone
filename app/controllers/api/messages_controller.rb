@@ -2,6 +2,7 @@ class Api::MessagesController < ApplicationController
   before_action :set_message, only: [:show, :update, :destroy]
 
   def show
+    render json: @message
   end
 
   def create
