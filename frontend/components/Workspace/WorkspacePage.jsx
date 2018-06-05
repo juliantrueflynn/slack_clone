@@ -1,6 +1,7 @@
 import React from 'react';
 import ChannelPageContainer from '../Channel/ChannelPageContainer';
 import { WorkspaceActionCable } from '../../util/actionCableUtil';
+import { RouteWithSubRoutes } from '../../util/routeUtil';
 
 class WorkspacePage extends React.Component {
   constructor(props) {
@@ -8,15 +9,13 @@ class WorkspacePage extends React.Component {
   }
 
   componentDidMount() {
-    const { location, workspaceRequest, match } = this.props;
+    const { workspaceRequest, match } = this.props;
     
-    if (location.pathname === match.url) {
-      workspaceRequest(match.params.workspaceSlug);
-    }
+    workspaceRequest(match.params.workspaceSlug);
   }
 
   componentDidUpdate(prevProps) {
-    const { location, workspaceRequest, match } = this.props;
+    const { workspaceRequest, match } = this.props;
     
     if (prevProps.match.url !== match.url) {
       workspaceRequest(match.params.workspaceSlug);
@@ -24,12 +23,15 @@ class WorkspacePage extends React.Component {
   }
 
   render() {
-    const { match: { params } } = this.props;
+    const { match: { params }, routes } = this.props;
 
     return (
       <div className="workspace-view">
         <WorkspaceActionCable workspaceSlug={params.workspaceSlug} />        
-        {this.props.children}
+        
+        {routes && routes.map((route, i) => (
+          <RouteWithSubRoutes key={`channelRoute${i}`} {...route} />
+        ))}
       </div>
     );
   }

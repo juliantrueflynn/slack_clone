@@ -38,31 +38,33 @@ const routes = [
     isProtected: true
   },
   {
-    path: '/:workspaceSlug/:channelSlug',
-    component: ChannelPageContainer,
-    isProtected: true,      
-    routes: [
-      {
-        path: '/:workspaceSlug/:channelSlug/team/:userSlug',
-        component: UserViewContainer,
-        isProtected: true
-      },
-      {
-        path: '/:workspaceSlug/:channelSlug/thread/:messageSlug',
-        component: MessageThreadContainer,
-        isProtected: true           
-      },
-      {
-        path: '/:workspaceSlug/:channelSlug/favorites',
-        component: UserFavoritesContainer,
-        isProtected: true
-      }
-    ]
-  },
-  {
     path: '/:workspaceSlug',
     component: WorkspacePageContainer,
-    isProtected: true
+    isProtected: true,
+    routes: [
+      {
+        path: '/:workspaceSlug/:channelSlug',
+        component: ChannelPageContainer,
+        isProtected: true,      
+        routes: [
+          {
+            path: '/:workspaceSlug/:channelSlug/team/:userSlug',
+            component: UserViewContainer,
+            isProtected: true
+          },
+          {
+            path: '/:workspaceSlug/:channelSlug/thread/:messageSlug',
+            component: MessageThreadContainer,
+            isProtected: true           
+          },
+          {
+            path: '/:workspaceSlug/:channelSlug/favorites',
+            component: UserFavoritesContainer,
+            isProtected: true
+          }
+        ]
+      }
+    ]
   }
 ];
 

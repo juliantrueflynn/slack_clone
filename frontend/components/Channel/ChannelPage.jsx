@@ -1,5 +1,4 @@
 import React from 'react';
-import WorkspacePageContainer from '../Workspace/WorkspacePageContainer';
 import ChannelHeaderContainer from './ChannelHeaderContainer';
 import ChannelSidebarContainer from './ChannelSidebarContainer';
 import ChannelMessages from './ChannelMessages';
@@ -33,25 +32,23 @@ class ChannelPage extends React.Component {
     const { routes, messages } = this.props;
 
     return (
-      <WorkspacePageContainer>
-        <div className="page page__channel">
-          <ChannelSidebarContainer />
-          
-          <div className="messages-pane">
-            <ChannelHeaderContainer />
-            <div className="messages-pane-body">
-              <ChannelMessages messages={messages} />
-              <MessageFormContainer />
-            </div>
+      <div className="page page__channel">
+        <ChannelSidebarContainer />
+        
+        <div className="messages-pane">
+          <ChannelHeaderContainer />
+          <div className="messages-pane-body">
+            <ChannelMessages messages={messages} />
+            <MessageFormContainer />
           </div>
-
-          {routes && routes.map((route, i) => (
-            <RouteWithSubRoutes key={`channelRoute${i}`} {...route} />
-          ))}
-          
-          <ChannelFormContainer />
         </div>
-      </WorkspacePageContainer>
+
+        {routes && routes.map((route, i) => (
+          <RouteWithSubRoutes key={`channelRoute${i}`} {...route} />
+        ))}
+        
+        <ChannelFormContainer />
+      </div>
     );
   }
 }
