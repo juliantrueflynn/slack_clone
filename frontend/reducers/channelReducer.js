@@ -2,7 +2,8 @@ import {
   CHANNEL_RECEIVE,
   UPDATE_CHANNEL_RECEIVE,
   DELETE_CHANNEL_RECEIVE,
-  DEFAULT_CHANNELS_RECEIVE
+  DEFAULT_CHANNELS_RECEIVE,
+  CREATE_CHANNEL_RECEIVE
 } from '../actions/channelActions';
 import { WORKSPACE_RECEIVE } from '../actions/workspaceActions';
 
@@ -26,6 +27,12 @@ const channelReducer = (state = {}, action) => {
         nextState[item.slug] = item;
       });
       return nextState;
+    case CREATE_CHANNEL_RECEIVE : {
+      const { channel } = action;
+      nextState = { [channel.slug]: channel };
+
+      return Object.assign({}, state, nextState);
+    }
     case DEFAULT_CHANNELS_RECEIVE :
       nextState = {};
       action.channels.forEach(item => { nextState[item.slug] = item; });
