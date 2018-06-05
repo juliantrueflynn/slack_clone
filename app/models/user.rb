@@ -61,11 +61,11 @@ class User < ApplicationRecord
     self.session_token
   end
 
-  def appear!(status, workspace_slug)
+  def appear!(status, workspace)
     self.appearance = status
     save!
-    ActionCable.server.broadcast(
-      "workspace_#{workspace_slug}",
+    WorkspaceChannel.broadcast_to(
+      workspace,
       user: self,
       event: 'STATUS'
     )
