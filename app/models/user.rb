@@ -61,10 +61,16 @@ class User < ApplicationRecord
     self.session_token
   end
 
-  def appear!(online_status)
-    self.appearance = online_status
+  def appear!(status, workspace_slug)
+    self.appearance = status
     save!
-    self.appearance
+    ActionCable.server.broadcast(
+      "workspace_#{workspace_slug}",
+      user: self,
+      event: 'STATUS'
+    )
+
+    self
   end
 
   private

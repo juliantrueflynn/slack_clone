@@ -4,28 +4,14 @@ class WorkspaceChannel < ApplicationCable::Channel
   end
 
   def unsubscribed
-    current_user.appear!('OFFLINE')
-
-    action_cable
+    current_user.appear!('OFFLINE', params[:workspace_slug])
   end
 
   def online(data)
-    current_user.appear!('ONLINE')
-
-    action_cable
+    current_user.appear!('ONLINE', params[:workspace_slug])
   end
 
   def away
-    current_user.appear!('AWAY')
-
-    action_cable
-  end
-
-  def action_cable
-    workspace_slug = params[:workspace_slug]
-    ActionCable.server.broadcast(
-      "workspace_#{workspace_slug}",
-      user: current_user, event: 'STATUS'
-    )
+    current_user.appear!('AWAY', params[:workspace_slug])
   end
 end
