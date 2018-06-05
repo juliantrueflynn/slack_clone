@@ -26,6 +26,15 @@ function* addNewChannel({ channel }) {
   }
 }
 
+function* redirectChannelOwner({ channel }) {
+  const currentUserId = yield select(getCurrentUserId);
+  const workspaceSlug = yield select(getPageWorkspaceSlug);
+
+  if (currentUserId === channel.ownerId) {
+    yield put(navigate(`/${workspaceSlug}/${channel.slug}`));
+  }
+}
+
 function* fetchEditChannel({ channel }) {
   try {
     const newChannel = yield call(api.editChannel, channel);
@@ -96,6 +105,7 @@ function* fetchDeleteChannel({ channelSlug }) {
 
 function* watchCreateChannel() {
   yield takeLatest(actions.CREATE_CHANNEL_REQUEST, addNewChannel);
+  yield takeLatest(actions.CREATE_CHANNEL_RECEIVE, redirectChannelOwner);
 }
 
 function* watchEditChannel() {
