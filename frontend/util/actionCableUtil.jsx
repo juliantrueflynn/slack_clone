@@ -10,6 +10,11 @@ import {
 import { getChannels } from '../reducers/selectors';
 import { statusRequest, setStatus } from '../actions/memberActions';
 import { createWorkspaceReceive } from '../actions/workspaceActions';
+import {
+  createChannelReceive,
+  updateChannelReceive,
+  deleteChannelReceive
+} from '../actions/channelActions';
 
 const mapStateToProps = state => ({
   channels: getChannels(state)
@@ -29,6 +34,12 @@ const mapDispatchToProps = dispatch => ({
         return dispatch(updateMessageReceive(camelized.message));
       case 'DELETE_MESSAGE' :
         return dispatch(deleteMessageReceive(camelized.message.slug));
+      case 'CREATE_CHANNEL' :
+        return dispatch(createChannelReceive(camelized.channel));
+      case 'EDIT_CHANNEL' :
+        return dispatch(updateChannelReceive(camelized.channel));
+      case 'DELETE_CHANNEL' :
+        return dispatch(deleteChannelReceive(camelized.channel));
       case 'CREATE_WORKSPACE' :
         return dispatch(createWorkspaceReceive(camelized.workspace));
       case 'STATUS' :

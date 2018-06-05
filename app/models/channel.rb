@@ -52,4 +52,18 @@ class Channel < ApplicationRecord
       break unless Channel.where(slug: slug).exists?
     end
   end
+
+  after_create_commit do
+    ChannelEventsJob.perform_later(event: "CREATE_CHANNEL", channel: self)
+  end
+
+  after_update_commit do
+    ChannelEventsJob.perform_later(event: "EDIT_CHANNEL", channel: self)
+  end
+
+  # This works but after_destroy_commit does not for some reason
+  after_destroy :delete_channel
+  def delete_channel
+    ChannelEventsJob.perform_later(event: "DELETE_CHANNEL", channel: self)
+  end
 end
