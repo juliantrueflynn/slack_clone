@@ -28,7 +28,6 @@ function* fetchDeleteWorkspace({ workspaceSlug }) {
 function* addNewWorkspace({ workspace }) {
   try {
     const newWorkspace = yield call(api.createWorkspace, workspace);
-    // yield put(actions.createWorkspaceReceive(newWorkspace));
     yield put(createWorkspaceSubRequest(newWorkspace.id));
     yield call(loadDefaultChannels, newWorkspace.slug);
   } catch (error) {
@@ -66,7 +65,6 @@ function* loadWorkspace({ workspaceSlug }) {
 
 function* newWorkspaceFlow() {
   yield takeLatest(actions.CREATE_WORKSPACE_REQUEST, addNewWorkspace);
-  // yield takeLatest(actions.CREATE_WORKSPACE_RECEIVE, loadDefaultChannels);
 }
 
 function* watchWorkspaces() {

@@ -11,8 +11,6 @@ function* loadCreateSub({ channelSlug }) {
       api.createChannelSub,
       { channelId: channelSlug }
     );
-    // yield put(actions.createChannelSubReceive(newChannelSub));
-    // yield put(navigate(`/${workspaceSlug}/${channelSlug}`));
   } catch (error) {
     yield put(actions.createChannelSubFailure(error));
   }
@@ -21,7 +19,6 @@ function* loadCreateSub({ channelSlug }) {
 function* loadDeleteSub({ channelSlug }) {
   try {
     yield call(api.deleteChannelSub, channelSlug);
-    // yield put(actions.deleteChannelSubReceive(channelSlug));
   } catch (error) {
     yield put(actions.deleteChannelSubFailure(error));
   }

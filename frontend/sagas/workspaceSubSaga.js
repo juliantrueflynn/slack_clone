@@ -5,7 +5,6 @@ import * as api from '../util/workspaceSubAPIUtil';
 function* loadCreateSub({ workspaceId }) {
   try {
     const workspaceSub = yield call(api.createWorkspaceSub, { workspaceId });
-    // yield put(actions.createWorkspaceSubReceive(workspaceSub));
   } catch (error) {
     yield put(actions.createWorkspaceSubFailure(error));
   }
@@ -14,7 +13,6 @@ function* loadCreateSub({ workspaceId }) {
 function* loadDeleteSub({ workspaceSlug }) {
   try {
     yield call(api.deleteWorkspaceSub, workspaceSlug);
-    // yield put(actions.deleteWorkspaceSubReceive(workspaceSlug));
   } catch (error) {
     yield put(actions.deleteWorkspaceSubFailure(error));
   }
