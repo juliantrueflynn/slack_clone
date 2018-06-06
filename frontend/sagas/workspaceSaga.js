@@ -4,7 +4,11 @@ import * as api from '../util/workspaceAPIUtil';
 import { createWorkspaceSubRequest } from '../actions/workspaceSubActions';
 import { defaultChannelsRequest } from '../actions/channelActions';
 import { createWorkspaceSub } from '../util/workspaceSubAPIUtil';
-import { getWorkspaces, getChannels } from '../reducers/selectors';
+import {
+  getWorkspaces,
+  getChannels,
+  getCurrentUserId
+} from '../reducers/selectors';
 import { navigate } from '../actions/navigateActions';
 
 export function* fetchWorkspace(workspaceSlug) {
@@ -27,21 +31,28 @@ function* fetchDeleteWorkspace({ workspaceSlug }) {
 
 function* addNewWorkspace({ workspace }) {
   try {
-    const newWorkspace = yield call(api.createWorkspace, workspace);
-    yield put(createWorkspaceSubRequest(newWorkspace.id));
-    yield call(loadDefaultChannels, newWorkspace.slug);
+    yield call(api.createWorkspace, workspace);
   } catch (error) {
     yield put(actions.createWorkspaceFailure(error));
   }
 }
 
-function* loadDefaultChannels(slug) {
-  let defaultChannels = [];
-  const defaultChannelTitles = ['general', 'random'];
-  for (let title of defaultChannelTitles) {
-    defaultChannels.push({ title, workspaceId: slug });
+function* receiveNewWorkspace({ workspace }) {
+  try {
+    const currentUser = yield select(getCurrentUserId);
+    yield put(createWorkspaceSubRequest(workspace.id));
+  
+    let defaultChannels = [];
+    const defaultChannelTitles = ['general', 'random'];
+    
+    for (let title of defaultChannelTitles) {
+      defaultChannels.push({ title, workspaceId: workspace.slug });
+    }
+  
+    yield put(defaultChannelsRequest(defaultChannels));
+  } catch (error) {
+    yield put(actions.workspaceFailure(error));
   }
-  yield put(defaultChannelsRequest(defaultChannels));
 }
 
 function* loadWorkspaces() {
@@ -65,6 +76,7 @@ function* loadWorkspace({ workspaceSlug }) {
 
 function* newWorkspaceFlow() {
   yield takeLatest(actions.CREATE_WORKSPACE_REQUEST, addNewWorkspace);
+  yield takeLatest(actions.CREATE_WORKSPACE_RECEIVE, receiveNewWorkspace);
 }
 
 function* watchWorkspaces() {

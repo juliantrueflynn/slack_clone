@@ -69,7 +69,28 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export class SocketWorkspace extends React.Component {
+class SocketApp extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleReceived = this.handleReceived.bind(this);
+  }
+
+  handleReceived(received) {
+    this.props.onReceivedCallback(received);
+  }
+
+  render() {
+    return (
+      <ActionCable
+        channel={{ channel: 'AppChannel' }}
+        onReceived={this.handleReceived}
+      />
+    );
+  }
+}
+
+class SocketWorkspace extends React.Component {
   constructor(props) {
     super(props);
 
@@ -135,6 +156,11 @@ class SocketChatChannel extends React.Component {
     );
   }
 }
+
+export const AppActionCable = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SocketApp);
 
 export const WorkspaceActionCable = connect(
   null,
