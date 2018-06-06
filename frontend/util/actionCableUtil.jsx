@@ -19,6 +19,10 @@ import {
   createFavoriteReceive,
   deleteFavoriteReceive
 } from '../actions/favoriteActions';
+import {
+  createReactionReceive,
+  deleteReactionReceive
+} from '../actions/reactionActions';
 
 const mapStateToProps = state => ({
   channels: getChannels(state)
@@ -44,6 +48,10 @@ const mapDispatchToProps = dispatch => ({
       case 'DELETE_FAVORITE' :
         camelized.favorite.messageSlug = camelized.messageSlug;
         return dispatch(deleteFavoriteReceive(camelized.favorite));
+      case 'CREATE_REACTION' :
+        return dispatch(createReactionReceive(camelized.reaction));
+      case 'DELETE_REACTION' :
+        return dispatch(deleteReactionReceive(camelized.reaction));
       case 'CREATE_CHANNEL' :
         return dispatch(createChannelReceive(camelized.channel));
       case 'EDIT_CHANNEL' :
