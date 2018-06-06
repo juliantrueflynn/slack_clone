@@ -15,6 +15,10 @@ import {
   updateChannelReceive,
   deleteChannelReceive
 } from '../actions/channelActions';
+import {
+  createFavoriteReceive,
+  deleteFavoriteReceive
+} from '../actions/favoriteActions';
 
 const mapStateToProps = state => ({
   channels: getChannels(state)
@@ -34,6 +38,12 @@ const mapDispatchToProps = dispatch => ({
         return dispatch(updateMessageReceive(camelized.message));
       case 'DELETE_MESSAGE' :
         return dispatch(deleteMessageReceive(camelized.message.slug));
+      case 'CREATE_FAVORITE' :
+        camelized.favorite.messageSlug = camelized.messageSlug;
+        return dispatch(createFavoriteReceive(camelized.favorite));
+      case 'DELETE_FAVORITE' :
+        camelized.favorite.messageSlug = camelized.messageSlug;
+        return dispatch(deleteFavoriteReceive(camelized.favorite));
       case 'CREATE_CHANNEL' :
         return dispatch(createChannelReceive(camelized.channel));
       case 'EDIT_CHANNEL' :
@@ -108,7 +118,7 @@ class SocketChatChannel extends React.Component {
       <Fragment>
         {this.props.channels.map(channel =>
           <ActionCable
-            key={ channel.slug }
+            key={channel.slug}
             channel={{ channel: 'ChatChannel', channel_id: channel.id }}
             onReceived={this.handleReceived}
           />

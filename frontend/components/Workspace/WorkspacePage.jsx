@@ -27,7 +27,7 @@ class WorkspacePage extends React.Component {
 
     return (
       <div className="workspace-view">
-        <WorkspaceActionCable workspaceSlug={params.workspaceSlug} />        
+        <WorkspaceActionCable workspaceSlug={params.workspaceSlug} />
         
         {routes && routes.map((route, i) => (
           <RouteWithSubRoutes key={`channelRoute${i}`} {...route} />
