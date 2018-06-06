@@ -69,7 +69,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-class SocketWorkspace extends React.Component {
+export class SocketWorkspace extends React.Component {
   constructor(props) {
     super(props);
 
@@ -136,12 +136,12 @@ class SocketChatChannel extends React.Component {
   }
 }
 
-export const ChannelsActionCables = connect(
+export const WorkspaceActionCable = connect(
+  null,
+  mapDispatchToProps
+)(SocketWorkspace);
+
+export const ChannelActionCables = connect(
   mapStateToProps,
   mapDispatchToProps
 )(SocketChatChannel);
-
-export const WorkspaceActionCable = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SocketWorkspace);

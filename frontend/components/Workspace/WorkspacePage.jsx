@@ -1,6 +1,9 @@
 import React from 'react';
 import ChannelPageContainer from '../Channel/ChannelPageContainer';
-import { WorkspaceActionCable } from '../../util/actionCableUtil';
+import {
+  WorkspaceActionCable,
+  ChannelActionCables
+} from '../../util/actionCableUtil';
 import { RouteWithSubRoutes } from '../../util/routeUtil';
 
 class WorkspacePage extends React.Component {
@@ -28,6 +31,7 @@ class WorkspacePage extends React.Component {
     return (
       <div className="workspace-view">
         <WorkspaceActionCable workspaceSlug={params.workspaceSlug} />
+        <ChannelActionCables />
         
         {routes && routes.map((route, i) => (
           <RouteWithSubRoutes key={`channelRoute${i}`} {...route} />
