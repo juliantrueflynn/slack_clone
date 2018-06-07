@@ -10,7 +10,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   closeRightSidebar: () => dispatch(closeRightSidebar()),
-  navigate: path => dispatch(navigate({ path: path }))
+  navigate: params => dispatch(navigate(params))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RightSidebar);
