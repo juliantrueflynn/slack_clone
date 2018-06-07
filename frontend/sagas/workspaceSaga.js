@@ -56,6 +56,7 @@ function* loadWorkspaces() {
 
 function* loadWorkspace({ workspaceSlug }) {
   yield call(fetchWorkspace, workspaceSlug);
+  
   const channels = yield select(getChannels);
   if (channels.length) {
     yield put(navigate(`/${workspaceSlug}/${channels[0].slug}`));
