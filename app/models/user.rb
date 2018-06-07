@@ -12,6 +12,9 @@ class User < ApplicationRecord
   validates :username, :email, uniqueness: true
   validates :password, length: { minimum: 6 }, allow_nil: true
 
+  has_many :created_workspaces,
+    class_name: 'Workspace',
+    foreign_key: :owner_id
   has_many :created_channels,
     class_name: 'Channel',
     foreign_key: :owner_id
