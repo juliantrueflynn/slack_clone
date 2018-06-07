@@ -41,15 +41,6 @@ function* fetchEditChannel({ channel }) {
   }
 }
 
-function* loadFirstDefaultChannel({ channels, ownerId }) {
-  const currentUserId = yield select(getCurrentUserId);
-  
-  if (currentUserId === ownerId) {
-    const workspaceSlug = yield select(getPageWorkspaceSlug);
-    yield put(navigate({ path: `/${workspaceSlug}/${channels[0].slug}` }));
-  }
-}
-
 function* fetchChannel() {
   try {
     const channelSlug = yield select(getPageChannelSlug);

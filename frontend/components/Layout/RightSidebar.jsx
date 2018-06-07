@@ -10,13 +10,10 @@ class RightSidebar extends React.Component {
   }
 
   handleCloseSidebar() {
-    const { match: { params } } = this.props;
+    const { match: { params }, navigate, closeRightSidebar } = this.props;
   
-    this.props.closeRightSidebar();
-    this.props.navigate({
-      path: `/${params.workspaceSlug}/${params.channelSlug}`,
-      push: false
-    });
+    closeRightSidebar();
+    navigate(`/${params.workspaceSlug}/${params.channelSlug}`);
   }
 
   render() {
