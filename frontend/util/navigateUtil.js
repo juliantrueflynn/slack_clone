@@ -1,12 +1,11 @@
 import history from './history';
 
-export default function navigateTo(params = {}) {
-  const defaults = { path: '/', push: true };
-  const options = Object.assign({}, defaults, params);
+const _defaultParams = { path: '/', push: true };
 
-  if (options.push) {
-    history.replace(options.path);
+export default function navigateTo(params = _defaultParams) {
+  if (params.push) {
+    history.replace(params.path);
   } else {
-    history.push(options.path);    
+    history.push(params.path);    
   }
 }
