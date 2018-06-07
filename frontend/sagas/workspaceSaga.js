@@ -60,7 +60,7 @@ function* loadWorkspace({ workspaceSlug }) {
   if (channels.length) {
     yield put(navigate(`/${workspaceSlug}/${channels[0].slug}`));
   } else {
-    yield put(navigate(`/${workspaceSlug}/create-channel`));
+    yield put(navigate('/'));
   }
 }
 
