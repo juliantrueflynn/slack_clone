@@ -1,6 +1,6 @@
 export const NAVIGATE = 'NAVIGATE';
 
-export const navigate = path => ({
+export const navigate = params => ({
   type: NAVIGATE,
-  path
+  params
 });

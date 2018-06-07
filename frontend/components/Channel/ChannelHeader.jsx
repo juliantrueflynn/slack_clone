@@ -13,10 +13,10 @@ class ChannelHeader extends React.Component {
 
     if (rightSidebar && rightSidebar.sidebarType === 'Favorites') {
       this.props.closeRightSidebar();
-      navigate(`/${params.workspaceSlug}/${params.channelSlug}`);
+      navigate({ path: `/${params.workspaceSlug}/${params.channelSlug}` });
     } else {
       this.props.openRightSidebar();
-      navigate(`/${params.workspaceSlug}/${params.channelSlug}/favorites`);
+      navigate({ path: `/${params.workspaceSlug}/${params.channelSlug}/favorites` });
     }
   }
 

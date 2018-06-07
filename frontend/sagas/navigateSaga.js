@@ -2,8 +2,8 @@ import { call, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/navigateActions';
 import navigateTo from '../util/navigateUtil';
 
-function* fetchNavigate({ path }) {
-  yield navigateTo(path);
+function* fetchNavigate({ params }) {
+  yield navigateTo(params);
 }
 
 export function* navigateSaga() {

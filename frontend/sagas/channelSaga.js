@@ -29,7 +29,7 @@ function* redirectChannelOwner({ channel }) {
   const workspaceSlug = yield select(getPageWorkspaceSlug);
 
   if (currentUserId === channel.ownerId) {
-    yield put(navigate(`/${workspaceSlug}/${channel.slug}`));
+    yield put(navigate({ path: `/${workspaceSlug}/${channel.slug}` }));
   }
 }
 
@@ -46,7 +46,7 @@ function* loadFirstDefaultChannel({ channels, ownerId }) {
   
   if (currentUserId === ownerId) {
     const workspaceSlug = yield select(getPageWorkspaceSlug);
-    yield put(navigate(`/${workspaceSlug}/${channels[0].slug}`));
+    yield put(navigate({ path: `/${workspaceSlug}/${channels[0].slug}` }));
   }
 }
 
@@ -63,12 +63,12 @@ function* fetchChannel() {
     
     if (rightSidebarType === 'Thread') {
       const baseUrl = `/${workspaceSlug}/${channelSlug}`;
-      yield put(navigate(`${baseUrl}/thread/${messageSlug}`));
+      yield put(navigate({ path: `${baseUrl}/thread/${messageSlug}` }));
     }
 
     if (rightSidebarType === 'Favorites') {
       const baseUrl = `/${workspaceSlug}/${channelSlug}`;
-      yield put(navigate(`${baseUrl}/favorites`));
+      yield put(navigate({ path: `${baseUrl}/favorites` }));
     }
   } catch (error) {
     yield put(actions.channelFailure(error));

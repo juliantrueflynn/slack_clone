@@ -24,7 +24,7 @@ function* redirectOwner({ workspace }) {
   const currentUserId = yield select(getCurrentUserId);
 
   if (currentUserId === workspace.ownerId) {
-    yield put(navigate(`/${workspace.slug}`));
+    yield put(navigate({ path: `/${workspace.slug}` }));
   }
 }
 
@@ -59,9 +59,9 @@ function* loadWorkspace({ workspaceSlug }) {
   
   const channels = yield select(getChannels);
   if (channels.length) {
-    yield put(navigate(`/${workspaceSlug}/${channels[0].slug}`));
+    yield put(navigate({ path: `/${workspaceSlug}/${channels[0].slug}` }));
   } else {
-    yield put(navigate('/'));
+    yield put(navigate({ path: '/' }));
   }
 }
 

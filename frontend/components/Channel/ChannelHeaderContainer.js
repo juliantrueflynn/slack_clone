@@ -14,7 +14,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   openRightSidebar: () => dispatch(openRightSidebar('Favorites', {})),
   closeRightSidebar: () => dispatch(closeRightSidebar()),
-  navigate: path => dispatch(navigate(path))
+  navigate: path => dispatch(navigate({ path: path }))
 });
 
 export default withRouter(
