@@ -8,6 +8,14 @@ class Api::WorkspacesController < ApplicationController
   def show
   end
 
+  def update
+    if @workspace.update(workspace_params)
+      render json: @workspace
+    else
+      render json: @workspace.errors.full_messages, status: 422
+    end
+  end
+
   def create
     @workspace = Workspace.new(workspace_params)
     @workspace.owner_id = current_user.id
