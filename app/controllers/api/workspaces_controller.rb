@@ -21,15 +21,6 @@ class Api::WorkspacesController < ApplicationController
     @workspace.owner_id = current_user.id
 
     if @workspace.save
-      @workspace.owner.workspace_subs.create(workspace_id: @workspace.id, user_id: @workspace.owner_id)
-
-      @workspace.channels.create([
-        {title: 'General', owner_id: @workspace.owner_id, workspace_id: @workspace.id},
-        {title: 'Random', owner_id: @workspace.owner_id, workspace_id: @workspace.id}
-      ])
-
-      WorkspaceEventsJob.perform_later(event: 'CREATE_WORKSPACE', workspace: @workspace)
-
       render json: @workspace
     else
       render json: @workspace.errors.full_messages, status: 422
