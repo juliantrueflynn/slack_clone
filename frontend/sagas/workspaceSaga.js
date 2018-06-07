@@ -20,6 +20,14 @@ export function* fetchWorkspace(workspaceSlug) {
   }
 }
 
+function* redirectOwner({ workspace }) {
+  const currentUserId = yield select(getCurrentUserId);
+
+  if (currentUserId === workspace.ownerId) {
+    yield put(navigate(`/${workspace.slug}`));
+  }
+}
+
 function* fetchDeleteWorkspace({ workspaceSlug }) {
   try {
     yield call(api.deleteWorkspace, workspaceSlug);
@@ -34,24 +42,6 @@ function* addNewWorkspace({ workspace }) {
     yield call(api.createWorkspace, workspace);
   } catch (error) {
     yield put(actions.createWorkspaceFailure(error));
-  }
-}
-
-function* receiveNewWorkspace({ workspace }) {
-  try {
-    const currentUser = yield select(getCurrentUserId);
-    yield put(createWorkspaceSubRequest(workspace.id));
-  
-    let defaultChannels = [];
-    const defaultChannelTitles = ['general', 'random'];
-    
-    for (let title of defaultChannelTitles) {
-      defaultChannels.push({ title, workspaceId: workspace.slug });
-    }
-  
-    yield put(defaultChannelsRequest(defaultChannels));
-  } catch (error) {
-    yield put(actions.workspaceFailure(error));
   }
 }
 
@@ -76,7 +66,7 @@ function* loadWorkspace({ workspaceSlug }) {
 
 function* newWorkspaceFlow() {
   yield takeLatest(actions.CREATE_WORKSPACE_REQUEST, addNewWorkspace);
-  yield takeLatest(actions.CREATE_WORKSPACE_RECEIVE, receiveNewWorkspace);
+  yield takeLatest(actions.CREATE_WORKSPACE_RECEIVE, redirectOwner);
 }
 
 function* watchWorkspaces() {

@@ -94,14 +94,16 @@ export const deleteChannelFailure = errors => ({
   errors
 });
 
-export const defaultChannelsRequest = channels => ({
+export const defaultChannelsRequest = (channels, ownerId) => ({
   type: DEFAULT_CHANNELS_REQUEST,
-  channels
+  channels,
+  ownerId
 });
 
-export const defaultChannelsReceive = channels => ({
+export const defaultChannelsReceive = (channels, ownerId) => ({
   type: DEFAULT_CHANNELS_RECEIVE,
-  channels
+  channels,
+  ownerId
 });
 
 export const defaultChannelsFailure = errors => ({

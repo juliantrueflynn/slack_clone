@@ -4,7 +4,7 @@ import * as api from '../util/workspaceSubAPIUtil';
 
 function* loadCreateSub({ workspaceId }) {
   try {
-    const workspaceSub = yield call(api.createWorkspaceSub, { workspaceId });
+    yield call(api.createWorkspaceSub, { workspaceId });
   } catch (error) {
     yield put(actions.createWorkspaceSubFailure(error));
   }

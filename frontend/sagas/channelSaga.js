@@ -17,8 +17,7 @@ import { modalClose, NEW_CHANNEL_MODAL } from '../actions/modalActions';
 
 function* addNewChannel({ channel }) {
   try {
-    const newChannel = yield call(api.createChannel, channel);
-    yield put(createChannelSubRequest(newChannel.slug));
+    yield call(api.createChannel, channel);
     yield put(modalClose(NEW_CHANNEL_MODAL));
   } catch (error) {
     yield put(actions.createChannelFailure(error));
@@ -42,19 +41,13 @@ function* fetchEditChannel({ channel }) {
   }
 }
 
-function* addNewChannels({ channels }) {
-  let newChannels = [];
-  for (let channel of channels) {
-    const newChannel = yield call(api.createChannel, channel);
-    yield call(createChannelSub, { channelId: newChannel.slug });
-    newChannels.push(newChannel);
+function* loadFirstDefaultChannel({ channels, ownerId }) {
+  const currentUserId = yield select(getCurrentUserId);
+  
+  if (currentUserId === ownerId) {
+    const workspaceSlug = yield select(getPageWorkspaceSlug);
+    yield put(navigate(`/${workspaceSlug}/${channels[0].slug}`));
   }
-  yield put(actions.defaultChannelsReceive(newChannels));
-}
-
-function* loadFirstDefaultChannel({ channels }) {
-  const workspaceSlug = yield select(getPageWorkspaceSlug);
-  yield put(navigate(`/${workspaceSlug}/${channels[0].slug}`));
 }
 
 function* fetchChannel() {
@@ -110,11 +103,6 @@ function* watchEditChannel() {
   yield takeLatest(actions.UPDATE_CHANNEL_REQUEST, fetchEditChannel);
 }
 
-function* watchCreateChannels() {
-  yield takeLatest(actions.DEFAULT_CHANNELS_REQUEST, addNewChannels);
-  yield takeLatest(actions.DEFAULT_CHANNELS_RECEIVE, loadFirstDefaultChannel);
-}
-
 function* watchChannelPage() {
   yield takeLatest(actions.CHANNEL_REQUEST, loadChannelEntities);
 }
@@ -127,7 +115,6 @@ export function* channelSaga() {
   yield all([
     fork(watchCreateChannel),
     fork(watchEditChannel),
-    fork(watchCreateChannels),
     fork(watchChannelPage),
     fork(watchDeleteChannel),
   ]);
