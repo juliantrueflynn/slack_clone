@@ -32,6 +32,13 @@ class Workspace < ApplicationRecord
   private
 
   after_create_commit do
+    owner.workspace_subs.create(workspace_id: id, user_id: owner_id)
+
+    channels.create([
+      {title: 'General', owner_id: owner_id, workspace_id: id},
+      {title: 'Random', owner_id: owner_id, workspace_id: id}
+    ])
+
     WorkspaceEventsJob.perform_later(event: "CREATE_WORKSPACE", workspace: self)
   end
 
