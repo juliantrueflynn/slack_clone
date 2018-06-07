@@ -2,17 +2,14 @@ class Api::MessagesController < ApplicationController
   before_action :set_message, only: [:show, :update, :destroy]
 
   def show
-    render json: @message
   end
 
   def create
-    @message = Message.new(message_params)
-    @message.author_id = current_user.id
-    @message.channel_id = Channel.find_by(slug: params[:channel_id]).id
+    @message = current_user.messages.build(message_params)
+    @message.channel = Channel.find_by(slug: params[:channel_id])
     
     if params[:parent_message_id]  
-      parent_message = Message.find_by(slug: params[:parent_message_id])
-      @message.parent_message_id = parent_message.id
+      @message.parent_message = Message.find_by(slug: params[:parent_message_id])
     end
     
     if @message.save
@@ -46,6 +43,6 @@ class Api::MessagesController < ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:body, :slug, :parent_message_id, :parent_message_slug, :channel_id)
+    params.require(:message).permit(:body, :slug, :parent_message_id, :channel_id)
   end
 end

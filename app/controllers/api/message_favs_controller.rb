@@ -4,8 +4,7 @@ class Api::MessageFavsController < ApplicationController
   end
 
   def create
-    @message_fav = MessageFav.new(message_fav_params)
-    @message_fav.user_id = current_user.id
+    @message_fav = current_user.favs.build
     @message_fav.message_id = Message.find_by(slug: params[:message_id]).id
     
     if @message_fav.save
@@ -25,11 +24,5 @@ class Api::MessageFavsController < ApplicationController
     else
       render json: ['not found']
     end
-  end
-
-  private
-
-  def message_fav_params
-    params.require(:message_fav).permit(:message_id)
   end
 end

@@ -5,8 +5,7 @@ class Api::ReactionsController < ApplicationController
   end
 
   def create
-    @reaction = Reaction.new(reaction_params)
-    @reaction.user_id = current_user.id
+    @reaction = current_user.reactions.build(reaction_params)
 
     if @reaction.save
       render 'api/reactions/show'

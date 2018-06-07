@@ -1,8 +1,7 @@
 class Api::ChannelSubsController < ApplicationController
   def create
-    @channel_sub = ChannelSub.new(channel_sub_params)
-    @channel_sub.user_id = current_user.id
-    @channel_sub.channel_id = Channel.find_by(slug: params[:channel_id]).id
+    @channel_sub = current_user.channel_subs.build
+    @channel_sub.channel = Channel.find_by(slug: params[:channel_id])
     
     if @channel_sub.save
       render json: @channel_sub
@@ -20,11 +19,5 @@ class Api::ChannelSubsController < ApplicationController
     else
       render json: ['not found!'], status: 404
     end
-  end
-
-  private
-
-  def channel_sub_params
-    params.require(:channel_sub).permit(:channel_id)
   end
 end

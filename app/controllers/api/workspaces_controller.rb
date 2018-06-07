@@ -17,8 +17,7 @@ class Api::WorkspacesController < ApplicationController
   end
 
   def create
-    @workspace = Workspace.new(workspace_params)
-    @workspace.owner_id = current_user.id
+    @workspace = current_user.created_workspaces.build(workspace_params)
 
     if @workspace.save
       render json: @workspace

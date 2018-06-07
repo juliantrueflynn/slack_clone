@@ -9,9 +9,8 @@ class Api::ChannelsController < ApplicationController
   end
 
   def create
-    @channel = Channel.new(channel_params)
-    @channel.owner_id = current_user.id
-    @channel.workspace_id = Workspace.find_by(slug: params[:workspace_id]).id
+    @channel = current_user.created_channels.build(channel_params)
+    @channel.workspace = Workspace.find_by(slug: params[:workspace_id])
 
     if @channel.save
       render json: @channel

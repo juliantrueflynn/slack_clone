@@ -1,8 +1,7 @@
 class Api::WorkspaceSubsController < ApplicationController
   def create
-    @workspace_sub = WorkspaceSub.new(workspace_sub_params)
-    @workspace_sub.user_id = current_user.id
-    
+    @workspace_sub = current_user.workspace_subs.build(workspace_sub_params)
+
     if @workspace_sub.save
       render json: @workspace_sub
     else
