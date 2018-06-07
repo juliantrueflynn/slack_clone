@@ -54,6 +54,8 @@ class Channel < ApplicationRecord
   end
 
   after_create_commit do
+    owner.channel_subs.create(channel_id: id, user_id: owner_id)
+  
     ChannelEventsJob.perform_later(event: "CREATE_CHANNEL", channel: self)
   end
 
