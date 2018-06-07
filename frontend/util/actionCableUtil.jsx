@@ -25,7 +25,8 @@ import {
 } from '../actions/reactionActions';
 
 const mapStateToProps = state => ({
-  channels: getChannels(state)
+  channels: getChannels(state),
+  currentUser: state.session.currentUser
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -81,6 +82,10 @@ class SocketApp extends React.Component {
   }
 
   render() {
+    if (!this.props.currentUser) {
+      return null;
+    }
+
     return (
       <ActionCable
         channel={{ channel: 'AppChannel' }}
