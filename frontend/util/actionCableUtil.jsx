@@ -5,69 +5,71 @@ import { camelizeKeys } from 'humps';
 import {
   createMessageReceive,
   updateMessageReceive,
-  deleteMessageReceive
+  deleteMessageReceive,
 } from '../actions/messageActions';
 import { getChannels } from '../reducers/selectors';
-import { statusRequest, setStatus } from '../actions/memberActions';
+import { setStatus } from '../actions/memberActions';
 import { createWorkspaceReceive } from '../actions/workspaceActions';
 import {
   createChannelReceive,
   updateChannelReceive,
-  deleteChannelReceive
+  deleteChannelReceive,
 } from '../actions/channelActions';
 import {
   createFavoriteReceive,
-  deleteFavoriteReceive
+  deleteFavoriteReceive,
 } from '../actions/favoriteActions';
 import {
   createReactionReceive,
-  deleteReactionReceive
+  deleteReactionReceive,
 } from '../actions/reactionActions';
 
 const mapStateToProps = state => ({
   channels: getChannels(state),
-  currentUser: state.session.currentUser
+  currentUser: state.session.currentUser,
 });
 
 const mapDispatchToProps = dispatch => ({
-  onReceivedCallback: received => {
+  onReceivedCallback: (received) => {
     const camelized = camelizeKeys(received);
-  
+
     switch (received.event) {
-      case 'CREATE_MESSAGE' :
+      case 'CREATE_MESSAGE':
         return dispatch(createMessageReceive(
           camelized.message,
-          camelized.parentMessageSlug
+          camelized.parentMessageSlug,
         ));
-      case 'EDIT_MESSAGE' :
+      case 'EDIT_MESSAGE':
         return dispatch(updateMessageReceive(camelized.message));
-      case 'DELETE_MESSAGE' :
+      case 'DELETE_MESSAGE':
         return dispatch(deleteMessageReceive(camelized.message.slug));
-      case 'CREATE_FAVORITE' :
+      case 'CREATE_FAVORITE':
         camelized.favorite.messageSlug = camelized.messageSlug;
         return dispatch(createFavoriteReceive(camelized.favorite));
-      case 'DELETE_FAVORITE' :
+      case 'DELETE_FAVORITE':
         camelized.favorite.messageSlug = camelized.messageSlug;
         return dispatch(deleteFavoriteReceive(camelized.favorite));
-      case 'CREATE_REACTION' :
+      case 'CREATE_REACTION':
         return dispatch(createReactionReceive(camelized.reaction));
-      case 'DELETE_REACTION' :
+      case 'DELETE_REACTION':
         return dispatch(deleteReactionReceive(camelized.reaction));
-      case 'CREATE_CHANNEL' :
+      case 'CREATE_CHANNEL':
         return dispatch(createChannelReceive(camelized.channel));
-      case 'EDIT_CHANNEL' :
+      case 'EDIT_CHANNEL':
         return dispatch(updateChannelReceive(camelized.channel));
-      case 'DELETE_CHANNEL' :
+      case 'DELETE_CHANNEL':
         return dispatch(deleteChannelReceive(camelized.channel));
-      case 'CREATE_WORKSPACE' :
+      case 'CREATE_WORKSPACE':
         return dispatch(createWorkspaceReceive(camelized.workspace));
-      case 'STATUS' :
+      case 'STATUS':
         return dispatch(setStatus(
           camelized.user.slug,
-          camelized.user.appearance
+          camelized.user.appearance,
         ));
+      default:
+        return null;
     }
-  }
+  },
 });
 
 class SocketApp extends React.Component {
@@ -110,13 +112,13 @@ class SocketWorkspace extends React.Component {
 
   handleConnected() {
     this.refs.workspaceCable.perform('online', {
-      workspace_slug: this.props.workspaceSlug
+      workspace_slug: this.props.workspaceSlug,
     });
   }
 
   handleDisconnected() {
     this.refs.workspaceCable.perform('offline', {
-      workspace_slug: this.props.workspaceSlug
+      workspace_slug: this.props.workspaceSlug,
     });
   }
 
@@ -126,7 +128,7 @@ class SocketWorkspace extends React.Component {
         ref="workspaceCable"
         channel={{
           channel: 'WorkspaceChannel',
-          workspace_slug: this.props.workspaceSlug
+          workspace_slug: this.props.workspaceSlug,
         }}
         onReceived={this.handleReceived}
         onConnected={this.handleConnected}
@@ -150,13 +152,13 @@ class SocketChatChannel extends React.Component {
   render() {
     return (
       <Fragment>
-        {this.props.channels.map(channel =>
+        {this.props.channels.map(channel => (
           <ActionCable
             key={channel.slug}
             channel={{ channel: 'ChatChannel', channel_id: channel.id }}
             onReceived={this.handleReceived}
           />
-        )}
+        ))}
       </Fragment>
     );
   }
@@ -164,15 +166,15 @@ class SocketChatChannel extends React.Component {
 
 export const AppActionCable = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SocketApp);
 
 export const WorkspaceActionCable = connect(
   null,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SocketWorkspace);
 
 export const ChannelActionCables = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SocketChatChannel);
