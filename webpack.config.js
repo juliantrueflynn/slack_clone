@@ -2,7 +2,7 @@ var path = require("path");
 var webpack = require("webpack");
 
 var plugins = []; // dev and prod plugins
-var devPlugins = []; // if using any plugins for development
+var devPlugins = []; // if using plugins for dev
 
 var prodPlugins = [
   new webpack.DefinePlugin({
@@ -32,7 +32,7 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
-          presets: ['react', 'es2015']
+          presets: ['react', 'es2015', 'stage-2']
         }
       },
       {
