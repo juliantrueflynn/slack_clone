@@ -29,4 +29,4 @@ export const apiCall = (method, endpoint, props) => {
 export const apiFetch = (endpoint, props = {}) => apiCall('GET', endpoint, props);
 export const apiCreate = (endpoint, props = {}) => apiCall('POST', endpoint, props);
 export const apiUpdate = (endpoint, props = {}) => apiCall('PATCH', endpoint, props);
-export const apiDelete = (endpoint, props = {}) => apiCall('PATCH', endpoint, props);
+export const apiDelete = (endpoint, props = {}) => apiCall('DELETE', endpoint, props);

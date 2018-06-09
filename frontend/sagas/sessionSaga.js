@@ -26,7 +26,7 @@ function* fetchSignOut() {
     yield call(apiDelete, 'session');
     yield put(actions.signOutReceive());
   } catch (error) {
-    yield put(actions.sessionFailure(error));
+    yield put(actions.signOutFailure(error));
   }
 }
 
