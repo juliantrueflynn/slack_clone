@@ -1,11 +1,11 @@
 import { call, takeLatest } from 'redux-saga/effects';
-import * as actions from '../actions/navigateActions';
+import { NAVIGATE } from '../actions/actionTypes';
 import navigateTo from '../util/navigateUtil';
 
 function* fetchNavigate({ params }) {
-  yield navigateTo(params);
+  yield call(navigateTo, params);
 }
 
 export function* navigateSaga() {
-  yield takeLatest(actions.NAVIGATE, fetchNavigate);
+  yield takeLatest(NAVIGATE, fetchNavigate);
 }

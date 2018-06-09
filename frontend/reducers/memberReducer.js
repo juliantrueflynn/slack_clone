@@ -1,6 +1,5 @@
 import merge from 'lodash.merge';
-import { WORKSPACE, CHANNEL } from '../actions/actionTypes';
-import { SET_STATUS } from '../actions/memberActions';
+import { WORKSPACE, CHANNEL, SET_STATUS } from '../actions/actionTypes';
 
 const memberReducer = (state = {}, action) => {
   Object.freeze(state);

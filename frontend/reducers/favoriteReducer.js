@@ -2,7 +2,7 @@ import {
   FAVORITES,
   CREATE_FAVORITE,
   DELETE_FAVORITE,
-  CHANNEL
+  CHANNEL,
 } from '../actions/actionTypes';
 
 const favoriteReducer = (state = {}, action) => {
@@ -33,12 +33,12 @@ const favoriteReducer = (state = {}, action) => {
       
       return nextState;
     }
-    case CHANNEL.RECEIVE:
+    case CHANNEL.RECEIVE: {
       const { channel: { favorites }, ui: { messageSlug, userId } } = action;
-      let prevState = Object.assign({}, state);
+      const prevState = Object.assign({}, state);
       nextState = {};
 
-      Object.values(prevState).map(fav => {
+      Object.values(prevState).map((fav) => {
         if (fav.messageSlug === messageSlug) {
           nextState[fav.messageSlug] = fav;
         }
@@ -48,11 +48,12 @@ const favoriteReducer = (state = {}, action) => {
         }
       });
 
-      favorites.map(fav => {
+      favorites.map((fav) => {
         nextState[fav.messageSlug] = fav;
       });
 
       return nextState;
+    }
     default:
       return state;
   }

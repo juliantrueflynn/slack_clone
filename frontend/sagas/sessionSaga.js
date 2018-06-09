@@ -1,8 +1,7 @@
 import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/sessionActions';
+import { SIGN_IN, SIGN_UP, SIGN_OUT } from '../actions/actionTypes';
 import * as api from '../util/sessionAPIUtil';
-import { workspacesRequest } from '../actions/workspaceActions';
-import { navigate } from '../actions/navigateActions';
 
 function* fetchSignIn({ currentUser }) {
   try {
@@ -32,15 +31,15 @@ function* fetchSignOut() {
 }
 
 function* watchSignIn() {
-  yield takeLatest(actions.SIGN_IN_REQUEST, fetchSignIn);
+  yield takeLatest(SIGN_IN.REQUEST, fetchSignIn);
 }
 
 function* watchSignUp() {
-  yield takeLatest(actions.SIGN_UP_REQUEST, fetchSignUp);
+  yield takeLatest(SIGN_UP.REQUEST, fetchSignUp);
 }
 
 function* watchSignOut() {
-  yield takeLatest(actions.SIGN_OUT_REQUEST, fetchSignOut);
+  yield takeLatest(SIGN_OUT.REQUEST, fetchSignOut);
 }
 
 export function* sessionSaga() {

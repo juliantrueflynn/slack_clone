@@ -1,22 +1,19 @@
-import {
-  SIGN_OUT_RECEIVE,
-  SIGN_IN_RECEIVE,
-  SIGN_UP_RECEIVE
-} from '../actions/sessionActions';
+import { SIGN_UP, SIGN_IN, SIGN_OUT } from '../actions/actionTypes';
 
-const _nullCurrentUser = { currentUser: null };
+const nullCurrentUser = { currentUser: null };
 
-export const sessionReducer = (state = _nullCurrentUser, action) => {
+export const sessionReducer = (state = nullCurrentUser, action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case SIGN_IN_RECEIVE :
-    case SIGN_UP_RECEIVE :
-      const currentUser = action.currentUser;
+    case SIGN_IN.RECEIVE:
+    case SIGN_UP.RECEIVE: {
+      const { currentUser } = action;
       return Object.assign({}, { currentUser });
-    case SIGN_OUT_RECEIVE :
-      return _nullCurrentUser;
-    default :
+    }
+    case SIGN_OUT.RECEIVE:
+      return nullCurrentUser;
+    default:
       return state;
   }
 };
