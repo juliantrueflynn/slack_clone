@@ -1,6 +1,5 @@
 import merge from 'lodash.merge';
-import { WORKSPACE_RECEIVE } from '../actions/workspaceActions';
-import { CHANNEL_RECEIVE } from '../actions/channelActions';
+import { WORKSPACE, CHANNEL } from '../actions/actionTypes';
 import { SET_STATUS } from '../actions/memberActions';
 
 const memberReducer = (state = {}, action) => {
@@ -8,23 +7,21 @@ const memberReducer = (state = {}, action) => {
 
   let nextState;
   switch (action.type) {
-    case WORKSPACE_RECEIVE : {
+    case WORKSPACE.RECEIVE: {
       const { workspace } = action;
-      
       nextState = {};
-      workspace.members.map(member => {
+      workspace.members.map((member) => {
         nextState[member.slug] = member;
       });
-      
       return nextState;
     }
-    case SET_STATUS : {
+    case SET_STATUS: {
       const { userSlug, appearance } = action;
       nextState = { [userSlug]: { appearance } };
 
       return merge({}, state, nextState);
     }
-    default :
+    default:
       return state;
   }
 };

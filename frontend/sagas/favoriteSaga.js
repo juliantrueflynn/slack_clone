@@ -1,5 +1,6 @@
-import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
+import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/favoriteActions';
+import { CREATE_FAVORITE, DELETE_FAVORITE, FAVORITES } from '../actions/actionTypes';
 import * as api from '../util/favoriteAPIUtil';
 
 function* fetchUserFavorites() {
@@ -13,8 +14,7 @@ function* fetchUserFavorites() {
 
 function* fetchCreateFavorite({ messageSlug: messageId }) {
   try {
-    const newFavorite = yield call(api.createFavorite, { messageId });
-    // yield put(actions.createFavoriteReceive(newFavorite));
+    yield call(api.createFavorite, { messageId });
   } catch (error) {
     yield put(actions.createFavoriteFailure(error));
   }
@@ -22,23 +22,22 @@ function* fetchCreateFavorite({ messageSlug: messageId }) {
 
 function* fetchDeleteFavorite({ messageSlug }) {
   try {
-    const favorite = yield call(api.deleteFavorite, messageSlug);
-    // yield put(actions.deleteFavoriteReceive(favorite));
+    yield call(api.deleteFavorite, messageSlug);
   } catch (error) {
     yield put(actions.deleteFavoriteFailure(error));
   }
 }
 
 function* watchUserFavorites() {
-  yield takeLatest(actions.FAVORITES_REQUEST, fetchUserFavorites);
+  yield takeLatest(FAVORITES.REQUEST, fetchUserFavorites);
 }
 
 function* watchCreateFavorite() {
-  yield takeLatest(actions.CREATE_FAVORITE_REQUEST, fetchCreateFavorite);
+  yield takeLatest(CREATE_FAVORITE.REQUEST, fetchCreateFavorite);
 }
 
 function* watchDeleteFavorite() {
-  yield takeLatest(actions.DELETE_FAVORITE_REQUEST, fetchDeleteFavorite);
+  yield takeLatest(DELETE_FAVORITE.REQUEST, fetchDeleteFavorite);
 }
 
 export function* favoriteSaga() {

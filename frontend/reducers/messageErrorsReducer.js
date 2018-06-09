@@ -1,25 +1,22 @@
 import {
-  CREATE_MESSAGE_FAILURE,
-  UPDATE_MESSAGE_FAILURE,
-  DELETE_MESSAGE_FAILURE,
-  CREATE_MESSAGE_REQUEST,
-  UPDATE_MESSAGE_REQUEST,
-  DELETE_MESSAGE_REQUEST
-} from "../actions/messageActions";
+  CREATE_MESSAGE,
+  UPDATE_MESSAGE,
+  DELETE_MESSAGE,
+} from '../actions/actionTypes';
 
 const messageErrorsReducer = (state = [], action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case CREATE_MESSAGE_FAILURE :
-    case UPDATE_MESSAGE_FAILURE :
-    case DELETE_MESSAGE_FAILURE :
+    case CREATE_MESSAGE.FAILURE:
+    case UPDATE_MESSAGE.FAILURE:
+    case DELETE_MESSAGE.FAILURE:
       return [...action.errors];
-    case CREATE_MESSAGE_REQUEST :
-    case UPDATE_MESSAGE_REQUEST :
-    case DELETE_MESSAGE_REQUEST :
+    case CREATE_MESSAGE.REQUEST:
+    case UPDATE_MESSAGE.REQUEST:
+    case DELETE_MESSAGE.REQUEST:
       return [];
-    default :
+    default:
       return state;
   }
 };

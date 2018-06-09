@@ -1,14 +1,8 @@
 import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/workspaceActions';
 import * as api from '../util/workspaceAPIUtil';
-import { createWorkspaceSubRequest } from '../actions/workspaceSubActions';
-import { defaultChannelsRequest } from '../actions/channelActions';
-import { createWorkspaceSub } from '../util/workspaceSubAPIUtil';
-import {
-  getWorkspaces,
-  getChannels,
-  getCurrentUserId
-} from '../reducers/selectors';
+import { WORKSPACE, WORKSPACES, CREATE_WORKSPACE, DELETE_WORKSPACE } from '../actions/actionTypes';
+import { getChannels, getCurrentUserId } from '../reducers/selectors';
 import { navigate } from '../actions/navigateActions';
 
 export function* fetchWorkspace(workspaceSlug) {
@@ -56,7 +50,7 @@ function* loadWorkspaces() {
 
 function* loadWorkspace({ workspaceSlug }) {
   yield call(fetchWorkspace, workspaceSlug);
-  
+
   const channels = yield select(getChannels);
   if (channels.length) {
     yield put(navigate({ path: `/${workspaceSlug}/${channels[0].slug}` }));
@@ -66,20 +60,20 @@ function* loadWorkspace({ workspaceSlug }) {
 }
 
 function* newWorkspaceFlow() {
-  yield takeLatest(actions.CREATE_WORKSPACE_REQUEST, addNewWorkspace);
-  yield takeLatest(actions.CREATE_WORKSPACE_RECEIVE, redirectOwner);
+  yield takeLatest(CREATE_WORKSPACE.REQUEST, addNewWorkspace);
+  yield takeLatest(CREATE_WORKSPACE.RECEIVE, redirectOwner);
 }
 
 function* watchWorkspaces() {
-  yield takeLatest(actions.WORKSPACES_REQUEST, loadWorkspaces);
+  yield takeLatest(WORKSPACES.REQUEST, loadWorkspaces);
 }
 
 function* watchWorkspacePage() {
-  yield takeLatest(actions.WORKSPACE_REQUEST, loadWorkspace);
+  yield takeLatest(WORKSPACE.REQUEST, loadWorkspace);
 }
 
 function* watchDeleteWorkspace() {
-  yield takeLatest(actions.DELETE_WORKSPACE_REQUEST, fetchDeleteWorkspace);
+  yield takeLatest(DELETE_WORKSPACE.REQUEST, fetchDeleteWorkspace);
 }
 
 export function* workspaceSaga() {
@@ -87,6 +81,6 @@ export function* workspaceSaga() {
     fork(newWorkspaceFlow),
     fork(watchWorkspaces),
     fork(watchWorkspacePage),
-    fork(watchDeleteWorkspace)
+    fork(watchDeleteWorkspace),
   ]);
 }

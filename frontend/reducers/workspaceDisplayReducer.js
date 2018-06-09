@@ -1,21 +1,17 @@
-import {
-  WORKSPACE_REQUEST,
-  CREATE_WORKSPACE_RECEIVE
-} from '../actions/workspaceActions';
-import { CHANNEL_REQUEST } from '../actions/channelActions';
+import { WORKSPACE, CREATE_WORKSPACE, CHANNEL } from '../actions/actionTypes';
 
 const workspaceDisplayReducer = (state = null, action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case CREATE_WORKSPACE_RECEIVE :
+    case CREATE_WORKSPACE.RECEIVE:
       return action.workspace.slug;
-    case WORKSPACE_REQUEST :
+    case WORKSPACE.REQUEST:
       return action.workspaceSlug;
-    case CHANNEL_REQUEST : {
+    case CHANNEL.REQUEST: {
       return action.ui.workspaceSlug;
     }
-    default :
+    default:
       return state;
   }
 };

@@ -1,13 +1,13 @@
-import { CHANNEL_REQUEST } from '../actions/channelActions';
+import { CHANNEL } from '../actions/actionTypes';
 
 const channelDisplayReducer = (state = null, action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case CHANNEL_REQUEST : {
+    case CHANNEL.REQUEST: {
       return action.channelSlug;
     }
-    default :
+    default:
       return state;
   }
 };

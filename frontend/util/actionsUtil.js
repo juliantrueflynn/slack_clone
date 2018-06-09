@@ -13,18 +13,20 @@ const FAILURE = 'FAILURE';
 //   }, initialAction)
 // };
 
-export const createActionTypes = base => (
+export const actionTypes = base => (
   [REQUEST, RECEIVE, FAILURE].reduce((acc, type) => {
     acc[type] = `${base}_${type}`;
     return acc;
   }, {})
 );
 
-export const makeActionCreator = (type, ...argNames) => (...args) => {
-  const action = { type };
-  argNames.forEach((arg, i) => {
-    action[argNames[i]] = args[i];
-  });
+export const actionCreator = (type, payload = {}) => ({ type, ...payload });
 
-  return action;
-};
+// export const actionCreator = (type, ...argNames) => (...args) => {
+//   const action = { type };
+//   argNames.forEach((arg, i) => {
+//     action[argNames[i]] = args[i];
+//   });
+
+//   return action;
+// };

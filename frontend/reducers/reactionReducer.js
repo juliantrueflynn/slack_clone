@@ -1,47 +1,47 @@
 import {
-  CREATE_REACTION_RECEIVE,
-  DELETE_REACTION_RECEIVE
-} from "../actions/reactionActions";
-import { CHANNEL_RECEIVE } from "../actions/channelActions";
-import { MESSAGE_RECEIVE } from "../actions/messageActions";
+  CREATE_REACTION,
+  DELETE_REACTION,
+  CHANNEL,
+  MESSAGE,
+} from '../actions/actionTypes';
 
 const reactionReducer = (state = {}, action) => {
   Object.freeze(state);
 
   let nextState;
   switch (action.type) {
-    case CREATE_REACTION_RECEIVE : {
+    case CREATE_REACTION.RECEIVE: {
       const { reaction } = action;
       nextState = { [reaction.id]: reaction };
 
       return Object.assign({}, state, nextState);
     }
-    case DELETE_REACTION_RECEIVE : {
+    case DELETE_REACTION.RECEIVE: {
       const { reaction } = action;
       nextState = Object.assign({}, state);
       delete nextState[reaction.id];
 
       return nextState;
     }
-    case CHANNEL_RECEIVE : {
+    case CHANNEL.RECEIVE: {
       const { channel: { reactions } } = action;
       nextState = {};
-      reactions.map(reaction => {
+      reactions.map((reaction) => {
         nextState[reaction.id] = reaction;
       });
 
       return Object.assign({}, state, nextState);
     }
-    case MESSAGE_RECEIVE : {
+    case MESSAGE.RECEIVE: {
       const { message: { reactions } } = action;
       nextState = {};
-      reactions.map(reaction => {
+      reactions.map((reaction) => {
         nextState[reaction.id] = reaction;
       });
 
       return Object.assign({}, state, nextState);
     }
-    default :
+    default:
       return state;
   }
 };

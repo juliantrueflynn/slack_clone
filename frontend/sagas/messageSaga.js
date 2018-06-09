@@ -1,5 +1,6 @@
 import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/messageActions';
+import { DELETE_MESSAGE, UPDATE_MESSAGE, CREATE_MESSAGE, MESSAGE } from '../actions/actionTypes';
 import * as api from '../util/messageAPIUtil';
 
 function* loadMessage({ messageSlug }) {
@@ -36,19 +37,19 @@ function* fetchDeleteMessage({ messageSlug }) {
 }
 
 function* watchRequestMessage() {
-  yield takeLatest(actions.MESSAGE_REQUEST, loadMessage);
+  yield takeLatest(MESSAGE.REQUEST, loadMessage);
 }
 
 function* watchCreateMessage() {
-  yield takeLatest(actions.CREATE_MESSAGE_REQUEST, fetchNewMessage);
+  yield takeLatest(CREATE_MESSAGE.REQUEST, fetchNewMessage);
 }
 
 function* watchEditMessage() {
-  yield takeLatest(actions.UPDATE_MESSAGE_REQUEST, fetchEditMessage);
+  yield takeLatest(UPDATE_MESSAGE.REQUEST, fetchEditMessage);
 }
 
 function* watchDeleteMessage() {
-  yield takeLatest(actions.DELETE_MESSAGE_REQUEST, fetchDeleteMessage);
+  yield takeLatest(DELETE_MESSAGE.REQUEST, fetchDeleteMessage);
 }
 
 export function* messageSaga() {

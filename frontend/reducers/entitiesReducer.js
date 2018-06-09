@@ -12,7 +12,7 @@ const entitiesReducer = combineReducers({
   members,
   messages,
   favorites,
-  reactions
+  reactions,
 });
 
 export default entitiesReducer;

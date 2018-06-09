@@ -1,15 +1,14 @@
 import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/channelActions';
+import { CREATE_CHANNEL, UPDATE_CHANNEL, CHANNEL, DELETE_CHANNEL } from '../actions/actionTypes';
 import * as api from '../util/channelAPIUtil';
-import { createChannelSubRequest } from '../actions/channelSubActions';
-import { createChannelSub } from '../util/channelSubAPIUtil';
 import {
   getPageChannelSlug,
   getChannels,
   getPageWorkspaceSlug,
   getMessageSlug,
   getCurrentUserId,
-  getRightSidebarType
+  getRightSidebarType,
 } from '../reducers/selectors';
 import { fetchWorkspace } from './workspaceSaga';
 import { navigate } from '../actions/navigateActions';
@@ -35,7 +34,7 @@ function* redirectChannelOwner({ channel }) {
 
 function* fetchEditChannel({ channel }) {
   try {
-    const newChannel = yield call(api.editChannel, channel);
+    yield call(api.editChannel, channel);
   } catch (error) {
     yield put(actions.updateChannelFailure(error));
   }
@@ -51,7 +50,7 @@ function* fetchChannel() {
     const channel = yield call(api.fetchChannel, channelSlug);
     const messageSlug = yield select(getMessageSlug);
     yield put(actions.channelReceive(channel, ui));
-    
+
     if (rightSidebarType === 'Thread') {
       const baseUrl = `/${workspaceSlug}/${channelSlug}`;
       yield put(navigate({ path: `${baseUrl}/thread/${messageSlug}` }));
@@ -86,20 +85,20 @@ function* fetchDeleteChannel({ channelSlug }) {
 }
 
 function* watchCreateChannel() {
-  yield takeLatest(actions.CREATE_CHANNEL_REQUEST, addNewChannel);
-  yield takeLatest(actions.CREATE_CHANNEL_RECEIVE, redirectChannelOwner);
+  yield takeLatest(CREATE_CHANNEL.REQUEST, addNewChannel);
+  yield takeLatest(CREATE_CHANNEL.RECEIVE, redirectChannelOwner);
 }
 
 function* watchEditChannel() {
-  yield takeLatest(actions.UPDATE_CHANNEL_REQUEST, fetchEditChannel);
+  yield takeLatest(UPDATE_CHANNEL.REQUEST, fetchEditChannel);
 }
 
 function* watchChannelPage() {
-  yield takeLatest(actions.CHANNEL_REQUEST, loadChannelEntities);
+  yield takeLatest(CHANNEL.REQUEST, loadChannelEntities);
 }
 
 function* watchDeleteChannel() {
-  yield takeLatest(actions.DELETE_CHANNEL_REQUEST, fetchDeleteChannel);
+  yield takeLatest(DELETE_CHANNEL.REQUEST, fetchDeleteChannel);
 }
 
 export function* channelSaga() {
