@@ -1,11 +1,11 @@
 import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/channelSubActions';
 import { CREATE_CHANNEL_SUB, DELETE_CHANNEL_SUB } from '../actions/actionTypes';
-import * as api from '../util/channelSubAPIUtil';
+import { apiCreate, apiDelete } from '../util/apiUtil';
 
 function* loadCreateSub({ channelSlug }) {
   try {
-    yield call(api.createChannelSub, { channelId: channelSlug });
+    yield call(apiCreate, 'channels', { channelId: channelSlug });
   } catch (error) {
     yield put(actions.createChannelSubFailure(error));
   }
@@ -13,7 +13,7 @@ function* loadCreateSub({ channelSlug }) {
 
 function* loadDeleteSub({ channelSlug }) {
   try {
-    yield call(api.deleteChannelSub, channelSlug);
+    yield call(apiDelete, 'channel_subs', channelSlug);
   } catch (error) {
     yield put(actions.deleteChannelSubFailure(error));
   }

@@ -1,7 +1,7 @@
 import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/channelActions';
 import { CREATE_CHANNEL, UPDATE_CHANNEL, CHANNEL, DELETE_CHANNEL } from '../actions/actionTypes';
-import * as api from '../util/channelAPIUtil';
+import { apiFetch, apiCreate, apiUpdate, apiDelete } from '../util/apiUtil';
 import {
   getPageChannelSlug,
   getChannels,
@@ -12,12 +12,12 @@ import {
 } from '../reducers/selectors';
 import { fetchWorkspace } from './workspaceSaga';
 import { navigate } from '../actions/navigateActions';
-import { modalClose, NEW_CHANNEL_MODAL } from '../actions/modalActions';
+import { modalClose } from '../actions/modalActions';
 
 function* addNewChannel({ channel }) {
   try {
-    yield call(api.createChannel, channel);
-    yield put(modalClose(NEW_CHANNEL_MODAL));
+    yield call(apiCreate, 'channels', channel);
+    yield put(modalClose('NEW_CHANNEL_MODAL'));
   } catch (error) {
     yield put(actions.createChannelFailure(error));
   }
@@ -34,7 +34,7 @@ function* redirectChannelOwner({ channel }) {
 
 function* fetchEditChannel({ channel }) {
   try {
-    yield call(api.editChannel, channel);
+    yield call(apiUpdate, `channels/${channel.slug}`, channel);
   } catch (error) {
     yield put(actions.updateChannelFailure(error));
   }
@@ -47,7 +47,7 @@ function* fetchChannel() {
     const rightSidebarType = yield select(getRightSidebarType);
     const userId = yield select(getCurrentUserId);
     const ui = { workspaceSlug, channelSlug, userId };
-    const channel = yield call(api.fetchChannel, channelSlug);
+    const channel = yield call(apiFetch, 'channels', channelSlug);
     const messageSlug = yield select(getMessageSlug);
     yield put(actions.channelReceive(channel, ui));
 
@@ -77,7 +77,7 @@ function* loadChannelEntities() {
 
 function* fetchDeleteChannel({ channelSlug }) {
   try {
-    yield call(api.deleteChannel, channelSlug);
+    yield call(apiDelete, 'channels', channelSlug);
     yield put(actions.deleteChannelReceive(channelSlug));
   } catch (error) {
     yield put(actions.deleteChannelFailure(error));

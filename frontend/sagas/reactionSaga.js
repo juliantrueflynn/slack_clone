@@ -1,11 +1,11 @@
 import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/reactionActions';
 import { DELETE_REACTION, CREATE_REACTION } from '../actions/actionTypes';
-import * as api from '../util/reactionAPIUtil';
+import { apiCreate, apiDelete } from '../util/apiUtil';
 
 function* fetchCreateReaction({ reaction }) {
   try {
-    yield call(api.createReaction, reaction);
+    yield call(apiCreate, 'reactions', reaction);
   } catch (error) {
     yield put(actions.createReactionFailure(error));
   }
@@ -13,7 +13,7 @@ function* fetchCreateReaction({ reaction }) {
 
 function* fetchDeleteReaction({ reactionId }) {
   try {
-    yield call(api.deleteReaction, reactionId);
+    yield call(apiDelete, 'reactions', reactionId);
   } catch (error) {
     yield put(actions.deleteReactionFailure(error));
   }

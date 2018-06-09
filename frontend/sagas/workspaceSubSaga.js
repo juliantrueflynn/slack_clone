@@ -1,11 +1,11 @@
 import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/workspaceSubActions';
+import { apiCreate, apiDelete } from '../util/apiUtil';
 import { DELETE_WORKSPACE_SUB, CREATE_WORKSPACE_SUB } from '../actions/actionTypes';
-import * as api from '../util/workspaceSubAPIUtil';
 
 function* loadCreateSub({ workspaceId }) {
   try {
-    yield call(api.createWorkspaceSub, { workspaceId });
+    yield call(apiCreate, 'workspace_subs', { workspaceId });
   } catch (error) {
     yield put(actions.createWorkspaceSubFailure(error));
   }
@@ -13,7 +13,7 @@ function* loadCreateSub({ workspaceId }) {
 
 function* loadDeleteSub({ workspaceSlug }) {
   try {
-    yield call(api.deleteWorkspaceSub, workspaceSlug);
+    yield call(apiDelete, 'workspace_subs', workspaceSlug);
   } catch (error) {
     yield put(actions.deleteWorkspaceSubFailure(error));
   }
