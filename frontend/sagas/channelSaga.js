@@ -85,20 +85,20 @@ function* fetchDeleteChannel({ channelSlug }) {
 }
 
 function* watchCreateChannel() {
-  yield takeLatest(CREATE_CHANNEL.REQUEST, addNewChannel);
-  yield takeLatest(CREATE_CHANNEL.RECEIVE, redirectChannelOwner);
+  yield takeLatest(CHANNEL.CREATE.REQUEST, addNewChannel);
+  yield takeLatest(CHANNEL.CREATE.RECEIVE, redirectChannelOwner);
 }
 
 function* watchEditChannel() {
-  yield takeLatest(UPDATE_CHANNEL.REQUEST, fetchEditChannel);
+  yield takeLatest(CHANNEL.UPDATE.REQUEST, fetchEditChannel);
 }
 
 function* watchChannelPage() {
-  yield takeLatest(CHANNEL.REQUEST, loadChannelEntities);
+  yield takeLatest(CHANNEL.SHOW.REQUEST, loadChannelEntities);
 }
 
 function* watchDeleteChannel() {
-  yield takeLatest(DELETE_CHANNEL.REQUEST, fetchDeleteChannel);
+  yield takeLatest(CHANNEL.DELETE.REQUEST, fetchDeleteChannel);
 }
 
 export default function* channelSaga() {

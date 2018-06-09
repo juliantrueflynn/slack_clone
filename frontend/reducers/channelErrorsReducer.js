@@ -1,32 +1,23 @@
-import {
-  CREATE_CHANNEL,
-  UPDATE_CHANNEL,
-  DELETE_CHANNEL,
-  CHANNEL,
-  CHANNELS,
-} from '../actions/actionTypes';
-import { MODAL_CLOSE, NEW_CHANNEL_MODAL } from '../actions/modalActions';
-
-const _nullErrors = [];
+import { CHANNEL } from '../actions/actionTypes';
+import { MODAL_CLOSE } from '../actions/modalActions';
 
 const channelErrorsReducer = (state = [], action) => {
   Object.freeze(state);
 
   switch (action.type) {
     case CHANNEL.FAILURE:
-    case CHANNELS.FAILURE:
-    case CREATE_CHANNEL.FAILURE:
-    case UPDATE_CHANNEL.FAILURE:
-    case DELETE_CHANNEL.FAILURE:
+    case CHANNEL.FAILURE:
+    case CHANNEL.CREATE.FAILURE:
+    case CHANNEL.UPDATE.FAILURE:
+    case CHANNEL.DELETE.FAILURE:
       return [...action.errors];
-    case CREATE_CHANNEL.REQUEST:
-    case CREATE_CHANNEL.RECEIVE:
-      return _nullErrors;
+    case CHANNEL.CREATE.REQUEST:
+    case CHANNEL.CREATE.RECEIVE:
+      return [];
     case MODAL_CLOSE: {
-      if (action.modalType === NEW_CHANNEL_MODAL) {
-        return _nullErrors;
+      if (action.modalType === 'NEW_CHANNEL_MODAL') {
+        return [];
       }
-
       return state;
     }
     default:

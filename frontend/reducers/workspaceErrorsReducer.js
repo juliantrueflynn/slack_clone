@@ -1,14 +1,14 @@
-import { WORKSPACES, WORKSPACE, CREATE_WORKSPACE } from '../actions/actionTypes';
+import { WORKSPACE } from '../actions/actionTypes';
 
 const workspaceErrorsReducer = (state = [], action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case WORKSPACES.FAILURE:
-    case WORKSPACE.FAILURE:
-    case CREATE_WORKSPACE.FAILURE:
+    case WORKSPACE.INDEX.FAILURE:
+    case WORKSPACE.SHOW.FAILURE:
+    case WORKSPACE.CREATE.FAILURE:
       return [...action.errors];
-    case CREATE_WORKSPACE.REQUEST:
+    case WORKSPACE.CREATE.REQUEST:
       return [];
     default:
       return state;

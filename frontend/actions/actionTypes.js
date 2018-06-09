@@ -1,19 +1,21 @@
-import { actionTypes } from '../util/actionsUtil';
+import { actionTypes, apiActions } from '../util/actionsUtil';
 
 export const SIGN_IN = actionTypes('SIGN_IN');
 export const SIGN_UP = actionTypes('SIGN_UP');
 export const SIGN_OUT = actionTypes('SIGN_OUT');
 
-export const WORKSPACES = actionTypes('WORKSPACES');
-export const WORKSPACE = actionTypes('WORKSPACE');
-export const CREATE_WORKSPACE = actionTypes('CREATE_WORKSPACE');
-export const UPDATE_WORKSPACE = actionTypes('UPDATE_WORKSPACE');
-export const DELETE_WORKSPACE = actionTypes('DELETE_WORKSPACE');
-export const CHANNELS = actionTypes('CHANNELS');
-export const CHANNEL = actionTypes('CHANNEL');
-export const CREATE_CHANNEL = actionTypes('CREATE_CHANNEL');
-export const UPDATE_CHANNEL = actionTypes('UPDATE_CHANNEL');
-export const DELETE_CHANNEL = actionTypes('DELETE_CHANNEL');
+export const WORKSPACE = apiActions('WORKSPACE');
+export const CHANNEL = apiActions('CHANNEL');
+// export const WORKSPACES = actionTypes('WORKSPACES');
+// export const WORKSPACE = actionTypes('WORKSPACE');
+// export const CREATE_WORKSPACE = actionTypes('CREATE_WORKSPACE');
+// export const UPDATE_WORKSPACE = actionTypes('UPDATE_WORKSPACE');
+// export const DELETE_WORKSPACE = actionTypes('DELETE_WORKSPACE');
+// export const CHANNELS = actionTypes('CHANNELS');
+// export const CHANNEL = actionTypes('CHANNEL');
+// export const CREATE_CHANNEL = actionTypes('CREATE_CHANNEL');
+// export const UPDATE_CHANNEL = actionTypes('UPDATE_CHANNEL');
+// export const DELETE_CHANNEL = actionTypes('DELETE_CHANNEL');
 export const MESSAGE = actionTypes('MESSAGE');
 export const CREATE_MESSAGE = actionTypes('CREATE_MESSAGE');
 export const UPDATE_MESSAGE = actionTypes('UPDATE_MESSAGE');

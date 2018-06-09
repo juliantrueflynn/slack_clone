@@ -1,9 +1,10 @@
 import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/workspaceActions';
 import { apiFetch, apiCreate, apiDelete } from '../util/apiUtil';
-import { WORKSPACE, WORKSPACES, CREATE_WORKSPACE, DELETE_WORKSPACE } from '../actions/actionTypes';
+import { WORKSPACE } from '../actions/actionTypes';
 import { getChannels, getCurrentUserId } from '../reducers/selectors';
 import { navigate } from '../actions/navigateActions';
+import { fetchWorkspaces } from '../actions/actionCreators';
 
 export function* fetchWorkspace(workspaceSlug) {
   try {
@@ -42,7 +43,7 @@ function* addNewWorkspace({ workspace }) {
 function* loadWorkspaces() {
   try {
     const workspaces = yield call(apiFetch, 'workspaces');
-    yield put(actions.workspacesReceive(workspaces));
+    yield put(fetchWorkspaces.receive(workspaces));
   } catch (error) {
     yield put(actions.workspacesFailure(error));
   }
@@ -60,20 +61,20 @@ function* loadWorkspace({ workspaceSlug }) {
 }
 
 function* newWorkspaceFlow() {
-  yield takeLatest(CREATE_WORKSPACE.REQUEST, addNewWorkspace);
-  yield takeLatest(CREATE_WORKSPACE.RECEIVE, redirectOwner);
+  yield takeLatest(WORKSPACE.CREATE.REQUEST, addNewWorkspace);
+  yield takeLatest(WORKSPACE.CREATE.RECEIVE, redirectOwner);
 }
 
 function* watchWorkspaces() {
-  yield takeLatest(WORKSPACES.REQUEST, loadWorkspaces);
+  yield takeLatest(WORKSPACE.INDEX.REQUEST, loadWorkspaces);
 }
 
 function* watchWorkspacePage() {
-  yield takeLatest(WORKSPACE.REQUEST, loadWorkspace);
+  yield takeLatest(WORKSPACE.SHOW.REQUEST, loadWorkspace);
 }
 
 function* watchDeleteWorkspace() {
-  yield takeLatest(DELETE_WORKSPACE.REQUEST, fetchDeleteWorkspace);
+  yield takeLatest(WORKSPACE.SHOW.REQUEST, fetchDeleteWorkspace);
 }
 
 export default function* workspaceSaga() {

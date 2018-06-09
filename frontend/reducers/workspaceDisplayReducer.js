@@ -1,14 +1,14 @@
-import { WORKSPACE, CREATE_WORKSPACE, CHANNEL } from '../actions/actionTypes';
+import { WORKSPACE, CHANNEL } from '../actions/actionTypes';
 
 const workspaceDisplayReducer = (state = null, action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case CREATE_WORKSPACE.RECEIVE:
+    case WORKSPACE.CREATE.RECEIVE:
       return action.workspace.slug;
-    case WORKSPACE.REQUEST:
+    case WORKSPACE.SHOW.REQUEST:
       return action.workspaceSlug;
-    case CHANNEL.REQUEST: {
+    case CHANNEL.SHOW.REQUEST: {
       return action.ui.workspaceSlug;
     }
     default:

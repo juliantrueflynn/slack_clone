@@ -4,7 +4,7 @@ const channelDisplayReducer = (state = null, action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case CHANNEL.REQUEST: {
+    case CHANNEL.SHOW.REQUEST: {
       return action.channelSlug;
     }
     default:
