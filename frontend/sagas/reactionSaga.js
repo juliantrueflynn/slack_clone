@@ -27,7 +27,7 @@ function* watchDeleteReaction() {
   yield takeLatest(DELETE_REACTION.REQUEST, fetchDeleteReaction);
 }
 
-export function* reactionSaga() {
+export default function* reactionSaga() {
   yield all([
     fork(watchCreateReaction),
     fork(watchDeleteReaction),

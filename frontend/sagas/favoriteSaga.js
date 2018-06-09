@@ -40,7 +40,7 @@ function* watchDeleteFavorite() {
   yield takeLatest(DELETE_FAVORITE.REQUEST, fetchDeleteFavorite);
 }
 
-export function* favoriteSaga() {
+export default function* favoriteSaga() {
   yield all([
     fork(watchUserFavorites),
     fork(watchCreateFavorite),

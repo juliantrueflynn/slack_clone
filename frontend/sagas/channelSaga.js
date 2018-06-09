@@ -101,7 +101,7 @@ function* watchDeleteChannel() {
   yield takeLatest(DELETE_CHANNEL.REQUEST, fetchDeleteChannel);
 }
 
-export function* channelSaga() {
+export default function* channelSaga() {
   yield all([
     fork(watchCreateChannel),
     fork(watchEditChannel),

@@ -6,6 +6,6 @@ function* fetchNavigate({ params }) {
   yield call(navigateTo, params);
 }
 
-export function* navigateSaga() {
+export default function* navigateSaga() {
   yield takeLatest(NAVIGATE, fetchNavigate);
 }

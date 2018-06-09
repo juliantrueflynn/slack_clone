@@ -42,10 +42,10 @@ function* watchSignOut() {
   yield takeLatest(SIGN_OUT.REQUEST, fetchSignOut);
 }
 
-export function* sessionSaga() {
+export default function* sessionSaga() {
   yield all([
     fork(watchSignIn),
     fork(watchSignUp),
-    fork(watchSignOut)
+    fork(watchSignOut),
   ]);
 }

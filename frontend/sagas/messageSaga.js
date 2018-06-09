@@ -52,7 +52,7 @@ function* watchDeleteMessage() {
   yield takeLatest(DELETE_MESSAGE.REQUEST, fetchDeleteMessage);
 }
 
-export function* messageSaga() {
+export default function* messageSaga() {
   yield all([
     fork(watchRequestMessage),
     fork(watchCreateMessage),

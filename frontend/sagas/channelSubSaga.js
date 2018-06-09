@@ -27,7 +27,7 @@ function* watchDeleteSubChannel() {
   yield takeLatest(DELETE_CHANNEL_SUB.REQUEST, loadDeleteSub);
 }
 
-export function* channelSubSaga() {
+export default function* channelSubSaga() {
   yield all([
     fork(watchCreateChannelSub),
     // fork(watchDeleteSubChannel),

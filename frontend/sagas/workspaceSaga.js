@@ -76,7 +76,7 @@ function* watchDeleteWorkspace() {
   yield takeLatest(DELETE_WORKSPACE.REQUEST, fetchDeleteWorkspace);
 }
 
-export function* workspaceSaga() {
+export default function* workspaceSaga() {
   yield all([
     fork(newWorkspaceFlow),
     fork(watchWorkspaces),

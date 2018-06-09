@@ -27,7 +27,7 @@ function* watchDeleteSubWorkspace() {
   yield takeLatest(DELETE_WORKSPACE_SUB.REQUEST, loadDeleteSub);
 }
 
-export function* workspaceSubSaga() {
+export default function* workspaceSubSaga() {
   yield all([
     fork(watchCreateWorkspaceSub),
     // fork(watchDeleteSubWorkspace),
