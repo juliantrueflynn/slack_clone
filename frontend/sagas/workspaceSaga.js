@@ -1,6 +1,6 @@
 import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/workspaceActions';
-import { apiFetch, apiCreate, apiUpdate, apiDelete } from '../util/apiUtil';
+import { apiFetch, apiCreate, apiDelete } from '../util/apiUtil';
 import { WORKSPACE, WORKSPACES, CREATE_WORKSPACE, DELETE_WORKSPACE } from '../actions/actionTypes';
 import { getChannels, getCurrentUserId } from '../reducers/selectors';
 import { navigate } from '../actions/navigateActions';
