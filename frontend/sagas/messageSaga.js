@@ -5,7 +5,7 @@ import { apiFetch, apiCreate, apiUpdate, apiDelete } from '../util/apiUtil';
 
 function* loadMessage({ messageSlug }) {
   try {
-    const message = yield call(apiFetch, 'messages', messageSlug);
+    const message = yield call(apiFetch, `messages/${messageSlug}`);
     yield put(actions.messageReceive(message));
   } catch (error) {
     yield put(actions.messageFailure(error));

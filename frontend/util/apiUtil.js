@@ -10,16 +10,11 @@ export const apiCall = (method, endpoint, props) => {
     credentials: 'include',
   };
 
-  let apiUrl = `api/${endpoint}`;
-  if ((args.method === 'DELETE' || args.method === 'GET') && props !== '') {
-    apiUrl += `/${props}`;
-  }
-
   if (args.method === 'POST' || args.method === 'PATCH') {
     args.body = JSON.stringify(decamelizeKeys(props, { separator: '_' }));
   }
 
-  return fetch(apiUrl, args).then(response => (
+  return fetch(`api/${endpoint}`, args).then(response => (
     response.json().then(json => ({ json, response }))
   )).then(({ json, response }) => {
     if (!response.ok) {

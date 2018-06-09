@@ -47,7 +47,7 @@ function* fetchChannel() {
     const rightSidebarType = yield select(getRightSidebarType);
     const userId = yield select(getCurrentUserId);
     const ui = { workspaceSlug, channelSlug, userId };
-    const channel = yield call(apiFetch, 'channels', channelSlug);
+    const channel = yield call(apiFetch, `channels/${channelSlug}`);
     const messageSlug = yield select(getMessageSlug);
     yield put(actions.channelReceive(channel, ui));
 

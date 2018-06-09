@@ -7,7 +7,7 @@ import { navigate } from '../actions/navigateActions';
 
 export function* fetchWorkspace(workspaceSlug) {
   try {
-    const workspace = yield call(apiFetch, 'workspaces', workspaceSlug);
+    const workspace = yield call(apiFetch, `workspaces/${workspaceSlug}`);
     yield put(actions.workspaceReceive(workspace));
   } catch (error) {
     yield put(actions.workspaceFailure(error));

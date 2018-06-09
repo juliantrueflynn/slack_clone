@@ -1,21 +1,21 @@
 import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/sessionActions';
 import { SIGN_IN, SIGN_UP, SIGN_OUT } from '../actions/actionTypes';
-import * as api from '../util/sessionAPIUtil';
+import { apiCreate, apiDelete } from '../util/apiUtil';
 
-function* fetchSignIn({ currentUser }) {
+function* fetchSignIn({ currentUser: user }) {
   try {
-    const user = yield call(api.signIn, currentUser);
-    yield put(actions.signInReceive(user));
+    const session = yield call(apiCreate, 'session', { user });
+    yield put(actions.signInReceive(session));
   } catch (error) {
     yield put(actions.signInFailure(error));
   }
 }
 
-function* fetchSignUp({ currentUser }) {
+function* fetchSignUp({ currentUser: user }) {
   try {
-    const user = yield call(api.signUp, currentUser);
-    yield put(actions.signUpReceive(user));
+    const session = yield call(apiCreate, 'user', { user });
+    yield put(actions.signUpReceive(session));
   } catch (error) {
     yield put(actions.signUpFailure(error));
   }
@@ -23,7 +23,7 @@ function* fetchSignUp({ currentUser }) {
 
 function* fetchSignOut() {
   try {
-    yield call(api.signOut);
+    yield call(apiDelete, 'session');
     yield put(actions.signOutReceive());
   } catch (error) {
     yield put(actions.sessionFailure(error));
