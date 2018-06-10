@@ -1,24 +1,24 @@
 import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/workspaceActions';
-import { apiFetch, apiCreate, apiDelete } from '../util/apiUtil';
 import { WORKSPACE } from '../actions/actionTypes';
-import { getChannels, getCurrentUserId } from '../reducers/selectors';
+import { apiFetch, apiCreate, apiDelete } from '../util/apiUtil';
+import { getChannels, getCurrentUserId, getPageWorkspaceSlug } from '../reducers/selectors';
 import { navigate } from '../actions/navigateActions';
-import { fetchWorkspaces } from '../actions/actionCreators';
 
 export function* fetchWorkspace(workspaceSlug) {
   try {
     const workspace = yield call(apiFetch, `workspaces/${workspaceSlug}`);
-    yield put(actions.workspaceReceive(workspace));
+    yield put(actions.fetchWorkspace.receive(workspace));
   } catch (error) {
-    yield put(actions.workspaceFailure(error));
+    yield put(actions.fetchWorkspace.failure(error));
   }
 }
 
 function* redirectOwner({ workspace }) {
   const currentUserId = yield select(getCurrentUserId);
+  const currWorkspaceSlug = yield select(getPageWorkspaceSlug);
 
-  if (currentUserId === workspace.ownerId) {
+  if (currentUserId === workspace.ownerId && currWorkspaceSlug !== workspace.slug) {
     yield put(navigate({ path: `/${workspace.slug}` }));
   }
 }
@@ -26,9 +26,9 @@ function* redirectOwner({ workspace }) {
 function* fetchDeleteWorkspace({ workspaceSlug }) {
   try {
     yield call(apiDelete, 'workspaces', workspaceSlug);
-    yield put(actions.deleteWorkspaceReceive(workspaceSlug));
+    yield put(actions.deleteWorkspace.receive(workspaceSlug));
   } catch (error) {
-    yield put(actions.deleteWorkspaceFailure(error));
+    yield put(actions.deleteWorkspace.failure(error));
   }
 }
 
@@ -36,21 +36,22 @@ function* addNewWorkspace({ workspace }) {
   try {
     yield call(apiCreate, 'workspaces', workspace);
   } catch (error) {
-    yield put(actions.createWorkspaceFailure(error));
+    yield put(actions.createWorkspace.failure(error));
   }
 }
 
 function* loadWorkspaces() {
   try {
     const workspaces = yield call(apiFetch, 'workspaces');
-    yield put(fetchWorkspaces.receive(workspaces));
+    yield put(actions.fetchWorkspaces.receive(workspaces));
   } catch (error) {
-    yield put(actions.workspacesFailure(error));
+    yield put(actions.fetchWorkspaces.failure(error));
   }
 }
 
 function* loadWorkspace({ workspaceSlug }) {
-  yield call(fetchWorkspace, workspaceSlug);
+  const workspace = yield call(apiFetch, `workspaces/${workspaceSlug}`);
+  yield put(actions.fetchWorkspace.receive(workspace));
 
   const channels = yield select(getChannels);
   if (channels.length) {
@@ -74,7 +75,7 @@ function* watchWorkspacePage() {
 }
 
 function* watchDeleteWorkspace() {
-  yield takeLatest(WORKSPACE.SHOW.REQUEST, fetchDeleteWorkspace);
+  yield takeLatest(WORKSPACE.DELETE.REQUEST, fetchDeleteWorkspace);
 }
 
 export default function* workspaceSaga() {

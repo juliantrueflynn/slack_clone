@@ -8,14 +8,17 @@ class ChannelsMenu extends React.Component {
     this.handleModalOpen = this.handleModalOpen.bind(this);
   }
 
-  handleModalOpen(event) {
-    event.preventDefault();
+  handleModalOpen() {
     this.props.modalOpen();
   }
 
   render() {
     const { channels, workspaceSlug } = this.props;
-  
+
+    if (!channels) {
+      return null;
+    }
+
     return (
       <div>
         <header>
@@ -26,7 +29,7 @@ class ChannelsMenu extends React.Component {
           <ul>
             {channels.map(channel => (
               <ChannelsMenuItem
-                key={channel.slug}
+                key={channel.id}
                 channel={channel}
                 workspaceSlug={workspaceSlug}
               />

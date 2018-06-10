@@ -1,16 +1,11 @@
-import {
-  FAVORITES,
-  CREATE_FAVORITE,
-  DELETE_FAVORITE,
-  CHANNEL,
-} from '../actions/actionTypes';
+import { FAVORITE, CHANNEL } from '../actions/actionTypes';
 
 const favoriteReducer = (state = {}, action) => {
   Object.freeze(state);
 
   let nextState;
   switch (action.type) {
-    case FAVORITES.RECEIVE: {
+    case FAVORITE.INDEX.RECEIVE: {
       const { favorites } = action;
       nextState = {};
 
@@ -20,20 +15,19 @@ const favoriteReducer = (state = {}, action) => {
 
       return Object.assign({}, state, nextState);
     }
-    case CREATE_FAVORITE.RECEIVE: {
+    case FAVORITE.CREATE.RECEIVE: {
       const { favorite } = action;
       nextState = { [favorite.messageSlug]: favorite };
 
       return Object.assign({}, state, nextState);
     }
-    case DELETE_FAVORITE.RECEIVE: {
+    case FAVORITE.DELETE.RECEIVE: {
       const { favorite } = action;
       nextState = Object.assign({}, state);
       delete nextState[favorite.messageSlug];
-      
       return nextState;
     }
-    case CHANNEL.RECEIVE: {
+    case CHANNEL.SHOW.RECEIVE: {
       const { channel: { favorites }, ui: { messageSlug, userId } } = action;
       const prevState = Object.assign({}, state);
       nextState = {};

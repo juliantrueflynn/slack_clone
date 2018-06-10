@@ -1,14 +1,14 @@
 import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/messageActions';
-import { DELETE_MESSAGE, UPDATE_MESSAGE, CREATE_MESSAGE, MESSAGE } from '../actions/actionTypes';
+import { MESSAGE } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiUpdate, apiDelete } from '../util/apiUtil';
 
 function* loadMessage({ messageSlug }) {
   try {
     const message = yield call(apiFetch, `messages/${messageSlug}`);
-    yield put(actions.messageReceive(message));
+    yield put(actions.fetchMessage.receive(message));
   } catch (error) {
-    yield put(actions.messageFailure(error));
+    yield put(actions.fetchMessage.failure(error));
   }
 }
 
@@ -16,7 +16,7 @@ function* fetchNewMessage({ message }) {
   try {
     yield call(apiCreate, 'messages', message);
   } catch (error) {
-    yield put(actions.createMessageFailure(error));
+    yield put(actions.createMessage.failure(error));
   }
 }
 
@@ -24,7 +24,7 @@ function* fetchEditMessage({ message }) {
   try {
     yield call(apiUpdate, `messages/${message.slug}`, message);
   } catch (error) {
-    yield put(actions.editMessageFailure(error));
+    yield put(actions.updateMessage.failure(error));
   }
 }
 
@@ -32,24 +32,24 @@ function* fetchDeleteMessage({ messageSlug }) {
   try {
     yield call(apiDelete, 'messages', messageSlug);
   } catch (error) {
-    yield put(actions.deleteMessageFailure(error));
+    yield put(actions.deleteMessage.failure(error));
   }
 }
 
 function* watchRequestMessage() {
-  yield takeLatest(MESSAGE.REQUEST, loadMessage);
+  yield takeLatest(MESSAGE.SHOW.REQUEST, loadMessage);
 }
 
 function* watchCreateMessage() {
-  yield takeLatest(CREATE_MESSAGE.REQUEST, fetchNewMessage);
+  yield takeLatest(MESSAGE.CREATE.REQUEST, fetchNewMessage);
 }
 
 function* watchEditMessage() {
-  yield takeLatest(UPDATE_MESSAGE.REQUEST, fetchEditMessage);
+  yield takeLatest(MESSAGE.UPDATE.REQUEST, fetchEditMessage);
 }
 
 function* watchDeleteMessage() {
-  yield takeLatest(DELETE_MESSAGE.REQUEST, fetchDeleteMessage);
+  yield takeLatest(MESSAGE.DELETE.REQUEST, fetchDeleteMessage);
 }
 
 export default function* messageSaga() {

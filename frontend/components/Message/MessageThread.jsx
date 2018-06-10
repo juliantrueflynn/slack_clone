@@ -4,10 +4,6 @@ import MessageFormContainer from './MessageFormContainer';
 import RightSidebarContainer from '../Layout/RightSidebarContainer';
 
 class MessageThread extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     const { openRightSidebar, match: { params } } = this.props;
     const sidebarProps = { messageSlug: params.messageSlug };
@@ -16,7 +12,7 @@ class MessageThread extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { openRightSidebar, match: { params } } = this.props;
-  
+
     if (params.messageSlug !== prevProps.match.params.messageSlug) {
       const sidebarProps = { messageSlug: params.messageSlug };
       openRightSidebar(sidebarProps);
@@ -25,11 +21,11 @@ class MessageThread extends React.Component {
 
   render() {
     const { message, threadEntries } = this.props;
-  
+
     if (!message) {
       return null;
     }
-  
+
     return (
       <RightSidebarContainer
         sidebarTitle="Thread"
@@ -39,19 +35,19 @@ class MessageThread extends React.Component {
         <div className="thread">
           <div className="thread__message">
             <div>
-              ID: {message.id}<br/>
-              Slug: {message.slug}<br/>
-              Author: {message.authorId}<br/>
-              Body: {message.body}<br/>
+              ID: {message.id}<br />
+              Slug: {message.slug}<br />
+              Author: {message.authorId}<br />
+              Body: {message.body}<br />
             </div>
           </div>
-  
+
           <div className="thread-entries">
             {threadEntries && threadEntries.map(entry => (
               <MessageContainer message={entry} key={entry.slug} />
             ))}
           </div>
-  
+
           <MessageFormContainer parentMessageId={message.slug} />
         </div>
       </RightSidebarContainer>

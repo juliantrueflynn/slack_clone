@@ -1,23 +1,11 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Message from './Message';
-import {
-  updateMessageRequest,
-  deleteMessageRequest
-} from '../../actions/messageActions';
+import { updateMessage, deleteMessage } from '../../actions/messageActions';
 import { openRightSidebar } from '../../actions/rightSidebarActions';
-import {
-  createFavoriteRequest,
-  deleteFavoriteRequest
-} from '../../actions/favoriteActions';
-import {
-  getFavoriteStatus,
-  getReactionCounts
-} from '../../reducers/selectors';
-import {
-  createReactionRequest,
-  deleteReactionRequest
-} from '../../actions/reactionActions';
+import { createFavorite, deleteFavorite } from '../../actions/favoriteActions';
+import { getFavoriteStatus, getReactionCounts } from '../../reducers/selectors';
+import { createReaction, deleteReaction } from '../../actions/reactionActions';
 
 const mapStateToProps = (state, { message }) => ({
   isAuthor: state.session.currentUser.id === message.authorId,
@@ -26,27 +14,13 @@ const mapStateToProps = (state, { message }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateMessageRequest: message => dispatch(updateMessageRequest(message)),
-  deleteMessageRequest: messageSlug => dispatch(
-    deleteMessageRequest(messageSlug)
-  ),
-  openRightSidebar: sidebarProps => dispatch(
-    openRightSidebar('Thread', sidebarProps)
-  ),
-  createFavoriteRequest: messageId => dispatch(
-    createFavoriteRequest(messageId)
-  ),
-  deleteFavoriteRequest: messageId => dispatch(
-    deleteFavoriteRequest(messageId)
-  ),
-  createReactionRequest: reaction => dispatch(
-    createReactionRequest(reaction)
-  ),
-  deleteReactionRequest: reactionId => dispatch(
-    deleteReactionRequest(reactionId)
-  )
+  updateMessageRequest: message => dispatch(updateMessage.request(message)),
+  deleteMessageRequest: messageSlug => dispatch(deleteMessage.request(messageSlug)),
+  openRightSidebar: sidebarProps => dispatch(openRightSidebar('Thread', sidebarProps)),
+  createFavoriteRequest: messageId => dispatch(createFavorite.request(messageId)),
+  deleteFavoriteRequest: messageId => dispatch(deleteFavorite.request(messageId)),
+  createReactionRequest: reaction => dispatch(createReaction.request(reaction)),
+  deleteReactionRequest: reactionId => dispatch(deleteReaction.request(reactionId)),
 });
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(Message)
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Message));

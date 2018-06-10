@@ -1,19 +1,19 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import { OPEN_RIGHT_SIDEBAR } from '../actions/actionTypes';
-import { messageRequest, messageFailure } from '../actions/messageActions';
-import { favoritesRequest } from '../actions/favoriteActions';
+import { fetchMessage } from '../actions/messageActions';
+import { fetchFavorites } from '../actions/favoriteActions';
 
 function* fetchOpenRightSidebar({ sidebarType, sidebarProps }) {
   try {
     if (sidebarType === 'Thread') {
-      yield put(messageRequest(sidebarProps.messageSlug));
+      yield put(fetchMessage.request(sidebarProps.messageSlug));
     }
 
     if (sidebarType === 'Favorites') {
-      yield put(favoritesRequest());
+      yield put(fetchFavorites.request());
     }
   } catch (error) {
-    yield put(messageFailure(error));
+    yield put(fetchMessage.failure(error));
   }
 }
 

@@ -20,7 +20,11 @@ class UsersMenu extends React.Component {
 
   render() {
     const { workspaceSlug, workspaces, channelSlug, userSlug } = this.props;
-  
+    
+    if (!workspaces) {
+      return null;
+    }
+
     return (
       <DropdownMenu menuFor="user" togglerText={workspaceSlug}>
         <li>
@@ -40,14 +44,14 @@ class UsersMenu extends React.Component {
             onClick={this.handleModalOpenClick}
           >
             Preferences
-          </button>          
+          </button>
         </li>
         <li>
           Switch Workspace
         </li>
 
-        {workspaces && workspaces.map(workspace => (
-          <li key={workspace.slug}>
+        {workspaces.map(workspace => (
+          <li key={`workspace${workspace.id}`}>
             {workspace.title}
           </li>
         ))}

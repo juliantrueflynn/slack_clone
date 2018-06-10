@@ -2,27 +2,13 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { ActionCable } from 'react-actioncable-provider';
 import { camelizeKeys } from 'humps';
-import {
-  createMessageReceive,
-  updateMessageReceive,
-  deleteMessageReceive,
-} from '../actions/messageActions';
+import { updateMessage, deleteMessage, createMessage } from '../actions/messageActions';
 import { getChannels } from '../reducers/selectors';
 import { setStatus } from '../actions/memberActions';
-import { createWorkspaceReceive } from '../actions/workspaceActions';
-import {
-  createChannelReceive,
-  updateChannelReceive,
-  deleteChannelReceive,
-} from '../actions/channelActions';
-import {
-  createFavoriteReceive,
-  deleteFavoriteReceive,
-} from '../actions/favoriteActions';
-import {
-  createReactionReceive,
-  deleteReactionReceive,
-} from '../actions/reactionActions';
+import { createWorkspace } from '../actions/workspaceActions';
+import { createChannel, updateChannel, deleteChannel } from '../actions/channelActions';
+import { createFavorite, deleteFavorite } from '../actions/favoriteActions';
+import { createReaction, deleteReaction } from '../actions/reactionActions';
 
 const mapStateToProps = state => ({
   channels: getChannels(state),
@@ -35,32 +21,32 @@ const mapDispatchToProps = dispatch => ({
 
     switch (received.event) {
       case 'CREATE_MESSAGE':
-        return dispatch(createMessageReceive(
+        return dispatch(createMessage.receive(
           camelized.message,
           camelized.parentMessageSlug,
         ));
       case 'EDIT_MESSAGE':
-        return dispatch(updateMessageReceive(camelized.message));
+        return dispatch(updateMessage.receive(camelized.message));
       case 'DELETE_MESSAGE':
-        return dispatch(deleteMessageReceive(camelized.message.slug));
+        return dispatch(deleteMessage.receive(camelized.message.slug));
       case 'CREATE_FAVORITE':
         camelized.favorite.messageSlug = camelized.messageSlug;
-        return dispatch(createFavoriteReceive(camelized.favorite));
+        return dispatch(createFavorite.receive(camelized.favorite));
       case 'DELETE_FAVORITE':
         camelized.favorite.messageSlug = camelized.messageSlug;
-        return dispatch(deleteFavoriteReceive(camelized.favorite));
+        return dispatch(deleteFavorite.receive(camelized.favorite));
       case 'CREATE_REACTION':
-        return dispatch(createReactionReceive(camelized.reaction));
+        return dispatch(createReaction.receive(camelized.reaction));
       case 'DELETE_REACTION':
-        return dispatch(deleteReactionReceive(camelized.reaction));
+        return dispatch(deleteReaction.receive(camelized.reaction));
       case 'CREATE_CHANNEL':
-        return dispatch(createChannelReceive(camelized.channel));
+        return dispatch(createChannel.receive(camelized.channel));
       case 'EDIT_CHANNEL':
-        return dispatch(updateChannelReceive(camelized.channel));
+        return dispatch(updateChannel.receive(camelized.channel));
       case 'DELETE_CHANNEL':
-        return dispatch(deleteChannelReceive(camelized.channel));
+        return dispatch(deleteChannel.receive(camelized.channel));
       case 'CREATE_WORKSPACE':
-        return dispatch(createWorkspaceReceive(camelized.workspace));
+        return dispatch(createWorkspace.receive(camelized.workspace));
       case 'STATUS':
         return dispatch(setStatus(
           camelized.user.slug,

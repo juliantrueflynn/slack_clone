@@ -6,7 +6,7 @@ const memberReducer = (state = {}, action) => {
 
   let nextState;
   switch (action.type) {
-    case WORKSPACE.RECEIVE: {
+    case WORKSPACE.SHOW.RECEIVE: {
       const { workspace } = action;
       nextState = {};
       workspace.members.map((member) => {

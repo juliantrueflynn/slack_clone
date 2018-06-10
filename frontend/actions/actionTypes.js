@@ -7,10 +7,10 @@ export const SIGN_OUT = actionTypes('SIGN_OUT');
 export const WORKSPACE = apiActions('WORKSPACE');
 export const CHANNEL = apiActions('CHANNEL');
 export const MESSAGE = apiActions('MESSAGE', ['SHOW', 'CREATE', 'UPDATE', 'DELETE']);
-export const WORKSPACE_SUB = apiActions('CREATE_WORKSPACE_SUB', ['CREATE', 'DELETE']);
-export const CHANNEL_SUB = apiActions('CREATE_CHANNEL_SUB', ['CREATE', 'DELETE']);
-export const FAVORITES = apiActions('FAVORITES', ['INDEX', 'CREATE', 'DELETE']);
-export const REACTION = apiActions('CREATE_REACTION', ['CREATE', 'DELETE']);
+export const WORKSPACE_SUB = apiActions('WORKSPACE_SUB', ['CREATE', 'DELETE']);
+export const CHANNEL_SUB = apiActions('CHANNEL_SUB', ['CREATE', 'DELETE']);
+export const FAVORITE = apiActions('FAVORITE', ['INDEX', 'CREATE', 'DELETE']);
+export const REACTION = apiActions('REACTION', ['CREATE', 'DELETE']);
 
 export const NAVIGATE = 'NAVIGATE';
 export const MODAL_OPEN = 'MODAL_OPEN';

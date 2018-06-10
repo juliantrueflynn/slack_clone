@@ -1,89 +1,44 @@
-export const WORKSPACES_REQUEST = 'WORKSPACES_REQUEST';
-export const WORKSPACES_RECEIVE = 'WORKSPACES_RECEIVE';
-export const WORKSPACES_FAILURE = 'WORKSPACES_FAILURE';
-export const WORKSPACE_REQUEST = 'WORKSPACE_REQUEST';
-export const WORKSPACE_RECEIVE = 'WORKSPACE_RECEIVE';
-export const WORKSPACE_FAILURE = 'WORKSPACE_FAILURE';
-export const CREATE_WORKSPACE_REQUEST = 'CREATE_WORKSPACE_REQUEST';
-export const CREATE_WORKSPACE_RECEIVE = 'CREATE_WORKSPACE_RECEIVE';
-export const CREATE_WORKSPACE_FAILURE = 'CREATE_WORKSPACE_FAILURE';
-export const UPDATE_WORKSPACE_REQUEST = 'UPDATE_WORKSPACE_REQUEST';
-export const UPDATE_WORKSPACE_SUCCESS = 'UPDATE_WORKSPACE_SUCCESS';
-export const UPDATE_WORKSPACE_FAILURE = 'UPDATE_WORKSPACE_FAILURE';
-export const DELETE_WORKSPACE_REQUEST = 'DELETE_WORKSPACE_REQUEST';
-export const DELETE_WORKSPACE_RECEIVE = 'DELETE_WORKSPACE_RECEIVE';
-export const DELETE_WORKSPACE_FAILURE = 'DELETE_WORKSPACE_FAILURE';
+import { WORKSPACE, WORKSPACE_SUB } from './actionTypes';
+import { actionCreator } from '../util/actionsUtil';
 
-export const workspacesRequest = () => ({
-  type: WORKSPACES_REQUEST
-});
+export const fetchWorkspaces = {
+  request: () => actionCreator(WORKSPACE.INDEX.REQUEST),
+  receive: workspaces => actionCreator(WORKSPACE.INDEX.RECEIVE, { workspaces }),
+  failure: errors => actionCreator(WORKSPACE.INDEX.FAILURE, { errors }),
+};
 
-export const workspacesReceive = workspaces => ({
-  type: WORKSPACES_RECEIVE,
-  workspaces
-});
+export const fetchWorkspace = {
+  request: workspaceSlug => actionCreator(WORKSPACE.SHOW.REQUEST, { workspaceSlug }),
+  receive: workspace => actionCreator(WORKSPACE.SHOW.RECEIVE, { workspace }),
+  failure: errors => actionCreator(WORKSPACE.SHOW.FAILURE, { errors }),
+};
 
-export const workspacesFailure = errors => ({
-  type: WORKSPACES_FAILURE,
-  errors
-});
+export const createWorkspace = {
+  request: workspace => actionCreator(WORKSPACE.CREATE.REQUEST, { workspace }),
+  receive: workspace => actionCreator(WORKSPACE.CREATE.RECEIVE, { workspace }),
+  failure: errors => actionCreator(WORKSPACE.CREATE.FAILURE, { errors }),
+};
 
-export const createWorkspaceRequest = workspace => ({
-  type: CREATE_WORKSPACE_REQUEST,
-  workspace
-});
+export const updateWorkspace = {
+  request: workspace => actionCreator(WORKSPACE.UPDATE.REQUEST, { workspace }),
+  receive: workspace => actionCreator(WORKSPACE.UPDATE.RECEIVE, { workspace }),
+  failure: errors => actionCreator(WORKSPACE.UPDATE.FAILURE, { errors }),
+};
 
-export const createWorkspaceReceive = workspace => ({
-  type: CREATE_WORKSPACE_RECEIVE,
-  workspace
-});
+export const deleteWorkspace = {
+  request: workspaceSlug => actionCreator(WORKSPACE.SHOW.REQUEST, { workspaceSlug }),
+  receive: workspace => actionCreator(WORKSPACE.SHOW.RECEIVE, { workspace }),
+  failure: errors => actionCreator(WORKSPACE.SHOW.FAILURE, { errors }),
+};
 
-export const createWorkspaceFailure = errors => ({
-  type: CREATE_WORKSPACE_FAILURE,
-  errors
-});
+export const createWorkspaceSub = {
+  request: workspaceId => actionCreator(WORKSPACE_SUB.CREATE.REQUEST, { workspaceId }),
+  receive: workspaceSub => actionCreator(WORKSPACE_SUB.CREATE.RECEIVE, { workspaceSub }),
+  failure: errors => actionCreator(WORKSPACE_SUB.CREATE.FAILURE, { errors }),
+};
 
-export const workspaceRequest = workspaceSlug => ({
-  type: WORKSPACE_REQUEST,
-  workspaceSlug
-});
-
-export const workspaceReceive = workspace => ({
-  type: WORKSPACE_RECEIVE,
-  workspace
-});
-
-export const workspaceFailure = errors => ({
-  type: WORKSPACE_FAILURE,
-  errors
-});
-
-export const updateWorkspaceRequest = workspace => ({
-  type: UPDATE_WORKSPACE_REQUEST,
-  workspace
-});
-
-export const updateWorkspaceSuccess = workspace => ({
-  type: UPDATE_WORKSPACE_SUCCESS,
-  workspace
-});
-
-export const updateWorkspaceFailure = workspace => ({
-  type: UPDATE_WORKSPACE_FAILURE,
-  workspace
-});
-
-export const deleteWorkspaceRequest = workspaceSlug => ({
-  type: DELETE_WORKSPACE_REQUEST,
-  workspaceSlug
-});
-
-export const deleteWorkspaceSuccess = workspaceSlug => ({
-  type: DELETE_WORKSPACE_RECEIVE,
-  workspaceSlug
-});
-
-export const deleteWorkspaceFailure = errors => ({
-  type: DELETE_WORKSPACE_FAILURE,
-  errors
-});
+export const deleteWorkspaceSub = {
+  request: workspaceId => actionCreator(WORKSPACE_SUB.DELETE.REQUEST, { workspaceId }),
+  receive: workspaceSub => actionCreator(WORKSPACE_SUB.DELETE.RECEIVE, { workspaceSub }),
+  failure: errors => actionCreator(WORKSPACE_SUB.DELETE.FAILURE, { errors }),
+};

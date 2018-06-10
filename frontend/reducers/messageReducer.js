@@ -1,18 +1,12 @@
 import merge from 'lodash.merge';
-import {
-  CREATE_MESSAGE,
-  UPDATE_MESSAGE,
-  DELETE_MESSAGE,
-  MESSAGE,
-  CHANNEL,
-} from '../actions/actionTypes';
+import { MESSAGE, CHANNEL } from '../actions/actionTypes';
 
 const messageReducer = (state = {}, action) => {
   Object.freeze(state);
 
   let nextState;
   switch (action.type) {
-    case CHANNEL.RECEIVE: {
+    case CHANNEL.SHOW.RECEIVE: {
       nextState = Object.assign({}, state);
       const { channel: { messages, reactions }, ui: { messageSlug } } = action;
 
@@ -45,7 +39,7 @@ const messageReducer = (state = {}, action) => {
 
       return nextState;
     }
-    case MESSAGE.RECEIVE: {
+    case MESSAGE.SHOW.RECEIVE: {
       const { message: { message, thread, reactions } } = action;
       nextState = Object.assign({}, state);
       const { slug } = message;
@@ -72,7 +66,7 @@ const messageReducer = (state = {}, action) => {
 
       return nextState;
     }
-    case CREATE_MESSAGE.RECEIVE: {
+    case MESSAGE.CREATE.RECEIVE: {
       const { message, parentMessageSlug } = action;
       nextState = { [message.slug]: message };
       if (parentMessageSlug) {
@@ -81,10 +75,10 @@ const messageReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case UPDATE_MESSAGE.RECEIVE:
+    case MESSAGE.UPDATE.RECEIVE:
       nextState = { [action.message.slug]: action.message };
       return Object.assign({}, state, nextState);
-    case DELETE_MESSAGE.RECEIVE:
+    case MESSAGE.DELETE.RECEIVE:
       nextState = Object.assign({}, state);
       delete nextState[action.messageSlug];
       return nextState;

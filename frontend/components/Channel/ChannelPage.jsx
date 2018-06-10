@@ -8,22 +8,18 @@ import { RouteWithSubRoutes } from '../../util/routeUtil';
 import './ChannelPage.css';
 
 class ChannelPage extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     const { workspaceSlug, channelSlug, messageSlug } = this.props;
-    this.props.channelRequest(channelSlug, { workspaceSlug, messageSlug });
+    this.props.fetchChannelRequest(channelSlug, { workspaceSlug, messageSlug });
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const { workspaceSlug, channelSlug, messageSlug } = this.props;
-  
+
     if (channelSlug !== prevProps.channelSlug) {
-      this.props.channelRequest(
+      this.props.fetchChannelRequest(
         channelSlug,
-        { workspaceSlug, messageSlug: messageSlug || null }
+        { workspaceSlug, messageSlug: messageSlug || null },
       );
     }
   }
@@ -34,7 +30,7 @@ class ChannelPage extends React.Component {
     return (
       <div className="page page__channel">
         <ChannelSidebarContainer />
-        
+
         <div className="messages-pane">
           <ChannelHeaderContainer />
           <div className="messages-pane-body">
@@ -43,10 +39,10 @@ class ChannelPage extends React.Component {
           </div>
         </div>
 
-        {routes && routes.map((route, i) => (
-          <RouteWithSubRoutes key={`channelRoute${i}`} {...route} />
+        {routes && routes.map(route => (
+          <RouteWithSubRoutes key={route.path} {...route} />
         ))}
-        
+
         <ChannelFormContainer />
       </div>
     );

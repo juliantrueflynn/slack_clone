@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ChannelForm from './ChannelForm';
-import { createChannelRequest } from '../../actions/channelActions';
+import { createChannel } from '../../actions/channelActions';
 import { modalClose } from '../../actions/modalActions';
 
 const mapStateToProps = state => ({
@@ -9,11 +9,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  createChannelRequest: channel => dispatch(createChannelRequest(channel)),
+  createChannelRequest: channel => dispatch(createChannel.request(channel)),
   modalClose: () => dispatch(modalClose('NEW_CHANNEL_MODAL')),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ChannelForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ChannelForm);

@@ -1,112 +1,44 @@
-export const CHANNELS_REQUEST = 'CHANNELS_REQUEST';
-export const CHANNELS_RECEIVE = 'CHANNELS_RECEIVE';
-export const CHANNELS_FAILURE = 'CHANNELS_FAILURE';
-export const CHANNEL_REQUEST = 'CHANNEL_REQUEST';
-export const CHANNEL_RECEIVE = 'CHANNEL_RECEIVE';
-export const CHANNEL_FAILURE = 'CHANNEL_FAILURE';
-export const CREATE_CHANNEL_REQUEST = 'CREATE_CHANNEL_REQUEST';
-export const CREATE_CHANNEL_RECEIVE = 'CREATE_CHANNEL_RECEIVE';
-export const CREATE_CHANNEL_FAILURE = 'CREATE_CHANNEL_FAILURE';
-export const UPDATE_CHANNEL_REQUEST = 'UPDATE_CHANNEL_REQUEST';
-export const UPDATE_CHANNEL_RECEIVE = 'UPDATE_CHANNEL_RECEIVE';
-export const UPDATE_CHANNEL_FAILURE = 'UPDATE_CHANNEL_FAILURE';
-export const DELETE_CHANNEL_REQUEST = 'DELETE_CHANNEL_REQUEST';
-export const DELETE_CHANNEL_RECEIVE = 'DELETE_CHANNEL_RECEIVE';
-export const DELETE_CHANNEL_FAILURE = 'DELETE_CHANNEL_FAILURE';
-export const DEFAULT_CHANNELS_REQUEST = 'DEFAULT_CHANNELS_REQUEST';
-export const DEFAULT_CHANNELS_RECEIVE = 'DEFAULT_CHANNELS_RECEIVE';
-export const DEFAULT_CHANNELS_FAILURE = 'DEFAULT_CHANNELS_FAILURE';
+import { actionCreator } from '../util/actionsUtil';
+import { CHANNEL, CHANNEL_SUB } from './actionTypes';
 
-export const channelsRequest = (channels = {}) => ({
-  type: CHANNELS_REQUEST,
-  channels
-});
+export const fetchChannels = {
+  request: (channels = {}) => actionCreator(CHANNEL.INDEX.REQUEST, { channels }),
+  receive: channels => actionCreator(CHANNEL.INDEX.RECEIVE, { channels }),
+  failure: errors => actionCreator(CHANNEL.INDEX.FAILURE, { errors }),
+};
 
-export const channelsReceive = channels => ({
-  type: CHANNELS_RECEIVE,
-  channels
-});
+export const fetchChannel = {
+  request: (channelSlug, ui) => actionCreator(CHANNEL.SHOW.REQUEST, { channelSlug, ui }),
+  receive: (channel, ui) => actionCreator(CHANNEL.SHOW.RECEIVE, { channel, ui }),
+  failure: errors => actionCreator(CHANNEL.SHOW.FAILURE, { errors }),
+};
 
-export const channelsFailure = errors => ({
-  type: CHANNELS_FAILURE,
-  errors
-});
+export const createChannel = {
+  request: channel => actionCreator(CHANNEL.CREATE.REQUEST, { channel }),
+  receive: channel => actionCreator(CHANNEL.CREATE.RECEIVE, { channel }),
+  failure: errors => actionCreator(CHANNEL.CREATE.FAILURE, { errors }),
+};
 
-export const channelRequest = (channelSlug, ui) => ({
-  type: CHANNEL_REQUEST,
-  channelSlug,
-  ui
-});
+export const updateChannel = {
+  request: channel => actionCreator(CHANNEL.UPDATE.REQUEST, { channel }),
+  receive: channel => actionCreator(CHANNEL.UPDATE.RECEIVE, { channel }),
+  failure: errors => actionCreator(CHANNEL.UPDATE.FAILURE, { errors }),
+};
 
-export const channelReceive = (channel, ui) => ({
-  type: CHANNEL_RECEIVE,
-  channel,
-  ui
-});
+export const deleteChannel = {
+  request: channelSlug => actionCreator(CHANNEL.DELETE.REQUEST, { channelSlug }),
+  receive: channel => actionCreator(CHANNEL.DELETE.RECEIVE, { channel }),
+  failure: errors => actionCreator(CHANNEL.DELETE.FAILURE, { errors }),
+};
 
-export const channelFailure = errors => ({
-  type: CHANNEL_FAILURE,
-  errors
-});
+export const createChannelSub = {
+  request: channelId => actionCreator(CHANNEL_SUB.CREATE.REQUEST, { channelId }),
+  receive: channelSub => actionCreator(CHANNEL_SUB.CREATE.RECEIVE, { channelSub }),
+  failure: errors => actionCreator(CHANNEL_SUB.CREATE.FAILURE, { errors }),
+};
 
-export const createChannelRequest = channel => ({
-  type: CREATE_CHANNEL_REQUEST,
-  channel
-});
-
-export const createChannelReceive = channel => ({
-  type: CREATE_CHANNEL_RECEIVE,
-  channel
-});
-
-export const createChannelFailure = errors => ({
-  type: CREATE_CHANNEL_FAILURE,
-  errors
-});
-
-export const updateChannelRequest = channel => ({
-  type: UPDATE_CHANNEL_REQUEST,
-  channel
-});
-
-export const updateChannelReceive = channel => ({
-  type: UPDATE_CHANNEL_RECEIVE,
-  channel
-});
-
-export const updateChannelFailure = errors => ({
-  type: UPDATE_CHANNEL_FAILURE,
-  errors
-});
-
-export const deleteChannelRequest = channelSlug => ({
-  type: DELETE_CHANNEL_REQUEST,
-  channelSlug
-});
-
-export const deleteChannelReceive = channelSlug => ({
-  type: DELETE_CHANNEL_RECEIVE,
-  channelSlug
-});
-
-export const deleteChannelFailure = errors => ({
-  type: DELETE_CHANNEL_FAILURE,
-  errors
-});
-
-export const defaultChannelsRequest = (channels, ownerId) => ({
-  type: DEFAULT_CHANNELS_REQUEST,
-  channels,
-  ownerId
-});
-
-export const defaultChannelsReceive = (channels, ownerId) => ({
-  type: DEFAULT_CHANNELS_RECEIVE,
-  channels,
-  ownerId
-});
-
-export const defaultChannelsFailure = errors => ({
-  type: DEFAULT_CHANNELS_FAILURE,
-  errors
-});
+export const deleteChannelSub = {
+  request: channelId => actionCreator(CHANNEL_SUB.DELETE.REQUEST, { channelId }),
+  receive: channelSub => actionCreator(CHANNEL_SUB.DELETE.RECEIVE, { channelSub }),
+  failure: errors => actionCreator(CHANNEL_SUB.DELETE.FAILURE, { errors }),
+};

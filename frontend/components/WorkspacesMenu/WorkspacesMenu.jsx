@@ -12,7 +12,7 @@ class WorkspacesMenu extends React.Component {
 
   componentDidMount() {
     if (this.props.loggedIn) {
-      this.props.fetchWorkspaces();
+      this.props.fetchWorkspacesRequest();
     }
   }
 

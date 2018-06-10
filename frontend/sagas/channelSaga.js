@@ -1,6 +1,6 @@
 import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/channelActions';
-import { CREATE_CHANNEL, UPDATE_CHANNEL, CHANNEL, DELETE_CHANNEL } from '../actions/actionTypes';
+import { CHANNEL } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiUpdate, apiDelete } from '../util/apiUtil';
 import {
   getPageChannelSlug,
@@ -19,7 +19,7 @@ function* addNewChannel({ channel }) {
     yield call(apiCreate, 'channels', channel);
     yield put(modalClose('NEW_CHANNEL_MODAL'));
   } catch (error) {
-    yield put(actions.createChannelFailure(error));
+    yield put(actions.createChannel.failure(error));
   }
 }
 
@@ -36,7 +36,7 @@ function* fetchEditChannel({ channel }) {
   try {
     yield call(apiUpdate, `channels/${channel.slug}`, channel);
   } catch (error) {
-    yield put(actions.updateChannelFailure(error));
+    yield put(actions.updateChannel.failure(error));
   }
 }
 
@@ -49,7 +49,8 @@ function* fetchChannel() {
     const ui = { workspaceSlug, channelSlug, userId };
     const channel = yield call(apiFetch, `channels/${channelSlug}`);
     const messageSlug = yield select(getMessageSlug);
-    yield put(actions.channelReceive(channel, ui));
+
+    yield put(actions.fetchChannel.receive(channel, ui));
 
     if (rightSidebarType === 'Thread') {
       const baseUrl = `/${workspaceSlug}/${channelSlug}`;
@@ -61,7 +62,7 @@ function* fetchChannel() {
       yield put(navigate({ path: `${baseUrl}/favorites` }));
     }
   } catch (error) {
-    yield put(actions.channelFailure(error));
+    yield put(actions.fetchChannel.failure(error));
   }
 }
 
@@ -69,7 +70,7 @@ function* loadChannelEntities() {
   const workspaceSlug = yield select(getPageWorkspaceSlug);
   const channels = yield select(getChannels);
   if (channels.length < 1) {
-    yield put(actions.channelsRequest());
+    yield put(actions.fetchChannels.request());
     yield call(fetchWorkspace, workspaceSlug);
   }
   yield call(fetchChannel);
@@ -78,9 +79,8 @@ function* loadChannelEntities() {
 function* fetchDeleteChannel({ channelSlug }) {
   try {
     yield call(apiDelete, 'channels', channelSlug);
-    yield put(actions.deleteChannelReceive(channelSlug));
   } catch (error) {
-    yield put(actions.deleteChannelFailure(error));
+    yield put(actions.deleteChannel.failure(error));
   }
 }
 

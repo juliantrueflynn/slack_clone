@@ -1,27 +1,26 @@
 import React from 'react';
-import ChannelPageContainer from '../Channel/ChannelPageContainer';
-import {
-  WorkspaceActionCable,
-  ChannelActionCables
-} from '../../util/actionCableUtil';
+import { WorkspaceActionCable, ChannelActionCables } from '../../util/actionCableUtil';
 import { RouteWithSubRoutes } from '../../util/routeUtil';
 
 class WorkspacePage extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
-    const { workspaceRequest, match } = this.props;
-    
-    workspaceRequest(match.params.workspaceSlug);
+    const { fetchWorkspaceRequest, match, workspaces } = this.props;
+    fetchWorkspaceRequest(match.params.workspaceSlug);
+
+    if (!workspaces || !workspaces.length) {
+      this.props.fetchWorkspacesRequest();
+    }
   }
 
   componentDidUpdate(prevProps) {
-    const { workspaceRequest, match } = this.props;
-    
+    const { fetchWorkspaceRequest, match, workspaces } = this.props;
+
     if (prevProps.match.url !== match.url) {
-      workspaceRequest(match.params.workspaceSlug);
+      fetchWorkspaceRequest(match.params.workspaceSlug);
+    }
+
+    if (prevProps.workspaces && prevProps.workspaces.length !== workspaces.length) {
+      this.props.fetchWorkspacesRequest();
     }
   }
 
@@ -32,9 +31,9 @@ class WorkspacePage extends React.Component {
       <div className="workspace-view">
         <WorkspaceActionCable workspaceSlug={params.workspaceSlug} />
         <ChannelActionCables />
-        
-        {routes && routes.map((route, i) => (
-          <RouteWithSubRoutes key={`channelRoute${i}`} {...route} />
+
+        {routes && routes.map(route => (
+          <RouteWithSubRoutes key={route.path} {...route} />
         ))}
       </div>
     );

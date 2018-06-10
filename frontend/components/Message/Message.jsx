@@ -1,11 +1,11 @@
 import React from 'react';
-import MessageHoverMenu from './MessageHoverMenu';
+import 'draft-js/dist/Draft.css';
+import 'draft-js-emoji-plugin/lib/plugin.css';
 import Editor from 'draft-js-plugins-editor';
 import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import createEmojiPlugin from 'draft-js-emoji-plugin';
+import MessageHoverMenu from './MessageHoverMenu';
 import Reactions from '../Reactions';
-import 'draft-js/dist/Draft.css';
-import 'draft-js-emoji-plugin/lib/plugin.css';
 
 const emojiPlugin = createEmojiPlugin();
 const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
@@ -19,17 +19,17 @@ class Message extends React.Component {
     this.state = {
       isMouseOver: false,
       isEditing: false,
-      editorState: EditorState.createWithContent(blocks)
+      editorState: EditorState.createWithContent(blocks),
     };
 
     this.onChange = editorState => this.setState({ editorState });
-  
+
     this.handleEditToggle = this.handleEditToggle.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleHoverToggle(isMouseOver) {
-    return event => this.setState({ isMouseOver });
+    return () => this.setState({ isMouseOver });
   }
 
   handleEditToggle(toggleResult = false) {
@@ -41,7 +41,7 @@ class Message extends React.Component {
 
     const { editorState } = this.state;
     const currentContent = editorState.getCurrentContent();
-    
+
     const message = {
       slug: this.props.message.slug,
       body: JSON.stringify(convertToRaw(currentContent)),
@@ -77,7 +77,7 @@ class Message extends React.Component {
         </li>
       );
     }
-  
+
     return (
       <li
         className="message"
@@ -100,15 +100,15 @@ class Message extends React.Component {
               match={this.props.match}
             />
           )}
-          
+
           <div className="author">
             Author: {message.authorId}
           </div>
-    
+
           <div className="message-body">
             ID: #{message.id}<br/>
             Slug: {message.slug}<br/>
-            
+
             <Editor
               editorState={this.state.editorState}
               onChange={this.onChange}

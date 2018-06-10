@@ -1,20 +1,16 @@
-import {
-  CREATE_MESSAGE,
-  UPDATE_MESSAGE,
-  DELETE_MESSAGE,
-} from '../actions/actionTypes';
+import { MESSAGE } from '../actions/actionTypes';
 
 const messageErrorsReducer = (state = [], action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case CREATE_MESSAGE.FAILURE:
-    case UPDATE_MESSAGE.FAILURE:
-    case DELETE_MESSAGE.FAILURE:
+    case MESSAGE.CREATE.FAILURE:
+    case MESSAGE.UPDATE.FAILURE:
+    case MESSAGE.DELETE.FAILURE:
       return [...action.errors];
-    case CREATE_MESSAGE.REQUEST:
-    case UPDATE_MESSAGE.REQUEST:
-    case DELETE_MESSAGE.REQUEST:
+    case MESSAGE.CREATE.REQUEST:
+    case MESSAGE.UPDATE.REQUEST:
+    case MESSAGE.DELETE.REQUEST:
       return [];
     default:
       return state;

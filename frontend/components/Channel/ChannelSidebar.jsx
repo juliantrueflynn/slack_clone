@@ -5,47 +5,39 @@ import ChannelsMenuContainer from './ChannelsMenuContainer';
 import PreferencesModal from '../PreferencesModal';
 import './ChannelSidebar.css';
 
-class ChannelSidebar extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+const ChannelSidebar = props => (
+  <aside className="sidebar sidebar__channel">
+    <UsersMenu
+      workspaceSlug={props.workspaceSlug}
+      channelSlug={props.channelSlug}
+      userSlug={props.userSlug}
+      workspaces={props.workspaces}
+      modalOpen={props.modalOpen}
+      modalClose={props.modalClose}
+      openRightSidebar={props.openRightSidebar}
+    />
 
-  render() {
-    return (
-      <aside className="sidebar sidebar__channel">
-        <UsersMenu
-          workspaceSlug={this.props.workspaceSlug}
-          channelSlug={this.props.channelSlug}
-          userSlug={this.props.userSlug}
-          workspaces={this.props.workspaces}
-          modalOpen={this.props.modalOpen}
-          modalClose={this.props.modalClose}
-          openRightSidebar={this.props.openRightSidebar}
-        />
+    <PreferencesModal
+      workspaceSlug={props.workspaceSlug}
+      modalClose={props.modalClose}
+      isModalOpen={props.isModalOpen}
+    />
 
-        <PreferencesModal
-          workspaceSlug={this.props.workspaceSlug}
-          modalClose={this.props.modalClose}
-          isModalOpen={this.props.isModalOpen}
-        />
-        
-        <ul className="quicklinks">
-          <li className="quicklinks__item quicklinks__threads">
-            <NavLink to="/unreads" className="quicklinks__link">
-              All Unreads
-            </NavLink>
-          </li>
-          <li className="quicklinks__item quicklinks__unreads">
-            <NavLink to="/threads" className="quicklinks__link">
-              All Threads
-            </NavLink>
-          </li>
-        </ul>
+    <ul className="quicklinks">
+      <li className="quicklinks__item quicklinks__threads">
+        <NavLink to="/unreads" className="quicklinks__link">
+          All Unreads
+        </NavLink>
+      </li>
+      <li className="quicklinks__item quicklinks__unreads">
+        <NavLink to="/threads" className="quicklinks__link">
+          All Threads
+        </NavLink>
+      </li>
+    </ul>
 
-        <ChannelsMenuContainer />
-      </aside>
-    );
-  }
-}
+    <ChannelsMenuContainer />
+  </aside>
+);
 
 export default ChannelSidebar;
