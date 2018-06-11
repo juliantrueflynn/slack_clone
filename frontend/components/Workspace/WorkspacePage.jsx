@@ -31,8 +31,8 @@ class WorkspacePage extends React.Component {
       <div className="workspace-view">
         <Socket channel={{ channel: 'WorkspaceChannel', workspaceSlug }} />
 
-        {channels && channels.map(({ id: channelId }) => (
-          <Socket key={channelId} channel={{ channel: 'ChatChannel', channelId }} />
+        {channels && channels.map(({ slug: channelSlug }) => (
+          <Socket key={channelSlug} channel={{ channel: 'ChatChannel', channelSlug }} />
         ))}
 
         {routes && routes.map(route => (
