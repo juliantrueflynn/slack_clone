@@ -2,8 +2,8 @@ class ChannelEventsJob < ApplicationJob
   queue_as :default
 
   def perform(**args)
-    channel = Channel.find_by(id: args[:channel].id)
-
-    WorkspaceChannel.broadcast_to(channel.workspace, args)
+    channel = args[:channel]
+    workspace = channel.workspace
+    WorkspaceChannel.broadcast_to("workspace_#{workspace.slug}", args)
   end
 end
