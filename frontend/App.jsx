@@ -1,13 +1,13 @@
 import React from 'react';
-import { PageRoutes } from './util/routeUtil';
-import { AppActionCable } from './util/actionCableUtil';
-import './App.css';
 import 'sanitize.css';
+import './App.css';
+import { PageRoutes } from './util/routeUtil';
+import Socket from './util/actionCableUtil';
 
 const App = () => (
   <div className="app">
     <PageRoutes />
-    <AppActionCable />
+    <Socket channel={{ channel: 'AppChannel' }} />
   </div>
 );
 

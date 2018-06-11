@@ -1,11 +1,9 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { ActionCable } from 'react-actioncable-provider';
-import { camelizeKeys } from 'humps';
-import { getChannels } from '../reducers/selectors';
+import { camelizeKeys, decamelizeKeys } from 'humps';
 
 const mapStateToProps = state => ({
-  channels: getChannels(state),
   currentUser: state.session.currentUser,
 });
 
@@ -16,32 +14,7 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-// class SocketApp extends React.Component {
-//   constructor(props) {
-//     super(props);
-
-//     this.handleReceived = this.handleReceived.bind(this);
-//   }
-
-//   handleReceived(received) {
-//     this.props.onReceivedCallback(received);
-//   }
-
-//   render() {
-//     const { channel, ...otherProps } = this.props;
-
-//     return (
-//       <ActionCable
-//         channel={this.props.channel}
-//         onReceived={this.handleReceived}
-//         onConnected={this.props.onConnected}
-//         {...otherProps}
-//       />
-//     );
-//   }
-// }
-
-class SocketApp extends React.Component {
+class ActionCableChannel extends React.Component {
   constructor(props) {
     super(props);
 
@@ -53,82 +26,20 @@ class SocketApp extends React.Component {
   }
 
   render() {
-    if (!this.props.currentUser) {
+    const { currentUser, channel } = this.props;
+    const decamelizedChannel = decamelizeKeys(channel);
+
+    if (!currentUser) {
       return null;
     }
 
     return (
       <ActionCable
-        channel={{ channel: 'AppChannel' }}
-        onReceived={this.handleReceived}
-        {...this.props.ownProps}
-      />
-    );
-  }
-}
-
-class SocketWorkspace extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.handleReceived = this.handleReceived.bind(this);
-  }
-
-  handleReceived(received) {
-    this.props.onReceivedCallback(received);
-  }
-
-  render() {
-    return (
-      <ActionCable
-        ref="workspaceCable"
-        channel={{
-          channel: 'WorkspaceChannel',
-          workspace_slug: this.props.workspaceSlug,
-        }}
+        channel={{ ...decamelizedChannel }}
         onReceived={this.handleReceived}
       />
     );
   }
 }
 
-class SocketChatChannel extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.handleReceived = this.handleReceived.bind(this);
-  }
-
-  handleReceived(received) {
-    this.props.onReceivedCallback(received);
-  }
-
-  render() {
-    return (
-      <Fragment>
-        {this.props.channels.map(channel => (
-          <ActionCable
-            key={channel.slug}
-            channel={{ channel: 'ChatChannel', channel_id: channel.id }}
-            onReceived={this.handleReceived}
-          />
-        ))}
-      </Fragment>
-    );
-  }
-}
-
-export const AppActionCable = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SocketApp);
-
-export const WorkspaceActionCable = connect(
-  null,
-  mapDispatchToProps,
-)(SocketWorkspace);
-
-export const ChannelActionCables = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SocketChatChannel);
+export default connect(mapStateToProps, mapDispatchToProps)(ActionCableChannel);

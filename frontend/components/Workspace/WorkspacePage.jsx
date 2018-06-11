@@ -1,6 +1,6 @@
 import React from 'react';
-import { WorkspaceActionCable, ChannelActionCables } from '../../util/actionCableUtil';
 import { RouteWithSubRoutes } from '../../util/routeUtil';
+import Socket from '../../util/actionCableUtil';
 
 class WorkspacePage extends React.Component {
   componentDidMount() {
@@ -25,12 +25,15 @@ class WorkspacePage extends React.Component {
   }
 
   render() {
-    const { match: { params }, routes } = this.props;
+    const { match: { params: { workspaceSlug } }, routes, channels } = this.props;
 
     return (
       <div className="workspace-view">
-        <WorkspaceActionCable workspaceSlug={params.workspaceSlug} />
-        <ChannelActionCables />
+        <Socket channel={{ channel: 'WorkspaceChannel', workspaceSlug }} />
+
+        {channels && channels.map(({ id: channelId }) => (
+          <Socket key={channelId} channel={{ channel: 'ChatChannel', channelId }} />
+        ))}
 
         {routes && routes.map(route => (
           <RouteWithSubRoutes key={route.path} {...route} />
