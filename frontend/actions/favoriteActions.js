@@ -9,12 +9,10 @@ export const fetchFavorites = {
 
 export const createFavorite = {
   request: messageSlug => actionCreator(FAVORITE.CREATE.REQUEST, { messageSlug }),
-  receive: favorite => actionCreator(FAVORITE.CREATE.RECEIVE, { favorite }),
   failure: errors => actionCreator(FAVORITE.CREATE.FAILURE, { errors }),
 };
 
 export const deleteFavorite = {
   request: messageSlug => actionCreator(FAVORITE.DELETE.REQUEST, { messageSlug }),
-  receive: favorite => actionCreator(FAVORITE.DELETE.RECEIVE, { favorite }),
   failure: errors => actionCreator(FAVORITE.DELETE.FAILURE, { errors }),
 };

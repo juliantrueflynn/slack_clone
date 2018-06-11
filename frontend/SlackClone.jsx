@@ -6,7 +6,6 @@ import rootSaga from './sagas/rootSaga';
 
 // Just for testing, remove!
 import * as WorkspaceActions from './actions/workspaceActions';
-import * as WorkspaceSubActions from './actions/workspaceSubActions';
 import * as ChannelActions from './actions/channelActions';
 import * as MessageActions from './actions/messageActions';
 import * as FavoriteActions from './actions/favoriteActions';
@@ -31,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.getState = store.getState;
     window.dispatch = store.dispatch;
     window.WorkspaceActions = WorkspaceActions;
-    window.WorkspaceSubActions = WorkspaceSubActions;
     window.ChannelActions = ChannelActions;
     window.MessageActions = MessageActions;
     window.FavoriteActions = FavoriteActions;

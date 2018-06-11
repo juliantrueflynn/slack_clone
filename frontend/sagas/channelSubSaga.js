@@ -1,5 +1,5 @@
 import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
-import * as actions from '../actions/channelSubActions';
+import * as actions from '../actions/channelActions';
 import { CHANNEL_SUB } from '../actions/actionTypes';
 import { apiCreate, apiDelete } from '../util/apiUtil';
 
@@ -30,6 +30,6 @@ function* watchDeleteSubChannel() {
 export default function* channelSubSaga() {
   yield all([
     fork(watchCreateChannelSub),
-    // fork(watchDeleteSubChannel),
+    fork(watchDeleteSubChannel),
   ]);
 }

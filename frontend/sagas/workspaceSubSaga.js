@@ -1,7 +1,7 @@
 import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
-import * as actions from '../actions/workspaceSubActions';
-import { apiCreate, apiDelete } from '../util/apiUtil';
+import * as actions from '../actions/workspaceActions';
 import { WORKSPACE_SUB } from '../actions/actionTypes';
+import { apiCreate, apiDelete } from '../util/apiUtil';
 
 function* loadCreateSub({ workspaceId }) {
   try {
@@ -30,6 +30,6 @@ function* watchDeleteSubWorkspace() {
 export default function* workspaceSubSaga() {
   yield all([
     fork(watchCreateWorkspaceSub),
-    // fork(watchDeleteSubWorkspace),
+    fork(watchDeleteSubWorkspace),
   ]);
 }
