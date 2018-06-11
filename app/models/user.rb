@@ -66,13 +66,7 @@ class User < ApplicationRecord
   def appear!(status, workspace)
     self.appearance = status
     save!
-    WorkspaceChannel.broadcast_to(
-      workspace,
-      user: self,
-      event: 'STATUS'
-    )
-
-    self
+    WorkspaceChannel.broadcast_to(workspace, type: 'SET_STATUS', user_slug: slug, status: appearance)
   end
 
   private

@@ -50,19 +50,19 @@ class Message < ApplicationRecord
     end
 
     MessageEventsJob.perform_later(
-      event: "CREATE_MESSAGE",
+      type: "MESSAGE_CREATE_RECEIVE",
       message: self,
       parent_message_slug: parent_message_slug
     )
   end
 
   after_update_commit do
-    MessageEventsJob.perform_later(event: "EDIT_MESSAGE", message: self)
+    MessageEventsJob.perform_later(type: "MESSAGE_UPDATE_RECEIVE", message: self)
   end
 
   # This works but after_destroy_commit does not for some reason
   after_destroy :delete_message
   def delete_message
-    MessageEventsJob.perform_later(event: "DELETE_MESSAGE", message: self)
+    MessageEventsJob.perform_later(type: "MESSAGE_DELETE_RECEIVE", message: self)
   end
 end
