@@ -31,8 +31,8 @@ class UserFavorites extends React.Component {
         <ul className="user-favorites">
           {favorites.map(fav => (
             <li key={fav.id}>
-              id: {fav.id}<br/>
-              messageId: {fav.messageId}<br/>
+              id: {fav.id}<br />
+              messageId: {fav.messageId}<br />
               userId: {fav.userId}
             </li>
           ))}

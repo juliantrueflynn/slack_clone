@@ -1,9 +1,6 @@
-import {
-  OPEN_RIGHT_SIDEBAR,
-  CLOSE_RIGHT_SIDEBAR,
-} from '../actions/actionTypes';
+import { OPEN_RIGHT_SIDEBAR, CLOSE_RIGHT_SIDEBAR } from '../actions/actionTypes';
 
-const rightSidebarReducer = (state = null, action) => {
+const sidebarReducer = (state = null, action) => {
   Object.freeze(state);
 
   let nextState;
@@ -21,4 +18,4 @@ const rightSidebarReducer = (state = null, action) => {
   }
 };
 
-export default rightSidebarReducer;
+export default sidebarReducer;

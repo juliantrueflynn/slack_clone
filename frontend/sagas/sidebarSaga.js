@@ -17,6 +17,6 @@ function* fetchOpenRightSidebar({ sidebarType, sidebarProps }) {
   }
 }
 
-export default function* rightSidebarSaga() {
+export default function* sidebarSaga() {
   yield takeLatest(OPEN_RIGHT_SIDEBAR, fetchOpenRightSidebar);
 }

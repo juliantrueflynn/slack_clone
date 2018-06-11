@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Message from './Message';
 import { updateMessage, deleteMessage } from '../../actions/messageActions';
-import { openRightSidebar } from '../../actions/rightSidebarActions';
+import { openRightSidebar } from '../../actions/sidebarActions';
 import { createFavorite, deleteFavorite } from '../../actions/favoriteActions';
 import { getFavoriteStatus, getReactionCounts } from '../../reducers/selectors';
 import { createReaction, deleteReaction } from '../../actions/reactionActions';
@@ -10,7 +10,7 @@ import { createReaction, deleteReaction } from '../../actions/reactionActions';
 const mapStateToProps = (state, { message }) => ({
   isAuthor: state.session.currentUser.id === message.authorId,
   isFavorited: getFavoriteStatus(state, message.slug),
-  reactions: getReactionCounts(state, message.id)
+  reactions: getReactionCounts(state, message.id),
 });
 
 const mapDispatchToProps = dispatch => ({

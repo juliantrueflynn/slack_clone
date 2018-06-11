@@ -7,7 +7,7 @@ import workspaceSubSaga from './workspaceSubSaga';
 import messageSaga from './messageSaga';
 import favoriteSaga from './favoriteSaga';
 import navigateSaga from './navigateSaga';
-import rightSidebarSaga from './rightSidebarSaga';
+import sidebarSaga from './sidebarSaga';
 import reactionSaga from './reactionSaga';
 
 export default function* root() {
@@ -21,6 +21,6 @@ export default function* root() {
     fork(messageSaga),
     fork(favoriteSaga),
     fork(reactionSaga),
-    fork(rightSidebarSaga),
+    fork(sidebarSaga),
   ]);
 }

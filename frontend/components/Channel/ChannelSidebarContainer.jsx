@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import ChannelSidebar from './ChannelSidebar';
 import { getWorkspaces } from '../../reducers/selectors';
 import { modalOpen, modalClose } from '../../actions/modalActions';
-import { openRightSidebar } from '../../actions/rightSidebarActions';
+import { openRightSidebar } from '../../actions/sidebarActions';
 
 const mapStateToProps = (state, { match }) => ({
   workspaces: getWorkspaces(state),
