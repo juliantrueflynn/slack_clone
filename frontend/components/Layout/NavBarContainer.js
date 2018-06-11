@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import NavBar from './NavBar';
-import { signOut } from '../../actions/memberActions';
+import { signOut } from '../../actions/sessionActions';
 
 const mapStateToProps = state => ({
   loggedIn: Boolean(state.session.currentUser),

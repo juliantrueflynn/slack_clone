@@ -5,7 +5,7 @@ export const NEW_CHANNEL_MODAL = 'NEW_CHANNEL_MODAL';
 
 export const modalOpen = modalType => ({
   type: MODAL_OPEN,
-  modalType
+  modalType,
 });
 
 export const modalClose = modalType => ({

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import SessionForm from './SessionForm';
-import { signIn, signUp } from '../../actions/memberActions';
+import { signIn, signUp } from '../../actions/sessionActions';
 
 const mapStateToProps = (state, { location }) => ({
   isSignInPage: location.pathname === '/signin',
