@@ -63,10 +63,10 @@ class User < ApplicationRecord
     self.session_token
   end
 
-  def appear!(status, workspace)
+  def appear!(status, workspace_slug)
     self.appearance = status
     save!
-    WorkspaceChannel.broadcast_to(workspace, type: 'SET_STATUS', user_slug: slug, status: appearance)
+    WorkspaceChannel.broadcast_to("workspace_#{workspace_slug}", type: 'SET_STATUS', user_slug: slug, status: appearance)
   end
 
   private

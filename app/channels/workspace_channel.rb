@@ -1,15 +1,15 @@
 class WorkspaceChannel < ApplicationCable::Channel
   def subscribed
-    @workspace = Workspace.find_by(slug: params[:workspace_slug])
-    stream_for @workspace
-    current_user.appear!('ONLINE', @workspace)
+    @workspace_slug = params[:workspace_slug]
+    stream_from "workspace_#{@workspace_slug}"
+    current_user.appear!('ONLINE', @workspace_slug)
   end
 
   def unsubscribed
-    current_user.appear!('OFFLINE', @workspace)
+    current_user.appear!('OFFLINE', @workspace_slug)
   end
 
   def away
-    current_user.appear!('AWAY', @workspace)
+    current_user.appear!('AWAY', @workspace_slug)
   end
 end
