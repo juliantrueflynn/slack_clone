@@ -30,7 +30,7 @@ function* fetchEditMessage({ message }) {
 
 function* fetchDeleteMessage({ messageSlug }) {
   try {
-    yield call(apiDelete, 'messages', messageSlug);
+    yield call(apiDelete, `messages/${messageSlug}`);
   } catch (error) {
     yield put(actions.deleteMessage.failure(error));
   }

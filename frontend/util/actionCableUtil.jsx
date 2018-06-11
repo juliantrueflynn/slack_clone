@@ -28,7 +28,7 @@ const mapDispatchToProps = dispatch => ({
       case 'EDIT_MESSAGE':
         return dispatch(updateMessage.receive(camelized.message));
       case 'DELETE_MESSAGE':
-        return dispatch(deleteMessage.receive(camelized.message.slug));
+        return dispatch(deleteMessage.receive(camelized.message));
       case 'CREATE_FAVORITE':
         camelized.favorite.messageSlug = camelized.messageSlug;
         return dispatch(createFavorite.receive(camelized.favorite));

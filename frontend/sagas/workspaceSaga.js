@@ -25,7 +25,7 @@ function* redirectOwner({ workspace }) {
 
 function* fetchDeleteWorkspace({ workspaceSlug }) {
   try {
-    yield call(apiDelete, 'workspaces', workspaceSlug);
+    yield call(apiDelete, `workspaces/${workspaceSlug}`);
     yield put(actions.deleteWorkspace.receive(workspaceSlug));
   } catch (error) {
     yield put(actions.deleteWorkspace.failure(error));

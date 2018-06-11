@@ -13,7 +13,7 @@ function* loadCreateSub({ workspaceId }) {
 
 function* loadDeleteSub({ workspaceSlug }) {
   try {
-    yield call(apiDelete, 'workspace_subs', workspaceSlug);
+    yield call(apiDelete, `workspace_subs/${workspaceSlug}`);
   } catch (error) {
     yield put(actions.deleteWorkspaceSub.failure(error));
   }

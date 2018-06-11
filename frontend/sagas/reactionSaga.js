@@ -13,7 +13,7 @@ function* fetchCreateReaction({ reaction }) {
 
 function* fetchDeleteReaction({ reactionId }) {
   try {
-    yield call(apiDelete, 'reactions', reactionId);
+    yield call(apiDelete, `reactions/${reactionId}`);
   } catch (error) {
     yield put(actions.deleteReaction.failure(error));
   }

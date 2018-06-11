@@ -5,7 +5,7 @@ import { apiFetch, apiCreate, apiDelete } from '../util/apiUtil';
 
 function* fetchUserFavorites() {
   try {
-    const favorites = yield call(apiFetch, 'favorites');
+    const favorites = yield call(apiFetch, 'message_favs');
     yield put(actions.fetchFavorites.receive(favorites));
   } catch (error) {
     yield put(actions.fetchFavorites.failure(error));
@@ -14,7 +14,7 @@ function* fetchUserFavorites() {
 
 function* fetchCreateFavorite({ messageSlug: messageId }) {
   try {
-    yield call(apiCreate, 'favorites', { messageId });
+    yield call(apiCreate, 'message_favs', { messageId });
   } catch (error) {
     yield put(actions.createFavorite.failure(error));
   }
@@ -22,7 +22,7 @@ function* fetchCreateFavorite({ messageSlug: messageId }) {
 
 function* fetchDeleteFavorite({ messageSlug }) {
   try {
-    yield call(apiDelete, 'favorites', messageSlug);
+    yield call(apiDelete, `message_favs/${messageSlug}`);
   } catch (error) {
     yield put(actions.deleteFavorite.failure(error));
   }

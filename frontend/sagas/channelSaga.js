@@ -78,7 +78,7 @@ function* loadChannelEntities() {
 
 function* fetchDeleteChannel({ channelSlug }) {
   try {
-    yield call(apiDelete, 'channels', channelSlug);
+    yield call(apiDelete, `channels/${channelSlug}`);
   } catch (error) {
     yield put(actions.deleteChannel.failure(error));
   }

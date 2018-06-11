@@ -13,7 +13,7 @@ function* loadCreateSub({ channelSlug }) {
 
 function* loadDeleteSub({ channelSlug }) {
   try {
-    yield call(apiDelete, 'channel_subs', channelSlug);
+    yield call(apiDelete, `channel_subs/${channelSlug}`);
   } catch (error) {
     yield put(actions.deleteChannelSub.failure(error));
   }

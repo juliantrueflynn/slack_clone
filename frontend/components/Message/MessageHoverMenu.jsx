@@ -19,7 +19,7 @@ class MessageHoverMenu extends React.Component {
   handleReactionClick(id, emoji) {
     const reaction = {
       messageId: this.props.message.id,
-      emoji: emoji.name
+      emoji: emoji.name,
     };
 
     this.props.createReactionRequest(reaction);
@@ -49,7 +49,7 @@ class MessageHoverMenu extends React.Component {
   render() {
     const { message, isAuthor, isFavorited, match: { params } } = this.props;
     const baseUrl = `/${params.workspaceSlug}/${params.channelSlug}`;
-    
+
     return (
       <div className="message-hover-menu">
         <ul className="message-hover-menu__buttons">
@@ -59,7 +59,7 @@ class MessageHoverMenu extends React.Component {
           >
             Add reaction
           </button>
-          
+
           {this.state.isEmojiOpen && (
             <EmojiPicker onEmojiClick={this.handleReactionClick} />
           )}

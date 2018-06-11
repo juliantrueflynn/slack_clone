@@ -80,7 +80,7 @@ const messageReducer = (state = {}, action) => {
       return Object.assign({}, state, nextState);
     case MESSAGE.DELETE.RECEIVE:
       nextState = Object.assign({}, state);
-      delete nextState[action.messageSlug];
+      delete nextState[action.message.slug];
       return nextState;
     default:
       return state;

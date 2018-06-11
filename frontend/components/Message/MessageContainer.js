@@ -17,8 +17,8 @@ const mapDispatchToProps = dispatch => ({
   updateMessageRequest: message => dispatch(updateMessage.request(message)),
   deleteMessageRequest: messageSlug => dispatch(deleteMessage.request(messageSlug)),
   openRightSidebar: sidebarProps => dispatch(openRightSidebar('Thread', sidebarProps)),
-  createFavoriteRequest: messageId => dispatch(createFavorite.request(messageId)),
-  deleteFavoriteRequest: messageId => dispatch(deleteFavorite.request(messageId)),
+  createFavoriteRequest: messageSlug => dispatch(createFavorite.request(messageSlug)),
+  deleteFavoriteRequest: messageSlug => dispatch(deleteFavorite.request(messageSlug)),
   createReactionRequest: reaction => dispatch(createReaction.request(reaction)),
   deleteReactionRequest: reactionId => dispatch(deleteReaction.request(reactionId)),
 });

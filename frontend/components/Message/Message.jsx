@@ -106,8 +106,8 @@ class Message extends React.Component {
           </div>
 
           <div className="message-body">
-            ID: #{message.id}<br/>
-            Slug: {message.slug}<br/>
+            ID: #{message.id}<br />
+            Slug: {message.slug}<br />
 
             <Editor
               editorState={this.state.editorState}

@@ -14,7 +14,7 @@ export const createFavorite = {
 };
 
 export const deleteFavorite = {
-  request: messageSlug => actionCreator(FAVORITE.SHOW.REQUEST, { messageSlug }),
-  receive: favorite => actionCreator(FAVORITE.SHOW.RECEIVE, { favorite }),
-  failure: errors => actionCreator(FAVORITE.SHOW.FAILURE, { errors }),
+  request: messageSlug => actionCreator(FAVORITE.DELETE.REQUEST, { messageSlug }),
+  receive: favorite => actionCreator(FAVORITE.DELETE.RECEIVE, { favorite }),
+  failure: errors => actionCreator(FAVORITE.DELETE.FAILURE, { errors }),
 };
