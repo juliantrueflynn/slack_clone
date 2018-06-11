@@ -16,6 +16,31 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
+// class SocketApp extends React.Component {
+//   constructor(props) {
+//     super(props);
+
+//     this.handleReceived = this.handleReceived.bind(this);
+//   }
+
+//   handleReceived(received) {
+//     this.props.onReceivedCallback(received);
+//   }
+
+//   render() {
+//     const { channel, ...otherProps } = this.props;
+
+//     return (
+//       <ActionCable
+//         channel={this.props.channel}
+//         onReceived={this.handleReceived}
+//         onConnected={this.props.onConnected}
+//         {...otherProps}
+//       />
+//     );
+//   }
+// }
+
 class SocketApp extends React.Component {
   constructor(props) {
     super(props);
@@ -36,6 +61,7 @@ class SocketApp extends React.Component {
       <ActionCable
         channel={{ channel: 'AppChannel' }}
         onReceived={this.handleReceived}
+        {...this.props.ownProps}
       />
     );
   }
@@ -46,24 +72,10 @@ class SocketWorkspace extends React.Component {
     super(props);
 
     this.handleReceived = this.handleReceived.bind(this);
-    this.handleConnected = this.handleConnected.bind(this);
-    this.handleDisconnected = this.handleDisconnected.bind(this);
   }
 
   handleReceived(received) {
     this.props.onReceivedCallback(received);
-  }
-
-  handleConnected() {
-    this.refs.workspaceCable.perform('online', {
-      workspace_slug: this.props.workspaceSlug,
-    });
-  }
-
-  handleDisconnected() {
-    this.refs.workspaceCable.perform('offline', {
-      workspace_slug: this.props.workspaceSlug,
-    });
   }
 
   render() {
@@ -75,8 +87,6 @@ class SocketWorkspace extends React.Component {
           workspace_slug: this.props.workspaceSlug,
         }}
         onReceived={this.handleReceived}
-        onConnected={this.handleConnected}
-        onDisconnected={this.handleDisconnected}
       />
     );
   }
