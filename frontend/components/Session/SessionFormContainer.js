@@ -1,22 +1,19 @@
 import { connect } from 'react-redux';
 import SessionForm from './SessionForm';
-import { signInRequest, signUpRequest } from '../../actions/sessionActions';
+import { signIn, signUp } from '../../actions/memberActions';
 
 const mapStateToProps = (state, { location }) => ({
-  isSignInPage: location.pathname === '/signin'
+  isSignInPage: location.pathname === '/signin',
 });
 
 const mapDispatchToProps = (dispatch, { location }) => ({
-  sessionRequest: user => {
+  sessionRequest: (user) => {
     if (location.pathname === '/signin') {
-      return dispatch(signInRequest(user));
+      return dispatch(signIn.request(user));
     }
-    
-    return dispatch(signUpRequest(user));
-  }
+
+    return dispatch(signUp.request(user));
+  },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SessionForm);
+export default connect(mapStateToProps, mapDispatchToProps)(SessionForm);

@@ -1,32 +1,32 @@
 import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
-import * as actions from '../actions/sessionActions';
+import * as actions from '../actions/memberActions';
 import { SIGN_IN, SIGN_UP, SIGN_OUT } from '../actions/actionTypes';
 import { apiCreate, apiDelete } from '../util/apiUtil';
 
 function* fetchSignIn({ currentUser: user }) {
   try {
     const session = yield call(apiCreate, 'session', { user });
-    yield put(actions.signInReceive(session));
+    yield put(actions.signIn.receive(session));
   } catch (error) {
-    yield put(actions.signInFailure(error));
+    yield put(actions.signIn.failure(error));
   }
 }
 
 function* fetchSignUp({ currentUser: user }) {
   try {
     const session = yield call(apiCreate, 'user', { user });
-    yield put(actions.signUpReceive(session));
+    yield put(actions.signUp.receive(session));
   } catch (error) {
-    yield put(actions.signUpFailure(error));
+    yield put(actions.signUp.failure(error));
   }
 }
 
 function* fetchSignOut() {
   try {
     yield call(apiDelete, 'session');
-    yield put(actions.signOutReceive());
+    yield put(actions.signOut.receive());
   } catch (error) {
-    yield put(actions.signOutFailure(error));
+    yield put(actions.signOut.failure(error));
   }
 }
 

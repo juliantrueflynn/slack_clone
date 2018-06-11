@@ -30,16 +30,3 @@ export const actionCreator = (type, props = {}) => {
 
   return action;
 };
-
-// export const createActions = (base, types = []) => {
-//   const initialAction = { [base]: base };
-
-//   return types.reduce((acc, type) => {
-//     if () {
-//       acc[type] = `${type}_${base}`;
-//     }
-//     return acc;
-//   }, initialAction)
-// };
-
-// export const actionCreator = (type, payload = {}) => ({ type, ...payload });

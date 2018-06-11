@@ -1,4 +1,5 @@
-export const SET_STATUS = 'SET_STATUS';
+import { SET_STATUS, SIGN_IN, SIGN_UP, SIGN_OUT } from './actionTypes';
+import { actionCreator } from '../util/actionsUtil';
 
 export const setStatus = (userSlug, status) => ({
   type: SET_STATUS,
@@ -6,45 +7,20 @@ export const setStatus = (userSlug, status) => ({
   status,
 });
 
-export const signInRequest = currentUser => ({
-  type: SIGN_IN_REQUEST,
-  currentUser
-});
+export const signIn = {
+  request: currentUser => actionCreator(SIGN_IN.REQUEST, { currentUser }),
+  receive: currentUser => actionCreator(SIGN_IN.RECEIVE, { currentUser }),
+  failure: errors => actionCreator(SIGN_IN.FAILURE, errors),
+};
 
-export const signInReceive = currentUser => ({
-  type: SIGN_IN_RECEIVE,
-  currentUser
-});
+export const signUp = {
+  request: currentUser => actionCreator(SIGN_UP.REQUEST, { currentUser }),
+  receive: currentUser => actionCreator(SIGN_UP.RECEIVE, { currentUser }),
+  failure: errors => actionCreator(SIGN_UP.FAILURE, errors),
+};
 
-export const signInFailure = errors => ({
-  type: SIGN_IN_FAILURE,
-  errors
-});
-
-export const signUpRequest = currentUser => ({
-  type: SIGN_UP_REQUEST,
-  currentUser
-});
-
-export const signUpReceive = currentUser => ({
-  type: SIGN_UP_RECEIVE,
-  currentUser
-});
-
-export const signUpFailure = errors => ({
-  type: SIGN_UP_FAILURE,
-  errors
-});
-
-export const signOutRequest = () => ({
-  type: SIGN_OUT_REQUEST
-});
-
-export const signOutReceive = () => ({
-  type: SIGN_OUT_RECEIVE
-});
-
-export const signOutFailure = errors => ({
-  type: SIGN_OUT_FAILURE,
-  errors
-});
+export const signOut = {
+  request: () => actionCreator(SIGN_OUT.REQUEST),
+  receive: () => actionCreator(SIGN_OUT.RECEIVE),
+  failure: errors => actionCreator(SIGN_OUT.FAILURE, errors),
+};
