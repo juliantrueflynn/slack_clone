@@ -1,5 +1,5 @@
 import { CHANNEL } from '../actions/actionTypes';
-import { MODAL_CLOSE } from '../actions/modalActions';
+import { MODAL_CLOSE } from '../actions/interactiveActions';
 
 const channelErrorsReducer = (state = [], action) => {
   Object.freeze(state);

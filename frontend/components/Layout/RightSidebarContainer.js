@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import RightSidebar from './RightSidebar';
-import { closeRightSidebar } from '../../actions/sidebarActions';
-import { navigate } from '../../actions/navigateActions';
+import { closeRightSidebar } from '../../actions/interactiveActions';
+import { navigate } from '../../actions/interactiveActions';
 
 const mapStateToProps = state => ({
   isRightSidebarOpen: Boolean(state.ui.rightSidebar),

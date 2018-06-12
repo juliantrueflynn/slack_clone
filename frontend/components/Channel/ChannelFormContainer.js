@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import ChannelForm from './ChannelForm';
 import { createChannel } from '../../actions/channelActions';
-import { modalClose } from '../../actions/modalActions';
+import { modalClose } from '../../actions/interactiveActions';
 
 const mapStateToProps = state => ({
   workspaceSlug: state.ui.displayWorkspaceSlug,

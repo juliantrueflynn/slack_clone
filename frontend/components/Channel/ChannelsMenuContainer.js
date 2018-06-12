@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ChannelsMenu from './ChannelsMenu';
 import { getChannels, getPageWorkspaceSlug } from '../../reducers/selectors';
-import { modalOpen } from '../../actions/modalActions';
+import { modalOpen } from '../../actions/interactiveActions';
 
 const mapStateToProps = state => ({
   channels: getChannels(state),

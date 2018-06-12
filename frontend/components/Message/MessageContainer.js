@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Message from './Message';
 import { updateMessage, deleteMessage } from '../../actions/messageActions';
-import { openRightSidebar } from '../../actions/sidebarActions';
+import { openRightSidebar } from '../../actions/interactiveActions';
 import { createFavorite, deleteFavorite } from '../../actions/favoriteActions';
 import { getFavoriteStatus, getReactionCounts } from '../../reducers/selectors';
 import { createReaction, deleteReaction } from '../../actions/reactionActions';

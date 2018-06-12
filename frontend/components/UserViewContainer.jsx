@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import UserView from './UserView';
-import { openRightSidebar } from '../actions/sidebarActions';
+import { openRightSidebar } from '../actions/interactiveActions';
 
 const mapStateToProps = (state, { match }) => ({
   user: state.entities.members[match.params.userSlug],

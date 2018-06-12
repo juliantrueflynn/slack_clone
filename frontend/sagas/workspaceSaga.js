@@ -3,7 +3,7 @@ import * as actions from '../actions/workspaceActions';
 import { WORKSPACE } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiDelete } from '../util/apiUtil';
 import { getChannels, getCurrentUserId, getPageWorkspaceSlug } from '../reducers/selectors';
-import { navigate } from '../actions/navigateActions';
+import { navigate } from '../actions/interactiveActions';
 
 export function* fetchWorkspace(workspaceSlug) {
   try {
