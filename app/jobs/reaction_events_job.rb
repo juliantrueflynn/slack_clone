@@ -2,10 +2,8 @@ class ReactionEventsJob < ApplicationJob
   queue_as :default
 
   def perform(**args)
-    message_id = args[:reaction].message_id
-    message = Message.find_by(id: message_id)
-    channel_id = message.channel.id
-
-    ActionCable.server.broadcast("channel:#{channel_id}", args)
+    message = args[:reaction].message
+    channel_slug = message.channel.slug
+    ActionCable.server.broadcast("channel_#{channel_slug}", args)
   end
 end

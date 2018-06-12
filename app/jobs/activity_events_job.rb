@@ -2,20 +2,15 @@ class ActivityEventsJob < ApplicationJob
   queue_as :default
 
   def perform(**args)
-    message_id = args[:favorite].message_id
-    message = Message.find_by(id: message_id)
-    channel_id = message.channel.id
-
-    favorite = ApplicationController.render partial: 'api/message_favs/favorite',
-      locals: {favorite: args[:favorite]}
-    
-    args[:favorite] = JSON.parse(favorite)
-
-    ActionCable.server.broadcast("channel:#{channel_id}", args)
+    message = args[:favorite].message
+    channel_slug = message.channel.slug
+    args[:favorite] = render_to_json(args[:favorite])
+    ActionCable.server.broadcast("channel_#{channel_slug}", args)
   end
 
   def render_to_json(favorite)
-    ApplicationController.render partial: 'api/message_favs/favorite',
+    json_string = ApplicationController.render partial: 'api/message_favs/favorite',
       locals: {favorite: favorite}
+    JSON.parse(json_string)
   end
 end
