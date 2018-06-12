@@ -2,8 +2,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ChannelSidebar from './ChannelSidebar';
 import { getWorkspaces } from '../../reducers/selectors';
-import { modalOpen, modalClose } from '../../actions/interactiveActions';
-import { openRightSidebar } from '../../actions/interactiveActions';
+import { modalOpen, modalClose, openRightSidebar } from '../../actions/interactiveActions';
 
 const mapStateToProps = (state, { match }) => ({
   workspaces: getWorkspaces(state),

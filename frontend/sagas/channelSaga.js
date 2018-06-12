@@ -11,8 +11,7 @@ import {
   getRightSidebarType,
 } from '../reducers/selectors';
 import { fetchWorkspace } from './workspaceSaga';
-import { navigate } from '../actions/interactiveActions';
-import { modalClose } from '../actions/interactiveActions';
+import { navigate, modalClose } from '../actions/interactiveActions';
 
 function* addNewChannel({ channel }) {
   try {
