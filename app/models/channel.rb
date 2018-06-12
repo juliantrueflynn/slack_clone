@@ -56,16 +56,16 @@ class Channel < ApplicationRecord
   after_create_commit do
     owner.channel_subs.create(channel_id: id, user_id: owner_id)
     
-    ChannelEventsJob.perform_later(type: "CHANNEL_CREATE_RECEIVE", channel: self)
+    WorkspaceJob.perform_later(workspace.slug, type: "CHANNEL_CREATE_RECEIVE", channel: self)
   end
 
   after_update_commit do
-    ChannelEventsJob.perform_later(type: "CHANNEL_UPDATE_RECEIVE", channel: self)
+    WorkspaceJob.perform_later(workspace.slug, type: "CHANNEL_UPDATE_RECEIVE", channel: self)
   end
 
   # This works but after_destroy_commit does not for some reason
   after_destroy :delete_channel
   def delete_channel
-    ChannelEventsJob.perform_later(type: "CHANNEL_DELETE_RECEIVE", channel: self)
+    WorkspaceJob.perform_later(workspace.slug, type: "CHANNEL_DELETE_RECEIVE", channel: self)
   end
 end
