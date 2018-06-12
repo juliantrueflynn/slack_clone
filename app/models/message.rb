@@ -49,7 +49,8 @@ class Message < ApplicationRecord
       parent_message_slug = parent_message.slug
     end
 
-    MessageEventsJob.perform_later(
+    ChannelJob.perform_later(
+      channel.slug,
       type: "MESSAGE_CREATE_RECEIVE",
       message: self,
       parent_message_slug: parent_message_slug
@@ -57,12 +58,12 @@ class Message < ApplicationRecord
   end
 
   after_update_commit do
-    MessageEventsJob.perform_later(type: "MESSAGE_UPDATE_RECEIVE", message: self)
+    ChannelJob.perform_later(channel.slug, type: "MESSAGE_UPDATE_RECEIVE", message: self)
   end
 
   # This works but after_destroy_commit does not for some reason
   after_destroy :delete_message
   def delete_message
-    MessageEventsJob.perform_later(type: "MESSAGE_DELETE_RECEIVE", message: self)
+    ChannelJob.perform_later(channel.slug, type: "MESSAGE_DELETE_RECEIVE", message: self)
   end
 end
