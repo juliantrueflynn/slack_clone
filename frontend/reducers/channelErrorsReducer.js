@@ -5,8 +5,8 @@ const channelErrorsReducer = (state = [], action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case CHANNEL.FAILURE:
-    case CHANNEL.FAILURE:
+    case CHANNEL.INDEX.FAILURE:
+    case CHANNEL.SHOW.FAILURE:
     case CHANNEL.CREATE.FAILURE:
     case CHANNEL.UPDATE.FAILURE:
     case CHANNEL.DELETE.FAILURE:
