@@ -39,16 +39,16 @@ class Workspace < ApplicationRecord
       {title: 'Random', owner_id: owner_id, workspace_id: id}
     ])
 
-    WorkspaceEventsJob.perform_later(type: 'WORKSPACE_CREATE_RECEIVE', workspace: self)
+    AppJob.perform_later(type: 'WORKSPACE_CREATE_RECEIVE', workspace: self)
   end
 
   after_update_commit do
-    WorkspaceEventsJob.perform_later(type: "WORKSPACE_UPDATE_RECEIVE", workspace: self)
+    AppJob.perform_later(type: "WORKSPACE_UPDATE_RECEIVE", workspace: self)
   end
 
   # This works but after_destroy_commit does not for some reason
   after_destroy :delete_workspace
   def delete_workspace
-    WorkspaceEventsJob.perform_later(type: "WORKSPACE_DELETE_RECEIVE", workspace: self)
+    AppJob.perform_later(type: "WORKSPACE_DELETE_RECEIVE", workspace: self)
   end
 end
