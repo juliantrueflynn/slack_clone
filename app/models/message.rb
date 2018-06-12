@@ -20,11 +20,14 @@ class Message < ApplicationRecord
     optional: true
   has_many :thread_entries,
     class_name: 'Message',
-    foreign_key: :parent_message_id
+    foreign_key: :parent_message_id,
+    dependent: :destroy
   has_many :favs,
     class_name: 'MessageFav',
-    foreign_key: :message_id
-  has_many :reactions
+    foreign_key: :message_id,
+    dependent: :destroy
+  has_many :reactions,
+    dependent: :destroy
 
   def is_child?
     !!parent_message_id

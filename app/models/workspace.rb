@@ -11,8 +11,8 @@ class Workspace < ApplicationRecord
     message: "Taken, sorry!"
   
   belongs_to :owner,
-      class_name: 'User',
-      foreign_key: :owner_id
+    class_name: 'User',
+    foreign_key: :owner_id
   has_many :subs,
     class_name: 'WorkspaceSub',
     dependent: :destroy
@@ -20,9 +20,9 @@ class Workspace < ApplicationRecord
     class_name: 'User',
     through: :subs,
     source: :user
-  has_many :channels
+  has_many :channels, dependent: :destroy
   has_many :favs,
-      through: :channels
+    through: :channels
 
   def is_user_subbed?(user)
     users_subbed = subs.where(workspace_subs: { user_id: user.id })

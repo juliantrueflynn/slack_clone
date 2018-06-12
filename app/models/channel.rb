@@ -14,12 +14,13 @@ class Channel < ApplicationRecord
   belongs_to :workspace
   has_many :subs,
     class_name: 'ChannelSub',
-    foreign_key: :channel_id
+    foreign_key: :channel_id,
+    dependent: :destroy
   has_many :members,
     class_name: 'User',
     through: :subs,
     source: :user
-  has_many :messages
+  has_many :messages, dependent: :destroy
   has_many :favs,
     through: :messages,
     source: :favs

@@ -28,8 +28,9 @@ class User < ApplicationRecord
     source: :channel
   has_many :messages, foreign_key: :author_id
   has_many :favs,
-    class_name: 'MessageFav'
-  has_many :reactions
+    class_name: 'MessageFav',
+    dependent: :destroy
+  has_many :reactions, dependent: :destroy
 
   def self.find_by_email_and_password(email, password)
     user = User.find_by(email: email)
