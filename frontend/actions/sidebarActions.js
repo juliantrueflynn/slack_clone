@@ -1,5 +1,4 @@
-export const OPEN_RIGHT_SIDEBAR = 'OPEN_RIGHT_SIDEBAR';
-export const CLOSE_RIGHT_SIDEBAR = 'CLOSE_RIGHT_SIDEBAR';
+import { OPEN_RIGHT_SIDEBAR, CLOSE_RIGHT_SIDEBAR } from './actionTypes';
 
 export const openRightSidebar = (sidebarType, sidebarProps) => ({
   type: OPEN_RIGHT_SIDEBAR,

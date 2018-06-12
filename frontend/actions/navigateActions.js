@@ -1,4 +1,4 @@
-export const NAVIGATE = 'NAVIGATE';
+import { NAVIGATE } from './actionTypes';
 
 export const navigate = params => ({
   type: NAVIGATE,
