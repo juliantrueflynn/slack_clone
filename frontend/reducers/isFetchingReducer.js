@@ -1,4 +1,4 @@
-import { WORKSPACE, CHANNEL } from '../actions/actionTypes';
+import { WORKSPACE, CHANNEL, OPEN_RIGHT_SIDEBAR, CLOSE_RIGHT_SIDEBAR, MESSAGE, FAVORITE } from '../actions/actionTypes';
 
 const isFetchingReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -19,6 +19,22 @@ const isFetchingReducer = (state = {}, action) => {
     }
     case CHANNEL.SHOW.RECEIVE: {
       nextState = { channel: false };
+      return Object.assign({}, state, nextState);
+    }
+    case OPEN_RIGHT_SIDEBAR: {
+      nextState = { rightSidebar: true };
+      return Object.assign({}, state, nextState);
+    }
+    case MESSAGE.SHOW.RECEIVE: {
+      nextState = { rightSidebar: false };
+      return Object.assign({}, state, nextState);
+    }
+    case FAVORITE.INDEX.RECEIVE: {
+      nextState = { rightSidebar: false };
+      return Object.assign({}, state, nextState);
+    }
+    case CLOSE_RIGHT_SIDEBAR: {
+      nextState = { rightSidebar: false };
       return Object.assign({}, state, nextState);
     }
     default:

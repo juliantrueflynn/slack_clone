@@ -11,7 +11,7 @@ class RightSidebar extends React.Component {
 
   handleCloseSidebar() {
     const { match: { params }, navigate, closeRightSidebar } = this.props;
-  
+
     closeRightSidebar();
     navigate(`/${params.workspaceSlug}/${params.channelSlug}`);
   }
@@ -39,12 +39,12 @@ class RightSidebar extends React.Component {
               </span>
             )}
           </div>
-          
+
           <button className="btn btn__close" onClick={this.handleCloseSidebar}>
             &#10006;
           </button>
         </header>
-        
+
         <div className="sidebar__body">
           {this.props.children}
         </div>
