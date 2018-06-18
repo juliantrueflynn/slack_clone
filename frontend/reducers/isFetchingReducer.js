@@ -1,4 +1,4 @@
-import { WORKSPACE } from '../actions/actionTypes';
+import { WORKSPACE, CHANNEL } from '../actions/actionTypes';
 
 const isFetchingReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -11,6 +11,14 @@ const isFetchingReducer = (state = {}, action) => {
     }
     case WORKSPACE.SHOW.RECEIVE: {
       nextState = { workspace: false };
+      return Object.assign({}, state, nextState);
+    }
+    case CHANNEL.SHOW.REQUEST: {
+      nextState = { channel: true };
+      return Object.assign({}, state, nextState);
+    }
+    case CHANNEL.SHOW.RECEIVE: {
+      nextState = { channel: false };
       return Object.assign({}, state, nextState);
     }
     default:

@@ -27,6 +27,10 @@ class ChannelPage extends React.Component {
   render() {
     const { routes, messages } = this.props;
 
+    if (this.props.isFetching) {
+      return (<h2>Loading...</h2>);
+    }
+
     return (
       <div className="page page__channel">
         <ChannelSidebarContainer />
