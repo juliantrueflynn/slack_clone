@@ -17,16 +17,6 @@ export const apiActions = (base, methods = apiMethodsDefaults) => (
   }, {})
 );
 
-export const actionCreator = (type, props = {}) => {
-  const action = { type };
-  const propKeys = Object.keys(props);
-
-  if (propKeys.length) {
-    return propKeys.reduce((acc, key) => {
-      acc[key] = props[key];
-      return acc;
-    }, action);
-  }
-
-  return action;
-};
+export const actionCreator = (type, payload = {}) => (
+  { type, ...payload }
+);
