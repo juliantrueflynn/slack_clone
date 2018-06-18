@@ -27,6 +27,10 @@ class WorkspacePage extends React.Component {
   render() {
     const { match: { params: { workspaceSlug } }, routes, channels } = this.props;
 
+    if (this.props.isFetching) {
+      return (<h2>Loading...</h2>);
+    }
+
     return (
       <div className="workspace-view">
         <Socket channel={{ channel: 'WorkspaceChannel', workspaceSlug }} />
