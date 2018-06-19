@@ -17,15 +17,17 @@ export const getPageChannelSlug = state => (
 );
 
 export const getMessages = ({ entities: { messages, channels }, ui }) => {
-  const currentChannel = channels[ui.displayChannelSlug];
+  const currChannel = channels[ui.displayChannelSlug];
 
-  if (!currentChannel) {
+  if (!currChannel) {
     return [];
   }
 
-  return values(messages).filter(message =>
-    !message.parentMessageId && currentChannel.id === message.channelId
-  );
+  const currChannelMessages = Object.values(messages).filter(message => (
+    !message.parentMessageId && currChannel.id === message.channelId
+  ));
+
+  return currChannelMessages.sort((a, b) => messages[a.slug].id - messages[b.slug].id);
 };
 
 export const getCurrentMessageBySlug = ({ entities }, messageSlug) => (
