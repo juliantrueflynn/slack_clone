@@ -119,6 +119,8 @@ class Message extends React.Component {
 
           <Reactions reactions={this.props.reactions} />
         </div>
+
+        {this.props.threadCount > 0 && this.props.threadCount}
       </li>
     );
   }

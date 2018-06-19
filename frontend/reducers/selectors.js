@@ -18,12 +18,12 @@ export const getPageChannelSlug = state => (
 
 export const getMessages = ({ entities: { messages, channels }, ui }) => {
   const currentChannel = channels[ui.displayChannelSlug];
-  
+
   if (!currentChannel) {
     return [];
   }
 
-  return values(messages).filter(message => 
+  return values(messages).filter(message =>
     !message.parentMessageId && currentChannel.id === message.channelId
   );
 };
@@ -38,17 +38,28 @@ export const getMessageSlug = ({ ui: { rightSidebar } }) => (
   null
 );
 
+export const selectThreadCount = ({ entities: { messages } }, messageSlug) => {
+  const entries = Object.values(messages);
+  return entries.length && entries.reduce((acc, entry) => {
+    if (entry.parentMessageSlug === messageSlug) {
+      return acc + 1;
+    }
+
+    return acc;
+  }, 0);
+};
+
 export const getThread = ({ entities: { messages }, ui: { rightSidebar } }) => {
   if (!rightSidebar || rightSidebar.sidebarType !== 'Thread') {
     return [];
   }
 
   const messageSlug = rightSidebar.sidebarProps.messageSlug;
-  
+
   if (!messages[messageSlug] || !messageSlug) {
     return [];
   }
-  
+
   return values(messages).filter(message => {
     return message.parentMessageId === messages[messageSlug].id;
   });
@@ -78,12 +89,12 @@ export const getRightSidebarType = state => (
 
 export const getReactionCounts = (state, messageId) => {
   let newReactions = {};
-  
+
   Object.values(state.entities.reactions).forEach(reaction => {
     if (reaction.messageId !== messageId) {
       return;
     }
-  
+
     if (!newReactions[reaction.emoji]) {
       newReactions[reaction.emoji] = [];
     }

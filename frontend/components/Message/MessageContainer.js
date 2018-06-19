@@ -4,13 +4,14 @@ import Message from './Message';
 import { updateMessage, deleteMessage } from '../../actions/messageActions';
 import { openRightSidebar } from '../../actions/interactiveActions';
 import { createFavorite, deleteFavorite } from '../../actions/favoriteActions';
-import { getFavoriteStatus, getReactionCounts } from '../../reducers/selectors';
+import { getFavoriteStatus, getReactionCounts, selectThreadCount } from '../../reducers/selectors';
 import { createReaction, deleteReaction } from '../../actions/reactionActions';
 
 const mapStateToProps = (state, { message }) => ({
   isAuthor: state.session.currentUser.id === message.authorId,
   isFavorited: getFavoriteStatus(state, message.slug),
   reactions: getReactionCounts(state, message.id),
+  threadCount: selectThreadCount(state, message.slug),
 });
 
 const mapDispatchToProps = dispatch => ({
