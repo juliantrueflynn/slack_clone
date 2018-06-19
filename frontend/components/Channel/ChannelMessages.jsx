@@ -1,22 +1,16 @@
 import React from 'react';
 import MessageContainer from '../Message/MessageContainer';
 
-class MessageEntries extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+const MessageEntries = (props) => {
+  const { messages } = props;
 
-  render() {
-    const { messages } = this.props;
-
-    return (
-      <div>
-        {messages && messages.map(message =>
-          <MessageContainer message={message} key={message.slug} />
-        )}
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      {messages && messages.map(message => (
+        <MessageContainer message={message} key={message.slug} />
+      ))}
+    </div>
+  );
+};
 
 export default MessageEntries;

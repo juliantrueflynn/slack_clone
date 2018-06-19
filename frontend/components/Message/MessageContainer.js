@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Message from './Message';
 import { updateMessage, deleteMessage } from '../../actions/messageActions';
-import { openRightSidebar } from '../../actions/interactiveActions';
 import { createFavorite, deleteFavorite } from '../../actions/favoriteActions';
 import { getFavoriteStatus, getReactionCounts, selectThreadCount } from '../../reducers/selectors';
 import { createReaction, deleteReaction } from '../../actions/reactionActions';
@@ -17,7 +16,6 @@ const mapStateToProps = (state, { message }) => ({
 const mapDispatchToProps = dispatch => ({
   updateMessageRequest: message => dispatch(updateMessage.request(message)),
   deleteMessageRequest: messageSlug => dispatch(deleteMessage.request(messageSlug)),
-  openRightSidebar: sidebarProps => dispatch(openRightSidebar('Thread', sidebarProps)),
   createFavoriteRequest: messageSlug => dispatch(createFavorite.request(messageSlug)),
   deleteFavoriteRequest: messageSlug => dispatch(deleteFavorite.request(messageSlug)),
   createReactionRequest: reaction => dispatch(createReaction.request(reaction)),

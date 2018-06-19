@@ -10,30 +10,27 @@ const messageReducer = (state = {}, action) => {
       nextState = Object.assign({}, state);
       const { channel: { messages, reactions }, ui: { messageSlug } } = action;
 
-      messages.map((message) => {
+      messages.forEach((message) => {
         nextState[message.slug] = message;
-        nextState[message.slug].thread = nextState[message.slug].thread || [];
+
+        const children = messages.filter(child => child.parentMessageSlug === message.slug);
+        const messageThread = children.map(entry => entry.slug);
+
+        nextState[message.slug].thread = merge([], nextState[message.slug].thread, messageThread);
 
         if (messageSlug) {
           const { parentMessageSlug, slug } = message;
           nextState[slug].thread = null;
 
           if (nextState[messageSlug] && parentMessageSlug === messageSlug) {
-            nextState[messageSlug].thread = Object.assign(
-              [slug],
-              nextState[messageSlug].thread
-            );
+            nextState[messageSlug].thread = Object.assign([slug], nextState[messageSlug].thread);
           }
         }
       });
 
-      reactions.map((reaction) => {
-        if (nextState[reaction.messageSlug]) {
-          nextState[reaction.messageSlug].reactions = Object.assign(
-            [],
-            nextState[reaction.messageSlug].reactions,
-            [reaction.id]
-          );
+      reactions.forEach(({ messageSlug: slug, id }) => {
+        if (nextState[slug]) {
+          nextState[slug].reactions = Object.assign([], nextState[slug].reactions, [id]);
         }
       });
 
@@ -47,18 +44,14 @@ const messageReducer = (state = {}, action) => {
       nextState[slug].thread = [];
 
       const newReactions = [];
-      reactions.map((reaction) => {
+      reactions.forEach((reaction) => {
         newReactions.push(reaction.id);
       });
 
-      nextState[slug].reactions = Object.assign(
-        [],
-        nextState[slug].reactions,
-        newReactions
-      );
+      nextState[slug].reactions = Object.assign([], nextState[slug].reactions, newReactions);
 
       if (thread) {
-        thread.map((entry) => {
+        thread.forEach((entry) => {
           nextState[entry.slug] = entry;
           nextState[slug].thread.push(entry.slug);
         });
@@ -67,17 +60,25 @@ const messageReducer = (state = {}, action) => {
       return nextState;
     }
     case MESSAGE.CREATE.RECEIVE: {
-      const { message, parentMessageSlug } = action;
-      nextState = { [message.slug]: message };
-      if (parentMessageSlug) {
-        nextState[parentMessageSlug] = { thread: [message.slug] };
+      const { message, parentMessageSlug: parentSlug } = action;
+      if (!parentSlug) {
+        message.thread = [];
       }
+
+      nextState = merge({}, state, { [message.slug]: message });
+
+      if (parentSlug) {
+        nextState[parentSlug].thread.push(message.slug);
+      }
+
+      return nextState;
+    }
+    case MESSAGE.UPDATE.RECEIVE: {
+      const { message } = action;
+      nextState = { [message.slug]: message };
 
       return merge({}, state, nextState);
     }
-    case MESSAGE.UPDATE.RECEIVE:
-      nextState = { [action.message.slug]: action.message };
-      return Object.assign({}, state, nextState);
     case MESSAGE.DELETE.RECEIVE:
       nextState = Object.assign({}, state);
       delete nextState[action.message.slug];

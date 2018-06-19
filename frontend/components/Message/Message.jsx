@@ -6,6 +6,7 @@ import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import createEmojiPlugin from 'draft-js-emoji-plugin';
 import MessageHoverMenu from './MessageHoverMenu';
 import Reactions from '../Reactions';
+import SingleMessageThread from './SingleMessageThread';
 
 const emojiPlugin = createEmojiPlugin();
 const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
@@ -89,7 +90,6 @@ class Message extends React.Component {
             <MessageHoverMenu
               message={message}
               isAuthor={this.props.isAuthor}
-              openRightSidebar={this.props.openRightSidebar}
               toggleEditMessage={this.handleEditToggle}
               deleteMessageRequest={this.props.deleteMessageRequest}
               createFavoriteRequest={this.props.createFavoriteRequest}
@@ -120,7 +120,12 @@ class Message extends React.Component {
           <Reactions reactions={this.props.reactions} />
         </div>
 
-        {this.props.threadCount > 0 && this.props.threadCount}
+        <SingleMessageThread
+          thread={message.thread}
+          messageSlug={message.slug}
+          match={this.props.match}
+          isChild={!!message.parentMessageId}
+        />
       </li>
     );
   }
