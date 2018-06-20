@@ -1,8 +1,8 @@
 import React from 'react';
 import 'draft-js-emoji-plugin/lib/plugin.css';
 import 'draft-js/dist/Draft.css';
-import Editor from 'draft-js-plugins-editor';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import Editor from 'draft-js-plugins-editor';
 import createEmojiPlugin from 'draft-js-emoji-plugin';
 import FormErrors from '../Layout/FormErrors';
 
@@ -23,15 +23,14 @@ class MessageForm extends React.Component {
 
     const { editorState } = this.state;
     const currentContent = editorState.getCurrentContent();
-    const body = JSON.stringify(convertToRaw(currentContent));
     const message = {
-      body,
+      body: JSON.stringify(convertToRaw(currentContent)),
       channelId: this.props.channelSlug,
       parentMessageId: this.props.parentMessageId,
     };
+    const clearEditorState = EditorState.push(editorState, ContentState.createFromText(''), 'remove-range');
 
     this.props.createMessageRequest(message, this.props.parentMessageSlug);
-    const clearEditorState = EditorState.push(editorState, ContentState.createFromText(''), 'remove-range');
     this.setState({ editorState: clearEditorState });
   }
 

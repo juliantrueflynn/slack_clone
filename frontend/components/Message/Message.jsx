@@ -121,10 +121,9 @@ class Message extends React.Component {
         </div>
 
         <SingleMessageThread
-          thread={message.thread}
-          messageSlug={message.slug}
+          message={message}
           match={this.props.match}
-          isChild={!!message.parentMessageId}
+          threadLastUpdate={this.props.threadLastUpdate}
         />
       </li>
     );

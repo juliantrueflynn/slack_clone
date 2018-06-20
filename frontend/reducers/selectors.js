@@ -40,15 +40,13 @@ export const getMessageSlug = ({ ui: { rightSidebar } }) => (
   null
 );
 
-export const selectThreadCount = ({ entities: { messages } }, messageSlug) => {
-  const entries = Object.values(messages);
-  return entries.length && entries.reduce((acc, entry) => {
-    if (entry.parentMessageSlug === messageSlug) {
-      return acc + 1;
-    }
+export const selectThreadLastUpdate = ({ entities: { messages } }, thread) => {
+  if (!thread.length) {
+    return null;
+  }
 
-    return acc;
-  }, 0);
+  const lastSlug = thread[thread.length - 1];
+  return messages[lastSlug] ? messages[lastSlug].createdAt : '';
 };
 
 export const getThread = ({ entities: { messages }, ui: { rightSidebar } }) => {

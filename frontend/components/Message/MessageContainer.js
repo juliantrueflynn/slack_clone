@@ -3,14 +3,14 @@ import { withRouter } from 'react-router-dom';
 import Message from './Message';
 import { updateMessage, deleteMessage } from '../../actions/messageActions';
 import { createFavorite, deleteFavorite } from '../../actions/favoriteActions';
-import { getFavoriteStatus, getReactionCounts, selectThreadCount } from '../../reducers/selectors';
+import { getFavoriteStatus, getReactionCounts, selectThreadLastUpdate } from '../../reducers/selectors';
 import { createReaction, deleteReaction } from '../../actions/reactionActions';
 
 const mapStateToProps = (state, { message }) => ({
   isAuthor: state.session.currentUser.id === message.authorId,
   isFavorited: getFavoriteStatus(state, message.slug),
   reactions: getReactionCounts(state, message.id),
-  threadCount: selectThreadCount(state, message.slug),
+  threadLastUpdate: message.thread ? selectThreadLastUpdate(state, message.thread) : null,
 });
 
 const mapDispatchToProps = dispatch => ({

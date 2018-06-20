@@ -1,0 +1,26 @@
+.thread-meta {
+  font-size: small;
+  text-decoration: none;
+}
+
+.thread-meta__items {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.thread-meta__items .thread-meta__item {
+  margin-left: 6px;
+}
+
+.thread-meta__items .thread-meta__item:first-child {
+  margin-left: 0;
+}
+
+.thread-meta .thread-meta__counter:hover {
+  text-decoration: underline;
+}
