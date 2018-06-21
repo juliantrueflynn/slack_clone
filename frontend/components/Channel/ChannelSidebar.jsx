@@ -24,13 +24,13 @@ const ChannelSidebar = props => (
     />
 
     <ul className="quicklinks">
-      <li className="quicklinks__item quicklinks__threads">
-        <NavLink to="/unreads" className="quicklinks__link">
+      <li className="quicklinks__item quicklinks__unreads">
+        <NavLink to={`/${props.workspaceSlug}/unreads`} className="quicklinks__link">
           All Unreads
         </NavLink>
       </li>
-      <li className="quicklinks__item quicklinks__unreads">
-        <NavLink to="/threads" className="quicklinks__link">
+      <li className="quicklinks__item quicklinks__threads">
+        <NavLink to={`/${props.workspaceSlug}/threads`} className="quicklinks__link">
           All Threads
         </NavLink>
       </li>

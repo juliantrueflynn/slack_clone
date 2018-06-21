@@ -46,8 +46,8 @@ class MessageForm extends React.Component {
             plugins={[emojiPlugin]}
           />
 
-          <EmojiSuggestions />
-          <EmojiSelect />
+          {/* <EmojiSuggestions /> */}
+          {/* <EmojiSelect /> */}
 
           <button type="submit" className="btn btn__submit">
             Add Message

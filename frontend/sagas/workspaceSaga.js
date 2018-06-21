@@ -2,7 +2,7 @@ import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/workspaceActions';
 import { WORKSPACE } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiDelete } from '../util/apiUtil';
-import { getChannels, getCurrentUserId, getPageWorkspaceSlug } from '../reducers/selectors';
+import { getCurrentUserId, getPageWorkspaceSlug } from '../reducers/selectors';
 import { navigate } from '../actions/interactiveActions';
 
 export function* fetchWorkspace(workspaceSlug) {
@@ -52,13 +52,6 @@ function* loadWorkspaces() {
 function* loadWorkspace({ workspaceSlug }) {
   const workspace = yield call(apiFetch, `workspaces/${workspaceSlug}`);
   yield put(actions.fetchWorkspace.receive(workspace));
-
-  const channels = yield select(getChannels);
-  if (channels.length) {
-    yield put(navigate({ path: `/${workspaceSlug}/${channels[0].slug}` }));
-  } else {
-    yield put(navigate({ path: '/' }));
-  }
 }
 
 function* newWorkspaceFlow() {

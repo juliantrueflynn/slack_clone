@@ -5,8 +5,10 @@ import { getChannels } from '../../reducers/selectors';
 import WorkspacePage from './WorkspacePage';
 import isFetching from '../../util/isFetchingUtil';
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, { match, location }) => ({
   channels: getChannels(state),
+  workspaceSlug: match.params.workspaceSlug,
+  isExactMatch: match.url === location.pathname && !match.params.channelSlug,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,11 +1,11 @@
 import React from 'react';
-import { RouteWithSubRoutes } from '../../util/routeUtil';
+import { Redirect } from 'react-router-dom';
 import Socket from '../../util/actionCableUtil';
 
 class WorkspacePage extends React.Component {
   componentDidMount() {
-    const { fetchWorkspaceRequest, match, workspaces } = this.props;
-    fetchWorkspaceRequest(match.params.workspaceSlug);
+    const { workspaceSlug, workspaces } = this.props;
+    this.props.fetchWorkspaceRequest(workspaceSlug);
 
     if (!workspaces || !workspaces.length) {
       this.props.fetchWorkspacesRequest();
@@ -13,10 +13,10 @@ class WorkspacePage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { fetchWorkspaceRequest, match, workspaces } = this.props;
+    const { workspaceSlug, workspaces } = this.props;
 
-    if (prevProps.match.url !== match.url) {
-      fetchWorkspaceRequest(match.params.workspaceSlug);
+    if (prevProps.workspaceSlug !== workspaceSlug) {
+      this.props.fetchWorkspaceRequest(workspaceSlug);
     }
 
     if (prevProps.workspaces && prevProps.workspaces.length !== workspaces.length) {
@@ -25,23 +25,27 @@ class WorkspacePage extends React.Component {
   }
 
   render() {
-    const { match: { params: { workspaceSlug } }, routes, channels } = this.props;
+    const { workspaceSlug, channels, ...props } = this.props;
 
-    if (this.props.isFetching) {
+    if (props.isFetching) {
       return (<h2>Loading...</h2>);
     }
 
+    if (props.isExactMatch) {
+      return channels && channels.length && (
+        <Redirect to={`/${workspaceSlug}/${channels[0].slug}`} />
+      );
+    }
+
     return (
-      <div className="workspace-view">
+      <div className={`single-workspace single-workspace__${workspaceSlug}`}>
         <Socket channel={{ channel: 'WorkspaceChannel', workspaceSlug }} />
 
         {channels && channels.map(({ slug: channelSlug }) => (
           <Socket key={channelSlug} channel={{ channel: 'ChatChannel', channelSlug }} />
         ))}
 
-        {routes && routes.map(route => (
-          <RouteWithSubRoutes key={route.path} {...route} />
-        ))}
+        {props.children}
       </div>
     );
   }
