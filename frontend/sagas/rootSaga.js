@@ -5,6 +5,7 @@ import channelSaga from './channelSaga';
 import channelSubSaga from './channelSubSaga';
 import workspaceSubSaga from './workspaceSubSaga';
 import messageSaga from './messageSaga';
+import threadMessageSaga from './threadMessageSaga';
 import favoriteSaga from './favoriteSaga';
 import navigateSaga from './navigateSaga';
 import sidebarSaga from './sidebarSaga';
@@ -19,6 +20,7 @@ export default function* root() {
     fork(channelSubSaga),
     fork(workspaceSubSaga),
     fork(messageSaga),
+    fork(threadMessageSaga),
     fork(favoriteSaga),
     fork(reactionSaga),
     fork(sidebarSaga),

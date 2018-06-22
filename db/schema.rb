@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180601213541) do
+ActiveRecord::Schema.define(version: 20180622050708) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,17 +35,18 @@ ActiveRecord::Schema.define(version: 20180601213541) do
     t.index ["slug"], name: "index_channels_on_slug", unique: true
   end
 
-  create_table "message_favs", force: :cascade do |t|
-    t.bigint "message_id"
-    t.bigint "user_id"
+  create_table "favorites", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "favoriteable_type", null: false
+    t.bigint "favoriteable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["message_id", "user_id"], name: "index_message_favs_on_message_id_and_user_id", unique: true
+    t.index ["favoriteable_type", "favoriteable_id"], name: "index_favorites_on_favoriteable_type_and_favoriteable_id"
+    t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
     t.text "body"
-    t.integer "parent_message_id"
     t.integer "author_id", null: false
     t.string "slug", null: false
     t.integer "channel_id", null: false
@@ -55,13 +56,24 @@ ActiveRecord::Schema.define(version: 20180601213541) do
   end
 
   create_table "reactions", force: :cascade do |t|
-    t.bigint "message_id", null: false
+    t.string "reactionable_type", null: false
+    t.bigint "reactionable_id", null: false
     t.bigint "user_id", null: false
     t.string "emoji", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["message_id"], name: "index_reactions_on_message_id"
+    t.index ["reactionable_type", "reactionable_id"], name: "index_reactions_on_reactionable_type_and_reactionable_id"
     t.index ["user_id"], name: "index_reactions_on_user_id"
+  end
+
+  create_table "thread_messages", force: :cascade do |t|
+    t.text "body"
+    t.integer "author_id", null: false
+    t.string "slug", null: false
+    t.integer "parent_message_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_thread_messages_on_slug", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -101,12 +113,12 @@ ActiveRecord::Schema.define(version: 20180601213541) do
   add_foreign_key "channel_subs", "users"
   add_foreign_key "channels", "users", column: "owner_id"
   add_foreign_key "channels", "workspaces"
-  add_foreign_key "message_favs", "messages"
-  add_foreign_key "message_favs", "users"
+  add_foreign_key "favorites", "users"
   add_foreign_key "messages", "channels"
   add_foreign_key "messages", "users", column: "author_id"
-  add_foreign_key "reactions", "messages"
   add_foreign_key "reactions", "users"
+  add_foreign_key "thread_messages", "messages", column: "parent_message_id"
+  add_foreign_key "thread_messages", "users", column: "author_id"
   add_foreign_key "workspace_subs", "users"
   add_foreign_key "workspace_subs", "workspaces"
   add_foreign_key "workspaces", "users", column: "owner_id"

@@ -21,7 +21,7 @@ class Workspace < ApplicationRecord
     through: :subs,
     source: :user
   has_many :channels, dependent: :destroy
-  has_many :favs,
+  has_many :favorites,
     through: :channels
 
   def is_user_subbed?(user)

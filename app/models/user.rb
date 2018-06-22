@@ -12,25 +12,21 @@ class User < ApplicationRecord
   validates :username, :email, uniqueness: true
   validates :password, length: { minimum: 6 }, allow_nil: true
 
-  has_many :created_workspaces,
-    class_name: 'Workspace',
-    foreign_key: :owner_id
-  has_many :created_channels,
-    class_name: 'Channel',
-    foreign_key: :owner_id
   has_many :workspace_subs, dependent: :destroy
-  has_many :workspaces,
-    through: :workspace_subs,
-    source: :workspace
+  has_many :created_workspaces, class_name: 'Workspace', foreign_key: :owner_id
+  has_many :workspaces, through: :workspace_subs, source: :workspace
   has_many :channel_subs, dependent: :destroy
-  has_many :channels,
-    through: :channel_subs,
-    source: :channel
+  has_many :created_channels, class_name: 'Channel', foreign_key: :owner_id
+  has_many :channels, through: :channel_subs, source: :channel
   has_many :messages, foreign_key: :author_id
-  has_many :favs,
-    class_name: 'MessageFav',
-    dependent: :destroy
+  has_many :thread_messages, foreign_key: :author_id, dependent: :destroy
+  has_many :favorites, dependent: :destroy
   has_many :reactions, dependent: :destroy
+  has_many :user_threads,
+    class_name: 'ThreadMessage',
+    through: :thread_messages,
+    foreign_key: :author_id,
+    source: :parent_message
 
   def self.find_by_email_and_password(email, password)
     user = User.find_by(email: email)

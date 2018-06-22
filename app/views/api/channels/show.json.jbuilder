@@ -11,21 +11,22 @@ end
 
 json.messages do
   json.array! @channel.messages do |message|
-    json.(message, :id, :body, :slug, :author_id, :channel_id, :parent_message_id, :created_at)
-    json.parent_message_slug message.is_child? ? message.parent_message.slug : nil
+    json.(message, :id, :body, :slug, :author_id, :channel_id, :created_at)
   end
 end
 
 json.favorites do
-  json.array! @channel.favs do |fav|
-    json.(fav, :id, :message_id, :user_id)
-    json.message_slug fav.message.slug
+  json.array! @channel.favorites do |favorite|
+    json.(favorite, :id, :user_id)
+    json.message_id favorite.favoriteable_id
+    json.message_slug favorite.favoriteable.slug
   end
 end
 
 json.reactions do
   json.array! @channel.reactions do |reaction|
-    json.(reaction, :id, :message_id, :user_id, :emoji)
-    json.message_slug reaction.message.slug
+    json.(reaction, :id, :user_id, :emoji)
+    json.message_id reaction.reactionable_id
+    json.message_slug reaction.reactionable.slug
   end
 end
