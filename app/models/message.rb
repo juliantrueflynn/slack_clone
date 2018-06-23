@@ -1,33 +1,22 @@
 class Message < ApplicationRecord
-  before_validation :generate_id
+  before_validation :generate_slug
 
-  attr_accessor :parent_message_slug
-
-  validates :author_id, :channel_id, presence: true
-  validates :slug, uniqueness: true, presence: true
+  validates_presence_of :slug, :author_id, :channel_id
+  validates_uniqueness_of :slug
   validates_length_of :body,
     within: 1..50000,
     too_long: 'is too long (max: 50000 characters)',
     too_short: 'cannot be empty'
 
-  belongs_to :author,
-    class_name: 'User',
-    foreign_key: :author_id
+  belongs_to :author, class_name: 'User'
   belongs_to :channel
-  belongs_to :parent_message,
-    class_name: 'Message',
-    foreign_key: :parent_message_id,
-    optional: true
+  belongs_to :parent_message, class_name: 'Message', optional: true
   has_many :thread_entries,
     class_name: 'Message',
     foreign_key: :parent_message_id,
     dependent: :destroy
-  has_many :favs,
-    class_name: 'MessageFav',
-    foreign_key: :message_id,
-    dependent: :destroy
-  has_many :reactions,
-    dependent: :destroy
+  has_many :favorites, dependent: :destroy
+  has_many :reactions, dependent: :destroy
 
   def is_child?
     !!parent_message_id
@@ -35,7 +24,7 @@ class Message < ApplicationRecord
 
   private
 
-  def generate_id
+  def generate_slug
     return slug if slug
     
     loop do

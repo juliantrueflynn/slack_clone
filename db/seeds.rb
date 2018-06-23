@@ -1,6 +1,7 @@
 require 'faker'
 
 User.create(email: "jtf@gmail.com", username: "jtf", password: "123456")
+first_user = User.first
 
 REACTIONS = %w(joy smile heart_eyes innocent +1 point_up)
 
@@ -30,7 +31,7 @@ end
 
 3.times do
   title = Faker::Company.unique.name
-  workspace = Workspace.create(
+  workspace = first_user.created_workspaces.create(
     title: title,
     slug: "#{title.parameterize}",
     owner_id: User.first.id
@@ -38,7 +39,7 @@ end
 
   3.times do
     title = Faker::Company.unique.buzzword
-    Channel.create(
+    first_user.created_channels.create(
       title: title,
       owner_id: User.first.id,
       topic: (is_random_true? ? Faker::Company.bs : nil),
@@ -47,7 +48,7 @@ end
   end
 end
 
-8.times do
+6.times do
   user = User.create(
     email: Faker::Internet.unique.email,
     username: Faker::Internet.unique.user_name,
@@ -56,29 +57,30 @@ end
 
   Workspace.all.shuffle.each do |workspace|
     next if user.is_workspace_sub?(workspace) || is_random_true?
-    WorkspaceSub.create(
-      workspace_id: workspace.id,
-      user_id: user.id
+    user.workspace_subs.create(
+      workspace_id: workspace.id
     )
 
     workspace.channels.shuffle.each do |channel|
       next if user.is_channel_sub?(channel) || is_random_true?
   
-      ChannelSub.create(
-        channel_id: channel.id,
-        user_id: user.id
+      user.channel_subs.create(
+        channel_id: channel.id
       )
   
-      [*1..4].sample.times do
+      [*1..3].sample.times do
         next if is_random_true?
-        Message.create(
+        message = Message.create(
           body: random_message_body,
           author_id: user.id,
           channel_id: channel.id
         )
+
+        message.favorites.create(user_id: user.id) if rand < 0.40
+        message.reactions.create(user_id: user.id, emoji: REACTIONS.sample) if rand < 0.40
       end
   
-      random_parent_message = channel.parent_messages.sample
+      random_parent_message = channel.messages.sample
       next if random_parent_message.nil? || rand < 0.60
       Message.create(
         body: random_message_body,
@@ -86,41 +88,15 @@ end
         channel_id: channel.id,
         parent_message_id: random_parent_message.id
       )
-
-      3.times do
-        Reaction.create(
-          user_id: user.id,
-          message_id: channel.messages.sample.id,
-          emoji: REACTIONS.sample
-        )
-      end
-
-      MessageFav.create(
-        user_id: user.id,
-        message_id: channel.messages.sample.id
-      )
     end
   end
 end
 
-# Subscribe first user to all workspaces, channels, favs, reactions
-Workspace.all.each do |workspace|
-  WorkspaceSub.create(workspace_id: workspace.id, user_id: User.first.id)
-end
-
-Channel.all.each do |channel|
-  ChannelSub.create(channel_id: channel.id, user_id: User.first.id)
-end
-
 3.times do
-  Reaction.create(
-    user_id: User.first.id,
+  first_user.reactions.create(
     message_id: Channel.all.sample.messages.sample.id,
     emoji: REACTIONS.sample
   )
 
-  MessageFav.create(
-    user_id: User.first.id,
-    message_id: Channel.all.sample.messages.sample.id
-  )
+  first_user.favorites.create(message_id: Channel.all.sample.messages.sample.id)
 end

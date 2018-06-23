@@ -4,6 +4,8 @@ class WorkspaceSub < ApplicationRecord
   belongs_to :user
   belongs_to :workspace
 
+  private
+
   after_create_commit do
     WorkspaceJob.perform_later(workspace.slug, type: "WORKSPACE_SUB_CREATE_RECEIVE", workspace_sub: self)
   end

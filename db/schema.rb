@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180601213541) do
+ActiveRecord::Schema.define(version: 20180622204514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,12 +35,12 @@ ActiveRecord::Schema.define(version: 20180601213541) do
     t.index ["slug"], name: "index_channels_on_slug", unique: true
   end
 
-  create_table "message_favs", force: :cascade do |t|
+  create_table "favorites", force: :cascade do |t|
     t.bigint "message_id"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["message_id", "user_id"], name: "index_message_favs_on_message_id_and_user_id", unique: true
+    t.index ["message_id", "user_id"], name: "index_favorites_on_message_id_and_user_id", unique: true
   end
 
   create_table "messages", force: :cascade do |t|
@@ -101,8 +101,8 @@ ActiveRecord::Schema.define(version: 20180601213541) do
   add_foreign_key "channel_subs", "users"
   add_foreign_key "channels", "users", column: "owner_id"
   add_foreign_key "channels", "workspaces"
-  add_foreign_key "message_favs", "messages"
-  add_foreign_key "message_favs", "users"
+  add_foreign_key "favorites", "messages"
+  add_foreign_key "favorites", "users"
   add_foreign_key "messages", "channels"
   add_foreign_key "messages", "users", column: "author_id"
   add_foreign_key "reactions", "messages"

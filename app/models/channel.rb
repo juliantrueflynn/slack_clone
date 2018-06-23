@@ -1,32 +1,20 @@
 class Channel < ApplicationRecord
-  before_validation :generate_id
+  before_validation :generate_slug
 
-  validates :title, :owner_id, :workspace_id, presence: true
-  validates :slug, uniqueness: true, presence: true
+  validates_presence_of :title, :slug, :owner_id, :workspace_id
+  validates_uniqueness_of :slug
   validates_length_of :title,
     within: 2..55,
     too_long: 'title too long (max: 55 characters)',
     too_short: 'title too short (min: 3 characters)'
 
-  belongs_to :owner,
-    class_name: 'User',
-    foreign_key: :owner_id
+  belongs_to :owner, class_name: 'User', foreign_key: :owner_id
   belongs_to :workspace
-  has_many :subs,
-    class_name: 'ChannelSub',
-    foreign_key: :channel_id,
-    dependent: :destroy
-  has_many :members,
-    class_name: 'User',
-    through: :subs,
-    source: :user
+  has_many :subs, class_name: 'ChannelSub', foreign_key: :channel_id, dependent: :destroy
+  has_many :members, class_name: 'User', through: :subs, source: :user
   has_many :messages, dependent: :destroy
-  has_many :favs,
-    through: :messages,
-    source: :favs
-  has_many :reactions,
-    through: :messages,
-    source: :reactions
+  has_many :favorites, through: :messages, source: :favorites
+  has_many :reactions, through: :messages, source: :reactions
 
   def is_user_subbed?(user)
     users_subbed = subs.where(channel_subs: { user_id: user.id })
@@ -43,7 +31,7 @@ class Channel < ApplicationRecord
 
   private
 
-  def generate_id
+  def generate_slug
     return slug if slug
     
     loop do

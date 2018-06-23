@@ -17,7 +17,7 @@ json.messages do
 end
 
 json.favorites do
-  json.array! @channel.favs do |fav|
+  json.array! @channel.favorites do |fav|
     json.(fav, :id, :message_id, :user_id)
     json.message_slug fav.message.slug
   end
