@@ -70,16 +70,16 @@ export const getCurrentUserId = state => (
 );
 
 export const getUserFavorites = ({ entities, session }) => (
-  Object.values(entities.favorites).filter(fav => (
-    session.currentUserId !== fav.userId
+  Object.values(entities.favorites).filter(favorite => (
+    session.currentUserId !== favorite.userId
   ))
 );
 
 export const getFavoriteStatus = (state, messageSlug) => {
   const { entities, session: { currentUser } } = state;
 
-  return Object.values(entities.favorites).some(fav => {
-    return fav.messageSlug === messageSlug && fav.userId === currentUser.id;
+  return Object.values(entities.favorites).some(favorite => {
+    return favorite.messageSlug === messageSlug && favorite.userId === currentUser.id;
   });
 };
 

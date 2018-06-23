@@ -9,6 +9,8 @@ def is_random_true?
   rand < 0.25
 end
 
+Faker::UniqueGenerator.clear
+
 def random_lorem_short_or_long
   if rand < 0.1
     return Faker::Lorem.paragraph(4, false, 10)
@@ -75,9 +77,6 @@ end
           author_id: user.id,
           channel_id: channel.id
         )
-
-        message.favorites.create(user_id: user.id) if rand < 0.40
-        message.reactions.create(user_id: user.id, emoji: REACTIONS.sample) if rand < 0.40
       end
   
       random_parent_message = channel.messages.sample
@@ -88,15 +87,26 @@ end
         channel_id: channel.id,
         parent_message_id: random_parent_message.id
       )
+      random_parent_message.favorites.create(user_id: user.id)
+      random_parent_message.reactions.create(user_id: user.id, emoji: REACTIONS.sample)
     end
   end
 end
 
-3.times do
-  first_user.reactions.create(
-    message_id: Channel.all.sample.messages.sample.id,
-    emoji: REACTIONS.sample
+Channel.all.each do |channel|
+  random_message = channel.messages.sample
+    
+  first_user.messages.create(
+    body: random_message_body,
+    channel_id: random_message.channel.id
+  )
+  
+  first_user.messages.create(
+    body: random_message_body,
+    channel_id: random_message.channel.id,
+    parent_message_id: random_message.id
   )
 
-  first_user.favorites.create(message_id: Channel.all.sample.messages.sample.id)
+  first_user.favorites.create(message_id: random_message.id)
+  first_user.reactions.create(message_id: random_message.id, emoji: REACTIONS.sample)
 end

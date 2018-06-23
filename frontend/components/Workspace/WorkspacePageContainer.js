@@ -5,11 +5,16 @@ import { getChannels } from '../../reducers/selectors';
 import WorkspacePage from './WorkspacePage';
 import isFetching from '../../util/isFetchingUtil';
 
-const mapStateToProps = (state, { match, location }) => ({
-  channels: getChannels(state),
-  workspaceSlug: match.params.workspaceSlug,
-  isExactMatch: match.url === location.pathname && !match.params.channelSlug,
-});
+const mapStateToProps = (state, { match, location }) => {
+  const doesUrlMatchLocation = match.url === location.pathname;
+  const isChannelPath = match.path === '/:workspaceSlug/:channelSlug';
+
+  return {
+    channels: getChannels(state),
+    workspaceSlug: match.params.workspaceSlug,
+    isExactMatch: doesUrlMatchLocation && !match.params.channelSlug && isChannelPath,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   fetchWorkspaceRequest: workspaceSlug => dispatch(fetchWorkspace.request(workspaceSlug)),

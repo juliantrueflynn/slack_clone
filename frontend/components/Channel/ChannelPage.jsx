@@ -1,11 +1,10 @@
 import React from 'react';
-import ChannelHeaderContainer from './ChannelHeaderContainer';
-import ChannelSidebarContainer from './ChannelSidebarContainer';
-import ChannelMessages from './ChannelMessages';
 import MessageFormContainer from '../Message/MessageFormContainer';
 import ChannelFormContainer from './ChannelFormContainer';
 import { RouteWithSubRoutes } from '../../util/routeUtil';
 import WorkspacePageContainer from '../Workspace/WorkspacePageContainer';
+import TopBarHeaderContainer from '../TopBarHeaderContainer';
+import MessageContainer from '../Message/MessageContainer';
 import './ChannelPage.css';
 
 class ChannelPage extends React.Component {
@@ -18,29 +17,26 @@ class ChannelPage extends React.Component {
     const { workspaceSlug, channelSlug, messageSlug } = this.props;
 
     if (channelSlug !== prevProps.channelSlug) {
-      this.props.fetchChannelRequest(
-        channelSlug,
-        { workspaceSlug, messageSlug: messageSlug || null },
-      );
+      this.props.fetchChannelRequest(channelSlug, { workspaceSlug, messageSlug });
     }
   }
 
   render() {
-    const { routes, messages } = this.props;
+    const { routes, messages, ...props } = this.props;
 
-    if (this.props.isFetching) {
+    if (props.isFetching) {
       return (<h2>Loading...</h2>);
     }
 
     return (
-      <WorkspacePageContainer match={this.props.match}>
+      <WorkspacePageContainer match={props.match}>
         <div className="page page__channel">
-          <ChannelSidebarContainer />
-
+          <TopBarHeaderContainer sectionTitle={props.channelSlug} />
           <div className="messages-pane">
-            <ChannelHeaderContainer />
             <div className="messages-pane-body">
-              <ChannelMessages messages={messages} />
+              {messages && messages.map(message => (
+                <MessageContainer message={message} key={message.slug} />
+              ))}
               <MessageFormContainer />
             </div>
           </div>

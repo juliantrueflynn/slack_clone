@@ -1,13 +1,19 @@
 import React from 'react';
 import WorkspacePageContainer from './Workspace/WorkspacePageContainer';
+import TopBarHeaderContainer from './TopBarHeaderContainer';
 
 class ThreadsPage extends React.Component {
+  componentDidMount() {
+  }
+
   render() {
     const { match } = this.props;
 
     return (
       <WorkspacePageContainer match={match}>
-        <h1 className="top-bar__title">All Threads</h1>
+        <TopBarHeaderContainer sectionTitle="All Threads">
+          <small>Thread count here</small>
+        </TopBarHeaderContainer>
       </WorkspacePageContainer>
     );
   }

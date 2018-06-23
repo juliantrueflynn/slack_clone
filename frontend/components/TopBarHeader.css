@@ -1,4 +1,4 @@
-.ch-header {
+.top-bar-header {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -11,18 +11,19 @@
   padding: .625em .5em;
 }
 
-.ch-header__name {
+.top-bar-header__title {
   font-size: 16px;
   margin: 0;
 }
 
-.ch-header-menu {
+.top-bar-menu {
   display: flex;
   flex-direction: row;
   list-style-type: none;
   margin: 0;
+  background-color: #FFF;
 }
 
-.ch-header .btn__favs {
+.top-bar-header .btn__favs {
   padding: .25em .5em;
 }

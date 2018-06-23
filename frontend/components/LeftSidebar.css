@@ -1,0 +1,11 @@
+.sidebar__left {
+  width: 15%;
+  display: inline-block;
+  background-color: #4D394B;
+  color: #FFF;
+  padding: .625em .5em;
+}
+
+.sidebar__left a {
+  color: #FFF;
+}

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import Socket from '../../util/actionCableUtil';
+import LeftSidebarContainer from '../LeftSidebarContainer';
+import './WorkspacePage.css';
 
 class WorkspacePage extends React.Component {
   componentDidMount() {
@@ -44,6 +46,8 @@ class WorkspacePage extends React.Component {
         {channels && channels.map(({ slug: channelSlug }) => (
           <Socket key={channelSlug} channel={{ channel: 'ChatChannel', channelSlug }} />
         ))}
+
+        <LeftSidebarContainer />
 
         {props.children}
       </div>

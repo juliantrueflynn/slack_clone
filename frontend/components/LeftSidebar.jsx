@@ -1,12 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import UsersMenu from '../UsersMenu';
-import ChannelsMenuContainer from './ChannelsMenuContainer';
-import PreferencesModal from '../PreferencesModal';
-import './ChannelSidebar.css';
+import UsersMenu from './UsersMenu';
+import ChannelsMenuContainer from './Channel/ChannelsMenuContainer';
+import PreferencesModal from './PreferencesModal';
+import './LeftSidebar.css';
 
-const ChannelSidebar = props => (
-  <aside className="sidebar sidebar__channel">
+const LeftSidebar = props => (
+  <aside className="sidebar sidebar__left">
     <UsersMenu
       workspaceSlug={props.workspaceSlug}
       channelSlug={props.channelSlug}
@@ -40,4 +40,4 @@ const ChannelSidebar = props => (
   </aside>
 );
 
-export default ChannelSidebar;
+export default LeftSidebar;

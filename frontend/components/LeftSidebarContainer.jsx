@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import ChannelSidebar from './ChannelSidebar';
-import { getWorkspaces } from '../../reducers/selectors';
-import { modalOpen, modalClose, openRightSidebar } from '../../actions/interactiveActions';
+import LeftSidebar from './LeftSidebar';
+import { getWorkspaces } from '../reducers/selectors';
+import { modalOpen, modalClose, openRightSidebar } from '../actions/interactiveActions';
 
 const mapStateToProps = (state, { match }) => ({
   workspaces: getWorkspaces(state),
@@ -18,4 +18,4 @@ const mapDispatchToProps = dispatch => ({
   openRightSidebar: () => dispatch(openRightSidebar('Workspace Directory', {})),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChannelSidebar));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LeftSidebar));
