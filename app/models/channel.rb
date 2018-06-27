@@ -13,6 +13,11 @@ class Channel < ApplicationRecord
   has_many :subs, class_name: 'ChannelSub', foreign_key: :channel_id, dependent: :destroy
   has_many :members, class_name: 'User', through: :subs, source: :user
   has_many :messages, dependent: :destroy
+  has_many :message_threads, through: :messages
+  has_many :messages_with_children,
+    -> { distinct },
+    through: :message_threads,
+    source: :parent_message
   has_many :favorites, through: :messages, source: :favorites
   has_many :reactions, through: :messages, source: :reactions
 
@@ -23,10 +28,6 @@ class Channel < ApplicationRecord
 
   def self.subbed_by_user_in_workspace(user_id, workspace_id)
     self.joins(:subs).where(channel_subs: { user_id: user_id })
-  end
-
-  def parent_messages
-    messages.where(parent_message_id: nil)
   end
 
   private

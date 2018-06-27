@@ -1,11 +1,9 @@
 json.message do
-  json.(@message, :id, :body, :slug, :author_id, :channel_id, :parent_message_id)
+  json.(@message, :id, :body, :slug, :author_id, :channel_id)
 end
 
 json.thread do
-  json.array! @message.thread_entries do |entry|
-    json.(entry, :id, :body, :slug, :channel_id, :author_id, :created_at, :parent_message_id)
-  end
+  json.array! @message.children, :id, :body, :slug, :channel_id, :author_id, :created_at
 end
 
 json.favorites do
@@ -14,7 +12,7 @@ json.favorites do
     json.message_slug @message.slug
   end
 
-  @message.thread_entries.each do |message|
+  @message.children.each do |message|
     json.array! message.favorites do |fav|
       json.(fav, :id, :message_id, :user_id)
       json.message_slug message.slug

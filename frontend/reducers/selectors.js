@@ -1,7 +1,5 @@
-import values from 'lodash/values';
-
 export const getWorkspaces = state => (
-  values(state.entities.workspaces)
+  Object.values(state.entities.workspaces)
 );
 
 export const getPageWorkspaceSlug = state => (
@@ -9,25 +7,24 @@ export const getPageWorkspaceSlug = state => (
 );
 
 export const getChannels = state => (
-  values(state.entities.channels)
+  Object.values(state.entities.channels)
 );
 
 export const getPageChannelSlug = state => (
   state.ui.displayChannelSlug
 );
 
-export const getMessages = ({ entities: { messages, channels }, ui }) => {
-  const currChannel = channels[ui.displayChannelSlug];
+export const selectMessages = ({ entities: { channels, messages }, ui }) => {
+  const channel = channels[ui.displayChannelSlug];
+  const messagesArr = Object.values(messages);
 
-  if (!currChannel) {
+  if (!channel) {
     return [];
   }
 
-  const currChannelMessages = Object.values(messages).filter(message => (
-    !message.parentMessageId && currChannel.id === message.channelId
-  ));
+  const channelMessages = messagesArr.filter(msg => (msg.thread && channel.id === msg.channelId));
 
-  return currChannelMessages.sort((a, b) => messages[a.slug].id - messages[b.slug].id);
+  return channelMessages.sort((a, b) => messages[a.slug].id - messages[b.slug].id);
 };
 
 export const getCurrentMessageBySlug = ({ entities }, messageSlug) => (
@@ -35,9 +32,7 @@ export const getCurrentMessageBySlug = ({ entities }, messageSlug) => (
 );
 
 export const getMessageSlug = ({ ui: { rightSidebar } }) => (
-  rightSidebar && rightSidebar.sidebarType === 'Thread' ?
-  rightSidebar.sidebarProps.messageSlug :
-  null
+  rightSidebar && rightSidebar.sidebarType === 'Thread' ? rightSidebar.sidebarProps.messageSlug : null
 );
 
 export const selectThreadLastUpdate = ({ entities: { messages } }, thread) => {
@@ -49,20 +44,19 @@ export const selectThreadLastUpdate = ({ entities: { messages } }, thread) => {
   return messages[lastSlug] ? messages[lastSlug].createdAt : '';
 };
 
-export const getThread = ({ entities: { messages }, ui: { rightSidebar } }) => {
+export const selectThreadFromSlug = ({ entities: { messages }, ui: { rightSidebar } }) => {
   if (!rightSidebar || rightSidebar.sidebarType !== 'Thread') {
     return [];
   }
 
-  const messageSlug = rightSidebar.sidebarProps.messageSlug;
+  const { sidebarProps: { messageSlug } } = rightSidebar;
+  const parent = messages[messageSlug];
 
-  if (!messages[messageSlug] || !messageSlug) {
+  if (!parent || !parent.thread) {
     return [];
   }
 
-  return values(messages).filter(message => {
-    return message.parentMessageId === messages[messageSlug].id;
-  });
+  return parent.thread.map(slug => messages[slug]).filter(msg => msg !== undefined);
 };
 
 export const getCurrentUserId = state => (
@@ -75,22 +69,20 @@ export const getUserFavorites = ({ entities, session }) => (
   ))
 );
 
-export const getFavoriteStatus = (state, messageSlug) => {
-  const { entities, session: { currentUser } } = state;
-
-  return Object.values(entities.favorites).some(favorite => {
-    return favorite.messageSlug === messageSlug && favorite.userId === currentUser.id;
-  });
-};
+export const getFavoriteStatus = ({ entities, session: { currentUser } }, messageSlug) => (
+  Object.values(entities.favorites).some(fav => (
+    fav.messageSlug === messageSlug && fav.userId === currentUser.id
+  ))
+);
 
 export const getRightSidebarType = state => (
   state.ui.rightSidebar ? state.ui.rightSidebar.sidebarType : null
 );
 
 export const getReactionCounts = (state, messageId) => {
-  let newReactions = {};
+  const newReactions = {};
 
-  Object.values(state.entities.reactions).forEach(reaction => {
+  Object.values(state.entities.reactions).forEach((reaction) => {
     if (reaction.messageId !== messageId) {
       return;
     }

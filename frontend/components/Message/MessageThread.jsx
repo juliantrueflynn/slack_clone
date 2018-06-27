@@ -38,7 +38,7 @@ class MessageThread extends React.Component {
   }
 
   render() {
-    const { message, threadEntries } = this.props;
+    const { message, threadMessages } = this.props;
 
     if (!message) {
       return null;
@@ -66,12 +66,12 @@ class MessageThread extends React.Component {
           </div>
 
           <div className="thread-entries">
-            {threadEntries && threadEntries.map(entry => (
+            {threadMessages && threadMessages.length && threadMessages.map(entry => (
               <MessageContainer message={entry} key={entry.slug} />
             ))}
           </div>
 
-          <MessageFormContainer parentMessageId={message.slug} />
+          <MessageFormContainer parentMessageSlug={message.slug} />
         </div>
       </RightSidebarContainer>
     );

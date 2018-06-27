@@ -7,7 +7,7 @@ import createEmojiPlugin from 'draft-js-emoji-plugin';
 import FormErrors from '../Layout/FormErrors';
 
 const emojiPlugin = createEmojiPlugin();
-const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
+// const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
 
 class MessageForm extends React.Component {
   constructor(props) {
@@ -26,11 +26,11 @@ class MessageForm extends React.Component {
     const message = {
       body: JSON.stringify(convertToRaw(currentContent)),
       channelId: this.props.channelSlug,
-      parentMessageId: this.props.parentMessageId,
+      parentMessageSlug: this.props.parentMessageSlug,
     };
     const clearEditorState = EditorState.push(editorState, ContentState.createFromText(''), 'remove-range');
 
-    this.props.createMessageRequest(message, this.props.parentMessageSlug);
+    this.props.createEntryRequest(message, this.props.parentMessageSlug);
     this.setState({ editorState: clearEditorState });
   }
 

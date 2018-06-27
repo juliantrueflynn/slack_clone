@@ -26,7 +26,7 @@ class ActionCableChannel extends React.Component {
   }
 
   render() {
-    const { currentUser, channel } = this.props;
+    const { currentUser, channel, ...cableProps } = this.props;
     const decamelizedChannel = decamelizeKeys(channel);
 
     if (!currentUser) {
@@ -36,7 +36,8 @@ class ActionCableChannel extends React.Component {
     return (
       <ActionCable
         channel={{ ...decamelizedChannel }}
-        onReceived={this.handleReceived}
+        onReceived={onReceived}
+        {...cableProps}
       />
     );
   }

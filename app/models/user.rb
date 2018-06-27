@@ -12,15 +12,32 @@ class User < ApplicationRecord
   validates :username, :email, uniqueness: true
   validates :password, length: { minimum: 6 }, allow_nil: true
 
+  def self.thread_ids(author_id)
+    Message.with_children.where(author_id: author_id).pluck(:thread_id)
+  end
+
+  def self.replied_to_thread_ids(author_id)
+    Message.with_children.where(message_threads: { author_id: author_id }).pluck(:thread_id)
+  end
+
+  def self.thread_messages(author_id)
+    thread_ids = (User.thread_ids(author_id) + User.replied_to_thread_ids(author_id)).uniq
+    Message.with_children.where(message_threads: { thread_id: thread_ids })
+  end
+
   has_many :created_workspaces, class_name: 'Workspace', foreign_key: :owner_id
   has_many :created_channels, class_name: 'Channel', foreign_key: :owner_id
   has_many :workspace_subs, dependent: :destroy
   has_many :workspaces, through: :workspace_subs, source: :workspace
   has_many :channel_subs, dependent: :destroy
   has_many :channels, through: :channel_subs, source: :channel
-  has_many :messages, foreign_key: :author_id
+  has_many :messages, foreign_key: :author_id, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :reactions, dependent: :destroy
+  has_many :threads, ->(user) { User.thread_messages(user.id) },
+    class_name: 'Message',
+    foreign_key: :author_id,
+    dependent: :destroy
 
   def self.find_by_email_and_password(email, password)
     user = User.find_by(email: email)

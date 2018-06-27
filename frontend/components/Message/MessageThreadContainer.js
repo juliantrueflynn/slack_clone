@@ -2,10 +2,10 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import MessageThread from './MessageThread';
 import { openRightSidebar } from '../../actions/interactiveActions';
-import { getThread, getUserFavorites } from '../../reducers/selectors';
+import { selectThreadFromSlug, getUserFavorites } from '../../reducers/selectors';
 
 const mapStateToProps = (state, { match }) => ({
-  threadEntries: getThread(state),
+  threadMessages: selectThreadFromSlug(state),
   message: state.entities.messages[match.params.messageSlug] || null,
   favorites: getUserFavorites(state),
 });

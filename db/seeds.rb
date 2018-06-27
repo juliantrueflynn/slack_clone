@@ -1,15 +1,11 @@
 require 'faker'
-
-User.create(email: "jtf@gmail.com", username: "jtf", password: "123456")
-first_user = User.first
+Faker::UniqueGenerator.clear
 
 REACTIONS = %w(joy smile heart_eyes innocent +1 point_up)
 
 def is_random_true?
   rand < 0.25
 end
-
-Faker::UniqueGenerator.clear
 
 def random_lorem_short_or_long
   if rand < 0.1
@@ -31,82 +27,70 @@ def random_message_body
   '","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'
 end
 
+User.create(email: "jtf@gmail.com", username: "jtf", password: "123456")
+first_user = User.first
+
+users_attrs = []
+4.times do
+  users_attrs << {
+    email: Faker::Internet.unique.email,
+    username: Faker::Internet.unique.user_name,
+    password: "123456"
+  }
+end
+User.create(users_attrs)
+
 3.times do
   title = Faker::Company.unique.name
   workspace = first_user.created_workspaces.create(
     title: title,
     slug: "#{title.parameterize}",
-    owner_id: User.first.id
+    owner_id: first_user.id
   )
 
   3.times do
     title = Faker::Company.unique.buzzword
     first_user.created_channels.create(
       title: title,
-      owner_id: User.first.id,
+      owner_id: first_user.id,
       topic: (is_random_true? ? Faker::Company.bs : nil),
       workspace_id: workspace.id
     )
   end
 end
 
-6.times do
-  user = User.create(
-    email: Faker::Internet.unique.email,
-    username: Faker::Internet.unique.user_name,
-    password: "123456"
-  )
-
+User.all.shuffle.each do |user|
   Workspace.all.shuffle.each do |workspace|
     next if user.is_workspace_sub?(workspace) || is_random_true?
-    user.workspace_subs.create(
-      workspace_id: workspace.id
-    )
+    user.workspace_subs.create(workspace_id: workspace.id)
 
     workspace.channels.shuffle.each do |channel|
       next if user.is_channel_sub?(channel) || is_random_true?
+      user.channel_subs.create(channel_id: channel.id)
   
-      user.channel_subs.create(
-        channel_id: channel.id
-      )
-  
-      [*1..3].sample.times do
-        next if is_random_true?
-        message = Message.create(
+      [*1..2].sample.times do
+        Message.create(
           body: random_message_body,
           author_id: user.id,
           channel_id: channel.id
         )
       end
-  
-      random_parent_message = channel.messages.sample
-      next if random_parent_message.nil? || rand < 0.60
-      Message.create(
-        body: random_message_body,
-        author_id: user.id,
-        channel_id: channel.id,
-        parent_message_id: random_parent_message.id
-      )
-      random_parent_message.favorites.create(user_id: user.id)
-      random_parent_message.reactions.create(user_id: user.id, emoji: REACTIONS.sample)
     end
   end
 end
 
-Channel.all.each do |channel|
-  random_message = channel.messages.sample
-    
-  first_user.messages.create(
-    body: random_message_body,
-    channel_id: random_message.channel.id
-  )
-  
-  first_user.messages.create(
-    body: random_message_body,
-    channel_id: random_message.channel.id,
-    parent_message_id: random_message.id
-  )
+User.all.shuffle.each do |user|
+  user.channels.each do |channel|
+    random_message = channel.messages.sample
+    next if random_message.nil?
+    message = Message.create(
+      body: random_message_body,
+      author_id: user.id,
+      channel_id: channel.id
+    )
 
-  first_user.favorites.create(message_id: random_message.id)
-  first_user.reactions.create(message_id: random_message.id, emoji: REACTIONS.sample)
+    MessageThread.create(thread_id: random_message.id, message_id: message.id, author_id: user.id)
+    random_message.favorites.create(user_id: user.id)
+    random_message.reactions.create(user_id: user.id, emoji: REACTIONS.sample)
+  end
 end
