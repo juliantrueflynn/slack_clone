@@ -3,9 +3,13 @@ import { Link } from 'react-router-dom';
 import './SingleMessageThread.css';
 
 const SingleMessageThread = (props) => {
-  const { message, match: { params: { channelSlug, workspaceSlug } } } = props;
-  const { thread, slug } = message;
+  const { isSingleMessage, message, match: { params: { channelSlug, workspaceSlug } } } = props;
+  const { thread, slug, parentMessageId } = message;
   const threadUrl = `/${workspaceSlug}/${channelSlug}/thread/${slug}`;
+
+  if (parentMessageId || isSingleMessage) {
+    return null;
+  }
 
   if (thread && thread.length === 0) {
     return null;

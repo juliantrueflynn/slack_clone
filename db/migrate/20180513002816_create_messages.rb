@@ -5,6 +5,7 @@ class CreateMessages < ActiveRecord::Migration[5.1]
       t.integer :author_id, null: false
       t.string :slug, null: false
       t.integer :channel_id, null: false
+      t.integer :parent_message_id, default: nil
 
       t.timestamps
     end

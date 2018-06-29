@@ -10,23 +10,32 @@ class Message < ApplicationRecord
   
   belongs_to :author, class_name: 'User'
   belongs_to :channel
+  belongs_to :parent_message, class_name: 'Message', optional: true
+  has_many :replies, class_name: 'Message', foreign_key: :parent_message_id, dependent: :destroy
+  has_many :thread_replies, through: :replies, source: :parent_message
   has_many :favorites, dependent: :destroy
   has_many :reactions, dependent: :destroy
-  has_many :message_threads, foreign_key: :thread_id, dependent: :destroy
-  has_many :children, through: :message_threads, source: :child_message
-  has_one :parent, class_name: 'MessageThread', foreign_key: :message_id
-  has_one :parent_message, through: :parent
 
-  def self.includes_children
-    unscope(where: :author_id).includes(:children)
+  scope :with_thread_replies, -> { includes(:thread_replies, :replies).where.not(thread_replies_messages: { id: nil }) }
+
+  def self.parents_with_author_id(author_id)
+    Message.with_thread_replies.where(thread_replies_messages: { author_id: author_id })
   end
 
-  def self.with_children
-    Message.includes_children.where.not(message_threads: { id: nil })
+  def self.users_parents_ids(author_id)
+    Message.select(:parent_message_id).where(author_id: author_id).where.not(parent_message_id: nil)
+  end
+
+  def self.children_with_author_id(author_id)
+    Message.with_thread_replies.where(id: Message.users_parents_ids(author_id))
+  end
+
+  def self.threads_with_author_id(author_id)
+    Message.parents_with_author_id(author_id).or(Message.children_with_author_id(author_id)).order(:id)
   end
 
   def is_child?
-    !parent.nil?
+    !!parent_message_id
   end
 
   private
@@ -41,7 +50,12 @@ class Message < ApplicationRecord
   end
 
   after_create_commit do
-    ChannelJob.perform_later(channel.slug, type: 'MESSAGE_CREATE_RECEIVE', message: self)
+    ChannelJob.perform_later(
+      channel.slug,
+      type: "MESSAGE_CREATE_RECEIVE",
+      message: self,
+      parent_message_slug: is_child? ? parent_message.slug : nil
+    )
   end
 
   after_update_commit do

@@ -1,11 +1,11 @@
-@user_threads.each do |user_thread|
-  json.set! user_thread.slug do
-    json.(user_thread, :id, :slug, :body, :author_id, :channel_id, :created_at)
+@user_threads.each do |parent|
+  json.set! parent.slug do
+    json.(parent, :id, :slug, :body, :author_id, :channel_id, :parent_message_id, :created_at)
 
     json.thread do
-      user_thread.children.each do |child|
-        json.set! child.slug do
-          json.(child, :id, :slug, :body, :author_id, :channel_id, :created_at)
+      parent.replies.each do |reply|
+        json.set! reply.slug do
+          json.(reply, :id, :slug, :body, :author_id, :channel_id, :parent_message_id, :created_at)
         end
       end
     end

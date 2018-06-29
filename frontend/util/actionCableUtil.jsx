@@ -36,7 +36,7 @@ class ActionCableChannel extends React.Component {
     return (
       <ActionCable
         channel={{ ...decamelizedChannel }}
-        onReceived={onReceived}
+        onReceived={this.handleReceived}
         {...cableProps}
       />
     );

@@ -9,7 +9,7 @@ end
 
 json.messages do
   json.array! @channel.messages do |message|
-    json.(message, :id, :body, :slug, :author_id, :channel_id, :created_at)
+    json.(message, :id, :body, :slug, :author_id, :channel_id, :parent_message_id, :created_at)
     json.parent_message_slug message.is_child? ? message.parent_message.slug : nil
   end
 end

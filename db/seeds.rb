@@ -61,35 +61,30 @@ end
 
 User.all.shuffle.each do |user|
   Workspace.all.shuffle.each do |workspace|
-    next if user.is_workspace_sub?(workspace) || is_random_true?
-    user.workspace_subs.create(workspace_id: workspace.id)
+    user.workspace_subs.create(workspace_id: workspace.id) unless user.is_workspace_sub?(workspace)
 
     workspace.channels.shuffle.each do |channel|
-      next if user.is_channel_sub?(channel) || is_random_true?
-      user.channel_subs.create(channel_id: channel.id)
-  
-      [*1..2].sample.times do
-        Message.create(
-          body: random_message_body,
-          author_id: user.id,
-          channel_id: channel.id
-        )
-      end
+      user.channel_subs.create(channel_id: channel.id) unless user.is_channel_sub?(channel)
+      Message.create(
+        body: random_message_body,
+        author_id: user.id,
+        channel_id: channel.id
+      )
     end
   end
 end
 
 User.all.shuffle.each do |user|
-  user.channels.each do |channel|
-    random_message = channel.messages.sample
+  user.channels.shuffle.each do |channel|
+    parent_messages = channel.messages.where(parent_message_id: nil)
+    random_message = parent_messages.sample
     next if random_message.nil?
     message = Message.create(
       body: random_message_body,
       author_id: user.id,
-      channel_id: channel.id
+      channel_id: channel.id,
+      parent_message_id: random_message.id
     )
-
-    MessageThread.create(thread_id: random_message.id, message_id: message.id, author_id: user.id)
     random_message.favorites.create(user_id: user.id)
     random_message.reactions.create(user_id: user.id, emoji: REACTIONS.sample)
   end

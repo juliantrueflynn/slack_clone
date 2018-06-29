@@ -8,7 +8,6 @@ export const SIGN_OUT = actionTypes('SIGN_OUT');
 export const WORKSPACE = apiActions('WORKSPACE');
 export const CHANNEL = apiActions('CHANNEL');
 export const MESSAGE = apiActions('MESSAGE', ['SHOW', 'CREATE', 'UPDATE', 'DELETE']);
-export const THREAD_MESSAGE = apiActions('THREAD_MESSAGE', ['CREATE']);
 export const WORKSPACE_SUB = apiActions('WORKSPACE_SUB', ['CREATE', 'DELETE']);
 export const CHANNEL_SUB = apiActions('CHANNEL_SUB', ['CREATE', 'DELETE']);
 export const FAVORITE = apiActions('FAVORITE', ['INDEX', 'CREATE', 'DELETE']);

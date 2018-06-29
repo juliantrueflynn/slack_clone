@@ -1,21 +1,14 @@
 import { connect } from 'react-redux';
 import MessageForm from './MessageForm';
-import { createMessage, createThreadMessage } from '../../actions/messageActions';
+import { createMessage } from '../../actions/messageActions';
+import { selectChannelIdBySlug } from '../../reducers/selectors';
 
 const mapStateToDispatch = state => ({
-  channelSlug: state.ui.displayChannelSlug,
+  channelId: selectChannelIdBySlug(state),
 });
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  if (ownProps.parentMessageSlug) {
-    return {
-      createEntryRequest: (message, parentMessageSlug) => (
-        dispatch(createThreadMessage.request(message, parentMessageSlug))
-      )
-    };
-  }
-
-  return { createEntryRequest: message => dispatch(createMessage.request(message)) };
-};
+const mapDispatchToProps = dispatch => ({
+  createMessageRequest: message => dispatch(createMessage.request(message))
+});
 
 export default connect(mapStateToDispatch, mapDispatchToProps)(MessageForm);

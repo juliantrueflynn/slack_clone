@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import { MESSAGE, CHANNEL, THREAD_MESSAGE } from '../actions/actionTypes';
+import { MESSAGE, CHANNEL } from '../actions/actionTypes';
 
 const messageReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -59,17 +59,13 @@ const messageReducer = (state = {}, action) => {
 
       return nextState;
     }
-    case THREAD_MESSAGE.CREATE.RECEIVE: {
-      const { message, parentMessageSlug: parentSlug } = action;
-      message.thread = null;
-      nextState = merge({}, state, { [message.slug]: message });
-      nextState[parentSlug].thread.push(message.slug);
-      return nextState;
-    }
     case MESSAGE.CREATE.RECEIVE: {
-      const { message } = action;
-      message.thread = [];
-      return merge({}, state, { [message.slug]: message });
+      const { message, parentMessageSlug: parentSlug } = action;
+      message.thread = parentSlug ? null : [];
+      nextState = merge({}, state, { [message.slug]: message });
+      if (parentSlug) nextState[parentSlug].thread.push(message.slug);
+
+      return nextState;
     }
     case MESSAGE.UPDATE.RECEIVE: {
       const { message } = action;

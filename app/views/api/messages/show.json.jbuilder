@@ -3,7 +3,7 @@ json.message do
 end
 
 json.thread do
-  json.array! @message.children, :id, :body, :slug, :channel_id, :author_id, :created_at
+  json.array! @message.replies, :id, :body, :slug, :channel_id, :author_id, :parent_message_id, :created_at
 end
 
 json.favorites do
@@ -12,7 +12,7 @@ json.favorites do
     json.message_slug @message.slug
   end
 
-  @message.children.each do |message|
+  @message.replies.each do |message|
     json.array! message.favorites do |fav|
       json.(fav, :id, :message_id, :user_id)
       json.message_slug message.slug

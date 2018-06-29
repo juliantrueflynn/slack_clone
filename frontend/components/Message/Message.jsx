@@ -58,7 +58,7 @@ class Message extends React.Component {
 
     if (isEditing) {
       return (
-        <li className="message">
+        <li className="msg">
           <form onSubmit={this.handleSubmit}>
             <Editor
               editorState={this.state.editorState}
@@ -85,7 +85,7 @@ class Message extends React.Component {
         onMouseEnter={this.handleHoverToggle(true)}
         onMouseLeave={this.handleHoverToggle(false)}
       >
-        <div className="message__body">
+        <div className="message-body">
           {isMouseOver && (
             <MessageHoverMenu
               message={message}
@@ -101,11 +101,11 @@ class Message extends React.Component {
             />
           )}
 
-          <div className="author">
+          <div className="message-body__author">
             Author: {message.authorId}
           </div>
 
-          <div className="message-body">
+          <div className="message-body__content">
             ID: #{message.id}<br />
             Slug: {message.slug}<br />
 
@@ -123,6 +123,7 @@ class Message extends React.Component {
         <SingleMessageThread
           message={message}
           match={this.props.match}
+          isSingleMessage={this.props.isSingleMessage}
           threadLastUpdate={this.props.threadLastUpdate}
         />
       </li>

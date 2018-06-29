@@ -14,6 +14,10 @@ export const getPageChannelSlug = state => (
   state.ui.displayChannelSlug
 );
 
+export const selectChannelIdBySlug = ({ entities: { channels }, ui: { displayChannelSlug } }) => (
+  channels[displayChannelSlug] && channels[displayChannelSlug].id
+);
+
 export const selectMessages = ({ entities: { channels, messages }, ui }) => {
   const channel = channels[ui.displayChannelSlug];
   const messagesArr = Object.values(messages);

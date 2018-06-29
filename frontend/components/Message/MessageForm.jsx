@@ -7,6 +7,7 @@ import createEmojiPlugin from 'draft-js-emoji-plugin';
 import FormErrors from '../Layout/FormErrors';
 
 const emojiPlugin = createEmojiPlugin();
+// Commenting out until optimized. Currently making page too slow for debugging.
 // const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
 
 class MessageForm extends React.Component {
@@ -25,35 +26,34 @@ class MessageForm extends React.Component {
     const currentContent = editorState.getCurrentContent();
     const message = {
       body: JSON.stringify(convertToRaw(currentContent)),
-      channelId: this.props.channelSlug,
-      parentMessageSlug: this.props.parentMessageSlug,
+      channelId: this.props.channelId,
+      parentMessageId: this.props.parentMessageId,
     };
     const clearEditorState = EditorState.push(editorState, ContentState.createFromText(''), 'remove-range');
 
-    this.props.createEntryRequest(message, this.props.parentMessageSlug);
+    this.props.createMessageRequest(message);
     this.setState({ editorState: clearEditorState });
   }
 
   render() {
     return (
-      <div className="msg-form-container">
+      <form className="msg-form" onSubmit={this.handleMessageSubmit}>
         <FormErrors entity="message" />
 
-        <form className="msg-form" onSubmit={this.handleMessageSubmit}>
-          <Editor
-            editorState={this.state.editorState}
-            onChange={this.onChange}
-            plugins={[emojiPlugin]}
-          />
+        <Editor
+          editorState={this.state.editorState}
+          onChange={this.onChange}
+          plugins={[emojiPlugin]}
+        />
 
-          {/* <EmojiSuggestions /> */}
-          {/* <EmojiSelect /> */}
+        {/* Commenting out until optimized. Currently making page too slow for debugging. */}
+        {/* <EmojiSuggestions /> */}
+        {/* <EmojiSelect /> */}
 
-          <button type="submit" className="btn btn__submit">
-            Add Message
-          </button>
-        </form>
-      </div>
+        <button type="submit" className="btn btn__submit">
+          Add Message
+        </button>
+      </form>
     );
   }
 }
