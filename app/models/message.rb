@@ -10,11 +10,15 @@ class Message < ApplicationRecord
   
   belongs_to :author, class_name: 'User'
   belongs_to :channel
-  belongs_to :parent_message, class_name: 'Message', optional: true
-  has_many :replies, class_name: 'Message', foreign_key: :parent_message_id, dependent: :destroy
-  has_many :thread_replies, through: :replies, source: :parent_message
   has_many :favorites, dependent: :destroy
   has_many :reactions, dependent: :destroy
+  belongs_to :parent_message, class_name: 'Message', optional: true
+  has_many :replies,
+    -> { includes(:favorites) },
+    class_name: 'Message',
+    foreign_key: :parent_message_id,
+    dependent: :destroy
+  has_many :thread_replies, through: :replies, source: :parent_message
 
   scope :with_thread_replies, -> { includes(:thread_replies, :replies).where.not(thread_replies_messages: { id: nil }) }
 

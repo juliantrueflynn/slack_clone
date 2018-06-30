@@ -10,24 +10,16 @@ class Channel < ApplicationRecord
 
   belongs_to :owner, class_name: 'User', foreign_key: :owner_id
   belongs_to :workspace
-  has_many :subs, class_name: 'ChannelSub', foreign_key: :channel_id, dependent: :destroy
-  has_many :members, class_name: 'User', through: :subs, source: :user
-  has_many :messages, dependent: :destroy
-  has_many :message_threads, through: :messages
-  has_many :messages_with_children,
-    -> { distinct },
-    through: :message_threads,
-    source: :parent_message
+  has_many :channel_subs, foreign_key: :channel_id, dependent: :destroy
+  has_many :members, class_name: 'User', through: :channel_subs, source: :user
+  has_many :messages, -> { includes(:parent_message, reactions: :message, favorites: :message) }, dependent: :destroy
   has_many :favorites, through: :messages, source: :favorites
   has_many :reactions, through: :messages, source: :reactions
 
-  def is_user_subbed?(user)
-    users_subbed = subs.where(channel_subs: { user_id: user.id })
-    users_subbed.length > 0
-  end
+  scope :with_subs, -> { includes(channel_subs: :user) }
 
-  def self.subbed_by_user_in_workspace(user_id, workspace_id)
-    self.joins(:subs).where(channel_subs: { user_id: user_id })
+  def is_user_sub?(user_id)
+    !!channel_subs.find_by(channel_subs: { user_id: user_id })
   end
 
   private

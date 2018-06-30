@@ -10,14 +10,14 @@ class Workspace < ApplicationRecord
   validates_exclusion_of :slug, in: EXCLUDED_SLUGS, message: "Taken, sorry!"
   
   belongs_to :owner, class_name: 'User', foreign_key: :owner_id
-  has_many :subs, class_name: 'WorkspaceSub', dependent: :destroy
-  has_many :members, class_name: 'User', through: :subs, source: :user
+  has_many :workspace_subs, foreign_key: :workspace_id, dependent: :destroy
+  has_many :members, class_name: 'User', through: :workspace_subs, source: :user
   has_many :channels, dependent: :destroy
+  has_many :channel_subs, through: :channels
   has_many :favorites, through: :channels
 
-  def is_user_subbed?(user)
-    users_subbed = subs.where(workspace_subs: { user_id: user.id })
-    users_subbed
+  def is_channel_sub?(user_id)
+    !!channels_with_subs.find_by(channel_subs: { user_id: user_id })
   end
 
   private
