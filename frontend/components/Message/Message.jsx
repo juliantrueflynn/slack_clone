@@ -56,9 +56,13 @@ class Message extends React.Component {
     const { message } = this.props;
     const { isMouseOver, isEditing } = this.state;
 
+    if (!message) {
+      return null;
+    }
+
     if (isEditing) {
       return (
-        <li className="msg">
+        <div className="msg">
           <form onSubmit={this.handleSubmit}>
             <Editor
               editorState={this.state.editorState}
@@ -75,12 +79,12 @@ class Message extends React.Component {
               Save changes
             </button>
           </form>
-        </li>
+        </div>
       );
     }
 
     return (
-      <li
+      <div
         className="message"
         onMouseEnter={this.handleHoverToggle(true)}
         onMouseLeave={this.handleHoverToggle(false)}
@@ -126,7 +130,7 @@ class Message extends React.Component {
           isSingleMessage={this.props.isSingleMessage}
           threadLastUpdate={this.props.threadLastUpdate}
         />
-      </li>
+      </div>
     );
   }
 }

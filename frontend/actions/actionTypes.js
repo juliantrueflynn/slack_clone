@@ -12,6 +12,7 @@ export const WORKSPACE_SUB = apiActions('WORKSPACE_SUB', ['CREATE', 'DELETE']);
 export const CHANNEL_SUB = apiActions('CHANNEL_SUB', ['CREATE', 'DELETE']);
 export const FAVORITE = apiActions('FAVORITE', ['INDEX', 'CREATE', 'DELETE']);
 export const REACTION = apiActions('REACTION', ['CREATE', 'DELETE']);
+export const USER_THREAD = apiActions('USER_THREAD', ['INDEX']);
 
 export const NAVIGATE = 'NAVIGATE';
 export const MODAL_OPEN = 'MODAL_OPEN';

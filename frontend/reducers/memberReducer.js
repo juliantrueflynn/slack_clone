@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import { WORKSPACE, CHANNEL, SET_STATUS } from '../actions/actionTypes';
+import { WORKSPACE, SET_STATUS } from '../actions/actionTypes';
 
 const memberReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -7,9 +7,9 @@ const memberReducer = (state = {}, action) => {
   let nextState;
   switch (action.type) {
     case WORKSPACE.SHOW.RECEIVE: {
-      const { workspace } = action;
+      const { workspace: { members } } = action;
       nextState = {};
-      workspace.members.map((member) => {
+      members.forEach((member) => {
         nextState[member.slug] = member;
       });
       return nextState;

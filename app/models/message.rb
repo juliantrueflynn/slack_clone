@@ -10,17 +10,23 @@ class Message < ApplicationRecord
   
   belongs_to :author, class_name: 'User'
   belongs_to :channel
-  has_many :favorites, dependent: :destroy
-  has_many :reactions, dependent: :destroy
   belongs_to :parent_message, class_name: 'Message', optional: true
+  has_many :single_message_replies,
+    -> { includes(:author, :favorites) },
+    class_name: 'Message',
+    foreign_key: :parent_message_id,
+    dependent: :destroy
   has_many :replies,
-    -> { includes(:favorites) },
+    -> { includes(:author, :favorites, :reactions) },
     class_name: 'Message',
     foreign_key: :parent_message_id,
     dependent: :destroy
   has_many :thread_replies, through: :replies, source: :parent_message
+  has_many :authors, through: :replies, source: :author
+  has_many :favorites, dependent: :destroy
+  has_many :reactions, dependent: :destroy
 
-  scope :with_thread_replies, -> { includes(:thread_replies, :replies).where.not(thread_replies_messages: { id: nil }) }
+  scope :with_thread_replies, -> { includes(thread_replies: [:author, :replies]).where.not(thread_replies_messages: { id: nil }) }
 
   def self.parents_with_author_id(author_id)
     Message.with_thread_replies.where(thread_replies_messages: { author_id: author_id })
@@ -35,7 +41,7 @@ class Message < ApplicationRecord
   end
 
   def self.threads_with_author_id(author_id)
-    Message.parents_with_author_id(author_id).or(Message.children_with_author_id(author_id)).order(:id)
+    Message.parents_with_author_id(author_id).or(Message.children_with_author_id(author_id))
   end
 
   def is_child?

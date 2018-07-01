@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import { MESSAGE, CHANNEL } from '../actions/actionTypes';
+import { MESSAGE, CHANNEL, USER_THREAD } from '../actions/actionTypes';
 
 const messageReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -37,11 +37,11 @@ const messageReducer = (state = {}, action) => {
       return nextState;
     }
     case MESSAGE.SHOW.RECEIVE: {
-      const { message: { message, thread, reactions } } = action;
-      nextState = Object.assign({}, state);
+      const { message: { message, childMessages, reactions } } = action;
       const { slug } = message;
+      nextState = Object.assign({}, state);
       nextState[slug] = message;
-      nextState[slug].thread = [];
+      if (!nextState[slug].thread) nextState[slug].thread = [];
 
       const newReactions = [];
       reactions.forEach((reaction) => {
@@ -50,10 +50,12 @@ const messageReducer = (state = {}, action) => {
 
       nextState[slug].reactions = Object.assign([], nextState[slug].reactions, newReactions);
 
-      if (thread) {
-        thread.forEach((entry) => {
-          nextState[entry.slug] = entry;
-          nextState[slug].thread.push(entry.slug);
+      if (childMessages) {
+        childMessages.forEach((child) => {
+          nextState[child.slug] = child;
+          if (nextState[slug].thread.indexOf(child.slug) === -1) {
+            nextState[slug].thread.push(child.slug);
+          }
         });
       }
 
@@ -77,6 +79,22 @@ const messageReducer = (state = {}, action) => {
       nextState = Object.assign({}, state);
       delete nextState[action.message.slug];
       return nextState;
+    case USER_THREAD.INDEX.RECEIVE: {
+      const { messageThreads: { parentMessages, childMessages } } = action;
+      nextState = {};
+
+      parentMessages.forEach((parent) => {
+        nextState[parent.slug] = parent;
+        nextState[parent.slug].thread = [];
+      });
+
+      childMessages.forEach((child) => {
+        nextState[child.slug] = child;
+        nextState[child.parentMessageSlug].thread.push(child.slug);
+      });
+
+      return nextState;
+    }
     default:
       return state;
   }

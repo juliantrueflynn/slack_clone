@@ -6,6 +6,7 @@ import WorkspacePageContainer from '../Workspace/WorkspacePageContainer';
 import TopBarHeaderContainer from '../TopBarHeaderContainer';
 import MessageContainer from '../Message/MessageContainer';
 import './ChannelPage.css';
+import MessagesList from '../Message/MessagesList';
 
 class ChannelPage extends React.Component {
   componentDidMount() {
@@ -34,9 +35,7 @@ class ChannelPage extends React.Component {
           <TopBarHeaderContainer sectionTitle={props.channelSlug} />
           <div className="messages-pane">
             <div className="messages-pane-body">
-              {messages && messages.map(message => (
-                <MessageContainer message={message} key={message.slug} />
-              ))}
+              <MessagesList messages={messages} />
               <MessageFormContainer />
             </div>
           </div>

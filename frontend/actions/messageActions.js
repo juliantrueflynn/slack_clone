@@ -1,5 +1,5 @@
 import { actionCreator } from '../util/actionsUtil';
-import { MESSAGE } from './actionTypes';
+import { MESSAGE, USER_THREAD } from './actionTypes';
 
 export const fetchMessage = {
   request: messageSlug => actionCreator(MESSAGE.SHOW.REQUEST, { messageSlug }),
@@ -20,4 +20,10 @@ export const updateMessage = {
 export const deleteMessage = {
   request: messageSlug => actionCreator(MESSAGE.DELETE.REQUEST, { messageSlug }),
   failure: errors => actionCreator(MESSAGE.DELETE.FAILURE, { errors }),
+};
+
+export const fetchUserThreads = {
+  request: () => actionCreator(USER_THREAD.INDEX.REQUEST),
+  receive: messageThreads => actionCreator(USER_THREAD.INDEX.RECEIVE, { messageThreads }),
+  failure: errors => actionCreator(USER_THREAD.INDEX.FAILURE, { errors }),
 };

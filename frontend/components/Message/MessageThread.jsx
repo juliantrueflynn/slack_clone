@@ -2,6 +2,7 @@ import React from 'react';
 import MessageContainer from './MessageContainer';
 import MessageFormContainer from './MessageFormContainer';
 import RightSidebarContainer from '../Layout/RightSidebarContainer';
+import MessagesList from './MessagesList';
 
 class MessageThread extends React.Component {
   componentDidMount() {
@@ -20,7 +21,7 @@ class MessageThread extends React.Component {
   }
 
   render() {
-    const { message, threadMessages } = this.props;
+    const { message, threadMessages, ...props } = this.props;
 
     if (!message) {
       return null;
@@ -30,19 +31,13 @@ class MessageThread extends React.Component {
       <RightSidebarContainer
         sidebarTitle="Thread"
         sidebarSubtitle={`Author: ${message.authorId}`}
-        match={this.props.match}
+        match={props.match}
       >
         <div className="thread">
           <div className="thread__message">
             <MessageContainer isSingleMessage message={message} />
           </div>
-
-          <div className="thread-entries">
-            {threadMessages && threadMessages.length && threadMessages.map(entry => (
-              <MessageContainer message={entry} key={entry.slug} />
-            ))}
-          </div>
-
+          <MessagesList messages={threadMessages} />
           <MessageFormContainer parentMessageId={message.id} />
         </div>
       </RightSidebarContainer>

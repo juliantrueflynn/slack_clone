@@ -3,10 +3,6 @@ json.channel do
   json.is_subbed current_user.is_channel_sub?(@channel)
 end
 
-json.members do
-  json.array! @channel.members, :id, :slug, :username, :email, :appearance
-end
-
 json.messages do
   json.array! @channel.messages do |message|
     json.(message, :id, :body, :slug, :author_id, :channel_id, :parent_message_id, :created_at)
