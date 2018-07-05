@@ -35,7 +35,7 @@ export const getCurrentMessageBySlug = ({ entities }, messageSlug) => (
   entities.messages[messageSlug] || null
 );
 
-export const getMessageSlug = ({ ui: { rightSidebar } }) => (
+export const selectOpenMessageThreadSlug = ({ ui: { rightSidebar } }) => (
   rightSidebar && rightSidebar.sidebarType === 'Thread' ? rightSidebar.sidebarProps.messageSlug : null
 );
 

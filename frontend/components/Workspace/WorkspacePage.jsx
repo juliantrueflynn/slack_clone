@@ -1,10 +1,17 @@
 import React from 'react';
+import { ActionCable } from 'react-actioncable-provider';
 import { Redirect } from 'react-router-dom';
-import Socket from '../../util/actionCableUtil';
 import LeftSidebarContainer from '../LeftSidebarContainer';
 import './WorkspacePage.css';
+import { RouteWithSubRoutes } from '../../util/routeUtil';
 
 class WorkspacePage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleReceived = this.handleReceived.bind(this);
+    this.handleConnected = this.handleConnected.bind(this);
+  }
+
   componentDidMount() {
     const { workspaceSlug, workspaces } = this.props;
     this.props.fetchWorkspaceRequest(workspaceSlug);
@@ -26,6 +33,14 @@ class WorkspacePage extends React.Component {
     }
   }
 
+  handleReceived(received) {
+    this.props.actionCableReceive(received);
+  }
+
+  handleConnected() {
+    this.workspaceChannel.perform('online');
+  }
+
   render() {
     const { workspaceSlug, channels, ...props } = this.props;
 
@@ -41,15 +56,23 @@ class WorkspacePage extends React.Component {
 
     return (
       <div className={`single-workspace single-workspace__${workspaceSlug}`}>
-        <Socket channel={{ channel: 'WorkspaceChannel', workspaceSlug }} />
-
+        <ActionCable
+          ref={(refs) => { this.workspaceChannel = refs; }}
+          channel={{ channel: 'WorkspaceChannel', workspace_slug: workspaceSlug }}
+          onReceived={this.handleReceived}
+          onConnected={this.handleConnected}
+        />
         {channels && channels.map(({ slug: channelSlug }) => (
-          <Socket key={channelSlug} channel={{ channel: 'ChatChannel', channelSlug }} />
+          <ActionCable
+            key={channelSlug}
+            channel={{ channel: 'ChatChannel', channel_slug: channelSlug }}
+            onReceived={this.handleReceived}
+          />
         ))}
-
         <LeftSidebarContainer />
-
-        {props.children}
+        {props.routes && props.routes.map(route => (
+          <RouteWithSubRoutes key={route.path} {...route} />
+        ))}
       </div>
     );
   }

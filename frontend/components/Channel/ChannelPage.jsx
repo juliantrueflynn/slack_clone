@@ -2,9 +2,7 @@ import React from 'react';
 import MessageFormContainer from '../Message/MessageFormContainer';
 import ChannelFormContainer from './ChannelFormContainer';
 import { RouteWithSubRoutes } from '../../util/routeUtil';
-import WorkspacePageContainer from '../Workspace/WorkspacePageContainer';
 import TopBarHeaderContainer from '../TopBarHeaderContainer';
-import MessageContainer from '../Message/MessageContainer';
 import './ChannelPage.css';
 import MessagesList from '../Message/MessagesList';
 
@@ -30,23 +28,21 @@ class ChannelPage extends React.Component {
     }
 
     return (
-      <WorkspacePageContainer match={props.match}>
-        <div className="page page__channel">
-          <TopBarHeaderContainer sectionTitle={props.channelSlug} />
-          <div className="messages-pane">
-            <div className="messages-pane-body">
-              <MessagesList messages={messages} />
-              <MessageFormContainer />
-            </div>
+      <div className="page page__channel">
+        <TopBarHeaderContainer sectionTitle={props.channelSlug} />
+        <div className="messages-pane">
+          <div className="messages-pane-body">
+            <MessagesList messages={messages} />
+            <MessageFormContainer />
           </div>
-
-          {routes && routes.map(route => (
-            <RouteWithSubRoutes key={route.path} {...route} />
-          ))}
-
-          <ChannelFormContainer />
         </div>
-      </WorkspacePageContainer>
+
+        {routes && routes.map(route => (
+          <RouteWithSubRoutes key={route.path} {...route} />
+        ))}
+
+        <ChannelFormContainer />
+      </div>
     );
   }
 }

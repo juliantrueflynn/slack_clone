@@ -1,13 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import EmojiPicker from 'emoji-picker-react';
+import { Link } from 'react-router-dom';
+import './MessageHoverMenu.css';
 
 class MessageHoverMenu extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = { isEmojiOpen: false };
-
     this.handleReactionClick = this.handleReactionClick.bind(this);
     this.handleEmojiToggle = this.handleEmojiToggle.bind(this);
     this.handleFavClick = this.handleFavClick.bind(this);
@@ -47,61 +46,43 @@ class MessageHoverMenu extends React.Component {
   }
 
   render() {
-    const { message, isAuthor, isFavorited, match: { params } } = this.props;
-    const baseUrl = `/${params.workspaceSlug}/${params.channelSlug}`;
+    const { isAuthor, isFavorited, ...props } = this.props;
+    const { openThreadSlug, message: { slug, parentMessageId }, match: { params } } = props;
+    const baseThreadUrl = `/${params.workspaceSlug}/${params.channelSlug}`;
 
     return (
-      <div className="message-hover-menu">
-        <ul className="message-hover-menu__buttons">
-          <button
-            className="btn btn__reaction"
-            onClick={this.handleEmojiToggle}
-          >
-            Add reaction
+      <div className="btn-group__msg-hover-menu">
+        <button className="btn btn__reaction" onClick={this.handleEmojiToggle}>
+          Add reaction
+        </button>
+        {this.state.isEmojiOpen && (
+          <EmojiPicker onEmojiClick={this.handleReactionClick} />
+        )}
+        {!parentMessageId && openThreadSlug !== slug && (
+          <Link role="button" className="btn btn__thread" to={`${baseThreadUrl}/thread/${slug}`}>
+            Start a thread
+          </Link>
+        )}
+        {!isAuthor && !isFavorited && (
+          <button className="btn btn__fav" onClick={this.handleFavClick}>
+            Favorite
           </button>
-
-          {this.state.isEmojiOpen && (
-            <EmojiPicker onEmojiClick={this.handleReactionClick} />
-          )}
-
-          {!message.parentMessageId && (
-            <Link to={`${baseUrl}/thread/${message.slug}`}>
-              Start thread
-            </Link>
-          )}
-          {!isAuthor && !isFavorited && (
-            <button
-              className="btn btn__fav"
-              onClick={this.handleFavClick}
-            >
-              Favorite
-            </button>
-          )}
-          {!isAuthor && isFavorited && (
-            <button
-              className="btn btn__unfav"
-              onClick={this.handleUnfavClick}
-            >
-              Unfavorite
-            </button>
-          )}
-          {isAuthor && (
-            <button
-              className="btn btn__message-edit"
-              onClick={this.handleEditClick}
-            >
-              Edit message
-            </button>
-          )}
-          {isAuthor && (
-            <button
-              className="btn btn__message-delete"
-              onClick={this.handleDeleteClick}
-            >
-              Delete message
-            </button>
-          )}
-        </ul>
+        )}
+        {!isAuthor && isFavorited && (
+          <button className="btn btn__unfav" onClick={this.handleUnfavClick}>
+            Unfavorite
+          </button>
+        )}
+        {isAuthor && (
+          <button className="btn btn__msg-edit" onClick={this.handleEditClick}>
+            Edit message
+          </button>
+        )}
+        {isAuthor && (
+          <button className="btn btn__msg-delete" onClick={this.handleDeleteClick}>
+            Delete message
+          </button>
+        )}
       </div>
     );
   }

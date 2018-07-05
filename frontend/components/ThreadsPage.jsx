@@ -1,5 +1,4 @@
 import React from 'react';
-import WorkspacePageContainer from './Workspace/WorkspacePageContainer';
 import TopBarHeaderContainer from './TopBarHeaderContainer';
 import MessageContainer from './Message/MessageContainer';
 import MessageFormContainer from './Message/MessageFormContainer';
@@ -11,10 +10,10 @@ class ThreadsPage extends React.Component {
   }
 
   render() {
-    const { match, messages, members } = this.props;
+    const { messages, members } = this.props;
 
     return (
-      <WorkspacePageContainer match={match}>
+      <div>
         <TopBarHeaderContainer sectionTitle="All Threads">
           <small>Thread count here</small>
         </TopBarHeaderContainer>
@@ -44,7 +43,7 @@ class ThreadsPage extends React.Component {
             </div>
           ))}
         </div>
-      </WorkspacePageContainer>
+      </div>
     );
   }
 }

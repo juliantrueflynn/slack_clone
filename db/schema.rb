@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180622204514) do
+ActiveRecord::Schema.define(version: 20180701230519) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,15 @@ ActiveRecord::Schema.define(version: 20180622204514) do
     t.index ["user_id"], name: "index_reactions_on_user_id"
   end
 
+  create_table "user_appearances", force: :cascade do |t|
+    t.string "status", default: "ONLINE", null: false
+    t.bigint "user_id", null: false
+    t.string "workspace_slug", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["workspace_slug", "user_id"], name: "index_user_appearances_on_workspace_slug_and_user_id", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", null: false
     t.string "username", null: false
@@ -72,7 +81,6 @@ ActiveRecord::Schema.define(version: 20180622204514) do
     t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "appearance", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["session_token"], name: "index_users_on_session_token", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true
@@ -107,6 +115,7 @@ ActiveRecord::Schema.define(version: 20180622204514) do
   add_foreign_key "messages", "users", column: "author_id"
   add_foreign_key "reactions", "messages"
   add_foreign_key "reactions", "users"
+  add_foreign_key "user_appearances", "users"
   add_foreign_key "workspace_subs", "users"
   add_foreign_key "workspace_subs", "workspaces"
   add_foreign_key "workspaces", "users", column: "owner_id"

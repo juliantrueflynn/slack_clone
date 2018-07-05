@@ -4,7 +4,7 @@ import 'draft-js-emoji-plugin/lib/plugin.css';
 import Editor from 'draft-js-plugins-editor';
 import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import createEmojiPlugin from 'draft-js-emoji-plugin';
-import MessageHoverMenu from './MessageHoverMenu';
+import MessageHoverMenuContainer from '../MessageHoverMenuContainer';
 import Reactions from '../Reactions';
 import SingleMessageThread from './SingleMessageThread';
 
@@ -53,8 +53,8 @@ class Message extends React.Component {
   }
 
   render() {
-    const { message } = this.props;
-    const { isMouseOver, isEditing } = this.state;
+    const { message, ...props } = this.props;
+    const { isMouseOver, isEditing, ...state } = this.state;
 
     if (!message) {
       return null;
@@ -65,7 +65,7 @@ class Message extends React.Component {
         <div className="msg">
           <form onSubmit={this.handleSubmit}>
             <Editor
-              editorState={this.state.editorState}
+              editorState={state.editorState}
               onChange={this.onChange}
               plugins={[emojiPlugin]}
             />
@@ -91,17 +91,9 @@ class Message extends React.Component {
       >
         <div className="message-body">
           {isMouseOver && (
-            <MessageHoverMenu
+            <MessageHoverMenuContainer
               message={message}
-              isAuthor={this.props.isAuthor}
               toggleEditMessage={this.handleEditToggle}
-              deleteMessageRequest={this.props.deleteMessageRequest}
-              createFavoriteRequest={this.props.createFavoriteRequest}
-              deleteFavoriteRequest={this.props.deleteFavoriteRequest}
-              isFavorited={this.props.isFavorited}
-              createReactionRequest={this.props.createReactionRequest}
-              deleteReactionRequest={this.props.deleteReactionRequest}
-              match={this.props.match}
             />
           )}
 
@@ -114,21 +106,21 @@ class Message extends React.Component {
             Slug: {message.slug}<br />
 
             <Editor
-              editorState={this.state.editorState}
+              editorState={state.editorState}
               onChange={this.onChange}
               plugins={[emojiPlugin]}
               readOnly
             />
           </div>
 
-          <Reactions reactions={this.props.reactions} />
+          <Reactions reactions={props.reactions} />
         </div>
 
         <SingleMessageThread
           message={message}
-          match={this.props.match}
-          isSingleMessage={this.props.isSingleMessage}
-          threadLastUpdate={this.props.threadLastUpdate}
+          match={props.match}
+          isSingleMessage={props.isSingleMessage}
+          threadLastUpdate={props.threadLastUpdate}
         />
       </div>
     );

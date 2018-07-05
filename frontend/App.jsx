@@ -2,12 +2,12 @@ import React from 'react';
 import 'sanitize.css';
 import './App.css';
 import { PageRoutes } from './util/routeUtil';
-import Socket from './util/actionCableUtil';
+import ActionCablesContainer from './components/ActionCablesContainer';
 
 const App = () => (
   <div className="app">
     <PageRoutes />
-    <Socket channel={{ channel: 'AppChannel' }} />
+    <ActionCablesContainer />
   </div>
 );
 

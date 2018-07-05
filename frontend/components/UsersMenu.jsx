@@ -5,7 +5,6 @@ import DropdownMenu from './Layout/DropdownMenu';
 class UsersMenu extends React.Component {
   constructor(props) {
     super(props);
-
     this.handleOpenSidebar = this.handleOpenSidebar.bind(this);
     this.handleModalOpenClick = this.handleModalOpenClick.bind(this);
   }
@@ -19,8 +18,10 @@ class UsersMenu extends React.Component {
   }
 
   render() {
-    const { workspaceSlug, workspaces, channelSlug, userSlug } = this.props;
-    
+    const { workspaces, ...props } = this.props;
+    const { channelSlug, workspaceSlug, userSlug } = props;
+    const urlForMemberSidebar = `/${workspaceSlug}/${channelSlug}/team/${userSlug}`;
+
     if (!workspaces) {
       return null;
     }
@@ -31,18 +32,12 @@ class UsersMenu extends React.Component {
           Set Status
         </li>
         <li>
-          <NavLink
-            to={`/${workspaceSlug}/${channelSlug}/team/${userSlug}`}
-            onClick={this.handleOpenSidebar}
-          >
+          <NavLink to={urlForMemberSidebar} onClick={this.handleOpenSidebar}>
             Profile & Account
           </NavLink>
         </li>
         <li>
-          <button
-            className="btn btn__pref btn__modal"
-            onClick={this.handleModalOpenClick}
-          >
+          <button className="btn btn__nav" onClick={this.handleModalOpenClick}>
             Preferences
           </button>
         </li>
@@ -50,9 +45,13 @@ class UsersMenu extends React.Component {
           Switch Workspace
         </li>
 
+        <NavLink to="/">Home</NavLink>
+
         {workspaces.map(workspace => (
-          <li key={`workspace${workspace.id}`}>
-            {workspace.title}
+          <li key={workspace.id}>
+            <NavLink to={`/${workspace.slug}`}>
+              {workspace.title}
+            </NavLink>
           </li>
         ))}
       </DropdownMenu>

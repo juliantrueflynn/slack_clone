@@ -11,7 +11,12 @@ class Reaction < ApplicationRecord
   end
 
   after_create_commit do
-    ChannelJob.perform_later(channel.slug, type: "REACTION_CREATE_RECEIVE", reaction: self)
+    ChannelJob.perform_later(
+      channel.slug,
+      type: "REACTION_CREATE_RECEIVE",
+      reaction: self,
+      message_slug: message.slug
+    )
   end
 
   after_update_commit do

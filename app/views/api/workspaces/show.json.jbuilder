@@ -10,5 +10,8 @@ json.channels do
 end
 
 json.members do
-  json.array! @workspace.members, :id, :username, :email, :slug, :appearance
+  json.array! @workspace.members do |member|
+    json.(member, :id, :username, :email, :slug)
+    json.appearance member.appears.in_workspace(@workspace.slug)
+  end
 end

@@ -36,35 +36,35 @@ const routes = [
     isProtected: true,
   },
   {
-    path: '/:workspaceSlug',
-    component: WorkspacePageContainer,
-    isProtected: true,
-    exact: true,
-  },
-  {
     path: '/:workspaceSlug/threads',
     component: ThreadsPageContainer,
     exact: true,
   },
   {
-    path: '/:workspaceSlug/:channelSlug',
-    component: ChannelPageContainer,
+    path: '/:workspaceSlug',
+    component: WorkspacePageContainer,
     isProtected: true,
     routes: [
       {
-        path: '/:workspaceSlug/:channelSlug/favorites',
-        component: UserFavoritesContainer,
-      },
-      {
-        path: '/:workspaceSlug/:channelSlug/team/:userSlug',
-        component: UserViewContainer,
-      },
-      {
-        path: '/:workspaceSlug/:channelSlug/thread/:messageSlug',
-        component: MessageThreadContainer,
+        path: '/:workspaceSlug/:channelSlug',
+        component: ChannelPageContainer,
+        routes: [
+          {
+            path: '/:workspaceSlug/:channelSlug/favorites',
+            component: UserFavoritesContainer,
+          },
+          {
+            path: '/:workspaceSlug/:channelSlug/team/:userSlug',
+            component: UserViewContainer,
+          },
+          {
+            path: '/:workspaceSlug/:channelSlug/thread/:messageSlug',
+            component: MessageThreadContainer,
+          }
+        ]
       }
     ]
-  }
+  },
 ];
 
 export const RouteSubRoutes = (route) => {

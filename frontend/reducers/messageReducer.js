@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import { MESSAGE, CHANNEL, USER_THREAD } from '../actions/actionTypes';
+import { MESSAGE, CHANNEL, USER_THREAD, REACTION } from '../actions/actionTypes';
 
 const messageReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -94,6 +94,11 @@ const messageReducer = (state = {}, action) => {
       });
 
       return nextState;
+    }
+    case REACTION.CREATE.RECEIVE: {
+      const { reaction, messageSlug } = action;
+      nextState = { [messageSlug]: { reactions: [reaction.id] } };
+      return merge({}, state, nextState);
     }
     default:
       return state;

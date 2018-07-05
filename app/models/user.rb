@@ -1,16 +1,12 @@
 class User < ApplicationRecord
-  APPEARANCE_STATES = %w(OFFLINE ONLINE AWAY BUSY).freeze
-
   attr_reader :password
 
   before_validation :generate_slug
-  after_initialize :assign_default_appearance
   after_initialize :ensure_session_token
 
-  validates :username, :email, :password_digest, :session_token, :appearance, presence: true
-  validates :appearance, inclusion: APPEARANCE_STATES
-  validates :username, :email, uniqueness: true
-  validates :password, length: { minimum: 6 }, allow_nil: true
+  validates_presence_of :username, :email, :password_digest, :session_token
+  validates_uniqueness_of :username, :email
+  validates_length_of :password, minimum: 6, allow_nil: true
 
   has_many :created_workspaces, class_name: 'Workspace', foreign_key: :owner_id
   has_many :created_channels, class_name: 'Channel', foreign_key: :owner_id
@@ -26,6 +22,7 @@ class User < ApplicationRecord
     foreign_key: :author_id
   has_many :favorites, dependent: :destroy
   has_many :reactions, dependent: :destroy
+  has_many :appears, class_name: 'UserAppearance', dependent: :destroy
 
   def self.find_by_email_and_password(email, password)
     user = User.find_by(email: email)
@@ -59,12 +56,6 @@ class User < ApplicationRecord
     self.session_token
   end
 
-  def appear!(status, workspace_slug)
-    self.appearance = status
-    save!
-    WorkspaceJob.perform_later(workspace_slug, type: 'SET_STATUS', user_slug: slug, status: appearance)
-  end
-
   private
 
   def generate_slug
@@ -76,10 +67,6 @@ class User < ApplicationRecord
       self.slug = "#{username_slugged}-#{slug_token}"
       break unless User.where(slug: slug).exists?
     end
-  end
-
-  def assign_default_appearance
-    self.appearance ||= 'OFFLINE'
   end
 
   def ensure_session_token

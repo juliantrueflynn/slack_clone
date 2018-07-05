@@ -6,7 +6,7 @@ import {
   getPageChannelSlug,
   getChannels,
   getPageWorkspaceSlug,
-  getMessageSlug,
+  selectOpenMessageThreadSlug,
   getCurrentUserId,
   getRightSidebarType,
 } from '../reducers/selectors';
@@ -47,7 +47,7 @@ function* fetchChannel() {
     const userId = yield select(getCurrentUserId);
     const ui = { workspaceSlug, channelSlug, userId };
     const channel = yield call(apiFetch, `channels/${channelSlug}`);
-    const messageSlug = yield select(getMessageSlug);
+    const messageSlug = yield select(selectOpenMessageThreadSlug);
 
     yield put(actions.fetchChannel.receive(channel, ui));
 
