@@ -13,10 +13,12 @@ export const CHANNEL_SUB = apiActions('CHANNEL_SUB', ['CREATE', 'DELETE']);
 export const FAVORITE = apiActions('FAVORITE', ['INDEX', 'CREATE', 'DELETE']);
 export const REACTION = apiActions('REACTION', ['CREATE', 'DELETE']);
 export const USER_THREAD = apiActions('USER_THREAD', ['INDEX']);
+export const READ = apiActions('READ', ['UPDATE']);
+export const MEMBER = apiActions('MEMBER', ['INDEX', 'SHOW', 'UPDATE', 'DELETE']);
 
+export const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
+export const RIGHT_SIDEBAR = { OPEN: 'RIGHT_SIDEBAR_OPEN', CLOSE: 'RIGHT_SIDEBAR_CLOSE' };
 export const NAVIGATE = 'NAVIGATE';
 export const MODAL_OPEN = 'MODAL_OPEN';
 export const MODAL_CLOSE = 'MODAL_CLOSE';
 export const NEW_CHANNEL_MODAL = 'NEW_CHANNEL_MODAL';
-export const OPEN_RIGHT_SIDEBAR = 'OPEN_RIGHT_SIDEBAR';
-export const CLOSE_RIGHT_SIDEBAR = 'CLOSE_RIGHT_SIDEBAR';

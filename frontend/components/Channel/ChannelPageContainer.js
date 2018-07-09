@@ -1,18 +1,25 @@
 import { connect } from 'react-redux';
 import ChannelPage from './ChannelPage';
-import { fetchChannel } from '../../actions/channelActions';
-import { selectMessages } from '../../reducers/selectors';
+import { fetchChannel, leaveChannel } from '../../actions/channelActions';
+import { selectMessages, selectChannelIdBySlug } from '../../reducers/selectors';
 import isFetching from '../../util/isFetchingUtil';
+import readUpdate from '../../actions/readActions';
 
-const mapStateToProps = (state, { match }) => ({
+const mapStateToProps = (state, { match: { params } }) => ({
   messages: selectMessages(state),
-  workspaceSlug: match.params.workspaceSlug,
-  channelSlug: match.params.channelSlug,
-  messageSlug: match.params.messageSlug,
+  channelSlug: params.channelSlug,
+  rightSidebar: state.ui.rightSidebar,
+  messageSlug: state.ui.displayMessageSlug,
+  userSlug: state.ui.displayUserSlug,
+  stateChannelSlug: state.ui.displayChannelSlug,
+  isWorkspaceLoaded: !!state.ui.displayWorkspaceSlug,
+  channelId: selectChannelIdBySlug(state, params.channelSlug),
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchChannelRequest: (channelSlug, ui) => dispatch(fetchChannel.request(channelSlug, ui)),
+  fetchChannelRequest: channelSlug => dispatch(fetchChannel.request(channelSlug)),
+  readUpdateRequest: readableId => dispatch(readUpdate.request(readableId, 'Channel')),
+  leaveChannel: channelSlug => dispatch(leaveChannel(channelSlug)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)((isFetching('channel')(ChannelPage)));

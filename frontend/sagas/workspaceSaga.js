@@ -5,15 +5,6 @@ import { apiFetch, apiCreate, apiDelete } from '../util/apiUtil';
 import { getCurrentUserId, getPageWorkspaceSlug } from '../reducers/selectors';
 import { navigate } from '../actions/interactiveActions';
 
-export function* fetchWorkspace(workspaceSlug) {
-  try {
-    const workspace = yield call(apiFetch, `workspaces/${workspaceSlug}`);
-    yield put(actions.fetchWorkspace.receive(workspace));
-  } catch (error) {
-    yield put(actions.fetchWorkspace.failure(error));
-  }
-}
-
 function* redirectOwner({ workspace }) {
   const currentUserId = yield select(getCurrentUserId);
   const currWorkspaceSlug = yield select(getPageWorkspaceSlug);
@@ -50,8 +41,12 @@ function* loadWorkspaces() {
 }
 
 function* loadWorkspace({ workspaceSlug }) {
-  const workspace = yield call(apiFetch, `workspaces/${workspaceSlug}`);
-  yield put(actions.fetchWorkspace.receive(workspace));
+  try {
+    const workspace = yield call(apiFetch, `workspaces/${workspaceSlug}`);
+    yield put(actions.fetchWorkspace.receive(workspace));
+  } catch (error) {
+    yield put(actions.fetchWorkspace.failure(error));
+  }
 }
 
 function* newWorkspaceFlow() {

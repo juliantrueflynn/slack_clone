@@ -1,16 +1,19 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { openRightSidebar, closeRightSidebar, navigate } from '../actions/interactiveActions';
 import TopBarHeader from './TopBarHeader';
+import { rightSidebarClose } from '../actions/interactiveActions';
 
-const mapStateToProps = state => ({
-  rightSidebar: state.ui.rightSidebar,
-});
+const mapStateToProps = (state, { match: { params } }) => {
+  const channelUrl = `/${params.workspaceSlug}/${params.channelSlug}`;
+  const isFavoritesOpen = state.ui.rightSidebar === 'Favorites';
+  return {
+    favoritesUrl: isFavoritesOpen ? channelUrl : `${channelUrl}/favorites`,
+    isFavoritesOpen,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
-  openRightSidebar: () => dispatch(openRightSidebar('Favorites', {})),
-  closeRightSidebar: () => dispatch(closeRightSidebar()),
-  navigate: path => dispatch(navigate({ path, push: true })),
+  rightSidebarClose: () => dispatch(rightSidebarClose()),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TopBarHeader));

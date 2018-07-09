@@ -1,9 +1,9 @@
 import React from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 import { Redirect } from 'react-router-dom';
+import { PageRoutes } from '../../util/routeUtil';
 import LeftSidebarContainer from '../LeftSidebarContainer';
 import './WorkspacePage.css';
-import { RouteWithSubRoutes } from '../../util/routeUtil';
 
 class WorkspacePage extends React.Component {
   constructor(props) {
@@ -22,14 +22,14 @@ class WorkspacePage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { workspaceSlug, workspaces } = this.props;
+    const { workspaceSlug, workspaces, ...props } = this.props;
 
     if (prevProps.workspaceSlug !== workspaceSlug) {
-      this.props.fetchWorkspaceRequest(workspaceSlug);
+      props.fetchWorkspaceRequest(workspaceSlug);
     }
 
     if (prevProps.workspaces && prevProps.workspaces.length !== workspaces.length) {
-      this.props.fetchWorkspacesRequest();
+      props.fetchWorkspacesRequest();
     }
   }
 
@@ -43,19 +43,20 @@ class WorkspacePage extends React.Component {
 
   render() {
     const { workspaceSlug, channels, ...props } = this.props;
+    const defaultChannelSlug = channels[0] && channels[0].slug;
 
     if (props.isFetching) {
       return (<h2>Loading...</h2>);
     }
 
-    if (props.isExactMatch) {
-      return channels && channels.length && (
-        <Redirect to={`/${workspaceSlug}/${channels[0].slug}`} />
-      );
+    if (props.match.isExact && defaultChannelSlug) {
+      return (<Redirect to={`${workspaceSlug}/${defaultChannelSlug}`} />);
     }
 
     return (
       <div className={`single-workspace single-workspace__${workspaceSlug}`}>
+        <LeftSidebarContainer />
+        <PageRoutes routes={props.routes} />
         <ActionCable
           ref={(refs) => { this.workspaceChannel = refs; }}
           channel={{ channel: 'WorkspaceChannel', workspace_slug: workspaceSlug }}
@@ -68,10 +69,6 @@ class WorkspacePage extends React.Component {
             channel={{ channel: 'ChatChannel', channel_slug: channelSlug }}
             onReceived={this.handleReceived}
           />
-        ))}
-        <LeftSidebarContainer />
-        {props.routes && props.routes.map(route => (
-          <RouteWithSubRoutes key={route.path} {...route} />
         ))}
       </div>
     );

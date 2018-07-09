@@ -17,7 +17,7 @@ class Message < ApplicationRecord
     foreign_key: :parent_message_id,
     dependent: :destroy
   has_many :replies,
-    -> { includes(:author, :favorites, :reactions) },
+    -> { includes(:favorites, :reactions) },
     class_name: 'Message',
     foreign_key: :parent_message_id,
     dependent: :destroy
@@ -25,7 +25,9 @@ class Message < ApplicationRecord
   has_many :authors, through: :replies, source: :author
   has_many :favorites, dependent: :destroy
   has_many :reactions, dependent: :destroy
+  has_many :reads, as: :readable, dependent: :destroy
 
+  scope :exclude_children, -> { where(parent_message_id: nil) }
   scope :with_thread_replies, -> { includes(thread_replies: [:author, :replies]).where.not(thread_replies_messages: { id: nil }) }
 
   def self.parents_with_author_id(author_id)
@@ -62,8 +64,9 @@ class Message < ApplicationRecord
   after_create_commit do
     ChannelJob.perform_later(
       channel.slug,
-      type: "MESSAGE_CREATE_RECEIVE",
+      type: 'MESSAGE_CREATE_RECEIVE',
       message: self,
+      channel_slug: channel.slug,
       parent_message_slug: is_child? ? parent_message.slug : nil
     )
   end

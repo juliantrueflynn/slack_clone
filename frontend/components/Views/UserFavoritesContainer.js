@@ -1,15 +1,16 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import UserFavorites from './UserFavorites';
-import { openRightSidebar } from '../../actions/interactiveActions';
 import { getUserFavorites } from '../../reducers/selectors';
+import { fetchFavorites } from '../../actions/favoriteActions';
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, { match }) => ({
+  isChannelLoaded: state.ui.displayChannelSlug === match.params.channelSlug,
   favorites: getUserFavorites(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  openRightSidebar: () => dispatch(openRightSidebar('Favorites', {})),
+  fetchFavoritesRequest: () => dispatch(fetchFavorites.request()),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserFavorites));

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180701230519) do
+ActiveRecord::Schema.define(version: 20180706212936) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,15 @@ ActiveRecord::Schema.define(version: 20180701230519) do
     t.index ["user_id"], name: "index_reactions_on_user_id"
   end
 
+  create_table "reads", force: :cascade do |t|
+    t.string "readable_type"
+    t.bigint "readable_id"
+    t.bigint "user_id"
+    t.datetime "accessed_at", null: false
+    t.datetime "created_at"
+    t.index ["readable_type", "readable_id", "user_id"], name: "index_reads_on_readable_type_and_readable_id_and_user_id"
+  end
+
   create_table "user_appearances", force: :cascade do |t|
     t.string "status", default: "ONLINE", null: false
     t.bigint "user_id", null: false
@@ -115,6 +124,7 @@ ActiveRecord::Schema.define(version: 20180701230519) do
   add_foreign_key "messages", "users", column: "author_id"
   add_foreign_key "reactions", "messages"
   add_foreign_key "reactions", "users"
+  add_foreign_key "reads", "users"
   add_foreign_key "user_appearances", "users"
   add_foreign_key "workspace_subs", "users"
   add_foreign_key "workspace_subs", "workspaces"

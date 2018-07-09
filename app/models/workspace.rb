@@ -1,5 +1,5 @@
 class Workspace < ApplicationRecord
-  EXCLUDED_SLUGS = %w(api create-workspace assets signin signout stylesheets javascripts images messages).freeze
+  EXCLUDED_SLUGS = %w(api create-workspace assets signin signout stylesheets javascripts images).freeze
   
   validates_presence_of :title, :slug, :owner_id
   validates_uniqueness_of :slug

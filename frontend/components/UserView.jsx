@@ -2,21 +2,9 @@ import React from 'react';
 import RightSidebarContainer from './Layout/RightSidebarContainer';
 
 class UserView extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
-    this.props.openRightSidebar();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { match: { params, path }, openRightSidebar } = this.props;
-    const userPath = '/:workspaceSlug/:channelSlug/team/:userSlug';
-    
-    if (path === userPath && prevProps.match.path !== userPath) {
-      openRightSidebar({ userSlug: params.userSlug });
-    }
+    const { user, fetchMemberRequest } = this.props;
+    if (user) fetchMemberRequest(user.slug);
   }
 
   render() {
@@ -27,10 +15,7 @@ class UserView extends React.Component {
     }
 
     return (
-      <RightSidebarContainer
-        sidebarTitle="Workspace Directory"
-        match={match}
-      >
+      <RightSidebarContainer sidebarType="Workspace Directory" match={match}>
         {user.username}
       </RightSidebarContainer>
     );

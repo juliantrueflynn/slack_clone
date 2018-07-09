@@ -1,12 +1,13 @@
 json.message do
-  json.(@message, :id, :body, :slug, :author_id, :channel_id)
+  json.(@message, :id, :body, :slug, :author_id, :channel_id, :created_at, :updated_at)
   json.author_slug @message.author.slug
+  json.channel_slug @message.channel.slug
 end
 
 json.childMessages do
   @message.replies.each do |reply|
     json.array! @message.replies do |child|
-      json.(child, :id, :slug, :body, :author_id, :channel_id, :parent_message_id, :created_at)
+      json.(child, :id, :slug, :body, :author_id, :channel_id, :parent_message_id, :created_at, :updated_at)
       json.parent_message_slug @message.slug
       json.author_slug child.author.slug
     end

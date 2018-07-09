@@ -2,15 +2,7 @@ import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/channelActions';
 import { CHANNEL } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiUpdate, apiDelete } from '../util/apiUtil';
-import {
-  getPageChannelSlug,
-  getChannels,
-  getPageWorkspaceSlug,
-  selectOpenMessageThreadSlug,
-  getCurrentUserId,
-  getRightSidebarType,
-} from '../reducers/selectors';
-import { fetchWorkspace } from './workspaceSaga';
+import { getPageWorkspaceSlug, getCurrentUserId } from '../reducers/selectors';
 import { navigate, modalClose } from '../actions/interactiveActions';
 
 function* addNewChannel({ channel }) {
@@ -39,40 +31,13 @@ function* fetchEditChannel({ channel }) {
   }
 }
 
-function* fetchChannel() {
+function* fetchChannel({ channelSlug }) {
   try {
-    const channelSlug = yield select(getPageChannelSlug);
-    const workspaceSlug = yield select(getPageWorkspaceSlug);
-    const rightSidebarType = yield select(getRightSidebarType);
-    const userId = yield select(getCurrentUserId);
-    const ui = { workspaceSlug, channelSlug, userId };
     const channel = yield call(apiFetch, `channels/${channelSlug}`);
-    const messageSlug = yield select(selectOpenMessageThreadSlug);
-
-    yield put(actions.fetchChannel.receive(channel, ui));
-
-    if (rightSidebarType === 'Thread') {
-      const baseUrl = `/${workspaceSlug}/${channelSlug}`;
-      yield put(navigate({ path: `${baseUrl}/thread/${messageSlug}` }));
-    }
-
-    if (rightSidebarType === 'Favorites') {
-      const baseUrl = `/${workspaceSlug}/${channelSlug}`;
-      yield put(navigate({ path: `${baseUrl}/favorites` }));
-    }
+    yield put(actions.fetchChannel.receive(channel));
   } catch (error) {
     yield put(actions.fetchChannel.failure(error));
   }
-}
-
-function* loadChannelEntities() {
-  const workspaceSlug = yield select(getPageWorkspaceSlug);
-  const channels = yield select(getChannels);
-  if (channels.length < 1) {
-    yield put(actions.fetchChannels.request());
-    yield call(fetchWorkspace, workspaceSlug);
-  }
-  yield call(fetchChannel);
 }
 
 function* fetchDeleteChannel({ channelSlug }) {
@@ -93,7 +58,7 @@ function* watchEditChannel() {
 }
 
 function* watchChannelPage() {
-  yield takeLatest(CHANNEL.SHOW.REQUEST, loadChannelEntities);
+  yield takeLatest(CHANNEL.SHOW.REQUEST, fetchChannel);
 }
 
 function* watchDeleteChannel() {

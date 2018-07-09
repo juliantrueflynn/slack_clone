@@ -63,12 +63,12 @@ class MessageHoverMenu extends React.Component {
             Start a thread
           </Link>
         )}
-        {!isAuthor && !isFavorited && (
+        {!isFavorited && (
           <button className="btn btn__fav" onClick={this.handleFavClick}>
             Favorite
           </button>
         )}
-        {!isAuthor && isFavorited && (
+        {isFavorited && (
           <button className="btn btn__unfav" onClick={this.handleUnfavClick}>
             Unfavorite
           </button>

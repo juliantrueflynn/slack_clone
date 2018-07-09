@@ -11,6 +11,7 @@ class ThreadsPage extends React.Component {
 
   render() {
     const { messages, members } = this.props;
+    console.log(this.props.match);
 
     return (
       <div>

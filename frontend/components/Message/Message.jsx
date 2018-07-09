@@ -14,19 +14,31 @@ const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
 class Message extends React.Component {
   constructor(props) {
     super(props);
-
-    const body = JSON.parse(props.message.body);
-    const blocks = convertFromRaw(body);
     this.state = {
       isMouseOver: false,
       isEditing: false,
-      editorState: EditorState.createWithContent(blocks),
+      editorState: null,
     };
 
-    this.onChange = editorState => this.setState({ editorState });
-
+    this.onChange = this.onChange.bind(this);
     this.handleEditToggle = this.handleEditToggle.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  // TODO: Change this to memoization helper?
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const body = JSON.parse(nextProps.message.body);
+    const blocks = convertFromRaw(body);
+
+    return {
+      isMouseOver: prevState.isMouseOver,
+      isEditing: prevState.isEditing,
+      editorState: EditorState.createWithContent(blocks),
+    };
+  }
+
+  onChange(editorState) {
+    this.setState({ editorState });
   }
 
   handleHoverToggle(isMouseOver) {
@@ -54,7 +66,7 @@ class Message extends React.Component {
 
   render() {
     const { message, ...props } = this.props;
-    const { isMouseOver, isEditing, ...state } = this.state;
+    const { isMouseOver, isEditing, editorState } = this.state;
 
     if (!message) {
       return null;
@@ -65,7 +77,7 @@ class Message extends React.Component {
         <div className="msg">
           <form onSubmit={this.handleSubmit}>
             <Editor
-              editorState={state.editorState}
+              editorState={editorState}
               onChange={this.onChange}
               plugins={[emojiPlugin]}
             />
@@ -104,9 +116,8 @@ class Message extends React.Component {
           <div className="message-body__content">
             ID: #{message.id}<br />
             Slug: {message.slug}<br />
-
             <Editor
-              editorState={state.editorState}
+              editorState={editorState}
               onChange={this.onChange}
               plugins={[emojiPlugin]}
               readOnly

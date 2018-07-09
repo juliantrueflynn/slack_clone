@@ -14,7 +14,6 @@ const LeftSidebar = props => (
       workspaces={props.workspaces}
       modalOpen={props.modalOpen}
       modalClose={props.modalClose}
-      openRightSidebar={props.openRightSidebar}
     />
 
     <PreferencesModal

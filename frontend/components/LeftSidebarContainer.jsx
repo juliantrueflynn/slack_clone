@@ -2,12 +2,12 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import LeftSidebar from './LeftSidebar';
 import { getWorkspaces } from '../reducers/selectors';
-import { modalOpen, modalClose, openRightSidebar } from '../actions/interactiveActions';
+import { modalOpen, modalClose } from '../actions/interactiveActions';
 
 const mapStateToProps = (state, { match }) => ({
   workspaces: getWorkspaces(state),
   workspaceSlug: match.params.workspaceSlug,
-  channelSlug: match.params.channelSlug,
+  channelSlug: state.ui.displayChannelSlug,
   userSlug: state.session.currentUser ? state.session.currentUser.slug : null,
   isModalOpen: state.ui.displayModal === 'SETTINGS',
 });
@@ -15,7 +15,6 @@ const mapStateToProps = (state, { match }) => ({
 const mapDispatchToProps = dispatch => ({
   modalOpen: () => dispatch(modalOpen('SETTINGS')),
   modalClose: () => dispatch(modalClose()),
-  openRightSidebar: () => dispatch(openRightSidebar('Workspace Directory', {})),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LeftSidebar));

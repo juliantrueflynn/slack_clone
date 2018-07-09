@@ -1,16 +1,20 @@
 import { combineReducers } from 'redux';
 import displayWorkspaceSlug from './workspaceDisplayReducer';
 import displayChannelSlug from './channelDisplayReducer';
+import displayMessageSlug from './messageDisplayReducer';
+import displayUserSlug from './displayUserSlugReducer';
 import displayModal from './modalReducer';
-import rightSidebar from './sidebarReducer';
 import isFetching from './isFetchingReducer';
+import rightSidebar from './rightSidebarReducer';
 
 const uiReducer = combineReducers({
   displayWorkspaceSlug,
   displayChannelSlug,
+  displayMessageSlug,
+  displayUserSlug,
   displayModal,
-  rightSidebar,
   isFetching,
+  rightSidebar,
 });
 
 export default uiReducer;

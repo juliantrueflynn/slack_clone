@@ -8,17 +8,12 @@ const favoriteReducer = (state = {}, action) => {
     case FAVORITE.INDEX.RECEIVE: {
       const { favorites } = action;
       nextState = {};
-
-      favorites.map((fav) => {
-        nextState[fav.messageSlug] = fav;
-      });
-
+      favorites.forEach((fav) => { nextState[fav.messageSlug] = fav; });
       return Object.assign({}, state, nextState);
     }
     case FAVORITE.CREATE.RECEIVE: {
       const { favorite } = action;
       nextState = { [favorite.messageSlug]: favorite };
-
       return Object.assign({}, state, nextState);
     }
     case FAVORITE.DELETE.RECEIVE: {
@@ -28,24 +23,9 @@ const favoriteReducer = (state = {}, action) => {
       return nextState;
     }
     case CHANNEL.SHOW.RECEIVE: {
-      const { channel: { favorites }, ui: { messageSlug, userId } } = action;
-      const prevState = Object.assign({}, state);
+      const { channel: { favorites } } = action;
       nextState = {};
-
-      Object.values(prevState).map((fav) => {
-        if (fav.messageSlug === messageSlug) {
-          nextState[fav.messageSlug] = fav;
-        }
-
-        if (fav.userId === userId) {
-          nextState[fav.messageSlug] = fav;
-        }
-      });
-
-      favorites.map((fav) => {
-        nextState[fav.messageSlug] = fav;
-      });
-
+      favorites.forEach((fav) => { nextState[fav.messageSlug] = fav; });
       return nextState;
     }
     default:

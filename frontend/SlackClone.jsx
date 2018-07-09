@@ -10,6 +10,7 @@ import * as ChannelActions from './actions/channelActions';
 import * as MessageActions from './actions/messageActions';
 import * as FavoriteActions from './actions/favoriteActions';
 import * as ReactionActions from './actions/reactionActions';
+import * as api from './util/apiUtil';
 
 document.addEventListener('DOMContentLoaded', () => {
   const rootEl = document.getElementById('root');
@@ -34,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.MessageActions = MessageActions;
     window.FavoriteActions = FavoriteActions;
     window.ReactionActions = ReactionActions;
+    window.SlackAPI = api;
   }
 
   ReactDOM.render(<Root store={store} />, rootEl);

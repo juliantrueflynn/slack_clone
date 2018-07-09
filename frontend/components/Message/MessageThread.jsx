@@ -1,27 +1,30 @@
 import React from 'react';
 import MessageContainer from './MessageContainer';
 import MessageFormContainer from './MessageFormContainer';
-import RightSidebarContainer from '../Layout/RightSidebarContainer';
 import MessagesList from './MessagesList';
+import RightSidebarContainer from '../Layout/RightSidebarContainer';
 
 class MessageThread extends React.Component {
   componentDidMount() {
-    const { openRightSidebar, match: { params } } = this.props;
-    const sidebarProps = { messageSlug: params.messageSlug };
-    openRightSidebar(sidebarProps);
+    const { message, isChannelLoaded, ...props } = this.props;
+
+    if (isChannelLoaded) {
+      props.fetchMessageRequest(props.messageSlug);
+      if (message) props.readUpdateRequest(message.id);
+    }
   }
 
   componentDidUpdate(prevProps) {
-    const { openRightSidebar, match: { params } } = this.props;
+    const { message, messageSlug, ...props } = this.props;
 
-    if (params.messageSlug !== prevProps.match.params.messageSlug) {
-      const sidebarProps = { messageSlug: params.messageSlug };
-      openRightSidebar(sidebarProps);
+    if (prevProps.messageSlug && messageSlug !== prevProps.messageSlug) {
+      props.fetchMessageRequest(messageSlug);
+      if (message) props.readUpdateRequest(message.id);
     }
   }
 
   render() {
-    const { message, threadMessages, ...props } = this.props;
+    const { message, threadMessages } = this.props;
 
     if (!message) {
       return null;
@@ -29,9 +32,8 @@ class MessageThread extends React.Component {
 
     return (
       <RightSidebarContainer
-        sidebarTitle="Thread"
+        sidebarType="Thread"
         sidebarSubtitle={`Author: ${message.authorId}`}
-        match={props.match}
       >
         <div className="thread">
           <div className="thread__message">

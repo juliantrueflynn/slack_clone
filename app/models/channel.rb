@@ -12,11 +12,20 @@ class Channel < ApplicationRecord
   belongs_to :workspace
   has_many :channel_subs, foreign_key: :channel_id, dependent: :destroy
   has_many :members, class_name: 'User', through: :channel_subs, source: :user
-  has_many :messages, -> { includes(:parent_message, reactions: :message, favorites: :message) }, dependent: :destroy
+  has_many :messages,
+    -> { includes(:parent_message, reactions: :message, favorites: :message) },
+    dependent: :destroy
+  has_many :parent_messages,
+    -> { Message.exclude_children },
+    class_name: 'Message'
   has_many :favorites, through: :messages, source: :favorites
   has_many :reactions, through: :messages, source: :reactions
 
   scope :with_subs, -> { includes(channel_subs: :user) }
+
+  def last_message_created_date
+    parent_messages.last.created_at
+  end
 
   def is_user_sub?(user_id)
     !!channel_subs.find_by(channel_subs: { user_id: user_id })

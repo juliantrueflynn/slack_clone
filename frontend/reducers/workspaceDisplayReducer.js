@@ -1,4 +1,4 @@
-import { WORKSPACE, CHANNEL } from '../actions/actionTypes';
+import { WORKSPACE } from '../actions/actionTypes';
 
 const workspaceDisplayReducer = (state = null, action) => {
   Object.freeze(state);
@@ -8,9 +8,6 @@ const workspaceDisplayReducer = (state = null, action) => {
       return action.workspace.slug;
     case WORKSPACE.SHOW.REQUEST:
       return action.workspaceSlug;
-    case CHANNEL.SHOW.REQUEST: {
-      return action.ui.workspaceSlug;
-    }
     default:
       return state;
   }

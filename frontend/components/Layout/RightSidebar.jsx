@@ -1,38 +1,45 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { camelize } from 'humps';
 import './RightSidebar.css';
 
 class RightSidebar extends React.Component {
   constructor(props) {
     super(props);
-
+    this.state = { isSidebarOpen: true };
     this.handleCloseSidebar = this.handleCloseSidebar.bind(this);
   }
 
-  handleCloseSidebar() {
-    const { match: { params }, navigate, closeRightSidebar } = this.props;
+  componentDidMount() {
+    const { rightSidebarOpen, sidebarType } = this.props;
+    rightSidebarOpen(sidebarType);
+  }
 
-    closeRightSidebar();
-    navigate(`/${params.workspaceSlug}/${params.channelSlug}`);
+  componentDidUpdate(prevProps) {
+    const { message, messageSlug, ...props } = this.props;
+
+    if (props.match.isExact && props.location.pathname !== prevProps.location.pathname) {
+      props.rightSidebarOpen(props.sidebarType);
+    }
+  }
+
+  handleCloseSidebar() {
+    this.setState({ isSidebarOpen: false });
+    this.props.rightSidebarClose();
   }
 
   render() {
-    const { isRightSidebarOpen, sidebarTitle, sidebarSubtitle } = this.props;
-    const camelizedTitle = camelize(sidebarTitle);
+    const { sidebarType, sidebarSubtitle, ...props } = this.props;
 
-    if (!isRightSidebarOpen) {
-      return null;
+    if (!this.state.isSidebarOpen) {
+      return (<Redirect to={props.channelUrl} />);
     }
 
     return (
-      <aside
-        className={`sidebar__right sidebar__${camelizedTitle}`}
-      >
+      <aside className={`sidebar__right sidebar__${camelize(sidebarType)}`}>
         <header className="sidebar__header">
           <div className="sidebar__headings">
-            {sidebarTitle && (
-              <h4 className="sidebar__title">{sidebarTitle}</h4>
-            )}
+            {sidebarType && (<h4 className="sidebar__title">{sidebarType}</h4>)}
             {sidebarSubtitle && (
               <span className="sidebar__subtitle">
                 <small>{sidebarSubtitle}</small>
@@ -46,7 +53,7 @@ class RightSidebar extends React.Component {
         </header>
 
         <div className="sidebar__body">
-          {this.props.children}
+          {props.children}
         </div>
       </aside>
     );

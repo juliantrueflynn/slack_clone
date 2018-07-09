@@ -5,12 +5,7 @@ import DropdownMenu from './Layout/DropdownMenu';
 class UsersMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.handleOpenSidebar = this.handleOpenSidebar.bind(this);
     this.handleModalOpenClick = this.handleModalOpenClick.bind(this);
-  }
-
-  handleOpenSidebar() {
-    this.props.openRightSidebar();
   }
 
   handleModalOpenClick() {
@@ -32,7 +27,7 @@ class UsersMenu extends React.Component {
           Set Status
         </li>
         <li>
-          <NavLink to={urlForMemberSidebar} onClick={this.handleOpenSidebar}>
+          <NavLink to={urlForMemberSidebar}>
             Profile & Account
           </NavLink>
         </li>

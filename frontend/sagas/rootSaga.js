@@ -8,8 +8,8 @@ import messageSaga from './messageSaga';
 import userThreadSaga from './userThreadSaga';
 import favoriteSaga from './favoriteSaga';
 import navigateSaga from './navigateSaga';
-import sidebarSaga from './sidebarSaga';
 import reactionSaga from './reactionSaga';
+import readSaga from './readSaga';
 
 export default function* root() {
   yield all([
@@ -23,6 +23,6 @@ export default function* root() {
     fork(userThreadSaga),
     fork(favoriteSaga),
     fork(reactionSaga),
-    fork(sidebarSaga),
+    fork(readSaga),
   ]);
 }

@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { fetchMember } from '../actions/memberActions';
 import UserView from './UserView';
-import { openRightSidebar } from '../actions/interactiveActions';
 
 const mapStateToProps = (state, { match }) => ({
   user: state.entities.members[match.params.userSlug],
 });
 
 const mapDispatchToProps = dispatch => ({
-  openRightSidebar: sidebarProps => dispatch(openRightSidebar('Workspace Directory', sidebarProps)),
+  fetchMemberRequest: userSlug => dispatch(fetchMember.request(userSlug)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserView));

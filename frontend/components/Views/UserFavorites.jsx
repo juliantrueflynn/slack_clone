@@ -2,20 +2,17 @@ import React from 'react';
 import RightSidebarContainer from '../Layout/RightSidebarContainer';
 
 class UserFavorites extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
-    this.props.openRightSidebar();
+    const { isChannelLoaded, fetchFavoritesRequest } = this.props;
+    if (isChannelLoaded) fetchFavoritesRequest();
   }
 
   componentDidUpdate(prevProps) {
-    const { match: { path }, openRightSidebar } = this.props;
-    const favPath = '/:workspaceSlug/:channelSlug/favorites';
-    
-    if (path === favPath && prevProps.match.path !== favPath) {
-      openRightSidebar();
+    const { message, match: { isExact, params }, ...props } = this.props;
+
+    if (isExact && props.location.pathname !== prevProps.location.pathname) {
+      props.fetchMessageRequest(params.messageSlug);
+      if (message) props.readUpdateRequest(message.id);
     }
   }
 
@@ -27,7 +24,7 @@ class UserFavorites extends React.Component {
     }
 
     return (
-      <RightSidebarContainer sidebarTitle="Favorites" match={match}>
+      <RightSidebarContainer sidebarType="Favorites" match={match}>
         <ul className="user-favorites">
           {favorites.map(fav => (
             <li key={fav.id}>

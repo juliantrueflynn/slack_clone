@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import MessageHoverMenu from './Message/MessageHoverMenu';
-import { getFavoriteStatus, selectOpenMessageThreadSlug } from '../reducers/selectors';
+import { getFavoriteStatus } from '../reducers/selectors';
 import { deleteMessage } from '../actions/messageActions';
 import { createFavorite, deleteFavorite } from '../actions/favoriteActions';
 import { deleteReaction, createReaction } from '../actions/reactionActions';
@@ -9,7 +9,7 @@ import { deleteReaction, createReaction } from '../actions/reactionActions';
 const mapStateToProps = (state, { message }) => ({
   isAuthor: state.session.currentUser.id === message.authorId,
   isFavorited: getFavoriteStatus(state, message.slug),
-  openThreadSlug: selectOpenMessageThreadSlug(state),
+  openThreadSlug: state.ui.displayMessageSlug,
 });
 
 const mapDispatchToProps = dispatch => ({

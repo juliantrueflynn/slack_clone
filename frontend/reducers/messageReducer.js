@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import { MESSAGE, CHANNEL, USER_THREAD, REACTION } from '../actions/actionTypes';
+import { MESSAGE, CHANNEL, USER_THREAD, REACTION, READ } from '../actions/actionTypes';
 
 const messageReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -8,24 +8,19 @@ const messageReducer = (state = {}, action) => {
   switch (action.type) {
     case CHANNEL.SHOW.RECEIVE: {
       nextState = Object.assign({}, state);
-      const { channel: { messages, reactions }, ui: { messageSlug } } = action;
+      const { channel: { messages, reactions } } = action;
 
       messages.forEach((message) => {
-        nextState[message.slug] = message;
+        const { parentMessageSlug, slug, ...props } = message;
+        const children = messages.filter(child => child.parentMessageSlug === slug);
+        const messageThread = children.map(child => child.slug);
 
-        const children = messages.filter(child => child.parentMessageSlug === message.slug);
-        const messageThread = children.map(entry => entry.slug);
+        nextState[slug] = message;
+        nextState[slug].thread = merge([], nextState[slug].thread, messageThread);
 
-        nextState[message.slug].thread = merge([], nextState[message.slug].thread, messageThread);
-
-        if (messageSlug) {
-          const { parentMessageSlug, slug } = message;
-          nextState[slug].thread = null;
-
-          if (nextState[messageSlug] && parentMessageSlug === messageSlug) {
-            nextState[messageSlug].thread = Object.assign([slug], nextState[messageSlug].thread);
-          }
-        }
+        const lastReadInMs = Date.parse(props.lastRead);
+        const lastActiveInMs = Date.parse(props.lastActive);
+        nextState[slug].hasUnreads = lastReadInMs < lastActiveInMs;
       });
 
       reactions.forEach(({ messageSlug: slug, id }) => {
@@ -39,14 +34,11 @@ const messageReducer = (state = {}, action) => {
     case MESSAGE.SHOW.RECEIVE: {
       const { message: { message, childMessages, reactions } } = action;
       const { slug } = message;
-      nextState = Object.assign({}, state);
-      nextState[slug] = message;
+      nextState = { [slug]: message };
       if (!nextState[slug].thread) nextState[slug].thread = [];
 
       const newReactions = [];
-      reactions.forEach((reaction) => {
-        newReactions.push(reaction.id);
-      });
+      reactions.forEach((reaction) => { newReactions.push(reaction.id); });
 
       nextState[slug].reactions = Object.assign([], nextState[slug].reactions, newReactions);
 
@@ -59,21 +51,22 @@ const messageReducer = (state = {}, action) => {
         });
       }
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case MESSAGE.CREATE.RECEIVE: {
       const { message, parentMessageSlug: parentSlug } = action;
       message.thread = parentSlug ? null : [];
+      message.lastRead = null;
       nextState = merge({}, state, { [message.slug]: message });
-      if (parentSlug) nextState[parentSlug].thread.push(message.slug);
-
+      if (parentSlug) {
+        nextState[parentSlug].thread.push(message.slug);
+        nextState[parentSlug].lastActive = message.updatedAt;
+      }
       return nextState;
     }
     case MESSAGE.UPDATE.RECEIVE: {
       const { message } = action;
-      nextState = { [message.slug]: message };
-
-      return merge({}, state, nextState);
+      return merge({}, state, { [message.slug]: message });
     }
     case MESSAGE.DELETE.RECEIVE:
       nextState = Object.assign({}, state);
@@ -99,6 +92,13 @@ const messageReducer = (state = {}, action) => {
       const { reaction, messageSlug } = action;
       nextState = { [messageSlug]: { reactions: [reaction.id] } };
       return merge({}, state, nextState);
+    }
+    case READ.UPDATE.RECEIVE: {
+      const { read: { readableType, slug, accessedAt } } = action;
+      if (readableType !== 'Message') return state;
+      nextState = Object.assign({}, state);
+      nextState[slug].lastRead = accessedAt;
+      return nextState;
     }
     default:
       return state;

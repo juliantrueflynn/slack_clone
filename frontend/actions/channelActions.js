@@ -1,5 +1,5 @@
 import { actionCreator } from '../util/actionsUtil';
-import { CHANNEL, CHANNEL_SUB } from './actionTypes';
+import { CHANNEL, CHANNEL_SUB, LEAVE_CHANNEL } from './actionTypes';
 
 export const fetchChannels = {
   request: (channels = {}) => actionCreator(CHANNEL.INDEX.REQUEST, { channels }),
@@ -8,8 +8,8 @@ export const fetchChannels = {
 };
 
 export const fetchChannel = {
-  request: (channelSlug, ui) => actionCreator(CHANNEL.SHOW.REQUEST, { channelSlug, ui }),
-  receive: (channel, ui) => actionCreator(CHANNEL.SHOW.RECEIVE, { channel, ui }),
+  request: channelSlug => actionCreator(CHANNEL.SHOW.REQUEST, { channelSlug }),
+  receive: channel => actionCreator(CHANNEL.SHOW.RECEIVE, { channel }),
   failure: errors => actionCreator(CHANNEL.SHOW.FAILURE, { errors }),
 };
 
@@ -37,3 +37,8 @@ export const deleteChannelSub = {
   request: channelId => actionCreator(CHANNEL_SUB.DELETE.REQUEST, { channelId }),
   failure: errors => actionCreator(CHANNEL_SUB.DELETE.FAILURE, { errors }),
 };
+
+export const leaveChannel = channelSlug => ({
+  type: LEAVE_CHANNEL,
+  channelSlug,
+});

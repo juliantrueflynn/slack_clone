@@ -1,46 +1,63 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
+import { PageRoutes } from '../../util/routeUtil';
 import MessageFormContainer from '../Message/MessageFormContainer';
 import ChannelFormContainer from './ChannelFormContainer';
-import { RouteWithSubRoutes } from '../../util/routeUtil';
+import MessagesList from '../Message/MessagesList';
 import TopBarHeaderContainer from '../TopBarHeaderContainer';
 import './ChannelPage.css';
-import MessagesList from '../Message/MessagesList';
 
 class ChannelPage extends React.Component {
   componentDidMount() {
-    const { workspaceSlug, channelSlug, messageSlug } = this.props;
-    this.props.fetchChannelRequest(channelSlug, { workspaceSlug, messageSlug });
+    const { channelId, channelSlug, ...props } = this.props;
+    if (props.isWorkspaceLoaded) props.fetchChannelRequest(channelSlug);
+    if (channelId) props.readUpdateRequest(channelId);
   }
 
   componentDidUpdate(prevProps) {
-    const { workspaceSlug, channelSlug, messageSlug } = this.props;
-
+    const { channelSlug, fetchChannelRequest, leaveChannel } = this.props;
     if (channelSlug !== prevProps.channelSlug) {
-      this.props.fetchChannelRequest(channelSlug, { workspaceSlug, messageSlug });
+      fetchChannelRequest(channelSlug);
+      if (prevProps.channelSlug) leaveChannel(prevProps.channelSlug);
     }
   }
 
   render() {
-    const { routes, messages, ...props } = this.props;
+    const { match, messages, ...props } = this.props;
 
     if (props.isFetching) {
       return (<h2>Loading...</h2>);
     }
 
+    if (match.isExact && props.rightSidebar) {
+      const { messageSlug } = props;
+      if (messageSlug && props.rightSidebar === 'Thread') {
+        return (<Redirect to={`${match.url}/thread/${messageSlug}`} />);
+      }
+
+      if (props.rightSidebar === 'Favorites') {
+        return (<Redirect to={`${match.url}/favorites`} />);
+      }
+
+      if (props.rightSidebar === 'Workspace Directory') {
+        return (<Redirect to={`${match.url}/team/${props.userSlug}`} />);
+      }
+    }
+
     return (
       <div className="page page__channel">
-        <TopBarHeaderContainer sectionTitle={props.channelSlug} />
+        <TopBarHeaderContainer
+          sectionTitle={props.channelSlug}
+          match={match}
+          location={props.location}
+        />
         <div className="messages-pane">
           <div className="messages-pane-body">
             <MessagesList messages={messages} />
             <MessageFormContainer />
           </div>
         </div>
-
-        {routes && routes.map(route => (
-          <RouteWithSubRoutes key={route.path} {...route} />
-        ))}
-
+        <PageRoutes routes={props.routes} />
         <ChannelFormContainer />
       </div>
     );
