@@ -1,5 +1,5 @@
 .sidebar__right {
-  width: 450px;
+  width: 500px;
   border-left: 1px solid #E9E9E9;
   margin-top: 55px;
   display: flex;
@@ -15,7 +15,7 @@
 
 .sidebar__header {
   background-color: #F5F5F5;
-  padding: .75em .625em;
+  padding: 15px 12px;
   border-bottom: 1px solid #E9E9E9;
 }
 
@@ -26,8 +26,4 @@
 
 .sidebar__title {
   margin: 0;
-}
-
-.sidebar__body {
-  padding: .75em .625em;
 }

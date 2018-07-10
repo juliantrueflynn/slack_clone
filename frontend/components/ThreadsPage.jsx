@@ -11,7 +11,6 @@ class ThreadsPage extends React.Component {
 
   render() {
     const { messages, members } = this.props;
-    console.log(this.props.match);
 
     return (
       <div>
@@ -34,8 +33,8 @@ class ThreadsPage extends React.Component {
 
               <MessageContainer isSingleMessage message={parentMessage} />
               <ul>
-                {parentMessage.thread && parentMessage.thread.map(childSlug => (
-                  <li key={childSlug}>
+                {parentMessage.thread && parentMessage.thread.map((childSlug, i) => (
+                  <li key={`${i}-${parentMessage.channelId}-${childSlug}`}>
                     <MessageContainer message={messages[childSlug]} />
                   </li>
                 ))}

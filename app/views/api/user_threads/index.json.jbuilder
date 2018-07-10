@@ -6,15 +6,15 @@ json.parent_messages do
 end
 
 @user_threads.each do |parent|
-  parent.replies.each do |reply|
-    json.childMessages do
-      json.array! parent.replies do |child|
-        json.(child, :id, :slug, :body, :author_id, :channel_id, :parent_message_id, :created_at)
-        json.parent_message_slug parent.slug
-        json.author_slug child.author.slug
-      end
+  json.childMessages do
+    json.array! parent.replies do |child|
+      json.(child, :id, :slug, :body, :author_id, :channel_id, :parent_message_id, :created_at)
+      json.parent_message_slug parent.slug
+      json.author_slug child.author.slug
     end
+  end
 
+  parent.replies.each do |reply|
     json.favorites do
       json.array! reply.favorites do |fav|
         json.(fav, :id, :message_id, :user_id)

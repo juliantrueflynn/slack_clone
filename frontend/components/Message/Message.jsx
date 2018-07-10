@@ -7,6 +7,7 @@ import createEmojiPlugin from 'draft-js-emoji-plugin';
 import MessageHoverMenuContainer from '../MessageHoverMenuContainer';
 import Reactions from '../Reactions';
 import SingleMessageThread from './SingleMessageThread';
+import './Message.css';
 
 const emojiPlugin = createEmojiPlugin();
 const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
@@ -97,24 +98,27 @@ class Message extends React.Component {
 
     return (
       <div
-        className="message"
+        className="msg"
         onMouseEnter={this.handleHoverToggle(true)}
         onMouseLeave={this.handleHoverToggle(false)}
       >
-        <div className="message-body">
+        <a href={`/${message.authorId}`} className="msg__avatar-link">
+          <img src="https://via.placeholder.com/40x40" alt={`${message.authorId}'s avatar`} />
+        </a>
+        <div className="msg__body">
           {isMouseOver && (
             <MessageHoverMenuContainer
               message={message}
               toggleEditMessage={this.handleEditToggle}
             />
           )}
-
-          <div className="message-body__author">
-            Author: {message.authorId}
-          </div>
-
-          <div className="message-body__content">
+          <div className="msg__content">
+            <div className="msg__content-meta">
+              <span className="msg__author">{message.authorId}</span>
+              <span className="msg__time">{message.createdAt}</span>
+            </div>
             ID: #{message.id}<br />
+            Author: {message.authorId}<br />
             Slug: {message.slug}<br />
             <Editor
               editorState={editorState}
@@ -123,16 +127,17 @@ class Message extends React.Component {
               readOnly
             />
           </div>
-
-          <Reactions reactions={props.reactions} />
+          {(!props.isSingleMessage || message.parentMessageId) && (
+            <div className="msg__footer">
+              <Reactions reactions={props.reactions} />
+              <SingleMessageThread
+                message={message}
+                match={props.match}
+                threadLastUpdate={props.threadLastUpdate}
+              />
+            </div>
+          )}
         </div>
-
-        <SingleMessageThread
-          message={message}
-          match={props.match}
-          isSingleMessage={props.isSingleMessage}
-          threadLastUpdate={props.threadLastUpdate}
-        />
       </div>
     );
   }

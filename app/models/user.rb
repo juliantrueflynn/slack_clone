@@ -16,10 +16,6 @@ class User < ApplicationRecord
   has_many :channels, through: :channel_subs, source: :channel
   has_many :messages, foreign_key: :author_id
   has_many :thread_replies, through: :messages, source: :replies
-  has_many :thread_messages,
-    ->(user) { Message.unscope(where: :author_id).threads_with_author_id(user.id) },
-    class_name: 'Message',
-    foreign_key: :author_id
   has_many :favorites, dependent: :destroy
   has_many :reactions, dependent: :destroy
   has_many :appears, class_name: 'UserAppearance', dependent: :destroy

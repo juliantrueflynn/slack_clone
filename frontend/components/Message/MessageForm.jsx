@@ -5,6 +5,7 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import createEmojiPlugin from 'draft-js-emoji-plugin';
 import FormErrors from '../Layout/FormErrors';
+import './MessageForm.css';
 
 const emojiPlugin = createEmojiPlugin();
 // Commenting out until optimized. Currently making page too slow for debugging.
@@ -36,23 +37,31 @@ class MessageForm extends React.Component {
   }
 
   render() {
+    const { currentUser, parentMessageId } = this.props;
+
     return (
-      <form className="msg-form" onSubmit={this.handleMessageSubmit}>
+      <form className={`msg-form ${parentMessageId && 'msg-form__sidebar'}`} onSubmit={this.handleMessageSubmit}>
         <FormErrors entity="message" />
 
-        <Editor
-          editorState={this.state.editorState}
-          onChange={this.onChange}
-          plugins={[emojiPlugin]}
-        />
+        {parentMessageId && currentUser && (
+          <img src="https://via.placeholder.com/40x40" className="avatar__form" alt={`${currentUser.username}'s avatar`} />
+        )}
 
-        {/* Commenting out until optimized. Currently making page too slow for debugging. */}
-        {/* <EmojiSuggestions /> */}
-        {/* <EmojiSelect /> */}
+        <div className="msg-form__body">
+          <Editor
+            editorState={this.state.editorState}
+            onChange={this.onChange}
+            plugins={[emojiPlugin]}
+          />
 
-        <button type="submit" className="btn btn__submit">
-          Add Message
-        </button>
+          {/* Commenting out until optimized. Currently making page too slow for debugging. */}
+          {/* <EmojiSuggestions /> */}
+          {/* <EmojiSelect /> */}
+
+          <button type="submit" className="btn btn__submit">
+            Add Message
+          </button>
+        </div>
       </form>
     );
   }

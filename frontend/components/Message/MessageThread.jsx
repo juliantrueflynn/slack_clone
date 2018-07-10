@@ -1,7 +1,6 @@
 import React from 'react';
 import MessageContainer from './MessageContainer';
 import MessageFormContainer from './MessageFormContainer';
-import MessagesList from './MessagesList';
 import RightSidebarContainer from '../Layout/RightSidebarContainer';
 
 class MessageThread extends React.Component {
@@ -39,7 +38,13 @@ class MessageThread extends React.Component {
           <div className="thread__message">
             <MessageContainer isSingleMessage message={message} />
           </div>
-          <MessagesList messages={threadMessages} />
+          {threadMessages && (
+            <div className="thread__messages">
+              {threadMessages.map(threadMessage => (
+                <MessageContainer key={threadMessage.slug} message={threadMessage} />
+              ))}
+            </div>
+          )}
           <MessageFormContainer parentMessageId={message.id} />
         </div>
       </RightSidebarContainer>

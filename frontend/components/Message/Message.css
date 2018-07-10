@@ -1,0 +1,58 @@
+.messages-pane-body .msg {
+  padding: 6px 18px;
+}
+
+.thread .thread__message .msg {
+  padding: 10px;
+}
+
+.thread__messages > .msg {
+  padding: 6px 10px;
+}
+
+.msg {
+  position: relative;
+  display: flex;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.msg__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.msg__content-meta {
+  display: flex;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.msg__avatar-link {
+  padding: 0 2px;
+}
+
+.msg__content {
+  padding: 0 2px 0 6px;
+}
+
+.msg:hover {
+  background-color: #F9F9F9;
+}
+
+.msg__author {
+  font-weight: bold;
+  padding-right: 4px;
+}
+
+.msg__time {
+  color: rgba(0,0,0,0.5);
+  font-size: .8em;
+}
+
+.reactions { 
+  margin: 0;
+}

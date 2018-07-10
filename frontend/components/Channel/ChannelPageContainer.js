@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import ChannelPage from './ChannelPage';
 import { fetchChannel, leaveChannel } from '../../actions/channelActions';
-import { selectMessages, selectChannelIdBySlug } from '../../reducers/selectors';
+import { selectParentMessages, selectChannelIdBySlug } from '../../reducers/selectors';
 import isFetching from '../../util/isFetchingUtil';
 import readUpdate from '../../actions/readActions';
 
 const mapStateToProps = (state, { match: { params } }) => ({
-  messages: selectMessages(state),
+  messages: selectParentMessages(state),
   channelSlug: params.channelSlug,
   rightSidebar: state.ui.rightSidebar,
   messageSlug: state.ui.displayMessageSlug,

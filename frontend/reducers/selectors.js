@@ -24,17 +24,18 @@ export const selectDefaultChannelSlug = ({ entities: { channels } }) => (
   channels && Object.keys(channels)[0]
 );
 
-export const selectMessages = ({ entities: { channels, messages }, ui }) => {
+export const selectParentMessages = ({ entities: { messages, channels }, ui }) => {
   const channel = channels[ui.displayChannelSlug];
-  const messagesArr = Object.values(messages);
 
   if (!channel) {
     return [];
   }
 
-  const channelMessages = messagesArr.filter(msg => (msg.thread && channel.id === msg.channelId));
+  const entries = Object.values(messages).filter(msg => (
+    msg.thread && channel.id === msg.channelId && !msg.parentMessageId
+  ));
 
-  return channelMessages.sort((a, b) => messages[a.slug].id - messages[b.slug].id);
+  return entries.sort((a, b) => messages[a.slug].id - messages[b.slug].id);
 };
 
 export const getCurrentMessageBySlug = ({ entities }, messageSlug) => (

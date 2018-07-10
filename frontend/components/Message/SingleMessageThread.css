@@ -1,6 +1,12 @@
 .thread-meta {
   font-size: small;
   text-decoration: none;
+  padding: 2px 0;
+}
+
+.thread-meta__link {
+  display: block;
+  padding: 3px 4px;
 }
 
 .thread-meta__items {
@@ -11,6 +17,7 @@
   -webkit-box-direction: normal;
   -ms-flex-direction: row;
   flex-direction: row;
+  margin-top: 3px;
 }
 
 .thread-meta__items .thread-meta__item {
@@ -23,4 +30,8 @@
 
 .thread-meta .thread-meta__counter:hover {
   text-decoration: underline;
+}
+
+.thread-meta__date {
+  color: rgba(0,0,0,.5);
 }

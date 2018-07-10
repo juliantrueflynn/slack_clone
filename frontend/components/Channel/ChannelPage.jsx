@@ -3,8 +3,8 @@ import { Redirect } from 'react-router-dom';
 import { PageRoutes } from '../../util/routeUtil';
 import MessageFormContainer from '../Message/MessageFormContainer';
 import ChannelFormContainer from './ChannelFormContainer';
-import MessagesList from '../Message/MessagesList';
 import TopBarHeaderContainer from '../TopBarHeaderContainer';
+import MessageContainer from '../Message/MessageContainer';
 import './ChannelPage.css';
 
 class ChannelPage extends React.Component {
@@ -53,7 +53,9 @@ class ChannelPage extends React.Component {
         />
         <div className="messages-pane">
           <div className="messages-pane-body">
-            <MessagesList messages={messages} />
+            {messages.map(message => (
+              <MessageContainer key={message.slug} message={message} />
+            ))}
             <MessageFormContainer />
           </div>
         </div>

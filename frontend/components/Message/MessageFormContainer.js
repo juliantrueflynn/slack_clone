@@ -5,6 +5,7 @@ import { selectChannelIdBySlug } from '../../reducers/selectors';
 
 const mapStateToDispatch = state => ({
   channelId: selectChannelIdBySlug(state),
+  currentUser: state.session.currentUser,
 });
 
 const mapDispatchToProps = dispatch => ({

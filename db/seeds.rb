@@ -68,7 +68,8 @@ User.all.shuffle.each do |user|
       Message.create(
         body: random_message_body,
         author_id: user.id,
-        channel_id: channel.id
+        channel_id: channel.id,
+        parent_message_id: nil
       )
     end
   end

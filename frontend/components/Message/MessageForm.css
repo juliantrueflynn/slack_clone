@@ -1,0 +1,17 @@
+.msg-form {
+  display: flex;
+  flex-direction: row;
+}
+
+.avatar__form {
+  margin-right: 5px;
+  display: block;
+}
+
+.msg-form .btn__submit {
+  display: block;
+}
+
+.msg-form__sidebar {
+  padding: 10px;
+}
