@@ -33,8 +33,8 @@ class ThreadsPage extends React.Component {
 
               <MessageContainer isSingleMessage message={parentMessage} />
               <ul>
-                {parentMessage.thread && parentMessage.thread.map((childSlug, i) => (
-                  <li key={`${i}-${parentMessage.channelId}-${childSlug}`}>
+                {parentMessage.thread && parentMessage.thread.map(childSlug => (
+                  <li key={childSlug}>
                     <MessageContainer message={messages[childSlug]} />
                   </li>
                 ))}

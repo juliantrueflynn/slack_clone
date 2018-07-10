@@ -1,6 +1,6 @@
 class Api::ReadsController < ApplicationController
   def update
-    @read = Read.find_or_initialize_by(read_params) { |el| el.user_id = current_user.id }
+    @read = Read.find_or_initialize_by(read_params) { |read| read.user_id = current_user.id }
     @read.accessed_at = DateTime.now
 
     if @read.save

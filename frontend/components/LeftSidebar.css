@@ -2,10 +2,10 @@
   width: 15%;
   display: inline-block;
   background-color: #4D394B;
-  color: #FFF;
+  color: rgba(255,255,255,.8);
   padding: .625em .5em;
 }
 
 .sidebar__left a {
-  color: #FFF;
+  color: inherit;
 }

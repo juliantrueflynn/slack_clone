@@ -5,7 +5,8 @@ end
 json.channels do
   json.array! @workspace.channels do |channel|
     json.(channel, :id, :title, :slug)
-    json.last_read current_user.reads.find_by(readable_id: channel.id, readable_type: 'Channel')
+    last_read = channel.reads.find_by(user_id: current_user.id)
+    json.last_read last_read ? last_read.accessed_at : nil
     json.last_active channel.last_message_created_date
   end
 end

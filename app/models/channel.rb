@@ -20,6 +20,7 @@ class Channel < ApplicationRecord
     class_name: 'Message'
   has_many :favorites, through: :messages, source: :favorites
   has_many :reactions, through: :messages, source: :reactions
+  has_many :reads, as: :readable, dependent: :destroy
 
   scope :with_subs, -> { includes(channel_subs: :user) }
 

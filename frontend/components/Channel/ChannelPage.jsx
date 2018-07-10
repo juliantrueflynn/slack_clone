@@ -15,10 +15,11 @@ class ChannelPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { channelSlug, fetchChannelRequest, leaveChannel } = this.props;
+    const { channelSlug, fetchChannelRequest, ...props } = this.props;
     if (channelSlug !== prevProps.channelSlug) {
       fetchChannelRequest(channelSlug);
-      if (prevProps.channelSlug) leaveChannel(prevProps.channelSlug);
+      if (props.channelId) props.readUpdateRequest(props.channelId);
+      if (prevProps.channelSlug) props.leaveChannel(prevProps.channelSlug);
     }
   }
 
