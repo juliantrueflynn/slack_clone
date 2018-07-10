@@ -4,7 +4,7 @@ import displayChannelSlug from './channelDisplayReducer';
 import displayMessageSlug from './messageDisplayReducer';
 import displayUserSlug from './displayUserSlugReducer';
 import displayModal from './modalReducer';
-import isFetching from './isFetchingReducer';
+import isWorkspaceLoading from './isWorkspaceLoadingReducer';
 import rightSidebar from './rightSidebarReducer';
 
 const uiReducer = combineReducers({
@@ -13,7 +13,7 @@ const uiReducer = combineReducers({
   displayMessageSlug,
   displayUserSlug,
   displayModal,
-  isFetching,
+  isWorkspaceLoading,
   rightSidebar,
 });
 

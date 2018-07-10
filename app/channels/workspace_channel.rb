@@ -1,4 +1,5 @@
 class WorkspaceChannel < ApplicationCable::Channel
+  after_subscribe :online
   after_unsubscribe :offline
 
   def subscribed

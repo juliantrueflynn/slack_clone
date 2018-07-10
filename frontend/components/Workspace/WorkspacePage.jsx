@@ -9,25 +9,17 @@ class WorkspacePage extends React.Component {
   constructor(props) {
     super(props);
     this.handleReceived = this.handleReceived.bind(this);
-    this.handleConnected = this.handleConnected.bind(this);
   }
 
   componentDidMount() {
     const { workspaceSlug, workspaces } = this.props;
     this.props.fetchWorkspaceRequest(workspaceSlug);
-
-    if (!workspaces || !workspaces.length) {
-      this.props.fetchWorkspacesRequest();
-    }
+    if (!workspaces || !workspaces.length) this.props.fetchWorkspacesRequest();
   }
 
   componentDidUpdate(prevProps) {
     const { workspaceSlug, workspaces, ...props } = this.props;
-
-    if (prevProps.workspaceSlug !== workspaceSlug) {
-      props.fetchWorkspaceRequest(workspaceSlug);
-    }
-
+    if (prevProps.workspaceSlug !== workspaceSlug) props.fetchWorkspaceRequest(workspaceSlug);
     if (prevProps.workspaces && prevProps.workspaces.length !== workspaces.length) {
       props.fetchWorkspacesRequest();
     }
@@ -37,15 +29,11 @@ class WorkspacePage extends React.Component {
     this.props.actionCableReceive(received);
   }
 
-  handleConnected() {
-    this.workspaceChannel.perform('online');
-  }
-
   render() {
     const { workspaceSlug, channels, ...props } = this.props;
     const defaultChannelSlug = channels[0] && channels[0].slug;
 
-    if (props.isFetching) {
+    if (props.isLoading) {
       return (<h2>Loading...</h2>);
     }
 
@@ -61,7 +49,6 @@ class WorkspacePage extends React.Component {
           ref={(refs) => { this.workspaceChannel = refs; }}
           channel={{ channel: 'WorkspaceChannel', workspace_slug: workspaceSlug }}
           onReceived={this.handleReceived}
-          onConnected={this.handleConnected}
         />
         {channels && channels.map(({ slug: channelSlug }) => (
           <ActionCable

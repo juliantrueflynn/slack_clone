@@ -4,11 +4,12 @@ import { camelizeKeys } from 'humps';
 import { fetchWorkspace, fetchWorkspaces } from '../../actions/workspaceActions';
 import { getChannels } from '../../reducers/selectors';
 import WorkspacePage from './WorkspacePage';
-import isFetching from '../../util/isFetchingUtil';
 
-const mapStateToProps = (state, { match }) => ({
+const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   channels: getChannels(state),
-  workspaceSlug: match.params.workspaceSlug,
+  workspaceSlug,
+  defaultChannelSlug: state.entities.channels[0] && state.entities.channels[0].slug,
+  isLoading: state.ui.isWorkspaceLoading,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -17,4 +18,4 @@ const mapDispatchToProps = dispatch => ({
   actionCableReceive: actionFromActionCable => dispatch(camelizeKeys(actionFromActionCable)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(isFetching('workspace')(WorkspacePage)));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WorkspacePage));

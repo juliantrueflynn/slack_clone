@@ -25,6 +25,6 @@ class UserAppearance < ApplicationRecord
   def broadcast(params)
     defaults = { type: 'SET_STATUS', status: status, workspace_slug: workspace_slug }
     options = defaults.merge(params)
-    AppearanceJob.perform_later(options)
+    WorkspaceJob.perform_later(workspace_slug, options)
   end
 end

@@ -26,10 +26,6 @@ class ChannelPage extends React.Component {
   render() {
     const { match, messages, ...props } = this.props;
 
-    if (props.isFetching) {
-      return (<h2>Loading...</h2>);
-    }
-
     if (match.isExact && props.rightSidebar) {
       const { messageSlug } = props;
       if (messageSlug && props.rightSidebar === 'Thread') {
