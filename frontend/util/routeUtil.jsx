@@ -10,6 +10,7 @@ import MessageThreadContainer from '../components/Message/MessageThreadContainer
 import UserFavoritesContainer from '../components/Views/UserFavoritesContainer';
 import UserViewContainer from '../components/UserViewContainer';
 import ThreadsPageContainer from '../components/ThreadsPageContainer';
+import AllUnreadsPageContainer from '../components/AllUnreadsPageContainer';
 
 export const routesConfig = [
   {
@@ -43,6 +44,10 @@ export const routesConfig = [
       {
         path: '/:workspaceSlug/threads',
         component: ThreadsPageContainer,
+      },
+      {
+        path: '/:workspaceSlug/unreads',
+        component: AllUnreadsPageContainer,
       },
       {
         path: '/:workspaceSlug/:channelSlug',

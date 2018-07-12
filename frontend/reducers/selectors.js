@@ -7,6 +7,11 @@ export const selectWorkspaceBySlug = ({ entities: { workspaces }, ui }, slug) =>
   return workspaces[workspaceSlug];
 };
 
+export const selectWorkspaceIdBySlug = ({ entities: { workspaces }, ui }, slug) => {
+  const workspaceSlug = slug || ui.displayWorkspaceSlug;
+  return workspaces[workspaceSlug] && workspaces[workspaceSlug].id;
+};
+
 export const getPageWorkspaceSlug = state => (
   state.ui.displayWorkspaceSlug
 );
@@ -15,6 +20,15 @@ export const getChannels = state => (
   Object.values(state.entities.channels)
 );
 
+export const selectUnreadChannels = ({ entities: { channels } }) => {
+  const unreadChannels = Object.values(channels).filter(ch => ch.hasUnreads);
+
+  return unreadChannels.reduce((acc, curr) => {
+    acc[curr.slug] = curr;
+    return acc;
+  }, {});
+};
+
 export const selectChannelIdBySlug = ({ entities: { channels }, ui }, slug) => {
   const channelSlug = slug || ui.displayChannelSlug;
   return channels[channelSlug] && channels[channelSlug].id;
@@ -22,6 +36,13 @@ export const selectChannelIdBySlug = ({ entities: { channels }, ui }, slug) => {
 
 export const selectDefaultChannelSlug = ({ entities: { channels } }) => (
   channels && Object.keys(channels)[0]
+);
+
+export const selectAuthors = ({ entities: { members, messages } }) => (
+  Object.values(messages).reduce((acc, curr) => {
+    acc[curr.authorSlug] = members[curr.authorSlug];
+    return acc;
+  }, {})
 );
 
 export const selectParentMessages = ({ entities: { messages, channels }, ui }) => {

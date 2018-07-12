@@ -6,7 +6,7 @@ end
 
 json.childMessages do
   @message.replies.each do |reply|
-    json.array! @message.replies do |child|
+    json.array! @message.single_message_replies do |child|
       json.(child, :id, :slug, :body, :author_id, :channel_id, :parent_message_id, :created_at, :updated_at)
       json.parent_message_slug @message.slug
       json.author_slug child.author.slug

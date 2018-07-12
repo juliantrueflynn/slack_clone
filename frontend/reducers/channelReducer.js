@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import { WORKSPACE, CHANNEL, READ, MESSAGE } from '../actions/actionTypes';
+import { WORKSPACE, CHANNEL, READ, MESSAGE, USER_UNREADS } from '../actions/actionTypes';
 
 const channelReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -63,6 +63,17 @@ const channelReducer = (state = {}, action) => {
       nextState = Object.assign({}, state);
       nextState[slug].lastRead = accessedAt;
       if (nextState[slug].hasUnreads) nextState[slug].hasUnreads = false;
+      return nextState;
+    }
+    case USER_UNREADS.INDEX.RECEIVE: {
+      const { channels, messages } = action.unreads;
+
+      nextState = Object.assign({}, state);
+      channels.forEach((slug) => {
+        const messageSlugs = messages.filter(msg => msg.channelSlug === slug).map(msg => msg.slug);
+        nextState[slug].messages = messageSlugs;
+      });
+
       return nextState;
     }
     default:

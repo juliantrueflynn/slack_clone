@@ -15,6 +15,7 @@ export const REACTION = apiActions('REACTION', ['CREATE', 'DELETE']);
 export const USER_THREAD = apiActions('USER_THREAD', ['INDEX']);
 export const READ = apiActions('READ', ['UPDATE']);
 export const MEMBER = apiActions('MEMBER', ['INDEX', 'SHOW', 'UPDATE', 'DELETE']);
+export const USER_UNREADS = apiActions('USER_UNREADS', ['INDEX']);
 
 export const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
 export const RIGHT_SIDEBAR = { OPEN: 'RIGHT_SIDEBAR_OPEN', CLOSE: 'RIGHT_SIDEBAR_CLOSE' };

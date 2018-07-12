@@ -1,7 +1,7 @@
-import { put, takeLatest, call } from 'redux-saga/effects';
-import { READ } from '../actions/actionTypes';
-import { apiUpdate } from '../util/apiUtil';
-import readUpdate from '../actions/readActions';
+import { all, fork, put, takeLatest, takeEvery, call } from 'redux-saga/effects';
+import { READ, USER_UNREADS } from '../actions/actionTypes';
+import { apiUpdate, apiFetch } from '../util/apiUtil';
+import { readUpdate, fetchUnreads } from '../actions/readActions';
 
 function* loadReadDateTime({ readableId, readableType }) {
   try {
@@ -12,6 +12,26 @@ function* loadReadDateTime({ readableId, readableType }) {
   }
 }
 
+function* loadUnreads({ workspaceId }) {
+  try {
+    const unreads = yield call(apiFetch, `workspace/${workspaceId}/user_unreads`);
+    yield put(fetchUnreads.receive(unreads));
+  } catch (error) {
+    yield put(fetchUnreads.failure(error));
+  }
+}
+
+function* watchReadEntity() {
+  yield takeEvery(READ.UPDATE.REQUEST, loadReadDateTime);
+}
+
+function* watchAllUnreadsPage() {
+  yield takeLatest(USER_UNREADS.INDEX.REQUEST, loadUnreads);
+}
+
 export default function* readSaga() {
-  yield takeLatest(READ.UPDATE.REQUEST, loadReadDateTime);
+  yield all([
+    fork(watchReadEntity),
+    fork(watchAllUnreadsPage),
+  ]);
 }

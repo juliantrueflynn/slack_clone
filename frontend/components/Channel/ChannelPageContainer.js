@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import ChannelPage from './ChannelPage';
 import { fetchChannel, leaveChannel } from '../../actions/channelActions';
-import { selectParentMessages, selectChannelIdBySlug } from '../../reducers/selectors';
-import readUpdate from '../../actions/readActions';
+import { selectParentMessages, selectChannelIdBySlug, selectAuthors } from '../../reducers/selectors';
+import { readUpdate } from '../../actions/readActions';
 
 const mapStateToProps = (state, { match: { params } }) => ({
   messages: selectParentMessages(state),
@@ -12,6 +12,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
   userSlug: state.ui.displayUserSlug,
   isWorkspaceLoaded: !!state.ui.displayWorkspaceSlug,
   channelId: selectChannelIdBySlug(state, params.channelSlug),
+  authors: selectAuthors(state),
 });
 
 const mapDispatchToProps = dispatch => ({

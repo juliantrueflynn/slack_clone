@@ -5,9 +5,9 @@ import RightSidebarContainer from '../Layout/RightSidebarContainer';
 
 class MessageThread extends React.Component {
   componentDidMount() {
-    const { message, isChannelLoaded, ...props } = this.props;
+    const { message, ...props } = this.props;
 
-    if (isChannelLoaded) {
+    if (props.isWorkspaceLoaded) {
       props.fetchMessageRequest(props.messageSlug);
       if (message) props.readUpdateRequest(message.id);
     }
@@ -16,16 +16,16 @@ class MessageThread extends React.Component {
   componentDidUpdate(prevProps) {
     const { message, messageSlug, ...props } = this.props;
 
-    if (prevProps.messageSlug && messageSlug !== prevProps.messageSlug) {
+    if (messageSlug !== prevProps.messageSlug) {
       props.fetchMessageRequest(messageSlug);
       if (message) props.readUpdateRequest(message.id);
     }
   }
 
   render() {
-    const { message, threadMessages } = this.props;
+    const { message, threadMessages, ...props } = this.props;
 
-    if (!message) {
+    if (!message || !props.isWorkspaceLoaded) {
       return null;
     }
 
@@ -36,12 +36,20 @@ class MessageThread extends React.Component {
       >
         <div className="thread">
           <div className="thread__message">
-            <MessageContainer isSingleMessage message={message} />
+            <MessageContainer
+              author={props.authors[message.authorSlug]}
+              isSingleMessage
+              message={message}
+            />
           </div>
           {threadMessages && (
             <div className="thread__messages">
               {threadMessages.map(threadMessage => (
-                <MessageContainer key={threadMessage.slug} message={threadMessage} />
+                <MessageContainer
+                  key={threadMessage.slug}
+                  message={threadMessage}
+                  author={props.authors[threadMessage.authorSlug]}
+                />
               ))}
             </div>
           )}

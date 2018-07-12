@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: :json} do
     resources :users, only: [:index, :show]
     resources :workspaces, only: [:index, :show, :create, :update, :destroy], param: :slug
+    get 'workspace/:workspace_id/user_unreads', to: 'user_unreads#index'
     resource :user, only: [:create, :update]
     resource :read, only: [:update]
     resources :user_threads, only: [:index]

@@ -11,13 +11,14 @@ class Message < ApplicationRecord
   belongs_to :author, class_name: 'User'
   belongs_to :channel
   belongs_to :parent_message, class_name: 'Message', optional: true
+  has_one :workspace, through: :channel
   has_many :single_message_replies,
     -> { includes(:author, :favorites) },
     class_name: 'Message',
     foreign_key: :parent_message_id,
     dependent: :destroy
   has_many :replies,
-    -> { includes(:favorites, :reactions) },
+    -> { includes(:reactions) },
     class_name: 'Message',
     foreign_key: :parent_message_id,
     dependent: :destroy
@@ -29,6 +30,15 @@ class Message < ApplicationRecord
 
   scope :exclude_children, -> { where(parent_message_id: nil) }
   scope :with_thread_replies, -> { includes(thread_replies: [:author, :replies]).where.not(thread_replies_messages: { id: nil }) }
+
+  def self.user_unreads(params)
+      select('messages.*', 'channels.slug', 'users.slug', 'reads.accessed_at')
+      .includes(:author, channel: :reads)
+      .where(reads: { user_id: params[:user_id] })
+      .where("messages.created_at > reads.accessed_at")
+      .where(channels: { workspace_id: params[:workspace_id] })
+      .where(parent_message_id: nil)
+  end
 
   def self.parents_with_author_id(author_id)
     Message.with_thread_replies.where(thread_replies_messages: { author_id: author_id })

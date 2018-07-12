@@ -13,7 +13,7 @@ class Channel < ApplicationRecord
   has_many :channel_subs, foreign_key: :channel_id, dependent: :destroy
   has_many :members, class_name: 'User', through: :channel_subs, source: :user
   has_many :messages,
-    -> { includes(:parent_message, reactions: :message, favorites: :message) },
+    -> { includes(:parent_message, reactions: :message) },
     dependent: :destroy
   has_many :parent_messages,
     -> { Message.exclude_children },
@@ -47,7 +47,6 @@ class Channel < ApplicationRecord
 
   after_create_commit do
     owner.channel_subs.create(channel_id: id, user_id: owner_id)
-    
     WorkspaceJob.perform_later(workspace.slug, type: "CHANNEL_CREATE_RECEIVE", channel: self)
   end
 

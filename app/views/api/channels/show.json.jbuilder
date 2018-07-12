@@ -6,6 +6,7 @@ end
 json.messages do
   json.array! @channel.messages do |message|
     json.(message, :id, :body, :slug, :author_id, :channel_id, :parent_message_id, :created_at, :updated_at)
+    json.author_slug message.author.slug
     if message.is_child?
       json.parent_message_slug message.parent_message.slug
       json.last_read nil

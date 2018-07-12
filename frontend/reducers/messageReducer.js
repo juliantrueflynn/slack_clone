@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import { MESSAGE, CHANNEL, USER_THREAD, REACTION, READ } from '../actions/actionTypes';
+import { MESSAGE, CHANNEL, USER_THREAD, REACTION, READ, USER_UNREADS } from '../actions/actionTypes';
 
 const messageReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -100,6 +100,11 @@ const messageReducer = (state = {}, action) => {
       nextState[slug].lastRead = accessedAt;
       return nextState;
     }
+    case USER_UNREADS.INDEX.RECEIVE:
+      return action.unreads.messages.reduce((acc, curr) => {
+        acc[curr.slug] = curr;
+        return acc;
+      }, {});
     default:
       return state;
   }

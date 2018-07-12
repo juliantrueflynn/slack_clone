@@ -28,14 +28,18 @@ class Message extends React.Component {
 
   // TODO: Change this to memoization helper?
   static getDerivedStateFromProps(nextProps, prevState) {
-    const body = JSON.parse(nextProps.message.body);
-    const blocks = convertFromRaw(body);
+    if (nextProps.message) {
+      const body = JSON.parse(nextProps.message.body);
+      const blocks = convertFromRaw(body);
 
-    return {
-      isMouseOver: prevState.isMouseOver,
-      isEditing: prevState.isEditing,
-      editorState: EditorState.createWithContent(blocks),
-    };
+      return {
+        isMouseOver: prevState.isMouseOver,
+        isEditing: prevState.isEditing,
+        editorState: EditorState.createWithContent(blocks),
+      };
+    }
+
+    return null;
   }
 
   onChange(editorState) {
@@ -114,7 +118,7 @@ class Message extends React.Component {
           )}
           <div className="msg__content">
             <div className="msg__content-meta">
-              <span className="msg__author">{message.authorId}</span>
+              <span className="msg__author">{props.author && props.author.username}</span>
               <span className="msg__time">{message.createdAt}</span>
             </div>
             ID: #{message.id}<br />

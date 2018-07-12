@@ -5,8 +5,8 @@ import { updateMessage } from '../../actions/messageActions';
 import { getReactionCounts, selectThreadLastUpdate } from '../../reducers/selectors';
 
 const mapStateToProps = (state, { message }) => ({
-  reactions: getReactionCounts(state, message.id),
-  threadLastUpdate: message.thread ? selectThreadLastUpdate(state, message.thread) : null,
+  reactions: message && getReactionCounts(state, message.id),
+  threadLastUpdate: message && message.thread && selectThreadLastUpdate(state, message.thread),
 });
 
 const mapDispatchToProps = dispatch => ({

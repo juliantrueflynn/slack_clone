@@ -19,7 +19,7 @@ class User < ApplicationRecord
   has_many :favorites, dependent: :destroy
   has_many :reactions, dependent: :destroy
   has_many :appears, class_name: 'UserAppearance', dependent: :destroy
-  has_many :reads, as: :readable, dependent: :destroy
+  has_many :reads, dependent: :destroy
 
   def self.find_by_email_and_password(email, password)
     user = User.find_by(email: email)

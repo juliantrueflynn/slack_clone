@@ -10,7 +10,8 @@ class ChannelSub < ApplicationRecord
     channel.workspace 
   end
 
-  after_create_commit do  
+  after_create_commit do
+    channel.reads.create!(user_id: user_id, accessed_at: DateTime.now)
     WorkspaceJob.perform_later(workspace.slug, type: "CHANNEL_SUB_CREATE_RECEIVE", channel_sub: self)
   end
 

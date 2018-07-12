@@ -26,6 +26,10 @@ class ChannelPage extends React.Component {
   render() {
     const { match, messages, ...props } = this.props;
 
+    if (!messages) {
+      return null;
+    }
+
     if (match.isExact && props.rightSidebar) {
       const { messageSlug } = props;
       if (messageSlug && props.rightSidebar === 'Thread') {
@@ -51,7 +55,11 @@ class ChannelPage extends React.Component {
         <div className="messages-pane">
           <div className="messages-pane-body">
             {messages.map(message => (
-              <MessageContainer key={message.slug} message={message} />
+              <MessageContainer
+                key={message.slug}
+                author={props.authors[message.authorSlug]}
+                message={message}
+              />
             ))}
             <MessageFormContainer />
           </div>
