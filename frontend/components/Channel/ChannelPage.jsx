@@ -2,56 +2,53 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { PageRoutes } from '../../util/routeUtil';
 import MessageFormContainer from '../Message/MessageFormContainer';
-import ChannelFormContainer from './ChannelFormContainer';
 import TopBarHeaderContainer from '../TopBarHeaderContainer';
 import MessageContainer from '../Message/MessageContainer';
 import './ChannelPage.css';
 
 class ChannelPage extends React.Component {
   componentDidMount() {
-    const { channelId, channelSlug, ...props } = this.props;
+    const { channel, channelSlug, ...props } = this.props;
     if (props.isWorkspaceLoaded) props.fetchChannelRequest(channelSlug);
-    if (channelId) props.readUpdateRequest(channelId);
+    if (channel) props.readUpdateRequest(channel.id);
   }
 
   componentDidUpdate(prevProps) {
     const { channelSlug, fetchChannelRequest, ...props } = this.props;
     if (channelSlug !== prevProps.channelSlug) {
-      fetchChannelRequest(channelSlug);
-      if (props.channelId) props.readUpdateRequest(props.channelId);
       if (prevProps.channelSlug) props.leaveChannel(prevProps.channelSlug);
+      fetchChannelRequest(channelSlug);
+      if (props.channel) props.readUpdateRequest(props.channel.id);
     }
   }
 
   render() {
     const { match, messages, ...props } = this.props;
 
-    if (!messages) {
+    if (!props.channel) {
       return null;
     }
 
     if (match.isExact && props.rightSidebar) {
       const { messageSlug } = props;
-      if (messageSlug && props.rightSidebar === 'Thread') {
-        return (<Redirect to={`${match.url}/thread/${messageSlug}`} />);
+      let redirectUrl;
+
+      if (props.rightSidebar === 'Thread') {
+        redirectUrl = `${match.url}/thread/${messageSlug}`;
+      } else if (props.rightSidebar === 'Favorites') {
+        redirectUrl = `${match.url}/favorites`;
+      } else if (props.rightSidebar === 'Workspace Directory') {
+        redirectUrl = `${match.url}/team/${props.userSlug}`;
+      } else {
+        return null;
       }
 
-      if (props.rightSidebar === 'Favorites') {
-        return (<Redirect to={`${match.url}/favorites`} />);
-      }
-
-      if (props.rightSidebar === 'Workspace Directory') {
-        return (<Redirect to={`${match.url}/team/${props.userSlug}`} />);
-      }
+      return (<Redirect to={redirectUrl} />);
     }
 
     return (
       <div className="page page__channel">
-        <TopBarHeaderContainer
-          sectionTitle={props.channelSlug}
-          match={match}
-          location={props.location}
-        />
+        <TopBarHeaderContainer sectionTitle={props.channel && props.channel.title} />
         <div className="messages-pane">
           <div className="messages-pane-body">
             {messages.map(message => (
@@ -65,7 +62,6 @@ class ChannelPage extends React.Component {
           </div>
         </div>
         <PageRoutes routes={props.routes} />
-        <ChannelFormContainer />
       </div>
     );
   }

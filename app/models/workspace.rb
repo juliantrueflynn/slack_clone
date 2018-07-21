@@ -1,5 +1,7 @@
 class Workspace < ApplicationRecord
-  EXCLUDED_SLUGS = %w(api create-workspace assets signin signout stylesheets javascripts images).freeze
+  after_create_commit :generate_default_chats, :sub_owner_to_workspace
+
+  attr_accessor :skip_broadcast
   
   validates_presence_of :title, :slug, :owner_id
   validates_uniqueness_of :slug
@@ -7,37 +9,43 @@ class Workspace < ApplicationRecord
     within: 3..55,
     too_long: 'title too long (max: 55 characters)',
     too_short: 'title too short (min: 3 characters)'
-  validates_exclusion_of :slug, in: EXCLUDED_SLUGS, message: "Taken, sorry!"
-  
-  belongs_to :owner, class_name: 'User', foreign_key: :owner_id
-  has_many :workspace_subs, foreign_key: :workspace_id, dependent: :destroy
-  has_many :members, class_name: 'User', through: :workspace_subs, source: :user
-  has_many :channels, dependent: :destroy
-  has_many :channel_subs, through: :channels
-  has_many :favorites, through: :channels
+  validates_exclusion_of :slug,
+    in: %w(api create-workspace assets signin signout),
+    message: "Taken, sorry!"
 
-  def is_channel_sub?(user_id)
-    !!channels_with_subs.find_by(channel_subs: { user_id: user_id })
+  belongs_to :owner, class_name: 'User'
+  has_many :subs, class_name: 'WorkspaceSub'
+  has_many :members,
+    -> { left_joins(:appears).select('users.*', 'user_appearances.status AS status') },
+    class_name: 'User',
+    through: :subs,
+    source: :user
+  has_many :channels
+  has_many :chat_subs, through: :channels, source: :subs
+
+  def broadcast_name
+    "app"
+  end
+
+  def is_user_sub?(user_id)
+    !!subs.find_by(workspace_subs: { user_id: user_id })
   end
 
   private
 
-  after_create_commit do
-    owner.workspace_subs.create(workspace_id: id, user_id: owner_id)
-    channels.create([
-      {title: 'General', owner_id: owner_id, workspace_id: id},
-      {title: 'Random', owner_id: owner_id, workspace_id: id}
-    ])
-    AppJob.perform_later(type: 'WORKSPACE_CREATE_RECEIVE', workspace: self)
+  DEFAULT_CHAT_TITLES = %w(General Random).freeze
+
+  def generate_default_chats
+    DEFAULT_CHAT_TITLES.each do |chat_title|
+      channels.create(title: chat_title, owner_id: owner_id, workspace_id: id)
+    end
   end
 
-  after_update_commit do
-    AppJob.perform_later(type: "WORKSPACE_UPDATE_RECEIVE", workspace: self)
+  def sub_owner_to_workspace
+    owner.workspace_subs.create(skip_broadcast: true)
   end
 
-  # This works but after_destroy_commit does not for some reason
-  after_destroy :delete_workspace
-  def delete_workspace
-    AppJob.perform_later(type: "WORKSPACE_DELETE_RECEIVE", workspace: self)
-  end
+  after_create_commit :broadcast_create, unless: :skip_broadcast?
+  after_update_commit :broadcast_update, unless: :skip_broadcast?
+  after_destroy :broadcast_destroy, unless: :skip_broadcast?
 end

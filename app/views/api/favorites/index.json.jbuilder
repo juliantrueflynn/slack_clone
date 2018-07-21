@@ -1,4 +1,4 @@
-json.array! @favorites do |fav|
-  json.(fav, :id, :message_id, :user_id)
-  json.message_slug fav.message.slug
+json.array! @favorites do |favorite|
+  json.(favorite, :id, :message_id, :user_id)
+  json.message_slug favorite.message.slug
 end

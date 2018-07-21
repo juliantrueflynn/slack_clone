@@ -6,11 +6,11 @@ const messageErrorsReducer = (state = [], action) => {
   switch (action.type) {
     case MESSAGE.CREATE.FAILURE:
     case MESSAGE.UPDATE.FAILURE:
-    case MESSAGE.DELETE.FAILURE:
+    case MESSAGE.DESTROY.FAILURE:
       return [...action.errors];
     case MESSAGE.CREATE.REQUEST:
     case MESSAGE.UPDATE.REQUEST:
-    case MESSAGE.DELETE.REQUEST:
+    case MESSAGE.DESTROY.REQUEST:
       return [];
     default:
       return state;

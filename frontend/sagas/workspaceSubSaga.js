@@ -24,7 +24,7 @@ function* watchCreateWorkspaceSub() {
 }
 
 function* watchDeleteSubWorkspace() {
-  yield takeLatest(WORKSPACE_SUB.DELETE.REQUEST, loadDeleteSub);
+  yield takeLatest(WORKSPACE_SUB.DESTROY.REQUEST, loadDeleteSub);
 }
 
 export default function* workspaceSubSaga() {

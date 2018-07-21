@@ -1,6 +1,6 @@
 import React from 'react';
 import WorkspacesMenuItem from './WorkspacesMenuItem';
-import DropdownMenu from '../Layout/DropdownMenu';
+import Dropdown from '../Layout/Dropdown';
 
 class WorkspacesMenu extends React.Component {
   constructor(props) {
@@ -22,7 +22,7 @@ class WorkspacesMenu extends React.Component {
 
   render() {
     return (
-      <DropdownMenu menuFor="workspaces" togglerText="Workspaces">
+      <Dropdown menuFor="workspaces" togglerText="Workspaces">
         {this.props.workspaces.map(workspace => (
           <WorkspacesMenuItem
             workspace={workspace}
@@ -30,7 +30,7 @@ class WorkspacesMenu extends React.Component {
             dropdownToggle={this.handleDropdownToggle}
           />
         ))}
-      </DropdownMenu>
+      </Dropdown>
     );
   }
 }

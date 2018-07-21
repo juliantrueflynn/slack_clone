@@ -1,12 +1,11 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import UserFavorites from './UserFavorites';
-import { getUserFavorites } from '../../reducers/selectors';
 import { fetchFavorites } from '../../actions/favoriteActions';
 
 const mapStateToProps = (state, { match }) => ({
   isChannelLoaded: state.ui.displayChannelSlug === match.params.channelSlug,
-  favorites: getUserFavorites(state),
+  favorites: Object.values(state.entities.favorites),
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -11,6 +11,6 @@ class CreateWorkspaces < ActiveRecord::Migration[5.1]
     add_index :workspaces, :owner_id
     add_index :workspaces, :slug, unique: true
 
-    add_foreign_key :workspaces, :users, column: :owner_id
+    add_foreign_key :workspaces, :users, column: :owner_id, on_delete: :cascade
   end
 end

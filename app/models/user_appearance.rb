@@ -4,27 +4,35 @@ class UserAppearance < ApplicationRecord
 
   belongs_to :user
 
-  def self.find_or_create_by_workspace_slug(slug)
-    find_or_create_by(workspace_slug: slug) do |user_appearance|
-      user_appearance.status = 'ONLINE'
-    end
-  end
-
   def self.in_workspace(slug)
     find_by(workspace_slug: slug)
   end
 
+  def online!
+    new_record? && save
+    self
+  end
+
   def away!
-    update!(status: 'AWAY')
+    update(status: 'AWAY')
+    self
   end
 
   def busy!
-    update!(status: 'BUSY')
+    update(status: 'BUSY')
+    self
   end
 
-  def broadcast(params)
-    defaults = { type: 'SET_STATUS', status: status, workspace_slug: workspace_slug }
-    options = defaults.merge(params)
-    WorkspaceJob.perform_later(workspace_slug, options)
+  private
+
+  after_create :broadcast
+  after_update :broadcast
+  after_destroy { broadcast('OFFLINE') }
+
+  def broadcast(new_status = nil)
+    HashDispatcherJob.perform_later channel_name: "workspace_#{workspace_slug}",
+      type: action_type,
+      status: new_status || status,
+      user_slug: user.slug
   end
 end

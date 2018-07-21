@@ -1,12 +1,11 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import WorkspacesMenu from './WorkspacesMenu';
-import { getWorkspaces } from '../../reducers/selectors';
 import { fetchWorkspaces } from '../../actions/workspaceActions';
 
 const mapStateToProps = state => ({
-  loggedIn: Boolean(state.session.currentUser),
-  workspaces: getWorkspaces(state),
+  loggedIn: !!state.session.currentUser,
+  workspaces: Object.values(state.entities.workspaces),
 });
 
 const mapDispatchToProps = dispatch => ({

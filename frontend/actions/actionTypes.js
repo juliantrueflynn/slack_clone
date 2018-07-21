@@ -1,20 +1,21 @@
 import { actionTypes, apiActions } from '../util/actionsUtil';
 
-export const SET_STATUS = 'SET_STATUS';
 export const SIGN_IN = actionTypes('SIGN_IN');
 export const SIGN_UP = actionTypes('SIGN_UP');
 export const SIGN_OUT = actionTypes('SIGN_OUT');
+export const USER_APPEARANCE = actionTypes('USER_APPEARANCE');
 
 export const WORKSPACE = apiActions('WORKSPACE');
 export const CHANNEL = apiActions('CHANNEL');
-export const MESSAGE = apiActions('MESSAGE', ['SHOW', 'CREATE', 'UPDATE', 'DELETE']);
-export const WORKSPACE_SUB = apiActions('WORKSPACE_SUB', ['CREATE', 'DELETE']);
-export const CHANNEL_SUB = apiActions('CHANNEL_SUB', ['CREATE', 'DELETE']);
-export const FAVORITE = apiActions('FAVORITE', ['INDEX', 'CREATE', 'DELETE']);
-export const REACTION = apiActions('REACTION', ['CREATE', 'DELETE']);
+export const DM_CHAT = apiActions('DM_CHAT', ['CREATE']);
+export const MESSAGE = apiActions('MESSAGE', ['SHOW', 'CREATE', 'UPDATE', 'DESTROY']);
+export const WORKSPACE_SUB = apiActions('WORKSPACE_SUB', ['CREATE', 'DESTROY']);
+export const CHANNEL_SUB = apiActions('CHANNEL_SUB', ['CREATE', 'UPDATE', 'DESTROY']);
+export const FAVORITE = apiActions('FAVORITE', ['INDEX', 'CREATE', 'DESTROY']);
+export const REACTION = apiActions('REACTION', ['CREATE', 'DESTROY']);
 export const USER_THREAD = apiActions('USER_THREAD', ['INDEX']);
 export const READ = apiActions('READ', ['UPDATE']);
-export const MEMBER = apiActions('MEMBER', ['INDEX', 'SHOW', 'UPDATE', 'DELETE']);
+export const MEMBER = apiActions('MEMBER', ['INDEX', 'SHOW', 'UPDATE', 'DESTROY']);
 export const USER_UNREADS = apiActions('USER_UNREADS', ['INDEX']);
 
 export const LEAVE_CHANNEL = 'LEAVE_CHANNEL';

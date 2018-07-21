@@ -16,23 +16,25 @@ ActiveRecord::Schema.define(version: 20180706212936) do
   enable_extension "plpgsql"
 
   create_table "channel_subs", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "channel_id", null: false
+    t.bigint "user_id"
+    t.bigint "channel_id"
+    t.boolean "in_sidebar", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["channel_id", "user_id"], name: "index_channel_subs_on_channel_id_and_user_id", unique: true
   end
 
   create_table "channels", force: :cascade do |t|
-    t.string "title", null: false
-    t.text "topic"
+    t.string "title"
+    t.string "topic"
     t.string "slug", null: false
-    t.integer "owner_id", null: false
-    t.integer "workspace_id", null: false
+    t.integer "owner_id"
+    t.bigint "workspace_id"
+    t.boolean "has_dm", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["owner_id"], name: "index_channels_on_owner_id"
     t.index ["slug"], name: "index_channels_on_slug", unique: true
+    t.index ["workspace_id"], name: "index_channels_on_workspace_id"
   end
 
   create_table "favorites", force: :cascade do |t|
@@ -47,16 +49,17 @@ ActiveRecord::Schema.define(version: 20180706212936) do
     t.text "body"
     t.integer "author_id", null: false
     t.string "slug", null: false
-    t.integer "channel_id", null: false
+    t.bigint "channel_id"
     t.integer "parent_message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["channel_id"], name: "index_messages_on_channel_id"
     t.index ["slug"], name: "index_messages_on_slug", unique: true
   end
 
   create_table "reactions", force: :cascade do |t|
-    t.bigint "message_id", null: false
-    t.bigint "user_id", null: false
+    t.bigint "message_id"
+    t.bigint "user_id"
     t.string "emoji", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -75,7 +78,7 @@ ActiveRecord::Schema.define(version: 20180706212936) do
 
   create_table "user_appearances", force: :cascade do |t|
     t.string "status", default: "ONLINE", null: false
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.string "workspace_slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -97,8 +100,8 @@ ActiveRecord::Schema.define(version: 20180706212936) do
   end
 
   create_table "workspace_subs", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "workspace_id", null: false
+    t.bigint "user_id"
+    t.bigint "workspace_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["workspace_id", "user_id"], name: "index_workspace_subs_on_workspace_id_and_user_id", unique: true
@@ -114,19 +117,18 @@ ActiveRecord::Schema.define(version: 20180706212936) do
     t.index ["slug"], name: "index_workspaces_on_slug", unique: true
   end
 
-  add_foreign_key "channel_subs", "channels"
-  add_foreign_key "channel_subs", "users"
-  add_foreign_key "channels", "users", column: "owner_id"
-  add_foreign_key "channels", "workspaces"
-  add_foreign_key "favorites", "messages"
-  add_foreign_key "favorites", "users"
-  add_foreign_key "messages", "channels"
-  add_foreign_key "messages", "users", column: "author_id"
-  add_foreign_key "reactions", "messages"
-  add_foreign_key "reactions", "users"
-  add_foreign_key "reads", "users"
-  add_foreign_key "user_appearances", "users"
-  add_foreign_key "workspace_subs", "users"
-  add_foreign_key "workspace_subs", "workspaces"
-  add_foreign_key "workspaces", "users", column: "owner_id"
+  add_foreign_key "channel_subs", "channels", on_delete: :cascade
+  add_foreign_key "channel_subs", "users", on_delete: :cascade
+  add_foreign_key "channels", "workspaces", on_delete: :cascade
+  add_foreign_key "favorites", "messages", on_delete: :cascade
+  add_foreign_key "favorites", "users", on_delete: :cascade
+  add_foreign_key "messages", "channels", on_delete: :cascade
+  add_foreign_key "messages", "users", column: "author_id", on_delete: :cascade
+  add_foreign_key "reactions", "messages", on_delete: :cascade
+  add_foreign_key "reactions", "users", on_delete: :cascade
+  add_foreign_key "reads", "users", on_delete: :cascade
+  add_foreign_key "user_appearances", "users", on_delete: :cascade
+  add_foreign_key "workspace_subs", "users", on_delete: :cascade
+  add_foreign_key "workspace_subs", "workspaces", on_delete: :cascade
+  add_foreign_key "workspaces", "users", column: "owner_id", on_delete: :cascade
 end

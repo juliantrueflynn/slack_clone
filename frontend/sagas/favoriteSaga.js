@@ -1,49 +1,51 @@
 import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
-import * as actions from '../actions/favoriteActions';
 import { FAVORITE } from '../actions/actionTypes';
+import { fetchFavorites, createFavorite, deleteFavorite } from '../actions/favoriteActions';
 import { apiFetch, apiCreate, apiDelete } from '../util/apiUtil';
 
-function* fetchUserFavorites() {
+function* fetchIndex({ workspaceSlug }) {
   try {
-    const favorites = yield call(apiFetch, 'favorites');
-    yield put(actions.fetchFavorites.receive(favorites));
+    const favorites = yield call(apiFetch, `workspaces/${workspaceSlug}/favorites`);
+    yield put(fetchFavorites.receive(favorites));
   } catch (error) {
-    yield put(actions.fetchFavorites.failure(error));
+    yield put(fetchFavorites.failure(error));
   }
 }
 
-function* fetchCreateFavorite({ messageSlug: messageId }) {
+function* fetchCreate({ favorite }) {
   try {
-    yield call(apiCreate, 'favorites', { messageId });
+    const newFavorite = yield call(apiCreate, 'favorites', favorite);
+    yield put(createFavorite.receive(newFavorite));
   } catch (error) {
-    yield put(actions.createFavorite.failure(error));
+    yield put(createFavorite.failure(error));
   }
 }
 
-function* fetchDeleteFavorite({ messageSlug }) {
+function* fetchDestroy({ favoriteId }) {
   try {
-    yield call(apiDelete, `favorites/${messageSlug}`);
+    const favorite = yield call(apiDelete, `favorites/${favoriteId}`);
+    yield put(deleteFavorite.receive(favorite));
   } catch (error) {
-    yield put(actions.deleteFavorite.failure(error));
+    yield put(deleteFavorite.failure(error));
   }
 }
 
-function* watchUserFavorites() {
-  yield takeLatest(FAVORITE.INDEX.REQUEST, fetchUserFavorites);
+function* watchIndex() {
+  yield takeLatest(FAVORITE.INDEX.REQUEST, fetchIndex);
 }
 
-function* watchCreateFavorite() {
-  yield takeLatest(FAVORITE.CREATE.REQUEST, fetchCreateFavorite);
+function* watchCreate() {
+  yield takeLatest(FAVORITE.CREATE.REQUEST, fetchCreate);
 }
 
-function* watchDeleteFavorite() {
-  yield takeLatest(FAVORITE.DELETE.REQUEST, fetchDeleteFavorite);
+function* watchDestroy() {
+  yield takeLatest(FAVORITE.DESTROY.REQUEST, fetchDestroy);
 }
 
 export default function* favoriteSaga() {
   yield all([
-    fork(watchUserFavorites),
-    fork(watchCreateFavorite),
-    fork(watchDeleteFavorite),
+    fork(watchIndex),
+    fork(watchCreate),
+    fork(watchDestroy),
   ]);
 }

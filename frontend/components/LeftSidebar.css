@@ -3,9 +3,31 @@
   display: inline-block;
   background-color: #4D394B;
   color: rgba(255,255,255,.8);
-  padding: .625em .5em;
 }
 
 .sidebar__left a {
   color: inherit;
+}
+
+.sidebar__left .menu__item .menu__link {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  display: block;
+}
+
+.sidebar__left .menu__item .menu__link--active {
+  background-color: #4C9689;
+}
+
+.widget__header,
+.sidebar__left .menu__item .menu__link,
+.sidebar__left .menu__text {
+  padding-left: 16px;
+  padding-right: 16px;
+  width: 100%;
+  text-align: inherit;
+}
+
+.menu__quicklinks {
+  margin-bottom: 20px;
 }

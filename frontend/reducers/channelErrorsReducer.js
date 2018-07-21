@@ -9,7 +9,7 @@ const channelErrorsReducer = (state = [], action) => {
     case CHANNEL.SHOW.FAILURE:
     case CHANNEL.CREATE.FAILURE:
     case CHANNEL.UPDATE.FAILURE:
-    case CHANNEL.DELETE.FAILURE:
+    case CHANNEL.DESTROY.FAILURE:
       return [...action.errors];
     case CHANNEL.CREATE.REQUEST:
     case CHANNEL.CREATE.RECEIVE:

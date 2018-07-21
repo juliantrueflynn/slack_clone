@@ -30,11 +30,12 @@ class MessageHoverMenu extends React.Component {
   }
 
   handleFavClick() {
-    this.props.createFavoriteRequest(this.props.message.slug);
+    this.props.createFavoriteRequest({ messageId: this.props.message.id });
   }
 
   handleUnfavClick() {
-    this.props.deleteFavoriteRequest(this.props.message.slug);
+    const { message: { favoriteId }, deleteFavoriteRequest } = this.props;
+    deleteFavoriteRequest(favoriteId);
   }
 
   handleEditClick() {

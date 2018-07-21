@@ -1,31 +1,18 @@
 class Reaction < ApplicationRecord
+  attr_accessor :skip_broadcast
+
   validates :message_id, :user_id, :emoji, presence: true
 
   belongs_to :user
   belongs_to :message
+  has_one :channel, through: :message
+
+  def broadcast_name
+    "channel_#{channel.slug}"
+  end
 
   private
 
-  def channel
-    message.channel
-  end
-
-  after_create_commit do
-    ChannelJob.perform_later(
-      channel.slug,
-      type: 'REACTION_CREATE_RECEIVE',
-      reaction: self,
-      message_slug: message.slug
-    )
-  end
-
-  after_update_commit do
-    ChannelJob.perform_later(channel.slug, type: 'REACTION_UPDATE_RECEIVE', reaction: self)
-  end
-
-  # This works but after_destroy_commit does not for some reason
-  after_destroy :delete_reaction
-  def delete_reaction
-    ChannelJob.perform_later(channel.slug, type: 'REACTION_DELETE_RECEIVE', reaction: self)
-  end
+  after_create_commit :broadcast_create, unless: :skip_broadcast?
+  after_destroy :broadcast_destroy, unless: :skip_broadcast?
 end

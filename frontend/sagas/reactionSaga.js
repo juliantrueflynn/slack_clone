@@ -11,9 +11,9 @@ function* fetchCreateReaction({ reaction }) {
   }
 }
 
-function* fetchDeleteReaction({ reactionId }) {
+function* fetchDeleteReaction({ id }) {
   try {
-    yield call(apiDelete, `reactions/${reactionId}`);
+    yield call(apiDelete, `reactions/${id}`);
   } catch (error) {
     yield put(actions.deleteReaction.failure(error));
   }
@@ -24,7 +24,7 @@ function* watchCreateReaction() {
 }
 
 function* watchDeleteReaction() {
-  yield takeLatest(REACTION.DELETE.REQUEST, fetchDeleteReaction);
+  yield takeLatest(REACTION.DESTROY.REQUEST, fetchDeleteReaction);
 }
 
 export default function* reactionSaga() {

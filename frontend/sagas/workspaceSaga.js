@@ -2,12 +2,12 @@ import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/workspaceActions';
 import { WORKSPACE } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiDelete } from '../util/apiUtil';
-import { getCurrentUserId, getPageWorkspaceSlug } from '../reducers/selectors';
+import { selectCurrentUserId, selectWorkspaceSlug } from '../reducers/selectors';
 import { navigate } from '../actions/interactiveActions';
 
 function* redirectOwner({ workspace }) {
-  const currentUserId = yield select(getCurrentUserId);
-  const currWorkspaceSlug = yield select(getPageWorkspaceSlug);
+  const currentUserId = yield select(selectCurrentUserId);
+  const currWorkspaceSlug = yield select(selectWorkspaceSlug);
 
   if (currentUserId === workspace.ownerId && currWorkspaceSlug !== workspace.slug) {
     yield put(navigate({ path: `/${workspace.slug}` }));
@@ -63,7 +63,7 @@ function* watchWorkspacePage() {
 }
 
 function* watchDeleteWorkspace() {
-  yield takeLatest(WORKSPACE.DELETE.REQUEST, fetchDeleteWorkspace);
+  yield takeLatest(WORKSPACE.DESTROY.REQUEST, fetchDeleteWorkspace);
 }
 
 export default function* workspaceSaga() {

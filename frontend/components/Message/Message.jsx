@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import 'draft-js/dist/Draft.css';
 import 'draft-js-emoji-plugin/lib/plugin.css';
 import Editor from 'draft-js-plugins-editor';
@@ -106,9 +107,9 @@ class Message extends React.Component {
         onMouseEnter={this.handleHoverToggle(true)}
         onMouseLeave={this.handleHoverToggle(false)}
       >
-        <a href={`/${message.authorId}`} className="msg__avatar-link">
+        <Link to={`${props.match.url}/team/${message.authorId}`} className="msg__avatar-link">
           <img src="https://via.placeholder.com/40x40" alt={`${message.authorId}'s avatar`} />
-        </a>
+        </Link>
         <div className="msg__body">
           {isMouseOver && (
             <MessageHoverMenuContainer
@@ -118,11 +119,12 @@ class Message extends React.Component {
           )}
           <div className="msg__content">
             <div className="msg__content-meta">
-              <span className="msg__author">{props.author && props.author.username}</span>
+              <Link to={`${props.match.url}/team/${message.authorSlug}`} className="msg__author">
+                {props.author && props.author.username} (#{message.authorId})
+              </Link>
               <span className="msg__time">{message.createdAt}</span>
             </div>
             ID: #{message.id}<br />
-            Author: {message.authorId}<br />
             Slug: {message.slug}<br />
             <Editor
               editorState={editorState}

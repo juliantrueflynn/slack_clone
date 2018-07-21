@@ -11,6 +11,7 @@ import UserFavoritesContainer from '../components/Views/UserFavoritesContainer';
 import UserViewContainer from '../components/UserViewContainer';
 import ThreadsPageContainer from '../components/ThreadsPageContainer';
 import AllUnreadsPageContainer from '../components/AllUnreadsPageContainer';
+import DirectMessagePageContainer from '../components/DirectMessagePageContainer';
 
 export const routesConfig = [
   {
@@ -48,6 +49,10 @@ export const routesConfig = [
       {
         path: '/:workspaceSlug/unreads',
         component: AllUnreadsPageContainer,
+      },
+      {
+        path: '/:workspaceSlug/dm/:userSlug',
+        component: DirectMessagePageContainer,
       },
       {
         path: '/:workspaceSlug/:channelSlug',

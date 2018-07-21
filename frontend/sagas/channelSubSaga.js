@@ -1,35 +1,50 @@
 import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
-import * as actions from '../actions/channelActions';
+import { deleteChannelSub, createChannelSub, updateChannelSub } from '../actions/channelActions';
 import { CHANNEL_SUB } from '../actions/actionTypes';
-import { apiCreate, apiDelete } from '../util/apiUtil';
+import { apiCreate, apiDelete, apiUpdate } from '../util/apiUtil';
 
-function* loadCreateSub({ channelSlug }) {
+function* fetchCreate({ channelId }) {
   try {
-    yield call(apiCreate, 'channels', { channelId: channelSlug });
+    yield call(apiCreate, 'channel_subs', { channelId });
   } catch (error) {
-    yield put(actions.createChannelSub.failure(error));
+    yield put(createChannelSub.failure(error));
   }
 }
 
-function* loadDeleteSub({ channelSlug }) {
+function* fetchUpdate({ channelSub: { channelId, userId, inSidebar } }) {
   try {
-    yield call(apiDelete, `channel_subs/${channelSlug}`);
+    const apiUrl = `channel/${channelId}/channel_subs/${userId}`;
+    const newSub = yield call(apiUpdate, apiUrl, { inSidebar: !inSidebar });
+    yield put(updateChannelSub(newSub));
   } catch (error) {
-    yield put(actions.deleteChannelSub.failure(error));
+    yield put(createChannelSub.failure(error));
   }
 }
 
-function* watchCreateChannelSub() {
-  yield takeLatest(CHANNEL_SUB.CREATE.REQUEST, loadCreateSub);
+function* fetchDestroy({ channelId }) {
+  try {
+    yield call(apiDelete, `channel_subs/${channelId}`);
+  } catch (error) {
+    yield put(deleteChannelSub.failure(error));
+  }
 }
 
-function* watchDeleteSubChannel() {
-  yield takeLatest(CHANNEL_SUB.DELETE.REQUEST, loadDeleteSub);
+function* watchCreate() {
+  yield takeLatest(CHANNEL_SUB.CREATE.REQUEST, fetchCreate);
+}
+
+function* watchUpdate() {
+  yield takeLatest(CHANNEL_SUB.UPDATE.REQUEST, fetchUpdate);
+}
+
+function* watchDestroy() {
+  yield takeLatest(CHANNEL_SUB.DESTROY.REQUEST, fetchDestroy);
 }
 
 export default function* channelSubSaga() {
   yield all([
-    fork(watchCreateChannelSub),
-    fork(watchDeleteSubChannel),
+    fork(watchCreate),
+    fork(watchUpdate),
+    fork(watchDestroy),
   ]);
 }

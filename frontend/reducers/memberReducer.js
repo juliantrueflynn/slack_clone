@@ -1,5 +1,4 @@
-import merge from 'lodash.merge';
-import { WORKSPACE, SET_STATUS } from '../actions/actionTypes';
+import { WORKSPACE, USER_APPEARANCE } from '../actions/actionTypes';
 
 const memberReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -7,18 +6,16 @@ const memberReducer = (state = {}, action) => {
   let nextState;
   switch (action.type) {
     case WORKSPACE.SHOW.RECEIVE: {
-      const { workspace: { members } } = action;
-      nextState = {};
-      members.forEach((member) => {
-        nextState[member.slug] = member;
-      });
-      return nextState;
+      return action.workspace.members.reduce((acc, curr) => {
+        acc[curr.slug] = curr;
+        return acc;
+      }, {});
     }
-    case SET_STATUS: {
-      const { userSlug, appearance } = action;
-      nextState = { [userSlug]: { appearance } };
-
-      return merge({}, state, nextState);
+    case USER_APPEARANCE.RECEIVE: {
+      const { userSlug, status } = action;
+      nextState = Object.assign({}, state);
+      nextState[userSlug].status = status;
+      return nextState;
     }
     default:
       return state;

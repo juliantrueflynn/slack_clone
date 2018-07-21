@@ -6,6 +6,13 @@ module.exports = {
             "components": [ "Link" ],
             "specialLink": [ "to" ]
         }],
+        "jsx-a11y/label-has-for": [ 2, {
+            "components": [ "Label" ],
+            "required": {
+                "some": [ "nesting", "id" ]
+            },
+            "allowChildren": false
+        }],
         "comma-dangle": ["error", {
             "arrays": "ignore",
             "objects": "ignore",

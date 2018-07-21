@@ -2,11 +2,8 @@ class AppearanceChannel < ApplicationCable::Channel
   after_unsubscribe :ensure_offline
 
   def ensure_offline
-    appears = current_user.appears
-    unless appears.empty?
-      appears.each do |appearance|
-        appearance.destroy.broadcast(status: 'OFFLINE', user_slug: current_user.slug)
-      end
+    unless current_user.appears.empty?
+      current_user.appears.each { |appear| appear.broadcast 'OFFLINE' }
     end
   end
 

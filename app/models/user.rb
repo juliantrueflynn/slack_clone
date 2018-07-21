@@ -1,25 +1,31 @@
 class User < ApplicationRecord
   attr_reader :password
 
-  before_validation :generate_slug
+  before_validation :generate_slug, unless: :slug?
   after_initialize :ensure_session_token
 
   validates_presence_of :username, :email, :password_digest, :session_token
   validates_uniqueness_of :username, :email
   validates_length_of :password, minimum: 6, allow_nil: true
 
-  has_many :created_workspaces, class_name: 'Workspace', foreign_key: :owner_id
-  has_many :created_channels, class_name: 'Channel', foreign_key: :owner_id
-  has_many :workspace_subs, dependent: :destroy
-  has_many :workspaces, through: :workspace_subs, source: :workspace
-  has_many :channel_subs, dependent: :destroy
-  has_many :channels, through: :channel_subs, source: :channel
+  has_many :created_workspaces,
+    class_name: 'Workspace',
+    foreign_key: :owner_id
+  has_many :created_channels,
+    class_name: 'Channel',
+    foreign_key: :owner_id
+  has_many :workspace_subs
+  has_many :workspaces, through: :workspace_subs
+  has_many :channel_subs
+  has_many :channels, through: :channel_subs
   has_many :messages, foreign_key: :author_id
-  has_many :thread_replies, through: :messages, source: :replies
-  has_many :favorites, dependent: :destroy
-  has_many :reactions, dependent: :destroy
-  has_many :appears, class_name: 'UserAppearance', dependent: :destroy
-  has_many :reads, dependent: :destroy
+  has_many :thread_replies,
+    through: :messages,
+    source: :replies
+  has_many :favorites
+  has_many :reactions
+  has_many :appears, class_name: 'UserAppearance'
+  has_many :reads
 
   def self.find_by_email_and_password(email, password)
     user = User.find_by(email: email)
@@ -30,11 +36,6 @@ class User < ApplicationRecord
   def is_workspace_sub?(workspace)
     workspaces_subbed = workspace_subs.where(workspace_subs: { workspace_id: workspace.id })
     workspaces_subbed.length > 0
-  end
-
-  def is_channel_sub?(channel)
-    channels_subbed = channel_subs.where(channel_subs: { channel_id: channel })
-    channels_subbed.length > 0
   end
 
   def password=(password)
@@ -54,17 +55,6 @@ class User < ApplicationRecord
   end
 
   private
-
-  def generate_slug
-    return slug if slug
-    
-    loop do
-      slug_token = SecureRandom.urlsafe_base64(8)
-      username_slugged = username.parameterize
-      self.slug = "#{username_slugged}-#{slug_token}"
-      break unless User.where(slug: slug).exists?
-    end
-  end
 
   def ensure_session_token
     generate_unique_session_token unless self.session_token

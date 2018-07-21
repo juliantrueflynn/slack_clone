@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import { WORKSPACE, CHANNEL, READ, MESSAGE, USER_UNREADS } from '../actions/actionTypes';
+import { WORKSPACE, CHANNEL, READ, MESSAGE, USER_UNREADS, DM_CHAT } from '../actions/actionTypes';
 
 const channelReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -19,6 +19,17 @@ const channelReducer = (state = {}, action) => {
         if (prevSlug !== channel.slug) nextState[prevSlug].isActive = false;
       });
 
+      props.members.forEach((memberSlug) => {
+        if (!nextState[channel.slug].memberSlugs) {
+          nextState[channel.slug].memberSlugs = [memberSlug];
+          return;
+        }
+
+        if (nextState[channel.slug].memberSlugs.includes(memberSlug)) return;
+
+        nextState[channel.slug].memberSlugs.push(memberSlug);
+      });
+
       return nextState;
     }
     case WORKSPACE.SHOW.RECEIVE: {
@@ -26,17 +37,28 @@ const channelReducer = (state = {}, action) => {
       nextState = {};
       channels.forEach((channel) => {
         nextState[channel.slug] = channel;
-        const lastReadInMs = Date.parse(channel.lastRead);
-        const lastActiveInMs = Date.parse(channel.lastActive);
         nextState[channel.slug].isActive = false;
-        nextState[channel.slug].hasUnreads = lastReadInMs < lastActiveInMs;
+        // const lastReadInMs = Date.parse(channel.lastRead);
+        // const lastActiveInMs = Date.parse(channel.lastActive);
+        // nextState[channel.slug].hasUnreads = lastReadInMs < lastActiveInMs;
       });
       return nextState;
     }
+    case DM_CHAT.CREATE.RECEIVE: {
+      const { dmChat } = action;
+      nextState = Object.assign({}, state);
+      nextState[dmChat.slug] = dmChat;
+      nextState[dmChat.slug].hasUnreads = false;
+      nextState[dmChat.slug].lastActive = dmChat.createdAt;
+      nextState[dmChat.slug].lastRead = dmChat.createdAt;
+      return Object.assign({}, state, nextState);
+    }
     case CHANNEL.CREATE.RECEIVE: {
       const { channel } = action;
-      nextState = { [channel.slug]: channel };
+      nextState = Object.assign({}, state);
+      nextState[channel.slug] = channel;
       nextState[channel.slug].hasUnreads = false;
+      if (channel.ownerId) nextState[channel.slug].memberSlugs = [channel.ownerSlug];
       nextState[channel.slug].lastActive = channel.createdAt;
       nextState[channel.slug].lastRead = channel.createdAt;
       return Object.assign({}, state, nextState);
@@ -45,12 +67,12 @@ const channelReducer = (state = {}, action) => {
       nextState = {};
       nextState[action.channel.slug] = action.channel;
       return Object.assign({}, state, nextState);
-    case CHANNEL.DELETE.RECEIVE:
+    case CHANNEL.DESTROY.RECEIVE:
       nextState = Object.assign({}, state);
       delete nextState[action.channelSlug];
       return nextState;
     case MESSAGE.CREATE.RECEIVE: {
-      const { message: { createdAt }, channelSlug } = action;
+      const { createdAt, channelSlug } = action.message;
       nextState = Object.assign({}, state);
       nextState[channelSlug].lastActive = createdAt;
       nextState[channelSlug].hasUnreads = true;
@@ -58,7 +80,7 @@ const channelReducer = (state = {}, action) => {
       return nextState;
     }
     case READ.UPDATE.RECEIVE: {
-      const { read: { readableType, slug, accessedAt } } = action;
+      const { readableType, slug, accessedAt } = action.read;
       if (readableType !== 'Channel') return state;
       nextState = Object.assign({}, state);
       nextState[slug].lastRead = accessedAt;

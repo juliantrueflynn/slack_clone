@@ -34,6 +34,6 @@ export const createWorkspaceSub = {
 };
 
 export const deleteWorkspaceSub = {
-  request: workspaceId => actionCreator(WORKSPACE_SUB.DELETE.REQUEST, { workspaceId }),
-  failure: errors => actionCreator(WORKSPACE_SUB.DELETE.FAILURE, { errors }),
+  request: workspaceId => actionCreator(WORKSPACE_SUB.DESTROY.REQUEST, { workspaceId }),
+  failure: errors => actionCreator(WORKSPACE_SUB.DESTROY.FAILURE, { errors }),
 };

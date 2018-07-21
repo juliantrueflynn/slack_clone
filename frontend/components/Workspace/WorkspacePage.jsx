@@ -1,6 +1,7 @@
 import React from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 import { Redirect } from 'react-router-dom';
+import { decamelizeKeys } from 'humps';
 import { PageRoutes } from '../../util/routeUtil';
 import LeftSidebarContainer from '../LeftSidebarContainer';
 import './WorkspacePage.css';
@@ -9,6 +10,7 @@ class WorkspacePage extends React.Component {
   constructor(props) {
     super(props);
     this.handleReceived = this.handleReceived.bind(this);
+    this.handleConnected = this.handleConnected.bind(this);
   }
 
   componentDidMount() {
@@ -26,16 +28,21 @@ class WorkspacePage extends React.Component {
   }
 
   handleReceived(received) {
-    this.props.actionCableReceive(received);
+    const { membersSlugs, currentUser: { slug }, ...props } = this.props;
+    if (membersSlugs.includes(slug) && props.subsHash[slug]) {
+      props.actionCableReceive(received);
+    }
+  }
+
+  handleConnected() {
+    this.workspaceChat.perform('online');
   }
 
   render() {
     const { workspaceSlug, channels, ...props } = this.props;
     const defaultChannelSlug = channels[0] && channels[0].slug;
 
-    if (props.isLoading) {
-      return (<h2>Loading...</h2>);
-    }
+    if (props.isLoading) return (<h2>Loading...</h2>);
 
     if (props.match.isExact && defaultChannelSlug) {
       return (<Redirect to={`${workspaceSlug}/${defaultChannelSlug}`} />);
@@ -46,14 +53,15 @@ class WorkspacePage extends React.Component {
         <LeftSidebarContainer />
         <PageRoutes routes={props.routes} />
         <ActionCable
-          ref={(refs) => { this.workspaceChannel = refs; }}
-          channel={{ channel: 'WorkspaceChannel', workspace_slug: workspaceSlug }}
+          ref={(refs) => { this.workspaceChat = refs; }}
+          channel={decamelizeKeys({ channel: 'WorkspaceChannel', workspaceSlug })}
           onReceived={this.handleReceived}
+          onConnected={this.handleConnected}
         />
-        {channels && channels.map(({ slug: channelSlug }) => (
+        {channels && channels.map(({ id, slug: channelSlug }) => (
           <ActionCable
-            key={channelSlug}
-            channel={{ channel: 'ChatChannel', channel_slug: channelSlug }}
+            key={id}
+            channel={decamelizeKeys({ channel: 'ChatChannel', channelSlug })}
             onReceived={this.handleReceived}
           />
         ))}

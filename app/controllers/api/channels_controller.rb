@@ -10,7 +10,6 @@ class Api::ChannelsController < ApplicationController
 
   def create
     @channel = current_user.created_channels.build(channel_params)
-    @channel.workspace = Workspace.find_by(slug: params[:workspace_id])
 
     if @channel.save
       render json: @channel
@@ -28,8 +27,7 @@ class Api::ChannelsController < ApplicationController
   end
 
   def destroy
-    if @channel
-      @channel.destroy
+    if @channel.destroy
       render json: @channel
     else
       render json: ['does not exist'], status: 404

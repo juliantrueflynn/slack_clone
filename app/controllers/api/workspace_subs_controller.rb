@@ -1,9 +1,9 @@
 class Api::WorkspaceSubsController < ApplicationController
   def create
-    @workspace_sub = current_user.workspace_subs.build(workspace_sub_params)
+    @workspace_sub = current_user.subs.build(workspace_sub_params)
 
     if @workspace_sub.save
-      render json: @workspace_sub
+      render ['success']
     else
       render json: @workspace_sub.errors.full_messages, status: 422
     end
@@ -12,9 +12,8 @@ class Api::WorkspaceSubsController < ApplicationController
   def destroy
     @workspace_sub = WorkspaceSub.find_by(slug: params[:slug])
     
-    if @workspace_sub
-      @workspace_sub.destroy
-      render json: @workspace_sub
+    if @workspace_sub.destroy
+      render ['success']
     else
       render json: ['not found'], status: 404
     end

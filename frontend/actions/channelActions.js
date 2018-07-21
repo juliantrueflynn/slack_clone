@@ -1,5 +1,5 @@
 import { actionCreator } from '../util/actionsUtil';
-import { CHANNEL, CHANNEL_SUB, LEAVE_CHANNEL } from './actionTypes';
+import { CHANNEL, CHANNEL_SUB, LEAVE_CHANNEL, DM_CHAT } from './actionTypes';
 
 export const fetchChannels = {
   request: (channels = {}) => actionCreator(CHANNEL.INDEX.REQUEST, { channels }),
@@ -24,8 +24,13 @@ export const updateChannel = {
 };
 
 export const deleteChannel = {
-  request: channelSlug => actionCreator(CHANNEL.DELETE.REQUEST, { channelSlug }),
-  failure: errors => actionCreator(CHANNEL.DELETE.FAILURE, { errors }),
+  request: channelSlug => actionCreator(CHANNEL.DESTROY.REQUEST, { channelSlug }),
+  failure: errors => actionCreator(CHANNEL.DESTROY.FAILURE, { errors }),
+};
+
+export const createDmChat = {
+  request: (dmChat, memberIds) => actionCreator(DM_CHAT.CREATE.REQUEST, { dmChat, memberIds }),
+  failure: errors => actionCreator(DM_CHAT.CREATE.FAILURE, { errors }),
 };
 
 export const createChannelSub = {
@@ -33,9 +38,15 @@ export const createChannelSub = {
   failure: errors => actionCreator(CHANNEL_SUB.CREATE.FAILURE, { errors }),
 };
 
+export const updateChannelSub = {
+  request: channelSub => actionCreator(CHANNEL_SUB.UPDATE.REQUEST, { channelSub }),
+  receive: channelSub => actionCreator(CHANNEL_SUB.UPDATE.RECEIVE, { channelSub }),
+  failure: errors => actionCreator(CHANNEL_SUB.UPDATE.FAILURE, { errors }),
+};
+
 export const deleteChannelSub = {
-  request: channelId => actionCreator(CHANNEL_SUB.DELETE.REQUEST, { channelId }),
-  failure: errors => actionCreator(CHANNEL_SUB.DELETE.FAILURE, { errors }),
+  request: channelId => actionCreator(CHANNEL_SUB.DESTROY.REQUEST, { channelId }),
+  failure: errors => actionCreator(CHANNEL_SUB.DESTROY.FAILURE, { errors }),
 };
 
 export const leaveChannel = channelSlug => ({

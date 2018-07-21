@@ -49,7 +49,7 @@ function* watchEditMessage() {
 }
 
 function* watchDeleteMessage() {
-  yield takeLatest(MESSAGE.DELETE.REQUEST, fetchDeleteMessage);
+  yield takeLatest(MESSAGE.DESTROY.REQUEST, fetchDeleteMessage);
 }
 
 export default function* messageSaga() {

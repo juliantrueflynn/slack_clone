@@ -1,38 +1,45 @@
 class Message < ApplicationRecord
-  before_validation :generate_slug
-  
+  before_validation :generate_slug, unless: :slug?
+  after_create_commit :generate_channel_sub, if: Proc.new { |sub| sub.channel.has_dm? }
+
+  attr_accessor :skip_broadcast
+
   validates_presence_of :slug, :author_id, :channel_id
   validates_uniqueness_of :slug
   validates_length_of :body,
     within: 1..50000,
     too_long: 'is too long (max: 50000 characters)',
     too_short: 'cannot be empty'
-  
-  belongs_to :author, class_name: 'User'
+
   belongs_to :channel
-  belongs_to :parent_message, class_name: 'Message', optional: true
+  belongs_to :author, class_name: 'User'
+  belongs_to :parent_message,
+    class_name: 'Message',
+    optional: true
   has_one :workspace, through: :channel
   has_many :single_message_replies,
     -> { includes(:author, :favorites) },
     class_name: 'Message',
-    foreign_key: :parent_message_id,
-    dependent: :destroy
+    foreign_key: :parent_message_id
   has_many :replies,
     -> { includes(:reactions) },
     class_name: 'Message',
-    foreign_key: :parent_message_id,
-    dependent: :destroy
-  has_many :thread_replies, through: :replies, source: :parent_message
-  has_many :authors, through: :replies, source: :author
-  has_many :favorites, dependent: :destroy
-  has_many :reactions, dependent: :destroy
-  has_many :reads, as: :readable, dependent: :destroy
+    foreign_key: :parent_message_id
+  has_many :thread_replies,
+    through: :replies,
+    source: :parent_message
+  has_many :authors,
+    through: :replies,
+    source: :author
+  has_many :favorites
+  has_many :reactions
+  has_many :reads, as: :readable
 
   scope :exclude_children, -> { where(parent_message_id: nil) }
   scope :with_thread_replies, -> { includes(thread_replies: [:author, :replies]).where.not(thread_replies_messages: { id: nil }) }
 
   def self.user_unreads(params)
-      select('messages.*', 'channels.slug', 'users.slug', 'reads.accessed_at')
+    select('messages.*', 'channels.slug', 'users.slug', 'reads.accessed_at')
       .includes(:author, channel: :reads)
       .where(reads: { user_id: params[:user_id] })
       .where("messages.created_at > reads.accessed_at")
@@ -56,38 +63,21 @@ class Message < ApplicationRecord
     Message.parents_with_author_id(author_id).or(Message.children_with_author_id(author_id))
   end
 
+  def broadcast_name
+    "channel_#{channel.slug}"
+  end
+
   def is_child?
     !!parent_message_id
   end
 
   private
 
-  def generate_slug
-    return slug if slug
-    
-    loop do
-      self.slug = SecureRandom.urlsafe_base64(8)
-      break unless Message.where(slug: slug).exists?
-    end
+  def generate_channel_sub
+    channel.subs.create(user_id: channel.slug, skip_broadcast: true)
   end
 
-  after_create_commit do
-    ChannelJob.perform_later(
-      channel.slug,
-      type: 'MESSAGE_CREATE_RECEIVE',
-      message: self,
-      channel_slug: channel.slug,
-      parent_message_slug: is_child? ? parent_message.slug : nil
-    )
-  end
-
-  after_update_commit do
-    ChannelJob.perform_later(channel.slug, type: 'MESSAGE_UPDATE_RECEIVE', message: self)
-  end
-
-  # This works but after_destroy_commit does not for some reason
-  after_destroy :delete_message
-  def delete_message
-    ChannelJob.perform_later(channel.slug, type: 'MESSAGE_DELETE_RECEIVE', message: self)
-  end
+  after_create_commit :broadcast_create, unless: :skip_broadcast?
+  after_update_commit :broadcast_update, unless: :skip_broadcast?
+  after_destroy :broadcast_destroy, unless: :skip_broadcast?
 end

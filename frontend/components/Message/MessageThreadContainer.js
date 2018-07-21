@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import MessageThread from './MessageThread';
-import { selectThreadFromSlug, getUserFavorites, selectAuthors } from '../../reducers/selectors';
+import { selectThreadFromSlug, selectAuthors } from '../../reducers/selectors';
 import { readUpdate } from '../../actions/readActions';
 import { fetchMessage } from '../../actions/messageActions';
 
@@ -11,7 +11,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
   threadMessages: selectThreadFromSlug(state),
   isChannelLoaded: !!state.ui.displayChannelSlug,
   message: state.entities.messages[params.messageSlug],
-  favorites: getUserFavorites(state),
+  favorites: Object.values(state.entities.favorites),
   messageSlug: params.messageSlug,
   authors: selectAuthors(state),
 });

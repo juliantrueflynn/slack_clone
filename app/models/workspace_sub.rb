@@ -1,18 +1,27 @@
 class WorkspaceSub < ApplicationRecord
+  attr_accessor :skip_broadcast
+
   validates_presence_of :workspace_id, scope: :user_id
 
   belongs_to :user
   belongs_to :workspace
 
+  def broadcast_name
+    "workspace_#{workspace.slug}"
+  end
+
+  after_create_commit :sub_default_chats
+
   private
 
-  after_create_commit do
-    WorkspaceJob.perform_later(workspace.slug, type: "WORKSPACE_SUB_CREATE_RECEIVE", workspace_sub: self)
+  def default_chats
+    workspace.channels.first(2)
   end
 
-  # This works but after_destroy_commit does not for some reason
-  after_destroy :delete_message
-  def delete_message
-    WorkspaceJob.perform_later(workspace.slug, type: "WORKSPACE_SUB_DELETE_RECEIVE", workspace_sub: self)
+  def sub_default_chats
+    default_chats.each { |chat| user.channel_subs.create(channel_id: chat.id) }
   end
+
+  after_create_commit :broadcast_create, unless: :skip_broadcast?
+  after_destroy :broadcast_destroy, unless: :skip_broadcast?
 end

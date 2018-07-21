@@ -1,44 +1,21 @@
 import React from 'react';
-import ChannelsMenuItem from './ChannelsMenuItem';
+import { NavLink } from 'react-router-dom';
+import './ChannelsMenu.css';
 
-class ChannelsMenu extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.handleModalOpen = this.handleModalOpen.bind(this);
-  }
-
-  handleModalOpen() {
-    this.props.modalOpen();
-  }
-
-  render() {
-    const { channels, workspaceSlug } = this.props;
-
-    if (!channels) {
-      return null;
-    }
-
-    return (
-      <div>
-        <header>
-          <span>Channels</span>
-          <button onClick={this.handleModalOpen}>+</button>
-        </header>
-        <div>
-          <ul>
-            {channels.map(channel => (
-              <ChannelsMenuItem
-                key={channel.id}
-                channel={channel}
-                workspaceSlug={workspaceSlug}
-              />
-            ))}
-          </ul>
-        </div>
-      </div>
-    );
-  }
-}
+const ChannelsMenu = ({ subbedChannels, workspaceSlug }) => (
+  <ul className="menu menu__channels">
+    {subbedChannels.map(channel => (
+      <li key={channel.slug} className={`menu__item ${channel.hasUnreads ? 'menu-item--unread' : ''}`}>
+        <NavLink
+          className="menu__link"
+          activeClassName="menu__link--active"
+          to={`/${workspaceSlug}/${channel.slug}`}
+        >
+          &#x00023; {channel.title}
+        </NavLink>
+      </li>
+    ))}
+  </ul>
+);
 
 export default ChannelsMenu;

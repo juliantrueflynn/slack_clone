@@ -2,7 +2,7 @@ class CreateReads < ActiveRecord::Migration[5.1]
   def change
     create_table :reads do |t|
       t.references :readable, polymorphic: true, index: false
-      t.references :user, foreign_key: true, index: false
+      t.references :user, foreign_key: {on_delete: :cascade}, index: false
       t.datetime :accessed_at, null: false
 
       t.timestamp :created_at

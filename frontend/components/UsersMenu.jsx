@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import DropdownMenu from './Layout/DropdownMenu';
+import Dropdown from './Layout/Dropdown';
 
 class UsersMenu extends React.Component {
   constructor(props) {
@@ -9,7 +9,7 @@ class UsersMenu extends React.Component {
   }
 
   handleModalOpenClick() {
-    this.props.modalOpen();
+    this.props.modalOpen('SETTINGS');
   }
 
   render() {
@@ -22,34 +22,41 @@ class UsersMenu extends React.Component {
     }
 
     return (
-      <DropdownMenu menuFor="user" togglerText={workspaceSlug}>
-        <li>
-          Set Status
-        </li>
-        <li>
-          <NavLink to={urlForMemberSidebar}>
-            Profile & Account
-          </NavLink>
-        </li>
-        <li>
-          <button className="btn btn__nav" onClick={this.handleModalOpenClick}>
-            Preferences
-          </button>
-        </li>
-        <li>
-          Switch Workspace
-        </li>
-
-        <NavLink to="/">Home</NavLink>
-
-        {workspaces.map(workspace => (
-          <li key={workspace.id}>
-            <NavLink to={`/${workspace.slug}`}>
-              {workspace.title}
+      <Dropdown togglerText={workspaceSlug}>
+        <ul className="menu menu__user">
+          <li className="menu__item">
+            <NavLink className="menu__link" to="/">Home</NavLink>
+          </li>
+          <li className="menu__item">
+            <span className="menu__text">
+              Set Status
+            </span>
+          </li>
+          <li className="menu__item">
+            <NavLink activeClassName="menu__link--active" className="menu__link" to={urlForMemberSidebar}>
+              Profile & Account
             </NavLink>
           </li>
-        ))}
-      </DropdownMenu>
+          <li className="menu__item">
+            <button className="menu__link" onClick={this.handleModalOpenClick}>
+              Preferences
+            </button>
+          </li>
+        </ul>
+
+        <div className="users-menu__workspaces">
+          <span className="menu__divider-title">Switch Workspace</span>
+          <ul className="menu menu__workspaces">
+            {workspaces.map(workspace => (
+              <li className="menu__item" key={workspace.id}>
+                <NavLink activeClassName="menu__link--active" className="menu__link" to={`/${workspace.slug}`}>
+                  {workspace.title}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Dropdown>
     );
   }
 }

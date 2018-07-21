@@ -5,15 +5,25 @@ body {
   font-size: 15px;
 }
 
+div#root {
+  min-height: 100vh;
+}
+
 ul {
-  padding-left: 0;
-  margin-bottom: 0;
+  padding: 0;
+  margin: 0;
   list-style-type: none;
 }
 
 a {
   text-decoration: none;
   color: #0576b9;
+}
+
+button.menu__link {
+  padding: 0;
+  border: none;
+  color: inherit;
 }
 
 .btn:hover, .btn:focus {

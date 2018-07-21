@@ -2,14 +2,15 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { camelizeKeys } from 'humps';
 import { fetchWorkspace, fetchWorkspaces } from '../../actions/workspaceActions';
-import { getChannels } from '../../reducers/selectors';
 import WorkspacePage from './WorkspacePage';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
-  channels: getChannels(state),
+  channels: Object.values(state.entities.channels),
   workspaceSlug,
-  defaultChannelSlug: state.entities.channels[0] && state.entities.channels[0].slug,
+  membersSlugs: Object.keys(state.entities.members),
+  subsHash: state.entities.members,
   isLoading: state.ui.isWorkspaceLoading,
+  currentUser: state.session.currentUser,
 });
 
 const mapDispatchToProps = dispatch => ({

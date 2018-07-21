@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import ChannelPage from './ChannelPage';
 import { fetchChannel, leaveChannel } from '../../actions/channelActions';
-import { selectParentMessages, selectChannelIdBySlug, selectAuthors } from '../../reducers/selectors';
+import { selectParentMessages, selectAuthors } from '../../reducers/selectors';
 import { readUpdate } from '../../actions/readActions';
 
 const mapStateToProps = (state, { match: { params } }) => ({
@@ -10,8 +10,8 @@ const mapStateToProps = (state, { match: { params } }) => ({
   rightSidebar: state.ui.rightSidebar,
   messageSlug: state.ui.displayMessageSlug,
   userSlug: state.ui.displayUserSlug,
-  isWorkspaceLoaded: !!state.ui.displayWorkspaceSlug,
-  channelId: selectChannelIdBySlug(state, params.channelSlug),
+  isWorkspaceLoaded: !!state.entities.workspaces[params.workspaceSlug],
+  channel: state.entities.channels[params.channelSlug],
   authors: selectAuthors(state),
 });
 

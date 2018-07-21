@@ -1,5 +1,5 @@
 class Api::ReactionsController < ApplicationController
-  before_action :set_reaction, only: [:show, :destroy]
+  before_action :set_reaction, except: :create
 
   def show
   end
@@ -8,16 +8,15 @@ class Api::ReactionsController < ApplicationController
     @reaction = current_user.reactions.build(reaction_params)
 
     if @reaction.save
-      render 'api/reactions/show'
+      render json: @reaction
     else
       render json: @reaction.errors.full_messages, status: 422
     end
   end
 
   def destroy
-    if @reaction
-      @reaction.destroy
-      render 'api/reactions/show'
+    if @reaction.destroy
+      render json: @reaction
     else
       render json: ["doesn't exist"]
     end

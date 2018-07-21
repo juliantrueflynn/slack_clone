@@ -1,7 +1,7 @@
 const REQUEST = 'REQUEST';
 const RECEIVE = 'RECEIVE';
 const FAILURE = 'FAILURE';
-const apiMethodsDefaults = ['INDEX', 'SHOW', 'CREATE', 'UPDATE', 'DELETE'];
+const apiMethodsDefaults = ['INDEX', 'SHOW', 'CREATE', 'UPDATE', 'DESTROY'];
 
 export const actionTypes = base => (
   [REQUEST, RECEIVE, FAILURE].reduce((acc, type) => {

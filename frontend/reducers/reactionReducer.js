@@ -1,3 +1,4 @@
+import merge from 'lodash.merge';
 import { REACTION, CHANNEL, MESSAGE } from '../actions/actionTypes';
 
 const reactionReducer = (state = {}, action) => {
@@ -8,32 +9,25 @@ const reactionReducer = (state = {}, action) => {
     case REACTION.CREATE.RECEIVE: {
       const { reaction } = action;
       nextState = { [reaction.id]: reaction };
-
       return Object.assign({}, state, nextState);
     }
-    case REACTION.DELETE.RECEIVE: {
+    case REACTION.DESTROY.RECEIVE: {
       const { reaction } = action;
       nextState = Object.assign({}, state);
       delete nextState[reaction.id];
-
       return nextState;
     }
     case CHANNEL.SHOW.RECEIVE: {
-      const { channel: { reactions } } = action;
-      nextState = {};
-      reactions.map((reaction) => {
-        nextState[reaction.id] = reaction;
-      });
-
-      return Object.assign({}, state, nextState);
+      nextState = action.channel.reactions.reduce((acc, curr) => {
+        acc[curr.id] = curr;
+        return acc;
+      }, {});
+      return merge({}, state, nextState);
     }
     case MESSAGE.SHOW.RECEIVE: {
       const { message: { reactions } } = action;
       nextState = {};
-      reactions.map((reaction) => {
-        nextState[reaction.id] = reaction;
-      });
-
+      reactions.forEach((reaction) => { nextState[reaction.id] = reaction; });
       return Object.assign({}, state, nextState);
     }
     default:

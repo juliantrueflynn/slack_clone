@@ -18,8 +18,8 @@ export const updateMessage = {
 };
 
 export const deleteMessage = {
-  request: messageSlug => actionCreator(MESSAGE.DELETE.REQUEST, { messageSlug }),
-  failure: errors => actionCreator(MESSAGE.DELETE.FAILURE, { errors }),
+  request: messageSlug => actionCreator(MESSAGE.DESTROY.REQUEST, { messageSlug }),
+  failure: errors => actionCreator(MESSAGE.DESTROY.FAILURE, { errors }),
 };
 
 export const fetchUserThreads = {

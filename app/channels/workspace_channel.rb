@@ -1,11 +1,10 @@
 class WorkspaceChannel < ApplicationCable::Channel
-  after_subscribe :online
-  after_unsubscribe :offline
+  before_unsubscribe :offline
 
   def subscribed
-    workspace_slug = params[:workspace_slug]
-    @appears = current_user.appears.find_or_create_by_workspace_slug(workspace_slug)
-    stream_from "workspace_#{workspace_slug}"
+    slug = params[:workspace_slug]
+    @appears = current_user.appears.find_or_initialize_by(workspace_slug: slug)
+    stream_from "workspace_#{slug}"
   end
 
   def unsubscribed
@@ -13,26 +12,18 @@ class WorkspaceChannel < ApplicationCable::Channel
   end
 
   def online
-    broadcast if @appears
+    @appears.online!
   end
 
   def offline
-    broadcast(status: 'OFFLINE') if @appears && @appears.destroy!
+    @appears.destroy
   end
 
   def away
-    broadcast if @appears.away!
+    @appears.away!
   end
 
   def busy
-    broadcast if @appears.busy!
-  end
-
-  private
-
-  def broadcast(params = {})
-    defaults = { user_slug: current_user.slug }
-    options = defaults.merge(params)
-    @appears.broadcast(options)
+    @appears.busy!
   end
 end

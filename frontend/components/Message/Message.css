@@ -46,6 +46,7 @@
 .msg__author {
   font-weight: bold;
   padding-right: 4px;
+  color: inherit;
 }
 
 .msg__time {

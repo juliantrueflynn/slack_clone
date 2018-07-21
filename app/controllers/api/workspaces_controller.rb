@@ -27,8 +27,7 @@ class Api::WorkspacesController < ApplicationController
   end
 
   def destroy
-    if @workspace
-      @workspace.destroy
+    if @workspace.destroy
       render json: @workspace
     else
       render json: ['does not exist'], status: 404

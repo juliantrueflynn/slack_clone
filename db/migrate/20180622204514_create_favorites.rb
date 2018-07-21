@@ -1,8 +1,8 @@
 class CreateFavorites < ActiveRecord::Migration[5.1]
   def change
     create_table :favorites do |t|
-      t.references :message, foreign_key: true, index: false
-      t.references :user, foreign_key: true, index: false
+      t.references :message, foreign_key: {on_delete: :cascade}, index: false
+      t.references :user, foreign_key: {on_delete: :cascade}, index: false
 
       t.timestamps
     end

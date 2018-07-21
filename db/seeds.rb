@@ -1,92 +1,107 @@
 require 'faker'
-Faker::UniqueGenerator.clear
 
-REACTIONS = %w(joy smile heart_eyes innocent +1 point_up)
+REACTIONS = %w(joy smile heart_eyes innocent +1 point_up).freeze
 
-def is_random_true?
-  rand < 0.25
+def random_num(min: 3, max: 9)
+  [*min.to_i..max.to_i].sample
 end
 
-def random_lorem_short_or_long
-  if rand < 0.1
-    return Faker::Lorem.paragraph(4, false, 10)
-  elsif rand < 0.1
-    return Faker::Lorem.paragraph(15)
-  elsif rand < 0.7
-    return Faker::Lorem.sentence
-  end
-  
-  Faker::Lorem.word
+def random_string
+  lorem_ipsum = [
+    Faker::Lorem.paragraph(random_num, rand < 0.5, random_num),
+    Faker::Lorem.paragraph(random_num),
+    Faker::Lorem.sentence,
+    Faker::Lorem.sentence(random_num, rand < 0.5),
+    Faker::Lorem.question,
+    Faker::Lorem.questions(random_num).join(" "),
+    Faker::Lorem.word
+  ]
+
+  lorem_ipsum.sample
 end
 
 def random_message_body
   '{"blocks":[{"key":"' +
-  Faker::Lorem.unique.word +
+  SecureRandom.urlsafe_base64(6) +
   '","text":"' +
-  random_lorem_short_or_long +
+  random_string +
   '","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'
 end
 
-User.create(email: "jtf@gmail.com", username: "jtf", password: "123456")
-first_user = User.first
+def seed_sub_and_members(user)
+  workspace = Workspace.all.sample
+  chat = workspace.channels.sample
+  return nil unless chat
 
-users_attrs = []
-4.times do
-  users_attrs << {
+  workspace.subs.create!(user_id: user.id) unless workspace.is_user_sub?(user.id)
+  chat.subs.create!(user_id: user.id) unless chat.is_user_sub?(user.id)
+end
+
+def seed_workspace(user)
+  title = Faker::Company.unique.name
+  user.created_workspaces.create!(title: title, slug: "#{title.parameterize}")
+end
+
+def seed_chats(user)
+  workspace = user.workspaces.sample
+  return nil unless workspace
+
+  title = Faker::Company.unique.buzzword
+  topic = rand < 0.2 ? Faker::Company.bs : nil
+  user.created_channels.create!(title: title, topic: topic, workspace_id: workspace.id)
+end
+
+User.create!(email: "jtf@gmail.com", username: "jtf", password: "123456")
+
+random_num(min: 2, max: 4).times do
+  seed_workspace(User.first)
+
+  random_num(min: 1, max: 3).times do
+    User.first.channels.create!(
+      title: Faker::Company.unique.buzzword,
+      topic: (rand < 0.2 ? Faker::Company.bs : nil),
+      workspace_id: Workspace.last.id
+    )
+  end
+end
+
+random_num(min: 8, max: 16).times do
+  User.create!(
     email: Faker::Internet.unique.email,
     username: Faker::Internet.unique.user_name,
     password: "123456"
-  }
-end
-User.create(users_attrs)
-
-3.times do
-  title = Faker::Company.unique.name
-  workspace = first_user.created_workspaces.create(
-    title: title,
-    slug: "#{title.parameterize}",
-    owner_id: first_user.id
   )
-
-  3.times do
-    title = Faker::Company.unique.buzzword
-    first_user.created_channels.create(
-      title: title,
-      owner_id: first_user.id,
-      topic: (is_random_true? ? Faker::Company.bs : nil),
-      workspace_id: workspace.id
-    )
-  end
 end
 
-User.all.shuffle.each do |user|
-  Workspace.all.shuffle.each do |workspace|
-    user.workspace_subs.create(workspace_id: workspace.id) unless user.is_workspace_sub?(workspace)
+random_num(min: 30, max: 40).times do
+  user = User.all.sample
 
-    workspace.channels.shuffle.each do |channel|
-      user.channel_subs.create(channel_id: channel.id) unless user.is_channel_sub?(channel)
-      Message.create(
-        body: random_message_body,
-        author_id: user.id,
-        channel_id: channel.id,
-        parent_message_id: nil
-      )
-    end
-  end
+  seed_workspace(user) if rand < 0.1
+  seed_chats(user) if rand < 0.1
+  seed_sub_and_members(user)
 end
 
-User.all.shuffle.each do |user|
-  user.channels.shuffle.each do |channel|
-    parent_messages = channel.messages.where(parent_message_id: nil)
-    random_message = parent_messages.sample
-    next if random_message.nil?
-    message = Message.create(
+random_num(min: 50, max: 60).times do
+  user = User.all.sample
+  chat = user.channels.sample
+  next unless chat
+
+  loop do
+    parent = rand < 0.7 ? nil : chat.messages.sample
+    user.messages.create!(
       body: random_message_body,
-      author_id: user.id,
-      channel_id: channel.id,
-      parent_message_id: random_message.id
+      channel_id: chat.id,
+      parent_message_id: parent ? parent.id : nil
     )
-    random_message.favorites.create(user_id: user.id)
-    random_message.reactions.create(user_id: user.id, emoji: REACTIONS.sample)
+
+    break if rand < 0.7
+  end
+
+  if rand < 0.5
+    message = chat.messages.sample
+    next unless message
+
+    user.favorites.create!(message_id: message.id) if rand < 0.5
+    user.reactions.create!(message_id: message.id, emoji: REACTIONS.sample)
   end
 end

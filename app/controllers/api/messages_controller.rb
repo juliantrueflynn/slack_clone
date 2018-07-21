@@ -1,5 +1,5 @@
 class Api::MessagesController < ApplicationController
-  before_action :set_message, only: [:show, :update, :destroy]
+  before_action :set_message, except: :create
 
   def show
   end
@@ -23,8 +23,7 @@ class Api::MessagesController < ApplicationController
   end
 
   def destroy
-    if @message
-      @message.destroy
+    if @message.destroy
       render json: @message
     else
       render json: ['error no message found'], status: 404
@@ -38,6 +37,6 @@ class Api::MessagesController < ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:body, :slug, :channel_id, :parent_message_id)
+    params.require(:message).permit(:body, :channel_id, :parent_message_id)
   end
 end

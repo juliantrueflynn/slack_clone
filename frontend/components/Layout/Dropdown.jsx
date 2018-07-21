@@ -1,6 +1,6 @@
 import React from 'react';
 
-class DropdownMenu extends React.Component {
+class Dropdown extends React.Component {
   constructor(props) {
     super(props);
 
@@ -18,17 +18,17 @@ class DropdownMenu extends React.Component {
     document.removeEventListener('mousedown', this.handleDropdownClickOut);
   }
 
-  handleDropdownToggle() {
-    this.setState({ isDropdownOpen: !this.state.isDropdownOpen });
-  }
-
   setNodeToDropdown(node) {
     this.wrapperRef = node;
   }
 
+  handleDropdownToggle() {
+    this.setState({ isDropdownOpen: !this.state.isDropdownOpen });
+  }
+
   handleDropdownClickOut(e) {
     const ref = this.wrapperRef;
-    
+
     if (ref && !ref.contains(e.target) && !this.state.isDropdownOpen) {
       this.setState({ isDropdownOpen: false });
     }
@@ -36,24 +36,24 @@ class DropdownMenu extends React.Component {
 
   render() {
     const { isDropdownOpen } = this.state;
-    const { togglerText, menuFor } = this.props;
+    const { togglerText } = this.props;
 
     return (
-      <div className={`dropdown dropdown__${menuFor}`}>
+      <div className="dropdown">
         <button
-          className="button button__dropdown"
+          className="btn btn__dropdown"
           onClick={this.handleDropdownToggle}
         >
           {togglerText}
         </button>
         {isDropdownOpen && (
-          <ul ref={this.setNodeToDropdown} className="dropdown__menu">
+          <div ref={this.setNodeToDropdown} className="dropdown__content">
             {this.props.children}
-          </ul>
+          </div>
         )}
       </div>
     );
   }
 }
 
-export default DropdownMenu;
+export default Dropdown;
