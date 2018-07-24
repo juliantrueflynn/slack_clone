@@ -1,23 +1,24 @@
 import React from 'react';
 import 'draft-js-emoji-plugin/lib/plugin.css';
-import 'draft-js/dist/Draft.css';
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import createEmojiPlugin from 'draft-js-emoji-plugin';
+import { EditorState, convertToRaw } from 'draft-js';
 import FormErrors from '../Layout/FormErrors';
 import './MessageForm.css';
 
 const emojiPlugin = createEmojiPlugin();
-// Commenting out until optimized. Currently making page too slow for debugging.
-// const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
+const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
 
 class MessageForm extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = { editorState: EditorState.createEmpty() };
-    this.onChange = editorState => this.setState({ editorState });
+    this.onChange = this.onChange.bind(this);
     this.handleMessageSubmit = this.handleMessageSubmit.bind(this);
+  }
+
+  onChange(editorState) {
+    this.setState({ editorState });
   }
 
   handleMessageSubmit(event) {
@@ -25,14 +26,11 @@ class MessageForm extends React.Component {
 
     const { editorState } = this.state;
     const currentContent = editorState.getCurrentContent();
-    const message = {
-      body: JSON.stringify(convertToRaw(currentContent)),
-      channelId: this.props.channelId,
-      parentMessageId: this.props.parentMessageId,
-    };
-    const clearEditorState = EditorState.push(editorState, ContentState.createFromText(''), 'remove-range');
+    const body = JSON.stringify(convertToRaw(currentContent));
+    const { channelId, parentMessageId, createMessageRequest } = this.props;
+    const clearEditorState = EditorState.createEmpty();
 
-    this.props.createMessageRequest(message);
+    createMessageRequest({ body, channelId, parentMessageId });
     this.setState({ editorState: clearEditorState });
   }
 
@@ -53,14 +51,9 @@ class MessageForm extends React.Component {
             onChange={this.onChange}
             plugins={[emojiPlugin]}
           />
-
-          {/* Commenting out until optimized. Currently making page too slow for debugging. */}
-          {/* <EmojiSuggestions /> */}
-          {/* <EmojiSelect /> */}
-
-          <button type="submit" className="btn btn__submit">
-            Add Message
-          </button>
+          <EmojiSuggestions />
+          <EmojiSelect />
+          <button type="submit" className="btn btn__submit">Add Message</button>
         </div>
       </form>
     );

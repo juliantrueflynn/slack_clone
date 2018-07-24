@@ -1,47 +1,37 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import 'draft-js/dist/Draft.css';
-import 'draft-js-emoji-plugin/lib/plugin.css';
-import Editor from 'draft-js-plugins-editor';
-import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
-import createEmojiPlugin from 'draft-js-emoji-plugin';
+import { EditorState, convertFromRaw } from 'draft-js';
 import MessageHoverMenuContainer from '../MessageHoverMenuContainer';
 import Reactions from '../Reactions';
+import MessageEditForm from './MessageEditForm';
 import SingleMessageThread from './SingleMessageThread';
 import './Message.css';
-
-const emojiPlugin = createEmojiPlugin();
-const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
+import MessageEditor from '../../util/editorUtil';
 
 class Message extends React.Component {
   constructor(props) {
     super(props);
+
+    const body = JSON.parse(props.message.body);
+    const blocks = convertFromRaw(body);
+
     this.state = {
       isMouseOver: false,
       isEditing: false,
-      editorState: null,
+      editorState: EditorState.createWithContent(blocks),
     };
 
     this.onChange = this.onChange.bind(this);
     this.handleEditToggle = this.handleEditToggle.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // TODO: Change this to memoization helper?
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.message) {
-      const body = JSON.parse(nextProps.message.body);
-      const blocks = convertFromRaw(body);
-
-      return {
-        isMouseOver: prevState.isMouseOver,
-        isEditing: prevState.isEditing,
-        editorState: EditorState.createWithContent(blocks),
-      };
-    }
-
-    return null;
-  }
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.message.body !== this.props.message.body) {
+  //     const newContentState = convertFromRaw(JSON.parse(this.props.message.body));
+  //     const editorState = EditorState.push(this.state.editorState, newContentState);
+  //     this.onChange(editorState);
+  //   }
+  // }
 
   onChange(editorState) {
     this.setState({ editorState });
@@ -55,50 +45,12 @@ class Message extends React.Component {
     this.setState({ isEditing: toggleResult });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-
-    const { editorState } = this.state;
-    const currentContent = editorState.getCurrentContent();
-
-    const message = {
-      slug: this.props.message.slug,
-      body: JSON.stringify(convertToRaw(currentContent)),
-    };
-
-    this.props.updateMessageRequest(message);
-    this.setState({ isEditing: false });
-  }
-
   render() {
     const { message, ...props } = this.props;
     const { isMouseOver, isEditing, editorState } = this.state;
 
     if (!message) {
       return null;
-    }
-
-    if (isEditing) {
-      return (
-        <div className="msg">
-          <form onSubmit={this.handleSubmit}>
-            <Editor
-              editorState={editorState}
-              onChange={this.onChange}
-              plugins={[emojiPlugin]}
-            />
-            <EmojiSuggestions />
-            <EmojiSelect />
-
-            <button className="btn btn__cancel" onClick={this.handleEditToggle}>
-              Cancel
-            </button>
-            <button type="submit" className="btn btn__submit">
-              Save changes
-            </button>
-          </form>
-        </div>
-      );
     }
 
     return (
@@ -126,12 +78,23 @@ class Message extends React.Component {
             </div>
             ID: #{message.id}<br />
             Slug: {message.slug}<br />
-            <Editor
-              editorState={editorState}
-              onChange={this.onChange}
-              plugins={[emojiPlugin]}
-              readOnly
-            />
+            {isEditing && (
+              <MessageEditForm
+                messageSlug={message.slug}
+                onChange={this.onChange}
+                editorState={editorState}
+                handleEditToggle={this.handleEditToggle}
+                updateMessageRequest={this.props.updateMessageRequest}
+              />
+            )}
+            {!isEditing && (
+              <MessageEditor
+                editorState={editorState}
+                content={message.body}
+                onChange={this.onChange}
+                readOnly
+              />
+            )}
           </div>
           {(!props.isSingleMessage || message.parentMessageId) && (
             <div className="msg__footer">

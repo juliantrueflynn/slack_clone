@@ -18,7 +18,7 @@ class App extends React.Component {
     return (
       <div className="app">
         <PageRoutes routes={routesConfig} />
-        {this.props.isLoggedIn && (
+        {this.props.currentUser && (
           <ActionCable
             channel={{ channel: 'AppChannel' }}
             onReceived={this.handleActionCableReceive}
