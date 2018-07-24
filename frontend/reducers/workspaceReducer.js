@@ -13,10 +13,12 @@ const workspaceReducer = (state = {}, action) => {
       return Object.assign({}, state, nextState);
     }
     case WORKSPACE.CREATE.RECEIVE: {
-      const { workspace } = action;
-      nextState = { [workspace.slug]: workspace };
-      nextState[workspace.slug].memberIds = [workspace.ownerSlug];
-      return Object.assign({}, state, nextState);
+      const { workspace, channels } = action.workspace;
+      nextState = Object.assign({}, state);
+      workspace.channels = channels.map(ch => ch.slug);
+      workspace.members = [workspace.ownerSlug];
+      nextState[workspace.slug] = workspace;
+      return nextState;
     }
     case WORKSPACE.DESTROY.RECEIVE:
       nextState = Object.assign({}, state);

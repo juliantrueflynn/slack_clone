@@ -1,6 +1,4 @@
 class ChannelSub < ApplicationRecord
-  after_create_commit :generate_read
-
   attr_accessor :skip_broadcast
 
   validates_presence_of :channel_id, scope: :user_id
@@ -13,12 +11,17 @@ class ChannelSub < ApplicationRecord
     "channel_#{channel.slug}"
   end
 
+  after_create_commit :generate_read, :broadcast_create_sub
+  after_destroy :broadcast_destroy
+
   private
 
   def generate_read
     channel.reads.create!(user_id: user_id, accessed_at: DateTime.now)
   end
 
-  after_create_commit :broadcast_create, unless: :skip_broadcast?
-  after_destroy :broadcast_destroy, unless: :skip_broadcast?
+  def broadcast_create_sub
+    return if user.id === workspace.owner.id
+    broadcast_create
+  end
 end

@@ -44,6 +44,12 @@ const channelReducer = (state = {}, action) => {
       });
       return nextState;
     }
+    case WORKSPACE.CREATE.RECEIVE: {
+      const { channels } = action.workspace;
+      nextState = Object.assign({}, state);
+      channels.forEach((channel) => { nextState[channel.slug] = channel; });
+      return nextState;
+    }
     case DM_CHAT.CREATE.RECEIVE: {
       const { dmChat } = action;
       nextState = Object.assign({}, state);

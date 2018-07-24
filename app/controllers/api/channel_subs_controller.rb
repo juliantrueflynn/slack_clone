@@ -10,7 +10,7 @@ class Api::ChannelSubsController < ApplicationController
   end
 
   def update
-    if @channel.update(channel_sub_params)
+    if @channel_sub.update(channel_sub_params)
       render json: ['success']
     else
       render json: @channel.errors.full_messages, status: 422

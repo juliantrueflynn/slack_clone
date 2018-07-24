@@ -2,14 +2,13 @@ import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from '../actions/workspaceActions';
 import { WORKSPACE } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiDelete } from '../util/apiUtil';
-import { selectCurrentUserId, selectWorkspaceSlug } from '../reducers/selectors';
+import { selectCurrentUserId } from '../reducers/selectors';
 import { navigate } from '../actions/interactiveActions';
 
-function* redirectOwner({ workspace }) {
+function* redirectOwner({ workspace: { workspace } }) {
   const currentUserId = yield select(selectCurrentUserId);
-  const currWorkspaceSlug = yield select(selectWorkspaceSlug);
 
-  if (currentUserId === workspace.ownerId && currWorkspaceSlug !== workspace.slug) {
+  if (currentUserId === workspace.ownerId) {
     yield put(navigate({ path: `/${workspace.slug}` }));
   }
 }

@@ -1,2 +1,8 @@
-json.(workspace, *workspace.attributes.keys)
-json.ownerSlug workspace.owner.slug
+json.workspace do
+  json.(workspace, :id, :title, :slug, :owner_id)
+  json.owner_slug workspace.owner.slug
+end
+
+json.channels do
+  json.array! workspace.channels, :id, :title, :slug
+end

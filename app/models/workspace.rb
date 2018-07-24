@@ -1,6 +1,4 @@
 class Workspace < ApplicationRecord
-  after_create_commit :generate_default_chats, :sub_owner_to_workspace
-
   attr_accessor :skip_broadcast
   
   validates_presence_of :title, :slug, :owner_id
@@ -31,13 +29,17 @@ class Workspace < ApplicationRecord
     !!subs.find_by(workspace_subs: { user_id: user_id })
   end
 
+  after_create_commit :broadcast_create_workspace
+  after_update_commit :broadcast_update
+  after_destroy :broadcast_destroy
+
   private
 
-  DEFAULT_CHAT_TITLES = %w(General Random).freeze
+  DEFAULT_CHAT_TITLES = %w(general random).freeze
 
   def generate_default_chats
-    DEFAULT_CHAT_TITLES.each do |chat_title|
-      channels.create(title: chat_title, owner_id: owner_id, workspace_id: id)
+    DEFAULT_CHAT_TITLES.each do |ch_title|
+      channels.create(title: ch_title, owner_id: owner_id, workspace_id: id, skip_broadcast: true)
     end
   end
 
@@ -45,7 +47,9 @@ class Workspace < ApplicationRecord
     owner.workspace_subs.create(skip_broadcast: true)
   end
 
-  after_create_commit :broadcast_create, unless: :skip_broadcast?
-  after_update_commit :broadcast_update, unless: :skip_broadcast?
-  after_destroy :broadcast_destroy, unless: :skip_broadcast?
+  def broadcast_create_workspace
+    sub_owner_to_workspace
+    generate_default_chats
+    broadcast_create
+  end
 end

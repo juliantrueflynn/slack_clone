@@ -54,11 +54,25 @@ class Channel < ApplicationRecord
     has_dm? ? 'DM_CHAT' : self.class.name
   end
 
+  after_create_commit :broadcast_create_chat
+  after_update_commit :broadcast_update
+  after_destroy :broadcast_destroy
+
   private
 
-  after_create_commit { subs.create(user_id: owner.id, skip_broadcast: true) if owner }
+  def sub_user_to_public_chat
+    subs.create(user_id: owner.id, skip_broadcast: true) if owner
+  end
 
-  after_create_commit :broadcast_create, unless: :skip_broadcast?
-  after_update_commit :broadcast_update, unless: :skip_broadcast?
-  after_destroy :broadcast_destroy, unless: :skip_broadcast?
+  def sub_users_to_dm_chat
+    return if self.member_ids
+    self.member_ids.each do |sub_id|
+      subs.create(channel_id: id, user_id: sub_id, skip_broadcast: true)
+    end
+  end
+
+  def broadcast_create_chat
+    has_dm? ? sub_users_to_dm_chat : sub_user_to_public_chat
+    broadcast_create
+  end
 end

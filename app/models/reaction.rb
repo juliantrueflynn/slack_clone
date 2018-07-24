@@ -11,8 +11,6 @@ class Reaction < ApplicationRecord
     "channel_#{channel.slug}"
   end
 
-  private
-
-  after_create_commit :broadcast_create, unless: :skip_broadcast?
-  after_destroy :broadcast_destroy, unless: :skip_broadcast?
+  after_create_commit :broadcast_create
+  after_destroy :broadcast_destroy
 end

@@ -10,18 +10,19 @@ class WorkspaceSub < ApplicationRecord
     "workspace_#{workspace.slug}"
   end
 
-  after_create_commit :sub_default_chats
+  after_create_commit :broadcast_create_sub
+  after_destroy :broadcast_destroy
 
   private
 
-  def default_chats
-    workspace.channels.first(2)
-  end
-
-  def sub_default_chats
+  def sub_user_to_default_chats
+    default_chats = workspace.channels.first(2)
     default_chats.each { |chat| user.channel_subs.create(channel_id: chat.id) }
   end
 
-  after_create_commit :broadcast_create, unless: :skip_broadcast?
-  after_destroy :broadcast_destroy, unless: :skip_broadcast?
+  def broadcast_create_sub
+    return if user.id === workspace.owner.id
+    sub_user_to_default_chats
+    broadcast_create
+  end
 end

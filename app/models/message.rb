@@ -1,6 +1,5 @@
 class Message < ApplicationRecord
   before_validation :generate_slug, unless: :slug?
-  after_create_commit :generate_channel_sub, if: Proc.new { |sub| sub.channel.has_dm? }
 
   attr_accessor :skip_broadcast
 
@@ -71,13 +70,7 @@ class Message < ApplicationRecord
     !!parent_message_id
   end
 
-  private
-
-  def generate_channel_sub
-    channel.subs.create(user_id: channel.slug, skip_broadcast: true)
-  end
-
-  after_create_commit :broadcast_create, unless: :skip_broadcast?
-  after_update_commit :broadcast_update, unless: :skip_broadcast?
-  after_destroy :broadcast_destroy, unless: :skip_broadcast?
+  after_create_commit :broadcast_create
+  after_update_commit :broadcast_update
+  after_destroy :broadcast_destroy
 end

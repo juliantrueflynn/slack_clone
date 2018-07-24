@@ -36,7 +36,7 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def broadcast(type = nil)
-    ActionDispatcherJob.perform_later action_type(type), self
+    ActionDispatcherJob.perform_later(action_type(type), self) unless skip_broadcast?
   end
 
   private

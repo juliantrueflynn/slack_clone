@@ -5,7 +5,7 @@ const workspaceDisplayReducer = (state = null, action) => {
 
   switch (action.type) {
     case WORKSPACE.CREATE.RECEIVE:
-      return action.workspace.slug;
+      return action.workspace.workspace.slug;
     case WORKSPACE.SHOW.REQUEST:
       return action.workspaceSlug;
     default:
