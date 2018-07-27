@@ -13,7 +13,8 @@ class LeftSidebar extends React.Component {
   }
 
   handleModalOpen() {
-    this.props.modalOpen('NEW_CHANNEL_MODAL');
+    const { modalOpen } = this.props;
+    modalOpen('NEW_CHANNEL_MODAL');
   }
 
   render() {
@@ -51,8 +52,12 @@ class LeftSidebar extends React.Component {
 
         <div className="sidebar-widget">
           <header className="widget__header">
-            <span className="widget__title">Channels</span>
-            <button className="btn btn__channels" onClick={this.handleModalOpen}>+</button>
+            <span className="widget__title">
+              Channels
+            </span>
+            <button type="button" className="btn btn__channels" onClick={this.handleModalOpen}>
+              +
+            </button>
           </header>
           {subbedChannels && (
             <ChannelsMenu subbedChannels={subbedChannels} workspaceSlug={workspaceSlug} />
@@ -61,8 +66,12 @@ class LeftSidebar extends React.Component {
 
         <div className="sidebar-widget">
           <header className="widget__header">
-            <span className="widget__title">Direct Messages</span>
-            <button className="btn btn__channels" onClick={this.handleModalOpen}>+</button>
+            <span className="widget__title">
+              Direct Messages
+            </span>
+            <button type="button" className="btn btn__channels" onClick={this.handleModalOpen}>
+              +
+            </button>
           </header>
 
           <ul className="menu">
@@ -70,7 +79,9 @@ class LeftSidebar extends React.Component {
               <li className="menu__item" key={chSlug}>
                 <NavLink className="menu__link" to={`/${workspaceSlug}/${chSlug}`}>
                   {memberSlugs.filter(slug => slug !== currentUser.slug).map(slug => (
-                    <span key={slug}>{members[slug].username}</span>
+                    <span key={slug}>
+                      {members[slug].username}
+                    </span>
                   ))}
                 </NavLink>
               </li>

@@ -16,38 +16,45 @@ class RightSidebar extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { message, messageSlug, ...props } = this.props;
+    const { location, match: { isExact }, ...props } = this.props;
 
-    if (props.match.isExact && props.location.pathname !== prevProps.location.pathname) {
+    if (isExact && location.pathname !== prevProps.location.pathname) {
       props.rightSidebarOpen(props.sidebarType);
     }
   }
 
   handleCloseSidebar() {
+    const { rightSidebarClose } = this.props;
     this.setState({ isSidebarOpen: false });
-    this.props.rightSidebarClose();
+    rightSidebarClose();
   }
 
   render() {
     const { sidebarType, sidebarSubtitle, ...props } = this.props;
+    const { isSidebarOpen } = this.state;
+    const sidebarClassName = camelize(sidebarType);
 
-    if (!this.state.isSidebarOpen) {
-      return (<Redirect to={props.channelUrl} />);
+    if (!isSidebarOpen) {
+      return (<Redirect to={`/${props.workspaceSlug}/${props.channelSlug}`} />);
     }
 
     return (
-      <aside className={`sidebar__right sidebar__${camelize(sidebarType)}`}>
+      <aside className={`sidebar__right sidebar__${sidebarClassName}`}>
         <header className="sidebar__header">
           <div className="sidebar__headings">
-            {sidebarType && (<h4 className="sidebar__title">{sidebarType}</h4>)}
+            {sidebarType && (
+              <h4 className="sidebar__title">
+                {sidebarType}
+              </h4>
+            )}
             {sidebarSubtitle && (
               <span className="sidebar__subtitle">
-                <small>{sidebarSubtitle}</small>
+                {sidebarSubtitle}
               </span>
             )}
           </div>
 
-          <button className="btn btn__close" onClick={this.handleCloseSidebar}>
+          <button type="button" className="btn btn__close" onClick={this.handleCloseSidebar}>
             &#10006;
           </button>
         </header>

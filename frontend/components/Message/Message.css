@@ -20,6 +20,7 @@
 .msg__body {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .msg__content-meta {
@@ -39,8 +40,12 @@
   padding: 0 2px 0 6px;
 }
 
-.msg:hover {
+.msg--hover {
   background-color: #F9F9F9;
+}
+
+.msg--editing {
+  background-color: #FFEAA7;
 }
 
 .msg__author {

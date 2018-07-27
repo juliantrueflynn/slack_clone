@@ -1,55 +1,76 @@
-import React from 'react';
-import 'draft-js/dist/Draft.css';
-import 'draft-js-emoji-plugin/lib/plugin.css';
-import Editor from 'draft-js-plugins-editor';
-import { EditorState, convertFromRaw } from 'draft-js';
-import createEmojiPlugin from 'draft-js-emoji-plugin';
+import {
+  ContentState,
+  EditorState,
+  convertFromRaw,
+  convertToRaw
+} from 'draft-js';
 
-const emojiPlugin = createEmojiPlugin();
-const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
+export const createEmptyEditor = () => EditorState.createEmpty();
 
-class MessageEditor extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { editorState: props.editorState };
-    this.onChange = this.onChange.bind(this);
-    this.focus = this.focus.bind(this);
+export const createEditor = content => EditorState.createWithContent(content);
+
+export const clearEditor = (editorState) => {
+  const emptyContentState = ContentState.createFromText('');
+  return EditorState.push(editorState, emptyContentState, 'remove-range');
+};
+
+export const convertForSubmit = (editorState) => {
+  const currentContent = editorState.getCurrentContent();
+  const messageBody = convertToRaw(currentContent);
+  return JSON.stringify(messageBody);
+};
+
+export const mountEditorState = (content) => {
+  let editorState;
+
+  try {
+    const newContentState = convertFromRaw(JSON.parse(content));
+    editorState = EditorState.createWithContent(newContentState);
+  } catch (errors) {
+    editorState = createEmptyEditor();
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.readOnly && prevProps.content !== this.props.content) {
-      const newContentState = convertFromRaw(JSON.parse(this.props.content));
-      const editorState = EditorState.push(this.state.editorState, newContentState);
-      this.onChange(editorState);
-    }
-  }
+  return editorState;
+};
 
-  onChange(editorState) {
-    this.setState({ editorState });
-    this.props.onChange(editorState);
-  }
+export const emojiConfig = {
+  theme: {
+    emoji: 'emoji',
+    emojiSuggestions: 'emojiSuggestions',
 
-  focus() {
-    this.editor.focus();
-  }
+    emojiSuggestionsEntry: 'emojiSuggestionsEntry',
+    emojiSuggestionsEntryFocused: 'emojiSuggestionsEntryFocused',
+    emojiSuggestionsEntryText: 'emojiSuggestionsEntryText',
+    emojiSuggestionsEntryIcon: 'emojiSuggestionsEntryIcon',
 
-  render() {
-    const { hasEmoji, readOnly } = this.props;
+    emojiSelect: 'emoji-select',
+    emojiSelectButton: 'btn btn__emoji',
+    emojiSelectButtonPressed: 'btn btn__emoji btn__emoji--focus',
 
-    return (
-      <div className="message-editor" role="presentation" onClick={this.focus}>
-        <Editor
-          ref={(element) => { this.editor = element; }}
-          editorState={this.state.editorState}
-          onChange={this.onChange}
-          plugins={[emojiPlugin]}
-          readOnly={readOnly || false}
-        />
-        {!readOnly && hasEmoji && (<EmojiSuggestions />)}
-        {!readOnly && hasEmoji && (<EmojiSelect />)}
-      </div>
-    );
-  }
-}
+    emojiSelectPopover: 'emoji-select__popover',
+    emojiSelectPopoverClosed: 'emojiSelectPopoverClosed',
+    emojiSelectPopoverTitle: 'emojiSelectPopoverTitle',
+    emojiSelectPopoverGroups: 'emojiSelectPopoverGroups',
 
-export default MessageEditor;
+    emojiSelectPopoverGroup: 'emojiSelectPopoverGroup',
+    emojiSelectPopoverGroupTitle: 'emojiSelectPopoverGroupTitle',
+    emojiSelectPopoverGroupList: 'emojiSelectPopoverGroupList',
+    emojiSelectPopoverGroupItem: 'emojiSelectPopoverGroupItem',
+
+    emojiSelectPopoverToneSelect: 'emojiSelectPopoverToneSelect',
+    emojiSelectPopoverToneSelectList: 'emojiSelectPopoverToneSelectList',
+    emojiSelectPopoverToneSelectItem: 'emojiSelectPopoverToneSelectItem',
+
+    emojiSelectPopoverEntry: 'emojiSelectPopoverEntry',
+    emojiSelectPopoverEntryFocused: 'emojiSelectPopoverEntryFocused',
+    emojiSelectPopoverEntryIcon: 'emojiSelectPopoverEntryIcon',
+
+    emojiSelectPopoverNav: 'emojiSelectPopoverNav',
+    emojiSelectPopoverNavItem: 'emojiSelectPopoverNavItem',
+    emojiSelectPopoverNavEntry: 'emojiSelectPopoverNavEntry',
+    emojiSelectPopoverNavEntryActive: 'emojiSelectPopoverNavEntryActive',
+
+    emojiSelectPopoverScrollbar: 'emojiSelectPopoverScrollbar',
+    emojiSelectPopoverScrollbarThumb: 'emojiSelectPopoverScrollbarThumb',
+  },
+};

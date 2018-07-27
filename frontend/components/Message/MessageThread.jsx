@@ -53,7 +53,9 @@ class MessageThread extends React.Component {
               ))}
             </div>
           )}
-          <MessageFormContainer parentMessageId={message.id} />
+          <MessageFormContainer
+            parentMessageId={message.id}
+          />
         </div>
       </RightSidebarContainer>
     );

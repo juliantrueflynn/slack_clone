@@ -1,6 +1,5 @@
 import React from 'react';
-import { convertToRaw } from 'draft-js';
-import MessageEditor from '../../util/editorUtil';
+import MessageEditor, { convertForSubmit } from '../../util/editorUtil';
 
 class Message extends React.Component {
   constructor(props) {
@@ -11,9 +10,8 @@ class Message extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    const currentContent = this.props.editorState.getCurrentContent();
     const message = {
-      body: JSON.stringify(convertToRaw(currentContent)),
+      body: convertForSubmit(this.props.editorState),
       slug: this.props.messageSlug,
     };
     this.props.updateMessageRequest(message);

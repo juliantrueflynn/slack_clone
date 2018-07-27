@@ -9,6 +9,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "css-loader": "^0.28.11",
+    "css-object-loader": "0.0.7",
     "draft-js": "^0.10.5",
     "draft-js-emoji-plugin": "^2.0.6",
     "draft-js-plugins-editor": "^2.0.8",
@@ -17,7 +18,6 @@
     "humps": "^2.0.1",
     "lodash.merge": "^4.6.1",
     "lodash.values": "^4.3.0",
-    "quill": "^1.3.6",
     "react": "^16.4.0",
     "react-actioncable-provider": "^1.0.3",
     "react-dom": "^16.4.0",
@@ -59,10 +59,11 @@
   },
   "homepage": ".",
   "devDependencies": {
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-plugin-import": "^2.12.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.9.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.10.0",
     "redux-logger": "^3.0.6",
     "webpack-cli": "^2.1.5"
   }

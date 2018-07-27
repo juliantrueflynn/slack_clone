@@ -1,100 +1,68 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { EditorState, convertFromRaw } from 'draft-js';
 import MessageHoverMenuContainer from '../MessageHoverMenuContainer';
 import Reactions from '../Reactions';
-import MessageEditForm from './MessageEditForm';
+import AuthorNameLink from '../AuthorNameLink';
+import Avatar from '../Avatar';
+import MessageContent from '../MessageContent';
 import SingleMessageThread from './SingleMessageThread';
 import './Message.css';
-import MessageEditor from '../../util/editorUtil';
 
 class Message extends React.Component {
   constructor(props) {
     super(props);
 
-    const body = JSON.parse(props.message.body);
-    const blocks = convertFromRaw(body);
-
     this.state = {
       isMouseOver: false,
-      isEditing: false,
-      editorState: EditorState.createWithContent(blocks),
+      isEditing: false
     };
 
-    this.onChange = this.onChange.bind(this);
     this.handleEditToggle = this.handleEditToggle.bind(this);
-  }
-
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.message.body !== this.props.message.body) {
-  //     const newContentState = convertFromRaw(JSON.parse(this.props.message.body));
-  //     const editorState = EditorState.push(this.state.editorState, newContentState);
-  //     this.onChange(editorState);
-  //   }
-  // }
-
-  onChange(editorState) {
-    this.setState({ editorState });
   }
 
   handleHoverToggle(isMouseOver) {
     return () => this.setState({ isMouseOver });
   }
 
-  handleEditToggle(toggleResult = false) {
-    this.setState({ isEditing: toggleResult });
+  handleEditToggle(isEditing = false) {
+    this.setState({ isEditing });
   }
 
   render() {
-    const { message, ...props } = this.props;
-    const { isMouseOver, isEditing, editorState } = this.state;
+    const { message, author, ...props } = this.props;
+    const { isMouseOver, isEditing } = this.state;
 
-    if (!message) {
+    if (!message || !author) {
       return null;
     }
 
     return (
       <div
-        className="msg"
+        className={`msg ${isEditing ? 'msg--editing' : ''} ${isMouseOver && !isEditing ? 'msg--hover' : ''}`}
         onMouseEnter={this.handleHoverToggle(true)}
         onMouseLeave={this.handleHoverToggle(false)}
       >
-        <Link to={`${props.match.url}/team/${message.authorId}`} className="msg__avatar-link">
-          <img src="https://via.placeholder.com/40x40" alt={`${message.authorId}'s avatar`} />
-        </Link>
+        <Avatar baseUrl={props.match.url} author={author} />
         <div className="msg__body">
-          {isMouseOver && (
-            <MessageHoverMenuContainer
-              message={message}
-              toggleEditMessage={this.handleEditToggle}
-            />
-          )}
+          <MessageHoverMenuContainer
+            isMouseOver={isMouseOver}
+            isEditing={isEditing}
+            message={message}
+            handleEditToggle={this.handleEditToggle}
+          />
           <div className="msg__content">
             <div className="msg__content-meta">
-              <Link to={`${props.match.url}/team/${message.authorSlug}`} className="msg__author">
-                {props.author && props.author.username} (#{message.authorId})
-              </Link>
-              <span className="msg__time">{message.createdAt}</span>
+              <AuthorNameLink baseUrl={props.match.url} author={author} />
+              <time className="msg__time">
+                {message.createdAt}
+              </time>
             </div>
-            ID: #{message.id}<br />
-            Slug: {message.slug}<br />
-            {isEditing && (
-              <MessageEditForm
-                messageSlug={message.slug}
-                onChange={this.onChange}
-                editorState={editorState}
-                handleEditToggle={this.handleEditToggle}
-                updateMessageRequest={this.props.updateMessageRequest}
-              />
-            )}
-            {!isEditing && (
-              <MessageEditor
-                editorState={editorState}
-                content={message.body}
-                onChange={this.onChange}
-                readOnly
-              />
-            )}
+            <MessageContent
+              isEditing={isEditing}
+              content={message.body}
+              updateMessageRequest={props.updateMessageRequest}
+              closeEditor={this.handleEditToggle}
+              messageSlug={message.slug}
+            />
           </div>
           {(!props.isSingleMessage || message.parentMessageId) && (
             <div className="msg__footer">

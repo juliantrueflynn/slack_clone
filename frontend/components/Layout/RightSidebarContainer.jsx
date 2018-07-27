@@ -5,14 +5,12 @@ import { rightSidebarClose, rightSidebarOpen } from '../../actions/interactiveAc
 
 const mapStateToProps = (state, { match: { params } }) => ({
   rightSidebar: state.ui.rightSidebar,
-  channelUrl: `/${params.workspaceSlug}/${params.channelSlug}`,
+  workspaceSlug: params.workspaceSlug,
+  channelSlug: params.channelSlug,
 });
 
 const mapDispatchToProps = dispatch => ({
-  rightSidebarOpen: (sidebarType, sidebarProps) => dispatch(rightSidebarOpen(
-    sidebarType,
-    sidebarProps
-  )),
+  rightSidebarOpen: sidebarType => dispatch(rightSidebarOpen(sidebarType)),
   rightSidebarClose: () => dispatch(rightSidebarClose()),
 });
 

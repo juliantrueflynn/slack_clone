@@ -1,6 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Route, Redirect, withRouter, Switch } from 'react-router-dom';
+import {
+  Route,
+  Redirect,
+  withRouter,
+  Switch
+} from 'react-router-dom';
 import SessionFormContainer from '../components/Session/SessionFormContainer';
 import WorkspacePageContainer from '../components/Workspace/WorkspacePageContainer';
 import WorkspaceFormContainer from '../components/Workspace/WorkspaceFormContainer';

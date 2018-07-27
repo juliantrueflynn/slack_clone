@@ -15,22 +15,22 @@ class MessageHoverMenu extends React.Component {
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
   }
 
-  handleReactionClick(id, emoji) {
-    const reaction = {
-      messageId: this.props.message.id,
-      emoji: emoji.name,
-    };
+  handleReactionClick(_, emoji) {
+    const { message: { id: messageId }, createReactionRequest } = this.props;
+    const reaction = { messageId, emoji: emoji.name };
 
-    this.props.createReactionRequest(reaction);
+    createReactionRequest(reaction);
     this.setState({ isEmojiOpen: false });
   }
 
   handleEmojiToggle() {
-    this.setState({ isEmojiOpen: !this.state.isEmojiOpen });
+    const { isEmojiOpen } = this.state;
+    this.setState({ isEmojiOpen: !isEmojiOpen });
   }
 
   handleFavClick() {
-    this.props.createFavoriteRequest({ messageId: this.props.message.id });
+    const { createFavoriteRequest, message: { id: messageId } } = this.props;
+    createFavoriteRequest({ messageId });
   }
 
   handleUnfavClick() {
@@ -39,24 +39,31 @@ class MessageHoverMenu extends React.Component {
   }
 
   handleEditClick() {
-    this.props.toggleEditMessage(true);
+    const { handleEditToggle } = this.props;
+    handleEditToggle(true);
   }
 
   handleDeleteClick() {
-    this.props.deleteMessageRequest(this.props.message.slug);
+    const { deleteMessageRequest, message: { slug } } = this.props;
+    deleteMessageRequest(slug);
   }
 
   render() {
     const { isAuthor, isFavorited, ...props } = this.props;
+    const { isEmojiOpen } = this.state;
     const { openThreadSlug, message: { slug, parentMessageId }, match: { params } } = props;
     const baseThreadUrl = `/${params.workspaceSlug}/${params.channelSlug}`;
 
+    if (!props.isMouseOver || props.isEditing) {
+      return null;
+    }
+
     return (
       <div className="btn-group__msg-hover-menu">
-        <button className="btn btn__reaction" onClick={this.handleEmojiToggle}>
+        <button type="button" className="btn btn__reaction" onClick={this.handleEmojiToggle}>
           Add reaction
         </button>
-        {this.state.isEmojiOpen && (
+        {isEmojiOpen && (
           <EmojiPicker onEmojiClick={this.handleReactionClick} />
         )}
         {!parentMessageId && openThreadSlug !== slug && (
@@ -65,22 +72,22 @@ class MessageHoverMenu extends React.Component {
           </Link>
         )}
         {!isFavorited && (
-          <button className="btn btn__fav" onClick={this.handleFavClick}>
+          <button type="button" className="btn btn__fav" onClick={this.handleFavClick}>
             Favorite
           </button>
         )}
         {isFavorited && (
-          <button className="btn btn__unfav" onClick={this.handleUnfavClick}>
+          <button type="button" className="btn btn__unfav" onClick={this.handleUnfavClick}>
             Unfavorite
           </button>
         )}
         {isAuthor && (
-          <button className="btn btn__msg-edit" onClick={this.handleEditClick}>
+          <button type="button" className="btn btn__msg-edit" onClick={this.handleEditClick}>
             Edit message
           </button>
         )}
         {isAuthor && (
-          <button className="btn btn__msg-delete" onClick={this.handleDeleteClick}>
+          <button type="button" className="btn btn__msg-delete" onClick={this.handleDeleteClick}>
             Delete message
           </button>
         )}

@@ -6,12 +6,9 @@ import { readUpdate } from '../../actions/readActions';
 import { fetchMessage } from '../../actions/messageActions';
 
 const mapStateToProps = (state, { match: { params } }) => ({
-  isNewMessage: state.ui.displayMessageSlug !== params.messageSlug,
   isWorkspaceLoaded: !!state.ui.displayWorkspaceSlug,
   threadMessages: selectThreadFromSlug(state),
-  isChannelLoaded: !!state.ui.displayChannelSlug,
   message: state.entities.messages[params.messageSlug],
-  favorites: Object.values(state.entities.favorites),
   messageSlug: params.messageSlug,
   authors: selectAuthors(state),
 });

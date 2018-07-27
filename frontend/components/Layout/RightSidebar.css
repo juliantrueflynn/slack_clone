@@ -11,19 +11,21 @@
   display: -ms-flexbox;
   display: flex;
   flex-direction: row;
-}
-
-.sidebar__header {
   background-color: #F5F5F5;
   padding: 15px 12px;
   border-bottom: 1px solid #E9E9E9;
 }
 
+.sidebar__title {
+  margin: 0;
+}
+
+.sidebar__subtitle {
+  font-size: 80%;
+  display: block;
+}
+
 .btn__close {
   margin-left: auto;
   border: none;
-}
-
-.sidebar__title {
-  margin: 0;
 }

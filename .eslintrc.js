@@ -1,6 +1,7 @@
 module.exports = {
     "extends": "airbnb",
     "rules": {
+        "import/no-cycle": false,
         "react/prop-types": 0,
         "jsx-a11y/anchor-is-valid": [ "error", {
             "components": [ "Link" ],

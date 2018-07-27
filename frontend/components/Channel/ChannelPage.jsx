@@ -46,19 +46,21 @@ class ChannelPage extends React.Component {
       return (<Redirect to={redirectUrl} />);
     }
 
+    const { channel: { title }, authors } = props;
+
     return (
       <div className="page page__channel">
-        <TopBarHeaderContainer sectionTitle={props.channel && props.channel.title} />
+        <TopBarHeaderContainer sectionTitle={title} />
         <div className="messages-pane">
           <div className="messages-pane-body">
             {messages.map(message => (
               <MessageContainer
                 key={message.slug}
-                author={props.authors[message.authorSlug]}
+                author={authors[message.authorSlug]}
                 message={message}
               />
             ))}
-            <MessageFormContainer />
+            <MessageFormContainer editorPlaceholder={title && `Message #${title}`} />
           </div>
         </div>
         <PageRoutes routes={props.routes} />
