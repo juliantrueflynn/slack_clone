@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import ChannelPage from './ChannelPage';
 import { fetchChannel, leaveChannel } from '../../actions/channelActions';
-import { selectParentMessages, selectAuthors } from '../../reducers/selectors';
+import { selectParentMessages, selectHashDmUsersBySlug, selectDmUsernamesBySlug } from '../../reducers/selectors';
 import { readUpdate } from '../../actions/readActions';
 
 const mapStateToProps = (state, { match: { params } }) => ({
@@ -12,7 +12,8 @@ const mapStateToProps = (state, { match: { params } }) => ({
   userSlug: state.ui.displayUserSlug,
   isWorkspaceLoaded: !!state.entities.workspaces[params.workspaceSlug],
   channel: state.entities.channels[params.channelSlug],
-  authors: selectAuthors(state),
+  authors: selectHashDmUsersBySlug(state, params.channelSlug),
+  dmUsernames: selectDmUsernamesBySlug(state, params.channelSlug, false),
 });
 
 const mapDispatchToProps = dispatch => ({

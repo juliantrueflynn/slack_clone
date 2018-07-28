@@ -31,7 +31,7 @@ class Message extends React.Component {
     const { message, author, ...props } = this.props;
     const { isMouseOver, isEditing } = this.state;
 
-    if (!message || !author) {
+    if (!message) {
       return null;
     }
 

@@ -16,7 +16,7 @@ class UserView extends React.Component {
 
   handleClick() {
     const { workspaceId, user, ...props } = this.props;
-    props.createDmChatRequest({ workspaceId }, [user.id]);
+    props.createDmChatRequest({ workspaceId, memberIds: [user.id] });
     this.setState({ didCreateDmChat: true });
   }
 
@@ -43,7 +43,7 @@ class UserView extends React.Component {
               Message
             </Link>
           ) : (
-            <button onClick={this.handleClick}>
+            <button type="button" onClick={this.handleClick}>
               Message
             </button>
           )}

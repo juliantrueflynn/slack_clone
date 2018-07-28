@@ -7,8 +7,10 @@ export const selectWorkspaceIdBySlug = ({ entities: { workspaces }, ui }, slug) 
 
 export const selectWorkspaceSlug = state => state.ui.displayWorkspaceSlug;
 
-export const selectSubbedChats = ({ entities, session: { currentUser } }) => (
-  values(entities.channels).filter(ch => !ch.hasDm && ch.memberSlugs && ch.memberSlugs.includes(currentUser.slug))
+export const selectSubbedChats = ({ entities: { channels }, session: { currentUser } }) => (
+  values(channels).filter(ch => (
+    !ch.hasDm && ch.memberSlugs && ch.memberSlugs.includes(currentUser.slug)
+  ))
 );
 
 export const selectUnreadChannels = ({ entities: { channels } }) => (
@@ -35,6 +37,27 @@ export const selectChatMembers = ({ entities: { members, channels } }) => (
       return acc;
     }, {})
 );
+
+export const selectHashDmUsersBySlug = ({ entities, session }, chatSlug, hasCurrUser = true) => {
+  const { channels, members } = entities;
+  const { currentUser } = session;
+
+  if (!channels[chatSlug]) return null;
+
+  const chatUsers = channels[chatSlug].memberSlugs.reduce((acc, curr) => {
+    acc[curr] = members[curr];
+    return acc;
+  }, {});
+
+  if (!hasCurrUser) delete chatUsers[currentUser.slug];
+
+  return chatUsers;
+};
+
+export const selectDmUsernamesBySlug = (state, chatSlug, hasCurrUser = true) => {
+  const dmUsers = selectHashDmUsersBySlug(state, chatSlug, hasCurrUser);
+  return dmUsers && values(dmUsers).map(user => user.username);
+};
 
 export const selectAuthors = ({ entities: { members, messages } }) => (
   values(messages).reduce((acc, curr) => {

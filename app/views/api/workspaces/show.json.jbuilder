@@ -5,7 +5,10 @@ end
 json.channels do
   json.array! current_user.channels.where(channels: { workspace_id: @workspace.id }) do |chat|
     json.(chat, :id, :title, :slug, :has_dm)
-    json.member_slugs [current_user.slug]
+
+    member_slugs = [current_user.slug]
+    member_slugs = chat.members.pluck(:slug) if chat.has_dm?
+    json.member_slugs member_slugs
   end
 end
 

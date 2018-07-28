@@ -23,7 +23,7 @@ class ChannelPage extends React.Component {
   }
 
   render() {
-    const { match, messages, ...props } = this.props;
+    const { match, dmUsernames, ...props } = this.props;
 
     if (!props.channel) {
       return null;
@@ -46,21 +46,27 @@ class ChannelPage extends React.Component {
       return (<Redirect to={redirectUrl} />);
     }
 
-    const { channel: { title }, authors } = props;
+    const { channel: { title, hasDm } } = props;
+    let chatTitle = `#${title}`;
+    let placeholder = chatTitle;
+    if (hasDm) {
+      chatTitle = dmUsernames.join(', ');
+      placeholder = dmUsernames.length === 1 ? `@${chatTitle}` : chatTitle;
+    }
 
     return (
       <div className="page page__channel">
-        <TopBarHeaderContainer sectionTitle={title} />
+        <TopBarHeaderContainer sectionTitle={chatTitle} />
         <div className="messages-pane">
           <div className="messages-pane-body">
-            {messages.map(message => (
+            {props.messages.map(message => (
               <MessageContainer
                 key={message.slug}
-                author={authors[message.authorSlug]}
+                author={props.authors[message.authorSlug]}
                 message={message}
               />
             ))}
-            <MessageFormContainer editorPlaceholder={title && `Message #${title}`} />
+            <MessageFormContainer placeholder={placeholder && `Message ${placeholder}`} />
           </div>
         </div>
         <PageRoutes routes={props.routes} />

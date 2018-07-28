@@ -1,5 +1,12 @@
 import merge from 'lodash.merge';
-import { WORKSPACE, CHANNEL, READ, MESSAGE, USER_UNREADS, DM_CHAT } from '../actions/actionTypes';
+import {
+  WORKSPACE,
+  CHANNEL,
+  READ,
+  MESSAGE,
+  USER_UNREADS,
+  DM_CHAT
+} from '../actions/actionTypes';
 
 const channelReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -38,9 +45,6 @@ const channelReducer = (state = {}, action) => {
       channels.forEach((channel) => {
         nextState[channel.slug] = channel;
         nextState[channel.slug].isActive = false;
-        // const lastReadInMs = Date.parse(channel.lastRead);
-        // const lastActiveInMs = Date.parse(channel.lastActive);
-        // nextState[channel.slug].hasUnreads = lastReadInMs < lastActiveInMs;
       });
       return nextState;
     }

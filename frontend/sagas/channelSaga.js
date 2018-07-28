@@ -1,23 +1,30 @@
-import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
-import { fetchChannel, updateChannel, deleteChannel, createChannel } from '../actions/channelActions';
+import {
+  all,
+  call,
+  fork,
+  put,
+  select,
+  takeLatest
+} from 'redux-saga/effects';
+import * as action from '../actions/channelActions';
 import { CHANNEL, DM_CHAT } from '../actions/actionTypes';
-import { apiFetch, apiCreate, apiUpdate, apiDelete } from '../util/apiUtil';
+import * as api from '../util/apiUtil';
 import { selectWorkspaceSlug, selectCurrentUserId } from '../reducers/selectors';
 import { navigate, modalClose } from '../actions/interactiveActions';
 
 function* fetchCreate({ channel }) {
   try {
-    yield call(apiCreate, 'channels', channel);
+    yield call(api.apiCreate, 'channels', channel);
   } catch (error) {
-    yield put(createChannel.failure(error));
+    yield put(action.createChannel.failure(error));
   }
 }
 
-function* fetchCreateDm({ dmChat, memberIds }) {
+function* fetchCreateDm({ dmChat }) {
   try {
-    yield call(apiCreate, 'dm_chat', { dmChat, memberIds });
+    yield call(api.apiCreate, 'dm_chat', dmChat);
   } catch (error) {
-    yield put(createChannel.failure(error));
+    yield put(action.createChannel.failure(error));
   }
 }
 
@@ -33,26 +40,26 @@ function* fetchRedirectOwner({ channel }) {
 
 function* fetchUpdate({ channel }) {
   try {
-    yield call(apiUpdate, `channels/${channel.slug}`, channel);
+    yield call(api.apiUpdate, `channels/${channel.slug}`, channel);
   } catch (error) {
-    yield put(updateChannel.failure(error));
+    yield put(action.updateChannel.failure(error));
   }
 }
 
 function* fetchShow({ channelSlug }) {
   try {
-    const channel = yield call(apiFetch, `channels/${channelSlug}`);
-    yield put(fetchChannel.receive(channel));
+    const channel = yield call(api.apiFetch, `channels/${channelSlug}`);
+    yield put(action.fetchChannel.receive(channel));
   } catch (error) {
-    yield put(fetchChannel.failure(error));
+    yield put(action.fetchChannel.failure(error));
   }
 }
 
 function* fetchDestroy({ channelSlug }) {
   try {
-    yield call(apiDelete, `channels/${channelSlug}`);
+    yield call(api.apiDelete, `channels/${channelSlug}`);
   } catch (error) {
-    yield put(deleteChannel.failure(error));
+    yield put(action.deleteChannel.failure(error));
   }
 }
 

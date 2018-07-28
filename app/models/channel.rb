@@ -1,5 +1,6 @@
 class Channel < ApplicationRecord
-  attr_accessor :skip_broadcast, :member_ids, :last_read
+  attr_accessor :skip_broadcast, :last_read5
+  attr_reader :member_ids
 
   before_validation :generate_slug, unless: :slug?
 
@@ -37,9 +38,23 @@ class Channel < ApplicationRecord
   has_many :reads, as: :readable
 
   scope :with_subs, -> { includes(channel_subs: :user) }
+  scope :with_dm, -> { where(has_dm: true) }
 
   def self.with_user_sub(user_id)
     includes(:subs).where(channel_subs: { user_id: user_id })
+  end
+
+  def self.has_dm_subs?(member_ids)
+    with_dm.joins(:subs)
+      .where(channel_subs: { user_id: member_ids })
+      .group(:id)
+      .having('count(channels.id) = ?', member_ids.length)
+      .distinct
+      .exists?
+  end
+
+  def member_ids=(member_ids)
+    @member_ids = member_ids.map(&:to_i)
   end
 
   def broadcast_name
@@ -54,25 +69,26 @@ class Channel < ApplicationRecord
     has_dm? ? 'DM_CHAT' : self.class.name
   end
 
-  after_create_commit :broadcast_create_chat
+  after_create :generate_chat_subs
+  after_create_commit :broadcast_create
   after_update_commit :broadcast_update
   after_destroy :broadcast_destroy
 
   private
 
   def sub_user_to_public_chat
-    subs.create(user_id: owner.id, skip_broadcast: true) if owner
+    subs.create(user_id: owner.id, skip_broadcast: true)
   end
 
   def sub_users_to_dm_chat
-    return if self.member_ids
+    return unless self.member_ids
     self.member_ids.each do |sub_id|
       subs.create(channel_id: id, user_id: sub_id, skip_broadcast: true)
     end
   end
 
-  def broadcast_create_chat
-    has_dm? ? sub_users_to_dm_chat : sub_user_to_public_chat
-    broadcast_create
+  def generate_chat_subs
+    sub_users_to_dm_chat if has_dm?
+    sub_user_to_public_chat if owner
   end
 end

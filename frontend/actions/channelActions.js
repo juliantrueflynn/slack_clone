@@ -29,7 +29,7 @@ export const deleteChannel = {
 };
 
 export const createDmChat = {
-  request: (dmChat, memberIds) => actionCreator(DM_CHAT.CREATE.REQUEST, { dmChat, memberIds }),
+  request: dmChat => actionCreator(DM_CHAT.CREATE.REQUEST, { dmChat }),
   failure: errors => actionCreator(DM_CHAT.CREATE.FAILURE, { errors }),
 };
 
