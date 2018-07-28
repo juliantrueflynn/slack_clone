@@ -26,11 +26,11 @@ class MessageContent extends React.Component {
   handleEditSubmit(event) {
     event.preventDefault();
 
-    const { messageSlug: slug, updateMessageRequest, handleEditToggle } = this.props;
+    const { messageSlug: slug, updateMessageRequest, closeEditor } = this.props;
     const { editorState } = this.state;
     const body = convertForSubmit(editorState);
     updateMessageRequest({ body, slug });
-    handleEditToggle();
+    closeEditor();
   }
 
   render() {
