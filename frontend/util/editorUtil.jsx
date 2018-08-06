@@ -44,8 +44,8 @@ export const emojiConfig = {
     emojiSuggestionsEntryIcon: 'emojiSuggestionsEntryIcon',
 
     emojiSelect: 'emoji-select',
-    emojiSelectButton: 'btn btn__emoji',
-    emojiSelectButtonPressed: 'btn btn__emoji btn__emoji--focus',
+    emojiSelectButton: 'Btn Btn__emoji',
+    emojiSelectButtonPressed: 'Btn Btn__emoji Btn__emoji--focus',
 
     emojiSelectPopover: 'emoji-select__popover',
     emojiSelectPopoverClosed: 'emojiSelectPopoverClosed',

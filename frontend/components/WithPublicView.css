@@ -1,0 +1,70 @@
+.Page__header {
+  background-color: #FFF;
+  padding: 1em 0;
+  position: fixed;
+  width: 100%;
+}
+
+.Page__public .Btn {
+  text-transform: uppercase;
+}
+
+.Page__header .Btn__dropdown {
+  text-transform: none;
+  border: .5px solid #636e72;
+  color: #636e72;
+  border-radius: 5px;
+  padding: 10px;
+  display: block;
+}
+
+.Page__navbar--public {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.Page__container {
+  margin: 0 auto;
+  -ms-flex-preferred-size: 0;
+  flex-basis: 0;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  max-width: 900px;
+}
+
+.Page__header .navbar__logo,
+.Page__header .MenuItem__content {
+  padding: 10px 5px;
+  display: block;
+}
+
+.Page__public .Menu--dropdown {
+  padding: 20px 15px;
+  top: 38px;
+  right: -15px;
+}
+
+.Menu--public {
+  margin: 0 0 0 auto;
+  list-style: none;
+  padding: 0 1.75em;
+}
+
+.Menu--public > .MenuItem,
+.Menu--public > .MenuItem > .MenuItem__content {
+  color: #2D3436;
+}
+
+.Page__title--m0 {
+  margin: 0;
+}
+
+.Page__public--create-workspace .Page__container {
+  padding-top: 70px;
+}

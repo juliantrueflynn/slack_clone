@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import RightSidebarContainer from './Layout/RightSidebarContainer';
+import Button from './Button';
 
 class UserView extends React.Component {
   constructor(props) {
@@ -43,9 +44,9 @@ class UserView extends React.Component {
               Message
             </Link>
           ) : (
-            <button type="button" onClick={this.handleClick}>
+            <Button className="Btn__dm" onClick={this.handleClick}>
               Message
-            </button>
+            </Button>
           )}
         </div>
       </RightSidebarContainer>

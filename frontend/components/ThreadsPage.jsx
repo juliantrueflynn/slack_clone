@@ -6,28 +6,35 @@ import MessageThreadAuthors from './MessageThreadAuthors';
 
 class ThreadsPage extends React.Component {
   componentDidMount() {
-    this.props.fetchUserThreadsRequest();
+    const { fetchUserThreadsRequest } = this.props;
+    fetchUserThreadsRequest();
   }
 
   render() {
-    const { messages, members } = this.props;
+    const { messages, members, currentUserSlug } = this.props;
 
     return (
       <div>
         <TopBarHeaderContainer sectionTitle="All Threads">
-          <small>Thread count here</small>
+          <small>
+            Thread count here
+          </small>
         </TopBarHeaderContainer>
 
         <div>
           {Object.values(messages).map(parentMessage => (
             <div key={parentMessage.id}>
               <div className="thread-channel-meta">
-                <strong>Channel: {parentMessage.channelId}</strong><br />
+                <strong>
+                  Channel:
+                  {parentMessage.channelId}
+                </strong>
+                <br />
                 <MessageThreadAuthors
                   messages={messages}
                   members={members}
                   messageThread={parentMessage.thread}
-                  currentUserSlug={this.props.currentUserSlug}
+                  currentUserSlug={currentUserSlug}
                 />
               </div>
 

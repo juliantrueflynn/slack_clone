@@ -1,0 +1,76 @@
+.SessionForm {
+  text-align: center;
+  max-width: 450px;
+  margin: 0 auto;
+  -ms-flex-preferred-size: 0;
+  flex-basis: 0;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  padding-top: 160px;
+}
+
+@media only screen and (max-width : 1200px) {
+  .SessionForm {
+    padding-top: 120px;
+  }
+}
+
+.Page__public--signin,
+.Page__public--signup {
+  background-color: #6C5CE7;
+  min-height: 100vh;
+}
+
+.Page__public--signin .Page__title,
+.Page__public--signup .Page__title {
+  margin-top: 0;
+  color: #FFF;
+}
+
+.SessionForm .errors {
+  background-color: #E17055;
+  border: 0;
+  padding-left: 12px;
+  padding-right: 12px;
+  text-align: center;
+}
+
+.SessionForm .Form__control {
+  border-color: #FFF;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+}
+
+.SessionForm .Btn__submit {
+  margin-top: 20px;
+  padding: 15px 10px;
+  background-color: #00b894;
+  border-color: #00b894;
+  transition: background-color .2s ease-in-out, box-shadow .2s ease-in-out 
+}
+
+.SessionForm .Btn__submit,
+.SessionForm .Form__control,
+.SessionForm .errors {
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,.1);
+  color: #FFF;
+}
+
+.SessionForm .Btn__submit:hover {
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  background-color: #32c6a9;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: rgba(255,255,255,.8);
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: rgba(255,255,255,.8);
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: rgba(255,255,255,.8);
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: rgba(255,255,255,.8);
+}

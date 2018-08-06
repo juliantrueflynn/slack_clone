@@ -1,0 +1,13 @@
+.Avatar {
+  padding: 0 2px;
+}
+
+.Sidebar .Avatar {
+  margin-right: 5px;
+  display: block;
+  padding: 0;
+}
+
+.Avatar__image {
+  display: block;
+}

@@ -1,0 +1,8 @@
+.Modal__channel {
+  margin: 5em 2.5em;
+  position: relative;
+}
+
+.Modal__channel:focus {
+  outline: none;
+}

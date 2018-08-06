@@ -1,0 +1,19 @@
+.ReactModal__Overlay {
+  z-index: 999;
+}
+
+.Modal {
+  height: 100%;
+}
+
+.Modal__close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
+}
+
+.Modal__title {
+  margin: 0;
+}
+

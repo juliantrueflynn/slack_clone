@@ -56,7 +56,7 @@ export const selectHashDmUsersBySlug = ({ entities, session }, chatSlug, hasCurr
 
 export const selectDmUsernamesBySlug = (state, chatSlug, hasCurrUser = true) => {
   const dmUsers = selectHashDmUsersBySlug(state, chatSlug, hasCurrUser);
-  return dmUsers && values(dmUsers).map(user => user.username);
+  return dmUsers && values(dmUsers).map(user => user && user.username);
 };
 
 export const selectAuthors = ({ entities: { members, messages } }) => (

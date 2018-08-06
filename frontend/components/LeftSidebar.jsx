@@ -1,109 +1,101 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import UsersMenu from './UsersMenu';
-import ChannelsMenu from './Channel/ChannelsMenu';
-import NewChannelModal from './NewChannelModal';
+import ChatModal from './ChatModal';
 import PreferencesModal from './PreferencesModal';
+import Dropdown from './Dropdown';
+import Menu from './Menu';
+import Button from './Button';
 import './LeftSidebar.css';
 
-class LeftSidebar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleModalOpen = this.handleModalOpen.bind(this);
+const LeftSidebar = ({
+  subbedChannels,
+  workspaceSlug,
+  channelSlug,
+  userSlug,
+  currentUser,
+  members,
+  workspaces,
+  modalOpen,
+  dmChats,
+  workspaceId,
+  createChannelRequest,
+}) => {
+  const handleModalOpen = () => modalOpen('MODAL_CHAT');
+  const quickLinksList = [
+    { label: 'All Unreads', link: `/${workspaceSlug}/unreads` },
+    { label: 'All Threads', link: `/${workspaceSlug}/threads` },
+  ];
+  const chatList = subbedChannels.map(item => ({
+    label: item.title,
+    link: `/${workspaceSlug}/${item.slug}`,
+  }));
+  const profileDdMenu = [
+    { label: 'Home', link: '/', exact: true },
+    { label: 'Set Status' },
+    { label: 'Profile & Account', link: `/${workspaceSlug}/${channelSlug}/team/${userSlug}` },
+    { label: 'Preferences', onClick: () => modalOpen('SETTINGS') },
+    { label: 'Switch Workspace' },
+  ];
+
+  if (workspaces) {
+    workspaces.forEach((workspace) => {
+      profileDdMenu.push({ label: workspace.title, link: `/${workspace.slug}` });
+    });
   }
 
-  handleModalOpen() {
-    const { modalOpen } = this.props;
-    modalOpen('NEW_CHANNEL_MODAL');
-  }
+  const dmChatsItems = dmChats && dmChats.map((ch) => {
+    const subsWithoutCurrUser = ch.memberSlugs.filter(slug => slug !== currentUser.slug);
+    const usernames = subsWithoutCurrUser.map(slug => members[slug].username);
+    return {
+      link: `/${workspaceSlug}/${ch.slug}`,
+      label: usernames.join(', '),
+    };
+  });
 
-  render() {
-    const {
-      subbedChannels,
-      workspaceSlug,
-      currentUser,
-      members,
-      ...props
-    } = this.props;
+  return (
+    <aside className="Sidebar Sidebar--left">
+      <div className="SidebarWidget">
+        <Dropdown togglerText={workspaceSlug} menuFor="user" items={profileDdMenu} />
+      </div>
 
-    return (
-      <aside className="sidebar sidebar__left">
-        <UsersMenu
-          workspaceSlug={workspaceSlug}
-          channelSlug={props.channelSlug}
-          userSlug={props.userSlug}
-          workspaces={props.workspaces}
-          modalOpen={props.modalOpen}
-          modalClose={props.modalClose}
-        />
+      <div className="SidebarWidget">
+        <Menu items={quickLinksList} menuFor="quicklinks" />
+      </div>
 
-        <ul className="menu menu__quicklinks">
-          <li className="menu__item menu__item-unreads">
-            <NavLink to={`/${workspaceSlug}/unreads`} className="menu__link">
-              All Unreads
-            </NavLink>
-          </li>
-          <li className="menu__item menu__item-threads">
-            <NavLink to={`/${workspaceSlug}/threads`} className="menu__link">
-              All Threads
-            </NavLink>
-          </li>
-        </ul>
+      <div className="SidebarWidget">
+        <header className="SidebarWidget__header">
+          <span className="SidebarWidget__title">
+            Channels
+          </span>
+          <Button className="Btn__widget" onClick={handleModalOpen}>
+            +
+          </Button>
+        </header>
+        {subbedChannels && (
+          <Menu items={chatList} />
+        )}
+      </div>
 
-        <div className="sidebar-widget">
-          <header className="widget__header">
-            <span className="widget__title">
-              Channels
-            </span>
-            <button type="button" className="btn btn__channels" onClick={this.handleModalOpen}>
-              +
-            </button>
-          </header>
-          {subbedChannels && (
-            <ChannelsMenu subbedChannels={subbedChannels} workspaceSlug={workspaceSlug} />
-          )}
-        </div>
+      <div className="SidebarWidget">
+        <header className="SidebarWidget__header">
+          <span className="SidebarWidget__title">
+            Direct Messages
+          </span>
+          <Button className="Btn__widget" onClick={handleModalOpen}>
+            +
+          </Button>
+        </header>
 
-        <div className="sidebar-widget">
-          <header className="widget__header">
-            <span className="widget__title">
-              Direct Messages
-            </span>
-            <button type="button" className="btn btn__channels" onClick={this.handleModalOpen}>
-              +
-            </button>
-          </header>
+        <Menu menuFor="dmChats" items={dmChatsItems} />
+      </div>
 
-          <ul className="menu">
-            {props.dmChats && props.dmChats.map(({ slug: chSlug, memberSlugs }) => (
-              <li className="menu__item" key={chSlug}>
-                <NavLink className="menu__link" to={`/${workspaceSlug}/${chSlug}`}>
-                  {memberSlugs.filter(slug => slug !== currentUser.slug).map(slug => (
-                    <span key={slug}>
-                      {members[slug].username}
-                    </span>
-                  ))}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <ChatModal
+        workspaceId={workspaceId}
+        createChannelRequest={createChannelRequest}
+      />
 
-        <NewChannelModal
-          workspaceId={props.workspaceId}
-          isModalOpen={props.isChannelModalOpen}
-          modalClose={props.modalClose}
-          createChannelRequest={props.createChannelRequest}
-        />
-
-        <PreferencesModal
-          workspaceSlug={workspaceSlug}
-          modalClose={props.modalClose}
-          isModalOpen={props.isSettingsModalOpen}
-        />
-      </aside>
-    );
-  }
-}
+      <PreferencesModal workspaceSlug={workspaceSlug} />
+    </aside>
+  );
+};
 
 export default LeftSidebar;

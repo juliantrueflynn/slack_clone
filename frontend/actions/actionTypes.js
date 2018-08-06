@@ -5,8 +5,8 @@ export const SIGN_UP = actionTypes('SIGN_UP');
 export const SIGN_OUT = actionTypes('SIGN_OUT');
 export const USER_APPEARANCE = actionTypes('USER_APPEARANCE');
 
-export const WORKSPACE = apiActions('WORKSPACE');
-export const CHANNEL = apiActions('CHANNEL');
+export const WORKSPACE = apiActions('WORKSPACE', ['INDEX', 'SHOW', 'CREATE', 'UPDATE', 'DESTROY']);
+export const CHANNEL = apiActions('CHANNEL', ['INDEX', 'SHOW', 'CREATE', 'UPDATE', 'DESTROY']);
 export const DM_CHAT = apiActions('DM_CHAT', ['CREATE']);
 export const MESSAGE = apiActions('MESSAGE', ['SHOW', 'CREATE', 'UPDATE', 'DESTROY']);
 export const WORKSPACE_SUB = apiActions('WORKSPACE_SUB', ['CREATE', 'DESTROY']);
@@ -23,4 +23,4 @@ export const RIGHT_SIDEBAR = { OPEN: 'RIGHT_SIDEBAR_OPEN', CLOSE: 'RIGHT_SIDEBAR
 export const NAVIGATE = 'NAVIGATE';
 export const MODAL_OPEN = 'MODAL_OPEN';
 export const MODAL_CLOSE = 'MODAL_CLOSE';
-export const NEW_CHANNEL_MODAL = 'NEW_CHANNEL_MODAL';
+export const NEW_CHANNEL_MODAL = 'MODAL_CHAT';

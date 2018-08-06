@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { camelize } from 'humps';
 import './RightSidebar.css';
+import Button from '../Button';
 
 class RightSidebar extends React.Component {
   constructor(props) {
@@ -39,27 +40,27 @@ class RightSidebar extends React.Component {
     }
 
     return (
-      <aside className={`sidebar__right sidebar__${sidebarClassName}`}>
-        <header className="sidebar__header">
-          <div className="sidebar__headings">
+      <aside className={`Sidebar Sidebar__right Sidebar__right--${sidebarClassName}`}>
+        <header className="Sidebar__header">
+          <div className="Sidebar__headings">
             {sidebarType && (
-              <h4 className="sidebar__title">
+              <h4 className="Sidebar__title">
                 {sidebarType}
               </h4>
             )}
             {sidebarSubtitle && (
-              <span className="sidebar__subtitle">
+              <span className="Sidebar__subtitle">
                 {sidebarSubtitle}
               </span>
             )}
           </div>
 
-          <button type="button" className="btn btn__close" onClick={this.handleCloseSidebar}>
+          <Button className="Btn__close" onClick={this.handleCloseSidebar}>
             &#10006;
-          </button>
+          </Button>
         </header>
 
-        <div className="sidebar__body">
+        <div className="Sidebar__body">
           {props.children}
         </div>
       </aside>

@@ -1,13 +1,17 @@
-import { NAVIGATE, MODAL_OPEN, MODAL_CLOSE, RIGHT_SIDEBAR } from './actionTypes';
+import {
+  NAVIGATE,
+  MODAL_OPEN,
+  MODAL_CLOSE,
+  RIGHT_SIDEBAR
+} from './actionTypes';
 
 export const modalOpen = modalType => ({
   type: MODAL_OPEN,
   modalType,
 });
 
-export const modalClose = modalType => ({
+export const modalClose = () => ({
   type: MODAL_CLOSE,
-  modalType,
 });
 
 export const navigate = params => ({

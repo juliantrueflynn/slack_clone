@@ -1,4 +1,8 @@
 module.exports = {
+    "env": {
+        "browser": true,
+        "node": true
+    },
     "extends": "airbnb",
     "rules": {
         "import/no-cycle": false,
@@ -7,7 +11,7 @@ module.exports = {
             "components": [ "Link" ],
             "specialLink": [ "to" ]
         }],
-        "jsx-a11y/label-has-for": [ 2, {
+        "jsx-a11y/label-has-for": [2, {
             "components": [ "Label" ],
             "required": {
                 "some": [ "nesting", "id" ]
@@ -20,7 +24,11 @@ module.exports = {
             "imports": "ignore",
             "exports": "ignore",
             "functions": "ignore"
-        }]
+        }],
+        "react/no-children-prop": false,
     },
-    "globals": { "fetch": false }
+    "globals": {
+        "fetch": false,
+        "document": false
+    }
 };

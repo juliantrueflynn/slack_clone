@@ -14,9 +14,9 @@ class WorkspacePage extends React.Component {
   }
 
   componentDidMount() {
-    const { workspaceSlug, workspaces } = this.props;
-    this.props.fetchWorkspaceRequest(workspaceSlug);
-    if (!workspaces || !workspaces.length) this.props.fetchWorkspacesRequest();
+    const { workspaceSlug, workspaces, ...props } = this.props;
+    props.fetchWorkspaceRequest(workspaceSlug);
+    if (!workspaces || !workspaces.length) props.fetchWorkspacesRequest();
   }
 
   componentDidUpdate(prevProps) {
@@ -42,7 +42,13 @@ class WorkspacePage extends React.Component {
     const { workspaceSlug, channels, ...props } = this.props;
     const defaultChannelSlug = channels[0] && channels[0].slug;
 
-    if (props.isLoading) return (<h2>Loading...</h2>);
+    if (props.isLoading) {
+      return (
+        <h2>
+          Loading...
+        </h2>
+      );
+    }
 
     if (props.match.isExact && defaultChannelSlug) {
       return (<Redirect to={`${workspaceSlug}/${defaultChannelSlug}`} />);

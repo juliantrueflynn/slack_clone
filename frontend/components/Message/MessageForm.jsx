@@ -1,9 +1,10 @@
 import React from 'react';
-import 'draft-js-emoji-plugin/lib/plugin.css';
-import FormErrors from '../Layout/FormErrors';
 import { convertForSubmit, clearEditor, createEmptyEditor } from '../../util/editorUtil';
 import MessageEditor from '../MessageEditor';
+import Button from '../Button';
+import Form from '../Form';
 import './MessageForm.css';
+import Avatar from '../Avatar';
 
 class MessageForm extends React.Component {
   constructor(props) {
@@ -33,30 +34,22 @@ class MessageForm extends React.Component {
     const { editorState } = this.state;
 
     return (
-      <form className={`msg-form ${parentMessageId && 'msg-form__sidebar'}`} onSubmit={this.handleMessageSubmit}>
-        <FormErrors entity="message" />
-
+      <Form formFor="message" onSubmit={this.handleMessageSubmit}>
         {parentMessageId && currentUser && (
-          <img
-            src="https://via.placeholder.com/40x40"
-            className="avatar__form"
-            alt={`${currentUser.username}'s avatar`}
-            height="40"
-            width="40"
-          />
+          <Avatar author={currentUser} avatarFor="form" />
         )}
 
-        <div className="msg-form__body">
+        <div className="Form__body">
           <MessageEditor
             editorState={editorState}
             onChange={this.onChange}
             placeholder={placeholder || 'Reply...'}
           />
-          <button type="submit" className="btn btn__submit">
+          <Button type="submit" className="Btn__submit">
             Add Message
-          </button>
+          </Button>
         </div>
-      </form>
+      </Form>
     );
   }
 }

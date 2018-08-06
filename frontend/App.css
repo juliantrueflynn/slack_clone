@@ -3,6 +3,7 @@
 body {
   font-family: 'Noto Sans', sans-serif;
   font-size: 15px;
+  margin: 0;
 }
 
 div#root {
@@ -20,14 +21,21 @@ a {
   color: #0576b9;
 }
 
-button.menu__link {
-  padding: 0;
-  border: none;
-  color: inherit;
+.App {
+  height: 100%;
 }
 
-.btn:hover, .btn:focus {
-  cursor: pointer;
+.Form__control {
+  cursor: auto;
+  line-height: 1.6;
+  font-size: 16px;
+  padding: 8px 10px;
+  width: 100%;
+  border-style: solid;
+}
+
+.Form__group {
+  margin-bottom: 10px;
 }
 
 @media only screen and (min-width : 1250px) {

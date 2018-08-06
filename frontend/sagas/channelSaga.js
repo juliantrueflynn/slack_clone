@@ -33,7 +33,7 @@ function* fetchRedirectOwner({ channel }) {
   const workspaceSlug = yield select(selectWorkspaceSlug);
 
   if (currentUserId === channel.ownerId) {
-    yield put(modalClose('NEW_CHANNEL_MODAL'));
+    yield put(modalClose('MODAL_CHAT'));
     yield put(navigate({ path: `/${workspaceSlug}/${channel.slug}` }));
   }
 }

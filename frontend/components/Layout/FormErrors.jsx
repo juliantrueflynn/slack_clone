@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { camelize } from 'humps';
 import { withRouter } from 'react-router-dom';
+import './FormErrors.css';
 
 const mapStateToProps = (state, ownProps) => ({
   errors: ownProps.errors || state.errors[ownProps.entity] || []
@@ -17,7 +19,7 @@ class FormErrors extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    let nextState = {
+    const nextState = {
       errors: [],
       pathname: nextProps.location.pathname
     };
@@ -29,16 +31,24 @@ class FormErrors extends React.Component {
     if (nextProps.location.pathname !== prevState.pathname) {
       nextState.errors = [];
     }
-    
+
     return nextState;
   }
 
   render() {
+    const { errors } = this.state;
+
+    if (!errors.length) {
+      return null;
+    }
+
     return (
       <div className="errors errors__form">
         <ul>
-          {this.state.errors.map((error, i) => (
-            <li key={`formError${i}`}>{error}</li>
+          {errors.map(error => (
+            <li key={camelize(error)}>
+              {error}
+            </li>
           ))}
         </ul>
       </div>

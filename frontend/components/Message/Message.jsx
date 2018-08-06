@@ -1,7 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import MessageHoverMenuContainer from '../MessageHoverMenuContainer';
 import Reactions from '../Reactions';
-import AuthorNameLink from '../AuthorNameLink';
 import Avatar from '../Avatar';
 import MessageContent from '../MessageContent';
 import SingleMessageThread from './SingleMessageThread';
@@ -30,6 +30,7 @@ class Message extends React.Component {
   render() {
     const { message, author, ...props } = this.props;
     const { isMouseOver, isEditing } = this.state;
+    const authorUrl = author && `${props.match.url}/team/${author.slug}`;
 
     if (!message) {
       return null;
@@ -37,22 +38,26 @@ class Message extends React.Component {
 
     return (
       <div
-        className={`msg ${isEditing ? 'msg--editing' : ''} ${isMouseOver && !isEditing ? 'msg--hover' : ''}`}
+        className={`Message ${isEditing ? 'Message--editing' : ''} ${isMouseOver && !isEditing ? 'Message--hover' : ''}`}
         onMouseEnter={this.handleHoverToggle(true)}
         onMouseLeave={this.handleHoverToggle(false)}
       >
         <Avatar baseUrl={props.match.url} author={author} />
-        <div className="msg__body">
+        <div className="Message__body">
           <MessageHoverMenuContainer
             isMouseOver={isMouseOver}
             isEditing={isEditing}
             message={message}
             handleEditToggle={this.handleEditToggle}
           />
-          <div className="msg__content">
-            <div className="msg__content-meta">
-              <AuthorNameLink baseUrl={props.match.url} author={author} />
-              <time className="msg__time">
+          <div className="Message__content">
+            <div className="Message__content-meta">
+              {author && (
+                <Link to={authorUrl} className="Message__author">
+                  {author.username}
+                </Link>
+              )}
+              <time className="Message__time">
                 {message.createdAt}
               </time>
             </div>
@@ -65,7 +70,7 @@ class Message extends React.Component {
             />
           </div>
           {(!props.isSingleMessage || message.parentMessageId) && (
-            <div className="msg__footer">
+            <div className="Message__footer">
               <Reactions reactions={props.reactions} />
               <SingleMessageThread
                 message={message}

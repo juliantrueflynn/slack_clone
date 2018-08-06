@@ -1,0 +1,13 @@
+.Menu--row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.Menu--row > .MenuItem {
+  margin-right: 20px;
+}
+
+.Menu--row > .MenuItem:last-child {
+  margin-right: 0;
+}

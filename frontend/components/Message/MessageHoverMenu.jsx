@@ -2,6 +2,7 @@ import React from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import { Link } from 'react-router-dom';
 import './MessageHoverMenu.css';
+import Button from '../Button';
 
 class MessageHoverMenu extends React.Component {
   constructor(props) {
@@ -59,37 +60,37 @@ class MessageHoverMenu extends React.Component {
     }
 
     return (
-      <div className="btn-group__msg-hover-menu">
-        <button type="button" className="btn btn__reaction" onClick={this.handleEmojiToggle}>
+      <div className="Btn-group__msg-hover-menu">
+        <Button className="Btn__reaction" onClick={this.handleEmojiToggle}>
           Add reaction
-        </button>
+        </Button>
         {isEmojiOpen && (
           <EmojiPicker onEmojiClick={this.handleReactionClick} />
         )}
         {!parentMessageId && openThreadSlug !== slug && (
-          <Link role="button" className="btn btn__thread" to={`${baseThreadUrl}/thread/${slug}`}>
+          <Link className="Btn__thread" to={`${baseThreadUrl}/thread/${slug}`}>
             Start a thread
           </Link>
         )}
         {!isFavorited && (
-          <button type="button" className="btn btn__fav" onClick={this.handleFavClick}>
+          <Button className="Btn__fav" onClick={this.handleFavClick}>
             Favorite
-          </button>
+          </Button>
         )}
         {isFavorited && (
-          <button type="button" className="btn btn__unfav" onClick={this.handleUnfavClick}>
+          <Button className="Btn__unfav" onClick={this.handleUnfavClick}>
             Unfavorite
-          </button>
+          </Button>
         )}
         {isAuthor && (
-          <button type="button" className="btn btn__msg-edit" onClick={this.handleEditClick}>
+          <Button className="Btn__msg-edit" onClick={this.handleEditClick}>
             Edit message
-          </button>
+          </Button>
         )}
         {isAuthor && (
-          <button type="button" className="btn btn__msg-delete" onClick={this.handleDeleteClick}>
+          <Button className="Btn__msg-delete" onClick={this.handleDeleteClick}>
             Delete message
-          </button>
+          </Button>
         )}
       </div>
     );

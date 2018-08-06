@@ -1,39 +1,19 @@
 import React from 'react';
-import Modal from 'react-modal';
-import FormErrors from './Layout/FormErrors';
+import withModal from './withModal';
+import Label from './Label';
+// import Button from './Button';
+// import FormErrors from './Layout/FormErrors';
 
 class PreferencesModal extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      title: '',
-      isOpen: false
-    };
-
-    this.handleModalClose = this.handleModalClose.bind(this);
+    this.state = { title: '' };
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    Modal.setAppElement('#root');
-    
-    let nextState = {
-      title: prevState.title,
-      isOpen: nextProps.isModalOpen
-    };
-    
-    if (!nextProps.isModalOpen && prevState.isOpen) {
-      if (!nextProps.isModalOpen && prevState.isOpen) {
-        nextState.title = '';
-        return nextState;
-      }
-    }
-    
-    return nextState;
-  }
-
-  handleModalClose(event) {
-    this.props.modalClose();
+  handleSubmit(event) {
+    event.preventDefault();
+    this.setState({ title: '' });
   }
 
   handleInputValue(property) {
@@ -41,50 +21,30 @@ class PreferencesModal extends React.Component {
   }
 
   render() {
-    const { workspaceSlug } = this.props;
+    const { title } = this.state;
 
     return (
-      <Modal
-        className="modal modal__new-channel"
-        isOpen={this.state.isOpen}
-        onRequestClose={this.handleModalClose}
-        shouldCloseOnOverlayClick={false}
-        style={{
-          overlay: { backgroundColor: 'white' },
-          content: { border: 'none' },
-        }}
-        contentLabel={`Workspace ${workspaceSlug} Preferences`}
-      >
-        <div className="modal-top-bar">
-          <button className="btn btn__close" onClick={this.handleModalClose}>
-            &#10006;
-          </button>
-          <header className="modal__header">
-            <h1 className="modal__title">
-              Your Preferences for {workspaceSlug}
-            </h1>
-          </header>
+      <form className="Form Form__settings" onSubmit={this.handleSubmit}>
+        <div className="Form__group">
+          <Label htmlFor="title">
+            Name
+          </Label>
+          <input
+            type="text"
+            name="title"
+            placeholder="e.g. leads"
+            value={title}
+            onChange={this.handleInputValue('title')}
+          />
         </div>
-
-        {/* <FormErrors entity="channel" /> */}
-
-        <form
-          className="form form__new-channel"
-          onSubmit={this.handleSubmit}
-        >
-          <div className="form__group">
-            <label>Name</label>
-            <input
-              type="text"
-              placeholder="e.g. leads"
-              value={this.state.title}
-              onChange={this.handleInputValue('title')}
-            />
-          </div>
-        </form>
-      </Modal>
+      </form>
     );
   }
 }
 
-export default PreferencesModal;
+const modalProps = {
+  modalType: 'SETTINGS',
+  modalTitle: 'Workspace Settings',
+};
+
+export default withModal(modalProps)(PreferencesModal);

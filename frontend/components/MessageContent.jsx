@@ -1,6 +1,7 @@
 import React from 'react';
 import MessageEditor from './MessageEditor';
 import { mountEditorState, convertForSubmit } from '../util/editorUtil';
+import Button from './Button';
 
 class MessageContent extends React.Component {
   constructor(props) {
@@ -47,12 +48,12 @@ class MessageContent extends React.Component {
         />
         {isEditing && (
           <div className="msg__actions">
-            <button type="button" className="btn btn__cancel" onClick={this.handleEditClose}>
+            <Button className="Btn__cancel" onClick={this.handleEditClose}>
               Cancel
-            </button>
-            <button type="submit" className="btn btn__submit" onClick={this.handleEditSubmit}>
+            </Button>
+            <Button type="submit" className="Btn__submit" onClick={this.handleEditSubmit}>
               Save changes
-            </button>
+            </Button>
           </div>
         )}
       </div>

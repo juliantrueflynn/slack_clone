@@ -1,0 +1,15 @@
+.MenuItem {
+  display: block;
+}
+
+.MenuItem__content--btn {
+  cursor: pointer;
+  border: 0;
+}
+
+.MenuItem__content {
+  display: block;
+  font-size: 15px;
+  line-height: 18px;
+  padding: 4px 15px;
+}

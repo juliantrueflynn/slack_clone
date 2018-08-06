@@ -6,11 +6,11 @@ import {
   withRouter,
   Switch
 } from 'react-router-dom';
-import SessionFormContainer from '../components/Session/SessionFormContainer';
+import PageHome from '../components/PageHome';
+import SessionForm from '../components/SessionForm';
 import WorkspacePageContainer from '../components/Workspace/WorkspacePageContainer';
-import WorkspaceFormContainer from '../components/Workspace/WorkspaceFormContainer';
+import PageWorkspaceCreate from '../components/PageWorkspaceCreate';
 import ChannelPageContainer from '../components/Channel/ChannelPageContainer';
-import PageHome from '../components/Views/PageHome';
 import MessageThreadContainer from '../components/Message/MessageThreadContainer';
 import UserFavoritesContainer from '../components/Views/UserFavoritesContainer';
 import UserViewContainer from '../components/UserViewContainer';
@@ -25,19 +25,19 @@ export const routesConfig = [
   },
   {
     path: '/signin',
-    component: SessionFormContainer,
+    component: SessionForm,
     exact: true,
     isAuth: true,
   },
   {
     path: '/signup',
-    component: SessionFormContainer,
+    component: SessionForm,
     exact: true,
     isAuth: true,
   },
   {
     path: '/create-workspace',
-    component: WorkspaceFormContainer,
+    component: PageWorkspaceCreate,
     exact: true,
     isProtected: true,
   },
@@ -77,15 +77,15 @@ export const routesConfig = [
 ];
 
 const mapStateToProps = state => ({
-  loggedIn: Boolean(state.session.currentUser)
+  isLoggedIn: !!state.session.currentUser
 });
 
 const RouteSubRoutes = (route) => {
-  if (route.isAuth && route.loggedIn) {
+  if (route.isAuth && route.isLoggedIn) {
     return (<Redirect to="/" />);
   }
 
-  if (route.isProtected && !route.loggedIn) {
+  if (route.isProtected && !route.isLoggedIn) {
     return (<Redirect to="/signin" />);
   }
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import 'sanitize.css';
 import { ActionCable } from 'react-actioncable-provider';
-import './App.css';
 import { PageRoutes, routesConfig } from './util/routeUtil';
+import './App.css';
 
 class App extends React.Component {
   constructor(props) {
@@ -11,14 +11,17 @@ class App extends React.Component {
   }
 
   handleActionCableReceive(received) {
-    this.props.dispatch(received);
+    const { dispatch } = this.props;
+    dispatch(received);
   }
 
   render() {
+    const { currentUser } = this.props;
+
     return (
-      <div className="app">
+      <div className="App">
         <PageRoutes routes={routesConfig} />
-        {this.props.currentUser && (
+        {currentUser && (
           <ActionCable
             channel={{ channel: 'AppChannel' }}
             onReceived={this.handleActionCableReceive}

@@ -1,0 +1,39 @@
+.hero__home {
+  background-color: #6c5ce7;
+  color: #FFF;
+  text-shadow: 0px 1px 2px rgba(0,0,0,0.6);
+  padding: 25px 0;
+  font-size: 1.25em;
+  text-align: center;
+}
+
+.home .Btn__hero {
+  margin-left: 20px;
+}
+
+.home .Btn__create {
+  padding: 12px 16px;
+}
+
+.home .Page__body {
+  padding-top: 70px;
+}
+
+.home .Page__body .Btn {
+  background-color: #6c5ce7;
+  color: #FFF;
+  text-transform: uppercase;
+  border: none;
+  font-weight: 400;
+  display: inline-block;
+}
+
+.public-rooms {
+  list-style-type: none;
+}
+
+.room-item__body {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+}

@@ -1,4 +1,4 @@
-.sidebar__right {
+.Sidebar__right {
   width: 500px;
   border-left: 1px solid #E9E9E9;
   margin-top: 55px;
@@ -6,7 +6,7 @@
   flex-direction: column;
 }
 
-.sidebar__header {
+.Sidebar__header {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -16,16 +16,16 @@
   border-bottom: 1px solid #E9E9E9;
 }
 
-.sidebar__title {
+.Sidebar__title {
   margin: 0;
 }
 
-.sidebar__subtitle {
+.Sidebar__subtitle {
   font-size: 80%;
   display: block;
 }
 
-.btn__close {
+.Btn__close {
   margin-left: auto;
   border: none;
 }

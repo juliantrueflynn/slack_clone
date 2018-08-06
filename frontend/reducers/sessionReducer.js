@@ -9,7 +9,7 @@ const sessionReducer = (state = nullCurrentUser, action) => {
     case SIGN_IN.RECEIVE:
     case SIGN_UP.RECEIVE: {
       const { currentUser } = action;
-      return Object.assign({}, { currentUser });
+      return { currentUser };
     }
     case SIGN_OUT.RECEIVE:
       return nullCurrentUser;

@@ -1,5 +1,4 @@
-import { CHANNEL } from '../actions/actionTypes';
-import { MODAL_CLOSE } from '../actions/interactiveActions';
+import { MODAL_CLOSE, CHANNEL } from '../actions/actionTypes';
 
 const channelErrorsReducer = (state = [], action) => {
   Object.freeze(state);
@@ -15,7 +14,7 @@ const channelErrorsReducer = (state = [], action) => {
     case CHANNEL.CREATE.RECEIVE:
       return [];
     case MODAL_CLOSE: {
-      if (action.modalType === 'NEW_CHANNEL_MODAL') {
+      if (action.modalType === 'MODAL_CHAT') {
         return [];
       }
       return state;

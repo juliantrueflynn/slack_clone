@@ -1,21 +1,16 @@
-.msg-form {
+.Form__message {
   display: flex;
   flex-direction: row;
 }
 
-.msg-form__body {
+.Form__message .Form__body {
   width: 100%;
 }
 
-.avatar__form {
-  margin-right: 5px;
+.Form__message .Btn__submit {
   display: block;
 }
 
-.msg-form .btn__submit {
-  display: block;
-}
-
-.msg-form__sidebar {
+.Sidebar .Form__message {
   padding: 10px;
 }

@@ -1,0 +1,20 @@
+.Btn {
+  border-style: none;
+}
+
+.Btn__w100 {
+  width: 100%;
+  display: block;
+}
+
+.Btn__close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
+}
+
+.Btn:hover,
+.Btn:focus {
+  cursor: pointer;
+}

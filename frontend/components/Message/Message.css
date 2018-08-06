@@ -1,29 +1,29 @@
-.messages-pane-body .msg {
+.messages-pane-body .Message {
   padding: 6px 18px;
 }
 
-.thread .thread__message .msg {
+.thread .thread__message .Message {
   padding: 10px;
 }
 
-.thread__messages > .msg {
+.thread__messages > .Message {
   padding: 6px 10px;
 }
 
-.msg {
+.Message {
   position: relative;
   display: flex;
   -ms-flex-direction: row;
   flex-direction: row;
 }
 
-.msg__body {
+.Message__body {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.msg__content-meta {
+.Message__content-meta {
   display: flex;
   -ms-flex-direction: row;
   flex-direction: row;
@@ -32,29 +32,25 @@
   align-items: center;
 }
 
-.msg__avatar-link {
-  padding: 0 2px;
-}
-
-.msg__content {
+.Message__content {
   padding: 0 2px 0 6px;
 }
 
-.msg--hover {
+.Message--hover {
   background-color: #F9F9F9;
 }
 
-.msg--editing {
+.Message--editing {
   background-color: #FFEAA7;
 }
 
-.msg__author {
+.Message__author {
   font-weight: bold;
   padding-right: 4px;
   color: inherit;
 }
 
-.msg__time {
+.Message__time {
   color: rgba(0,0,0,0.5);
   font-size: .8em;
 }
