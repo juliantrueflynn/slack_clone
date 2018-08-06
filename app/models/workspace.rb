@@ -29,7 +29,8 @@ class Workspace < ApplicationRecord
     !!subs.find_by(workspace_subs: { user_id: user_id })
   end
 
-  after_create_commit :broadcast_create_workspace
+  after_create :generate_workspace_subs, :generate_default_chats
+  after_create_commit :broadcast_create
   after_update_commit :broadcast_update
   after_destroy :broadcast_destroy
 
@@ -43,13 +44,7 @@ class Workspace < ApplicationRecord
     end
   end
 
-  def sub_owner_to_workspace
-    owner.workspace_subs.create(skip_broadcast: true)
-  end
-
-  def broadcast_create_workspace
-    sub_owner_to_workspace
-    generate_default_chats
-    broadcast_create
+  def generate_workspace_subs
+    subs.create(user_id: owner.id, skip_broadcast: true)
   end
 end
