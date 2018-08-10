@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import TopBarHeader from './TopBarHeader';
+import ChannelHeader from './ChannelHeader';
 import { rightSidebarClose } from '../actions/interactiveActions';
 
 const mapStateToProps = (state, { match: { params } }) => {
@@ -16,4 +16,4 @@ const mapDispatchToProps = dispatch => ({
   rightSidebarClose: () => dispatch(rightSidebarClose()),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TopBarHeader));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChannelHeader));

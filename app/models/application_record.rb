@@ -3,7 +3,7 @@ class ApplicationRecord < ActiveRecord::Base
 
   def generate_slug
     loop do
-      self.slug = SecureRandom.hex(10)
+      self.slug = SecureRandom.hex(12)
       break unless self.class.where(slug: slug).exists?
     end
   end

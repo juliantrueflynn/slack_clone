@@ -65,6 +65,6 @@
   margin: 0;
 }
 
-.Page__public--create-workspace .Page__container {
-  padding-top: 70px;
+.Form__workspace {
+  margin-top: 70px;
 }

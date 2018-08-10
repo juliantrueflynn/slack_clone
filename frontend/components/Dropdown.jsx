@@ -89,7 +89,7 @@ class Dropdown extends React.Component {
       flag = true;
     }
 
-    console.log(this.itemLetterSpliceHash());
+    // console.log(this.itemLetterSpliceHash());
 
     if (flag) {
       this.focusItem(nextIndex);

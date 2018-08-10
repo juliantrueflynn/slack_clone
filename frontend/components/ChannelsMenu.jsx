@@ -1,6 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import Menu from '../Menu';
+import Menu from './Menu';
 
 const ChannelsMenu = ({ subbedChannels, workspaceSlug }) => {
   const items = subbedChannels.map(item => ({

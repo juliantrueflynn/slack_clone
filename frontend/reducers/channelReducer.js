@@ -14,19 +14,30 @@ const channelReducer = (state = {}, action) => {
   let nextState;
   switch (action.type) {
     case CHANNEL.SHOW.RECEIVE: {
-      const { channel, messages, ...props } = action.channel;
+      const {
+        channel,
+        messages,
+        members,
+        reactions,
+      } = action.channel;
 
-      channel.messages = messages.map(msg => msg.slug);
-      channel.reactions = props.reactions.map(reaction => reaction.id);
-      channel.isActive = true;
-      nextState = merge({}, state, { [channel.slug]: channel });
+      const currChannel = {
+        [channel.slug]: {
+          isActive: true,
+          reactions: reactions.map(reaction => reaction.id),
+          messages: messages.map(msg => msg.slug),
+          ...channel,
+        }
+      };
+
+      nextState = merge({}, state, currChannel);
 
       const prevState = Object.assign({}, state);
       Object.keys(prevState).forEach((prevSlug) => {
         if (prevSlug !== channel.slug) nextState[prevSlug].isActive = false;
       });
 
-      props.members.forEach((memberSlug) => {
+      members.forEach((memberSlug) => {
         if (!nextState[channel.slug].memberSlugs) {
           nextState[channel.slug].memberSlugs = [memberSlug];
           return;
@@ -40,12 +51,16 @@ const channelReducer = (state = {}, action) => {
       return nextState;
     }
     case WORKSPACE.SHOW.RECEIVE: {
-      const { workspace: { channels } } = action;
+      const { workspace: { workspace, channels } } = action;
       nextState = {};
       channels.forEach((channel) => {
-        nextState[channel.slug] = channel;
-        nextState[channel.slug].isActive = false;
+        nextState[channel.slug] = {
+          workspaceSlug: workspace.slug,
+          isActive: false,
+          ...channel
+        };
       });
+
       return nextState;
     }
     case WORKSPACE.CREATE.RECEIVE: {

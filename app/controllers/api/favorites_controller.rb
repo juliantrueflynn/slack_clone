@@ -1,7 +1,7 @@
 class Api::FavoritesController < ApplicationController
   def index
     @favorites = current_user.favorites
-      .includes(message: { channel: :workspace })
+      .includes(:workspace, :channel)
       .where(workspaces: { slug: params[:workspace_slug] })
   end
 

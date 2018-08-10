@@ -21,7 +21,7 @@ class MessageEditor extends React.Component {
     const { readOnly, ...props } = this.props;
     const { EmojiSuggestions, EmojiSelect } = this.emojiPlugin;
     const plugins = [this.emojiPlugin];
-    const editorClassNames = `editor ${readOnly ? 'editor__locked' : 'editor__unlocked'}`;
+    const editorClassNames = `Editor ${readOnly ? 'Editor__locked' : 'Editor__unlocked'}`;
 
     return (
       <div className={editorClassNames} role="presentation" onClick={this.focus}>

@@ -1,10 +1,10 @@
 import React from 'react';
-import RightSidebarContainer from '../Layout/RightSidebarContainer';
+import RightSidebarContainer from './Layout/RightSidebarContainer';
 
 class UserFavorites extends React.Component {
   componentDidMount() {
-    const { isChannelLoaded, fetchFavoritesRequest } = this.props;
-    if (isChannelLoaded) fetchFavoritesRequest();
+    const { isChannelLoaded, fetchFavoritesRequest, workspaceSlug } = this.props;
+    if (isChannelLoaded) fetchFavoritesRequest(workspaceSlug);
   }
 
   componentDidUpdate(prevProps) {
@@ -28,9 +28,14 @@ class UserFavorites extends React.Component {
         <ul className="user-favorites">
           {favorites.map(fav => (
             <li key={fav.id}>
-              id: {fav.id}<br />
-              messageId: {fav.messageId}<br />
-              userId: {fav.userId}
+              id:
+              {fav.id}
+              <br />
+              messageId:
+              {fav.messageId}
+              <br />
+              userId:
+              {fav.userId}
             </li>
           ))}
         </ul>

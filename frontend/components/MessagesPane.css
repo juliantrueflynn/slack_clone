@@ -1,0 +1,14 @@
+.MessagesPane {
+  position: relative;
+  display: flex;
+  flex: 1;
+}
+
+.MessagesPane__list {
+  overflow-y: hidden;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+  overflow: auto;
+}

@@ -1,7 +1,6 @@
 .Sidebar__right {
   width: 500px;
   border-left: 1px solid #E9E9E9;
-  margin-top: 55px;
   display: flex;
   flex-direction: column;
 }
@@ -13,7 +12,6 @@
   flex-direction: row;
   background-color: #F5F5F5;
   padding: 15px 12px;
-  border-bottom: 1px solid #E9E9E9;
 }
 
 .Sidebar__title {
@@ -28,4 +26,5 @@
 .Btn__close {
   margin-left: auto;
   border: none;
+  position: static;
 }

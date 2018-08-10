@@ -1,0 +1,30 @@
+.ChannelHeader {
+  border-bottom: 1px solid #E9E9E9;
+  height: 55px;
+  background-color: #FFF;
+  padding: .625em 1em;
+  z-index: 999;
+  display: flex;
+}
+
+.ChannelHeader__content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.ChannelHeader__title {
+  font-size: 16px;
+  margin: 0;
+}
+
+.Menu--channel-header {
+  margin: 0;
+  background-color: #FFF;
+  margin-left: auto;
+}
+
+.ChannelHeader .Btn__favs {
+  padding: .25em .5em;
+}

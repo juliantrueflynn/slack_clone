@@ -41,6 +41,7 @@ class Message extends React.Component {
         className={`Message ${isEditing ? 'Message--editing' : ''} ${isMouseOver && !isEditing ? 'Message--hover' : ''}`}
         onMouseEnter={this.handleHoverToggle(true)}
         onMouseLeave={this.handleHoverToggle(false)}
+        role="listitem"
       >
         <Avatar baseUrl={props.match.url} author={author} />
         <div className="Message__body">

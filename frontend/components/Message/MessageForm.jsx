@@ -4,21 +4,21 @@ import MessageEditor from '../MessageEditor';
 import Button from '../Button';
 import Form from '../Form';
 import './MessageForm.css';
-import Avatar from '../Avatar';
 
 class MessageForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = { editorState: createEmptyEditor() };
     this.onChange = this.onChange.bind(this);
-    this.handleMessageSubmit = this.handleMessageSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleEnterSubmit = this.handleEnterSubmit.bind(this);
   }
 
   onChange(editorState) {
     this.setState({ editorState });
   }
 
-  handleMessageSubmit(event) {
+  handleSubmit(event) {
     event.preventDefault();
 
     const { editorState } = this.state;
@@ -29,27 +29,35 @@ class MessageForm extends React.Component {
     this.setState({ editorState: clearEditor(editorState) });
   }
 
+  handleEnterSubmit(e) {
+    if (e.key === 'Enter' && !e.shiftKey) this.handleSubmit(e);
+  }
+
   render() {
-    const { currentUser, parentMessageId, placeholder } = this.props;
+    const { parentMessageId, placeholder } = this.props;
     const { editorState } = this.state;
+    let classNames = 'MessageForm MessageForm__';
+    classNames += parentMessageId ? 'aside' : 'chat';
 
     return (
-      <Form formFor="message" onSubmit={this.handleMessageSubmit}>
-        {parentMessageId && currentUser && (
-          <Avatar author={currentUser} avatarFor="form" />
-        )}
-
-        <div className="Form__body">
-          <MessageEditor
-            editorState={editorState}
-            onChange={this.onChange}
-            placeholder={placeholder || 'Reply...'}
-          />
-          <Button type="submit" className="Btn__submit">
-            Add Message
-          </Button>
-        </div>
-      </Form>
+      <div className={classNames}>
+        <Form formFor="message" onSubmit={this.handleSubmit} onKeyDown={this.handleEnterSubmit}>
+          <div className="Form__body">
+            <MessageEditor
+              editorState={editorState}
+              onChange={this.onChange}
+              placeholder={placeholder || 'Reply...'}
+            />
+            {parentMessageId && (
+              <div className="Form__actions">
+                <Button type="submit" className="Btn__submit">
+                  Send
+                </Button>
+              </div>
+            )}
+          </div>
+        </Form>
+      </div>
     );
   }
 }

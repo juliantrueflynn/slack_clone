@@ -23,21 +23,26 @@ class MessageThread extends React.Component {
   }
 
   render() {
-    const { message, threadMessages, ...props } = this.props;
+    const {
+      message,
+      threadMessages,
+      chat,
+      authors,
+      isWorkspaceLoaded,
+    } = this.props;
+    const chatTitle = chat && `#${chat.title}`;
 
-    if (!message || !props.isWorkspaceLoaded) {
-      return null;
-    }
+    if (!message || !isWorkspaceLoaded) return null;
 
     return (
       <RightSidebarContainer
         sidebarType="Thread"
-        sidebarSubtitle={`Author: ${message.authorId}`}
+        sidebarSubtitle={chatTitle}
       >
         <div className="thread">
           <div className="thread__message">
             <MessageContainer
-              author={props.authors[message.authorSlug]}
+              author={authors[message.authorSlug]}
               isSingleMessage
               message={message}
             />
@@ -48,14 +53,12 @@ class MessageThread extends React.Component {
                 <MessageContainer
                   key={threadMessage.slug}
                   message={threadMessage}
-                  author={props.authors[threadMessage.authorSlug]}
+                  author={authors[threadMessage.authorSlug]}
                 />
               ))}
             </div>
           )}
-          <MessageFormContainer
-            parentMessageId={message.id}
-          />
+          <MessageFormContainer parentMessageId={message.id} />
         </div>
       </RightSidebarContainer>
     );

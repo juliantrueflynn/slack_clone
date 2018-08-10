@@ -39,10 +39,17 @@ class WorkspacePage extends React.Component {
   }
 
   render() {
-    const { workspaceSlug, channels, ...props } = this.props;
+    const {
+      workspaceSlug,
+      channels,
+      match: { isExact },
+      routes,
+      isLoading,
+    } = this.props;
     const defaultChannelSlug = channels[0] && channels[0].slug;
+    const defaultChannelUrl = `${workspaceSlug}/${defaultChannelSlug}`;
 
-    if (props.isLoading) {
+    if (isLoading) {
       return (
         <h2>
           Loading...
@@ -50,14 +57,14 @@ class WorkspacePage extends React.Component {
       );
     }
 
-    if (props.match.isExact && defaultChannelSlug) {
-      return (<Redirect to={`${workspaceSlug}/${defaultChannelSlug}`} />);
+    if (isExact && defaultChannelSlug) {
+      return (<Redirect to={defaultChannelUrl} />);
     }
 
     return (
-      <div className={`single-workspace single-workspace__${workspaceSlug}`}>
+      <div className="Page Page__workspace">
         <LeftSidebarContainer />
-        <PageRoutes routes={props.routes} />
+        <PageRoutes routes={routes} />
         <ActionCable
           ref={(refs) => { this.workspaceChat = refs; }}
           channel={decamelizeKeys({ channel: 'WorkspaceChannel', workspaceSlug })}

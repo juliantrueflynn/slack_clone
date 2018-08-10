@@ -13,6 +13,10 @@ export const selectSubbedChats = ({ entities: { channels }, session: { currentUs
   ))
 );
 
+export const selectChannels = ({ entities: { channels } }, workspaceSlug) => (
+  Object.values(channels).filter(ch => ch.workspaceSlug === workspaceSlug)
+);
+
 export const selectUnreadChannels = ({ entities: { channels } }) => (
   values(channels)
     .filter(ch => ch.hasUnreads)
@@ -21,6 +25,11 @@ export const selectUnreadChannels = ({ entities: { channels } }) => (
       return acc;
     }, {})
 );
+
+export const selectChatBySlug = ({ entities: { channels }, ui }, slug) => {
+  const chSlug = slug || ui.displayChannelSlug;
+  return channels[chSlug];
+};
 
 export const selectChatIdBySlug = ({ entities: { channels }, ui }, slug) => {
   const chSlug = slug || ui.displayChannelSlug;

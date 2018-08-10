@@ -1,5 +1,5 @@
 import React from 'react';
-import TopBarHeaderContainer from './TopBarHeaderContainer';
+import ChannelHeaderContainer from './ChannelHeaderContainer';
 import MessageContainer from './Message/MessageContainer';
 import MessageFormContainer from './Message/MessageFormContainer';
 import MessageThreadAuthors from './MessageThreadAuthors';
@@ -15,11 +15,11 @@ class ThreadsPage extends React.Component {
 
     return (
       <div>
-        <TopBarHeaderContainer sectionTitle="All Threads">
+        <ChannelHeaderContainer sectionTitle="All Threads">
           <small>
             Thread count here
           </small>
-        </TopBarHeaderContainer>
+        </ChannelHeaderContainer>
 
         <div>
           {Object.values(messages).map(parentMessage => (

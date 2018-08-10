@@ -43,11 +43,11 @@ export const emojiConfig = {
     emojiSuggestionsEntryText: 'emojiSuggestionsEntryText',
     emojiSuggestionsEntryIcon: 'emojiSuggestionsEntryIcon',
 
-    emojiSelect: 'emoji-select',
+    emojiSelect: 'emojiSelect',
     emojiSelectButton: 'Btn Btn__emoji',
     emojiSelectButtonPressed: 'Btn Btn__emoji Btn__emoji--focus',
 
-    emojiSelectPopover: 'emoji-select__popover',
+    emojiSelectPopover: 'emojiSelect__popover',
     emojiSelectPopoverClosed: 'emojiSelectPopoverClosed',
     emojiSelectPopoverTitle: 'emojiSelectPopoverTitle',
     emojiSelectPopoverGroups: 'emojiSelectPopoverGroups',

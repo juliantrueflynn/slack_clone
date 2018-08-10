@@ -18,7 +18,6 @@ const Menu = ({
   return (
     <ul
       role="menu"
-      tabIndex="-1"
       className={classNames}
       {...props}
     >

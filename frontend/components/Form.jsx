@@ -8,8 +8,7 @@ const Form = ({
   ...props
 }) => {
   let classNames = 'Form';
-  if (formFor) classNames += ` ${formFor}`;
-  if (className) classNames += ` ${className}`;
+  if (formFor) classNames += ` Form__${formFor}`;
 
   return (
     <form className={classNames} {...props}>

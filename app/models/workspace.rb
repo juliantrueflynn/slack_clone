@@ -19,6 +19,7 @@ class Workspace < ApplicationRecord
     through: :subs,
     source: :user
   has_many :channels
+  has_many :favorites, through: :channels
   has_many :chat_subs, through: :channels, source: :subs
 
   def broadcast_name

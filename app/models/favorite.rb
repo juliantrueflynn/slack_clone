@@ -4,6 +4,7 @@ class Favorite < ApplicationRecord
 
   belongs_to :message
   belongs_to :user
+  has_one :channel, through: :message
   has_one :workspace, through: :channel
 
   def self.with_user(user_id)

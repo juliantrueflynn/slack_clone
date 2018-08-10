@@ -1,0 +1,19 @@
+.Channel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 1px;
+}
+
+.Channel__body {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+.Channel__container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}

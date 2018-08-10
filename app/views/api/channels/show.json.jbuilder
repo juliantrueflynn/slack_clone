@@ -1,5 +1,6 @@
 json.channel do
   json.(@channel, *@channel.attributes.keys)
+  json.owner_slug @channel.owner.slug
 end
 
 json.messages do

@@ -1,10 +1,11 @@
-class WorkspaceSub < ApplicationRecord
+ class WorkspaceSub < ApplicationRecord
   attr_accessor :skip_broadcast
 
   validates_presence_of :workspace_id, scope: :user_id
 
   belongs_to :user
   belongs_to :workspace
+  has_many :favorites, through: :user
 
   def broadcast_name
     "workspace_#{workspace.slug}"
