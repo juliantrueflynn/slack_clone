@@ -6,7 +6,6 @@ const Menu = ({
   items,
   menuFor,
   isRow,
-  togglerClick,
   ...props
 }) => {
   let classNames = 'Menu';
@@ -16,11 +15,7 @@ const Menu = ({
   if (!items) return null;
 
   return (
-    <ul
-      role="menu"
-      className={classNames}
-      {...props}
-    >
+    <ul role="menu" className={classNames} {...props}>
       {items.map(({ link, ...item }) => (
         <MenuItem
           key={item.label + (link || '')}
