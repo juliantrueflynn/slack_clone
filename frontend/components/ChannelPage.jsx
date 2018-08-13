@@ -24,7 +24,7 @@ class ChannelPage extends React.Component {
 
   render() {
     const {
-      match: { isExact, url },
+      match: { isExact, url, params },
       channels,
       messages,
       dmUsernames,
@@ -42,10 +42,7 @@ class ChannelPage extends React.Component {
       const defaultChatSlug = channels[0].slug;
 
       return (
-        <Redirect
-          from="/:workspaceSlug/:channelSlug"
-          to={`/:workspaceSlug/${defaultChatSlug}`}
-        />
+        <Redirect to={`/${params.workspaceSlug}/${defaultChatSlug}`} />
       );
     }
 

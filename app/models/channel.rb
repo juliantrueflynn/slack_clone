@@ -1,5 +1,5 @@
 class Channel < ApplicationRecord
-  attr_accessor :skip_broadcast, :last_read5
+  attr_accessor :skip_broadcast, :last_read
   attr_reader :member_ids
 
   before_validation :generate_slug, unless: :slug?
@@ -44,9 +44,10 @@ class Channel < ApplicationRecord
     includes(:subs).where(channel_subs: { user_id: user_id })
   end
 
-  def self.has_dm_subs?(member_ids)
+  def self.has_dm_subs?(member_ids, chat_workspace_id)
     with_dm.joins(:subs)
       .where(channel_subs: { user_id: member_ids })
+      .where(workspace_id: chat_workspace_id)
       .group(:id)
       .having('count(channels.id) = ?', member_ids.length)
       .distinct

@@ -17,7 +17,7 @@ class Api::DmChatsController < ApplicationController
 
   def is_duplicate_dm_chat?
     member_ids = params[:dm_chat][:member_ids]
-    Channel.has_dm_subs?([current_user.id, *member_ids])
+    Channel.has_dm_subs?([current_user.id, *member_ids], params[:workspace_id])
   end
 
   def ensure_unique_dm_chat
