@@ -1,8 +1,9 @@
 import React from 'react';
 import EmojiPicker from 'emoji-picker-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
-import './MessageHoverMenu.css';
 import Button from '../Button';
+import './MessageHoverMenu.css';
 
 class MessageHoverMenu extends React.Component {
   constructor(props) {
@@ -55,41 +56,39 @@ class MessageHoverMenu extends React.Component {
     const { openThreadSlug, message: { slug, parentMessageId }, match: { params } } = props;
     const baseThreadUrl = `/${params.workspaceSlug}/${params.channelSlug}`;
 
-    if (!props.isMouseOver || props.isEditing) {
-      return null;
-    }
+    if (!props.isMouseOver || props.isEditing) return null;
 
     return (
       <div className="Btn-group__msg-hover-menu">
         <Button className="Btn__reaction" onClick={this.handleEmojiToggle}>
-          Add reaction
+          <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />
         </Button>
         {isEmojiOpen && (
           <EmojiPicker onEmojiClick={this.handleReactionClick} />
         )}
         {!parentMessageId && openThreadSlug !== slug && (
-          <Link className="Btn__thread" to={`${baseThreadUrl}/thread/${slug}`}>
-            Start a thread
+          <Link className="Btn Btn__thread" to={`${baseThreadUrl}/thread/${slug}`}>
+            <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />
           </Link>
         )}
         {!isFavorited && (
-          <Button className="Btn__fav" onClick={this.handleFavClick}>
-            Favorite
+          <Button className="Btn__fav Btn__fav--empty" onClick={this.handleFavClick}>
+            <FontAwesomeIcon icon={['far', 'star']} fixedWidth />
           </Button>
         )}
         {isFavorited && (
-          <Button className="Btn__unfav" onClick={this.handleUnfavClick}>
-            Unfavorite
+          <Button className="Btn__fav Btn__fav--filled" onClick={this.handleUnfavClick}>
+            <FontAwesomeIcon icon={['fas', 'star']} fixedWidth />
           </Button>
         )}
         {isAuthor && (
           <Button className="Btn__msg-edit" onClick={this.handleEditClick}>
-            Edit message
+            <FontAwesomeIcon icon={['far', 'edit']} fixedWidth />
           </Button>
         )}
         {isAuthor && (
           <Button className="Btn__msg-delete" onClick={this.handleDeleteClick}>
-            Delete message
+            <FontAwesomeIcon icon={['far', 'trash-alt']} fixedWidth />
           </Button>
         )}
       </div>

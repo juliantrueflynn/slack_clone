@@ -16,7 +16,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchMemberRequest: userSlug => dispatch(fetchMember.request(userSlug)),
-  createDmChatRequest: (dmChat, memberIds) => dispatch(createDmChat.request(dmChat, memberIds)),
+  createDmChatRequest: dmChat => dispatch(createDmChat.request(dmChat)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserView));

@@ -35,5 +35,9 @@
 }
 
 .Btn-group__msg-hover-menu .Btn:hover {
-  color: #0576b9;
+  color: #0576B9;
+}
+
+.Btn__fav--filled {
+  color: #FDCB6E !important;
 }

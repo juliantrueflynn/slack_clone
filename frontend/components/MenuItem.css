@@ -13,3 +13,11 @@
   line-height: 18px;
   padding: 4px 15px;
 }
+
+.MenuItem__icon {
+  margin-right: 8px;
+}
+
+.Sidebar .MenuItem__icon {
+  color: rgba(255,255,255,0.3);
+}

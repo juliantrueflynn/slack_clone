@@ -28,6 +28,7 @@ class Dropdown extends React.Component {
       menuPos,
       items,
       togglerText,
+      children,
     } = this.props;
 
     if (!items) return null;
@@ -39,7 +40,9 @@ class Dropdown extends React.Component {
     return (
       <div className={dropdownClassNames}>
         <Button className="Btn__dropdown" onClick={this.handleTogglerClick}>
-          {togglerText}
+          <div className="Dropdown__title">
+            {togglerText || children}
+          </div>
         </Button>
         <Menu menuFor="dropdown" items={items} />
       </div>

@@ -1,6 +1,6 @@
 .Dropdown {
   position: relative;
-  z-index: 999;
+  z-index: 900;
 }
 
 .Dropdown--hide .Menu--dropdown {

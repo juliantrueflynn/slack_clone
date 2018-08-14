@@ -2,6 +2,11 @@
   "name": "slack_clone",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-free-regular": "^5.0.13",
+    "@fortawesome/fontawesome-svg-core": "^1.2.0-14",
+    "@fortawesome/free-regular-svg-icons": "^5.1.0-11",
+    "@fortawesome/free-solid-svg-icons": "^5.1.0-11",
+    "@fortawesome/react-fontawesome": "0.1.0-11",
     "actioncable": "^5.2.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
