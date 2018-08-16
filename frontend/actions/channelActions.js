@@ -1,5 +1,5 @@
 import { actionCreator } from '../util/actionsUtil';
-import { CHANNEL, CHANNEL_SUB, LEAVE_CHANNEL, DM_CHAT } from './actionTypes';
+import { CHANNEL, CHANNEL_SUB, DM_CHAT } from './actionTypes';
 
 export const fetchChannels = {
   request: (channels = {}) => actionCreator(CHANNEL.INDEX.REQUEST, { channels }),
@@ -48,8 +48,3 @@ export const deleteChannelSub = {
   request: channelId => actionCreator(CHANNEL_SUB.DESTROY.REQUEST, { channelId }),
   failure: errors => actionCreator(CHANNEL_SUB.DESTROY.FAILURE, { errors }),
 };
-
-export const leaveChannel = channelSlug => ({
-  type: LEAVE_CHANNEL,
-  channelSlug,
-});

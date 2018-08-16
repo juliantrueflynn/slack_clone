@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ChannelPage from './ChannelPage';
-import { fetchChannel, leaveChannel } from '../actions/channelActions';
+import { fetchChannel } from '../actions/channelActions';
 import { selectParentMessages, selectHashDmUsersBySlug, selectDmUsernamesBySlug } from '../reducers/selectors';
 import { readUpdate } from '../actions/readActions';
 
@@ -20,7 +20,6 @@ const mapStateToProps = (state, { match: { params } }) => ({
 const mapDispatchToProps = dispatch => ({
   fetchChannelRequest: channelSlug => dispatch(fetchChannel.request(channelSlug)),
   readUpdateRequest: readableId => dispatch(readUpdate.request(readableId, 'Channel')),
-  leaveChannel: channelSlug => dispatch(leaveChannel(channelSlug)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChannelPage);
