@@ -2,7 +2,9 @@ class Api::ChannelsController < ApplicationController
   before_action :set_channel, only: [:show, :update, :destroy]
 
   def index
-    @channels = Channel.where(workspace_id: params[:workspace_id])
+    user_subs = current_user.channel_subs.select(:channel_id)
+    workspace = Workspace.find_by(slug: params[:workspace_slug])
+    @channels = Channel.where(workspace_id: workspace.id, has_dm: false).where.not(id: user_subs)
   end
 
   def show

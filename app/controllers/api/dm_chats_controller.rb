@@ -4,7 +4,7 @@ class Api::DmChatsController < ApplicationController
   def create
     @channel ||= Channel.new(dm_chat_params)
     @channel.has_dm = true
-    @channel.member_ids << current_user.id
+    @channel.member_ids.unshift(current_user.id)
 
     if @channel.save
       render json: ['success']

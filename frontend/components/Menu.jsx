@@ -20,7 +20,6 @@ const Menu = ({
         <MenuItem
           key={item.label + (link || '')}
           role="menuitem"
-          tabIndex={menuFor === 'dropdown' ? '-1' : null}
           to={link}
           className="MenuItem"
           {...item}

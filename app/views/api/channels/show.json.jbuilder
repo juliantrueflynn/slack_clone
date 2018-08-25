@@ -34,3 +34,11 @@ json.reactions do
 end
 
 json.members @channel.members.pluck(:slug)
+
+json.subs do
+  json.array! @channel.subs do |chat_sub|
+    json.(chat_sub, :id, :user_id, :in_sidebar, :channel_id, :created_at)
+    json.user_slug chat_sub.user.slug
+    json.channel_slug chat_sub.channel.slug
+  end
+end

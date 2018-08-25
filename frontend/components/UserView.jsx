@@ -25,9 +25,7 @@ class UserView extends React.Component {
     const { hasDmWith, user, ...props } = this.props;
     const { didCreateDmChat } = this.state;
 
-    if (!user || !props.isChannelsLoaded) {
-      return null;
-    }
+    if (!user || !props.isChannelsLoaded) return null;
 
     if (hasDmWith && didCreateDmChat) {
       return (

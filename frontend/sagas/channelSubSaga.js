@@ -1,7 +1,15 @@
-import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
+import {
+  all,
+  call,
+  fork,
+  put,
+  select,
+  takeLatest,
+} from 'redux-saga/effects';
+import { CHANNEL_SUB, MESSAGE, CHANNEL } from '../actions/actionTypes';
 import { deleteChannelSub, createChannelSub, updateChannelSub } from '../actions/channelActions';
-import { CHANNEL_SUB } from '../actions/actionTypes';
 import { apiCreate, apiDelete, apiUpdate } from '../util/apiUtil';
+import { selectChatBySlug, selectChatSubById, selectCurrentUserSlug } from '../reducers/selectors';
 
 function* fetchCreate({ channelId }) {
   try {
@@ -11,13 +19,41 @@ function* fetchCreate({ channelId }) {
   }
 }
 
-function* fetchUpdate({ channelSub: { channelId, userId, inSidebar } }) {
+function* fetchUpdate({ channelSub }) {
   try {
-    const apiUrl = `channel/${channelId}/channel_subs/${userId}`;
-    const newSub = yield call(apiUpdate, apiUrl, { inSidebar: !inSidebar });
-    yield put(updateChannelSub(newSub));
+    const sub = yield call(apiUpdate, `channel_subs/${channelSub.channelId}`, channelSub);
+    yield put(updateChannelSub.receive(sub));
   } catch (error) {
     yield put(createChannelSub.failure(error));
+  }
+}
+
+function* fetchChannelShow({ channel }) {
+  try {
+    const currUserSlug = yield select(selectCurrentUserSlug);
+    const chatSubs = channel.subs.filter(sub => sub.userSlug && sub.userSlug !== currUserSlug);
+
+    if (chatSubs[0] && !chatSubs[0].inSidebar) {
+      const { userId, channelId } = chatSubs[0];
+      const channelSub = { userId, channelId, inSidebar: true };
+      yield fetchUpdate({ channelSub });
+    }
+  } catch (error) {
+    yield put(createChannelSub.failure(error));
+  }
+}
+
+function* fetchDmChatMessage({ message }) {
+  try {
+    const chat = yield select(selectChatBySlug, message.channelSlug);
+    const sub = yield select(selectChatSubById, chat.subs);
+
+    if (!sub.inSidebar) {
+      const channelSub = { channelId: chat.id, inSidebar: true };
+      yield fetchUpdate({ channelSub });
+    }
+  } catch (error) {
+    yield put(updateChannelSub.failure(error));
   }
 }
 
@@ -33,6 +69,14 @@ function* watchCreate() {
   yield takeLatest(CHANNEL_SUB.CREATE.REQUEST, fetchCreate);
 }
 
+function* watchChannelShow() {
+  yield takeLatest(CHANNEL.SHOW.RECEIVE, fetchChannelShow);
+}
+
+function* watchDmChatMessage() {
+  yield takeLatest(MESSAGE.CREATE.RECEIVE, fetchDmChatMessage);
+}
+
 function* watchUpdate() {
   yield takeLatest(CHANNEL_SUB.UPDATE.REQUEST, fetchUpdate);
 }
@@ -44,6 +88,8 @@ function* watchDestroy() {
 export default function* channelSubSaga() {
   yield all([
     fork(watchCreate),
+    fork(watchChannelShow),
+    fork(watchDmChatMessage),
     fork(watchUpdate),
     fork(watchDestroy),
   ]);

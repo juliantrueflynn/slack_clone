@@ -1,7 +1,11 @@
 import { connect } from 'react-redux';
 import ChannelPage from './ChannelPage';
 import { fetchChannel } from '../actions/channelActions';
-import { selectParentMessages, selectHashDmUsersBySlug, selectDmUsernamesBySlug } from '../reducers/selectors';
+import {
+  selectParentMessages,
+  selectHashDmUsersBySlug,
+  selectDmUsernamesBySlug,
+} from '../reducers/selectors';
 import { readUpdate } from '../actions/readActions';
 
 const mapStateToProps = (state, { match: { params } }) => ({

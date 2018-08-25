@@ -11,6 +11,7 @@ import {
   faStar as farStar
 } from '@fortawesome/free-regular-svg-icons';
 import {
+  faTimesCircle,
   faCircle,
   faAlignLeft,
   faPlusCircle,
@@ -25,6 +26,7 @@ library.add(
   faTrashAlt,
   faEdit,
   faSquare,
+  faTimesCircle,
   farCircle,
   faPlusCircle,
   faHashtag,

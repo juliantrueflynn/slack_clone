@@ -2,7 +2,7 @@ import { actionCreator } from '../util/actionsUtil';
 import { CHANNEL, CHANNEL_SUB, DM_CHAT } from './actionTypes';
 
 export const fetchChannels = {
-  request: (channels = {}) => actionCreator(CHANNEL.INDEX.REQUEST, { channels }),
+  request: workspaceSlug => actionCreator(CHANNEL.INDEX.REQUEST, { workspaceSlug }),
   receive: channels => actionCreator(CHANNEL.INDEX.RECEIVE, { channels }),
   failure: errors => actionCreator(CHANNEL.INDEX.FAILURE, { errors }),
 };

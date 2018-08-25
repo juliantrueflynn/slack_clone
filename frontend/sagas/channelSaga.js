@@ -12,6 +12,15 @@ import * as api from '../util/apiUtil';
 import { selectWorkspaceSlug, selectCurrentUserId } from '../reducers/selectors';
 import { navigate, modalClose } from '../actions/interactiveActions';
 
+function* fetchIndex({ workspaceSlug }) {
+  try {
+    const channels = yield call(api.apiFetch, `workspaces/${workspaceSlug}/channels`);
+    yield put(action.fetchChannels.receive(channels));
+  } catch (error) {
+    yield put(action.createChannel.failure(error));
+  }
+}
+
 function* fetchCreate({ channel }) {
   try {
     yield call(api.apiCreate, 'channels', channel);
@@ -63,6 +72,10 @@ function* fetchDestroy({ channelSlug }) {
   }
 }
 
+function* watchIndex() {
+  yield takeLatest(CHANNEL.INDEX.REQUEST, fetchIndex);
+}
+
 function* watchCreate() {
   yield takeLatest(CHANNEL.CREATE.REQUEST, fetchCreate);
   yield takeLatest(CHANNEL.CREATE.RECEIVE, fetchRedirectOwner);
@@ -86,6 +99,7 @@ function* watchDestroy() {
 
 export default function* channelSaga() {
   yield all([
+    fork(watchIndex),
     fork(watchCreate),
     fork(watchCreateDm),
     fork(watchUpdate),

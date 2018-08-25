@@ -20,7 +20,10 @@ class Workspace < ApplicationRecord
     source: :user
   has_many :channels
   has_many :favorites, through: :channels
-  has_many :chat_subs, through: :channels, source: :subs
+  has_many :chat_subs,
+    -> { select('channel_subs.*, channels.slug AS channel_slug, users.slug AS user_slug') },
+    through: :channels,
+    source: :subs
 
   def broadcast_name
     "app"

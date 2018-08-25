@@ -13,6 +13,17 @@ const channelReducer = (state = {}, action) => {
 
   let nextState;
   switch (action.type) {
+    case CHANNEL.INDEX.RECEIVE: {
+      const { channels: { channels, workspaceSlug } } = action;
+
+      nextState = channels.reduce((acc, curr) => {
+        acc[curr.slug] = curr;
+        acc[curr.slug].workspaceSlug = workspaceSlug;
+        return acc;
+      }, {});
+
+      return merge({}, state, nextState);
+    }
     case CHANNEL.SHOW.RECEIVE: {
       const {
         channel,
@@ -32,33 +43,40 @@ const channelReducer = (state = {}, action) => {
 
       nextState = merge({}, state, currChannel);
 
-      const prevState = Object.assign({}, state);
-      Object.keys(prevState).forEach((prevSlug) => {
+      Object.keys(nextState).forEach((prevSlug) => {
         if (prevSlug !== channel.slug) nextState[prevSlug].isActive = false;
       });
 
       members.forEach((memberSlug) => {
-        if (!nextState[channel.slug].memberSlugs) {
-          nextState[channel.slug].memberSlugs = [memberSlug];
+        if (!nextState[channel.slug].members) {
+          nextState[channel.slug].members = [memberSlug];
           return;
         }
 
-        if (nextState[channel.slug].memberSlugs.includes(memberSlug)) return;
+        if (nextState[channel.slug].members.includes(memberSlug)) return;
 
-        nextState[channel.slug].memberSlugs.push(memberSlug);
+        nextState[channel.slug].members.push(memberSlug);
       });
 
       return nextState;
     }
     case WORKSPACE.SHOW.RECEIVE: {
-      const { workspace: { workspace, channels } } = action;
+      const { workspace: { workspace, channels, subs } } = action;
+
       nextState = {};
       channels.forEach((channel) => {
         nextState[channel.slug] = {
           workspaceSlug: workspace.slug,
           isActive: false,
+          subs: [],
+          members: [],
           ...channel
         };
+      });
+
+      subs.forEach((sub) => {
+        nextState[sub.channelSlug].subs.push(sub.id);
+        nextState[sub.channelSlug].members.push(sub.userSlug);
       });
 
       return nextState;
@@ -70,20 +88,32 @@ const channelReducer = (state = {}, action) => {
       return nextState;
     }
     case DM_CHAT.CREATE.RECEIVE: {
-      const { dmChat } = action;
+      const { dmChat: { channel, subs, members } } = action;
+
       nextState = Object.assign({}, state);
-      nextState[dmChat.slug] = dmChat;
-      nextState[dmChat.slug].hasUnreads = false;
-      nextState[dmChat.slug].lastActive = dmChat.createdAt;
-      nextState[dmChat.slug].lastRead = dmChat.createdAt;
-      return Object.assign({}, state, nextState);
+      nextState[channel.slug] = {
+        hasUnreads: false,
+        lastRead: channel.createdAt,
+        lastActive: channel.createdAt,
+        subs: subs.reduce((acc, curr) => {
+          acc.push(curr.id);
+          return acc;
+        }, []),
+        members: members.reduce((acc, curr) => {
+          acc.push(curr);
+          return acc;
+        }, []),
+        ...channel,
+      };
+
+      return nextState;
     }
     case CHANNEL.CREATE.RECEIVE: {
       const { channel } = action;
       nextState = Object.assign({}, state);
       nextState[channel.slug] = channel;
       nextState[channel.slug].hasUnreads = false;
-      if (channel.ownerId) nextState[channel.slug].memberSlugs = [channel.ownerSlug];
+      if (channel.ownerId) nextState[channel.slug].members = [channel.ownerSlug];
       nextState[channel.slug].lastActive = channel.createdAt;
       nextState[channel.slug].lastRead = channel.createdAt;
       return Object.assign({}, state, nextState);

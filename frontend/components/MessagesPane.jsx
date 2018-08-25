@@ -23,19 +23,19 @@ class MessagesPane extends React.Component {
   render() {
     const {
       chatTitle,
-      hasMessages,
       channel,
       users,
       messages,
     } = this.props;
+
+    if (!channel) return null;
 
     return (
       <div className="MessagesPane">
         <div role="list" ref={this.messagesList} className="MessagesPane__list">
           <ChannelBlurb
             title={chatTitle}
-            owner={users[channel.ownerSlug]}
-            hasMessages={hasMessages}
+            // owner={users[channel.ownerSlug]}
             createdAt={channel.createdAt}
           />
           {messages.map(message => (

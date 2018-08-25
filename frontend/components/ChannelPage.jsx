@@ -8,9 +8,16 @@ import './ChannelPage.css';
 
 class ChannelPage extends React.Component {
   componentDidMount() {
-    const { channel, channelSlug, ...props } = this.props;
-    if (props.isWorkspaceLoaded) props.fetchChannelRequest(channelSlug);
-    if (channel) props.readUpdateRequest(channel.id);
+    const {
+      channel,
+      channelSlug,
+      isWorkspaceLoaded,
+      fetchChannelRequest,
+      readUpdateRequest,
+    } = this.props;
+
+    if (isWorkspaceLoaded) fetchChannelRequest(channelSlug);
+    if (channel) readUpdateRequest(channel.id);
   }
 
   componentDidUpdate(prevProps) {
@@ -79,9 +86,8 @@ class ChannelPage extends React.Component {
               messages={messages}
               channel={channel}
               users={authors}
-              hasMessages={!!channels.length}
             />
-            <MessageFormContainer placeholder={formPlaceholder} />
+            {/* <MessageFormContainer placeholder={formPlaceholder} /> */}
           </div>
           <PageRoutes routes={routes} />
         </div>

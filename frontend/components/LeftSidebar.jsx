@@ -1,10 +1,10 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ChatModal from './ChatModal';
 import PreferencesModal from './PreferencesModal';
 import Dropdown from './Dropdown';
 import Menu from './Menu';
-import Button from './Button';
+import DmChatMenuItem from './DmChatMenuItem';
+import ChatsWidget from './ChatsWidget';
 import './LeftSidebar.css';
 
 const LeftSidebar = ({
@@ -18,9 +18,11 @@ const LeftSidebar = ({
   modalOpen,
   dmChats,
   workspaceId,
+  unsubbedChannels,
+  updateChannelSubRequest,
   createChannelRequest,
+  fetchChannelsRequest,
 }) => {
-  const handleModalOpen = () => modalOpen('MODAL_CHAT');
   const quickLinksList = [
     {
       icon: <FontAwesomeIcon icon={['fas', 'align-left']} />,
@@ -33,11 +35,6 @@ const LeftSidebar = ({
       link: `/${workspaceSlug}/threads`,
     },
   ];
-  const chatList = subbedChannels.map(item => ({
-    icon: <FontAwesomeIcon icon={['fas', 'hashtag']} />,
-    label: item.title,
-    link: `/${workspaceSlug}/${item.slug}`,
-  }));
   const profileDdMenu = [
     { label: 'Home', link: '/', exact: true },
     { label: 'Set Status' },
@@ -53,23 +50,28 @@ const LeftSidebar = ({
   }
 
   const dmChatsItems = dmChats && dmChats.map((ch) => {
-    const subsWithoutCurrUser = ch.memberSlugs.filter(slug => slug !== currentUser.slug);
+    const subsWithoutCurrUser = ch.members.filter(slug => slug !== currentUser.slug);
     const usernames = subsWithoutCurrUser.map(slug => members[slug].username);
+
+    if (!usernames) return null;
 
     const dmUser = members[subsWithoutCurrUser[0]];
     const dmUserStatus = dmUser && dmUser.status.toLowerCase();
     const circleType = dmUserStatus === 'offline' ? 'far' : 'fas';
+    const circleIcon = [circleType, 'circle'];
+    const iconClassName = `Icon Icon__status--${dmUserStatus}`;
 
     return {
-      icon: (
-        <FontAwesomeIcon
-          icon={[circleType, 'circle']}
-          size="xs"
-          className={`Icon Icon__status--${dmUserStatus}`}
+      icon: (<FontAwesomeIcon icon={circleIcon} size="xs" className={iconClassName} />),
+      link: `/${workspaceSlug}/${ch.slug}`,
+      label: (
+        <DmChatMenuItem
+          channelId={ch.id}
+          label={usernames}
+          userId={dmUser && dmUser.id}
+          updateChannelSubRequest={updateChannelSubRequest}
         />
       ),
-      link: `/${workspaceSlug}/${ch.slug}`,
-      label: usernames.join(', '),
     };
   });
 
@@ -97,19 +99,15 @@ const LeftSidebar = ({
         <Menu items={quickLinksList} menuFor="quicklinks" />
       </div>
 
-      <div className="SidebarWidget">
-        <header className="SidebarWidget__header">
-          <span className="SidebarWidget__title">
-            Channels
-          </span>
-          <Button className="Btn__widget" onClick={handleModalOpen}>
-            <FontAwesomeIcon icon={['fas', 'plus-circle']} />
-          </Button>
-        </header>
-        {subbedChannels && (
-          <Menu items={chatList} />
-        )}
-      </div>
+      <ChatsWidget
+        modalOpen={modalOpen}
+        subbedChannels={subbedChannels}
+        unsubbedChannels={unsubbedChannels}
+        workspaceSlug={workspaceSlug}
+        workspaceId={workspaceId}
+        createChannelRequest={createChannelRequest}
+        fetchChannelsRequest={fetchChannelsRequest}
+      />
 
       <div className="SidebarWidget">
         <header className="SidebarWidget__header">
@@ -120,11 +118,6 @@ const LeftSidebar = ({
 
         <Menu menuFor="dmChats" items={dmChatsItems} />
       </div>
-
-      <ChatModal
-        workspaceId={workspaceId}
-        createChannelRequest={createChannelRequest}
-      />
 
       <PreferencesModal workspaceSlug={workspaceSlug} />
     </aside>

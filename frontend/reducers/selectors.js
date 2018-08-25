@@ -7,14 +7,67 @@ export const selectWorkspaceIdBySlug = ({ entities: { workspaces }, ui }, slug) 
 
 export const selectWorkspaceSlug = state => state.ui.displayWorkspaceSlug;
 
-export const selectSubbedChats = ({ entities: { channels }, session: { currentUser } }) => (
+export const selectSubbedChats = ({ entities: { channels, members, channelSubs }, session }) => {
+  const { currentUser } = session;
+  const currMember = members[currentUser.slug];
+
+  if (!currMember || !currMember.subs) return [];
+
+  const chats = currMember.subs.reduce((acc, curr) => {
+    const chatSub = channelSubs[curr];
+    const channel = channels[chatSub.channelSlug];
+    if (chatSub.userSlug !== currentUser.slug || channel.hasDm) return acc;
+    acc[chatSub.channelSlug] = channel;
+    return acc;
+  }, {});
+
+  return values(chats);
+};
+
+export const selectUnsubbedChats = ({ entities: { channels, members, channelSubs }, session }) => {
+  const { currentUser } = session;
+  const currMember = members[currentUser.slug];
+
+  if (!currMember) return [];
+
+  const subbedChatSlugs = currMember.subs.map(subId => channelSubs[subId].channelSlug);
+  return values(channels).filter(ch => !subbedChatSlugs.includes(ch.slug) && !ch.hasDm);
+};
+
+export const selectChatSubById = ({ entities: { channelSubs } }, id) => (
+  channelSubs && channelSubs[id]
+);
+
+const hasDmWithUser = ({ hasDm, members }, userSlug) => (
+  !!hasDm && members && members.includes(userSlug)
+);
+
+export const selectDmChats = ({ entities: { channels, channelSubs, members }, session }) => {
+  const { currentUser } = session;
+  const currMember = members[currentUser.slug];
+
+  if (!currMember || !currMember.subs) return [];
+
+  const subIds = values(channels).filter(ch => ch.hasDm).map(ch => ch.subs);
+  const flatten = subIds.reduce((acc, curr) => acc.concat(curr), []);
+  const subs = flatten.filter(id => !currMember.subs.includes(id) && channelSubs[id].inSidebar);
+  const chatSubs = subs.map(sub => channelSubs[sub]);
+
+  const subsFilter = chatSubs.filter(({ channelSlug, inSidebar }) => (
+    channels[channelSlug].hasDm && inSidebar
+  ));
+
+  return subsFilter.map(sub => channels[sub.channelSlug]);
+};
+
+export const selectDmWithUser = ({ entities: { channels } }, userSlug) => (
   values(channels).filter(ch => (
-    !ch.hasDm && ch.memberSlugs && ch.memberSlugs.includes(currentUser.slug)
-  ))
+    hasDmWithUser(ch, userSlug)
+  ))[0]
 );
 
 export const selectChannels = ({ entities: { channels } }, workspaceSlug) => (
-  Object.values(channels).filter(ch => ch.workspaceSlug === workspaceSlug)
+  values(channels).filter(ch => ch.workspaceSlug === workspaceSlug)
 );
 
 export const selectUnreadChannels = ({ entities: { channels } }) => (
@@ -38,7 +91,7 @@ export const selectChatIdBySlug = ({ entities: { channels }, ui }, slug) => {
 
 export const selectChatMembers = ({ entities: { members, channels } }) => (
   values(channels)
-    .map(ch => ch.memberSlugs)
+    .map(ch => ch.members)
     .reduce((acc, curr) => acc.concat(curr), [])
     .filter((userSlug, idx, arr) => arr.indexOf(userSlug) === idx)
     .reduce((acc, curr) => {
@@ -47,13 +100,17 @@ export const selectChatMembers = ({ entities: { members, channels } }) => (
     }, {})
 );
 
+export const selectUserBySlug = ({ entities: { members } }, slug) => (
+  members && members[slug]
+);
+
 export const selectHashDmUsersBySlug = ({ entities, session }, chatSlug, hasCurrUser = true) => {
   const { channels, members } = entities;
   const { currentUser } = session;
 
-  if (!channels[chatSlug]) return null;
+  if (!channels[chatSlug] || !channels[chatSlug].members) return null;
 
-  const chatUsers = channels[chatSlug].memberSlugs.reduce((acc, curr) => {
+  const chatUsers = channels[chatSlug].members.reduce((acc, curr) => {
     acc[curr] = members[curr];
     return acc;
   }, {});
@@ -94,6 +151,8 @@ export const selectThreadFromSlug = ({ entities: { messages }, ui: { displayMess
   && messages[displayMessageSlug].thread.map(slug => messages[slug]).filter(msg => msg)
 );
 
+export const selectCurrentUser = ({ session: { currentUser } }) => currentUser;
+
 export const selectCurrentUserId = ({ session }) => session.currentUser && session.currentUser.id;
 
 export const selectCurrentUserSlug = ({ session }) => (
@@ -108,20 +167,4 @@ export const getReactionCounts = ({ entities: { reactions } }, messageId) => (
       if (!acc[emoji].includes(userId)) acc[emoji].push(userId);
       return acc;
     }, {})
-);
-
-const hasDmWithUser = ({ hasDm, memberSlugs }, userSlug) => (
-  !!(hasDm && memberSlugs && memberSlugs.includes(userSlug))
-);
-
-export const selectDmChats = ({ entities: { channels }, session: { currentUser } }) => (
-  values(channels)
-    .filter(ch => hasDmWithUser(ch, currentUser.slug))
-    .map(ch => channels[ch.slug])
-);
-
-export const selectDmWithUser = ({ entities: { channels } }, userSlug) => (
-  values(channels).filter(ch => (
-    hasDmWithUser(ch, userSlug) && ch.memberSlugs.length === 2
-  ))[0]
 );

@@ -3,12 +3,10 @@ import { NavLink } from 'react-router-dom';
 import Button from './Button';
 import './MenuItem.css';
 
-const MenuItem = ({ className, ...props }) => {
+const MenuItem = ({ className, icon, label, ...props }) => {
   const {
-    label,
     to: link,
     onClick,
-    icon,
   } = props;
   let itemType = 'link';
   if (!link) itemType = onClick ? 'btn' : 'text';

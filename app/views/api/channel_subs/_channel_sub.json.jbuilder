@@ -1,2 +1,3 @@
-json.(channel_sub, channel_sub.attributes.keys)
-json.userSlug channel_sub.user.slug
+json.(channel_sub, :id, :channel_id, :in_sidebar, :created_at)
+json.user_slug channel_sub.user.slug
+json.channel_slug channel_sub.channel.slug

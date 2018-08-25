@@ -83,8 +83,9 @@ class Channel < ApplicationRecord
 
   def sub_users_to_dm_chat
     return unless self.member_ids
-    self.member_ids.each do |sub_id|
-      subs.create(channel_id: id, user_id: sub_id, skip_broadcast: true)
+    self.member_ids.each_with_index do |member_id, idx|
+      in_sidebar = idx === 0 ? true : false
+      subs.create(channel_id: id, user_id: member_id, skip_broadcast: true, in_sidebar: in_sidebar)
     end
   end
 
