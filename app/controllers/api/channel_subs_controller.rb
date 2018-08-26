@@ -2,8 +2,8 @@ class Api::ChannelSubsController < ApplicationController
   before_action :set_channel_sub
 
   def create
-    @channel_sub = current_user.subs.build(channel_id: params[:channel_id])
-    
+    @channel_sub = current_user.channel_subs.build(channel_sub_params)
+
     if @channel_sub.save
       render json: ['success']
     else

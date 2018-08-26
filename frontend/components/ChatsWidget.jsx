@@ -4,6 +4,7 @@ import Button from './Button';
 import Menu from './Menu';
 import ChatModal from './ChatModal';
 import ChatsModal from './ChatsModal';
+import './ChatsWidget.css';
 
 class ChatsWidget extends React.Component {
   constructor(props) {
@@ -27,16 +28,16 @@ class ChatsWidget extends React.Component {
     } = this.props;
 
     const chatList = subbedChannels.map(item => ({
-      icon: <FontAwesomeIcon icon={['fas', 'hashtag']} />,
+      icon: <FontAwesomeIcon className="Icon" icon={['fas', 'hashtag']} />,
       label: item.title,
       link: `/${workspaceSlug}/${item.slug}`,
     }));
 
     return (
-      <div className="SidebarWidget">
+      <div className="SidebarWidget SidebarWidget__chats">
         <header className="SidebarWidget__header">
           <span className="SidebarWidget__title">
-            <Button onClick={() => this.handleModalOpen('CHATS')}>
+            <Button className="Btn__chats" onClick={() => this.handleModalOpen('CHATS')}>
               Channels
             </Button>
           </span>
@@ -44,7 +45,7 @@ class ChatsWidget extends React.Component {
             <FontAwesomeIcon icon={['fas', 'plus-circle']} />
           </Button>
         </header>
-        {subbedChannels && (<Menu items={chatList} />)}
+        {subbedChannels && (<Menu menuFor="chats" items={chatList} />)}
 
         <ChatModal
           workspaceId={workspaceId}

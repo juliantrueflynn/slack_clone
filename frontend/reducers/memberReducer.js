@@ -1,4 +1,9 @@
-import { WORKSPACE, USER_APPEARANCE, DM_CHAT } from '../actions/actionTypes';
+import {
+  WORKSPACE,
+  USER_APPEARANCE,
+  DM_CHAT,
+  CHANNEL_SUB,
+} from '../actions/actionTypes';
 
 const memberReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -18,6 +23,12 @@ const memberReducer = (state = {}, action) => {
         nextState[sub.userSlug].subs.push(sub.id);
       });
 
+      return nextState;
+    }
+    case CHANNEL_SUB.CREATE.RECEIVE: {
+      const { channelSub: { id, userSlug } } = action;
+      nextState = Object.assign({}, state);
+      nextState[userSlug].subs.push(id);
       return nextState;
     }
     case DM_CHAT.CREATE.RECEIVE: {

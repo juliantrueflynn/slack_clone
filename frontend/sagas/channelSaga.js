@@ -17,7 +17,7 @@ function* fetchIndex({ workspaceSlug }) {
     const channels = yield call(api.apiFetch, `workspaces/${workspaceSlug}/channels`);
     yield put(action.fetchChannels.receive(channels));
   } catch (error) {
-    yield put(action.createChannel.failure(error));
+    yield put(action.fetchChannels.failure(error));
   }
 }
 

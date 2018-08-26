@@ -34,7 +34,7 @@ export const createDmChat = {
 };
 
 export const createChannelSub = {
-  request: channelId => actionCreator(CHANNEL_SUB.CREATE.REQUEST, { channelId }),
+  request: channelSub => actionCreator(CHANNEL_SUB.CREATE.REQUEST, { channelSub }),
   failure: errors => actionCreator(CHANNEL_SUB.CREATE.FAILURE, { errors }),
 };
 

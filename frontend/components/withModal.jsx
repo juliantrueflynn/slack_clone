@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from 'react-modal';
-import { camelize } from 'humps';
 import Button from './Button';
 import { modalClose } from '../actions/interactiveActions';
 import './WithModal.css';
@@ -36,24 +36,31 @@ const withModal = ({ modalTitle, modalType, ...modalProps }) => (WrappedComponen
         content: { border: 'none' },
       };
 
+      const lowerCaseType = modalType.toLowerCase();
+      const typeClassName = lowerCaseType.slice(6);
+
       return (
         <Modal
-          className={`Modal Modal__${camelize(modalType)}`}
+          className={`Modal Modal__${typeClassName}`}
           style={style}
           contentLabel={modalTitle}
           shouldCloseOnOverlayClick={false}
           {...modalProps}
           {...this.props}
         >
-          <header className="Modal__header">
+          <div className="Modal__body">
             <Button className="Btn__close" onClick={this.handleModalClose}>
-              &#10006;
+              <FontAwesomeIcon icon="times" size="2x" />
             </Button>
-            <h1 className="Modal__title">
-              {modalTitle}
-            </h1>
-          </header>
-          <WrappedComponent {...this.props} />
+            <div className="Modal__inner-body">
+              <header className="Modal__header">
+                <h1 className="Modal__title">
+                  {modalTitle}
+                </h1>
+              </header>
+              <WrappedComponent {...this.props} />
+            </div>
+          </div>
         </Modal>
       );
     }

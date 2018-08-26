@@ -11,9 +11,9 @@ import { deleteChannelSub, createChannelSub, updateChannelSub } from '../actions
 import { apiCreate, apiDelete, apiUpdate } from '../util/apiUtil';
 import { selectChatBySlug, selectChatSubById, selectCurrentUserSlug } from '../reducers/selectors';
 
-function* fetchCreate({ channelId }) {
+function* fetchCreate({ channelSub }) {
   try {
-    yield call(apiCreate, 'channel_subs', { channelId });
+    yield call(apiCreate, 'channel_subs', channelSub);
   } catch (error) {
     yield put(createChannelSub.failure(error));
   }
@@ -33,7 +33,7 @@ function* fetchChannelShow({ channel }) {
     const currUserSlug = yield select(selectCurrentUserSlug);
     const chatSubs = channel.subs.filter(sub => sub.userSlug && sub.userSlug !== currUserSlug);
 
-    if (chatSubs[0] && !chatSubs[0].inSidebar) {
+    if (chatSubs[0] && !chatSubs[0].inSidebar && channel.hasDm) {
       const { userId, channelId } = chatSubs[0];
       const channelSub = { userId, channelId, inSidebar: true };
       yield fetchUpdate({ channelSub });

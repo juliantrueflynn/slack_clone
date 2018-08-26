@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import withModal from './withModal';
+import './ChatsModal.css';
 
 class ChatsModal extends React.Component {
   componentDidMount() {

@@ -13,7 +13,8 @@ class ChannelSub < ApplicationRecord
     "channel_#{channel.slug}"
   end
 
-  after_create_commit :generate_read, :broadcast_create_sub
+  after_create_commit :broadcast_create_sub
+  after_create_commit :generate_read
   after_destroy :broadcast_destroy
 
   private
@@ -23,7 +24,6 @@ class ChannelSub < ApplicationRecord
   end
 
   def broadcast_create_sub
-    return if user.id === workspace.owner.id
-    broadcast_create
+    broadcast_create if workspace.channels.length > 2
   end
 end

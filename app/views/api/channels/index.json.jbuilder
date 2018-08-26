@@ -1,4 +1,4 @@
-json.workspace_slug @channels.length ? @channels.first.workspace.slug : nil
+json.workspace_slug @channels.first ? @channels.first.workspace.slug : nil
 
 json.channels do
   json.array! @channels do |channel|

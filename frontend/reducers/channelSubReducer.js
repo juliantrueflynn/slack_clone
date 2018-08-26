@@ -22,6 +22,7 @@ const channelSubReducer = (state = {}, action) => {
     }
     case DM_CHAT.CREATE.RECEIVE: {
       const { dmChat: { subs } } = action;
+
       nextState = {};
       subs.forEach((sub) => {
         nextState[sub.id] = sub;

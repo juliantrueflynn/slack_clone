@@ -9,17 +9,17 @@ class AllUnreadsPage extends React.Component {
 
   render() {
     const { unreadChannels, messages, authors } = this.props;
-    const channels = Object.values(unreadChannels);
 
-    if (!messages || !unreadChannels) {
-      return null;
-    }
+    if (!messages || !unreadChannels) return null;
 
     return (
       <div className="page page__unreads">
-        {channels.map(channel => (
+        {unreadChannels.map(channel => (
           <div key={channel.slug}>
-            <h4>#{channel.slug}</h4>
+            <h4>
+              #
+              {channel.slug}
+            </h4>
             {channel.messages && (
               <UnreadEntry
                 authors={authors}

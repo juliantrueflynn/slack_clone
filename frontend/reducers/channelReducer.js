@@ -5,7 +5,8 @@ import {
   READ,
   MESSAGE,
   USER_UNREADS,
-  DM_CHAT
+  DM_CHAT,
+  CHANNEL_SUB
 } from '../actions/actionTypes';
 
 const channelReducer = (state = {}, action) => {
@@ -126,6 +127,12 @@ const channelReducer = (state = {}, action) => {
       nextState = Object.assign({}, state);
       delete nextState[action.channelSlug];
       return nextState;
+    case CHANNEL_SUB.CREATE.RECEIVE: {
+      const { channelSub: { id, channelSlug } } = action;
+      nextState = Object.assign({}, state);
+      nextState[channelSlug].subs.push(id);
+      return nextState;
+    }
     case MESSAGE.CREATE.RECEIVE: {
       const { createdAt, channelSlug } = action.message;
       nextState = Object.assign({}, state);

@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import LeftSidebar from './LeftSidebar';
 import {
+  selectWorkspaces,
   selectSubbedChats,
   selectDmChats,
   selectChatMembers,
@@ -15,7 +16,7 @@ import { createChannel, updateChannelSub, fetchChannels } from '../actions/chann
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug, channelSlug } } }) => ({
   currentUser: state.session.currentUser,
-  workspaces: Object.values(state.entities.workspaces),
+  workspaces: selectWorkspaces(state),
   workspaceSlug,
   workspaceId: selectWorkspaceIdBySlug(state, workspaceSlug),
   channelSlug: state.ui.displayChannelSlug,

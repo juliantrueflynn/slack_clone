@@ -11,6 +11,7 @@ import {
   faStar as farStar
 } from '@fortawesome/free-regular-svg-icons';
 import {
+  faTimes,
   faTimesCircle,
   faCircle,
   faAlignLeft,
@@ -23,6 +24,7 @@ import { PageRoutes, routesConfig } from './util/routeUtil';
 import './App.css';
 
 library.add(
+  faTimes,
   faTrashAlt,
   faEdit,
   faSquare,

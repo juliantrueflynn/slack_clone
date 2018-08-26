@@ -46,10 +46,6 @@
   color: rgba(255,255,255,0.75);
 }
 
-.SidebarWidget > .Menu > .MenuItem > .MenuItem__content--active {
-  pointer-events: none;
-}
-
 .SidebarWidget .MenuItem--unread {
   color: #FFF;
   font-weight: bold;
@@ -67,7 +63,7 @@
 
 .SidebarWidget__header .Btn {
   display: block;
-  margin-left: auto;
+  margin-right: auto;
 }
 
 
@@ -111,8 +107,4 @@
 
 .Icon__status--online {
   color: #55EFC4;
-}
-
-.Btn__widget {
-  color: rgba(255,255,255,0.4);
 }

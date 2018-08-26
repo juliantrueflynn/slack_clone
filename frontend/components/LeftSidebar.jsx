@@ -25,12 +25,12 @@ const LeftSidebar = ({
 }) => {
   const quickLinksList = [
     {
-      icon: <FontAwesomeIcon icon={['fas', 'align-left']} />,
+      icon: <FontAwesomeIcon className="Icon" icon={['fas', 'align-left']} />,
       label: 'All Unreads',
       link: `/${workspaceSlug}/unreads`,
     },
     {
-      icon: <FontAwesomeIcon icon={['far', 'comment']} />,
+      icon: <FontAwesomeIcon className="Icon" icon={['far', 'comment']} />,
       label: 'All Threads',
       link: `/${workspaceSlug}/threads`,
     },
@@ -86,7 +86,7 @@ const LeftSidebar = ({
           </div>
           <div className="Dropdown__subtitle">
             <div className={`Dropdown__status Dropdown__status--${userStatus}`}>
-              <FontAwesomeIcon icon={['fas', 'circle']} size="xs" />
+              <FontAwesomeIcon className="Icon" icon={['fas', 'circle']} size="xs" />
             </div>
             <div className="Dropdown__title">
               {currentUser.username}

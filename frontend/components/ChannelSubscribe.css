@@ -1,0 +1,14 @@
+.ChannelSubscribe {
+  padding: 30px 20px;
+  text-align: center;
+  background-color: #F5F5F5;
+  border-top: 1px solid #E9E9E9;
+}
+
+.ChannelSubscribe__title {
+  margin: 0 0 10px;
+}
+
+.ChannelSubscribe__text {
+  color: #717274;
+}

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { PageRoutes } from '../util/routeUtil';
-import MessageFormContainer from './Message/MessageFormContainer';
 import ChannelHeaderContainer from './ChannelHeaderContainer';
 import MessagesPane from './MessagesPane';
+import MessageFormContainer from './Message/MessageFormContainer';
+import ChannelSubscribe from './ChannelSubscribe';
 import './ChannelPage.css';
 
 class ChannelPage extends React.Component {
@@ -40,6 +41,9 @@ class ChannelPage extends React.Component {
       authors,
       routes,
       messageSlug,
+      isChatSub,
+      currentUserId,
+      createChannelSubRequest,
     } = this.props;
 
     if (!channel) return null;
@@ -75,6 +79,7 @@ class ChannelPage extends React.Component {
       placeholder = dmUsernames.length === 1 ? `@${chatTitle}` : chatTitle;
     }
     const formPlaceholder = placeholder && `Message ${placeholder}`;
+    const ownerName = authors[channel.ownerSlug] && authors[channel.ownerSlug].username;
 
     return (
       <div className="Channel">
@@ -88,6 +93,14 @@ class ChannelPage extends React.Component {
               users={authors}
             />
             {/* <MessageFormContainer placeholder={formPlaceholder} /> */}
+            <ChannelSubscribe
+              title={chatTitle}
+              ownerName={ownerName}
+              channel={channel}
+              isChatSub={isChatSub}
+              userId={currentUserId}
+              createChannelSubRequest={createChannelSubRequest}
+            />
           </div>
           <PageRoutes routes={routes} />
         </div>

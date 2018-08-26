@@ -1,10 +1,12 @@
 import { connect } from 'react-redux';
 import ChannelPage from './ChannelPage';
-import { fetchChannel } from '../actions/channelActions';
+import { fetchChannel, createChannelSub } from '../actions/channelActions';
 import {
   selectParentMessages,
   selectHashDmUsersBySlug,
   selectDmUsernamesBySlug,
+  isUserChatSub,
+  selectCurrentUserId,
 } from '../reducers/selectors';
 import { readUpdate } from '../actions/readActions';
 
@@ -18,11 +20,15 @@ const mapStateToProps = (state, { match: { params } }) => ({
   isWorkspaceLoaded: !!state.entities.workspaces[params.workspaceSlug],
   channel: state.entities.channels[params.channelSlug],
   authors: selectHashDmUsersBySlug(state, params.channelSlug),
+  currentUser: state.session.currentUser,
   dmUsernames: selectDmUsernamesBySlug(state, params.channelSlug, false),
+  isChatSub: isUserChatSub(state),
+  currentUserId: selectCurrentUserId(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchChannelRequest: channelSlug => dispatch(fetchChannel.request(channelSlug)),
+  createChannelSubRequest: channelSub => dispatch(createChannelSub.request(channelSub)),
   readUpdateRequest: readableId => dispatch(readUpdate.request(readableId, 'Channel')),
 });
 

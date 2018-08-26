@@ -1,13 +1,12 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from './Button';
+import './DmChatMenuItem.css';
 
 class DmChatMenuItem extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isMouseOver: false };
     this.handleClick = this.handleClick.bind(this);
-    this.handleHoverToggle = this.handleHoverToggle.bind(this);
   }
 
   handleClick(e) {
@@ -18,26 +17,16 @@ class DmChatMenuItem extends React.Component {
     updateChannelSubRequest(channelSub);
   }
 
-  handleHoverToggle(isMouseOver) {
-    return () => this.setState({ isMouseOver });
-  }
-
   render() {
     const { label } = this.props;
-    const { isMouseOver } = this.state;
 
     return (
-      <span
-        onMouseEnter={this.handleHoverToggle(true)}
-        onMouseLeave={this.handleHoverToggle(false)}
-      >
+      <div className="DmChatMenuItem">
         {label}
-        {isMouseOver && (
-          <Button onClick={this.handleClick}>
-            <FontAwesomeIcon icon="times-circle" />
-          </Button>
-        )}
-      </span>
+        <Button onClick={this.handleClick}>
+          <FontAwesomeIcon icon="times-circle" />
+        </Button>
+      </div>
     );
   }
 }

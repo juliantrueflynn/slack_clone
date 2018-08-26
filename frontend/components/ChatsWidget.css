@@ -1,0 +1,22 @@
+.SidebarWidget > .Menu--chats > .MenuItem > .MenuItem__content--active {
+  pointer-events: none;
+}
+
+.SidebarWidget__chats .SidebarWidget__title {
+  width: 100%;
+}
+
+.SidebarWidget__chats .Btn__chats {
+  padding: 0;
+  margin: 0 auto 0 0;
+  width: 100%;
+  text-align: left;
+}
+
+.SidebarWidget__header > .Btn__widget {
+  color: rgba(255,255,255,0.4);
+}
+
+.SidebarWidget__header > .Btn__widget:hover {
+  color: rgba(255,255,255,0.8);
+}
