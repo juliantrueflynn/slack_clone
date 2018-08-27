@@ -59,7 +59,7 @@ class PageWorkspaceCreate extends React.Component {
               onChange={this.handleInputValueUpdate('slug')}
             />
           </div>
-          <Button type="submit" className="Btn__submit">
+          <Button type="submit" buttonFor="submit">
             Create Workspace
           </Button>
         </Form>

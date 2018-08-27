@@ -12,8 +12,8 @@ class DmChatMenuItem extends React.Component {
   handleClick(e) {
     e.preventDefault();
 
-    const { updateChannelSubRequest, channelId, userId } = this.props;
-    const channelSub = { userId, channelId, inSidebar: false };
+    const { updateChannelSubRequest, channelId } = this.props;
+    const channelSub = { channelId, inSidebar: false };
     updateChannelSubRequest(channelSub);
   }
 

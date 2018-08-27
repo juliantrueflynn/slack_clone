@@ -76,6 +76,7 @@ const channelReducer = (state = {}, action) => {
       });
 
       subs.forEach((sub) => {
+        if (!nextState[sub.channelSlug]) return;
         nextState[sub.channelSlug].subs.push(sub.id);
         nextState[sub.channelSlug].members.push(sub.userSlug);
       });

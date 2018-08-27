@@ -16,8 +16,12 @@ class UserView extends React.Component {
   }
 
   handleClick() {
-    const { workspaceId, user, ...props } = this.props;
-    props.createDmChatRequest({ workspaceId, memberIds: [user.id] });
+    const {
+      workspaceId,
+      user,
+      createDmChatRequest
+    } = this.props;
+    createDmChatRequest({ workspaceId, memberIds: [user.id] });
     this.setState({ didCreateDmChat: true });
   }
 
@@ -28,9 +32,7 @@ class UserView extends React.Component {
     if (!user || !props.isChannelsLoaded) return null;
 
     if (hasDmWith && didCreateDmChat) {
-      return (
-        <Redirect to={`/${props.workspaceSlug}/${hasDmWith.slug}`} />
-      );
+      return <Redirect to={`/${props.workspaceSlug}/${hasDmWith.slug}`} />;
     }
 
     return (
@@ -42,7 +44,7 @@ class UserView extends React.Component {
               Message
             </Link>
           ) : (
-            <Button className="Btn__dm" onClick={this.handleClick}>
+            <Button buttonFor="dm" onClick={this.handleClick}>
               Message
             </Button>
           )}

@@ -61,6 +61,10 @@
   display: block;
 }
 
+.SidebarWidget__title .Btn:hover {
+  color: rgba(255,255,255,1);
+}
+
 .SidebarWidget__header .Btn {
   display: block;
   margin-right: auto;
@@ -101,10 +105,11 @@
   align-items: center;
 }
 
-.Dropdown__status--online {
-  color: #55EFC4;
+.Dropdown__status--online,
+.Icon__status--online  {
+  color: rgb(85,239,196,.5);
 }
 
-.Icon__status--online {
-  color: #55EFC4;
+.SidebarWidget__header .Btn:focus {
+  outline: none;
 }

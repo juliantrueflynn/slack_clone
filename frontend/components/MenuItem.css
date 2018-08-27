@@ -15,18 +15,23 @@
   position: relative;
 }
 
-.MenuItem__content > .Icon {
+.SidebarWidget .MenuItem__content > .Icon {
   margin-right: 8px;
 }
 
-.MenuItem__content > .Icon {
-  color: rgba(255,255,255,0.3);
+.SidebarWidget .Menu--chats .MenuItem__content > .Icon,
+.SidebarWidget .Menu--quicklinks .MenuItem__content > .Icon {
+  color: rgba(255,255,255,0.4);
 }
 
-.MenuItem__content:hover {
+.Menu--dmChats .Icon__status--offline {
+  color: rgba(255,255,255,0.4);
+}
+
+.SidebarWidget .MenuItem__content:hover:not(.MenuItem__content--active) {
   background-color: rgba(0,0,0,.15);
 }
 
-.MenuItem__content--active {
+.SidebarWidget .MenuItem__content--active {
   background-color: #4C9689;
 }

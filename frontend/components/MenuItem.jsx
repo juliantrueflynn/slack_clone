@@ -3,7 +3,12 @@ import { NavLink } from 'react-router-dom';
 import Button from './Button';
 import './MenuItem.css';
 
-const MenuItem = ({ className, icon, label, ...props }) => {
+const MenuItem = ({
+  className,
+  icon,
+  label,
+  ...props,
+}) => {
   const {
     to: link,
     onClick,

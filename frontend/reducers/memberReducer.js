@@ -33,8 +33,8 @@ const memberReducer = (state = {}, action) => {
     }
     case DM_CHAT.CREATE.RECEIVE: {
       const { dmChat: { subs } } = action;
-      nextState = Object.assign({}, state);
 
+      nextState = Object.assign({}, state);
       subs.forEach((sub) => {
         nextState[sub.userSlug].subs.push(sub.id);
       });

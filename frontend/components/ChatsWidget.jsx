@@ -37,11 +37,11 @@ class ChatsWidget extends React.Component {
       <div className="SidebarWidget SidebarWidget__chats">
         <header className="SidebarWidget__header">
           <span className="SidebarWidget__title">
-            <Button className="Btn__chats" onClick={() => this.handleModalOpen('CHATS')}>
+            <Button buttonFor="chats" onClick={() => this.handleModalOpen('CHATS')}>
               Channels
             </Button>
           </span>
-          <Button className="Btn__widget" onClick={() => this.handleModalOpen('CHAT')}>
+          <Button buttonFor="widget" onClick={() => this.handleModalOpen('CHAT')}>
             <FontAwesomeIcon icon={['fas', 'plus-circle']} />
           </Button>
         </header>

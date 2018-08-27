@@ -70,7 +70,7 @@ class SessionForm extends React.Component {
                 onChange={this.handleInputValue('password')}
               />
             </div>
-            <Button className="Btn__submit Btn__w100" type="submit">
+            <Button type="submit" buttonFor="submit" fullWidth>
               {isSignInPage ? 'Sign in' : 'Sign Up'}
             </Button>
           </Form>

@@ -39,7 +39,7 @@ class Dropdown extends React.Component {
 
     return (
       <div className={dropdownClassNames}>
-        <Button className="Btn__dropdown" onClick={this.handleTogglerClick}>
+        <Button buttonFor="dropdown" onClick={this.handleTogglerClick}>
           <div className="Dropdown__title">
             {togglerText || children}
           </div>

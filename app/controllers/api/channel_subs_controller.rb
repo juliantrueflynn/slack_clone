@@ -2,7 +2,7 @@ class Api::ChannelSubsController < ApplicationController
   before_action :set_channel_sub
 
   def create
-    @channel_sub = current_user.channel_subs.build(channel_sub_params)
+    @channel_sub = current_user.channel_subs.build(params[:channel_id])
 
     if @channel_sub.save
       render json: ['success']
@@ -30,10 +30,10 @@ class Api::ChannelSubsController < ApplicationController
   private
 
   def set_channel_sub
-    @channel_sub = ChannelSub.find_by(channel_id: params[:channel_id], user_id: params[:user_id])
+    @channel_sub = ChannelSub.find_by(channel_id: params[:channel_id], user_id: current_user.id)
   end
 
   def channel_sub_params
-    params.require(:channel_sub).permit(:channel_id, :user_id, :in_sidebar)
+    params.require(:channel_sub).permit(:channel_id, :in_sidebar)
   end
 end

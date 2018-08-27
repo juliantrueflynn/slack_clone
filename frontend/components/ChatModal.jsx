@@ -46,10 +46,10 @@ class ChatModal extends React.Component {
             onChange={this.handleInputValue('title')}
           />
         </div>
-        <Button className="Btn__modal" onClick={() => onRequestClose()}>
+        <Button buttonFor="modal" onClick={() => onRequestClose()}>
           Close
         </Button>
-        <Button className="Btn__modal" type="submit">
+        <Button buttonFor="modal" type="submit">
           Create Channel
         </Button>
       </Form>

@@ -9,7 +9,7 @@ const PageHome = ({ workspaces }) => (
     <div className="Page__body">
       <div className="hero hero__home">
         Created by Julian Flynn
-        <Button className="Btn__hero">
+        <Button buttonFor="hero">
           Contact
         </Button>
       </div>

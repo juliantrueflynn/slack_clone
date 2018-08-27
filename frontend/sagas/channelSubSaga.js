@@ -28,14 +28,14 @@ function* fetchUpdate({ channelSub }) {
   }
 }
 
-function* fetchChannelShow({ channel }) {
+function* fetchChannelShow({ channel: { channel, subs } }) {
   try {
     const currUserSlug = yield select(selectCurrentUserSlug);
-    const chatSubs = channel.subs.filter(sub => sub.userSlug && sub.userSlug !== currUserSlug);
+    const chatSubs = subs.filter(sub => sub.userSlug && sub.userSlug === currUserSlug);
 
     if (chatSubs[0] && !chatSubs[0].inSidebar && channel.hasDm) {
-      const { userId, channelId } = chatSubs[0];
-      const channelSub = { userId, channelId, inSidebar: true };
+      const { channelId } = chatSubs[0];
+      const channelSub = { channelId, inSidebar: true };
       yield fetchUpdate({ channelSub });
     }
   } catch (error) {

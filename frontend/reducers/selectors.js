@@ -30,7 +30,7 @@ export const selectSubbedChats = ({ entities, ui, session: { currentUser } }) =>
     chats[chatSlug] = channels[chatSlug];
   }
 
-  return values(chats);
+  return values(chats).sort((a, b) => a.title.localeCompare(b.title));
 };
 
 export const selectUnsubbedChats = ({ entities: { channels, members, channelSubs }, session }) => {
@@ -53,22 +53,16 @@ export const selectDmChats = ({ entities: { channels, channelSubs, members }, se
 
   if (!currMember || !currMember.subs) return [];
 
-  const subIds = values(channels).filter(ch => ch.hasDm).map(ch => ch.subs);
-  const flatten = subIds.reduce((acc, curr) => acc.concat(curr), []);
-  const subs = flatten.filter(id => !currMember.subs.includes(id) && channelSubs[id].inSidebar);
-  const chatSubs = subs.map(sub => channelSubs[sub]);
-
-  const subsFilter = chatSubs.filter(({ channelSlug, inSidebar }) => (
-    channels[channelSlug].hasDm && inSidebar
-  ));
-
-  return subsFilter.map(sub => channels[sub.channelSlug]);
+  return currMember.subs
+    .map(subId => channelSubs[subId])
+    .filter(sub => channels[sub.channelSlug].hasDm && sub.inSidebar)
+    .map(sub => channels[sub.channelSlug]);
 };
 
-export const selectDmWithUser = ({ entities: { channels, members } }, userSlug) => {
+export const selectDmWithUser = ({ entities: { channels } }, userSlug) => {
   const chats = values(channels);
-  const users = values(members);
-  const dmChatsWithUser = chats.filter(ch => ch.hasDm && members && users.includes(userSlug));
+  const dmChatsWithUser = chats.filter(ch => ch.hasDm && ch.members.includes(userSlug));
+
   return dmChatsWithUser[0];
 };
 
@@ -113,7 +107,8 @@ export const isUserChatSub = ({ entities, ui, session: { currentUser } }) => {
 
   let isChatSub = false;
   currChat.subs.forEach((subId) => {
-    if (currMember.subs.includes(subId)) isChatSub = true;
+    if (!currMember.subs.includes(subId)) return;
+    isChatSub = true;
   });
 
   return isChatSub;
@@ -166,7 +161,7 @@ export const selectThreadLastUpdate = ({ entities: { messages } }, thread) => {
 
 export const selectThreadFromSlug = ({ entities: { messages }, ui: { displayMessageSlug } }) => {
   const message = messages[displayMessageSlug];
-  if (message && message.thread) return [];
+  if (!message || !message.thread) return [];
   return message.thread.map(slug => messages[slug]).filter(msg => msg);
 };
 

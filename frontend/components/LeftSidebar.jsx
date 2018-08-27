@@ -68,7 +68,6 @@ const LeftSidebar = ({
         <DmChatMenuItem
           channelId={ch.id}
           label={usernames}
-          userId={dmUser && dmUser.id}
           updateChannelSubRequest={updateChannelSubRequest}
         />
       ),
@@ -95,7 +94,7 @@ const LeftSidebar = ({
         </Dropdown>
       </div>
 
-      <div className="SidebarWidget">
+      <div className="SidebarWidget SidebarWidth__quicklinks">
         <Menu items={quickLinksList} menuFor="quicklinks" />
       </div>
 

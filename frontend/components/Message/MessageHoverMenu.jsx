@@ -60,7 +60,7 @@ class MessageHoverMenu extends React.Component {
 
     return (
       <div className="Btn-group__msg-hover-menu">
-        <Button className="Btn__reaction" onClick={this.handleEmojiToggle}>
+        <Button buttonFor="reaction" onClick={this.handleEmojiToggle}>
           <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />
         </Button>
         {isEmojiOpen && (
@@ -72,22 +72,22 @@ class MessageHoverMenu extends React.Component {
           </Link>
         )}
         {!isFavorited && (
-          <Button className="Btn__fav Btn__fav--empty" onClick={this.handleFavClick}>
+          <Button buttonFor="fav Btn__fav--empty" onClick={this.handleFavClick}>
             <FontAwesomeIcon icon={['far', 'star']} fixedWidth />
           </Button>
         )}
         {isFavorited && (
-          <Button className="Btn__fav Btn__fav--filled" onClick={this.handleUnfavClick}>
+          <Button buttonFor="fav Btn__fav--filled" onClick={this.handleUnfavClick}>
             <FontAwesomeIcon icon={['fas', 'star']} fixedWidth />
           </Button>
         )}
         {isAuthor && (
-          <Button className="Btn__msg-edit" onClick={this.handleEditClick}>
+          <Button buttonFor="msg-edit" onClick={this.handleEditClick}>
             <FontAwesomeIcon icon={['far', 'edit']} fixedWidth />
           </Button>
         )}
         {isAuthor && (
-          <Button className="Btn__msg-delete" onClick={this.handleDeleteClick}>
+          <Button buttonFor="msg-delete" onClick={this.handleDeleteClick}>
             <FontAwesomeIcon icon={['far', 'trash-alt']} fixedWidth />
           </Button>
         )}

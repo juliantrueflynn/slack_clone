@@ -48,10 +48,10 @@ class MessageContent extends React.Component {
         />
         {isEditing && (
           <div className="msg__actions">
-            <Button className="Btn__cancel" onClick={this.handleEditClose}>
+            <Button buttonFor="cancel" onClick={this.handleEditClose}>
               Cancel
             </Button>
-            <Button type="submit" className="Btn__submit" onClick={this.handleEditSubmit}>
+            <Button type="submit" buttonFor="submit" onClick={this.handleEditSubmit}>
               Save changes
             </Button>
           </div>
