@@ -67,7 +67,7 @@ class Channel < ApplicationRecord
   end
 
   def class_name
-    has_dm? ? 'DM_CHAT' : self.class.name
+    has_dm ? 'DM_CHAT' : self.class.name
   end
 
   after_create :generate_chat_subs
@@ -90,7 +90,7 @@ class Channel < ApplicationRecord
   end
 
   def generate_chat_subs
-    sub_users_to_dm_chat if has_dm?
+    sub_users_to_dm_chat if has_dm
     sub_user_to_public_chat if owner
   end
 end
