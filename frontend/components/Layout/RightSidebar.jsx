@@ -55,7 +55,7 @@ class RightSidebar extends React.Component {
             )}
           </div>
 
-          <Button buttonFor="close" onClick={this.handleCloseSidebar}>
+          <Button unStyled buttonFor="close" onClick={this.handleCloseSidebar}>
             &#10006;
           </Button>
         </header>

@@ -23,7 +23,7 @@ class DmChatMenuItem extends React.Component {
     return (
       <div className="DmChatMenuItem">
         {label}
-        <Button onClick={this.handleClick}>
+        <Button unStyled onClick={this.handleClick}>
           <FontAwesomeIcon icon="times-circle" />
         </Button>
       </div>

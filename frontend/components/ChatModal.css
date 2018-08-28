@@ -1,8 +1,16 @@
-.Modal__channel {
+.Modal__chat {
   margin: 5em 2.5em;
   position: relative;
 }
 
-.Modal__channel:focus {
+.Modal__chat:focus {
   outline: none;
+}
+
+.Modal__chat .Form__actions {
+  text-align: right;
+}
+
+.Modal__chat .Btn__modal--submit {
+  margin-left: 6px;
 }

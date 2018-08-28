@@ -2,14 +2,6 @@
   padding: 6px 18px;
 }
 
-.thread .thread__message .Message {
-  padding: 10px;
-}
-
-.thread__messages > .Message {
-  padding: 6px 10px;
-}
-
 .Message {
   position: relative;
   display: flex;

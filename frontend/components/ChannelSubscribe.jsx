@@ -36,7 +36,7 @@ class ChannelSubscribe extends React.Component {
         <div className="ChannelSubscribe__text">
           {this.description()}
         </div>
-        <Button onClick={this.clickSubscribe}>
+        <Button buttonFor="subscribe" color="green" onClick={this.clickSubscribe}>
           Join Channel
         </Button>
       </div>

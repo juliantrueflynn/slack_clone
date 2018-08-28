@@ -79,7 +79,7 @@ const LeftSidebar = ({
   return (
     <aside className="Sidebar Sidebar--left">
       <div className="SidebarWidget">
-        <Dropdown menuFor="user" items={profileDdMenu}>
+        <Dropdown menuFor="user" items={profileDdMenu} unStyledButton>
           <div className="Dropdown__workspace">
             {workspaceSlug}
           </div>

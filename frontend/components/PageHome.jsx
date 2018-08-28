@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Button from './Button';
 import withPublicView from './withPublicView';
 import './PageHome.css';
@@ -9,15 +8,15 @@ const PageHome = ({ workspaces }) => (
     <div className="Page__body">
       <div className="hero hero__home">
         Created by Julian Flynn
-        <Button buttonFor="hero">
+        <Button buttonFor="hero" color="purple">
           Contact
         </Button>
       </div>
 
       <div className="Page__container">
-        <Link role="button" className="Btn Btn__create" to="/create-workspace">
+        <Button linkTo="/create-workspace" buttonFor="create">
           Create Workspace
-        </Link>
+        </Button>
 
         <section className="home__workspaces">
           <h2>

@@ -2,6 +2,7 @@ import React from 'react';
 import MessageContainer from './MessageContainer';
 import MessageFormContainer from './MessageFormContainer';
 import RightSidebarContainer from '../Layout/RightSidebarContainer';
+import './MessageThread.css';
 
 class MessageThread extends React.Component {
   componentDidMount() {
@@ -35,12 +36,9 @@ class MessageThread extends React.Component {
     if (!message || !isWorkspaceLoaded) return null;
 
     return (
-      <RightSidebarContainer
-        sidebarType="Thread"
-        sidebarSubtitle={chatTitle}
-      >
-        <div className="thread">
-          <div className="thread__message">
+      <RightSidebarContainer sidebarType="Thread" sidebarSubtitle={chatTitle}>
+        <div className="MessageThread">
+          <div className="MessageThread__primary">
             <MessageContainer
               author={authors[message.authorSlug]}
               isSingleMessage
@@ -48,7 +46,7 @@ class MessageThread extends React.Component {
             />
           </div>
           {threadMessages && (
-            <div className="thread__messages">
+            <div className="MessageThread__secondary">
               {threadMessages.map(threadMessage => (
                 <MessageContainer
                   key={threadMessage.slug}

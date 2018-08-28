@@ -50,7 +50,7 @@ class MessageForm extends React.Component {
             />
             {parentMessageId && (
               <div className="Form__actions">
-                <Button type="submit" buttonFor="submit">
+                <Button type="submit" buttonFor="submit" size="sm">
                   Send
                 </Button>
               </div>

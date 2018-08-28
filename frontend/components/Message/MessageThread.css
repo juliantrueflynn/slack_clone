@@ -1,5 +1,11 @@
-.message-thread {
-  list-style: none;
-  margin: 0;
-  padding-left: 0;
+.MessageThread__primary .Btn__thread {
+  display: none;
+}
+
+.MessageThread__primary .Message {
+  padding: 10px;
+}
+
+.MessageThread__secondary > .Message {
+  padding: 6px 10px;
 }

@@ -49,7 +49,7 @@ const withModal = ({ modalTitle, modalType, ...modalProps }) => (WrappedComponen
           {...this.props}
         >
           <div className="Modal__body">
-            <Button buttonFor="close" onClick={this.handleModalClose}>
+            <Button buttonFor="close" unStyled onClick={this.handleModalClose}>
               <FontAwesomeIcon icon="times" size="2x" />
             </Button>
             <div className="Modal__inner-body">

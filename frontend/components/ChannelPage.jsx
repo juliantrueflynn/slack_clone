@@ -92,7 +92,7 @@ class ChannelPage extends React.Component {
               channel={channel}
               users={authors}
             />
-            {/* <MessageFormContainer placeholder={formPlaceholder} /> */}
+            <MessageFormContainer placeholder={formPlaceholder} />
             <ChannelSubscribe
               title={chatTitle}
               ownerName={ownerName}
