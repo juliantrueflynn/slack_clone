@@ -111,14 +111,19 @@ const channelReducer = (state = {}, action) => {
       return nextState;
     }
     case CHANNEL.CREATE.RECEIVE: {
-      const { channel } = action;
+      const { channel: { subs, ...channel } } = action;
+
       nextState = Object.assign({}, state);
-      nextState[channel.slug] = channel;
-      nextState[channel.slug].hasUnreads = false;
-      if (channel.ownerId) nextState[channel.slug].members = [channel.ownerSlug];
-      nextState[channel.slug].lastActive = channel.createdAt;
-      nextState[channel.slug].lastRead = channel.createdAt;
-      return Object.assign({}, state, nextState);
+      nextState[channel.slug] = {
+        hasUnreads: false,
+        lastActive: channel.createdAt,
+        lastRead: channel.createdAt,
+        members: [channel.ownerSlug],
+        subs: [subs[0].id],
+        ...channel,
+      };
+
+      return nextState;
     }
     case CHANNEL.UPDATE.RECEIVE:
       nextState = {};

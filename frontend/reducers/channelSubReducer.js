@@ -1,5 +1,10 @@
 import merge from 'lodash.merge';
-import { CHANNEL_SUB, WORKSPACE, DM_CHAT } from '../actions/actionTypes';
+import {
+  CHANNEL_SUB,
+  WORKSPACE,
+  DM_CHAT,
+  CHANNEL,
+} from '../actions/actionTypes';
 
 const channelSubReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -29,6 +34,12 @@ const channelSubReducer = (state = {}, action) => {
       });
 
       return merge({}, state, nextState);
+    }
+    case CHANNEL.CREATE.RECEIVE: {
+      const { channel: { ownerSlug: userSlug, subs, slug: channelSlug } } = action;
+      nextState = Object.assign({}, state);
+      nextState[subs[0].id] = { channelSlug, userSlug, ...subs[0] };
+      return nextState;
     }
     case CHANNEL_SUB.UPDATE.RECEIVE: {
       const { channelSub: { id, inSidebar } } = action;

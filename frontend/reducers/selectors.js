@@ -103,9 +103,12 @@ export const isUserChatSub = ({ entities, ui, session: { currentUser } }) => {
   const currChat = channels[chatSlug];
   const currMember = members[currentUser.slug];
 
-  if (!currMember || !currChat) return null;
-
   let isChatSub = false;
+
+  if (!currMember || !currChat || !currChat.subs) {
+    return isChatSub;
+  }
+
   currChat.subs.forEach((subId) => {
     if (!currMember.subs.includes(subId)) return;
     isChatSub = true;

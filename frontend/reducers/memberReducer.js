@@ -3,6 +3,7 @@ import {
   USER_APPEARANCE,
   DM_CHAT,
   CHANNEL_SUB,
+  CHANNEL,
 } from '../actions/actionTypes';
 
 const memberReducer = (state = {}, action) => {
@@ -40,6 +41,17 @@ const memberReducer = (state = {}, action) => {
       });
 
       return Object.assign({}, state, nextState);
+    }
+    case CHANNEL.CREATE.RECEIVE: {
+      const { channel: { ownerSlug, subs } } = action;
+      const sub = subs[0];
+
+      nextState = Object.assign({}, state);
+      if (sub && nextState[ownerSlug].subs) {
+        nextState[ownerSlug].subs.push(sub.id);
+      }
+
+      return nextState;
     }
     case USER_APPEARANCE.RECEIVE: {
       const { userSlug, status } = action;
