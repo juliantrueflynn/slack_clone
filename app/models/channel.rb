@@ -67,10 +67,10 @@ class Channel < ApplicationRecord
   end
 
   def class_name
-    has_dm ? 'DM_CHAT' : self.class.name
+    has_dm? ? 'DM_CHAT' : self.class.name
   end
 
-  after_create_commit :generate_chat_subs
+  after_create :generate_chat_subs
   after_create_commit :broadcast_create
   after_update_commit :broadcast_update
   after_destroy :broadcast_destroy
@@ -90,7 +90,7 @@ class Channel < ApplicationRecord
   end
 
   def generate_chat_subs
-    sub_users_to_dm_chat if self.has_dm
-    sub_user_to_public_chat if self.owner
+    sub_users_to_dm_chat if has_dm?
+    sub_user_to_public_chat if owner
   end
 end
