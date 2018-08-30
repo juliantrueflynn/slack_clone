@@ -1,14 +1,11 @@
 import React from 'react';
-import EmojiPicker from 'emoji-picker-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Button from '../Button';
+import Button from './Button';
 import './MessageHoverMenu.css';
 
 class MessageHoverMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isEmojiOpen: false };
-    this.handleReactionClick = this.handleReactionClick.bind(this);
     this.handleEmojiToggle = this.handleEmojiToggle.bind(this);
     this.handleFavClick = this.handleFavClick.bind(this);
     this.handleUnfavClick = this.handleUnfavClick.bind(this);
@@ -16,17 +13,17 @@ class MessageHoverMenu extends React.Component {
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
   }
 
-  handleReactionClick(_, emoji) {
-    const { message: { id: messageId }, createReactionRequest } = this.props;
-    const reaction = { messageId, emoji: emoji.name };
+  handleEmojiToggle(e) {
+    const {
+      isReactionModalOpen,
+      modalClose,
+      modalOpen,
+      message: { id: messageId },
+    } = this.props;
 
-    createReactionRequest(reaction);
-    this.setState({ isEmojiOpen: false });
-  }
-
-  handleEmojiToggle() {
-    const { isEmojiOpen } = this.state;
-    this.setState({ isEmojiOpen: !isEmojiOpen });
+    if (!isReactionModalOpen) modalClose();
+    const modalProps = { clickPos: e.clientY, messageId };
+    modalOpen({ modalType: 'MODAL_REACTION', modalProps });
   }
 
   handleFavClick() {
@@ -50,21 +47,23 @@ class MessageHoverMenu extends React.Component {
   }
 
   render() {
-    const { isAuthor, isFavorited, ...props } = this.props;
-    const { isEmojiOpen } = this.state;
-    const { message: { slug, parentMessageId }, match: { params } } = props;
-    const baseThreadUrl = `/${params.workspaceSlug}/${params.channelSlug}`;
+    const {
+      isAuthor,
+      isFavorited,
+      isEditing,
+      hasHover,
+      match: { params: { workspaceSlug, channelSlug } },
+      message: { slug, parentMessageId },
+    } = this.props;
+    const baseThreadUrl = `/${workspaceSlug}/${channelSlug}`;
 
-    if (!props.isMouseOver || props.isEditing) return null;
+    if (!hasHover || isEditing) return null;
 
     return (
-      <div className="Btn-group__msg-hover-menu">
+      <div className="MessageHoverMenu">
         <Button unStyled buttonFor="reaction" onClick={this.handleEmojiToggle}>
           <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />
         </Button>
-        {isEmojiOpen && (
-          <EmojiPicker onEmojiClick={this.handleReactionClick} />
-        )}
         {!parentMessageId && (
           <Button className="Btn Btn__thread" linkTo={`${baseThreadUrl}/thread/${slug}`}>
             <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />

@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { PageRoutes } from '../util/routeUtil';
 import ChannelHeaderContainer from './ChannelHeaderContainer';
 import MessagesPane from './MessagesPane';
+import EmojiModalContainer from './EmojiModalContainer';
 import MessageFormContainer from './Message/MessageFormContainer';
 import ChannelSubscribe from './ChannelSubscribe';
 import './ChannelPage.css';
@@ -44,6 +45,8 @@ class ChannelPage extends React.Component {
       isChatSub,
       currentUserId,
       createChannelSubRequest,
+      isReactionModalOpen,
+      modalClose,
     } = this.props;
 
     if (!channel) return null;
@@ -80,9 +83,11 @@ class ChannelPage extends React.Component {
     }
     const formPlaceholder = placeholder && `Message ${placeholder}`;
     const ownerName = authors[channel.ownerSlug] && authors[channel.ownerSlug].username;
+    let chatClassNames = 'Channel';
+    if (isReactionModalOpen) chatClassNames += ' Channel--reaction';
 
     return (
-      <div className="Channel">
+      <div className={chatClassNames}>
         <ChannelHeaderContainer sectionTitle={chatTitle} />
         <div className="Channel__body">
           <div className="Channel__container">
@@ -91,8 +96,11 @@ class ChannelPage extends React.Component {
               messages={messages}
               channel={channel}
               users={authors}
+              isReactionModalOpen={isReactionModalOpen}
+              modalClose={modalClose}
             />
-            <MessageFormContainer placeholder={formPlaceholder} />
+            <EmojiModalContainer />
+            {/* <MessageFormContainer placeholder={formPlaceholder} /> */}
             <ChannelSubscribe
               title={chatTitle}
               ownerName={ownerName}

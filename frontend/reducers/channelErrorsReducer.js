@@ -14,7 +14,8 @@ const channelErrorsReducer = (state = [], action) => {
     case CHANNEL.CREATE.RECEIVE:
       return [];
     case MODAL_CLOSE: {
-      if (action.modalType === 'MODAL_CHAT') {
+      const { modal } = action;
+      if (modal === 'MODAL_CHAT') {
         return [];
       }
       return state;

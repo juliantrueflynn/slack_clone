@@ -5,9 +5,9 @@ import {
   RIGHT_SIDEBAR
 } from './actionTypes';
 
-export const modalOpen = modalType => ({
+export const modalOpen = modal => ({
   type: MODAL_OPEN,
-  modalType,
+  modal,
 });
 
 export const modalClose = () => ({

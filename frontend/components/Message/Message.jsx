@@ -10,46 +10,58 @@ import './Message.css';
 class Message extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      isMouseOver: false,
-      isEditing: false
-    };
-
+    this.state = { isEditing: false };
     this.handleEditToggle = this.handleEditToggle.bind(this);
+    this.handleMouseOver = this.handleMouseOver.bind(this);
   }
 
-  handleHoverToggle(isMouseOver) {
-    return () => this.setState({ isMouseOver });
+  handleMouseOver() {
+    const { message: { id }, isReactionOpen, handleHoverToggle } = this.props;
+    if (!isReactionOpen) handleHoverToggle(id);
   }
 
   handleEditToggle(isEditing = false) {
     this.setState({ isEditing });
   }
 
-  render() {
-    const { message, author, ...props } = this.props;
-    const { isMouseOver, isEditing } = this.state;
-    const authorUrl = author && `${props.match.url}/team/${author.slug}`;
+  hasHover() {
+    const { message: { id }, isReactionModalOpen, isMouseOver } = this.props;
+    return id === isMouseOver && !isReactionModalOpen;
+  }
 
-    if (!message) {
-      return null;
-    }
+  render() {
+    const {
+      message,
+      author,
+      match,
+      updateMessageRequest,
+      reactions,
+      threadLastUpdate,
+      isSingleMessage,
+    } = this.props;
+    const { isEditing } = this.state;
+    const authorUrl = author && `${match.url}/team/${author.slug}`;
+
+    if (!message) return null;
+
+    let msgClassName = 'Message';
+    if (isEditing) msgClassName += ' Message--editing';
+    if (this.hasHover() && !isEditing) msgClassName += ' Message--hover';
 
     return (
       <div
-        className={`Message ${isEditing ? 'Message--editing' : ''} ${isMouseOver && !isEditing ? 'Message--hover' : ''}`}
-        onMouseEnter={this.handleHoverToggle(true)}
-        onMouseLeave={this.handleHoverToggle(false)}
+        className={msgClassName}
+        onMouseEnter={this.handleMouseOver}
+        onMouseLeave={this.handleMouseOver}
         role="listitem"
       >
-        <Avatar baseUrl={props.match.url} author={author} />
+        <Avatar baseUrl={match.url} author={author} />
         <div className="Message__body">
           <MessageHoverMenuContainer
-            isMouseOver={isMouseOver}
+            hasHover={this.hasHover()}
             isEditing={isEditing}
-            message={message}
             handleEditToggle={this.handleEditToggle}
+            message={message}
           />
           <div className="Message__content">
             <div className="Message__content-meta">
@@ -65,18 +77,18 @@ class Message extends React.Component {
             <MessageContent
               isEditing={isEditing}
               content={message.body}
-              updateMessageRequest={props.updateMessageRequest}
+              updateMessageRequest={updateMessageRequest}
               closeEditor={this.handleEditToggle}
               messageSlug={message.slug}
             />
           </div>
-          {(!props.isSingleMessage || message.parentMessageId) && (
+          {(!isSingleMessage || message.parentMessageId) && (
             <div className="Message__footer">
-              <Reactions reactions={props.reactions} />
+              <Reactions reactions={reactions} />
               <SingleMessageThread
                 message={message}
-                match={props.match}
-                threadLastUpdate={props.threadLastUpdate}
+                match={match}
+                threadLastUpdate={threadLastUpdate}
               />
             </div>
           )}

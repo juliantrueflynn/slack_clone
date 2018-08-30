@@ -1,4 +1,4 @@
-.Btn-group__msg-hover-menu {
+.MessageHoverMenu {
   background-color: #FFF;
   border: 0.5px solid rgba(0,0,0,0.18);
   border-radius: 3px;
@@ -10,19 +10,19 @@
   right: 16px;
 }
 
-.MessageThread .Btn-group__msg-hover-menu {
+.MessageThread .MessageHoverMenu {
   top: 10px;
   right: 10px;
 }
 
-.Btn-group__msg-hover-menu:hover {
+.MessageHoverMenu:hover {
   -webkit-box-shadow: 0px 0.5px 1px -0.5px rgba(0,0,0,0.33);
   -moz-box-shadow: 0px 0.5px 1px -0.5px rgba(0,0,0,0.33);
   box-shadow: 0px 0.5px 1px -0.5px rgba(0,0,0,0.33);
   border-color: rgba(0,0,0,0.28);
 }
 
-.Btn-group__msg-hover-menu .Btn {
+.MessageHoverMenu > .Btn {
   border-width: 0;
   padding: 3px 6px;
   font-size: 14px;
@@ -30,11 +30,11 @@
   border-right: 0.5px solid rgba(0,0,0,0.18);
 }
 
-.Btn-group__msg-hover-menu .Btn:last-child {
+.MessageHoverMenu > .Btn:last-child {
   border-right: 0;
 }
 
-.Btn-group__msg-hover-menu .Btn:hover {
+.MessageHoverMenu > .Btn:hover {
   color: #0576B9;
 }
 

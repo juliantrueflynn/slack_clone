@@ -9,6 +9,7 @@ import {
   selectCurrentUserId,
 } from '../reducers/selectors';
 import { readUpdate } from '../actions/readActions';
+import { modalClose } from '../actions/interactiveActions';
 
 const mapStateToProps = (state, { match: { params } }) => ({
   messages: selectParentMessages(state),
@@ -24,12 +25,14 @@ const mapStateToProps = (state, { match: { params } }) => ({
   dmUsernames: selectDmUsernamesBySlug(state, params.channelSlug, false),
   isChatSub: isUserChatSub(state),
   currentUserId: selectCurrentUserId(state),
+  isReactionModalOpen: state.ui.displayModal && state.ui.displayModal.modalType === 'MODAL_REACTION',
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchChannelRequest: channelSlug => dispatch(fetchChannel.request(channelSlug)),
   createChannelSubRequest: channelSub => dispatch(createChannelSub.request(channelSub)),
   readUpdateRequest: readableId => dispatch(readUpdate.request(readableId, 'Channel')),
+  modalClose: () => dispatch(modalClose()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChannelPage);

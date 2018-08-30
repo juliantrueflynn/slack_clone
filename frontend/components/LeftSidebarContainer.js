@@ -30,7 +30,7 @@ const mapStateToProps = (state, { match: { params: { workspaceSlug, channelSlug 
 
 const mapDispatchToProps = dispatch => ({
   fetchChannelsRequest: workspaceSlug => dispatch(fetchChannels.request(workspaceSlug)),
-  modalOpen: modalType => dispatch(modalOpen(modalType)),
+  modalOpen: modal => dispatch(modalOpen(modal)),
   createChannelRequest: channel => dispatch(createChannel.request(channel)),
   updateChannelSubRequest: channelSub => dispatch(updateChannelSub.request(channelSub)),
 });

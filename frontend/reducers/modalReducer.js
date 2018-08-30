@@ -5,7 +5,7 @@ const modalReducer = (state = null, action) => {
 
   switch (action.type) {
     case MODAL_OPEN:
-      return action.modalType;
+      return action.modal;
     case CHANNEL.SHOW.RECEIVE:
     case MODAL_CLOSE:
       return null;
