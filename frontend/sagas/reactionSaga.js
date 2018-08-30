@@ -1,21 +1,36 @@
-import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
+import {
+  all,
+  call,
+  fork,
+  put,
+  select,
+  takeLatest,
+} from 'redux-saga/effects';
 import * as actions from '../actions/reactionActions';
 import { REACTION } from '../actions/actionTypes';
 import { apiCreate, apiDelete } from '../util/apiUtil';
-
-function* fetchCreateReaction({ reaction }) {
-  try {
-    yield call(apiCreate, 'reactions', reaction);
-  } catch (error) {
-    yield put(actions.createReaction.failure(error));
-  }
-}
+import { selectReactionByMessageEmoji } from '../reducers/selectors';
 
 function* fetchDeleteReaction({ id }) {
   try {
     yield call(apiDelete, `reactions/${id}`);
   } catch (error) {
     yield put(actions.deleteReaction.failure(error));
+  }
+}
+
+function* fetchCreateReaction({ reaction }) {
+  try {
+    const reactionExists = yield select(selectReactionByMessageEmoji, reaction);
+
+    if (reactionExists) {
+      const { id } = reactionExists;
+      yield fetchDeleteReaction({ id });
+    } else {
+      yield call(apiCreate, 'reactions', reaction);
+    }
+  } catch (error) {
+    yield put(actions.createReaction.failure(error));
   }
 }
 

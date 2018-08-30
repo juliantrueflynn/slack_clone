@@ -1,12 +1,12 @@
-.reactions {
+.Reactions {
   display: flex;
   flex-direction: row;
 }
 
-.reactions__item {
+.Reactions__item {
   margin-right: 5px;
 }
 
-.reactions__item:last-child {
+.Reactions__item:last-child {
   margin-right: 0;
 }

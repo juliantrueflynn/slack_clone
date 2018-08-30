@@ -1,4 +1,9 @@
-import { MODAL_OPEN, MODAL_CLOSE, CHANNEL } from '../actions/actionTypes';
+import {
+  MODAL_OPEN,
+  MODAL_CLOSE,
+  CHANNEL,
+  REACTION,
+} from '../actions/actionTypes';
 
 const modalReducer = (state = null, action) => {
   Object.freeze(state);
@@ -6,6 +11,7 @@ const modalReducer = (state = null, action) => {
   switch (action.type) {
     case MODAL_OPEN:
       return action.modal;
+    case REACTION.CREATE.RECEIVE:
     case CHANNEL.SHOW.RECEIVE:
     case MODAL_CLOSE:
       return null;

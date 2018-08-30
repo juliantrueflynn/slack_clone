@@ -7,6 +7,7 @@ import {
   selectDmUsernamesBySlug,
   isUserChatSub,
   selectCurrentUserId,
+  isModalOpen,
 } from '../reducers/selectors';
 import { readUpdate } from '../actions/readActions';
 import { modalClose } from '../actions/interactiveActions';
@@ -25,7 +26,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
   dmUsernames: selectDmUsernamesBySlug(state, params.channelSlug, false),
   isChatSub: isUserChatSub(state),
   currentUserId: selectCurrentUserId(state),
-  isReactionModalOpen: state.ui.displayModal && state.ui.displayModal.modalType === 'MODAL_REACTION',
+  isReactionModalOpen: isModalOpen(state, 'MODAL_REACTION'),
 });
 
 const mapDispatchToProps = dispatch => ({

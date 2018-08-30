@@ -7,6 +7,6 @@ export const createReaction = {
 };
 
 export const deleteReaction = {
-  request: reactionId => actionCreator(REACTION.SHOW.REQUEST, { reactionId }),
+  request: id => actionCreator(REACTION.SHOW.REQUEST, { id }),
   failure: errors => actionCreator(REACTION.SHOW.FAILURE, { errors }),
 };

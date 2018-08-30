@@ -4,12 +4,13 @@ import MessageHoverMenu from './MessageHoverMenu';
 import { deleteMessage } from '../actions/messageActions';
 import { createFavorite, deleteFavorite } from '../actions/favoriteActions';
 import { modalOpen, modalClose } from '../actions/interactiveActions';
+import { isModalOpen } from '../reducers/selectors';
 
 const mapStateToProps = (state, { message }) => ({
   isAuthor: state.session.currentUser.id === message.authorId,
   isFavorited: !!message.favoriteId,
   openThreadSlug: state.ui.displayMessageSlug,
-  isReactionModalOpen: state.ui.displayModal && state.ui.displayModal.modalType === 'MODAL_REACTION',
+  isReactionModalOpen: isModalOpen(state, 'MODAL_REACTION'),
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -100,7 +100,7 @@ class ChannelPage extends React.Component {
               modalClose={modalClose}
             />
             <EmojiModalContainer />
-            {/* <MessageFormContainer placeholder={formPlaceholder} /> */}
+            <MessageFormContainer placeholder={formPlaceholder} />
             <ChannelSubscribe
               title={chatTitle}
               ownerName={ownerName}

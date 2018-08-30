@@ -97,6 +97,15 @@ export const selectChatMembers = ({ entities: { members, channels } }) => (
     }, {})
 );
 
+export const selectModalProps = ({ ui: { displayModal } }) => {
+  if (!displayModal) return {};
+  return displayModal.modalProps;
+};
+
+export const isModalOpen = ({ ui: { displayModal: modal } }, type) => (
+  modal && modal.modalType && modal.modalType === type
+);
+
 export const isUserChatSub = ({ entities, ui, session: { currentUser } }) => {
   const { members, channels } = entities;
   const { displayChannelSlug: chatSlug } = ui;
@@ -175,6 +184,17 @@ export const selectCurrentUserId = ({ session }) => session.currentUser && sessi
 export const selectCurrentUserSlug = ({ session }) => (
   session.currentUser && session.currentUser.slug
 );
+
+export const selectReactionByMessageEmoji = (state, { messageId, emoji }) => {
+  const { entities: { reactions }, session: { currentUser } } = state;
+  const filtered = values(reactions).filter(reaction => (
+    reaction.userId === currentUser.id
+    && reaction.messageId === messageId
+    && reaction.emoji === emoji
+  ));
+
+  return !filtered.length ? null : filtered[0];
+};
 
 export const getReactionCounts = ({ entities: { reactions } }, messageId) => (
   values(reactions)

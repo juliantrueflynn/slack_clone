@@ -38,6 +38,7 @@ class Message extends React.Component {
       reactions,
       threadLastUpdate,
       isSingleMessage,
+      createReactionRequest,
     } = this.props;
     const { isEditing } = this.state;
     const authorUrl = author && `${match.url}/team/${author.slug}`;
@@ -84,7 +85,11 @@ class Message extends React.Component {
           </div>
           {(!isSingleMessage || message.parentMessageId) && (
             <div className="Message__footer">
-              <Reactions reactions={reactions} />
+              <Reactions
+                createReactionRequest={createReactionRequest}
+                reactions={reactions}
+                messageId={message.id}
+              />
               <SingleMessageThread
                 message={message}
                 match={match}
