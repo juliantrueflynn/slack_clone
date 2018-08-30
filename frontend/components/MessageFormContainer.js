@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import MessageForm from './MessageForm';
-import { createMessage } from '../../actions/messageActions';
-import { selectChatIdBySlug } from '../../reducers/selectors';
+import { createMessage } from '../actions/messageActions';
+import { selectChatIdBySlug } from '../reducers/selectors';
 
 const mapStateToDispatch = state => ({
   channelId: selectChatIdBySlug(state),

@@ -28,8 +28,12 @@
   padding: 0 2px 0 6px;
 }
 
-.Message--hover {
+.Message:hover {
   background-color: #F9F9F9;
+}
+
+.ChannelPage--reaction .Message:hover {
+  background-color: #FFF;
 }
 
 .Message--editing {
@@ -45,8 +49,4 @@
 .Message__time {
   color: rgba(0,0,0,0.5);
   font-size: .8em;
-}
-
-.reactions { 
-  margin: 0;
 }

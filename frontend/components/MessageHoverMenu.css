@@ -1,13 +1,17 @@
-.MessageHoverMenu {
+.Message .MessageHoverMenu {
   background-color: #FFF;
   border: 0.5px solid rgba(0,0,0,0.18);
   border-radius: 3px;
   padding: 0 3px;
   transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
-  display: flex;
   position: absolute;
   top: -8px;
   right: 16px;
+  display: none;
+}
+
+.Message:hover .MessageHoverMenu {
+  display: flex;
 }
 
 .MessageThread .MessageHoverMenu {

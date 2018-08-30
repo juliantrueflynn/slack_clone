@@ -51,13 +51,12 @@ class MessageHoverMenu extends React.Component {
       isAuthor,
       isFavorited,
       isEditing,
-      hasHover,
       match: { params: { workspaceSlug, channelSlug } },
       message: { slug, parentMessageId },
     } = this.props;
     const baseThreadUrl = `/${workspaceSlug}/${channelSlug}`;
 
-    if (!hasHover || isEditing) return null;
+    if (isEditing) return null;
 
     return (
       <div className="MessageHoverMenu">

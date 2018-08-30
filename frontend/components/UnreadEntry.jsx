@@ -1,10 +1,8 @@
 import React from 'react';
-import MessageContainer from './Message/MessageContainer';
+import MessageContainer from './MessageContainer';
 
 const UnreadEntry = ({ messages, authors }) => {
-  if (!messages) {
-    return null;
-  }
+  if (!messages) return null;
 
   return (
     <div className="unread-channel-entries">

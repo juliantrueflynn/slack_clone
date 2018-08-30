@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Message from './Message';
-import { updateMessage } from '../../actions/messageActions';
-import { deleteReaction, createReaction } from '../../actions/reactionActions';
-import { getReactionCounts, selectThreadLastUpdate } from '../../reducers/selectors';
+import { updateMessage } from '../actions/messageActions';
+import { deleteReaction, createReaction } from '../actions/reactionActions';
+import { getReactionCounts, selectThreadLastUpdate } from '../reducers/selectors';
 
 const mapStateToProps = (state, { message }) => ({
   reactions: message && getReactionCounts(state, message.id),

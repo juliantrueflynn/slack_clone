@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import MessageHoverMenuContainer from '../MessageHoverMenuContainer';
-import Reactions from '../Reactions';
-import Avatar from '../Avatar';
-import MessageContent from '../MessageContent';
+import MessageHoverMenuContainer from './MessageHoverMenuContainer';
+import Reactions from './Reactions';
+import Avatar from './Avatar';
+import MessageContent from './MessageContent';
 import SingleMessageThread from './SingleMessageThread';
 import './Message.css';
 
@@ -12,12 +12,6 @@ class Message extends React.Component {
     super(props);
     this.state = { isEditing: false };
     this.handleEditToggle = this.handleEditToggle.bind(this);
-    this.handleMouseOver = this.handleMouseOver.bind(this);
-  }
-
-  handleMouseOver() {
-    const { message: { id }, isReactionOpen, handleHoverToggle } = this.props;
-    if (!isReactionOpen) handleHoverToggle(id);
   }
 
   handleEditToggle(isEditing = false) {
@@ -47,19 +41,12 @@ class Message extends React.Component {
 
     let msgClassName = 'Message';
     if (isEditing) msgClassName += ' Message--editing';
-    if (this.hasHover() && !isEditing) msgClassName += ' Message--hover';
 
     return (
-      <div
-        className={msgClassName}
-        onMouseEnter={this.handleMouseOver}
-        onMouseLeave={this.handleMouseOver}
-        role="listitem"
-      >
+      <div className={msgClassName} role="listitem">
         <Avatar baseUrl={match.url} author={author} />
         <div className="Message__body">
           <MessageHoverMenuContainer
-            hasHover={this.hasHover()}
             isEditing={isEditing}
             handleEditToggle={this.handleEditToggle}
             message={message}

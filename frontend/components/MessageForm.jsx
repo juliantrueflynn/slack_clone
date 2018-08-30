@@ -1,8 +1,8 @@
 import React from 'react';
-import { convertForSubmit, clearEditor, createEmptyEditor } from '../../util/editorUtil';
-import MessageEditor from '../MessageEditor';
-import Button from '../Button';
-import Form from '../Form';
+import { convertForSubmit, clearEditor, createEmptyEditor } from '../util/editorUtil';
+import MessageEditor from './MessageEditor';
+import Button from './Button';
+import Form from './Form';
 import './MessageForm.css';
 
 class MessageForm extends React.Component {

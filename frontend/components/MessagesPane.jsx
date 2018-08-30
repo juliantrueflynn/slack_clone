@@ -1,6 +1,5 @@
 import React from 'react';
-import ChannelBlurb from './ChannelBlurb';
-import MessageContainer from './Message/MessageContainer';
+import MessageContainer from './MessageContainer';
 import './MessagesPane.css';
 
 class MessagesPane extends React.Component {
@@ -34,7 +33,6 @@ class MessagesPane extends React.Component {
 
   render() {
     const {
-      chatTitle,
       channel,
       users,
       messages,
@@ -50,11 +48,6 @@ class MessagesPane extends React.Component {
         onMouseLeave={this.handleContainerHover}
       >
         <div role="list" ref={this.messagesList} className="MessagesPane__list">
-          <ChannelBlurb
-            title={chatTitle}
-            owner={users[channel.ownerSlug]}
-            createdAt={channel.createdAt}
-          />
           {messages.map(message => (
             <MessageContainer
               key={message.slug}

@@ -4,8 +4,9 @@ import { PageRoutes } from '../util/routeUtil';
 import ChannelHeaderContainer from './ChannelHeaderContainer';
 import MessagesPane from './MessagesPane';
 import EmojiModalContainer from './EmojiModalContainer';
-import MessageFormContainer from './Message/MessageFormContainer';
+import MessageFormContainer from './MessageFormContainer';
 import ChannelSubscribe from './ChannelSubscribe';
+import ChannelBlurb from './ChannelBlurb';
 import './ChannelPage.css';
 
 class ChannelPage extends React.Component {
@@ -83,16 +84,20 @@ class ChannelPage extends React.Component {
     }
     const formPlaceholder = placeholder && `Message ${placeholder}`;
     const ownerName = authors[channel.ownerSlug] && authors[channel.ownerSlug].username;
-    let chatClassNames = 'Channel';
-    if (isReactionModalOpen) chatClassNames += ' Channel--reaction';
+    let chatClassNames = 'ChannelPage';
+    if (isReactionModalOpen) chatClassNames += ' ChannelPage--reaction';
 
     return (
       <div className={chatClassNames}>
         <ChannelHeaderContainer sectionTitle={chatTitle} />
-        <div className="Channel__body">
-          <div className="Channel__container">
+        <div className="ChannelPage__body">
+          <div className="ChannelPage__container">
+            <ChannelBlurb
+              title={chatTitle}
+              owner={authors[channel.ownerSlug]}
+              createdAt={channel.createdAt}
+            />
             <MessagesPane
-              chatTitle={chatTitle}
               messages={messages}
               channel={channel}
               users={authors}

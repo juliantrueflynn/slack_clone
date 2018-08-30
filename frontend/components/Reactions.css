@@ -1,6 +1,7 @@
 .Reactions {
   display: flex;
   flex-direction: row;
+  margin: 0;
 }
 
 .Reactions__item {

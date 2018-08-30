@@ -1,7 +1,7 @@
 import React from 'react';
 import ChannelHeaderContainer from './ChannelHeaderContainer';
-import MessageContainer from './Message/MessageContainer';
-import MessageFormContainer from './Message/MessageFormContainer';
+import MessageContainer from './MessageContainer';
+import MessageFormContainer from './MessageFormContainer';
 import MessageThreadAuthors from './MessageThreadAuthors';
 
 class ThreadsPage extends React.Component {
