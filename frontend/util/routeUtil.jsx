@@ -11,7 +11,7 @@ import SessionForm from '../components/SessionForm';
 import WorkspacePageContainer from '../components/Workspace/WorkspacePageContainer';
 import PageWorkspaceCreate from '../components/PageWorkspaceCreate';
 import ChannelPageContainer from '../components/ChannelPageContainer';
-import MessageThreadContainer from '../components/Message/MessageThreadContainer';
+import MessageThreadContainer from '../components/MessageThreadContainer';
 import UserFavoritesContainer from '../components/UserFavoritesContainer';
 import UserViewContainer from '../components/UserViewContainer';
 import ThreadsPageContainer from '../components/ThreadsPageContainer';

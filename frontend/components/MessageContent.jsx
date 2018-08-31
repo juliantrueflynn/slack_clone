@@ -13,7 +13,19 @@ class MessageContent extends React.Component {
     this.handleEditSubmit = this.handleEditSubmit.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    const { content } = this.props;
+
+    if (prevProps.content !== content) {
+      this.setEditorState(mountEditorState(content));
+    }
+  }
+
   onChange(editorState) {
+    this.setEditorState(editorState);
+  }
+
+  setEditorState(editorState) {
     this.setState({ editorState });
   }
 
