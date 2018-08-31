@@ -27,7 +27,7 @@ class EmojiModal extends React.Component {
 
     const { clickPos } = modalProps;
     let pos = clickPos - 343;
-    if (pos - 70 < 0) pos = 60;
+    if (pos - 40 < 0) pos = 10;
     const style = { top: `${pos}px` };
 
     return (

@@ -1,27 +1,17 @@
 import React from 'react';
+import EmojiModalContainer from './EmojiModalContainer';
 import MessageContainer from './MessageContainer';
+import ChannelBlurb from './ChannelBlurb';
 import './MessagesPane.css';
 
 class MessagesPane extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isMouseOver: -1 };
     this.messagesList = React.createRef();
-    this.handleHoverToggle = this.handleHoverToggle.bind(this);
-    this.handleContainerHover = this.handleContainerHover.bind(this);
   }
 
   componentDidUpdate() {
     this.scrollToBottom();
-  }
-
-  handleHoverToggle(isMouseOver) {
-    this.setState({ isMouseOver });
-  }
-
-  handleContainerHover() {
-    const { isReactionModalOpen } = this.state;
-    if (!isReactionModalOpen) this.setState({ isMouseOver: -1 });
   }
 
   scrollToBottom() {
@@ -33,29 +23,30 @@ class MessagesPane extends React.Component {
 
   render() {
     const {
-      channel,
       users,
       messages,
-      isReactionModalOpen,
+      channel,
+      isInSidebar,
     } = this.props;
-    const { isMouseOver } = this.state;
 
-    if (!channel) return null;
+    if (!messages) return null;
 
     return (
-      <div
-        className="MessagesPane"
-        onMouseLeave={this.handleContainerHover}
-      >
+      <div className="MessagesPane">
+        <EmojiModalContainer />
         <div role="list" ref={this.messagesList} className="MessagesPane__list">
+          {isInSidebar || (
+            <ChannelBlurb
+              title={channel.title}
+              owner={users[channel.ownerSlug]}
+              createdAt={channel.createdAt}
+            />
+          )}
           {messages.map(message => (
             <MessageContainer
               key={message.slug}
               author={users[message.authorSlug]}
               message={message}
-              handleHoverToggle={this.handleHoverToggle}
-              isMouseOver={isMouseOver}
-              isReactionOpen={isReactionModalOpen}
             />
           ))}
         </div>

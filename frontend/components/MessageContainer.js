@@ -3,11 +3,12 @@ import { withRouter } from 'react-router-dom';
 import Message from './Message';
 import { updateMessage } from '../actions/messageActions';
 import { deleteReaction, createReaction } from '../actions/reactionActions';
-import { getReactionCounts, selectThreadLastUpdate } from '../reducers/selectors';
+import { getReactionCounts, selectThreadLastUpdate, isModalOpen } from '../reducers/selectors';
 
 const mapStateToProps = (state, { message }) => ({
   reactions: message && getReactionCounts(state, message.id),
   threadLastUpdate: message && message.thread && selectThreadLastUpdate(state, message.thread),
+  isReactionModalOpen: isModalOpen(state, 'MODAL_REACTION'),
 });
 
 const mapDispatchToProps = dispatch => ({

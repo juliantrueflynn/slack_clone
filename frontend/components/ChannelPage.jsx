@@ -3,10 +3,8 @@ import { Redirect } from 'react-router-dom';
 import { PageRoutes } from '../util/routeUtil';
 import ChannelHeaderContainer from './ChannelHeaderContainer';
 import MessagesPane from './MessagesPane';
-import EmojiModalContainer from './EmojiModalContainer';
 import MessageFormContainer from './MessageFormContainer';
 import ChannelSubscribe from './ChannelSubscribe';
-import ChannelBlurb from './ChannelBlurb';
 import './ChannelPage.css';
 
 class ChannelPage extends React.Component {
@@ -24,10 +22,16 @@ class ChannelPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { channelSlug, fetchChannelRequest, ...props } = this.props;
+    const {
+      channelSlug,
+      channel,
+      fetchChannelRequest,
+      readUpdateRequest,
+    } = this.props;
+
     if (channelSlug !== prevProps.channelSlug) {
       fetchChannelRequest(channelSlug);
-      if (props.channel) props.readUpdateRequest(props.channel.id);
+      if (channel) readUpdateRequest(channel.id);
     }
   }
 
@@ -47,7 +51,6 @@ class ChannelPage extends React.Component {
       currentUserId,
       createChannelSubRequest,
       isReactionModalOpen,
-      modalClose,
     } = this.props;
 
     if (!channel) return null;
@@ -76,6 +79,10 @@ class ChannelPage extends React.Component {
       return (<Redirect to={redirectUrl} />);
     }
 
+    let chatClassNames = 'ChannelPage';
+    if (isReactionModalOpen) chatClassNames += ' ChannelPage--reaction';
+    if (!isExact && rightSidebar) chatClassNames += ' ChannelPage--sidebar-open';
+
     let chatTitle = `#${channel.title}`;
     let placeholder = chatTitle;
     if (channel.hasDm) {
@@ -84,27 +91,17 @@ class ChannelPage extends React.Component {
     }
     const formPlaceholder = placeholder && `Message ${placeholder}`;
     const ownerName = authors[channel.ownerSlug] && authors[channel.ownerSlug].username;
-    let chatClassNames = 'ChannelPage';
-    if (isReactionModalOpen) chatClassNames += ' ChannelPage--reaction';
 
     return (
       <div className={chatClassNames}>
         <ChannelHeaderContainer sectionTitle={chatTitle} />
         <div className="ChannelPage__body">
           <div className="ChannelPage__container">
-            <ChannelBlurb
-              title={chatTitle}
-              owner={authors[channel.ownerSlug]}
-              createdAt={channel.createdAt}
-            />
             <MessagesPane
               messages={messages}
-              channel={channel}
               users={authors}
-              isReactionModalOpen={isReactionModalOpen}
-              modalClose={modalClose}
+              channel={channel}
             />
-            <EmojiModalContainer />
             <MessageFormContainer placeholder={formPlaceholder} />
             <ChannelSubscribe
               title={chatTitle}

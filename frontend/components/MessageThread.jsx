@@ -1,16 +1,33 @@
 import React from 'react';
-import MessageContainer from './MessageContainer';
 import MessageFormContainer from './MessageFormContainer';
 import RightSidebarContainer from './Layout/RightSidebarContainer';
+import MessagesPane from './MessagesPane';
 import './MessageThread.css';
 
 class MessageThread extends React.Component {
+  componentDidMount() {
+    const {
+      message,
+      messageSlug,
+      fetchMessageRequest,
+      readUpdateRequest
+    } = this.props;
+
+    fetchMessageRequest(messageSlug);
+    if (message) readUpdateRequest(message.id);
+  }
+
   componentDidUpdate(prevProps) {
-    const { message, messageSlug, ...props } = this.props;
+    const {
+      message,
+      messageSlug,
+      fetchMessageRequest,
+      readUpdateRequest
+    } = this.props;
 
     if (messageSlug !== prevProps.messageSlug) {
-      props.fetchMessageRequest(messageSlug);
-      if (message) props.readUpdateRequest(message.id);
+      fetchMessageRequest(messageSlug);
+      if (message) readUpdateRequest(message.id);
     }
   }
 
@@ -18,34 +35,22 @@ class MessageThread extends React.Component {
     const {
       message,
       threadMessages,
-      chat,
+      channel,
       authors,
     } = this.props;
-    const chatTitle = chat && `#${chat.title}`;
+    const chatTitle = channel && `#${channel.title}`;
 
     if (!message) return null;
 
     return (
       <RightSidebarContainer sidebarType="Thread" sidebarSubtitle={chatTitle}>
         <div className="MessageThread">
-          <div className="MessageThread__primary">
-            <MessageContainer
-              author={authors[message.authorSlug]}
-              isSingleMessage
-              message={message}
-            />
-          </div>
-          {threadMessages && (
-            <div className="MessageThread__secondary">
-              {threadMessages.map(threadMessage => (
-                <MessageContainer
-                  key={threadMessage.slug}
-                  message={threadMessage}
-                  author={authors[threadMessage.authorSlug]}
-                />
-              ))}
-            </div>
-          )}
+          <MessagesPane
+            messages={threadMessages}
+            users={authors}
+            channel={channel}
+            isInSidebar
+          />
           <MessageFormContainer parentMessageId={message.id} />
         </div>
       </RightSidebarContainer>

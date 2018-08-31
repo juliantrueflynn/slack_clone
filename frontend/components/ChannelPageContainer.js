@@ -10,7 +10,6 @@ import {
   isModalOpen,
 } from '../reducers/selectors';
 import { readUpdate } from '../actions/readActions';
-import { modalClose } from '../actions/interactiveActions';
 
 const mapStateToProps = (state, { match: { params } }) => ({
   messages: selectParentMessages(state),
@@ -33,7 +32,6 @@ const mapDispatchToProps = dispatch => ({
   fetchChannelRequest: channelSlug => dispatch(fetchChannel.request(channelSlug)),
   createChannelSubRequest: channelSub => dispatch(createChannelSub.request(channelSub)),
   readUpdateRequest: readableId => dispatch(readUpdate.request(readableId, 'Channel')),
-  modalClose: () => dispatch(modalClose()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChannelPage);

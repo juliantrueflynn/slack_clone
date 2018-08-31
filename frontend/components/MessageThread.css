@@ -1,11 +1,24 @@
-.MessageThread__primary .Btn__thread {
-  display: none;
+.Sidebar__right--thread .Sidebar__body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
-.MessageThread__primary .Message {
+.MessageThread {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.MessageThread .Message:first-child {
   padding: 10px;
 }
 
-.MessageThread__secondary > .Message {
+.MessageThread .Message:first-child .Btn__thread {
+  display: none;
+}
+
+.MessageThread .Message:not(:first-child) {
   padding: 6px 10px;
 }

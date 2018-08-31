@@ -171,10 +171,19 @@ export const selectThreadLastUpdate = ({ entities: { messages } }, thread) => {
   return messages[lastSlug] ? messages[lastSlug].createdAt : '';
 };
 
+// export const selectThreadFromSlug = ({ entities: { messages }, ui: { displayMessageSlug } }) => {
+//   const message = messages[displayMessageSlug];
+//   if (!message || !message.thread) return [];
+//   return message.thread.map(slug => messages[slug]).filter(msg => msg);
+// };
+
 export const selectThreadFromSlug = ({ entities: { messages }, ui: { displayMessageSlug } }) => {
   const message = messages[displayMessageSlug];
   if (!message || !message.thread) return [];
-  return message.thread.map(slug => messages[slug]).filter(msg => msg);
+  return message.thread.reduce((acc, curr) => {
+    if (messages[curr]) acc.push(messages[curr]);
+    return acc;
+  }, [message]);
 };
 
 export const selectCurrentUser = ({ session: { currentUser } }) => currentUser;
