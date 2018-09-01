@@ -22,7 +22,14 @@ class MessageHoverMenu extends React.Component {
     } = this.props;
 
     if (!isReactionModalOpen) modalClose();
-    const modalProps = { clickPos: e.clientY, messageId };
+
+    const menuNode = e.currentTarget.parentNode;
+    const nodeBounds = menuNode.getBoundingClientRect();
+    const modalProps = {
+      clickPosY: nodeBounds.top,
+      clickPosX: nodeBounds.right,
+      messageId,
+    };
     modalOpen({ modalType: 'MODAL_REACTION', modalProps });
   }
 

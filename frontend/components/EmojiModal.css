@@ -1,7 +1,6 @@
 .EmojiModal {
   z-index: 800;
   position: absolute;
-  right: 30px;
   box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.15);
 }
 

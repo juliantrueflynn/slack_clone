@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { PageRoutes } from '../util/routeUtil';
 import ChannelHeaderContainer from './ChannelHeaderContainer';
+import EmojiModalContainer from './EmojiModalContainer';
 import MessagesPane from './MessagesPane';
 import MessageFormContainer from './MessageFormContainer';
 import ChannelSubscribe from './ChannelSubscribe';
@@ -97,6 +98,7 @@ class ChannelPage extends React.Component {
         <ChannelHeaderContainer sectionTitle={chatTitle} />
         <div className="ChannelPage__body">
           <div className="ChannelPage__container">
+            <EmojiModalContainer />
             <MessagesPane
               messages={messages}
               users={authors}

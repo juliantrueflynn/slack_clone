@@ -1,5 +1,4 @@
 import React from 'react';
-import EmojiModalContainer from './EmojiModalContainer';
 import MessageContainer from './MessageContainer';
 import ChannelBlurb from './ChannelBlurb';
 import './MessagesPane.css';
@@ -33,13 +32,13 @@ class MessagesPane extends React.Component {
 
     return (
       <div className="MessagesPane">
-        <EmojiModalContainer />
         <div role="list" ref={this.messagesList} className="MessagesPane__list">
           {isInSidebar || (
             <ChannelBlurb
               title={channel.title}
               owner={users[channel.ownerSlug]}
               createdAt={channel.createdAt}
+              isInSidebar={isInSidebar}
             />
           )}
           {messages.map(message => (
