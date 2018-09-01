@@ -13,9 +13,9 @@ class Api::ChannelSubsController < ApplicationController
 
   def update
     if @channel_sub.update(channel_sub_params)
-      render 'api/channel_subs/show'
+      render json: ['success']
     else
-      render json: @channel.errors.full_messages, status: 422
+      render json: @channel_sub.errors.full_messages, status: 422
     end
   end
 
@@ -34,6 +34,6 @@ class Api::ChannelSubsController < ApplicationController
   end
 
   def channel_sub_params
-    params.require(:channel_sub).permit(:channel_id, :in_sidebar)
+    params.require(:channel_sub).permit(:channel_id, :in_sidebar, :user_id)
   end
 end

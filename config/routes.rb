@@ -2,9 +2,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: :json} do
     resource :session, only: [:create, :destroy, :show]
     resource :user, only: [:create, :update]
-    resources :users, only: [:show] do
-      resources :user_chat_subs, only: [:create, :update, :destroy], param: :chat_id
-    end
+    resources :users, only: [:show]
     resources :user_threads, only: [:index]
     resource :read, only: [:update]
     resources :workspaces, only: [:index, :show, :create, :update, :destroy], param: :slug do
@@ -12,7 +10,7 @@ Rails.application.routes.draw do
       resources :favorites, only: [:index]
     end
     resources :workspace_subs, only: [:create, :destroy]
-    get 'workspace/:workspace_id/user_unreads', to: 'user_unreads#index'
+    resources :sidebar_channel_subs, only: [:update]
     resource :dm_chat, only: [:create]
     resources :channels, only: [:show, :create, :update, :destroy], param: :slug
     resources :channel_subs, only: [:create, :update, :destroy], param: :channel_id

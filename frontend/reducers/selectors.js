@@ -43,9 +43,14 @@ export const selectUnsubbedChats = ({ entities: { channels, members, channelSubs
   return values(channels).filter(ch => !subbedChatSlugs.includes(ch.slug) && !ch.hasDm);
 };
 
-export const selectChatSubById = ({ entities: { channelSubs } }, id) => (
-  channelSubs && channelSubs[id]
-);
+export const selectOtherDmSub = ({ entities: { channelSubs }, session }, chatSubs) => {
+  const { currentUser: { id: userId } } = session;
+  const otherUserSubId = chatSubs.filter(subId => (
+    channelSubs[subId] && channelSubs[subId].userId !== userId
+  ));
+
+  return otherUserSubId.length ? channelSubs[otherUserSubId[0]] : null;
+};
 
 export const selectDmChats = ({ entities: { channels, channelSubs, members }, session }) => {
   const { currentUser } = session;
@@ -170,12 +175,6 @@ export const selectThreadLastUpdate = ({ entities: { messages } }, thread) => {
   const lastSlug = thread[thread.length - 1];
   return messages[lastSlug] ? messages[lastSlug].createdAt : '';
 };
-
-// export const selectThreadFromSlug = ({ entities: { messages }, ui: { displayMessageSlug } }) => {
-//   const message = messages[displayMessageSlug];
-//   if (!message || !message.thread) return [];
-//   return message.thread.map(slug => messages[slug]).filter(msg => msg);
-// };
 
 export const selectThreadFromSlug = ({ entities: { messages }, ui: { displayMessageSlug } }) => {
   const message = messages[displayMessageSlug];

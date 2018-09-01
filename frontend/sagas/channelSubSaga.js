@@ -9,7 +9,7 @@ import {
 import { CHANNEL_SUB, MESSAGE, CHANNEL } from '../actions/actionTypes';
 import { deleteChannelSub, createChannelSub, updateChannelSub } from '../actions/channelActions';
 import { apiCreate, apiDelete, apiUpdate } from '../util/apiUtil';
-import { selectChatBySlug, selectChatSubById, selectCurrentUserSlug } from '../reducers/selectors';
+import { selectChatBySlug, selectOtherDmSub, selectCurrentUserSlug } from '../reducers/selectors';
 
 function* fetchCreate({ channelSub }) {
   try {
@@ -46,11 +46,10 @@ function* fetchChannelShow({ channel: { channel, subs } }) {
 function* fetchDmChatMessage({ message }) {
   try {
     const chat = yield select(selectChatBySlug, message.channelSlug);
-    const sub = yield select(selectChatSubById, chat.subs);
+    const sub = yield select(selectOtherDmSub, chat.subs);
 
-    if (!sub.inSidebar) {
-      const channelSub = { channelId: chat.id, inSidebar: true };
-      yield fetchUpdate({ channelSub });
+    if (!sub.inSidebar && chat.hasDm) {
+      yield call(apiUpdate, `sidebar_channel_subs/${sub.id}`);
     }
   } catch (error) {
     yield put(updateChannelSub.failure(error));

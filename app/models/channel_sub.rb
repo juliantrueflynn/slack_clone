@@ -15,6 +15,7 @@ class ChannelSub < ApplicationRecord
 
   after_create_commit :broadcast_create_sub
   after_create_commit :generate_read
+  after_update_commit :broadcast_update
   after_destroy :broadcast_destroy
 
   private
