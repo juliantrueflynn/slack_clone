@@ -34,12 +34,14 @@ class Message extends React.Component {
       isSingleMessage,
       createReactionRequest,
       users,
+      threadUsers,
+      isInSidebar,
     } = this.props;
     const { isEditing } = this.state;
-    const authorUrl = author && `${match.url}/team/${author.slug}`;
 
     if (!message) return null;
 
+    const authorUrl = author && `${match.url}/team/${author.slug}`;
     let msgClassName = 'Message';
     if (isEditing) msgClassName += ' Message--editing';
 
@@ -82,7 +84,9 @@ class Message extends React.Component {
               <SingleMessageThread
                 message={message}
                 match={match}
+                threadUsers={threadUsers}
                 threadLastUpdate={threadLastUpdate}
+                isInSidebar={isInSidebar}
               />
             </div>
           )}

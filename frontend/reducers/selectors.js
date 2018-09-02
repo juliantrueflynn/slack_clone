@@ -176,13 +176,24 @@ export const selectThreadLastUpdate = ({ entities: { messages } }, thread) => {
   return messages[lastSlug] ? messages[lastSlug].createdAt : '';
 };
 
-export const selectThreadFromSlug = ({ entities: { messages }, ui: { displayMessageSlug } }) => {
-  const message = messages[displayMessageSlug];
+export const selectThreadFromSlug = ({ entities: { messages }, ui }, messageSlug) => {
+  const msgSlug = messageSlug || ui.displayMessageSlug;
+  const message = messages[msgSlug];
   if (!message || !message.thread) return [];
   return message.thread.reduce((acc, curr) => {
     if (messages[curr]) acc.push(messages[curr]);
     return acc;
   }, [message]);
+};
+
+export const selectThreadMembers = (state, messageSlug) => {
+  const thread = selectThreadFromSlug(state, messageSlug);
+
+  if (!thread) return [];
+
+  const { entities: { members } } = state;
+  return thread.map(msg => members[msg.authorSlug])
+    .filter((user, i, self) => self.indexOf(user) === i);
 };
 
 export const selectCurrentUser = ({ session: { currentUser } }) => currentUser;

@@ -1,15 +1,24 @@
-.thread-meta {
+.SingleMessageThread {
   font-size: small;
   text-decoration: none;
   padding: 2px 0;
+  margin: 3px -4px 0;
 }
 
-.thread-meta__link {
+.SingleMessageThread__link {
   display: block;
   padding: 3px 4px;
+  border: 1px solid;
+  border-color: transparent;
+  border-radius: 3px;
+  transition: border-color ease-in-out .2s;
 }
 
-.thread-meta__items {
+.SingleMessageThread__link:hover {
+  border-color: #e8e8e8;
+}
+
+.SingleMessageThread__items {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -17,21 +26,30 @@
   -webkit-box-direction: normal;
   -ms-flex-direction: row;
   flex-direction: row;
-  margin-top: 3px;
 }
 
-.thread-meta__items .thread-meta__item {
+.SingleMessageThread__avatars .Avatar {
+  margin-right: 3px;
+}
+
+.SingleMessageThread__avatars .Avatar:last-child {
+  margin-right: 0;
+}
+
+.SingleMessageThread__items .SingleMessageThread__item {
   margin-left: 6px;
+  display: flex;
+  align-items: center;
 }
 
-.thread-meta__items .thread-meta__item:first-child {
+.SingleMessageThread__items .SingleMessageThread__item:first-child {
   margin-left: 0;
 }
 
-.thread-meta .thread-meta__counter:hover {
+.SingleMessageThread .SingleMessageThread__counter:hover {
   text-decoration: underline;
 }
 
-.thread-meta__date {
+.SingleMessageThread__date {
   color: rgba(0,0,0,.5);
 }

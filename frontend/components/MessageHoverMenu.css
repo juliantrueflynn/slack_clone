@@ -18,8 +18,13 @@
   display: none;
 }
 
-.MessageThread .MessageHoverMenu {
+.MessageThread .Message:first-child .MessageHoverMenu {
   top: 10px;
+  right: 10px;
+}
+
+.MessageThread .Message:not(:first-child) .MessageHoverMenu {
+  top: -5px;
   right: 10px;
 }
 

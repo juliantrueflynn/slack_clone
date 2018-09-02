@@ -1,4 +1,4 @@
-.Avatar {
+.Message > .Avatar {
   padding: 0 2px;
 }
 
@@ -10,4 +10,5 @@
 
 .Avatar__image {
   display: block;
+  border-radius: 3px;
 }

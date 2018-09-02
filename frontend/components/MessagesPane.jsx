@@ -46,6 +46,8 @@ class MessagesPane extends React.Component {
               key={message.slug}
               author={users[message.authorSlug]}
               message={message}
+              users={users}
+              isInSidebar={isInSidebar}
             />
           ))}
         </div>
