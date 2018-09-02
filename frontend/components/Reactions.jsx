@@ -1,7 +1,7 @@
 import React from 'react';
 import Emojify from 'react-emojione';
-import './Reactions.css';
 import Button from './Button';
+import './Reactions.css';
 
 class Reactions extends React.Component {
   constructor(props) {
@@ -14,24 +14,39 @@ class Reactions extends React.Component {
     createReactionRequest({ emoji, messageId });
   }
 
+  itemClassNames(emoji) {
+    const { reactions } = this.props;
+    let classNames = 'Reactions__item';
+    if (reactions[emoji].hasCurrentUser) classNames += ' Reactions__item--has-user';
+
+    return classNames;
+  }
+
   render() {
     const { reactions } = this.props;
     const emojiNames = Object.keys(reactions);
 
-    if (!emojiNames) return null;
+    if (!emojiNames || !emojiNames.length) return null;
+
+    const emojiStyle = {
+      height: 17,
+      width: 17,
+      top: 0,
+      display: 'block',
+    };
 
     return (
       <ul className="Reactions">
         {emojiNames.map(emoji => (
-          <li className="Reactions__item" key={emoji}>
-            <div className="Reactions__badge">
-              <Button buttonFor="reaction" unStyled onClick={() => this.handleClick(emoji)}>
-                <Emojify style={{ height: 17, width: 17 }}>
-                  {`:${emoji}:`}
-                </Emojify>
-                {reactions[emoji].length}
-              </Button>
-            </div>
+          <li className={this.itemClassNames(emoji)} key={emoji}>
+            <Button buttonFor="reaction" unStyled onClick={() => this.handleClick(emoji)}>
+              <Emojify style={emojiStyle} className="Reactions__emoji">
+                {`:${emoji}:`}
+              </Emojify>
+              <div className="Reactions__counter">
+                {reactions[emoji].users.length}
+              </div>
+            </Button>
           </li>
         ))}
       </ul>

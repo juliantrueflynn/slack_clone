@@ -33,7 +33,7 @@ class EmojiModal extends React.Component {
 
     return (
       <div className="EmojiModal" style={style}>
-        <EmojiPicker onEmojiClick={this.handleClick} />
+        <EmojiPicker onEmojiClick={this.handleClick} disableDiversityPicker />
       </div>
     );
   }

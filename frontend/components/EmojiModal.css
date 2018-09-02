@@ -11,3 +11,7 @@
 .ChannelPage--reaction .MessageHoverMenu > .Btn {
   display: none;
 }
+
+.emoji-picker .emoji {
+  padding: 15.1px;
+}

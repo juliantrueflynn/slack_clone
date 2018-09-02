@@ -33,6 +33,7 @@ class Message extends React.Component {
       threadLastUpdate,
       isSingleMessage,
       createReactionRequest,
+      users,
     } = this.props;
     const { isEditing } = this.state;
     const authorUrl = author && `${match.url}/team/${author.slug}`;
@@ -76,6 +77,7 @@ class Message extends React.Component {
                 createReactionRequest={createReactionRequest}
                 reactions={reactions}
                 messageId={message.id}
+                users={users}
               />
               <SingleMessageThread
                 message={message}

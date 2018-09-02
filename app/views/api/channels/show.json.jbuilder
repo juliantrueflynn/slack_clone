@@ -27,9 +27,10 @@ json.favorites do
 end
 
 json.reactions do
-  json.array! @channel.reactions.includes(:message) do |reaction|
+  json.array! @channel.reactions.includes(:message, :user) do |reaction|
     json.(reaction, :id, :message_id, :user_id, :emoji)
     json.message_slug reaction.message.slug
+    json.user_slug reaction.user.slug
   end
 end
 

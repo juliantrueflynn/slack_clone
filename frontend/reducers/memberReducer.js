@@ -17,11 +17,22 @@ const memberReducer = (state = {}, action) => {
       nextState = members.reduce((acc, curr) => {
         acc[curr.slug] = curr;
         acc[curr.slug].subs = [];
+        acc[curr.slug].reactions = [];
         return acc;
       }, {});
 
       subs.forEach((sub) => {
         nextState[sub.userSlug].subs.push(sub.id);
+      });
+
+      return nextState;
+    }
+    case CHANNEL.SHOW.RECEIVE: {
+      const { channel: { reactions } } = action;
+
+      nextState = Object.assign({}, state);
+      reactions.forEach(({ id, userSlug }) => {
+        if (nextState[userSlug]) nextState[userSlug].reactions.push(id);
       });
 
       return nextState;

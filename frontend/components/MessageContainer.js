@@ -6,7 +6,7 @@ import { deleteReaction, createReaction } from '../actions/reactionActions';
 import { getReactionCounts, selectThreadLastUpdate, isModalOpen } from '../reducers/selectors';
 
 const mapStateToProps = (state, { message }) => ({
-  reactions: message && getReactionCounts(state, message.id),
+  reactions: message && getReactionCounts(state, message.slug),
   threadLastUpdate: message && message.thread && selectThreadLastUpdate(state, message.thread),
   isReactionModalOpen: isModalOpen(state, 'MODAL_REACTION'),
 });

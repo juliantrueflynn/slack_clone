@@ -204,12 +204,16 @@ export const selectReactionByMessageEmoji = (state, { messageId, emoji }) => {
   return !filtered.length ? null : filtered[0];
 };
 
-export const getReactionCounts = ({ entities: { reactions } }, messageId) => (
-  values(reactions)
-    .filter(reaction => reaction.messageId === messageId)
+export const getReactionCounts = ({ entities: { reactions }, session }, messageSlug) => {
+  const { currentUser } = session;
+
+  return values(reactions)
+    .filter(reaction => reaction.messageSlug === messageSlug)
     .reduce((acc, { emoji, userId }) => {
-      if (!acc[emoji]) acc[emoji] = [userId];
-      if (!acc[emoji].includes(userId)) acc[emoji].push(userId);
+      if (!acc[emoji]) acc[emoji] = { users: [] };
+      acc[emoji].users.push(userId);
+      acc[emoji].hasCurrentUser = userId === currentUser.id;
+
       return acc;
-    }, {})
-);
+    }, {});
+};

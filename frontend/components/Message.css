@@ -13,6 +13,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-left: 6px;
 }
 
 .Message__content-meta {
@@ -25,7 +26,7 @@
 }
 
 .Message__content {
-  padding: 0 2px 0 6px;
+  padding-right: 2px;
 }
 
 .Message:hover {
