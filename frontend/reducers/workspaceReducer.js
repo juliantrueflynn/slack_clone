@@ -1,12 +1,30 @@
-import { WORKSPACE } from '../actions/actionTypes';
+import { WORKSPACE, WORKSPACE_SUB } from '../actions/actionTypes';
 
 const workspaceReducer = (state = {}, action) => {
   Object.freeze(state);
 
   let nextState;
   switch (action.type) {
-    case WORKSPACE.INDEX.RECEIVE:
-      return Object.assign({}, state, action.workspaces);
+    case WORKSPACE.INDEX.RECEIVE: {
+      const { workspaces: { workspaces, subs } } = action;
+
+      nextState = workspaces;
+      Object.values(workspaces).forEach(({ slug, ownerSlug }) => {
+        nextState[slug].subs = [ownerSlug];
+        nextState[slug].isOwner = false;
+        nextState[slug].isSub = false;
+      });
+
+      subs.forEach(({ workspaceSlug, userSlug }) => {
+        if (!subs.includes(userSlug)) {
+          nextState[workspaceSlug].subs.push(userSlug);
+          nextState[workspaceSlug].isOwner = true;
+          nextState[workspaceSlug].isSub = true;
+        }
+      });
+
+      return nextState;
+    }
     case WORKSPACE.SHOW.RECEIVE: {
       const { workspace: { workspace } } = action;
       nextState = { [workspace.slug]: workspace };
@@ -24,6 +42,18 @@ const workspaceReducer = (state = {}, action) => {
       nextState = Object.assign({}, state);
       delete nextState[action.workspaceSlug];
       return nextState;
+    case WORKSPACE_SUB.CREATE.RECEIVE: {
+      const { workspaceSub: { workspaceSlug } } = action;
+      nextState = Object.assign({}, state);
+      nextState[workspaceSlug].isSub = true;
+      return nextState;
+    }
+    case WORKSPACE_SUB.DESTROY.RECEIVE: {
+      const { workspaceSub: { workspaceSlug } } = action;
+      nextState = Object.assign({}, state);
+      nextState[workspaceSlug].isSub = false;
+      return nextState;
+    }
     default:
       return state;
   }

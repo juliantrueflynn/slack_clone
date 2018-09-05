@@ -1,4 +1,6 @@
 class UserAppearance < ApplicationRecord
+  attr_accessor :skip_broadcast
+
   validates_presence_of :user_id, :workspace_slug, :status
   validates_uniqueness_of :workspace_slug, scope: :user_id
 
@@ -8,30 +10,19 @@ class UserAppearance < ApplicationRecord
     find_by(workspace_slug: slug)
   end
 
-  def online!
-    new_record? && save
-    self
-  end
-
-  def away!
-    update(status: 'AWAY')
-    self
-  end
-
-  def busy!
-    update(status: 'BUSY')
-    self
+  def broadcast_name
+    "appearance_#{workspace_slug}"
   end
 
   private
 
-  after_create :broadcast
-  after_update :broadcast
-  after_destroy { broadcast('OFFLINE') }
+  after_create_commit { broadcast 'CREATE' }
+  after_update_commit { broadcast 'UPDATE' }
+  after_destroy { broadcast 'DESTROY', 'OFFLINE' }
 
-  def broadcast(new_status = nil)
-    HashDispatcherJob.perform_later channel_name: "workspace_#{workspace_slug}",
-      type: action_type,
+  def broadcast(type, new_status = nil)
+    HashDispatcherJob.perform_later channel_name: "appearance_#{workspace_slug}",
+      type: action_type(type),
       status: new_status || status,
       user_slug: user.slug
   end

@@ -9,11 +9,18 @@ export const selectWorkspaces = ({ entities: { workspaces } }) => (
   values(workspaces).sort((a, b) => workspaces[a.slug].id - workspaces[b.slug].id)
 );
 
+export const selectSubbedWorkspaces = ({ entities: { workspaces } }) => (
+  values(workspaces).filter(workspace => workspace.isSub)
+);
+
 export const selectWorkspaceSlug = state => state.ui.displayWorkspaceSlug;
 
 export const selectSubbedChats = ({ entities, ui, session: { currentUser } }) => {
   const { channels, members, channelSubs } = entities;
   const { displayChannelSlug: chatSlug } = ui;
+
+  if (!currentUser) return [];
+
   const currMember = members[currentUser.slug];
 
   if (!currMember || !currMember.subs) return [];

@@ -8,11 +8,11 @@
   has_many :favorites, through: :user
 
   def broadcast_name
-    "workspace_#{workspace.slug}"
+    "app"
   end
 
   after_create_commit :broadcast_create_sub
-  after_destroy :broadcast_destroy
+  after_destroy :broadcast_destroy_subs
 
   private
 
@@ -22,8 +22,14 @@
   end
 
   def broadcast_create_sub
-    return if user.id === workspace.owner.id
+    return if workspace.channels.empty?
     sub_user_to_default_chats
     broadcast_create
+  end
+
+  def broadcast_destroy_subs
+    workspace.chat_subs.where(user_id: user.id).delete_all
+    workspace.favorites.where(user_id: user.id).delete_all
+    broadcast_destroy
   end
 end

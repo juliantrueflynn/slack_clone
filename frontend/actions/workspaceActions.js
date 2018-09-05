@@ -29,7 +29,7 @@ export const deleteWorkspace = {
 };
 
 export const createWorkspaceSub = {
-  request: workspaceId => actionCreator(WORKSPACE_SUB.CREATE.REQUEST, { workspaceId }),
+  request: workspaceSub => actionCreator(WORKSPACE_SUB.CREATE.REQUEST, { workspaceSub }),
   failure: errors => actionCreator(WORKSPACE_SUB.CREATE.FAILURE, { errors }),
 };
 

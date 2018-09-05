@@ -2,7 +2,7 @@ class Api::WorkspacesController < ApplicationController
   before_action :set_workspace, only: [:show, :update, :destroy]
 
   def index
-    @workspaces = current_user.workspaces
+    @workspaces = Workspace.all
   end
 
   def show

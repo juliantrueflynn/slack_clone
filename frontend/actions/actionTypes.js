@@ -3,8 +3,8 @@ import { actionTypes, apiActions } from '../util/actionsUtil';
 export const SIGN_IN = actionTypes('SIGN_IN');
 export const SIGN_UP = actionTypes('SIGN_UP');
 export const SIGN_OUT = actionTypes('SIGN_OUT');
-export const USER_APPEARANCE = actionTypes('USER_APPEARANCE');
 
+export const USER_APPEARANCE = apiActions('USER_APPEARANCE', ['CREATE', 'UPDATE', 'DESTROY']);
 export const WORKSPACE = apiActions('WORKSPACE', ['INDEX', 'SHOW', 'CREATE', 'UPDATE', 'DESTROY']);
 export const CHANNEL = apiActions('CHANNEL', ['INDEX', 'SHOW', 'CREATE', 'UPDATE', 'DESTROY']);
 export const DM_CHAT = apiActions('DM_CHAT', ['CREATE']);

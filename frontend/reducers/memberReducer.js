@@ -1,3 +1,4 @@
+import merge from 'lodash.merge';
 import {
   WORKSPACE,
   USER_APPEARANCE,
@@ -17,6 +18,7 @@ const memberReducer = (state = {}, action) => {
       nextState = members.reduce((acc, curr) => {
         acc[curr.slug] = curr;
         acc[curr.slug].subs = [];
+        acc[curr.slug].workspaces = [];
         acc[curr.slug].reactions = [];
         return acc;
       }, {});
@@ -25,7 +27,7 @@ const memberReducer = (state = {}, action) => {
         nextState[sub.userSlug].subs.push(sub.id);
       });
 
-      return nextState;
+      return merge({}, nextState);
     }
     case CHANNEL.SHOW.RECEIVE: {
       const { channel: { reactions } } = action;
@@ -64,7 +66,13 @@ const memberReducer = (state = {}, action) => {
 
       return nextState;
     }
-    case USER_APPEARANCE.RECEIVE: {
+    case USER_APPEARANCE.CREATE.RECEIVE: {
+      const { userSlug, status } = action;
+      nextState = Object.assign({}, state);
+      nextState[userSlug].status = status;
+      return nextState;
+    }
+    case USER_APPEARANCE.DESTROY.RECEIVE: {
       const { userSlug, status } = action;
       nextState = Object.assign({}, state);
       nextState[userSlug].status = status;

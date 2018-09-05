@@ -9,7 +9,8 @@ Rails.application.routes.draw do
       resources :channels, only: [:index]
       resources :favorites, only: [:index]
     end
-    resources :workspace_subs, only: [:create, :destroy]
+    resource :user_appearance, only: [:create, :destroy]
+    resources :workspace_subs, only: [:create, :destroy], param: :workspace_id
     resources :sidebar_channel_subs, only: [:update]
     resource :dm_chat, only: [:create]
     resources :channels, only: [:show, :create, :update, :destroy], param: :slug

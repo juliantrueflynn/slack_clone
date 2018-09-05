@@ -14,10 +14,7 @@ const Root = ({ store }) => (
   <Provider store={store}>
     <ActionCableProvider url={cable}>
       <Router basename="/" history={history}>
-        <App
-          dispatch={store.dispatch}
-          currentUser={store.getState().session.currentUser}
-        />
+        <App />
       </Router>
     </ActionCableProvider>
   </Provider>

@@ -10,6 +10,7 @@ import favoriteSaga from './favoriteSaga';
 import navigateSaga from './navigateSaga';
 import reactionSaga from './reactionSaga';
 import readSaga from './readSaga';
+import userAppearanceSaga from './userAppearanceSaga';
 
 export default function* root() {
   yield all([
@@ -24,5 +25,6 @@ export default function* root() {
     fork(favoriteSaga),
     fork(reactionSaga),
     fork(readSaga),
+    fork(userAppearanceSaga),
   ]);
 }
