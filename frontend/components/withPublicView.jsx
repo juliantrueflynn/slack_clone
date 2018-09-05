@@ -5,11 +5,15 @@ import { signOut, signUp, signIn } from '../actions/sessionActions';
 import { fetchWorkspaces } from '../actions/workspaceActions';
 import Menu from './Menu';
 import Dropdown from './Dropdown';
+import withActionCable from './withActionCable';
+import { selectSubbedWorkspaces } from '../reducers/selectors';
 import './WithPublicView.css';
 
 const mapStateToProps = state => ({
   isLoggedIn: !!state.session.currentUser,
   workspaces: Object.values(state.entities.workspaces),
+  subbedWorkspaces: selectSubbedWorkspaces(state),
+  currentUser: state.session.currentUser,
 });
 
 const mapDispatchToProps = (dispatch, { location }) => ({
@@ -32,25 +36,33 @@ const withPublicView = (WrappedComponent) => {
     }
 
     render() {
-      const { signOutRequest, isLoggedIn, ...props } = this.props;
+      const {
+        signOutRequest,
+        isLoggedIn,
+        subbedWorkspaces,
+        ...props
+      } = this.props;
       const { workspaces, location: { pathname } } = props;
       const pagePath = pathname.length > 1 ? pathname.slice(1) : 'home';
       const pageClassName = pagePath ? `Page__public--${pagePath}` : '';
-      const workspaceItems = workspaces && workspaces.map(item => ({
-        key: item.slug,
-        link: item.slug,
-        label: item.title,
+
+      const workspaceItems = subbedWorkspaces.map(({ slug, title }) => ({
+        key: slug,
+        link: slug,
+        label: title,
       }));
+      const ddModifierClassName = subbedWorkspaces.length ? 'filled' : 'empty';
+      const createWorkspaceItem = { key: 'createWorkspace', link: '/create-workspace', label: 'Create Workspace' };
+      workspaceItems.push(createWorkspaceItem);
+
 
       let navItems = [
-        { key: 'signup', label: 'Sign up', link: '/signup' },
-        { key: 'signin', label: 'Sign in', link: '/signin' },
+        { key: 'signup', label: 'Sign Up', link: '/signup' },
+        { key: 'signin', label: 'Sign In', link: '/signin' },
       ];
 
       if (isLoggedIn) {
-        navItems = [
-          { key: 'signup', label: 'Sign out', onClick: () => signOutRequest() },
-        ];
+        navItems = [{ key: 'signout', label: 'Sign Out', onClick: () => signOutRequest() }];
       }
 
       return (
@@ -58,7 +70,7 @@ const withPublicView = (WrappedComponent) => {
           <header className="header Page__header">
             <div className="Page__container">
               <nav className="navbar Page__navbar--public">
-                <Link className="navbar__logo" to="/" rel="home">
+                <Link className="Page__logo" to="/" rel="home">
                   Slack Clone
                 </Link>
 
@@ -68,19 +80,21 @@ const withPublicView = (WrappedComponent) => {
                     menuFor="workspaces"
                     menuPos="right"
                     togglerText="Your Workspaces"
+                    modifier={ddModifierClassName}
+                    style={{ fontWeight: 400, borderWidth: '2px' }}
                     items={workspaceItems}
                   />
                 )}
               </nav>
             </div>
           </header>
-          <WrappedComponent {...props} />
+          <WrappedComponent {...this.props} />
         </div>
       );
     }
   }
 
-  return withRouter(connect(mapStateToProps, mapDispatchToProps)(WithPublicView));
+  return withActionCable(withRouter(connect(mapStateToProps, mapDispatchToProps)(WithPublicView)));
 };
 
 export default withPublicView;

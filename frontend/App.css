@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans');
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans:400,700" rel="stylesheet');
 
 body {
   font-family: 'Noto Sans', sans-serif;
@@ -18,11 +18,11 @@ ul {
 
 a {
   text-decoration: none;
-  color: #0576b9;
+  color: rgba(5,118,185,1);
 }
 
 .App {
-  height: 100%;
+  min-height: 100vh;
 }
 
 .Form__control {

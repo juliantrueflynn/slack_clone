@@ -10,6 +10,8 @@ const Button = ({
   color,
   linkTo,
   fullWidth,
+  borderThick,
+  borderLess,
   ...props
 }) => {
   let classNames = 'Btn';

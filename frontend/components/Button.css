@@ -3,13 +3,13 @@
 }
 
 .Btn__styled {
-  border: 1px solid #999;
+  border: 1px solid #A8A9B0;
   border-radius: 4px;
   padding: 8px 10px;
-  color: #222;;
-  font-weight: 600;
+  color: #636E72;
+  font-weight: 700;
   box-shadow: 0px 0px 1px 0px rgba(0,0,0,0);
-  transition: box-shadow ease-in-out .2s;
+  transition: all ease-in-out .2s;
 }
 
 .Btn__styled:hover {
@@ -48,6 +48,14 @@
   right: 0;
   top: 0;
   z-index: 1;
+}
+
+.Btn__border-thick {
+  border-width: 2px;
+}
+
+.Btn__borderless {
+  border: none;
 }
 
 .Btn:hover,

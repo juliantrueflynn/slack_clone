@@ -30,7 +30,7 @@ class PageWorkspaceCreate extends React.Component {
 
     return (
       <div className="Page__container">
-        <h1 className="Page__title Page__title--m0">
+        <h1 className="Page__title">
           Create New Workspace
         </h1>
 

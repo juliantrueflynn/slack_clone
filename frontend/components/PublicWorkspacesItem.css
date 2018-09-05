@@ -1,0 +1,38 @@
+.PublicWorkspaces__item {
+  font-size: 18px;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 25px;
+  border-top: 1px solid #E9E9E9;
+}
+
+.PublicWorkspaces__item-title {
+  color: #636E72;
+  transition: color ease-in-out .2s;
+}
+
+.PublicWorkspaces__item-title:hover {
+  color: #3B4244;
+}
+
+.PublicWorkspaces__item .Btn {
+  margin-left: auto;
+}
+
+.PublicWorkspaces__item .Btn__workspace-sub--unsub {
+  color: #FF7675;
+}
+
+.PublicWorkspaces__item .Btn__workspace-sub--unsub:hover {
+  color: #FF4342;
+}
+
+.PublicWorkspaces__item .Btn__workspace-sub--sub {
+  color: #00CEC9;
+}
+
+.PublicWorkspaces__item .Btn__workspace-sub--sub:hover {
+  color: #009B97;
+}

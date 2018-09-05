@@ -28,22 +28,23 @@ class Dropdown extends React.Component {
       menuPos,
       items,
       togglerText,
-      unStyledButton,
       children,
+      modifier,
+      style,
+      unStyled,
     } = this.props;
 
     if (!items) return null;
 
     let dropdownClassNames = `Dropdown Dropdown--${menuPos || 'left'}`;
     if (menuFor) dropdownClassNames += ` Dropdown__${menuFor}`;
+    if (modifier && menuFor) dropdownClassNames += ` Dropdown__${menuFor}--${modifier}`;
     dropdownClassNames += ` Dropdown--${isOpen ? 'show' : 'hide'}`;
 
     return (
       <div className={dropdownClassNames}>
-        <Button unStyled={unStyledButton} buttonFor="dropdown" onClick={this.handleTogglerClick}>
-          <div className="Dropdown__title">
-            {togglerText || children}
-          </div>
+        <Button buttonFor="dropdown" onClick={this.handleTogglerClick} style={style} unStyled={unStyled}>
+          {togglerText || children}
         </Button>
         <Menu menuFor="dropdown" items={items} />
       </div>

@@ -6,6 +6,7 @@ const Menu = ({
   items,
   menuFor,
   isRow,
+  inverseColor,
   ...props
 }) => {
   let classNames = 'Menu';

@@ -1,40 +1,31 @@
 import React from 'react';
 import Button from './Button';
 import withPublicView from './withPublicView';
+import PublicWorkspacesContainer from './PublicWorkspacesContainer';
 import './PageHome.css';
 
-const PageHome = ({ workspaces }) => (
-  <div className="home">
+const PageHome = ({ workspaces, isLoggedIn }) => (
+  <div className="PageHome">
     <div className="Page__body">
-      <div className="hero hero__home">
-        Created by Julian Flynn
-        <Button buttonFor="hero" color="purple">
-          Contact
+      <div className="PageHome__hero">
+        <h1 className="PageHome__hero-title">
+          Slack Clone
+          <br />
+          made with React & Rails
+        </h1>
+        <Button buttonFor="hero" color="green" size="lg" style={{ textTransform: 'none' }}>
+          Contact Julian Flynn
         </Button>
       </div>
-
       <div className="Page__container">
-        <Button linkTo="/create-workspace" buttonFor="create">
-          Create Workspace
-        </Button>
-
-        <section className="home__workspaces">
-          <h2>
-            Public Workspaces
-          </h2>
-          <div className="public-rooms">
-            {workspaces && workspaces.map(workspace => (
-              <li key={workspace.id} className="room-item">
-                <div className="room-item__body">
-                  {workspace.title}
-                </div>
-              </li>
-            ))}
-          </div>
-        </section>
+        <PublicWorkspacesContainer
+          isLoggedIn={isLoggedIn}
+          workspaces={workspaces}
+        />
       </div>
     </div>
   </div>
+
 );
 
 export default withPublicView(PageHome);

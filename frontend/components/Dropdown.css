@@ -17,6 +17,7 @@
   box-shadow: 0px 2px 15px 0px rgba(0,0,0,0.2);
   padding-top: 15px;
   padding-bottom: 15px;
+  border-radius: 3px;
 }
 
 .Btn__dropdown {
@@ -25,7 +26,7 @@
 
 .Btn__dropdown:focus {
   outline: 0;
-  box-shadow: 0 0 0 2px rgba(0,0,0,.2);
+  box-shadow: 0 0 0 2px rgba(255,255,255,.4);
 }
 
 .Dropdown--right .Menu--dropdown {
