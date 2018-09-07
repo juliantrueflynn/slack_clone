@@ -163,13 +163,6 @@ export const selectDmUsernamesBySlug = (state, chatSlug, hasCurrUser = true) => 
   return dmUsers && values(dmUsers).map(user => user && user.username);
 };
 
-export const selectAuthors = ({ entities: { members, messages } }) => (
-  values(messages).reduce((acc, curr) => {
-    acc[curr.authorSlug] = members[curr.authorSlug];
-    return acc;
-  }, {})
-);
-
 export const selectParentMessages = ({ entities: { messages, channels }, ui }) => {
   const channel = channels[ui.displayChannelSlug];
   return values(messages)

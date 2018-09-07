@@ -12,6 +12,15 @@ json.channels do
   end
 end
 
+json.messages do
+  json.array! current_user.channels.includes(:entries).where(workspace_id: @workspace.id) do |chat|
+    message = chat.entries.where(parent_message_id: nil).last
+    json.slug message ? message.slug : nil
+    json.created_at message ? message.created_at : nil
+    json.channel_slug chat.slug
+  end
+end
+
 json.members do
   json.array! @workspace.members do |member|
     json.(member, :id, :username, :email, :slug)
@@ -24,5 +33,13 @@ json.subs do
     json.(chat_sub, :id, :user_id, :in_sidebar, :channel_id, :created_at)
     json.user_slug chat_sub.user_slug
     json.channel_slug chat_sub.channel_slug
+  end
+end
+
+json.reads do
+  json.array! current_user.reads.where(workspace_id: @workspace.id) do |read|
+    json.(read, :id, :accessed_at, :readable_type)
+    entity = read.readable_type.constantize.find_by(id: read.readable_id)
+    json.slug entity ? entity.slug : nil
   end
 end

@@ -12,7 +12,7 @@ class UserFavorites extends React.Component {
 
     if (isExact && props.location.pathname !== prevProps.location.pathname) {
       props.fetchMessageRequest(params.messageSlug);
-      if (message) props.readUpdateRequest(message.id);
+      if (message) props.updateReadRequest(message.id);
     }
   }
 

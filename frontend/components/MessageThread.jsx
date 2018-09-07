@@ -10,11 +10,11 @@ class MessageThread extends React.Component {
       message,
       messageSlug,
       fetchMessageRequest,
-      readUpdateRequest
+      updateReadRequest
     } = this.props;
 
     fetchMessageRequest(messageSlug);
-    if (message) readUpdateRequest(message.id);
+    if (message) updateReadRequest(message.id);
   }
 
   componentDidUpdate(prevProps) {
@@ -22,12 +22,12 @@ class MessageThread extends React.Component {
       message,
       messageSlug,
       fetchMessageRequest,
-      readUpdateRequest
+      updateReadRequest
     } = this.props;
 
     if (messageSlug !== prevProps.messageSlug) {
       fetchMessageRequest(messageSlug);
-      if (message) readUpdateRequest(message.id);
+      if (message) updateReadRequest(message.id);
     }
   }
 

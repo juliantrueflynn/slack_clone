@@ -23,6 +23,7 @@ class Channel < ApplicationRecord
     through: :subs,
     source: :user
   has_many :all_messages, class_name: 'Message'
+  has_many :entries, class_name: 'Message'
   has_many :messages,
     -> { includes(:parent_message) }
   has_many :parent_messages,
@@ -35,7 +36,7 @@ class Channel < ApplicationRecord
   has_many :reactions,
     through: :messages,
     source: :reactions
-  has_many :reads, as: :readable
+  has_many :reads, foreign_key: :readable_id
 
   scope :with_subs, -> { includes(channel_subs: :user) }
   scope :with_dm, -> { where(has_dm: true) }

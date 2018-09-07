@@ -1,0 +1,21 @@
+.UnreadsItem {
+  margin-bottom: 30px;
+}
+
+.UnreadsItem__header {
+  padding: 18px 27px;
+  margin-bottom: 25px;
+  background-color: #F6F6F6;
+  display: flex;
+  align-items: center;
+}
+
+.UnreadsItem__title {
+  margin: 0;
+  display: inline-block;
+}
+
+.UnreadsItem__title-hashtag {
+  margin-right: 5px;
+  opacity: .6;
+}

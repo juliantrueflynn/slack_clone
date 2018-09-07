@@ -1,37 +1,58 @@
-import { all, fork, put, takeLatest, takeEvery, call } from 'redux-saga/effects';
-import { READ, USER_UNREADS } from '../actions/actionTypes';
+import {
+  all,
+  fork,
+  put,
+  takeLatest,
+  takeEvery,
+  call,
+} from 'redux-saga/effects';
+import { READ } from '../actions/actionTypes';
 import { apiUpdate, apiFetch } from '../util/apiUtil';
-import { readUpdate, fetchUnreads } from '../actions/readActions';
+import { updateRead, fetchUnreads } from '../actions/readActions';
 
-function* loadReadDateTime({ readableId, readableType }) {
+function* fetchIndex({ workspaceSlug }) {
   try {
-    const newUnread = yield call(apiUpdate, 'read', { readableId, readableType });
-    yield put(readUpdate.receive(newUnread));
-  } catch (error) {
-    yield put(readUpdate.failure(error));
-  }
-}
-
-function* loadUnreads({ workspaceId }) {
-  try {
-    const unreads = yield call(apiFetch, `workspace/${workspaceId}/user_unreads`);
-    yield put(fetchUnreads.receive(unreads));
+    const received = yield call(apiFetch, `workspaces/${workspaceSlug}/reads`);
+    yield put(fetchUnreads.receive(received));
   } catch (error) {
     yield put(fetchUnreads.failure(error));
   }
 }
 
-function* watchReadEntity() {
-  yield takeEvery(READ.UPDATE.REQUEST, loadReadDateTime);
+function* fetchCreate({ read }) {
+  try {
+    const created = yield call(apiUpdate, 'read', read);
+    yield put(updateRead.receive(created));
+  } catch (error) {
+    yield put(updateRead.failure(error));
+  }
 }
 
-function* watchAllUnreadsPage() {
-  yield takeLatest(USER_UNREADS.INDEX.REQUEST, loadUnreads);
+function* fetchUpdate({ read }) {
+  try {
+    const updated = yield call(apiUpdate, 'read', read);
+    yield put(updateRead.receive(updated));
+  } catch (error) {
+    yield put(updateRead.failure(error));
+  }
+}
+
+function* watchIndex() {
+  yield takeLatest(READ.INDEX.REQUEST, fetchIndex);
+}
+
+function* watchCreated() {
+  yield takeEvery(READ.CREATE.REQUEST, fetchCreate);
+}
+
+function* watchUpdated() {
+  yield takeEvery(READ.UPDATE.REQUEST, fetchUpdate);
 }
 
 export default function* readSaga() {
   yield all([
-    fork(watchReadEntity),
-    fork(watchAllUnreadsPage),
+    fork(watchIndex),
+    fork(watchCreated),
+    fork(watchUpdated),
   ]);
 }

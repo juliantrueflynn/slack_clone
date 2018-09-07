@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import ChannelPage from './ChannelPage';
 import { fetchChannel, createChannelSub } from '../actions/channelActions';
+import { updateRead } from '../actions/readActions';
 import {
   selectParentMessages,
   selectHashDmUsersBySlug,
@@ -8,8 +9,8 @@ import {
   isUserChatSub,
   selectCurrentUserId,
   isModalOpen,
+  selectWorkspaceIdBySlug,
 } from '../reducers/selectors';
-import { readUpdate } from '../actions/readActions';
 
 const mapStateToProps = (state, { match: { params } }) => ({
   messages: selectParentMessages(state),
@@ -18,6 +19,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
   messageSlug: state.ui.displayMessageSlug,
   rightSidebar: state.ui.rightSidebar,
   userSlug: state.ui.displayUserSlug,
+  workspaceId: selectWorkspaceIdBySlug(state, params.workspaceSlug),
   isWorkspaceLoaded: !!state.entities.workspaces[params.workspaceSlug],
   channel: state.entities.channels[params.channelSlug],
   authors: selectHashDmUsersBySlug(state, params.channelSlug),
@@ -31,7 +33,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
 const mapDispatchToProps = dispatch => ({
   fetchChannelRequest: channelSlug => dispatch(fetchChannel.request(channelSlug)),
   createChannelSubRequest: channelSub => dispatch(createChannelSub.request(channelSub)),
-  readUpdateRequest: readableId => dispatch(readUpdate.request(readableId, 'Channel')),
+  updateReadRequest: read => dispatch(updateRead.request(read)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChannelPage);

@@ -4,10 +4,11 @@ Rails.application.routes.draw do
     resource :user, only: [:create, :update]
     resources :users, only: [:show]
     resources :user_threads, only: [:index]
-    resource :read, only: [:update]
+    resource :read, only: [:create, :update]
     resources :workspaces, only: [:index, :show, :create, :update, :destroy], param: :slug do
       resources :channels, only: [:index]
       resources :favorites, only: [:index]
+      resources :reads, only: [:index]
     end
     resource :user_appearance, only: [:create, :destroy]
     resources :workspace_subs, only: [:create, :destroy], param: :workspace_id

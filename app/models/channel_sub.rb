@@ -21,7 +21,12 @@ class ChannelSub < ApplicationRecord
   private
 
   def generate_read
-    channel.reads.create(user_id: user_id, accessed_at: DateTime.now)
+    channel.reads.create(
+      readable_type: 'Channel',
+      workspace_id: workspace.id,
+      user_id: user_id,
+      accessed_at: DateTime.now
+    )
   end
 
   def broadcast_create_sub

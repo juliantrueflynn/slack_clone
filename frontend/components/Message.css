@@ -1,5 +1,6 @@
+.UnreadsItem__body .Message,
 .MessagesPane .Message {
-  padding: 6px 18px;
+  padding: 9px 27px;
 }
 
 .Message {

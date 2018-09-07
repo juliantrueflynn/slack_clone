@@ -33,13 +33,13 @@ def seed_sub_and_members(user)
   chat = workspace.channels.sample
   return nil unless chat
 
-  workspace.subs.create!(user_id: user.id) unless workspace.is_user_sub?(user.id)
-  chat.subs.create!(user_id: user.id) unless chat.is_user_sub?(user.id)
+  workspace.subs.create(user_id: user.id) unless workspace.is_user_sub?(user.id)
+  chat.subs.create(user_id: user.id) unless chat.is_user_sub?(user.id)
 end
 
 def seed_workspace(user)
   title = Faker::Company.unique.name
-  user.created_workspaces.create!(title: title, slug: "#{title.parameterize}")
+  user.created_workspaces.create(title: title, slug: "#{title.parameterize}")
 end
 
 def seed_chats(user)
@@ -48,7 +48,7 @@ def seed_chats(user)
 
   title = Faker::Company.unique.buzzword
   topic = rand < 0.2 ? Faker::Company.bs : nil
-  user.created_channels.create!(title: title, topic: topic, workspace_id: workspace.id)
+  user.created_channels.create(title: title, topic: topic, workspace_id: workspace.id)
 end
 
 User.create!(email: "jtf@gmail.com", username: "jtf", password: "123456")
@@ -57,7 +57,7 @@ random_num(min: 2, max: 4).times do
   seed_workspace(User.first)
 
   random_num(min: 1, max: 3).times do
-    User.first.channels.create!(
+    User.first.channels.create(
       title: Faker::Company.unique.buzzword,
       topic: (rand < 0.2 ? Faker::Company.bs : nil),
       workspace_id: Workspace.last.id
@@ -66,7 +66,7 @@ random_num(min: 2, max: 4).times do
 end
 
 random_num(min: 8, max: 16).times do
-  User.create!(
+  User.create(
     email: Faker::Internet.unique.email,
     username: Faker::Internet.unique.user_name,
     password: "123456"
@@ -101,7 +101,7 @@ random_num(min: 50, max: 60).times do
     message = chat.messages.sample
     next unless message
 
-    user.favorites.create!(message_id: message.id) if rand < 0.5
-    user.reactions.create!(message_id: message.id, emoji: REACTIONS.sample)
+    user.favorites.create(message_id: message.id) if rand < 0.5
+    user.reactions.create(message_id: message.id, emoji: REACTIONS.sample)
   end
 end

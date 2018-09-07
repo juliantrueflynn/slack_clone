@@ -18,6 +18,7 @@
 
   def sub_user_to_default_chats
     default_chats = workspace.channels.first(2)
+    return if (workspace.owner_id === user.id)
     default_chats.each { |chat| user.channel_subs.create(channel_id: chat.id) }
   end
 

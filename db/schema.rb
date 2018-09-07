@@ -68,12 +68,13 @@ ActiveRecord::Schema.define(version: 20180706212936) do
   end
 
   create_table "reads", force: :cascade do |t|
-    t.string "readable_type"
-    t.bigint "readable_id"
+    t.integer "readable_id", null: false
+    t.string "readable_type", null: false
     t.bigint "user_id"
+    t.bigint "workspace_id"
     t.datetime "accessed_at", null: false
     t.datetime "created_at"
-    t.index ["readable_type", "readable_id", "user_id"], name: "index_reads_on_readable_type_and_readable_id_and_user_id"
+    t.index ["readable_type", "readable_id", "workspace_id", "user_id"], name: "index_read_workspace_user"
   end
 
   create_table "user_appearances", force: :cascade do |t|
@@ -127,6 +128,7 @@ ActiveRecord::Schema.define(version: 20180706212936) do
   add_foreign_key "reactions", "messages", on_delete: :cascade
   add_foreign_key "reactions", "users", on_delete: :cascade
   add_foreign_key "reads", "users", on_delete: :cascade
+  add_foreign_key "reads", "workspaces", on_delete: :cascade
   add_foreign_key "user_appearances", "users", on_delete: :cascade
   add_foreign_key "workspace_subs", "users", on_delete: :cascade
   add_foreign_key "workspace_subs", "workspaces", on_delete: :cascade

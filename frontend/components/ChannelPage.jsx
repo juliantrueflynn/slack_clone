@@ -11,15 +11,19 @@ import './ChannelPage.css';
 class ChannelPage extends React.Component {
   componentDidMount() {
     const {
-      channel,
       channelSlug,
       isWorkspaceLoaded,
       fetchChannelRequest,
-      readUpdateRequest,
+      channel,
+      updateReadRequest,
+      workspaceSlug,
     } = this.props;
 
     if (isWorkspaceLoaded) fetchChannelRequest(channelSlug);
-    if (channel) readUpdateRequest(channel.id);
+    if (channel) {
+      const read = { readableId: channel.id, readableType: 'Channel', workspaceSlug };
+      updateReadRequest(read);
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -27,12 +31,17 @@ class ChannelPage extends React.Component {
       channelSlug,
       channel,
       fetchChannelRequest,
-      readUpdateRequest,
+      updateReadRequest,
+      match: { params: { workspaceSlug } },
     } = this.props;
 
     if (channelSlug !== prevProps.channelSlug) {
       fetchChannelRequest(channelSlug);
-      if (channel) readUpdateRequest(channel.id);
+
+      if (channel) {
+        const read = { readableId: channel.id, readableType: 'Channel', workspaceSlug };
+        updateReadRequest(read);
+      }
     }
   }
 
@@ -104,7 +113,7 @@ class ChannelPage extends React.Component {
               users={authors}
               channel={channel}
             />
-            {/* <MessageFormContainer placeholder={formPlaceholder} /> */}
+            <MessageFormContainer placeholder={formPlaceholder} />
             <ChannelSubscribe
               title={chatTitle}
               ownerName={ownerName}

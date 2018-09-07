@@ -4,7 +4,6 @@ import {
   CHANNEL,
   READ,
   MESSAGE,
-  USER_UNREADS,
   DM_CHAT,
   CHANNEL_SUB
 } from '../actions/actionTypes';
@@ -62,13 +61,23 @@ const channelReducer = (state = {}, action) => {
       return nextState;
     }
     case WORKSPACE.SHOW.RECEIVE: {
-      const { workspace: { workspace, channels, subs } } = action;
+      const {
+        workspace,
+        channels,
+        subs,
+        messages,
+        reads,
+      } = action.workspace;
 
       nextState = {};
       channels.forEach((channel) => {
         nextState[channel.slug] = {
           workspaceSlug: workspace.slug,
           isActive: false,
+          lastRead: null,
+          lastActive: null,
+          hasUnreads: false,
+          messages: [],
           subs: [],
           members: [],
           ...channel
@@ -79,6 +88,20 @@ const channelReducer = (state = {}, action) => {
         if (!nextState[sub.channelSlug]) return;
         nextState[sub.channelSlug].subs.push(sub.id);
         nextState[sub.channelSlug].members.push(sub.userSlug);
+      });
+
+      reads.filter(read => read.readableType === 'Channel').forEach((read) => {
+        if (!nextState[read.slug]) return;
+        nextState[read.slug].lastRead = read.accessedAt;
+      });
+
+      messages.forEach((message) => {
+        if (!nextState[message.channelSlug]) return;
+        nextState[message.channelSlug].messages.push(message.slug);
+        nextState[message.channelSlug].lastActive = message.createdAt;
+        const lastRead = Date.parse(nextState[message.channelSlug]);
+        const lastActive = Date.parse(message.createdAt);
+        nextState[message.channelSlug].hasUnreads = lastRead < lastActive;
       });
 
       return nextState;
@@ -155,16 +178,17 @@ const channelReducer = (state = {}, action) => {
       if (nextState[slug].hasUnreads) nextState[slug].hasUnreads = false;
       return nextState;
     }
-    case USER_UNREADS.INDEX.RECEIVE: {
-      const { channels, messages } = action.unreads;
+    case READ.INDEX.RECEIVE: {
+      const { unreads } = action;
+
+      if (!unreads) return state;
 
       nextState = Object.assign({}, state);
-      channels.forEach((slug) => {
-        const messageSlugs = messages.filter(msg => msg.channelSlug === slug).map(msg => msg.slug);
-        nextState[slug].messages = messageSlugs;
-      });
-
-      return nextState;
+      return unreads.reduce((acc, curr) => {
+        acc[curr.channelSlug].hasUnreads = true;
+        acc[curr.channelSlug].messages.push(curr.slug);
+        return acc;
+      }, nextState);
     }
     default:
       return state;

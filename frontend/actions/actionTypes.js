@@ -14,9 +14,8 @@ export const CHANNEL_SUB = apiActions('CHANNEL_SUB', ['CREATE', 'UPDATE', 'DESTR
 export const FAVORITE = apiActions('FAVORITE', ['INDEX', 'CREATE', 'DESTROY']);
 export const REACTION = apiActions('REACTION', ['CREATE', 'DESTROY']);
 export const USER_THREAD = apiActions('USER_THREAD', ['INDEX']);
-export const READ = apiActions('READ', ['UPDATE']);
+export const READ = apiActions('READ', ['INDEX', 'CREATE', 'UPDATE']);
 export const MEMBER = apiActions('MEMBER', ['INDEX', 'SHOW', 'UPDATE', 'DESTROY']);
-export const USER_UNREADS = apiActions('USER_UNREADS', ['INDEX']);
 
 export const RIGHT_SIDEBAR = { OPEN: 'RIGHT_SIDEBAR_OPEN', CLOSE: 'RIGHT_SIDEBAR_CLOSE' };
 export const NAVIGATE = 'NAVIGATE';

@@ -15,7 +15,7 @@ import MessageThreadContainer from '../components/MessageThreadContainer';
 import UserFavoritesContainer from '../components/UserFavoritesContainer';
 import UserViewContainer from '../components/UserViewContainer';
 import ThreadsPageContainer from '../components/ThreadsPageContainer';
-import AllUnreadsPageContainer from '../components/AllUnreadsPageContainer';
+import UnreadsContainer from '../components/UnreadsContainer';
 
 export const routesConfig = [
   {
@@ -52,7 +52,7 @@ export const routesConfig = [
       },
       {
         path: '/:workspaceSlug/unreads',
-        component: AllUnreadsPageContainer,
+        component: UnreadsContainer,
       },
       {
         path: '/:workspaceSlug/:channelSlug',

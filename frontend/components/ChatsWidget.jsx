@@ -28,7 +28,7 @@ class ChatsWidget extends React.Component {
     } = this.props;
 
     const chatList = subbedChannels.map(item => ({
-      icon: <FontAwesomeIcon className="Icon" icon={['fas', 'hashtag']} />,
+      icon: <FontAwesomeIcon className="Icon" icon={['fas', 'hashtag']} size="sm" />,
       label: item.title,
       link: `/${workspaceSlug}/${item.slug}`,
     }));

@@ -1,30 +1,48 @@
 import merge from 'lodash.merge';
-import { MESSAGE, CHANNEL, USER_THREAD, REACTION, READ, USER_UNREADS, FAVORITE } from '../actions/actionTypes';
+import {
+  MESSAGE,
+  CHANNEL,
+  USER_THREAD,
+  REACTION,
+  READ,
+  FAVORITE,
+  WORKSPACE,
+} from '../actions/actionTypes';
 
 const messageReducer = (state = {}, action) => {
   Object.freeze(state);
 
   let nextState;
   switch (action.type) {
+    case WORKSPACE.SHOW.RECEIVE: {
+      const { workspace: { messages } } = action;
+      return messages.reduce((acc, curr) => {
+        if (!curr || !curr.slug) return acc;
+        acc[curr.slug] = curr;
+        return acc;
+      }, {});
+    }
     case CHANNEL.SHOW.RECEIVE: {
       nextState = Object.assign({}, state);
       const { channel: { messages, reactions, favorites } } = action;
 
       messages.forEach((message) => {
-        const { parentMessageSlug, slug, ...props } = message;
-        const children = messages.filter(child => child.parentMessageSlug === slug);
+        const children = messages.filter(child => child.parentMessageSlug === message.slug);
         const messageThread = children.map(child => child.slug);
-
-        nextState[slug] = message;
-        nextState[slug].reactionIds = [];
-        nextState[slug].favoriteId = null;
-        nextState[slug].thread = merge([], nextState[slug].thread, messageThread);
-
         const popThreadMsg = children[children.length - 1];
-        const lastReadInMs = Date.parse(props.lastRead);
+        const lastReadInMs = Date.parse(message.lastRead);
         const lastActiveInMs = popThreadMsg && Date.parse(popThreadMsg.createdAt);
-        nextState[slug].lastActive = popThreadMsg && popThreadMsg.createdAt;
-        nextState[slug].hasUnreads = lastReadInMs < lastActiveInMs;
+
+        nextState[message.slug] = {
+          reactionIds: [],
+          favoriteId: null,
+          lastActive: popThreadMsg && popThreadMsg.createdAt,
+          hasUnreads: lastReadInMs < lastActiveInMs,
+          thread: children.map(child => child.slug),
+          ...message,
+        };
+
+        nextState[message.slug].thread = merge([], nextState[message.slug].thread, messageThread);
       });
 
       reactions.forEach(({ messageSlug, id }) => {
@@ -133,11 +151,18 @@ const messageReducer = (state = {}, action) => {
       nextState[messageSlug].favoriteId = null;
       return nextState;
     }
-    case USER_UNREADS.INDEX.RECEIVE:
-      return action.unreads.messages.reduce((acc, curr) => {
+    case READ.INDEX.RECEIVE: {
+      const { unreads } = action;
+
+      if (!unreads) return state;
+
+      nextState = unreads.reduce((acc, curr) => {
         acc[curr.slug] = curr;
         return acc;
       }, {});
+
+      return merge({}, state, nextState);
+    }
     default:
       return state;
   }

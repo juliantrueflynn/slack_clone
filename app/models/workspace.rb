@@ -13,6 +13,7 @@ class Workspace < ApplicationRecord
 
   belongs_to :owner, class_name: 'User'
   has_many :subs, class_name: 'WorkspaceSub'
+  has_many :users, through: :subs
   has_many :members,
     -> { left_joins(:appears).select('users.*', 'user_appearances.status AS status') },
     class_name: 'User',
@@ -20,10 +21,21 @@ class Workspace < ApplicationRecord
     source: :user
   has_many :channels
   has_many :favorites, through: :channels
+  has_many :channel_subs,
+    through: :channels,
+    source: :subs
   has_many :chat_subs,
     -> { select('channel_subs.*, channels.slug AS channel_slug, users.slug AS user_slug') },
     through: :channels,
     source: :subs
+  has_many :reads
+  has_many :entries,
+    -> { joins(channel: :subs).select('messages.*, channels.slug AS channel_slug') },
+    through: :channels do
+      def with_user(user_id)
+        where(channel_subs: { user_id: user_id })
+      end
+    end
 
   def broadcast_name
     "app"

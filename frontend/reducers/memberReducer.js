@@ -69,12 +69,14 @@ const memberReducer = (state = {}, action) => {
     case USER_APPEARANCE.CREATE.RECEIVE: {
       const { userSlug, status } = action;
       nextState = Object.assign({}, state);
+      if (!nextState[userSlug]) return state;
       nextState[userSlug].status = status;
       return nextState;
     }
     case USER_APPEARANCE.DESTROY.RECEIVE: {
       const { userSlug, status } = action;
       nextState = Object.assign({}, state);
+      if (!nextState[userSlug]) return state;
       nextState[userSlug].status = status;
       return nextState;
     }
