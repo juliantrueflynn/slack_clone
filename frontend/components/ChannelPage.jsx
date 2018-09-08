@@ -1,11 +1,9 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { PageRoutes } from '../util/routeUtil';
-import ChannelHeaderContainer from './ChannelHeaderContainer';
-import EmojiModalContainer from './EmojiModalContainer';
 import MessagesPane from './MessagesPane';
 import MessageFormContainer from './MessageFormContainer';
 import ChannelSubscribe from './ChannelSubscribe';
+import ChatPage from './ChatPage';
 import './ChannelPage.css';
 
 class ChannelPage extends React.Component {
@@ -55,7 +53,6 @@ class ChannelPage extends React.Component {
       rightSidebar,
       userSlug,
       authors,
-      routes,
       messageSlug,
       isChatSub,
       currentUserId,
@@ -68,9 +65,7 @@ class ChannelPage extends React.Component {
     if (!channel.workspaceSlug) {
       const defaultChatSlug = channels[0].slug;
 
-      return (
-        <Redirect to={`/${params.workspaceSlug}/${defaultChatSlug}`} />
-      );
+      return <Redirect to={`/${params.workspaceSlug}/${defaultChatSlug}`} />;
     }
 
     if (isExact && rightSidebar) {
@@ -89,10 +84,6 @@ class ChannelPage extends React.Component {
       return (<Redirect to={redirectUrl} />);
     }
 
-    let chatClassNames = 'ChannelPage';
-    if (isReactionModalOpen) chatClassNames += ' ChannelPage--reaction';
-    if (!isExact && rightSidebar) chatClassNames += ' ChannelPage--sidebar-open';
-
     let chatTitle = `#${channel.title}`;
     let placeholder = chatTitle;
     if (channel.hasDm) {
@@ -103,29 +94,22 @@ class ChannelPage extends React.Component {
     const ownerName = authors[channel.ownerSlug] && authors[channel.ownerSlug].username;
 
     return (
-      <div className={chatClassNames}>
-        <ChannelHeaderContainer sectionTitle={chatTitle} />
-        <div className="ChannelPage__body">
-          <div className="ChannelPage__container">
-            <EmojiModalContainer />
-            <MessagesPane
-              messages={messages}
-              users={authors}
-              channel={channel}
-            />
-            <MessageFormContainer placeholder={formPlaceholder} />
-            <ChannelSubscribe
-              title={chatTitle}
-              ownerName={ownerName}
-              channel={channel}
-              isChatSub={isChatSub}
-              userId={currentUserId}
-              createChannelSubRequest={createChannelSubRequest}
-            />
-          </div>
-          <PageRoutes routes={routes} />
-        </div>
-      </div>
+      <ChatPage chatTitle={chatTitle} isReactionModalOpen={isReactionModalOpen}>
+        <MessagesPane
+          messages={messages}
+          users={authors}
+          channel={channel}
+        />
+        <MessageFormContainer placeholder={formPlaceholder} />
+        <ChannelSubscribe
+          title={chatTitle}
+          ownerName={ownerName}
+          channel={channel}
+          isChatSub={isChatSub}
+          userId={currentUserId}
+          createChannelSubRequest={createChannelSubRequest}
+        />
+      </ChatPage>
     );
   }
 }

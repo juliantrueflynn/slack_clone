@@ -31,7 +31,6 @@ class Message extends React.Component {
       updateMessageRequest,
       reactions,
       threadLastUpdate,
-      isSingleMessage,
       createReactionRequest,
       users,
       threadUsers,
@@ -73,7 +72,7 @@ class Message extends React.Component {
               messageSlug={message.slug}
             />
           </div>
-          {(!isSingleMessage || message.parentMessageId) && (
+          {message.parentMessageId && (
             <div className="Message__footer">
               <Reactions
                 createReactionRequest={createReactionRequest}

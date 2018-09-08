@@ -1,32 +1,40 @@
 import React from 'react';
-import ChannelHeaderContainer from './ChannelHeaderContainer';
-import UnreadsItem from './UnreadsItem';
+import AllUnreadsItem from './AllUnreadsItem';
+import ChatPage from './ChatPage';
 
-class Unreads extends React.Component {
+class AllUnreads extends React.Component {
   componentDidMount() {
     const { isWorkspaceLoaded, fetchUnreadsRequest, workspaceSlug } = this.props;
     if (isWorkspaceLoaded) fetchUnreadsRequest(workspaceSlug);
   }
 
   render() {
-    const { unreadChannels, messages, authors } = this.props;
+    const {
+      unreadChannels,
+      messages,
+      authors,
+      isReactionModalOpen,
+    } = this.props;
 
     if (!unreadChannels) return null;
 
     return (
-      <div className="ChannelPage ChannelPage__unreads">
-        <ChannelHeaderContainer sectionTitle="All Unreads" />
+      <ChatPage
+        chatTitle="All Unreads"
+        chatClassName="unreads"
+        isReactionModalOpen={isReactionModalOpen}
+      >
         {unreadChannels.map(channel => (
-          <UnreadsItem
+          <AllUnreadsItem
             key={channel.id}
             channel={channel}
             authors={authors}
             messages={messages}
           />
         ))}
-      </div>
+      </ChatPage>
     );
   }
 }
 
-export default Unreads;
+export default AllUnreads;

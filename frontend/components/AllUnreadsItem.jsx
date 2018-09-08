@@ -1,9 +1,9 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MessageContainer from './MessageContainer';
-import './UnreadsItem.css';
+import './AllUnreadsItem.css';
 
-const UnreadsItem = ({ channel, messages, authors }) => {
+const AllUnreadsItem = ({ channel, messages, authors }) => {
   const unreadMessages = channel.messages.reduce((acc, curr) => {
     acc[curr] = messages[curr];
     return acc;
@@ -11,14 +11,14 @@ const UnreadsItem = ({ channel, messages, authors }) => {
   const messagesArray = Object.values(unreadMessages);
 
   return (
-    <div className="UnreadsItem">
-      <header className="UnreadsItem__header">
-        <FontAwesomeIcon className="UnreadsItem__title-hashtag" icon="hashtag" size="sm" />
-        <h3 className="UnreadsItem__title">
+    <div className="AllUnreadsItem">
+      <header className="AllUnreadsItem__header">
+        <FontAwesomeIcon className="AllUnreadsItem__title-hashtag" icon="hashtag" size="sm" />
+        <h3 className="AllUnreadsItem__title">
           {channel.title}
         </h3>
       </header>
-      <div className="UnreadsItem__body">
+      <div className="AllUnreadsItem__body">
         {messagesArray.map(message => (
           <MessageContainer
             key={message.id}
@@ -31,4 +31,4 @@ const UnreadsItem = ({ channel, messages, authors }) => {
   );
 };
 
-export default UnreadsItem;
+export default AllUnreadsItem;

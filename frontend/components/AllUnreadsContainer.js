@@ -1,14 +1,15 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import Unreads from './Unreads';
+import AllUnreads from './AllUnreads';
 import { fetchUnreads } from '../actions/readActions';
-import { selectUnreadChannels } from '../reducers/selectors';
+import { selectUnreadChannels, isModalOpen } from '../reducers/selectors';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   messages: state.entities.messages,
   unreadChannels: selectUnreadChannels(state),
   authors: state.entities.members,
   isWorkspaceLoaded: !!state.ui.displayWorkspaceSlug,
+  isReactionModalOpen: isModalOpen(state, 'MODAL_REACTION'),
   workspaceSlug,
 });
 
@@ -16,4 +17,4 @@ const mapDispatchToProps = dispatch => ({
   fetchUnreadsRequest: workspaceId => dispatch(fetchUnreads.request(workspaceId)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Unreads));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AllUnreads));

@@ -14,8 +14,8 @@ import ChannelPageContainer from '../components/ChannelPageContainer';
 import MessageThreadContainer from '../components/MessageThreadContainer';
 import UserFavoritesContainer from '../components/UserFavoritesContainer';
 import UserViewContainer from '../components/UserViewContainer';
-import ThreadsPageContainer from '../components/ThreadsPageContainer';
-import UnreadsContainer from '../components/UnreadsContainer';
+import AllThreadsContainer from '../components/AllThreadsContainer';
+import AllUnreadsContainer from '../components/AllUnreadsContainer';
 
 export const routesConfig = [
   {
@@ -48,11 +48,11 @@ export const routesConfig = [
     routes: [
       {
         path: '/:workspaceSlug/threads',
-        component: ThreadsPageContainer,
+        component: AllThreadsContainer,
       },
       {
         path: '/:workspaceSlug/unreads',
-        component: UnreadsContainer,
+        component: AllUnreadsContainer,
       },
       {
         path: '/:workspaceSlug/:channelSlug',
@@ -82,11 +82,11 @@ const mapStateToProps = state => ({
 
 const RouteSubRoutes = (route) => {
   if (route.isAuth && route.isLoggedIn) {
-    return (<Redirect to="/" />);
+    return <Redirect to="/" />;
   }
 
   if (route.isProtected && !route.isLoggedIn) {
-    return (<Redirect to="/signin" />);
+    return <Redirect to="/signin" />;
   }
 
   return (
@@ -103,7 +103,7 @@ const RouteWithSubRoutes = withRouter(connect(mapStateToProps, null)(RouteSubRou
 
 export const PageRoutes = ({ routes, ...extraProps }) => (
   <Switch>
-    {routes.map(route => (
+    {routes && routes.map(route => (
       <RouteWithSubRoutes key={route.path} {...extraProps} {...route} />
     ))}
   </Switch>
