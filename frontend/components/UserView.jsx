@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import RightSidebarContainer from './Layout/RightSidebarContainer';
+import RightSidebarContainer from './RightSidebarContainer';
 import Button from './Button';
 
 class UserView extends React.Component {

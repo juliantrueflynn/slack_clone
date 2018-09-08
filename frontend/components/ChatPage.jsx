@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import EmojiModalContainer from './EmojiModalContainer';
-import ChannelHeaderContainer from './ChannelHeaderContainer';
+import ChannelHeader from './ChannelHeader';
 
 const ChatPage = ({
   match: { isExact, params: { channelSlug } },
@@ -17,7 +17,7 @@ const ChatPage = ({
 
   return (
     <div className={chatClassNames}>
-      <ChannelHeaderContainer sectionTitle={chatTitle} />
+      <ChannelHeader sectionTitle={chatTitle} />
       <div className="ChannelPage__body">
         <div className="ChannelPage__container">
           <EmojiModalContainer />

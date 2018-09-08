@@ -1,6 +1,6 @@
 import React from 'react';
 import MessageFormContainer from './MessageFormContainer';
-import RightSidebarContainer from './Layout/RightSidebarContainer';
+import RightSidebarContainer from './RightSidebarContainer';
 import MessagesPane from './MessagesPane';
 import './MessageThread.css';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import RightSidebarContainer from './Layout/RightSidebarContainer';
+import RightSidebarContainer from './RightSidebarContainer';
 
 class UserFavorites extends React.Component {
   componentDidMount() {

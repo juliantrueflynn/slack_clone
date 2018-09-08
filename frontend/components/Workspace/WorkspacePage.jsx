@@ -39,7 +39,7 @@ class WorkspacePage extends React.Component {
     }
 
     if (isExact && defaultChannelSlug) {
-      return (<Redirect to={defaultChannelUrl} />);
+      return <Redirect to={defaultChannelUrl} />;
     }
 
     return (

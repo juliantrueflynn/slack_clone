@@ -1,15 +1,17 @@
-import { RIGHT_SIDEBAR, WORKSPACE } from '../actions/actionTypes';
+import { RIGHT_SIDEBAR_OPEN, RIGHT_SIDEBAR_CLOSE, WORKSPACE } from '../actions/actionTypes';
 
-const rightSidebarReducer = (state = null, action) => {
+const rightSidebarReducer = (state = {}, action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case RIGHT_SIDEBAR.OPEN:
-      return action.sidebarType;
-    case RIGHT_SIDEBAR.CLOSE:
-      return null;
+    case RIGHT_SIDEBAR_OPEN: {
+      const { sidebarType, sidebarProps } = action;
+      return { sidebarType, sidebarProps };
+    }
+    case RIGHT_SIDEBAR_CLOSE:
+      return {};
     case WORKSPACE.SHOW.RECEIVE:
-      return null;
+      return {};
     default:
       return state;
   }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import Menu from './Menu';
 import './ChannelHeader.css';
 
@@ -9,15 +10,15 @@ class ChannelHeader extends React.Component {
   }
 
   handleFavoritesClick() {
-    const { isFavoritesOpen, rightSidebarClose } = this.props;
-    if (isFavoritesOpen) rightSidebarClose();
+    const { history, match: { isExact, url } } = this.props;
+
+    const favUrl = isExact ? `${url}/favorites` : url;
+    history.push(favUrl);
   }
 
   render() {
     const { favoritesUrl, sectionTitle, ...props } = this.props;
-    const menuItems = [
-      { label: 'Favorites', onClick: this.handleFavoritesClick, link: favoritesUrl }
-    ];
+    const menuItems = [{ label: 'Favorites', onClick: this.handleFavoritesClick }];
 
     return (
       <header className="ChannelHeader">
@@ -35,4 +36,4 @@ class ChannelHeader extends React.Component {
   }
 }
 
-export default ChannelHeader;
+export default withRouter(ChannelHeader);

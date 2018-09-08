@@ -10,6 +10,7 @@ import {
   selectCurrentUserId,
   isModalOpen,
   selectWorkspaceIdBySlug,
+  isRightSidebarOpen,
 } from '../reducers/selectors';
 
 const mapStateToProps = (state, { match: { params } }) => ({
@@ -18,6 +19,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
   channelSlug: params.channelSlug,
   messageSlug: state.ui.displayMessageSlug,
   rightSidebar: state.ui.rightSidebar,
+  isRightSidebarOpen: isRightSidebarOpen(state),
   userSlug: state.ui.displayUserSlug,
   workspaceId: selectWorkspaceIdBySlug(state, params.workspaceSlug),
   isWorkspaceLoaded: !!state.entities.workspaces[params.workspaceSlug],

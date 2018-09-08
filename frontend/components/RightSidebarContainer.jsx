@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import RightSidebar from './RightSidebar';
-import { rightSidebarClose, rightSidebarOpen } from '../../actions/interactiveActions';
+import { rightSidebarClose, rightSidebarOpen } from '../actions/rightSidebarActions';
 
 const mapStateToProps = (state, { match: { params } }) => ({
   rightSidebar: state.ui.rightSidebar,

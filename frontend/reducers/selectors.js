@@ -40,6 +40,8 @@ export const selectSubbedChats = ({ entities, ui, session: { currentUser } }) =>
   return values(chats).sort((a, b) => a.title.localeCompare(b.title));
 };
 
+export const isRightSidebarOpen = ({ ui }) => !!values(ui.rightSidebar).length;
+
 export const selectUnsubbedChats = ({ entities: { channels, members, channelSubs }, session }) => {
   const { currentUser } = session;
   const currMember = members[currentUser.slug];

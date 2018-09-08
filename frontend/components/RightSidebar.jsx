@@ -1,14 +1,14 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { camelize } from 'humps';
+import Button from './Button';
 import './RightSidebar.css';
-import Button from '../Button';
 
 class RightSidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = { isSidebarOpen: true };
-    this.handleCloseSidebar = this.handleCloseSidebar.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {
@@ -17,14 +17,19 @@ class RightSidebar extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { location, match: { isExact }, ...props } = this.props;
+    const {
+      location,
+      rightSidebarOpen,
+      sidebarType,
+      match: { isExact },
+    } = this.props;
 
     if (isExact && location.pathname !== prevProps.location.pathname) {
-      props.rightSidebarOpen(props.sidebarType);
+      rightSidebarOpen(sidebarType);
     }
   }
 
-  handleCloseSidebar() {
+  handleClose() {
     const { rightSidebarClose } = this.props;
     this.setState({ isSidebarOpen: false });
     rightSidebarClose();
@@ -36,31 +41,31 @@ class RightSidebar extends React.Component {
     const sidebarClassName = camelize(sidebarType);
 
     if (!isSidebarOpen) {
-      return (<Redirect to={`/${props.workspaceSlug}/${props.channelSlug}`} />);
+      return <Redirect to={`/${props.workspaceSlug}/${props.channelSlug}`} />;
     }
 
     return (
-      <aside className={`Sidebar Sidebar__right Sidebar__right--${sidebarClassName}`}>
-        <header className="Sidebar__header">
-          <div className="Sidebar__headings">
+      <aside className={`RightSidebar RightSidebar--${sidebarClassName}`}>
+        <header className="RightSidebar__header">
+          <div className="RightSidebar__headings">
             {sidebarType && (
-              <h4 className="Sidebar__title">
+              <h4 className="RightSidebar__title">
                 {sidebarType}
               </h4>
             )}
             {sidebarSubtitle && (
-              <span className="Sidebar__subtitle">
+              <span className="RightSidebar__subtitle">
                 {sidebarSubtitle}
               </span>
             )}
           </div>
 
-          <Button unStyled buttonFor="close" onClick={this.handleCloseSidebar}>
+          <Button unStyled buttonFor="close" onClick={this.handleClose}>
             &#10006;
           </Button>
         </header>
 
-        <div className="Sidebar__body">
+        <div className="RightSidebar__body">
           {props.children}
         </div>
       </aside>

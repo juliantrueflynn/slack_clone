@@ -1,8 +1,8 @@
 .ChannelHeader {
   border-bottom: 1px solid #E9E9E9;
-  height: 55px;
+  height: 46px;
   background-color: #FFF;
-  padding: .625em 1em;
+  padding: 0 27px;
   z-index: 800;
   display: flex;
 }

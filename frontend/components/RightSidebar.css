@@ -1,11 +1,11 @@
-.Sidebar__right {
+.RightSidebar {
   width: 500px;
   border-left: 1px solid #E9E9E9;
   display: flex;
   flex-direction: column;
 }
 
-.Sidebar__header {
+.RightSidebar__header {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -14,13 +14,19 @@
   padding: 15px 12px;
 }
 
-.Sidebar__title {
+.RightSidebar__title {
   margin: 0;
 }
 
-.Sidebar__subtitle {
+.RightSidebar__subtitle {
   font-size: 80%;
   display: block;
+}
+
+.RightSidebar .Sidebar__body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .Btn__close {

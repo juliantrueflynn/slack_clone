@@ -2,7 +2,6 @@ import {
   NAVIGATE,
   MODAL_OPEN,
   MODAL_CLOSE,
-  RIGHT_SIDEBAR
 } from './actionTypes';
 
 export const modalOpen = modal => ({
@@ -17,13 +16,4 @@ export const modalClose = () => ({
 export const navigate = params => ({
   type: NAVIGATE,
   params,
-});
-
-export const rightSidebarOpen = sidebarType => ({
-  type: RIGHT_SIDEBAR.OPEN,
-  sidebarType,
-});
-
-export const rightSidebarClose = () => ({
-  type: RIGHT_SIDEBAR.CLOSE,
 });

@@ -17,8 +17,8 @@ export const USER_THREAD = apiActions('USER_THREAD', ['INDEX']);
 export const READ = apiActions('READ', ['INDEX', 'CREATE', 'UPDATE']);
 export const MEMBER = apiActions('MEMBER', ['INDEX', 'SHOW', 'UPDATE', 'DESTROY']);
 
-export const RIGHT_SIDEBAR = { OPEN: 'RIGHT_SIDEBAR_OPEN', CLOSE: 'RIGHT_SIDEBAR_CLOSE' };
+export const RIGHT_SIDEBAR_OPEN = 'RIGHT_SIDEBAR_OPEN';
+export const RIGHT_SIDEBAR_CLOSE = 'RIGHT_SIDEBAR_CLOSE';
 export const NAVIGATE = 'NAVIGATE';
 export const MODAL_OPEN = 'MODAL_OPEN';
 export const MODAL_CLOSE = 'MODAL_CLOSE';
-export const NEW_CHANNEL_MODAL = 'MODAL_CHAT';

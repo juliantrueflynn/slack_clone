@@ -51,6 +51,7 @@ class ChannelPage extends React.Component {
       dmUsernames,
       channel,
       rightSidebar,
+      isRightSidebarOpen,
       userSlug,
       authors,
       messageSlug,
@@ -62,27 +63,26 @@ class ChannelPage extends React.Component {
 
     if (!channel) return null;
 
-    if (!channel.workspaceSlug) {
-      const defaultChatSlug = channels[0].slug;
+    let redirectUrl;
 
-      return <Redirect to={`/${params.workspaceSlug}/${defaultChatSlug}`} />;
-    }
+    if (isExact && isRightSidebarOpen) {
+      const { sidebarType } = rightSidebar;
 
-    if (isExact && rightSidebar) {
-      let redirectUrl;
-
-      if (rightSidebar === 'Thread') {
+      if (sidebarType === 'Thread') {
         redirectUrl = `${url}/thread/${messageSlug}`;
-      } else if (rightSidebar === 'Favorites') {
+      } else if (sidebarType === 'Favorites') {
         redirectUrl = `${url}/favorites`;
-      } else if (rightSidebar === 'Workspace Directory') {
+      } else if (sidebarType === 'Workspace Directory') {
         redirectUrl = `${url}/team/${userSlug}`;
-      } else {
-        return null;
       }
-
-      return (<Redirect to={redirectUrl} />);
     }
+
+    if (!channel.workspaceSlug) {
+      const defChatSlug = channels[0].slug;
+      redirectUrl = `/${params.workspaceSlug}/${defChatSlug}`;
+    }
+
+    if (redirectUrl) return <Redirect to={redirectUrl} />;
 
     let chatTitle = `#${channel.title}`;
     let placeholder = chatTitle;
@@ -90,6 +90,7 @@ class ChannelPage extends React.Component {
       chatTitle = dmUsernames.join(', ');
       placeholder = dmUsernames.length === 1 ? `@${chatTitle}` : chatTitle;
     }
+
     const formPlaceholder = placeholder && `Message ${placeholder}`;
     const ownerName = authors[channel.ownerSlug] && authors[channel.ownerSlug].username;
 
@@ -100,7 +101,7 @@ class ChannelPage extends React.Component {
           users={authors}
           channel={channel}
         />
-        <MessageFormContainer placeholder={formPlaceholder} />
+        {/* <MessageFormContainer placeholder={formPlaceholder} /> */}
         <ChannelSubscribe
           title={chatTitle}
           ownerName={ownerName}
