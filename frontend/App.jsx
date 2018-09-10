@@ -19,7 +19,8 @@ import {
   faSquare,
   faStar as fasStar
 } from '@fortawesome/free-solid-svg-icons';
-import { PageRoutes, routesConfig } from './util/routeUtil';
+import { Switch } from 'react-router-dom';
+import { routesConfig, RouteWithSubRoutes } from './util/routeUtil';
 import './App.css';
 
 library.add(
@@ -41,7 +42,11 @@ library.add(
 
 const App = () => (
   <div className="App">
-    <PageRoutes routes={routesConfig} />
+    <Switch>
+      {routesConfig.map(route => (
+        <RouteWithSubRoutes key={route.path || route.key} {...route} />
+      ))}
+    </Switch>
   </div>
 );
 

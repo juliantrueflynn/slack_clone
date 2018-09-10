@@ -15,7 +15,7 @@ const mapStateToProps = (state, { match: { params: { messageSlug, channelSlug } 
 
 const mapDispatchToProps = dispatch => ({
   fetchMessageRequest: messageSlug => dispatch(fetchMessage.request(messageSlug)),
-  updateReadRequest: readableId => dispatch(updateRead.request(readableId, 'Message')),
+  updateReadRequest: read => dispatch(updateRead.request(read)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MessageThread));

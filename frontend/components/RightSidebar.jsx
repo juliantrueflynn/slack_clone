@@ -1,51 +1,43 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import { camelize } from 'humps';
 import Button from './Button';
 import './RightSidebar.css';
 
 class RightSidebar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isSidebarOpen: true };
     this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {
-    const { rightSidebarOpen, sidebarType } = this.props;
-    rightSidebarOpen(sidebarType);
-  }
-
-  componentDidUpdate(prevProps) {
     const {
-      location,
+      isWorkspaceLoaded,
       rightSidebarOpen,
       sidebarType,
-      match: { isExact },
+      sidebarProps,
+      isOpen,
     } = this.props;
 
-    if (isExact && location.pathname !== prevProps.location.pathname) {
-      rightSidebarOpen(sidebarType);
+    if (isWorkspaceLoaded && !isOpen) {
+      rightSidebarOpen(sidebarType, sidebarProps);
     }
   }
 
   handleClose() {
-    const { rightSidebarClose } = this.props;
-    this.setState({ isSidebarOpen: false });
+    const {
+      rightSidebarClose,
+      history,
+      match: { params: { workspaceSlug, channelSlug } }
+    } = this.props;
     rightSidebarClose();
+    history.push(`/${workspaceSlug}/${channelSlug}`);
   }
 
   render() {
-    const { sidebarType, sidebarSubtitle, ...props } = this.props;
-    const { isSidebarOpen } = this.state;
-    const sidebarClassName = camelize(sidebarType);
-
-    if (!isSidebarOpen) {
-      return <Redirect to={`/${props.workspaceSlug}/${props.channelSlug}`} />;
-    }
+    const { sidebarType, sidebarProps, children } = this.props;
+    const sidebarSubtitle = sidebarProps && sidebarProps.subtitle;
 
     return (
-      <aside className={`RightSidebar RightSidebar--${sidebarClassName}`}>
+      <aside className="RightSidebar">
         <header className="RightSidebar__header">
           <div className="RightSidebar__headings">
             {sidebarType && (
@@ -66,7 +58,7 @@ class RightSidebar extends React.Component {
         </header>
 
         <div className="RightSidebar__body">
-          {props.children}
+          {children}
         </div>
       </aside>
     );

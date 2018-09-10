@@ -1,20 +1,19 @@
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import AllUnreads from './AllUnreads';
 import { fetchUnreads } from '../actions/readActions';
-import { selectUnreadChannels, isModalOpen } from '../reducers/selectors';
+import { selectUnreadChannels } from '../reducers/selectors';
+import withChat from './withChat';
 
-const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
+const mapStateToProps = state => ({
   messages: state.entities.messages,
   unreadChannels: selectUnreadChannels(state),
   authors: state.entities.members,
-  isWorkspaceLoaded: !!state.ui.displayWorkspaceSlug,
-  isReactionModalOpen: isModalOpen(state, 'MODAL_REACTION'),
-  workspaceSlug,
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchUnreadsRequest: workspaceId => dispatch(fetchUnreads.request(workspaceId)),
+  fetchUnreadsRequest: workspaceSlug => dispatch(fetchUnreads.request(workspaceSlug)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AllUnreads));
+const chatProps = { chatClassName: 'unreads', chatTitle: 'All Unreads' };
+
+export default withChat(chatProps)(connect(mapStateToProps, mapDispatchToProps)(AllUnreads));

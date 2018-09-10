@@ -10,10 +10,14 @@ class ChannelHeader extends React.Component {
   }
 
   handleFavoritesClick() {
-    const { history, match: { isExact, url } } = this.props;
+    const { history, match: { isExact, url }, rightSidebarClose } = this.props;
 
-    const favUrl = isExact ? `${url}/favorites` : url;
-    history.push(favUrl);
+    if (isExact) {
+      history.push(`${url}/favorites`);
+    } else {
+      rightSidebarClose();
+      history.push(url);
+    }
   }
 
   render() {

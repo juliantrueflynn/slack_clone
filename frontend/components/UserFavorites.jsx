@@ -3,31 +3,35 @@ import RightSidebarContainer from './RightSidebarContainer';
 
 class UserFavorites extends React.Component {
   componentDidMount() {
-    const { isChannelLoaded, fetchFavoritesRequest, workspaceSlug } = this.props;
-    if (isChannelLoaded) fetchFavoritesRequest(workspaceSlug);
+    const { isWorkspaceLoaded, fetchFavoritesRequest, match: { params } } = this.props;
+
+    if (isWorkspaceLoaded) {
+      fetchFavoritesRequest(params.workspaceSlug);
+    }
   }
 
   componentDidUpdate(prevProps) {
-    const { message, match: { isExact, params }, ...props } = this.props;
+    const { fetchFavoritesRequest, match: { params }, favorites } = this.props;
+    const { favorites: prevFavs } = prevProps;
 
-    if (isExact && props.location.pathname !== prevProps.location.pathname) {
-      props.fetchMessageRequest(params.messageSlug);
-      if (message) props.updateReadRequest(message.id);
+    if (prevFavs[prevFavs.length] !== favorites[favorites.length]) {
+      fetchFavoritesRequest(params.workspaceSlug);
     }
   }
 
   render() {
-    const { favorites, match } = this.props;
+    const { favorites } = this.props;
 
-    if (!favorites) {
-      return null;
-    }
+    const sidebarProps = { path: '/favorites' };
 
     return (
-      <RightSidebarContainer sidebarType="Favorites" match={match}>
-        <ul className="user-favorites">
-          {favorites.map(fav => (
-            <li key={fav.id}>
+      <RightSidebarContainer
+        sidebarType="Favorites"
+        sidebarProps={sidebarProps}
+      >
+        <div className="UserFavorites" role="list">
+          {favorites && favorites.map(fav => (
+            <div key={fav.id} className="UserFavorites__item" role="listitem">
               id:
               {fav.id}
               <br />
@@ -36,9 +40,9 @@ class UserFavorites extends React.Component {
               <br />
               userId:
               {fav.userId}
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </RightSidebarContainer>
     );
   }

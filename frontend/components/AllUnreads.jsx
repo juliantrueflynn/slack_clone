@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import AllUnreadsItem from './AllUnreadsItem';
-import ChatPage from './ChatPage';
 
 class AllUnreads extends React.Component {
   componentDidMount() {
-    const { isWorkspaceLoaded, fetchUnreadsRequest, workspaceSlug } = this.props;
-    if (isWorkspaceLoaded) fetchUnreadsRequest(workspaceSlug);
+    const { isWorkspaceLoaded, fetchUnreadsRequest, match: { params } } = this.props;
+
+    if (isWorkspaceLoaded) {
+      fetchUnreadsRequest(params.workspaceSlug);
+    }
   }
 
   render() {
@@ -13,17 +15,12 @@ class AllUnreads extends React.Component {
       unreadChannels,
       messages,
       authors,
-      isReactionModalOpen,
     } = this.props;
 
     if (!unreadChannels) return null;
 
     return (
-      <ChatPage
-        chatTitle="All Unreads"
-        chatClassName="unreads"
-        isReactionModalOpen={isReactionModalOpen}
-      >
+      <Fragment>
         {unreadChannels.map(channel => (
           <AllUnreadsItem
             key={channel.id}
@@ -32,7 +29,7 @@ class AllUnreads extends React.Component {
             messages={messages}
           />
         ))}
-      </ChatPage>
+      </Fragment>
     );
   }
 }

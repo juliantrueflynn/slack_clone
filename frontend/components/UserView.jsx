@@ -26,21 +26,32 @@ class UserView extends React.Component {
   }
 
   render() {
-    const { hasDmWith, user, ...props } = this.props;
+    const {
+      hasDmWith,
+      user,
+      userSlug,
+      isChannelsLoaded,
+      match: { params: { workspaceSlug } },
+    } = this.props;
     const { didCreateDmChat } = this.state;
 
-    if (!user || !props.isChannelsLoaded) return null;
+    if (!user || !isChannelsLoaded) return null;
 
     if (hasDmWith && didCreateDmChat) {
-      return <Redirect to={`/${props.workspaceSlug}/${hasDmWith.slug}`} />;
+      return <Redirect to={`/${workspaceSlug}/${hasDmWith.slug}`} />;
     }
 
+    const sidebarProps = { path: `/team/${userSlug}` };
+
     return (
-      <RightSidebarContainer sidebarType="Workspace Directory">
+      <RightSidebarContainer
+        sidebarType="Workspace Directory"
+        sidebarProps={sidebarProps}
+      >
         {user.username}
         <div className="profile__actions">
           {hasDmWith ? (
-            <Link to={`/${props.workspaceSlug}/${hasDmWith.slug}`}>
+            <Link to={`/${workspaceSlug}/${hasDmWith.slug}`}>
               Message
             </Link>
           ) : (

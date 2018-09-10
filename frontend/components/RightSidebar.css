@@ -23,7 +23,7 @@
   display: block;
 }
 
-.RightSidebar .Sidebar__body {
+.RightSidebar__body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;

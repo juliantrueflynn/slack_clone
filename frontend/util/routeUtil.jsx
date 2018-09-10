@@ -1,14 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-  Route,
-  Redirect,
-  withRouter,
-  Switch
-} from 'react-router-dom';
+import { Route, Redirect, withRouter } from 'react-router-dom';
 import PageHome from '../components/PageHome';
 import SessionForm from '../components/SessionForm';
-import WorkspacePageContainer from '../components/Workspace/WorkspacePageContainer';
+import WorkspacePageContainer from '../components/WorkspacePageContainer';
 import PageWorkspaceCreate from '../components/PageWorkspaceCreate';
 import ChannelPageContainer from '../components/ChannelPageContainer';
 import MessageThreadContainer from '../components/MessageThreadContainer';
@@ -16,6 +11,7 @@ import UserFavoritesContainer from '../components/UserFavoritesContainer';
 import UserViewContainer from '../components/UserViewContainer';
 import AllThreadsContainer from '../components/AllThreadsContainer';
 import AllUnreadsContainer from '../components/AllUnreadsContainer';
+import ChatSwitch from '../components/ChatSwitch';
 
 export const routesConfig = [
   {
@@ -47,31 +43,35 @@ export const routesConfig = [
     isProtected: true,
     routes: [
       {
-        path: '/:workspaceSlug/threads',
-        component: AllThreadsContainer,
-      },
-      {
-        path: '/:workspaceSlug/unreads',
-        component: AllUnreadsContainer,
-      },
-      {
-        path: '/:workspaceSlug/:channelSlug',
-        component: ChannelPageContainer,
+        key: 'ChatSwitch',
+        component: ChatSwitch,
         routes: [
           {
-            path: '/:workspaceSlug/:channelSlug/favorites',
-            component: UserFavoritesContainer,
+            path: '/:workspaceSlug/threads',
+            component: AllThreadsContainer,
           },
           {
-            path: '/:workspaceSlug/:channelSlug/team/:userSlug',
-            component: UserViewContainer,
+            path: '/:workspaceSlug/unreads',
+            component: AllUnreadsContainer,
           },
           {
-            path: '/:workspaceSlug/:channelSlug/thread/:messageSlug',
-            component: MessageThreadContainer,
-          }
+            path: '/:workspaceSlug/:channelSlug',
+            component: ChannelPageContainer,
+          },
         ]
-      }
+      },
+      {
+        path: '/:workspaceSlug/:channelSlug/favorites',
+        component: UserFavoritesContainer,
+      },
+      {
+        path: '/:workspaceSlug/:channelSlug/team/:userSlug',
+        component: UserViewContainer,
+      },
+      {
+        path: '/:workspaceSlug/:channelSlug/thread/:messageSlug',
+        component: MessageThreadContainer,
+      },
     ]
   },
 ];
@@ -99,12 +99,4 @@ const RouteSubRoutes = (route) => {
   );
 };
 
-const RouteWithSubRoutes = withRouter(connect(mapStateToProps, null)(RouteSubRoutes));
-
-export const PageRoutes = ({ routes, ...extraProps }) => (
-  <Switch>
-    {routes && routes.map(route => (
-      <RouteWithSubRoutes key={route.path} {...extraProps} {...route} />
-    ))}
-  </Switch>
-);
+export const RouteWithSubRoutes = withRouter(connect(mapStateToProps, null)(RouteSubRoutes));

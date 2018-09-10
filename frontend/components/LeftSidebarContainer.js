@@ -6,22 +6,16 @@ import {
   selectSubbedChats,
   selectDmChats,
   selectChatMembers,
-  selectChatIdBySlug,
-  selectWorkspaceIdBySlug,
-  selectCurrentUserSlug,
   selectUnsubbedChats,
 } from '../reducers/selectors';
 import { modalOpen } from '../actions/interactiveActions';
 import { createChannel, updateChannelSub, fetchChannels } from '../actions/channelActions';
 
-const mapStateToProps = (state, { match: { params: { workspaceSlug, channelSlug } } }) => ({
+const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   currentUser: state.session.currentUser,
-  workspaces: selectWorkspaces(state),
-  workspaceSlug,
-  workspaceId: selectWorkspaceIdBySlug(state, workspaceSlug),
   channelSlug: state.ui.displayChannelSlug,
-  channelId: selectChatIdBySlug(state, channelSlug),
-  userSlug: selectCurrentUserSlug(state),
+  workspaces: selectWorkspaces(state),
+  currWorkspace: state.entities.workspaces[workspaceSlug],
   subbedChannels: selectSubbedChats(state),
   unsubbedChannels: selectUnsubbedChats(state),
   dmChats: selectDmChats(state),

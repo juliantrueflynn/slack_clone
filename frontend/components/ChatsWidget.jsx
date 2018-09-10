@@ -45,8 +45,7 @@ class ChatsWidget extends React.Component {
             <FontAwesomeIcon icon={['fas', 'plus-circle']} />
           </Button>
         </header>
-        {subbedChannels && (<Menu menuFor="chats" items={chatList} />)}
-
+        {subbedChannels && <Menu menuFor="chats" items={chatList} />}
         <ChatModal
           workspaceId={workspaceId}
           createChannelRequest={createChannelRequest}

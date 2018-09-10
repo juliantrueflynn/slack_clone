@@ -1,9 +1,7 @@
-import React from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { Fragment } from 'react';
 import MessagesPane from './MessagesPane';
 import MessageFormContainer from './MessageFormContainer';
 import ChannelSubscribe from './ChannelSubscribe';
-import ChatPage from './ChatPage';
 import './ChannelPage.css';
 
 class ChannelPage extends React.Component {
@@ -12,77 +10,53 @@ class ChannelPage extends React.Component {
       channelSlug,
       isWorkspaceLoaded,
       fetchChannelRequest,
-      channel,
-      updateReadRequest,
-      workspaceSlug,
     } = this.props;
 
-    if (isWorkspaceLoaded) fetchChannelRequest(channelSlug);
+    if (isWorkspaceLoaded) {
+      fetchChannelRequest(channelSlug);
+    }
+
+    this.updateRead();
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      channelSlug,
+      fetchChannelRequest,
+    } = this.props;
+
+    if (channelSlug !== prevProps.channelSlug) {
+      fetchChannelRequest(channelSlug);
+      this.updateRead();
+    }
+  }
+
+  updateRead() {
+    const {
+      channel,
+      updateReadRequest,
+      match: { params: { workspaceSlug } },
+    } = this.props;
+
     if (channel) {
       const read = { readableId: channel.id, readableType: 'Channel', workspaceSlug };
       updateReadRequest(read);
     }
   }
 
-  componentDidUpdate(prevProps) {
-    const {
-      channelSlug,
-      channel,
-      fetchChannelRequest,
-      updateReadRequest,
-      match: { params: { workspaceSlug } },
-    } = this.props;
-
-    if (channelSlug !== prevProps.channelSlug) {
-      fetchChannelRequest(channelSlug);
-
-      if (channel) {
-        const read = { readableId: channel.id, readableType: 'Channel', workspaceSlug };
-        updateReadRequest(read);
-      }
-    }
-  }
-
   render() {
     const {
-      match: { isExact, url, params },
-      channels,
       messages,
       dmUsernames,
       channel,
       rightSidebar,
-      isRightSidebarOpen,
-      userSlug,
       authors,
-      messageSlug,
       isChatSub,
       currentUserId,
       createChannelSubRequest,
-      isReactionModalOpen,
     } = this.props;
 
     if (!channel) return null;
-
-    let redirectUrl;
-
-    if (isExact && isRightSidebarOpen) {
-      const { sidebarType } = rightSidebar;
-
-      if (sidebarType === 'Thread') {
-        redirectUrl = `${url}/thread/${messageSlug}`;
-      } else if (sidebarType === 'Favorites') {
-        redirectUrl = `${url}/favorites`;
-      } else if (sidebarType === 'Workspace Directory') {
-        redirectUrl = `${url}/team/${userSlug}`;
-      }
-    }
-
-    if (!channel.workspaceSlug) {
-      const defChatSlug = channels[0].slug;
-      redirectUrl = `/${params.workspaceSlug}/${defChatSlug}`;
-    }
-
-    if (redirectUrl) return <Redirect to={redirectUrl} />;
 
     let chatTitle = `#${channel.title}`;
     let placeholder = chatTitle;
@@ -95,11 +69,12 @@ class ChannelPage extends React.Component {
     const ownerName = authors[channel.ownerSlug] && authors[channel.ownerSlug].username;
 
     return (
-      <ChatPage chatTitle={chatTitle} isReactionModalOpen={isReactionModalOpen}>
+      <Fragment>
         <MessagesPane
           messages={messages}
           users={authors}
           channel={channel}
+          rightSidebar={rightSidebar}
         />
         {/* <MessageFormContainer placeholder={formPlaceholder} /> */}
         <ChannelSubscribe
@@ -110,7 +85,7 @@ class ChannelPage extends React.Component {
           userId={currentUserId}
           createChannelSubRequest={createChannelSubRequest}
         />
-      </ChatPage>
+      </Fragment>
     );
   }
 }

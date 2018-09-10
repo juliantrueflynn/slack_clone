@@ -9,20 +9,22 @@ import './LeftSidebar.css';
 
 const LeftSidebar = ({
   subbedChannels,
-  workspaceSlug,
-  channelSlug,
-  userSlug,
   currentUser,
   members,
+  channelSlug,
+  currWorkspace,
   workspaces,
   modalOpen,
   dmChats,
-  workspaceId,
   unsubbedChannels,
   updateChannelSubRequest,
   createChannelRequest,
   fetchChannelsRequest,
+  match: { params: { workspaceSlug } },
 }) => {
+  if (!currWorkspace) return null;
+
+  const url = `/${workspaceSlug}/${channelSlug}`;
   const quickLinksList = [
     {
       icon: <FontAwesomeIcon className="Icon" icon={['fas', 'align-left']} />,
@@ -38,7 +40,7 @@ const LeftSidebar = ({
   const profileDdMenu = [
     { label: 'Home', link: '/', exact: true },
     { label: 'Set Status' },
-    { label: 'Profile & Account', link: `/${workspaceSlug}/${channelSlug}/team/${userSlug}` },
+    { label: 'Profile & Account', link: `${url}/team/${currentUser.slug}` },
     { label: 'Preferences', onClick: () => modalOpen('SETTINGS') },
     { label: 'Switch Workspace' },
   ];
@@ -62,7 +64,7 @@ const LeftSidebar = ({
     const iconClassName = `Icon Icon__status--${dmUserStatus}`;
 
     return {
-      icon: (<FontAwesomeIcon icon={circleIcon} size="xs" className={iconClassName} />),
+      icon: <FontAwesomeIcon icon={circleIcon} size="xs" className={iconClassName} />,
       link: `/${workspaceSlug}/${ch.slug}`,
       label: (
         <DmChatMenuItem
@@ -81,7 +83,7 @@ const LeftSidebar = ({
       <div className="SidebarWidget">
         <Dropdown menuFor="user" items={profileDdMenu} unStyled style={{ textAlign: 'left' }}>
           <div className="Dropdown__workspace">
-            {workspaceSlug}
+            {currWorkspace.title}
           </div>
           <div className="Dropdown__subtitle">
             <div className={`Dropdown__status Dropdown__status--${userStatus}`}>
@@ -103,7 +105,7 @@ const LeftSidebar = ({
         subbedChannels={subbedChannels}
         unsubbedChannels={unsubbedChannels}
         workspaceSlug={workspaceSlug}
-        workspaceId={workspaceId}
+        workspaceId={currWorkspace.id}
         createChannelRequest={createChannelRequest}
         fetchChannelsRequest={fetchChannelsRequest}
       />

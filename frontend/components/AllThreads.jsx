@@ -1,20 +1,21 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import MessageContainer from './MessageContainer';
 import MessageFormContainer from './MessageFormContainer';
 import MessageThreadAuthors from './MessageThreadAuthors';
-import ChatPage from './ChatPage';
 
 class AllThreads extends React.Component {
   componentDidMount() {
     const { fetchUserThreadsRequest, isWorkspaceLoaded } = this.props;
-    if (isWorkspaceLoaded) fetchUserThreadsRequest();
+
+    if (isWorkspaceLoaded) {
+      fetchUserThreadsRequest();
+    }
   }
 
   render() {
     const {
       messages,
       members,
-      isReactionModalOpen,
       currentUserSlug,
       isWorkspaceLoaded,
     } = this.props;
@@ -22,11 +23,7 @@ class AllThreads extends React.Component {
     if (!isWorkspaceLoaded) return null;
 
     return (
-      <ChatPage
-        chatTitle="All Threads"
-        chatClassName="threads"
-        isReactionModalOpen={isReactionModalOpen}
-      >
+      <Fragment>
         {Object.values(messages).map(parent => (
           <div key={parent.slug}>
             <div className="AllThreads__meta">
@@ -40,7 +37,6 @@ class AllThreads extends React.Component {
                 currentUserSlug={currentUserSlug}
               />
             </div>
-
             <MessageContainer message={parent} />
             <div className="ThreadsList" role="list">
               {parent.thread && parent.thread.map(childSlug => (
@@ -50,7 +46,7 @@ class AllThreads extends React.Component {
             <MessageFormContainer parentMessageId={parent.id} />
           </div>
         ))}
-      </ChatPage>
+      </Fragment>
     );
   }
 }

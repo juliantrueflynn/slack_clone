@@ -8,28 +8,23 @@ import {
   selectDmUsernamesBySlug,
   isUserChatSub,
   selectCurrentUserId,
-  isModalOpen,
   selectWorkspaceIdBySlug,
-  isRightSidebarOpen,
 } from '../reducers/selectors';
+import withChat from './withChat';
 
 const mapStateToProps = (state, { match: { params } }) => ({
   messages: selectParentMessages(state),
   channels: Object.values(state.entities.channels),
   channelSlug: params.channelSlug,
   messageSlug: state.ui.displayMessageSlug,
-  rightSidebar: state.ui.rightSidebar,
-  isRightSidebarOpen: isRightSidebarOpen(state),
   userSlug: state.ui.displayUserSlug,
   workspaceId: selectWorkspaceIdBySlug(state, params.workspaceSlug),
-  isWorkspaceLoaded: !!state.entities.workspaces[params.workspaceSlug],
   channel: state.entities.channels[params.channelSlug],
   authors: selectHashDmUsersBySlug(state, params.channelSlug),
   currentUser: state.session.currentUser,
   dmUsernames: selectDmUsernamesBySlug(state, params.channelSlug, false),
   isChatSub: isUserChatSub(state),
   currentUserId: selectCurrentUserId(state),
-  isReactionModalOpen: isModalOpen(state, 'MODAL_REACTION'),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -38,4 +33,4 @@ const mapDispatchToProps = dispatch => ({
   updateReadRequest: read => dispatch(updateRead.request(read)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChannelPage);
+export default withChat({ chatClassName: 'chat' })(connect(mapStateToProps, mapDispatchToProps)(ChannelPage));

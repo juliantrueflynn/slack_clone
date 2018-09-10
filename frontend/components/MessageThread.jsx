@@ -8,26 +8,34 @@ class MessageThread extends React.Component {
   componentDidMount() {
     const {
       message,
-      messageSlug,
       fetchMessageRequest,
-      updateReadRequest
+      updateReadRequest,
+      match: { params: { messageSlug, workspaceSlug } },
     } = this.props;
 
     fetchMessageRequest(messageSlug);
-    if (message) updateReadRequest(message.id);
+
+    if (message) {
+      const read = { readableId: message.id, readableType: 'Message', workspaceSlug };
+      updateReadRequest(read);
+    }
   }
 
   componentDidUpdate(prevProps) {
     const {
       message,
-      messageSlug,
       fetchMessageRequest,
-      updateReadRequest
+      updateReadRequest,
+      match: { params: { messageSlug, workspaceSlug } },
     } = this.props;
 
-    if (messageSlug !== prevProps.messageSlug) {
+    if (messageSlug !== prevProps.match.params.messageSlug) {
       fetchMessageRequest(messageSlug);
-      if (message) updateReadRequest(message.id);
+
+      if (message) {
+        const read = { readableId: message.id, readableType: 'Message', workspaceSlug };
+        updateReadRequest(read);
+      }
     }
   }
 
@@ -42,8 +50,13 @@ class MessageThread extends React.Component {
 
     if (!message) return null;
 
+    const sidebarProps = {
+      path: `/thread/${message.slug}`,
+      subtitle: chatTitle,
+    };
+
     return (
-      <RightSidebarContainer sidebarType="Thread" sidebarSubtitle={chatTitle}>
+      <RightSidebarContainer sidebarType="Thread" sidebarProps={sidebarProps}>
         <div className="MessageThread">
           <MessagesPane
             messages={threadMessages}

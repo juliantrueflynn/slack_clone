@@ -1,4 +1,16 @@
+.Channel {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
 .ChannelPage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.ChannelPage__body {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -6,7 +18,7 @@
   min-width: 1px;
 }
 
-.ChannelPage__body {
+.ChannelPage__row {
   display: flex;
   flex-direction: row;
   flex: 1;
