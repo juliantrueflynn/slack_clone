@@ -1,4 +1,4 @@
-import { FAVORITE, CHANNEL } from '../actions/actionTypes';
+import { FAVORITE, MESSAGE } from '../actions/actionTypes';
 
 const favoriteReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -24,8 +24,8 @@ const favoriteReducer = (state = {}, action) => {
       delete nextState[favorite.id];
       return nextState;
     }
-    case CHANNEL.SHOW.RECEIVE: {
-      const { channel: { favorites } } = action;
+    case MESSAGE.INDEX.RECEIVE: {
+      const { messages: { favorites } } = action;
 
       nextState = Object.assign({}, state);
       favorites.forEach((favorite) => {

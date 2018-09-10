@@ -24,13 +24,13 @@ const channelReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case CHANNEL.SHOW.RECEIVE: {
+    case MESSAGE.INDEX.RECEIVE: {
       const {
         channel,
         messages,
         members,
         reactions,
-      } = action.channel;
+      } = action.messages;
 
       const currChannel = {
         [channel.slug]: {

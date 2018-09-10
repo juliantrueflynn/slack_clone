@@ -16,7 +16,7 @@ const SingleMessageThread = ({
     return null;
   }
 
-  const threadUrl = `/${workspaceSlug}/${channelSlug}/thread/${message.slug}`;
+  const threadUrl = `/${workspaceSlug}/messages/${channelSlug}/thread/${message.slug}`;
   let threadLength = thread.length;
   threadLength += threadLength === 1 ? ' reply' : ' replies';
   let users = threadUsers;

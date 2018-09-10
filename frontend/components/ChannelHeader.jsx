@@ -21,7 +21,7 @@ class ChannelHeader extends React.Component {
   }
 
   render() {
-    const { favoritesUrl, sectionTitle, ...props } = this.props;
+    const { sectionTitle } = this.props;
     const menuItems = [{ label: 'Favorites', onClick: this.handleFavoritesClick }];
 
     return (
@@ -30,9 +30,6 @@ class ChannelHeader extends React.Component {
           <h1 className="ChannelHeader__title">
             {sectionTitle}
           </h1>
-          <div className="ChannelHeader__subheader">
-            {props.children}
-          </div>
           <Menu menuFor="channel-header" isRow items={menuItems} />
         </div>
       </header>

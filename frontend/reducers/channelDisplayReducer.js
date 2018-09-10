@@ -1,10 +1,10 @@
-import { CHANNEL, READ, USER_THREAD } from '../actions/actionTypes';
+import { MESSAGE, READ, USER_THREAD } from '../actions/actionTypes';
 
 const channelDisplayReducer = (state = null, action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case CHANNEL.SHOW.REQUEST: {
+    case MESSAGE.SHOW.REQUEST: {
       const { channelSlug } = action;
       return channelSlug;
     }

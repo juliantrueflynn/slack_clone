@@ -61,7 +61,7 @@ class MessageHoverMenu extends React.Component {
       match: { params: { workspaceSlug, channelSlug } },
       message: { slug, parentMessageId },
     } = this.props;
-    const baseThreadUrl = `/${workspaceSlug}/${channelSlug}`;
+    const baseThreadUrl = `/${workspaceSlug}/messages/${channelSlug}`;
 
     if (isEditing) return null;
 

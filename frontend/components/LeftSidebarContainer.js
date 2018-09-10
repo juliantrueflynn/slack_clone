@@ -13,7 +13,6 @@ import { createChannel, updateChannelSub, fetchChannels } from '../actions/chann
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   currentUser: state.session.currentUser,
-  channelSlug: state.ui.displayChannelSlug,
   workspaces: selectWorkspaces(state),
   currWorkspace: state.entities.workspaces[workspaceSlug],
   subbedChannels: selectSubbedChats(state),

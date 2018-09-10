@@ -1,6 +1,10 @@
 class Api::MessagesController < ApplicationController
   before_action :set_message, except: :create
 
+  def index
+    @channel = Channel.find_by(slug: params[:channel_slug])
+  end
+
   def show
   end
 

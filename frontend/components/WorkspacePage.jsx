@@ -1,8 +1,7 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Switch } from 'react-router-dom';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import './WorkspacePage.css';
-import LeftSidebarContainer from './LeftSidebarContainer';
 
 class WorkspacePage extends React.Component {
   componentDidMount() {
@@ -60,17 +59,14 @@ class WorkspacePage extends React.Component {
       return <Redirect to={`${url}/${defaultChatSlug}`} />;
     }
 
-    let channelClassNames = 'Channel';
-    if (isRightSidebarOpen) channelClassNames += ' Channel--sidebar-open';
+    let workspaceClassNames = 'WorkspacePage';
+    if (isRightSidebarOpen) workspaceClassNames += ' WorkspacePage--sidebar-open';
 
     return (
-      <div className="Page Page__workspace">
-        <LeftSidebarContainer />
-        <div className={channelClassNames}>
-          {routes.map(route => (
-            <RouteWithSubRoutes key={route.path || route.key} {...route} />
-          ))}
-        </div>
+      <div className={workspaceClassNames}>
+        {routes.map(route => (
+          <RouteWithSubRoutes key={route.path} {...route} />
+        ))}
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import { REACTION, CHANNEL, MESSAGE } from '../actions/actionTypes';
+import { REACTION, MESSAGE } from '../actions/actionTypes';
 
 const reactionReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -17,11 +17,14 @@ const reactionReducer = (state = {}, action) => {
       delete nextState[reaction.id];
       return nextState;
     }
-    case CHANNEL.SHOW.RECEIVE: {
-      nextState = action.channel.reactions.reduce((acc, curr) => {
+    case MESSAGE.INDEX.RECEIVE: {
+      const { messages: { reactions } } = action;
+
+      nextState = reactions.reduce((acc, curr) => {
         acc[curr.id] = curr;
         return acc;
       }, {});
+
       return merge({}, state, nextState);
     }
     case MESSAGE.SHOW.RECEIVE: {

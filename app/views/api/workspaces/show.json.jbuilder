@@ -15,8 +15,9 @@ end
 json.messages do
   json.array! current_user.channels.includes(:entries).where(workspace_id: @workspace.id) do |chat|
     message = chat.entries.where(parent_message_id: nil).last
-    json.slug message ? message.slug : nil
-    json.created_at message ? message.created_at : nil
+    next if message.nil?
+
+    json.(message, :id, :slug, :created_at)
     json.channel_slug chat.slug
   end
 end

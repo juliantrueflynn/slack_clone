@@ -11,7 +11,6 @@ const LeftSidebar = ({
   subbedChannels,
   currentUser,
   members,
-  channelSlug,
   currWorkspace,
   workspaces,
   modalOpen,
@@ -24,7 +23,7 @@ const LeftSidebar = ({
 }) => {
   if (!currWorkspace) return null;
 
-  const url = `/${workspaceSlug}/${channelSlug}`;
+  const url = `/${workspaceSlug}`;
   const quickLinksList = [
     {
       icon: <FontAwesomeIcon className="Icon" icon={['fas', 'align-left']} />,
@@ -65,7 +64,7 @@ const LeftSidebar = ({
 
     return {
       icon: <FontAwesomeIcon icon={circleIcon} size="xs" className={iconClassName} />,
-      link: `/${workspaceSlug}/${ch.slug}`,
+      link: `/${workspaceSlug}/messages/${ch.slug}`,
       label: (
         <DmChatMenuItem
           channelId={ch.id}

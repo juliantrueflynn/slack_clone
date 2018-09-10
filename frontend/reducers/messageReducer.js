@@ -1,7 +1,6 @@
 import merge from 'lodash.merge';
 import {
   MESSAGE,
-  CHANNEL,
   USER_THREAD,
   REACTION,
   READ,
@@ -22,9 +21,9 @@ const messageReducer = (state = {}, action) => {
         return acc;
       }, {});
     }
-    case CHANNEL.SHOW.RECEIVE: {
-      nextState = Object.assign({}, state);
-      const { channel: { messages, reactions, favorites } } = action;
+    case MESSAGE.INDEX.RECEIVE: {
+      nextState = {};
+      const { messages: { messages, reactions, favorites } } = action;
 
       messages.forEach((message) => {
         const children = messages.filter(child => child.parentMessageSlug === message.slug);
@@ -158,10 +157,11 @@ const messageReducer = (state = {}, action) => {
 
       nextState = unreads.reduce((acc, curr) => {
         acc[curr.slug] = curr;
+        acc[curr.slug].isUnread = true;
         return acc;
       }, {});
 
-      return merge({}, state, nextState);
+      return nextState;
     }
     default:
       return state;

@@ -1,12 +1,6 @@
-.Channel {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
-
 .ChannelPage {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100%;
 }
 

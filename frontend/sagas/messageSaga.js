@@ -9,6 +9,15 @@ import { MESSAGE } from '../actions/actionTypes';
 import * as actions from '../actions/messageActions';
 import * as api from '../util/apiUtil';
 
+function* fetchIndex({ channelSlug }) {
+  try {
+    const messages = yield call(api.apiFetch, `channels/${channelSlug}/messages`);
+    yield put(actions.fetchMessages.receive(messages));
+  } catch (error) {
+    yield put(actions.fetchMessage.failure(error));
+  }
+}
+
 function* loadMessage({ messageSlug }) {
   try {
     const message = yield call(api.apiFetch, `messages/${messageSlug}`);
@@ -42,6 +51,10 @@ function* fetchDeleteMessage({ messageSlug }) {
   }
 }
 
+function* watchIndex() {
+  yield takeLatest(MESSAGE.INDEX.REQUEST, fetchIndex);
+}
+
 function* watchRequestMessage() {
   yield takeLatest(MESSAGE.SHOW.REQUEST, loadMessage);
 }
@@ -60,6 +73,7 @@ function* watchDeleteMessage() {
 
 export default function* messageSaga() {
   yield all([
+    fork(watchIndex),
     fork(watchRequestMessage),
     fork(watchCreateMessage),
     fork(watchEditMessage),

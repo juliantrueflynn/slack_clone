@@ -6,7 +6,7 @@ import {
   select,
   takeLatest,
 } from 'redux-saga/effects';
-import { CHANNEL_SUB, MESSAGE, CHANNEL } from '../actions/actionTypes';
+import { CHANNEL_SUB, MESSAGE } from '../actions/actionTypes';
 import { deleteChannelSub, createChannelSub, updateChannelSub } from '../actions/channelActions';
 import { apiCreate, apiDelete, apiUpdate } from '../util/apiUtil';
 import { selectChatBySlug, selectOtherDmSub, selectCurrentUserSlug } from '../reducers/selectors';
@@ -28,7 +28,7 @@ function* fetchUpdate({ channelSub }) {
   }
 }
 
-function* fetchChannelShow({ channel: { channel, subs } }) {
+function* fetchChannelShow({ messages: { channel, subs } }) {
   try {
     const currUserSlug = yield select(selectCurrentUserSlug);
     const chatSubs = subs.filter(sub => sub.userSlug && sub.userSlug === currUserSlug);
@@ -69,7 +69,7 @@ function* watchCreate() {
 }
 
 function* watchChannelShow() {
-  yield takeLatest(CHANNEL.SHOW.RECEIVE, fetchChannelShow);
+  yield takeLatest(MESSAGE.INDEX.RECEIVE, fetchChannelShow);
 }
 
 function* watchDmChatMessage() {

@@ -85,6 +85,7 @@ class ChannelPage extends React.Component {
           userId={currentUserId}
           createChannelSubRequest={createChannelSubRequest}
         />
+        {this.props.children}
       </Fragment>
     );
   }

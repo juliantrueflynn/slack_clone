@@ -5,6 +5,7 @@ import {
   DM_CHAT,
   CHANNEL_SUB,
   CHANNEL,
+  MESSAGE,
 } from '../actions/actionTypes';
 
 const memberReducer = (state = {}, action) => {
@@ -29,8 +30,8 @@ const memberReducer = (state = {}, action) => {
 
       return merge({}, nextState);
     }
-    case CHANNEL.SHOW.RECEIVE: {
-      const { channel: { reactions } } = action;
+    case MESSAGE.INDEX.RECEIVE: {
+      const { messages: { reactions } } = action;
 
       nextState = Object.assign({}, state);
       reactions.forEach(({ id, userSlug }) => {

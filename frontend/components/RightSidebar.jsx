@@ -26,10 +26,11 @@ class RightSidebar extends React.Component {
     const {
       rightSidebarClose,
       history,
-      match: { params: { workspaceSlug, channelSlug } }
+      match: { params: { 0: chatPath, workspaceSlug } }
     } = this.props;
+
     rightSidebarClose();
-    history.push(`/${workspaceSlug}/${channelSlug}`);
+    history.push(`/${workspaceSlug}/${chatPath}`);
   }
 
   render() {

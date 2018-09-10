@@ -1,4 +1,4 @@
-import { MODAL_CLOSE, CHANNEL } from '../actions/actionTypes';
+import { MODAL_CLOSE, CHANNEL, MESSAGE } from '../actions/actionTypes';
 
 const channelErrorsReducer = (state = [], action) => {
   Object.freeze(state);
@@ -6,6 +6,7 @@ const channelErrorsReducer = (state = [], action) => {
   switch (action.type) {
     case CHANNEL.INDEX.FAILURE:
     case CHANNEL.SHOW.FAILURE:
+    case MESSAGE.INDEX.FAILURE:
     case CHANNEL.CREATE.FAILURE:
     case CHANNEL.UPDATE.FAILURE:
     case CHANNEL.DESTROY.FAILURE:
