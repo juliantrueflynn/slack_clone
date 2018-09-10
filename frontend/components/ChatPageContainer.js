@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 // import { fetchChannel, createChannelSub } from '../actions/channelActions';
 // import { updateRead } from '../actions/readActions';
-import { isRightSidebarOpen } from '../reducers/selectors';
+import { isRightSidebarOpen, selectChatTitleBySlug } from '../reducers/selectors';
 import { fetchMessages, fetchUserThreads } from '../actions/messageActions';
 import { fetchUnreads } from '../actions/readActions';
 import { rightSidebarClose } from '../actions/rightSidebarActions';
@@ -12,7 +12,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
   // entries: selectParentMessages(state),
   entries: Object.values(state.entities.messages),
   channels: Object.values(state.entities.channels),
-  channel: state.entities.channels[params.chatPath],
+  chatTitle: selectChatTitleBySlug(state, params.chatPath),
   channelSlug: params.channelSlug,
   messageSlug: state.ui.displayMessageSlug,
   userSlug: state.ui.displayUserSlug,

@@ -80,6 +80,22 @@ export const selectDmWithUser = ({ entities: { channels } }, userSlug) => {
   return dmChatsWithUser[0];
 };
 
+export const selectHashDmUsersBySlug = ({ entities, session }, chatSlug, hasCurrUser = true) => {
+  const { channels, members } = entities;
+  const { currentUser } = session;
+
+  if (!channels[chatSlug] || !channels[chatSlug].members) return null;
+
+  const chatUsers = channels[chatSlug].members.reduce((acc, curr) => {
+    acc[curr] = members[curr];
+    return acc;
+  }, {});
+
+  if (!hasCurrUser) delete chatUsers[currentUser.slug];
+
+  return chatUsers;
+};
+
 export const selectChannels = ({ entities: { channels } }, workspaceSlug) => (
   values(channels)
     .filter(ch => ch.workspaceSlug === workspaceSlug)
@@ -90,9 +106,36 @@ export const selectUnreadChannels = ({ entities: { channels } }) => (
   values(channels).filter(ch => ch.hasUnreads)
 );
 
+export const selectDmUsernamesBySlug = (state, chatSlug, hasCurrUser = true) => {
+  const dmUsers = selectHashDmUsersBySlug(state, chatSlug, hasCurrUser);
+  return dmUsers && values(dmUsers).map(user => user && user.username);
+};
+
 export const selectChatBySlug = ({ entities: { channels }, ui }, slug) => {
   const chSlug = slug || ui.displayChannelSlug;
-  return channels[chSlug];
+  const chat = Object.assign({}, channels[chSlug]);
+
+  return chat || null;
+};
+
+export const selectChatTitleBySlug = ({ entities: { channels, members }, session }, slug) => {
+  let chatTitle;
+  if (slug === 'unreads') {
+    chatTitle = 'All Unreads';
+  } else if (slug === 'threads') {
+    chatTitle = 'All Threads';
+  } else if (channels[slug]) {
+    chatTitle = `#${channels[slug].title}`;
+
+    if (channels[slug].hasDm) {
+      const { currentUser: { slug: userSlug } } = session;
+      const dmUsers = channels[slug].members.filter(member => member === userSlug);
+      const dmWith = dmUsers[0];
+      chatTitle = members[dmWith] && members[dmWith].username;
+    }
+  }
+
+  return chatTitle;
 };
 
 export const selectChatIdBySlug = ({ entities: { channels }, ui }, slug) => {
@@ -143,27 +186,6 @@ export const isUserChatSub = ({ entities, ui, session: { currentUser } }) => {
 export const selectUserBySlug = ({ entities: { members } }, slug) => (
   members && members[slug]
 );
-
-export const selectHashDmUsersBySlug = ({ entities, session }, chatSlug, hasCurrUser = true) => {
-  const { channels, members } = entities;
-  const { currentUser } = session;
-
-  if (!channels[chatSlug] || !channels[chatSlug].members) return null;
-
-  const chatUsers = channels[chatSlug].members.reduce((acc, curr) => {
-    acc[curr] = members[curr];
-    return acc;
-  }, {});
-
-  if (!hasCurrUser) delete chatUsers[currentUser.slug];
-
-  return chatUsers;
-};
-
-export const selectDmUsernamesBySlug = (state, chatSlug, hasCurrUser = true) => {
-  const dmUsers = selectHashDmUsersBySlug(state, chatSlug, hasCurrUser);
-  return dmUsers && values(dmUsers).map(user => user && user.username);
-};
 
 export const selectParentMessages = ({ entities: { messages, channels }, ui }) => {
   const channel = channels[ui.displayChannelSlug];
