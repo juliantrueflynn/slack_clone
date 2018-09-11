@@ -28,8 +28,9 @@
   color: rgba(255,255,255,0.4);
 }
 
-.SidebarWidget .MenuItem__content:hover:not(.MenuItem__content--active) {
-  background-color: rgba(0,0,0,.15);
+.SidebarWidget .MenuItem__content--btn:hover:not(.MenuItem__content--active),
+.SidebarWidget .MenuItem__content--link:hover:not(.MenuItem__content--active) {
+  background-color: rgba(0,0,0,.1);
 }
 
 .SidebarWidget .MenuItem__content--active {

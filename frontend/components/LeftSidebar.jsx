@@ -1,10 +1,10 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PreferencesModal from './PreferencesModal';
-import Dropdown from './Dropdown';
 import Menu from './Menu';
 import DmChatMenuItem from './DmChatMenuItem';
 import ChatsWidget from './ChatsWidget';
+import ProfileDropdown from './ProfileDropdown';
 import './LeftSidebar.css';
 
 const LeftSidebar = ({
@@ -19,11 +19,10 @@ const LeftSidebar = ({
   updateChannelSubRequest,
   createChannelRequest,
   fetchChannelsRequest,
-  match: { params: { workspaceSlug } },
+  match: { url, params: { workspaceSlug } },
 }) => {
   if (!currWorkspace) return null;
 
-  const url = `/${workspaceSlug}`;
   const quickLinksList = [
     {
       icon: <FontAwesomeIcon className="Icon" icon={['fas', 'align-left']} />,
@@ -36,19 +35,6 @@ const LeftSidebar = ({
       link: `/${workspaceSlug}/threads`,
     },
   ];
-  const profileDdMenu = [
-    { label: 'Home', link: '/', exact: true },
-    { label: 'Set Status' },
-    { label: 'Profile & Account', link: `${url}/team/${currentUser.slug}` },
-    { label: 'Preferences', onClick: () => modalOpen('SETTINGS') },
-    { label: 'Switch Workspace' },
-  ];
-
-  if (workspaces) {
-    workspaces.forEach((workspace) => {
-      profileDdMenu.push({ label: workspace.title, link: `/${workspace.slug}` });
-    });
-  }
 
   const dmChatsItems = dmChats && dmChats.map((ch) => {
     const subsWithoutCurrUser = ch.members.filter(slug => slug !== currentUser.slug);
@@ -75,24 +61,16 @@ const LeftSidebar = ({
     };
   });
 
-  const userStatus = currentUser.status && currentUser.status.toLowerCase();
-
   return (
     <aside className="Sidebar Sidebar--left">
       <div className="SidebarWidget">
-        <Dropdown menuFor="user" items={profileDdMenu} unStyled style={{ textAlign: 'left' }}>
-          <div className="Dropdown__workspace">
-            {currWorkspace.title}
-          </div>
-          <div className="Dropdown__subtitle">
-            <div className={`Dropdown__status Dropdown__status--${userStatus}`}>
-              <FontAwesomeIcon className="Icon" icon={['fas', 'circle']} size="xs" />
-            </div>
-            <div className="Dropdown__title">
-              {currentUser.username}
-            </div>
-          </div>
-        </Dropdown>
+        <ProfileDropdown
+          workspaceTitle={currWorkspace.title}
+          workspaces={workspaces}
+          user={members[currentUser.slug]}
+          url={url}
+          modalOpen={modalOpen}
+        />
       </div>
 
       <div className="SidebarWidget SidebarWidth__quicklinks">

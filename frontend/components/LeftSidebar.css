@@ -15,23 +15,12 @@
 }
 
 .SidebarWidget__header,
-.Dropdown__user .Btn__dropdown,
+.Dropdown__profile .Btn__dropdown,
 .Sidebar--left .MenuItem__content,
 .Sidebar--left .menu__text {
   padding-left: 16px;
   padding-right: 16px;
   width: 100%;
-}
-
-.Dropdown__user .Btn__dropdown:focus {
-  outline: 0;
-  background-color: #453343;
-  box-shadow: none;
-}
-
-.Dropdown__user .Menu--dropdown {
-  left: 10px;
-  z-index: 9999;
 }
 
 .SidebarWidget {
@@ -70,44 +59,8 @@
   margin-right: auto;
 }
 
-
-.Dropdown__user .MenuItem__content {
-  color: #333;
-}
-
-.Dropdown__user .MenuItem__content {
-  padding-top: 4px;
-  padding-bottom: 4px;
-  display: block;
-}
-
-.Dropdown__user .MenuItem__content--active {
-  background-color: #4C9689;
-  color: #FFF;
-}
-
-.Dropdown__user .Dropdown__title {
-  text-align: left;
-}
-
 .Dropdown__workspace {
   font-weight: bold;
-}
-
-.Dropdown__user .Dropdown__subtitle {
-  display: flex;
-  flex-direction: row;
-}
-
-.Dropdown__user .Dropdown__status {
-  padding-right: 8px;
-  display: flex;
-  align-items: center;
-}
-
-.Dropdown__status--online,
-.Icon__status--online  {
-  color: rgb(85,239,196,.5);
 }
 
 .SidebarWidget__header .Btn:focus {

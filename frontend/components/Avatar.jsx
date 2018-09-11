@@ -13,7 +13,8 @@ const Avatar = ({
 
   const imgSize = size || 40;
   let classNames = 'Avatar';
-  if (avatarFor) classNames += ` Avatar--${baseUrl ? 'link' : 'div'}`;
+  if (avatarFor) classNames += ` Avatar__${avatarFor}`;
+  classNames += ` Avatar--${baseUrl ? 'link' : 'div'}`;
 
   const authorImage = (
     <img

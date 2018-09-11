@@ -17,7 +17,7 @@ const Menu = ({
 
   return (
     <ul role="menu" className={classNames} {...props}>
-      {items.map(({ link, ...item }) => (
+      {items.map(({ link, className, ...item }) => (
         <MenuItem
           key={item.label + (link || '')}
           role="menuitem"
