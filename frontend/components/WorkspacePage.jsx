@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Switch } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import './WorkspacePage.css';
 
@@ -39,13 +39,12 @@ class WorkspacePage extends React.Component {
 
   render() {
     const {
+      defaultChat,
       match: { url, isExact },
-      channels,
       isLoading,
       routes,
-      isRightSidebarOpen,
     } = this.props;
-    const defaultChatSlug = channels[0] && channels[0].slug;
+    const defaultChatSlug = defaultChat && defaultChat.slug;
 
     if (isLoading) {
       return (
@@ -59,15 +58,10 @@ class WorkspacePage extends React.Component {
       return <Redirect to={`${url}/${defaultChatSlug}`} />;
     }
 
-    let workspaceClassNames = 'WorkspacePage';
-    if (isRightSidebarOpen) workspaceClassNames += ' WorkspacePage--sidebar-open';
-
     return (
-      <div className={workspaceClassNames}>
-        {routes.map(route => (
-          <RouteWithSubRoutes key={route.path} {...route} />
-        ))}
-      </div>
+      routes.map(route => (
+        <RouteWithSubRoutes key={route.path} {...route} />
+      ))
     );
   }
 }

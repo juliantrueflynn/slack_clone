@@ -34,7 +34,7 @@
   background-color: #F9F9F9;
 }
 
-.ChannelPage--reaction .Message:hover {
+.ChatPage--reaction .Message:hover {
   background-color: #FFF;
 }
 

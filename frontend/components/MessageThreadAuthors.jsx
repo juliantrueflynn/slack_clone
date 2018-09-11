@@ -1,28 +1,40 @@
-import React from 'react';
-import MessageThreadAuthor from './MessageThreadAuthor';
+import React, { Fragment } from 'react';
 
-const MessageThreadAuthors = ({ members, messages, ...props }) => {
-  if (!props.messageThread || !props.messageThread.length) {
+const MessageThreadAuthors = ({
+  authors,
+  messages,
+  messageThread,
+  currentUserSlug,
+}) => {
+  if (!messageThread) {
     return null;
   }
 
-  const authorSlugs = props.messageThread.map(childSlug => (
-    messages[childSlug] && messages[childSlug].authorSlug
-  )).filter((authorSlug, pos, self) => (
-    self.indexOf(authorSlug) === pos && props.currentUserSlug !== authorSlug
+  const slugs = messageThread.map(slug => messages[slug].authorSlug).filter((val, pos, self) => (
+    self.indexOf(val) === pos && currentUserSlug !== val
   ));
 
+  const threadAuthor = (userSlug) => {
+    const author = authors[userSlug];
+
+    return (
+      <Fragment>
+        {author.username}
+        {slugs.length === 1 ? ' ' : ', '}
+      </Fragment>
+    );
+  };
+
   return (
-    <div className="msg-thread-authors">
-      {authorSlugs.map(authorSlug => (
-        <MessageThreadAuthor
-          key={authorSlug}
-          authorSlug={authorSlug}
-          authorSlugs={authorSlugs}
-          members={members}
-        />
+    <div className="MessageThreadAuthors">
+      {slugs.map(authorSlug => (
+        <div className="MessageThreadAuthor__item" key={authorSlug}>
+          {threadAuthor(authorSlug)}
+        </div>
       ))}
-      <span>and you</span>
+      <span>
+        and you
+      </span>
     </div>
   );
 };

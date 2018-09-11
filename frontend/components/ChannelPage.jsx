@@ -2,31 +2,16 @@ import React, { Fragment } from 'react';
 import MessagesPane from './MessagesPane';
 import MessageFormContainer from './MessageFormContainer';
 import ChannelSubscribe from './ChannelSubscribe';
-import './ChannelPage.css';
 
-class ChannelPage extends React.Component {
+class ChatPage extends React.Component {
   componentDidMount() {
-    const {
-      channelSlug,
-      isWorkspaceLoaded,
-      fetchChannelRequest,
-    } = this.props;
-
-    if (isWorkspaceLoaded) {
-      fetchChannelRequest(channelSlug);
-    }
-
     this.updateRead();
   }
 
   componentDidUpdate(prevProps) {
-    const {
-      channelSlug,
-      fetchChannelRequest,
-    } = this.props;
+    const { location: { pathname } } = this.props;
 
-    if (channelSlug !== prevProps.channelSlug) {
-      fetchChannelRequest(channelSlug);
+    if (pathname !== prevProps.location.pathname) {
       this.updateRead();
     }
   }
@@ -47,24 +32,20 @@ class ChannelPage extends React.Component {
   render() {
     const {
       messages,
-      dmUsernames,
       channel,
       rightSidebar,
       authors,
       isChatSub,
-      currentUserId,
+      currentUser,
       createChannelSubRequest,
+      chatTitle,
     } = this.props;
 
-    if (!channel) return null;
-
-    let chatTitle = `#${channel.title}`;
-    let placeholder = chatTitle;
-    if (channel.hasDm) {
-      chatTitle = dmUsernames.join(', ');
-      placeholder = dmUsernames.length === 1 ? `@${chatTitle}` : chatTitle;
+    if (!channel) {
+      return null;
     }
 
+    const placeholder = channel.hasDm ? `@${chatTitle}` : chatTitle;
     const formPlaceholder = placeholder && `Message ${placeholder}`;
     const ownerName = authors[channel.ownerSlug] && authors[channel.ownerSlug].username;
 
@@ -76,19 +57,18 @@ class ChannelPage extends React.Component {
           channel={channel}
           rightSidebar={rightSidebar}
         />
-        {/* <MessageFormContainer placeholder={formPlaceholder} /> */}
+        <MessageFormContainer placeholder={formPlaceholder} />
         <ChannelSubscribe
           title={chatTitle}
           ownerName={ownerName}
           channel={channel}
           isChatSub={isChatSub}
-          userId={currentUserId}
+          userId={currentUser.id}
           createChannelSubRequest={createChannelSubRequest}
         />
-        {this.props.children}
       </Fragment>
     );
   }
 }
 
-export default ChannelPage;
+export default ChatPage;

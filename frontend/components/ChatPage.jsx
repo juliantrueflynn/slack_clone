@@ -3,22 +3,25 @@ import EmojiModalContainer from './EmojiModalContainer';
 import LeftSidebarContainer from './LeftSidebarContainer';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import ChannelHeader from './ChannelHeader';
-import './ChannelPage.css';
+import ChannelPageContainer from './ChannelPageContainer';
+import AllThreads from './AllThreads';
+import AllUnreads from './AllUnreads';
+import './ChatPage.css';
 
 class ChatPage extends React.Component {
-  componentDidMount() {
-    const {
-      history,
-      fetchEntriesRequest,
-      isWorkspaceLoaded,
-    } = this.props;
-
-    if (isWorkspaceLoaded) {
-      fetchEntriesRequest();
-    }
+  componentWillMount() {
+    const { history } = this.props;
 
     if (this.selectRedirectUrl()) {
       history.push(this.selectRedirectUrl());
+    }
+  }
+
+  componentDidMount() {
+    const { fetchEntriesRequest, isWorkspaceLoaded } = this.props;
+
+    if (isWorkspaceLoaded) {
+      fetchEntriesRequest();
     }
   }
 
@@ -31,7 +34,7 @@ class ChatPage extends React.Component {
       match: { params: { chatPath } },
     } = this.props;
 
-    if (pathname !== prevProps.location.pathname) {
+    if (prevProps.location.pathname !== pathname) {
       fetchEntriesRequest(chatPath);
     }
 
@@ -45,13 +48,11 @@ class ChatPage extends React.Component {
   }
 
   selectRedirectUrl() {
-    const { rightSidebar, isRightSidebarOpen, match: { url, isExact } } = this.props;
+    const { rightSidebarProps, match: { url, isExact } } = this.props;
 
-    if (isExact && isRightSidebarOpen) {
-      const { sidebarProps } = rightSidebar;
-
-      if (sidebarProps && sidebarProps.path) {
-        return url + sidebarProps.path;
+    if (isExact && rightSidebarProps) {
+      if (rightSidebarProps && rightSidebarProps.path) {
+        return url + rightSidebarProps.path;
       }
     }
 
@@ -60,28 +61,54 @@ class ChatPage extends React.Component {
 
   render() {
     const {
-      entries,
+      match: { params: { chatPath } },
+      messages,
       isWorkspaceLoaded,
       routes,
       rightSidebarClose,
       chatTitle,
+      isRightSidebarOpen,
+      channel,
+      users,
+      currentUser,
+      channels,
     } = this.props;
 
-    if (!isWorkspaceLoaded) return null;
+    if (!isWorkspaceLoaded) {
+      return null;
+    }
+
+    let chatClassNames = 'ChatPage';
+    if (isRightSidebarOpen) chatClassNames += ' ChatPage--sidebar-open';
 
     return (
-      <div className="ChannelPage">
+      <div className={chatClassNames}>
         <LeftSidebarContainer />
-        <div className="ChannelPage__body">
+        <div className="ChatPage__body">
           <ChannelHeader sectionTitle={chatTitle} rightSidebarClose={rightSidebarClose} />
-          <div className="ChannelPage__row">
-            <div className="ChannelPage__container">
+          <div className="ChatPage__row">
+            <div className="ChatPage__container">
               <EmojiModalContainer />
-              {entries && entries.map(entry => (
-                <div key={entry.id}>
-                  {entry.id}
-                </div>
-              ))}
+              <AllUnreads
+                messages={messages}
+                authors={users}
+                chatPath={chatPath}
+                channels={channels}
+              />
+              <AllThreads
+                chatPath={chatPath}
+                messages={messages}
+                users={users}
+                currentUserSlug={currentUser.slug}
+                channels={channels}
+              />
+              <ChannelPageContainer
+                channel={channel}
+                messages={messages}
+                chatTitle={chatTitle}
+                authors={users}
+                currentUser={currentUser}
+              />
             </div>
             {routes.map(route => (
               <RouteWithSubRoutes key={route.path} {...route} />

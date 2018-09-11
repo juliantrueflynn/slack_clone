@@ -1,37 +1,28 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import AllUnreadsItem from './AllUnreadsItem';
 
-class AllUnreads extends React.Component {
-  componentDidMount() {
-    const { isWorkspaceLoaded, fetchUnreadsRequest, match: { params } } = this.props;
-
-    if (isWorkspaceLoaded) {
-      fetchUnreadsRequest(params.workspaceSlug);
-    }
+const AllUnreads = ({
+  chatPath,
+  channels,
+  messages,
+  authors,
+}) => {
+  if (chatPath !== 'unreads') {
+    return null;
   }
 
-  render() {
-    const {
-      unreadChannels,
-      messages,
-      authors,
-    } = this.props;
+  const unreadChannels = channels.filter(ch => ch.hasUnreads);
 
-    if (!unreadChannels) return null;
-
-    return (
-      <Fragment>
-        {unreadChannels.map(channel => (
-          <AllUnreadsItem
-            key={channel.id}
-            channel={channel}
-            authors={authors}
-            messages={messages}
-          />
-        ))}
-      </Fragment>
-    );
-  }
-}
+  return (
+    unreadChannels.map(channel => (
+      <AllUnreadsItem
+        key={channel.id}
+        channel={channel}
+        authors={authors}
+        messages={messages}
+      />
+    ))
+  );
+};
 
 export default AllUnreads;

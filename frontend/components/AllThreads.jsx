@@ -1,54 +1,45 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import MessageContainer from './MessageContainer';
 import MessageFormContainer from './MessageFormContainer';
 import MessageThreadAuthors from './MessageThreadAuthors';
 
-class AllThreads extends React.Component {
-  componentDidMount() {
-    const { fetchUserThreadsRequest, isWorkspaceLoaded } = this.props;
-
-    if (isWorkspaceLoaded) {
-      fetchUserThreadsRequest();
-    }
+const AllThreads = ({
+  chatPath,
+  messages,
+  users,
+  channels,
+  currentUserSlug,
+}) => {
+  if (chatPath !== 'threads') {
+    return null;
   }
 
-  render() {
-    const {
-      messages,
-      members,
-      currentUserSlug,
-      isWorkspaceLoaded,
-    } = this.props;
+  const parentMessages = Object.values(messages);
 
-    if (!isWorkspaceLoaded) return null;
-
-    return (
-      <Fragment>
-        {Object.values(messages).map(parent => (
-          <div key={parent.slug}>
-            <div className="AllThreads__meta">
-              <strong>
-                {parent.channelId}
-              </strong>
-              <MessageThreadAuthors
-                messages={messages}
-                members={members}
-                messageThread={parent.thread}
-                currentUserSlug={currentUserSlug}
-              />
-            </div>
-            <MessageContainer message={parent} />
-            <div className="ThreadsList" role="list">
-              {parent.thread && parent.thread.map(childSlug => (
-                <MessageContainer key={childSlug} message={messages[childSlug]} />
-              ))}
-            </div>
-            <MessageFormContainer parentMessageId={parent.id} />
-          </div>
-        ))}
-      </Fragment>
-    );
-  }
-}
+  return (
+    parentMessages.map(parent => (
+      <div key={parent.slug} className="AllThread__item">
+        <div className="AllThreads__meta">
+          <strong>
+            {channels[parent.channelSlug].title}
+          </strong>
+          <MessageThreadAuthors
+            messages={messages}
+            authors={users}
+            messageThread={parent.thread}
+            currentUserSlug={currentUserSlug}
+          />
+        </div>
+        <MessageContainer message={parent} />
+        <div className="ThreadsList" role="list">
+          {parent.thread && parent.thread.map(childSlug => (
+            <MessageContainer key={childSlug} message={messages[childSlug]} />
+          ))}
+        </div>
+        {/* <MessageFormContainer parentMessageId={parent.id} /> */}
+      </div>
+    ))
+  );
+};
 
 export default AllThreads;

@@ -14,7 +14,7 @@
   display: flex;
 }
 
-.ChannelPage--reaction .Message:hover .MessageHoverMenu {
+.ChatPage--reaction .Message:hover .MessageHoverMenu {
   display: none;
 }
 

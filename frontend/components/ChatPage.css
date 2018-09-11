@@ -1,10 +1,10 @@
-.ChannelPage {
+.ChatPage {
   display: flex;
   flex-direction: row;
   width: 100%;
 }
 
-.ChannelPage__body {
+.ChatPage__body {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -12,13 +12,13 @@
   min-width: 1px;
 }
 
-.ChannelPage__row {
+.ChatPage__row {
   display: flex;
   flex-direction: row;
   flex: 1;
 }
 
-.ChannelPage__container {
+.ChatPage__container {
   display: flex;
   flex-direction: column;
   flex: 1;

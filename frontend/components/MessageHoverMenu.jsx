@@ -58,10 +58,9 @@ class MessageHoverMenu extends React.Component {
       isAuthor,
       isFavorited,
       isEditing,
-      match: { params: { workspaceSlug, channelSlug } },
+      match: { url },
       message: { slug, parentMessageId },
     } = this.props;
-    const baseThreadUrl = `/${workspaceSlug}/messages/${channelSlug}`;
 
     if (isEditing) return null;
 
@@ -71,7 +70,7 @@ class MessageHoverMenu extends React.Component {
           <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />
         </Button>
         {!parentMessageId && (
-          <Button className="Btn Btn__thread" linkTo={`${baseThreadUrl}/thread/${slug}`}>
+          <Button className="Btn Btn__thread" linkTo={`${url}/thread/${slug}`}>
             <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />
           </Button>
         )}

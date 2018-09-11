@@ -8,16 +8,15 @@ class RightSidebar extends React.Component {
     this.handleClose = this.handleClose.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const {
-      isWorkspaceLoaded,
       rightSidebarOpen,
       sidebarType,
       sidebarProps,
       isOpen,
     } = this.props;
 
-    if (isWorkspaceLoaded && !isOpen) {
+    if (!isOpen) {
       rightSidebarOpen(sidebarType, sidebarProps);
     }
   }

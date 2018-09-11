@@ -4,11 +4,11 @@
   box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.15);
 }
 
-.ChannelPage--reaction .MessageHoverMenu {
+.ChatPage--reaction .MessageHoverMenu {
   border: none;
 }
 
-.ChannelPage--reaction .MessageHoverMenu > .Btn {
+.ChatPage--reaction .MessageHoverMenu > .Btn {
   display: none;
 }
 
