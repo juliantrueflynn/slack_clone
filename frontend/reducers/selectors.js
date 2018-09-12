@@ -259,8 +259,6 @@ export const selectCurrentMessage = ({ entities: { messages }, ui }) => (
   messages[ui.displayMessageSlug]
 );
 
-export const selectReads = ({ entities: { reads } }) => reads;
-
 export const selectChatMessages = ({ entities: { channels, messages } }, chatPath) => {
   const chat = channels[chatPath];
 
@@ -280,3 +278,17 @@ export const selectChatChannels = ({ entities: { channels } }, chatPath) => {
 
   return values(channels);
 };
+
+export const selectCurrentChannel = ({ entities: { channels }, ui }) => (
+  channels[ui.displayChannelSlug]
+);
+
+export const hasUreadChannels = ({ entities: { reads, channels } }) => (
+  !!values(reads).filter(read => read.readableType === 'Channel' && channels[read.slug].hasUnreads).length
+);
+
+export const hasUreadThreads = ({ entities: { reads, messages } }) => (
+  !!values(reads).filter(read => (
+    read.readableType === 'Message' && messages[read.slug] && messages[read.slug].hasUnreads
+  )).length
+);

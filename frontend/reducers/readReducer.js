@@ -1,4 +1,4 @@
-import { WORKSPACE, MESSAGE, READ } from '../actions/actionTypes';
+import { WORKSPACE, READ, MESSAGE } from '../actions/actionTypes';
 
 const readReducer = (state = {}, action) => {
   Object.freeze(state);

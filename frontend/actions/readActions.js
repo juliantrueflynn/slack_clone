@@ -14,7 +14,7 @@ export const createRead = {
 };
 
 export const updateRead = {
-  request: read => actionCreator(READ.UPDATE.REQUEST, { read }),
+  request: readId => actionCreator(READ.UPDATE.REQUEST, { readId }),
   receive: read => actionCreator(READ.UPDATE.RECEIVE, { read }),
   failure: errors => actionCreator(READ.UPDATE.FAILURE, { errors }),
 };

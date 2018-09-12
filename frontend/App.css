@@ -23,15 +23,7 @@ a {
 
 .App {
   min-height: 100vh;
-}
-
-.Form__control {
-  cursor: auto;
-  line-height: 1.6;
-  font-size: 16px;
-  padding: 8px 10px;
-  width: 100%;
-  border-style: solid;
+  display: flex;
 }
 
 .Form__group {

@@ -15,16 +15,22 @@ const messageReducer = (state = {}, action) => {
   switch (action.type) {
     case WORKSPACE.SHOW.RECEIVE: {
       const { workspace: { messages } } = action;
-      nextState = Object.assign({}, state);
       return messages.reduce((acc, curr) => {
         if (!curr || !curr.slug) return acc;
         acc[curr.slug] = curr;
+        acc[curr.slug].thread = curr.parentMessageId ? null : [];
+        acc[curr.slug].hasUnreads = false;
         return acc;
       }, {});
     }
     case MESSAGE.INDEX.RECEIVE: {
-      nextState = {};
-      const { messages: { messages, reactions, favorites } } = action;
+      nextState = Object.assign({}, state);
+      const {
+        messages,
+        reactions,
+        favorites,
+        reads,
+      } = action.messages;
 
       messages.forEach((message) => {
         const children = messages.filter(child => child.parentMessageSlug === message.slug);
@@ -55,6 +61,10 @@ const messageReducer = (state = {}, action) => {
 
       favorites.forEach(({ id, messageSlug }) => {
         if (nextState[messageSlug]) nextState[messageSlug].favoriteId = id;
+      });
+
+      reads.forEach((read) => {
+        nextState[read.slug].readId = read.id;
       });
 
       return nextState;
@@ -92,16 +102,29 @@ const messageReducer = (state = {}, action) => {
     }
     case MESSAGE.CREATE.RECEIVE: {
       const { message } = action;
-      const { parentMessageSlug: parentSlug, slug, updatedAt } = message;
-      message.thread = parentSlug ? null : [];
+      const { parentMessageSlug, slug } = message;
+      message.thread = parentMessageSlug ? null : [];
       message.lastRead = null;
       message.readId = null;
       message.reactionIds = [];
       message.favoriteId = null;
       nextState = merge({}, state, { [slug]: message });
-      if (parentSlug) {
-        nextState[parentSlug].thread.push(slug);
-        nextState[parentSlug].lastActive = updatedAt;
+      if (parentMessageSlug) {
+        if (!nextState[parentMessageSlug]) {
+          nextState[parentMessageSlug] = {
+            id: message.parentMessageId,
+            slug: parentMessageSlug,
+            thread: [],
+            favoriteId: [],
+            reactionIds: [],
+            lastActive: message.createdAt,
+            channelId: message.channelId,
+            channelSlug: message.channelSlug,
+            parentMessageId: null,
+          };
+        }
+
+        nextState[parentMessageSlug].thread.push(slug);
       }
       return nextState;
     }
@@ -134,7 +157,14 @@ const messageReducer = (state = {}, action) => {
       nextState = { [messageSlug]: { reactionIds: [reaction.id] } };
       return merge({}, state, nextState);
     }
-    case READ.CREATE.RECEIVE:
+    case READ.CREATE.RECEIVE: {
+      const { read } = action;
+      if (read.readableType !== 'Message') return state;
+      nextState = Object.assign({}, state);
+      nextState[read.slug].lastRead = read.accessedAt;
+      nextState[read.slug].readId = read.id;
+      return nextState;
+    }
     case READ.UPDATE.RECEIVE: {
       const { read } = action;
       if (read.readableType !== 'Message') return state;

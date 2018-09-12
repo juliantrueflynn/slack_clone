@@ -8,6 +8,8 @@ import ProfileDropdown from './ProfileDropdown';
 import './LeftSidebar.css';
 
 const LeftSidebar = ({
+  hasUnreadChannels,
+  hasUnreadThreads,
   subbedChannels,
   currentUser,
   members,
@@ -28,11 +30,13 @@ const LeftSidebar = ({
       icon: <FontAwesomeIcon className="Icon" icon={['fas', 'align-left']} />,
       label: 'All Unreads',
       link: `/${workspaceSlug}/unreads`,
+      modifierClassName: hasUnreadChannels ? 'unread' : null,
     },
     {
       icon: <FontAwesomeIcon className="Icon" icon={['far', 'comment']} />,
       label: 'All Threads',
       link: `/${workspaceSlug}/threads`,
+      modifierClassName: hasUnreadThreads ? 'unread' : null,
     },
   ];
 

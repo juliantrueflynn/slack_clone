@@ -17,7 +17,7 @@ json.messages do
     message = chat.entries.where(parent_message_id: nil).last
     next if message.nil?
 
-    json.(message, :id, :slug, :created_at)
+    json.(message, :id, :parent_message_id, :slug, :created_at)
     json.channel_slug chat.slug
   end
 end

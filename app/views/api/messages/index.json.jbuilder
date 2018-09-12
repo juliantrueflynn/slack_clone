@@ -44,3 +44,10 @@ json.subs do
     json.channel_slug chat_sub.channel.slug
   end
 end
+
+json.reads do
+  json.array! Read.messages_by_channel_id_and_user_id(@channel.id, current_user.id) do |read|
+    json.(read, :id, :readable_id, :readable_type, :accessed_at)
+    json.slug read.message.slug
+  end
+end

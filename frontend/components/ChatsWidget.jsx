@@ -31,6 +31,7 @@ class ChatsWidget extends React.Component {
       icon: <FontAwesomeIcon className="Icon" icon={['fas', 'hashtag']} size="sm" />,
       label: item.title,
       link: `/${workspaceSlug}/messages/${item.slug}`,
+      modifierClassName: item.hasUnreads ? 'unread' : null,
     }));
 
     return (

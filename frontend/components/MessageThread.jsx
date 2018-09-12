@@ -6,45 +6,15 @@ import './MessageThread.css';
 
 class MessageThread extends React.Component {
   componentDidMount() {
-    const {
-      message,
-      fetchMessageRequest,
-      updateReadRequest,
-      match: { params: { messageSlug } },
-    } = this.props;
-
+    const { fetchMessageRequest, messageSlug } = this.props;
     fetchMessageRequest(messageSlug);
-
-    if (message) {
-      const read = { readableId: message.id, readableType: 'Message' };
-      updateReadRequest(read);
-    }
   }
 
   componentDidUpdate(prevProps) {
-    const {
-      message,
-      fetchMessageRequest,
-      updateReadRequest,
-      match: { params: { messageSlug } },
-    } = this.props;
+    const { fetchMessageRequest, messageSlug } = this.props;
 
-    if (messageSlug !== prevProps.match.params.messageSlug) {
+    if (messageSlug !== prevProps.messageSlug) {
       fetchMessageRequest(messageSlug);
-
-      if (message) {
-        const read = { readableId: message.id, readableType: 'Message' };
-        updateReadRequest(read);
-      }
-    }
-  }
-
-  readRequest() {
-    const { channel, updateReadRequest } = this.props;
-
-    if (channel) {
-      const read = { readableId: channel.id, readableType: 'Channel' };
-      updateReadRequest(read);
     }
   }
 

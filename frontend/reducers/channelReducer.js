@@ -92,7 +92,7 @@ const channelReducer = (state = {}, action) => {
       });
 
       reads.forEach((read) => {
-        if (!nextState[read.slug]) return;
+        if (read.readableType !== 'Channel') return;
         nextState[read.slug].lastRead = read.accessedAt;
         nextState[read.slug].readId = read.id;
       });
@@ -101,7 +101,7 @@ const channelReducer = (state = {}, action) => {
         if (!nextState[message.channelSlug]) return;
         nextState[message.channelSlug].messages.push(message.slug);
         nextState[message.channelSlug].lastActive = message.createdAt;
-        const lastRead = Date.parse(nextState[message.channelSlug]);
+        const lastRead = Date.parse(nextState[message.channelSlug].lastRead);
         const lastActive = Date.parse(message.createdAt);
         nextState[message.channelSlug].hasUnreads = lastRead < lastActive;
       });
@@ -165,11 +165,19 @@ const channelReducer = (state = {}, action) => {
       return nextState;
     }
     case MESSAGE.CREATE.RECEIVE: {
-      const { createdAt, channelSlug } = action.message;
+      const { message } = action;
       nextState = Object.assign({}, state);
-      nextState[channelSlug].lastActive = createdAt;
-      nextState[channelSlug].hasUnreads = true;
-      if (nextState[channelSlug].isActive) nextState[channelSlug].hasUnreads = false;
+
+      if (message.parentMessageId) {
+        nextState[message.channelSlug].messages.push(message.slug);
+      }
+
+      // nextState[message.channelSlug].lastActive = message.createdAt;
+      // nextState[message.channelSlug].hasUnreads = true;
+      // if (nextState[message.channelSlug].isActive) {
+      //   nextState[message.channelSlug].hasUnreads = false;
+      // }
+
       return nextState;
     }
     case READ.UPDATE.RECEIVE: {

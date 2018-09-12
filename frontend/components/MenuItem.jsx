@@ -8,6 +8,7 @@ const MenuItem = ({
   icon,
   label,
   altClassName,
+  modifierClassName,
   ...props,
 }) => {
   const { to: link, onClick } = props;
@@ -16,6 +17,7 @@ const MenuItem = ({
   if (!link) itemType = onClick ? 'btn' : 'text';
   let itemClassName = `${className} MenuItem--${itemType}`;
   if (altClassName) itemClassName += ` MenuItem__${altClassName}`;
+  if (modifierClassName) itemClassName += ` MenuItem--${modifierClassName}`;
   const contentClassName = `MenuItem__content MenuItem__content--${itemType}`;
   const itemText = (
     <Fragment>

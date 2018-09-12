@@ -18,7 +18,7 @@ class Api::ReadsController < ApplicationController
   end
 
   def update
-    @read = current_user.reads.find_by(read_params)
+    @read = Read.find_by(id: params[:id])
     @read.accessed_at = DateTime.now
 
     if @read.save

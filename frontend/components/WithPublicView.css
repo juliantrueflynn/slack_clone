@@ -12,6 +12,9 @@
 .Page__public {
   min-height: 100vh;
   background-color: #F7FAFC;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .Page__public .Btn {

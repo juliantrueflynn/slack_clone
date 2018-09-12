@@ -7,11 +7,15 @@ import {
   selectDmChats,
   selectChatMembers,
   selectUnsubbedChats,
+  hasUreadChannels,
+  hasUreadThreads,
 } from '../reducers/selectors';
 import { modalOpen } from '../actions/interactiveActions';
 import { createChannel, updateChannelSub, fetchChannels } from '../actions/channelActions';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
+  hasUnreadChannels: hasUreadChannels(state),
+  hasUnreadThreads: hasUreadThreads(state),
   currentUser: state.session.currentUser,
   workspaces: selectWorkspaces(state),
   currWorkspace: state.entities.workspaces[workspaceSlug],
