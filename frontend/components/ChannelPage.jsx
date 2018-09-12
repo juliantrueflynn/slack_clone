@@ -5,26 +5,22 @@ import ChannelSubscribe from './ChannelSubscribe';
 
 class ChatPage extends React.Component {
   componentDidMount() {
-    this.updateRead();
+    // this.updateRead();
   }
 
   componentDidUpdate(prevProps) {
     const { location: { pathname } } = this.props;
 
     if (pathname !== prevProps.location.pathname) {
-      this.updateRead();
+      // this.updateRead();
     }
   }
 
   updateRead() {
-    const {
-      channel,
-      updateReadRequest,
-      match: { params: { workspaceSlug } },
-    } = this.props;
+    const { channel, updateReadRequest } = this.props;
 
     if (channel) {
-      const read = { readableId: channel.id, readableType: 'Channel', workspaceSlug };
+      const read = { readableId: channel.id, readableType: 'Channel' };
       updateReadRequest(read);
     }
   }
@@ -57,7 +53,7 @@ class ChatPage extends React.Component {
           channel={channel}
           rightSidebar={rightSidebar}
         />
-        <MessageFormContainer placeholder={formPlaceholder} />
+        {/* <MessageFormContainer placeholder={formPlaceholder} /> */}
         <ChannelSubscribe
           title={chatTitle}
           ownerName={ownerName}

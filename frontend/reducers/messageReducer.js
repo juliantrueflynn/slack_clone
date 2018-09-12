@@ -15,6 +15,7 @@ const messageReducer = (state = {}, action) => {
   switch (action.type) {
     case WORKSPACE.SHOW.RECEIVE: {
       const { workspace: { messages } } = action;
+      nextState = Object.assign({}, state);
       return messages.reduce((acc, curr) => {
         if (!curr || !curr.slug) return acc;
         acc[curr.slug] = curr;
@@ -35,6 +36,7 @@ const messageReducer = (state = {}, action) => {
         nextState[message.slug] = {
           reactionIds: [],
           favoriteId: null,
+          readId: null,
           lastActive: popThreadMsg && popThreadMsg.createdAt,
           hasUnreads: lastReadInMs < lastActiveInMs,
           thread: children.map(child => child.slug),
@@ -93,6 +95,7 @@ const messageReducer = (state = {}, action) => {
       const { parentMessageSlug: parentSlug, slug, updatedAt } = message;
       message.thread = parentSlug ? null : [];
       message.lastRead = null;
+      message.readId = null;
       message.reactionIds = [];
       message.favoriteId = null;
       nextState = merge({}, state, { [slug]: message });
@@ -131,11 +134,13 @@ const messageReducer = (state = {}, action) => {
       nextState = { [messageSlug]: { reactionIds: [reaction.id] } };
       return merge({}, state, nextState);
     }
+    case READ.CREATE.RECEIVE:
     case READ.UPDATE.RECEIVE: {
-      const { read: { readableType, slug, accessedAt } } = action;
-      if (readableType !== 'Message') return state;
+      const { read } = action;
+      if (read.readableType !== 'Message') return state;
       nextState = Object.assign({}, state);
-      nextState[slug].lastRead = accessedAt;
+      nextState[read.slug].lastRead = read.accessedAt;
+      nextState[read.slug].readId = read.id;
       return nextState;
     }
     case FAVORITE.CREATE.RECEIVE: {
@@ -157,7 +162,6 @@ const messageReducer = (state = {}, action) => {
 
       nextState = unreads.reduce((acc, curr) => {
         acc[curr.slug] = curr;
-        acc[curr.slug].isUnread = true;
         return acc;
       }, {});
 

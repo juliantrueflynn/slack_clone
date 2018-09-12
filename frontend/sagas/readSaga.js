@@ -3,38 +3,48 @@ import {
   fork,
   put,
   takeLatest,
-  takeEvery,
+  select,
   call,
 } from 'redux-saga/effects';
-import { READ } from '../actions/actionTypes';
+import { READ, MESSAGE } from '../actions/actionTypes';
 import { apiUpdate, apiFetch } from '../util/apiUtil';
-import { updateRead, fetchUnreads } from '../actions/readActions';
+import * as actions from '../actions/readActions';
+import { selectWorkspaceSlug, selectCurrentMessage } from '../reducers/selectors';
 
 function* fetchIndex({ workspaceSlug }) {
   try {
     const received = yield call(apiFetch, `workspaces/${workspaceSlug}/reads`);
-    yield put(fetchUnreads.receive(received));
+    yield put(actions.fetchUnreads.receive(received));
   } catch (error) {
-    yield put(fetchUnreads.failure(error));
+    yield put(actions.fetchUnreads.failure(error));
   }
 }
 
 function* fetchCreate({ read }) {
   try {
-    const created = yield call(apiUpdate, 'read', read);
-    yield put(updateRead.receive(created));
+    const workspaceSlug = yield select(selectWorkspaceSlug);
+    const created = yield call(apiUpdate, `workspaces/${workspaceSlug}/reads`, read);
+    yield put(actions.createRead.receive(created));
   } catch (error) {
-    yield put(updateRead.failure(error));
+    yield put(actions.createRead.failure(error));
   }
 }
 
 function* fetchUpdate({ read }) {
   try {
-    const updated = yield call(apiUpdate, 'read', read);
-    yield put(updateRead.receive(updated));
+    const updated = yield call(apiUpdate, `reads/${read.id}`, read);
+    yield put(actions.updateRead.receive(updated));
   } catch (error) {
-    yield put(updateRead.failure(error));
+    yield put(actions.updateRead.failure(error));
   }
+}
+
+function* fetchMessageThread({ message: { message } }) {
+  // const message = yield select(selectCurrentMessage);
+
+  // if (message.hasUnreads) {
+    
+  // }
 }
 
 function* watchIndex() {
@@ -42,11 +52,15 @@ function* watchIndex() {
 }
 
 function* watchCreated() {
-  yield takeEvery(READ.CREATE.REQUEST, fetchCreate);
+  yield takeLatest(READ.CREATE.REQUEST, fetchCreate);
 }
 
 function* watchUpdated() {
-  yield takeEvery(READ.UPDATE.REQUEST, fetchUpdate);
+  yield takeLatest(READ.UPDATE.REQUEST, fetchUpdate);
+}
+
+function* watchMessageThread() {
+  yield takeLatest(MESSAGE.SHOW.RECEIVE, fetchMessageThread);
 }
 
 export default function* readSaga() {
@@ -54,5 +68,6 @@ export default function* readSaga() {
     fork(watchIndex),
     fork(watchCreated),
     fork(watchUpdated),
+    fork(watchMessageThread),
   ]);
 }

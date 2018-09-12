@@ -10,13 +10,13 @@ class MessageThread extends React.Component {
       message,
       fetchMessageRequest,
       updateReadRequest,
-      match: { params: { messageSlug, workspaceSlug } },
+      match: { params: { messageSlug } },
     } = this.props;
 
     fetchMessageRequest(messageSlug);
 
     if (message) {
-      const read = { readableId: message.id, readableType: 'Message', workspaceSlug };
+      const read = { readableId: message.id, readableType: 'Message' };
       updateReadRequest(read);
     }
   }
@@ -26,16 +26,25 @@ class MessageThread extends React.Component {
       message,
       fetchMessageRequest,
       updateReadRequest,
-      match: { params: { messageSlug, workspaceSlug } },
+      match: { params: { messageSlug } },
     } = this.props;
 
     if (messageSlug !== prevProps.match.params.messageSlug) {
       fetchMessageRequest(messageSlug);
 
       if (message) {
-        const read = { readableId: message.id, readableType: 'Message', workspaceSlug };
+        const read = { readableId: message.id, readableType: 'Message' };
         updateReadRequest(read);
       }
+    }
+  }
+
+  readRequest() {
+    const { channel, updateReadRequest } = this.props;
+
+    if (channel) {
+      const read = { readableId: channel.id, readableType: 'Channel' };
+      updateReadRequest(read);
     }
   }
 
@@ -46,13 +55,11 @@ class MessageThread extends React.Component {
       channel,
       authors,
     } = this.props;
-    const chatTitle = channel && `#${channel.title}`;
 
     if (!message) return null;
 
     const sidebarProps = {
-      path: `/thread/${message.slug}`,
-      subtitle: chatTitle,
+      path: `/thread/${message.slug}`
     };
 
     return (

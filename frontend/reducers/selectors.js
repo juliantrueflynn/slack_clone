@@ -252,3 +252,31 @@ export const getReactionCounts = ({ entities: { reactions }, session }, messageS
       return acc;
     }, {});
 };
+
+export const selectCurrentMessageSlug = ({ ui: { displayMessageSlug } }) => displayMessageSlug;
+
+export const selectCurrentMessage = ({ entities: { messages }, ui }) => (
+  messages[ui.displayMessageSlug]
+);
+
+export const selectReads = ({ entities: { reads } }) => reads;
+
+export const selectChatMessages = ({ entities: { channels, messages } }, chatPath) => {
+  const chat = channels[chatPath];
+
+  if (chat) {
+    return values(messages)
+      .filter(msg => (msg.thread && chat && chat.id === msg.channelId && !msg.parentMessageId))
+      .sort((a, b) => messages[a.slug].id - messages[b.slug].id);
+  }
+
+  return messages;
+};
+
+export const selectChatChannels = ({ entities: { channels } }, chatPath) => {
+  if (chatPath === 'unreads') {
+    return channels;
+  }
+
+  return values(channels);
+};

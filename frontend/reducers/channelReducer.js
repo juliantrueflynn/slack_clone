@@ -74,6 +74,7 @@ const channelReducer = (state = {}, action) => {
         nextState[channel.slug] = {
           workspaceSlug: workspace.slug,
           isActive: false,
+          readId: null,
           lastRead: null,
           lastActive: null,
           hasUnreads: false,
@@ -90,9 +91,10 @@ const channelReducer = (state = {}, action) => {
         nextState[sub.channelSlug].members.push(sub.userSlug);
       });
 
-      reads.filter(read => read.readableType === 'Channel').forEach((read) => {
+      reads.forEach((read) => {
         if (!nextState[read.slug]) return;
         nextState[read.slug].lastRead = read.accessedAt;
+        nextState[read.slug].readId = read.id;
       });
 
       messages.forEach((message) => {

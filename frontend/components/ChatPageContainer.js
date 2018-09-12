@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import {
   isRightSidebarOpen,
   selectChatTitleBySlug,
-  rightSidebarProps,
   selectChatMessages,
   selectChatChannels,
 } from '../reducers/selectors';
@@ -17,7 +16,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   messages: selectChatMessages(state, chatPath),
   channels: selectChatChannels(state, chatPath),
   chatTitle: selectChatTitleBySlug(state, chatPath),
-  rightSidebarProps: rightSidebarProps(state),
+  rightSidebarProps: state.ui.rightSidebar && state.ui.rightSidebar.sidebarProps,
   isWorkspaceLoaded: !!state.ui.displayWorkspaceSlug,
   isRightSidebarOpen: isRightSidebarOpen(state),
   users: state.entities.members,

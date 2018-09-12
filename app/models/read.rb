@@ -4,6 +4,6 @@ class Read < ApplicationRecord
 
   belongs_to :user
   belongs_to :workspace
-  belongs_to :channel, foreign_key: :readable_id
-  belongs_to :message, foreign_key: :readable_id
+  belongs_to :channel, foreign_key: :readable_id, optional: true
+  belongs_to :message, foreign_key: :readable_id, optional: true
 end

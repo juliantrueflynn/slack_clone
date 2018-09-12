@@ -6,6 +6,7 @@ import members from './memberReducer';
 import messages from './messageReducer';
 import favorites from './favoriteReducer';
 import reactions from './reactionReducer';
+import reads from './readReducer';
 
 const entitiesReducer = combineReducers({
   workspaces,
@@ -15,6 +16,7 @@ const entitiesReducer = combineReducers({
   messages,
   favorites,
   reactions,
+  reads,
 });
 
 export default entitiesReducer;
