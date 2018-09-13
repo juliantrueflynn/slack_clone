@@ -6,23 +6,9 @@ class Api::UnreadsController < ApplicationController
   #   @unreads = workspace.unreads.where(unreadable_type: 'Channel')
   # end
 
-  def create
-    workspace = Workspace.find_by(slug: params[:workspace_slug])
-    @unread = workspace.unreads.build(unread_params)
-    @unread.active_at = DateTime.now
-
-    if @unread.save
-      render 'api/unreads/show'
-    else
-      render json: @unread.errors.full_messages, status: 422
-    end
-  end
-
   def update
-    @unread.active_at = DateTime.now
-
-    if @unread.save
-      render 'api/unreads/show'
+    if @unread.update(active_at: params[:active_at])
+      render json: ['success']
     else
       render json: @unread.errors.full_messages, status: 422
     end
@@ -31,10 +17,13 @@ class Api::UnreadsController < ApplicationController
   private
 
   def set_unread
-    @unread = Unread.find_by(id: params[:id])
+    @unread = Unread.find_by(
+      unreadable_id: params[:unreadable_id],
+      unreadable_type: params[:unreadable_type]
+    )
   end
   
   def unread_params
-    params.require(:unread).permit(:unreadable_id, :unreadable_type)
+    params.require(:unread).permit(:unreadable_id, :unreadable_type, :active_at)
   end
 end

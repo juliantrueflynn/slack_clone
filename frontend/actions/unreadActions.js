@@ -7,14 +7,7 @@ export const fetchUnreads = {
   failure: errors => actionCreator(UNREAD.INDEX.FAILURE, { errors }),
 };
 
-export const createUnread = {
-  request: unread => actionCreator(UNREAD.CREATE.REQUEST, { unread }),
-  receive: unread => actionCreator(UNREAD.CREATE.RECEIVE, { unread }),
-  failure: errors => actionCreator(UNREAD.CREATE.FAILURE, { errors }),
-};
-
 export const updateUnread = {
-  request: unread => actionCreator(UNREAD.CREATE.REQUEST, { unread }),
-  receive: unread => actionCreator(UNREAD.CREATE.RECEIVE, { unread }),
-  failure: errors => actionCreator(UNREAD.CREATE.FAILURE, { errors }),
+  request: unread => actionCreator(UNREAD.UPDATE.REQUEST, { unread }),
+  failure: errors => actionCreator(UNREAD.UPDATE.FAILURE, { errors }),
 };

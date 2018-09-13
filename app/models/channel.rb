@@ -74,6 +74,7 @@ class Channel < ApplicationRecord
 
   after_create :generate_chat_subs
   after_create_commit :broadcast_create
+  after_create_commit :generate_unread
   after_update_commit :broadcast_update
   after_destroy :broadcast_destroy
 
@@ -94,5 +95,9 @@ class Channel < ApplicationRecord
   def generate_chat_subs
     sub_users_to_dm_chat if has_dm?
     sub_user_to_public_chat if owner
+  end
+
+  def generate_unread
+    Unread.create(accessed_at: created_at, unreadable_id: id, unreadable_type: 'Channel')
   end
 end

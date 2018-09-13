@@ -31,4 +31,10 @@ class Unread < ApplicationRecord
     children_by_workspace_id_and_user_id(workspace_id, user_id)
       .or(parents_by_workspace_id_and_user_id(workspace_id, user_id))
   end
+
+  def broadcast_name
+    "workspace_#{workspace.slug}"
+  end
+
+  after_update_commit :broadcast_update
 end

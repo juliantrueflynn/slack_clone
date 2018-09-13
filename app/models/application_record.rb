@@ -42,6 +42,7 @@ class ApplicationRecord < ActiveRecord::Base
   private
 
   def skip_broadcast?
+    return unless self.class.method_defined? :skip_broadcast
     !!self.skip_broadcast
   end
 end

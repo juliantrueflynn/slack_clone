@@ -5,9 +5,11 @@ Rails.application.routes.draw do
     resources :users, only: [:show]
     resources :user_threads, only: [:index]
     resources :reads, only: [:update]
+    resource :unread, only: [:update]
     resources :workspaces, only: [:index, :show, :create, :update, :destroy], param: :slug do
       resources :channels, only: [:index]
       resources :favorites, only: [:index]
+      resources :unreads, only: :index
       resources :reads, only: [:index, :create]
     end
     resource :user_appearance, only: [:create, :destroy]
