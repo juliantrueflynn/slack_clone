@@ -7,7 +7,7 @@ class CreateReads < ActiveRecord::Migration[5.1]
       t.references :workspace, foreign_key: {on_delete: :cascade}, index: false
       t.datetime :accessed_at, null: false
 
-      t.timestamp :created_at
+      t.timestamps
     end
 
     add_index :reads, [:readable_type, :readable_id, :workspace_id, :user_id], name: 'index_read_workspace_user'

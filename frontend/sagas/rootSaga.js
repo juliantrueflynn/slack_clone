@@ -9,6 +9,7 @@ import userThreadSaga from './userThreadSaga';
 import favoriteSaga from './favoriteSaga';
 import navigateSaga from './navigateSaga';
 import reactionSaga from './reactionSaga';
+import unreadSaga from './unreadSaga';
 import readSaga from './readSaga';
 import userAppearanceSaga from './userAppearanceSaga';
 
@@ -24,6 +25,7 @@ export default function* root() {
     fork(userThreadSaga),
     fork(favoriteSaga),
     fork(reactionSaga),
+    fork(unreadSaga),
     fork(readSaga),
     fork(userAppearanceSaga),
   ]);

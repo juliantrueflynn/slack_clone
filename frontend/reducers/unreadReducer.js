@@ -13,16 +13,11 @@ const unreadReducer = (state = {}, action) => {
         return acc;
       }, {});
     }
-    case UNREAD.CREATE.RECEIVE: {
+    case UNREAD.CREATE.RECEIVE:
+    case UNREAD.UPDATE.RECEIVE: {
       const { unread } = action;
       nextState = Object.assign({}, state);
       nextState[unread.id] = unread;
-      return nextState;
-    }
-    case UNREAD.DESTROY.RECEIVE: {
-      const { unread } = action;
-      nextState = Object.assign({}, state);
-      delete nextState[unread.id];
       return nextState;
     }
     default:

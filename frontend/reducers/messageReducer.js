@@ -14,14 +14,42 @@ const messageReducer = (state = {}, action) => {
   let nextState;
   switch (action.type) {
     case WORKSPACE.SHOW.RECEIVE: {
-      const { workspace: { messages } } = action;
-      return messages.reduce((acc, curr) => {
-        if (!curr || !curr.slug) return acc;
-        acc[curr.slug] = curr;
-        acc[curr.slug].thread = curr.parentMessageId ? null : [];
-        acc[curr.slug].hasUnreads = false;
-        return acc;
-      }, {});
+      const { workspace: { unreads, reads } } = action;
+      nextState = Object.assign({}, state);
+
+      unreads.forEach((unread) => {
+        if (unread.unreadableType === 'Channel') return;
+        if (!nextState[unread.slug]) nextState[unread.slug] = {};
+        nextState[unread.slug].id = unread.unreadableId;
+        nextState[unread.slug].slug = unread.slug;
+        nextState[unread.slug].lastActive = unread.activeAt;
+        nextState[unread.slug].lastRead = null;
+        nextState[unread.slug].hasUnreads = false;
+        nextState[unread.slug].unreadId = unread.id;
+        nextState[unread.slug].thread = [];
+      });
+
+      reads.forEach((read) => {
+        if (read.readableType === 'Channel') return;
+        if (!nextState[read.slug]) {
+          nextState[read.slug] = {
+            lastActive: null,
+            lastRead: read.accessedAt,
+            hasUnreads: false,
+          };
+        } else {
+          const lastActive = Date.parse(nextState[read.slug].lastActive);
+          const lastRead = Date.parse(read.accessedAt);
+          nextState[read.slug].lastRead = read.accessedAt;
+          nextState[read.slug].hasUnreads = lastActive > lastRead;
+        }
+        nextState[read.slug].id = read.readableId;
+        nextState[read.slug].slug = read.slug;
+        nextState[read.slug].readId = read.id;
+        nextState[read.slug].thread = [];
+      });
+
+      return nextState;
     }
     case MESSAGE.INDEX.RECEIVE: {
       nextState = Object.assign({}, state);

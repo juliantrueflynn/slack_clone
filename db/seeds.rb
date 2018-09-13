@@ -105,3 +105,22 @@ random_num(min: 50, max: 60).times do
     user.reactions.create(message_id: message.id, emoji: REACTIONS.sample)
   end
 end
+
+Channel.all.each do |channel|
+  created_at = channel.messages.last ? channel.messages.last.created_at : DateTime.now
+  Unread.create(
+    unreadable_id: channel.id,
+    unreadable_type: 'Channel',
+    active_at: created_at,
+    workspace_id: channel.workspace.id
+  )
+end
+
+Message.all.where(parent_message_id: nil).each do |message|
+  Unread.create(
+    unreadable_id: message.id,
+    unreadable_type: 'Message',
+    active_at: message.created_at,
+    workspace_id: message.workspace.id
+  )
+end

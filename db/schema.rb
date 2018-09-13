@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180706212936) do
+ActiveRecord::Schema.define(version: 20180912234744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,8 +73,19 @@ ActiveRecord::Schema.define(version: 20180706212936) do
     t.bigint "user_id"
     t.bigint "workspace_id"
     t.datetime "accessed_at", null: false
-    t.datetime "created_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["readable_type", "readable_id", "workspace_id", "user_id"], name: "index_read_workspace_user"
+  end
+
+  create_table "unreads", force: :cascade do |t|
+    t.integer "unreadable_id", null: false
+    t.string "unreadable_type", null: false
+    t.bigint "workspace_id"
+    t.datetime "active_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["unreadable_type", "unreadable_id", "workspace_id"], name: "index_unread_workspace_user"
   end
 
   create_table "user_appearances", force: :cascade do |t|
@@ -129,6 +140,7 @@ ActiveRecord::Schema.define(version: 20180706212936) do
   add_foreign_key "reactions", "users", on_delete: :cascade
   add_foreign_key "reads", "users", on_delete: :cascade
   add_foreign_key "reads", "workspaces", on_delete: :cascade
+  add_foreign_key "unreads", "workspaces", on_delete: :cascade
   add_foreign_key "user_appearances", "users", on_delete: :cascade
   add_foreign_key "workspace_subs", "users", on_delete: :cascade
   add_foreign_key "workspace_subs", "workspaces", on_delete: :cascade

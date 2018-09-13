@@ -29,6 +29,8 @@ class Workspace < ApplicationRecord
     through: :channels,
     source: :subs
   has_many :reads
+  has_many :unreads
+  has_many :messages, through: :channels
   has_many :entries,
     -> { joins(channel: :subs).select('messages.*, channels.slug AS channel_slug') },
     through: :channels do

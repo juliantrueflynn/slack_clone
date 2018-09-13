@@ -13,8 +13,8 @@ export const createUnread = {
   failure: errors => actionCreator(UNREAD.CREATE.FAILURE, { errors }),
 };
 
-export const destroyUnread = {
-  request: unreadId => actionCreator(UNREAD.DESTROY.REQUEST, { unreadId }),
-  receive: unread => actionCreator(UNREAD.DESTROY.RECEIVE, { unread }),
-  failure: errors => actionCreator(UNREAD.DESTROY.FAILURE, { errors }),
+export const updateUnread = {
+  request: unread => actionCreator(UNREAD.CREATE.REQUEST, { unread }),
+  receive: unread => actionCreator(UNREAD.CREATE.RECEIVE, { unread }),
+  failure: errors => actionCreator(UNREAD.CREATE.FAILURE, { errors }),
 };

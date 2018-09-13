@@ -36,15 +36,6 @@ function* fetchCreate({ unread }) {
   }
 }
 
-function* fetchDestroy({ unreadId }) {
-  try {
-    const destroyed = yield call(api.apiDelete, `unreads/${unreadId}`);
-    yield put(actions.destroyUnread.receive(destroyed));
-  } catch (error) {
-    yield put(actions.destroyUnread.failure(error));
-  }
-}
-
 function* fetchSetUnread({ message }) {
   const currUser = yield select(selectCurrentUser);
   const currChannel = yield select(selectCurrentChannel);
@@ -72,22 +63,7 @@ function* fetchSetUnread({ message }) {
       unreadProps.unreadableType = 'Channel';
     }
 
-    yield fetchCreate({ unread: { ...unreadProps } });
-  }
-}
-
-function* fetchViewChannel() {
-  const channel = yield select(selectCurrentChannel);
-  if (channel.unreadId) {
-    yield fetchDestroy({ unreadId: channel.unreadId });
-  }
-}
-
-function* fetchViewMessageThread() {
-  const message = yield select(selectCurrentMessage);
-
-  if (message.readId) {
-    yield fetchDestroy({ unreadId: message.readId });
+    yield put(actions.createUnread({ ...unreadProps }));
   }
 }
 
@@ -95,28 +71,18 @@ function* watchIndex() {
   yield takeLatest(UNREAD.INDEX.REQUEST, fetchIndex);
 }
 
-function* watchDestroyed() {
-  yield takeLatest(UNREAD.DESTROY.REQUEST, fetchDestroy);
+function* watchCreate() {
+  yield takeLatest(UNREAD.CREATE.RECEIVE, fetchCreate);
 }
 
 function* watchUnread() {
   yield takeLatest(MESSAGE.CREATE.RECEIVE, fetchSetUnread);
 }
 
-function* watchViewChannel() {
-  yield takeLatest(MESSAGE.INDEX.RECEIVE, fetchViewChannel);
-}
-
-function* watchViewMessageThread() {
-  yield takeLatest(MESSAGE.SHOW.RECEIVE, fetchViewMessageThread);
-}
-
 export default function* unreadSaga() {
   yield all([
     fork(watchIndex),
-    fork(watchDestroyed),
+    fork(watchCreate),
     fork(watchUnread),
-    fork(watchViewChannel),
-    fork(watchViewMessageThread),
   ]);
 }

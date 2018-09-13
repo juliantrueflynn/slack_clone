@@ -1,8 +1,8 @@
 class Api::ReadsController < ApplicationController
-  def index
-    workspace = Workspace.find_by(slug: params[:workspace_slug])
-    @reads = current_user.reads.where(workspace_id: workspace.id, readable_type: 'Channel')
-  end
+  # def index
+  #   workspace = Workspace.find_by(slug: params[:workspace_slug])
+  #   @reads = current_user.reads.where(workspace_id: workspace.id, readable_type: 'Channel')
+  # end
 
   def create
     @read = current_user.reads.build(read_params)
