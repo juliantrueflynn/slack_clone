@@ -29,7 +29,7 @@ const ChannelPage = ({
         channel={channel}
         rightSidebar={rightSidebar}
       />
-      <MessageFormContainer placeholder={formPlaceholder} />
+      {/* <MessageFormContainer placeholder={formPlaceholder} /> */}
       <ChannelSubscribe
         title={chatTitle}
         ownerName={ownerName}

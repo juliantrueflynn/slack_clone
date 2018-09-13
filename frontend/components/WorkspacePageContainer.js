@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import { fetchWorkspace, fetchWorkspaces } from '../actions/workspaceActions';
 import WorkspacePage from './WorkspacePage';
 import withActionCable from './withActionCable';
@@ -15,6 +14,4 @@ const mapDispatchToProps = dispatch => ({
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),
 });
 
-export default withActionCable(
-  withRouter(connect(mapStateToProps, mapDispatchToProps)(WorkspacePage))
-);
+export default withActionCable(connect(mapStateToProps, mapDispatchToProps)(WorkspacePage));

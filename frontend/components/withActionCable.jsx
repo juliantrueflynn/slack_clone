@@ -10,6 +10,9 @@ const mapStateToProps = state => ({
   isLoggedIn: !!state.session.currentUser,
   subbedWorkspaces: selectSubbedWorkspaces(state),
   subbedChats: selectSubbedChats(state),
+  workspaceSlug: state.ui.displayWorkspaceSlug,
+  workspaces: Object.values(state.entities.workspaces),
+  isUsersLoaded: !!Object.values(state.entities.members).length,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -21,9 +24,15 @@ const withActionCable = (WrappedComponent) => {
   class WithActionCable extends React.Component {
     constructor(props) {
       super(props);
-      this.workspaces = React.createRef();
       this.handleReceived = this.handleReceived.bind(this);
-      this.handleConnected = this.handleConnected.bind(this);
+    }
+
+    componentDidUpdate(prevProps) {
+      const { isUsersLoaded, createUserAppearanceRequest, workspaceSlug } = this.props;
+
+      if (isUsersLoaded && !prevProps.isUsersLoaded) {
+        createUserAppearanceRequest({ workspaceSlug });
+      }
     }
 
     handleReceived(received) {
@@ -31,19 +40,16 @@ const withActionCable = (WrappedComponent) => {
       actionCableReceive(received);
     }
 
-    handleConnected() {
-      const { createUserAppearanceRequest, match: { params: { workspaceSlug } } } = this.props;
-      createUserAppearanceRequest({ workspaceSlug });
-    }
-
     render() {
       const {
         subbedWorkspaces,
         subbedChats,
         isLoggedIn,
+        workspaces,
+        workspaceSlug,
+        isUsersLoaded,
         ...props
       } = this.props;
-      const { match: { params: { workspaceSlug } } } = props;
 
       return (
         <Fragment>
@@ -56,9 +62,7 @@ const withActionCable = (WrappedComponent) => {
           )}
           {workspaceSlug && (
             <ActionCable
-              ref={this.workspaceChat}
               channel={decamelizeKeys({ channel: 'AppearanceChannel', workspaceSlug })}
-              onConnected={this.handleConnected}
               onReceived={this.handleReceived}
             />
           )}
