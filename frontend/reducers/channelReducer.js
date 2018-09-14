@@ -5,7 +5,8 @@ import {
   READ,
   MESSAGE,
   DM_CHAT,
-  CHANNEL_SUB
+  CHANNEL_SUB,
+  WORKSPACE_SUB
 } from '../actions/actionTypes';
 
 const channelReducer = (state = {}, action) => {
@@ -80,7 +81,6 @@ const channelReducer = (state = {}, action) => {
       });
 
       subs.forEach((sub) => {
-        if (!nextState[sub.channelSlug]) return;
         nextState[sub.channelSlug].subs.push(sub.id);
         nextState[sub.channelSlug].members.push(sub.userSlug);
       });
@@ -111,6 +111,26 @@ const channelReducer = (state = {}, action) => {
       channels.forEach((channel) => { nextState[channel.slug] = channel; });
       return nextState;
     }
+    case WORKSPACE_SUB.CREATE.RECEIVE: {
+      const { workspaceSub, channelSubs } = action.workspaceSub;
+
+      nextState = Object.assign({}, state);
+      channelSubs.forEach((sub) => {
+        if (!nextState[sub.channelSlug]) {
+          nextState[sub.channelSlug] = {
+            id: sub.channelId,
+            slug: sub.channelSlug,
+            members: [],
+            subs: [],
+          };
+        }
+
+        nextState[sub.channelSlug].members.push(sub.userSlug);
+        nextState[sub.channelSlug].subs.push(workspaceSub.userSlug);
+      });
+
+      return nextState;
+    }
     case DM_CHAT.CREATE.RECEIVE: {
       const { dmChat: { channel, subs, members } } = action;
 
@@ -119,6 +139,7 @@ const channelReducer = (state = {}, action) => {
         hasUnreads: false,
         lastRead: null,
         lastActive: null,
+        inSidebar: true,
         subs: subs.reduce((acc, curr) => {
           acc.push(curr.id);
           return acc;
@@ -168,9 +189,6 @@ const channelReducer = (state = {}, action) => {
       if (message.parentMessageId) {
         nextState[message.channelSlug].messages.push(message.slug);
       }
-
-      // nextState[message.channelSlug].lastActive = message.createdAt;
-      // nextState[message.channelSlug].hasUnreads = true;
 
       return nextState;
     }

@@ -8,6 +8,7 @@ const PublicWorkspaces = ({
   isLoggedIn,
   createWorkspaceSubRequest,
   deleteWorkspaceSubRequest,
+  currentUser,
 }) => {
   if (!workspaces || !isLoggedIn) return null;
 
@@ -28,6 +29,7 @@ const PublicWorkspaces = ({
         {workspaces.map(workspace => (
           <PublicWorkspacesItem
             key={workspace.id}
+            currentUser={currentUser}
             createWorkspaceSubRequest={createWorkspaceSubRequest}
             deleteWorkspaceSubRequest={deleteWorkspaceSubRequest}
             workspace={workspace}

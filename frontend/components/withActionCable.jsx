@@ -6,12 +6,11 @@ import { decamelizeKeys, camelizeKeys } from 'humps';
 import { selectSubbedChats, selectSubbedWorkspaces } from '../reducers/selectors';
 import { createUserAppearance } from '../actions/userAppearanceActions';
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, { match: { params } }) => ({
+  workspaceSlug: params.workspaceSlug,
   isLoggedIn: !!state.session.currentUser,
   subbedWorkspaces: selectSubbedWorkspaces(state),
   subbedChats: selectSubbedChats(state),
-  workspaceSlug: state.ui.displayWorkspaceSlug,
-  workspaces: Object.values(state.entities.workspaces),
   isUsersLoaded: !!Object.values(state.entities.members).length,
 });
 
@@ -28,9 +27,13 @@ const withActionCable = (WrappedComponent) => {
     }
 
     componentDidUpdate(prevProps) {
-      const { isUsersLoaded, createUserAppearanceRequest, workspaceSlug } = this.props;
+      const {
+        isUsersLoaded,
+        createUserAppearanceRequest,
+        workspaceSlug,
+      } = this.props;
 
-      if (isUsersLoaded && !prevProps.isUsersLoaded) {
+      if (workspaceSlug && isUsersLoaded && !prevProps.isUsersLoaded) {
         createUserAppearanceRequest({ workspaceSlug });
       }
     }
@@ -42,11 +45,10 @@ const withActionCable = (WrappedComponent) => {
 
     render() {
       const {
+        workspaceSlug,
         subbedWorkspaces,
         subbedChats,
         isLoggedIn,
-        workspaces,
-        workspaceSlug,
         isUsersLoaded,
         ...props
       } = this.props;

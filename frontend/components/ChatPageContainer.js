@@ -9,6 +9,7 @@ import {
 import { fetchMessages, fetchUserThreads } from '../actions/messageActions';
 import { fetchUnreads } from '../actions/readActions';
 import { rightSidebarClose } from '../actions/rightSidebarActions';
+import { createChannelSub } from '../actions/channelActions';
 import ChatPage from './ChatPage';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
@@ -36,6 +37,7 @@ const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug, chatPa
     return dispatch(fetchMessages.request(chatPath));
   },
   rightSidebarClose: () => dispatch(rightSidebarClose()),
+  createChannelSubRequest: channelSub => dispatch(createChannelSub.request(channelSub)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatPage));

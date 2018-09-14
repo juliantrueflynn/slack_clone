@@ -4,11 +4,10 @@ import LeftSidebar from './LeftSidebar';
 import {
   selectWorkspaces,
   selectSubbedChats,
-  selectDmChats,
-  selectChatMembers,
   selectUnsubbedChats,
   hasUreadChannels,
   hasUreadThreads,
+  selectDmChats,
 } from '../reducers/selectors';
 import { modalOpen } from '../actions/interactiveActions';
 import { createChannel, updateChannelSub, fetchChannels } from '../actions/channelActions';
@@ -19,10 +18,10 @@ const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   currentUser: state.session.currentUser,
   workspaces: selectWorkspaces(state),
   currWorkspace: state.entities.workspaces[workspaceSlug],
-  subbedChannels: selectSubbedChats(state),
+  subbedChannels: selectSubbedChats(state).filter(ch => !ch.hasDm),
   unsubbedChannels: selectUnsubbedChats(state),
   dmChats: selectDmChats(state),
-  members: selectChatMembers(state),
+  members: state.entities.members,
 });
 
 const mapDispatchToProps = dispatch => ({

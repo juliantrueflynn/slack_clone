@@ -98,6 +98,6 @@ class Channel < ApplicationRecord
   end
 
   def generate_unread
-    Unread.create(accessed_at: created_at, unreadable_id: id, unreadable_type: 'Channel')
+    Unread.create(active_at: created_at, unreadable_id: id, unreadable_type: 'Channel')
   end
 end

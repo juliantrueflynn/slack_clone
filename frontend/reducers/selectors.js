@@ -9,48 +9,23 @@ export const selectWorkspaces = ({ entities: { workspaces } }) => (
   values(workspaces).sort((a, b) => workspaces[a.slug].id - workspaces[b.slug].id)
 );
 
-export const selectSubbedWorkspaces = ({ entities: { workspaces } }) => (
-  values(workspaces).filter(workspace => workspace.isSub)
+export const selectSubbedWorkspaces = ({ entities: { workspaces }, session: { currentUser } }) => (
+  values(workspaces).filter(workspace => workspace.members.includes(currentUser.slug))
 );
 
 export const selectWorkspaceSlug = state => state.ui.displayWorkspaceSlug;
 
-export const selectSubbedChats = ({ entities, ui, session: { currentUser } }) => {
-  const { channels, members, channelSubs } = entities;
-  const { displayChannelSlug: chatSlug } = ui;
-
-  if (!currentUser) return [];
-
-  const currMember = members[currentUser.slug];
-
-  if (!currMember || !currMember.subs) return [];
-
-  const chats = currMember.subs.reduce((acc, curr) => {
-    const chatSub = channelSubs[curr];
-    const channel = channels[chatSub.channelSlug];
-    if (chatSub.userSlug !== currentUser.slug || channel.hasDm) return acc;
-    acc[chatSub.channelSlug] = channel;
-    return acc;
-  }, {});
-
-  if (chatSlug && !chats[chatSlug] && channels[chatSlug] && !channels[chatSlug].hasDm) {
-    chats[chatSlug] = channels[chatSlug];
-  }
-
-  return values(chats).sort((a, b) => a.title.localeCompare(b.title));
-};
+export const selectSubbedChats = ({ entities: { channels }, session: { currentUser } }) => (
+  values(channels)
+    .filter(ch => ch.members.includes(currentUser.slug))
+    .sort((a, b) => a.title && a.title.localeCompare(b.title))
+);
 
 export const isRightSidebarOpen = ({ ui }) => !!values(ui.rightSidebar).length;
 
-export const selectUnsubbedChats = ({ entities: { channels, members, channelSubs }, session }) => {
-  const { currentUser } = session;
-  const currMember = members[currentUser.slug];
-
-  if (!currMember) return [];
-
-  const subbedChatSlugs = currMember.subs.map(subId => channelSubs[subId].channelSlug);
-  return values(channels).filter(ch => !subbedChatSlugs.includes(ch.slug) && !ch.hasDm);
-};
+export const selectUnsubbedChats = ({ entities: { channels }, session: { currentUser } }) => (
+  values(channels).filter(ch => !ch.members.includes(currentUser.slug) && !ch.hasDm)
+);
 
 export const selectOtherDmSub = ({ entities: { channelSubs }, session }, chatSubs) => {
   const { currentUser: { id: userId } } = session;
@@ -102,20 +77,9 @@ export const selectChannels = ({ entities: { channels } }, workspaceSlug) => (
     .sort((a, b) => channels[a.slug].id - channels[b.slug].id)
 );
 
-export const selectUnreadChannels = ({ entities: { channels } }) => (
-  values(channels).filter(ch => ch.hasUnreads)
-);
-
-export const selectDmUsernamesBySlug = (state, chatSlug, hasCurrUser = true) => {
-  const dmUsers = selectHashDmUsersBySlug(state, chatSlug, hasCurrUser);
-  return dmUsers && values(dmUsers).map(user => user && user.username);
-};
-
 export const selectChatBySlug = ({ entities: { channels }, ui }, slug) => {
   const chSlug = slug || ui.displayChannelSlug;
-  const chat = Object.assign({}, channels[chSlug]);
-
-  return chat || null;
+  return channels[chSlug] || null;
 };
 
 export const selectChatTitleBySlug = ({ entities: { channels, members }, session }, slug) => {
@@ -129,7 +93,7 @@ export const selectChatTitleBySlug = ({ entities: { channels, members }, session
 
     if (channels[slug].hasDm) {
       const { currentUser: { slug: userSlug } } = session;
-      const dmUsers = channels[slug].members.filter(member => member === userSlug);
+      const dmUsers = channels[slug].members.filter(member => member !== userSlug);
       const dmWith = dmUsers[0];
       chatTitle = members[dmWith] && members[dmWith].username;
     }
@@ -137,22 +101,6 @@ export const selectChatTitleBySlug = ({ entities: { channels, members }, session
 
   return chatTitle;
 };
-
-export const selectChatIdBySlug = ({ entities: { channels }, ui }, slug) => {
-  const chSlug = slug || ui.displayChannelSlug;
-  return channels[chSlug] && channels[chSlug].id;
-};
-
-export const selectChatMembers = ({ entities: { members, channels } }) => (
-  values(channels)
-    .map(ch => ch.members)
-    .reduce((acc, curr) => acc.concat(curr), [])
-    .filter((userSlug, idx, arr) => arr.indexOf(userSlug) === idx)
-    .reduce((acc, curr) => {
-      acc[curr] = members[curr];
-      return acc;
-    }, {})
-);
 
 export const selectModalProps = ({ ui: { displayModal } }) => {
   if (!displayModal) return {};
@@ -163,36 +111,9 @@ export const isModalOpen = ({ ui: { displayModal: modal } }, type) => (
   modal && modal.modalType && modal.modalType === type
 );
 
-export const isUserChatSub = ({ entities, ui, session: { currentUser } }) => {
-  const { members, channels } = entities;
-  const { displayChannelSlug: chatSlug } = ui;
-  const currChat = channels[chatSlug];
-  const currMember = members[currentUser.slug];
-
-  let isChatSub = false;
-
-  if (!currMember || !currChat || !currChat.subs) {
-    return isChatSub;
-  }
-
-  currChat.subs.forEach((subId) => {
-    if (!currMember.subs.includes(subId)) return;
-    isChatSub = true;
-  });
-
-  return isChatSub;
-};
-
 export const selectUserBySlug = ({ entities: { members } }, slug) => (
   members && members[slug]
 );
-
-export const selectParentMessages = ({ entities: { messages, channels }, ui }) => {
-  const channel = channels[ui.displayChannelSlug];
-  return values(messages)
-    .filter(msg => (msg.thread && channel && channel.id === msg.channelId && !msg.parentMessageId))
-    .sort((a, b) => messages[a.slug].id - messages[b.slug].id);
-};
 
 export const selectThreadLastUpdate = ({ entities: { messages } }, thread) => {
   if (!thread.length) return null;
@@ -252,8 +173,6 @@ export const getReactionCounts = ({ entities: { reactions }, session }, messageS
       return acc;
     }, {});
 };
-
-export const selectCurrentMessageSlug = ({ ui: { displayMessageSlug } }) => displayMessageSlug;
 
 export const selectCurrentMessage = ({ entities: { messages }, ui }) => (
   messages[ui.displayMessageSlug]

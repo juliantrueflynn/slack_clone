@@ -3,7 +3,7 @@ json.workspace do
 end
 
 json.channels do
-  json.array! @workspace.channels do |chat|
+  json.array! current_user.channels.where(workspace_id: @workspace.id) do |chat|
     if chat.has_dm
       next unless chat.subs.exists?(user_id: current_user.id)
     end
@@ -20,7 +20,7 @@ json.members do
 end
 
 json.subs do
-  json.array! @workspace.chat_subs do |chat_sub|
+  json.array! @workspace.chat_subs.with_user_id(current_user.id) do |chat_sub|
     json.(chat_sub, :id, :user_id, :in_sidebar, :channel_id, :created_at)
     json.user_slug chat_sub.user_slug
     json.channel_slug chat_sub.channel_slug

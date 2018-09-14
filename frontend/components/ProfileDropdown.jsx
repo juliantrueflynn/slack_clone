@@ -39,7 +39,7 @@ const ProfileDropdown = ({
     });
   }
 
-  const userStatus = user.status.toLowerCase();
+  const userStatus = user.status && user.status.toLowerCase();
 
   return (
     <Dropdown menuFor="profile" items={menuItems} unStyled style={{ textAlign: 'left' }}>

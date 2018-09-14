@@ -7,28 +7,31 @@ const workspaceReducer = (state = {}, action) => {
   let nextState;
   switch (action.type) {
     case WORKSPACE.INDEX.RECEIVE: {
-      const { workspaces: { workspaces, subs } } = action;
+      const { workspaces, workspaceSubs } = action.workspaces;
+      nextState = Object.assign({}, state);
 
-      nextState = workspaces;
-      Object.values(workspaces).forEach(({ slug, ownerSlug }) => {
-        nextState[slug].subs = [ownerSlug];
-        nextState[slug].isOwner = false;
-        nextState[slug].isSub = false;
+      workspaces.forEach((workspace) => {
+        nextState[workspace.slug] = {
+          members: [workspace.ownerSlug],
+          ...workspace
+        };
       });
 
-      subs.forEach(({ workspaceSlug, userSlug }) => {
-        if (!subs.includes(userSlug)) {
-          nextState[workspaceSlug].subs.push(userSlug);
-          nextState[workspaceSlug].isOwner = true;
-          nextState[workspaceSlug].isSub = true;
-        }
+      workspaceSubs.forEach(({ workspaceSlug, userSlug }) => {
+        if (!workspaceSubs.includes(userSlug)) return;
+        nextState[workspaceSlug].members.push(userSlug);
       });
 
       return nextState;
     }
     case WORKSPACE.SHOW.RECEIVE: {
-      const { workspace: { workspace } } = action;
-      nextState = { [workspace.slug]: workspace };
+      const { workspace, members } = action.workspace;
+      nextState = {
+        [workspace.slug]: {
+          members: members.map(user => user.slug),
+          ...workspace,
+        }
+      };
       return merge({}, state, nextState);
     }
     case WORKSPACE.CREATE.RECEIVE: {
@@ -44,15 +47,18 @@ const workspaceReducer = (state = {}, action) => {
       delete nextState[action.workspaceSlug];
       return nextState;
     case WORKSPACE_SUB.CREATE.RECEIVE: {
-      const { workspaceSub: { workspaceSlug } } = action;
+      const { workspaceSub } = action.workspaceSub;
       nextState = Object.assign({}, state);
-      nextState[workspaceSlug].isSub = true;
+      nextState[workspaceSub.workspaceSlug].members.push(workspaceSub.userSlug);
       return nextState;
     }
     case WORKSPACE_SUB.DESTROY.RECEIVE: {
-      const { workspaceSub: { workspaceSlug } } = action;
+      const { workspaceSub: { workspaceSlug, userSlug } } = action.workspaceSub;
       nextState = Object.assign({}, state);
-      nextState[workspaceSlug].isSub = false;
+      const members = nextState[workspaceSlug].members.filter(memberSlug => (
+        memberSlug !== userSlug
+      ));
+      nextState[workspaceSlug].members = members;
       return nextState;
     }
     default:

@@ -10,8 +10,8 @@ class PublicWorkspacesItem extends React.Component {
   }
 
   isSubscriber() {
-    const { workspace } = this.props;
-    return workspace.isSub;
+    const { currentUser, workspace: { members } } = this.props;
+    return members.includes(currentUser.slug);
   }
 
   handleSubscribe() {

@@ -55,7 +55,7 @@ class WorkspacePage extends React.Component {
     }
 
     if (isExact && defaultChatSlug) {
-      return <Redirect to={`${url}/${defaultChatSlug}`} />;
+      return <Redirect to={`${url}/messages/${defaultChatSlug}`} />;
     }
 
     return (

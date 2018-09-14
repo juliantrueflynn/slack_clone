@@ -8,7 +8,8 @@ const AllThreads = ({
   messages,
   users,
   channels,
-  currentUserSlug,
+  currentUser,
+  channelId,
 }) => {
   if (chatPath !== 'threads') {
     return null;
@@ -27,7 +28,7 @@ const AllThreads = ({
             messages={messages}
             authors={users}
             messageThread={parent.thread}
-            currentUserSlug={currentUserSlug}
+            currentUserSlug={currentUser.slug}
           />
         </div>
         <MessageContainer message={parent} />
@@ -36,7 +37,7 @@ const AllThreads = ({
             <MessageContainer key={childSlug} message={messages[childSlug]} />
           ))}
         </div>
-        {/* <MessageFormContainer parentMessageId={parent.id} /> */}
+        <MessageFormContainer parentMessageId={parent.id} channelId={channelId} />
       </div>
     ))
   );

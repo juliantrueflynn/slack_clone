@@ -3,7 +3,7 @@ import EmojiModalContainer from './EmojiModalContainer';
 import LeftSidebarContainer from './LeftSidebarContainer';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import ChannelHeader from './ChannelHeader';
-import ChannelPageContainer from './ChannelPageContainer';
+import ChannelPage from './ChannelPage';
 import AllThreads from './AllThreads';
 import AllUnreads from './AllUnreads';
 import './ChatPage.css';
@@ -72,9 +72,10 @@ class ChatPage extends React.Component {
       users,
       currentUser,
       channels,
+      createChannelSubRequest,
     } = this.props;
 
-    if (!isWorkspaceLoaded) {
+    if (!isWorkspaceLoaded || !channel) {
       return null;
     }
 
@@ -99,15 +100,17 @@ class ChatPage extends React.Component {
                 chatPath={chatPath}
                 messages={messages}
                 users={users}
-                currentUserSlug={currentUser.slug}
+                currentUser={currentUser}
                 channels={channels}
+                channelId={channel.id}
               />
-              <ChannelPageContainer
+              <ChannelPage
                 channel={channel}
                 messages={messages}
                 chatTitle={chatTitle}
                 authors={users}
-                currentUser={currentUser}
+                currentUserSlug={currentUser.slug}
+                createChannelSubRequest={createChannelSubRequest}
               />
             </div>
             {routes.map(route => (

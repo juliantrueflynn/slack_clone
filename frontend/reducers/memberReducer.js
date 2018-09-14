@@ -6,6 +6,7 @@ import {
   CHANNEL_SUB,
   CHANNEL,
   MESSAGE,
+  WORKSPACE_SUB,
 } from '../actions/actionTypes';
 
 const memberReducer = (state = {}, action) => {
@@ -13,8 +14,22 @@ const memberReducer = (state = {}, action) => {
 
   let nextState;
   switch (action.type) {
+    case WORKSPACE.INDEX.RECEIVE: {
+      const { workspaceSubs } = action.workspaces;
+      nextState = Object.assign({}, state);
+
+      const currUser = workspaceSubs[0];
+      if (currUser) {
+        nextState[currUser.userSlug] = {
+          id: currUser.userId,
+          slug: currUser.userSlug,
+        };
+      }
+
+      return nextState;
+    }
     case WORKSPACE.SHOW.RECEIVE: {
-      const { workspace: { members, subs } } = action;
+      const { members, subs } = action.workspace;
 
       nextState = members.reduce((acc, curr) => {
         acc[curr.slug] = curr;
@@ -29,6 +44,23 @@ const memberReducer = (state = {}, action) => {
       });
 
       return merge({}, nextState);
+    }
+    case WORKSPACE_SUB.CREATE.RECEIVE: {
+      const { workspaceSub, channelSubs } = action.workspaceSub;
+
+      nextState = Object.assign({}, state);
+      nextState[workspaceSub.userSlug] = {
+        id: workspaceSub.id,
+        slug: workspaceSub.userSlug,
+        subs: [],
+        workspaces: [workspaceSub.workspaceSlug]
+      };
+
+      channelSubs.forEach((sub) => {
+        nextState[workspaceSub.userSlug].subs.push(sub.id);
+      });
+
+      return nextState;
     }
     case MESSAGE.INDEX.RECEIVE: {
       const { messages: { reactions } } = action;

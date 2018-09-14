@@ -27,7 +27,11 @@ class Workspace < ApplicationRecord
   has_many :chat_subs,
     -> { select('channel_subs.*, channels.slug AS channel_slug, users.slug AS user_slug') },
     through: :channels,
-    source: :subs
+    source: :subs do
+      def with_user_id(user_id)
+        where(channel_id: where(user_id: user_id).pluck(:channel_id))
+      end
+    end
   has_many :reads
   has_many :unreads
   has_many :messages, through: :channels

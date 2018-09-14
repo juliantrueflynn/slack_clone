@@ -7,7 +7,7 @@ class Unread < ApplicationRecord
   belongs_to :message, foreign_key: :unreadable_id, optional: true
 
   def self.channels_by_workspace_id_and_user_id(workspace_id, user_id)
-    includes(workspace: :channel_subs)
+    includes(:workspace, channel: :subs)
       .where(unreadable_type: 'Channel')
       .where(workspaces: { id: workspace_id })
       .where(channel_subs: { user_id: user_id })

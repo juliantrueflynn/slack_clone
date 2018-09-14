@@ -8,10 +8,9 @@ const ChannelPage = ({
   channel,
   rightSidebar,
   authors,
-  isChatSub,
-  currentUser,
   createChannelSubRequest,
   chatTitle,
+  currentUserSlug,
 }) => {
   if (!channel) {
     return null;
@@ -29,13 +28,12 @@ const ChannelPage = ({
         channel={channel}
         rightSidebar={rightSidebar}
       />
-      {/* <MessageFormContainer placeholder={formPlaceholder} /> */}
+      {/* <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} /> */}
       <ChannelSubscribe
         title={chatTitle}
         ownerName={ownerName}
         channel={channel}
-        isChatSub={isChatSub}
-        userId={currentUser.id}
+        currentUserSlug={currentUserSlug}
         createChannelSubRequest={createChannelSubRequest}
       />
     </Fragment>

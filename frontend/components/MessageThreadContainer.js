@@ -10,7 +10,7 @@ const mapStateToProps = (state, { match: { params: { messageSlug, channelSlug } 
   message: state.entities.messages[messageSlug],
   messageSlug,
   authors: state.entities.members,
-  channel: selectChatBySlug(state, channelSlug)
+  channel: selectChatBySlug(state, channelSlug),
 });
 
 const mapDispatchToProps = dispatch => ({
