@@ -8,35 +8,37 @@ const workspaceReducer = (state = {}, action) => {
   switch (action.type) {
     case WORKSPACE.INDEX.RECEIVE: {
       const { workspaces, workspaceSubs } = action.workspaces;
-      nextState = Object.assign({}, state);
+      nextState = {};
 
       workspaces.forEach((workspace) => {
         nextState[workspace.slug] = {
           members: [workspace.ownerSlug],
+          channels: [],
           ...workspace
         };
       });
 
       workspaceSubs.forEach(({ workspaceSlug, userSlug }) => {
-        if (!workspaceSubs.includes(userSlug)) return;
+        if (workspaceSubs.includes(userSlug)) return;
         nextState[workspaceSlug].members.push(userSlug);
       });
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.RECEIVE: {
-      const { workspace, members } = action.workspace;
-      nextState = {
-        [workspace.slug]: {
-          members: members.map(user => user.slug),
-          ...workspace,
-        }
+      const { workspace, members, channels } = action.workspace;
+      nextState = Object.assign({}, state);
+      nextState[workspace.slug] = {
+        members: members.map(user => user.slug),
+        channels: channels.map(ch => ch.slug),
+        ...workspace,
       };
-      return merge({}, state, nextState);
+
+      return nextState;
     }
     case WORKSPACE.CREATE.RECEIVE: {
       const { owner, workspace, channels } = action.workspace;
-      nextState = Object.assign({}, state);
+      nextState = {};
       nextState[workspace.slug] = {
         ownerId: owner.id,
         members: [owner.slug],
@@ -44,7 +46,7 @@ const workspaceReducer = (state = {}, action) => {
         ...workspace,
       };
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case WORKSPACE.DESTROY.RECEIVE:
       nextState = Object.assign({}, state);
@@ -59,10 +61,10 @@ const workspaceReducer = (state = {}, action) => {
     case WORKSPACE_SUB.DESTROY.RECEIVE: {
       const { workspaceSub: { workspaceSlug, userSlug } } = action.workspaceSub;
       nextState = Object.assign({}, state);
-      const members = nextState[workspaceSlug].members.filter(memberSlug => (
+      nextState[workspaceSlug].members = nextState[workspaceSlug].members.filter(memberSlug => (
         memberSlug !== userSlug
       ));
-      nextState[workspaceSlug].members = members;
+
       return nextState;
     }
     case SIGN_OUT.RECEIVE: {

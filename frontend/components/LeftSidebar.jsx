@@ -41,12 +41,9 @@ const LeftSidebar = ({
   ];
 
   const dmChatsItems = dmChats && dmChats.map((ch) => {
-    const subsWithoutCurrUser = ch.members.filter(slug => slug !== currentUser.slug);
-    const usernames = subsWithoutCurrUser.map(slug => members[slug].username);
-
-    if (!usernames) return null;
-
-    const dmUser = members[subsWithoutCurrUser[0]];
+    const dmChatUsers = ch.members.filter(slug => slug !== currentUser.slug);
+    const usernames = dmChatUsers.map(slug => members[slug].username);
+    const dmUser = members[dmChatUsers[0]];
     const dmUserStatus = dmUser && dmUser.status.toLowerCase();
     const circleType = dmUserStatus === 'offline' ? 'far' : 'fas';
     const circleIcon = [circleType, 'circle'];

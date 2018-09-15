@@ -4,9 +4,11 @@ import WorkspacePage from './WorkspacePage';
 import withActionCable from './withActionCable';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
-  defaultChat: Object.values(state.entities.channels)[0],
   workspaceSlug,
+  channels: state.entities.channels,
+  workspaces: state.entities.workspaces,
   isLoading: state.ui.isWorkspaceLoading,
+  currentUser: state.session.currentUser,
 });
 
 const mapDispatchToProps = dispatch => ({

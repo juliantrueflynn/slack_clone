@@ -28,7 +28,7 @@ const ChannelPage = ({
         channel={channel}
         rightSidebar={rightSidebar}
       />
-      <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} />
+      {/* <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} /> */}
       <ChannelSubscribe
         title={chatTitle}
         ownerName={ownerName}

@@ -27,7 +27,7 @@ const memberReducer = (state = {}, action) => {
         };
       }
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.RECEIVE: {
       const { members, subs } = action.workspace;
@@ -44,7 +44,7 @@ const memberReducer = (state = {}, action) => {
         nextState[sub.userSlug].subs.push(sub.id);
       });
 
-      return merge({}, nextState);
+      return merge({}, state, nextState);
     }
     case WORKSPACE_SUB.CREATE.RECEIVE: {
       const { user, workspaceSub, channelSubs } = action.workspaceSub;

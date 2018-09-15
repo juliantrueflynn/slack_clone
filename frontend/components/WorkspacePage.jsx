@@ -1,5 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import './WorkspacePage.css';
 
@@ -21,8 +20,11 @@ class WorkspacePage extends React.Component {
 
   componentDidUpdate(prevProps) {
     const {
+      match: { isExact, url },
+      history,
       workspaceSlug,
       workspaces,
+      channels,
       fetchWorkspaceRequest,
       fetchWorkspacesRequest,
     } = this.props;
@@ -35,16 +37,20 @@ class WorkspacePage extends React.Component {
     if (prevWorkspaces && prevWorkspaces.length !== workspaces.length) {
       fetchWorkspacesRequest();
     }
+
+    const workspace = workspaces[workspaceSlug];
+    if (isExact && workspace) {
+      const firstChatSlug = workspace.channels[0];
+      const defaultChatSlug = channels[firstChatSlug] && channels[firstChatSlug].slug;
+
+      if (defaultChatSlug) {
+        history.replace(`${url}/messages/${defaultChatSlug}`);
+      }
+    }
   }
 
   render() {
-    const {
-      defaultChat,
-      match: { url, isExact },
-      isLoading,
-      routes,
-    } = this.props;
-    const defaultChatSlug = defaultChat && defaultChat.slug;
+    const { isLoading, routes } = this.props;
 
     if (isLoading) {
       return (
@@ -52,10 +58,6 @@ class WorkspacePage extends React.Component {
           Loading...
         </h2>
       );
-    }
-
-    if (isExact && defaultChatSlug) {
-      return <Redirect to={`${url}/messages/${defaultChatSlug}`} />;
     }
 
     return (
