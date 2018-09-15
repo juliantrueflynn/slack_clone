@@ -6,11 +6,12 @@ import { decamelizeKeys, camelizeKeys } from 'humps';
 import { selectSubbedChats, selectSubbedWorkspaces } from '../reducers/selectors';
 import { destroyUserAppearance } from '../actions/userAppearanceActions';
 
-const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
-  workspaceSlug,
+const mapStateToProps = state => ({
+  workspaceSlug: state.ui.displayWorkspaceSlug,
   isLoggedIn: !!state.session.currentUser,
   subbedWorkspaces: selectSubbedWorkspaces(state),
   subbedChats: selectSubbedChats(state),
+  workspaces: Object.values(state.entities.workspaces),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -58,12 +59,16 @@ const withActionCable = (WrappedComponent) => {
             />
           )}
           {subbedWorkspaces && subbedWorkspaces.map(({ slug }) => (
-            <ActionCable
-              key={slug}
-              ref={this.workspaces}
-              channel={decamelizeKeys({ channel: 'WorkspaceChannel', workspaceSlug: slug })}
-              onReceived={this.handleReceived}
-            />
+            <Fragment key={slug}>
+              <ActionCable
+                channel={decamelizeKeys({ channel: 'WorkspaceChannel', workspaceSlug: slug })}
+                onReceived={this.handleReceived}
+              />
+              <ActionCable
+                channel={decamelizeKeys({ channel: 'AppearanceChannel', workspaceSlug: slug })}
+                onReceived={this.handleReceived}
+              />
+            </Fragment>
           ))}
           {subbedChats && subbedChats.map(({ slug }) => (
             <ActionCable

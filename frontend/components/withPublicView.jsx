@@ -1,15 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signOut, signUp, signIn } from '../actions/sessionActions';
 import { fetchWorkspaces } from '../actions/workspaceActions';
-import Menu from './Menu';
-import Dropdown from './Dropdown';
-import withActionCable from './withActionCable';
-import { selectSubbedWorkspaces } from '../reducers/selectors';
-import './WithPublicView.css';
-import CreateWorkspaceModal from './CreateWorkspaceModal';
 import { modalOpen } from '../actions/interactiveActions';
+import { selectSubbedWorkspaces } from '../reducers/selectors';
+import CreateWorkspaceModal from './CreateWorkspaceModal';
+import Dropdown from './Dropdown';
+import Menu from './Menu';
+import './WithPublicView.css';
 
 const mapStateToProps = state => ({
   isLoggedIn: !!state.session.currentUser,
@@ -103,7 +102,7 @@ const withPublicView = (WrappedComponent) => {
     }
   }
 
-  return withActionCable(connect(mapStateToProps, mapDispatchToProps)(WithPublicView));
+  return withRouter(connect(mapStateToProps, mapDispatchToProps)(WithPublicView));
 };
 
 export default withPublicView;

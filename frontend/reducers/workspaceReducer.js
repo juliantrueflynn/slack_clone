@@ -59,10 +59,10 @@ const workspaceReducer = (state = {}, action) => {
       return nextState;
     }
     case WORKSPACE_SUB.DESTROY.RECEIVE: {
-      const { workspaceSub: { workspaceSlug, userSlug } } = action.workspaceSub;
+      const { user, workspaceSub: { workspaceSlug } } = action.workspaceSub;
       nextState = Object.assign({}, state);
-      nextState[workspaceSlug].members = nextState[workspaceSlug].members.filter(memberSlug => (
-        memberSlug !== userSlug
+      nextState[workspaceSlug].members = nextState[workspaceSlug].members.filter(userSlug => (
+        userSlug !== user.slug
       ));
 
       return nextState;

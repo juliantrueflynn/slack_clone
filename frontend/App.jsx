@@ -21,6 +21,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Switch } from 'react-router-dom';
 import { routesConfig, RouteWithSubRoutes } from './util/routeUtil';
+import withActionCable from './components/withActionCable';
 import './App.css';
 
 library.add(
@@ -44,10 +45,10 @@ const App = () => (
   <div className="App">
     <Switch>
       {routesConfig.map(route => (
-        <RouteWithSubRoutes key={route.path || route.key} {...route} />
+        <RouteWithSubRoutes key={route.path} {...route} />
       ))}
     </Switch>
   </div>
 );
 
-export default App;
+export default withActionCable(App);

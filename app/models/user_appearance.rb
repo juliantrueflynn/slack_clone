@@ -11,7 +11,7 @@ class UserAppearance < ApplicationRecord
   end
 
   def broadcast_name
-    "workspace_#{workspace_slug}"
+    "appearance_#{workspace_slug}"
   end
 
   private
@@ -20,7 +20,7 @@ class UserAppearance < ApplicationRecord
   after_destroy { broadcast 'DESTROY', 'OFFLINE' }
 
   def broadcast(type, new_status = nil)
-    HashDispatcherJob.perform_later channel_name: "workspace_#{workspace_slug}",
+    HashDispatcherJob.perform_later channel_name: "appearance_#{workspace_slug}",
       type: action_type(type),
       status: new_status || status,
       user_id: user_id,

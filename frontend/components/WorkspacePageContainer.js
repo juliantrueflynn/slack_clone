@@ -1,14 +1,13 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { fetchWorkspace, fetchWorkspaces } from '../actions/workspaceActions';
 import WorkspacePage from './WorkspacePage';
-import withActionCable from './withActionCable';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   workspaceSlug,
   channels: state.entities.channels,
   workspaces: state.entities.workspaces,
   isLoading: state.ui.isWorkspaceLoading,
-  currentUser: state.session.currentUser,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -16,4 +15,4 @@ const mapDispatchToProps = dispatch => ({
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),
 });
 
-export default withActionCable(connect(mapStateToProps, mapDispatchToProps)(WorkspacePage));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WorkspacePage));
