@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signOut, signUp, signIn } from '../actions/sessionActions';
 import { fetchWorkspaces } from '../actions/workspaceActions';
@@ -8,6 +8,8 @@ import Dropdown from './Dropdown';
 import withActionCable from './withActionCable';
 import { selectSubbedWorkspaces } from '../reducers/selectors';
 import './WithPublicView.css';
+import CreateWorkspaceModal from './CreateWorkspaceModal';
+import { modalOpen } from '../actions/interactiveActions';
 
 const mapStateToProps = state => ({
   isLoggedIn: !!state.session.currentUser,
@@ -18,6 +20,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, { location }) => ({
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),
+  modalOpen: modal => dispatch(modalOpen(modal)),
   signOutRequest: () => dispatch(signOut.request()),
   sessionRequest: (user) => {
     if (location.pathname === '/signin') {
@@ -32,7 +35,10 @@ const withPublicView = (WrappedComponent) => {
   class WithPublicView extends React.Component {
     componentDidMount() {
       const { fetchWorkspacesRequest, isLoggedIn } = this.props;
-      if (isLoggedIn) fetchWorkspacesRequest();
+
+      if (isLoggedIn) {
+        fetchWorkspacesRequest();
+      }
     }
 
     render() {
@@ -52,9 +58,12 @@ const withPublicView = (WrappedComponent) => {
         label: title,
       }));
       const ddModifierClassName = subbedWorkspaces.length ? 'filled' : 'empty';
-      const createWorkspaceItem = { key: 'createWorkspace', link: '/create-workspace', label: 'Create Workspace' };
+      const createWorkspaceItem = {
+        key: 'createWorkspace',
+        label: 'Create Workspace',
+        onClick: () => modalOpen('MODAL_WORKSPACE')
+      };
       workspaceItems.push(createWorkspaceItem);
-
 
       let navItems = [
         { key: 'signup', label: 'Sign Up', link: '/signup' },
@@ -73,7 +82,6 @@ const withPublicView = (WrappedComponent) => {
                 <Link className="Page__logo" to="/" rel="home">
                   Slack Clone
                 </Link>
-
                 <Menu menuFor="public" isRow items={navItems} />
                 {isLoggedIn && workspaces && (
                   <Dropdown
@@ -89,12 +97,13 @@ const withPublicView = (WrappedComponent) => {
             </div>
           </header>
           <WrappedComponent {...this.props} />
+          <CreateWorkspaceModal />
         </div>
       );
     }
   }
 
-  return withActionCable(withRouter(connect(mapStateToProps, mapDispatchToProps)(WithPublicView)));
+  return withActionCable(connect(mapStateToProps, mapDispatchToProps)(WithPublicView));
 };
 
 export default withPublicView;

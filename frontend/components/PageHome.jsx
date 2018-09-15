@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from './Button';
 import withPublicView from './withPublicView';
 import PublicWorkspacesContainer from './PublicWorkspacesContainer';
 import './PageHome.css';
@@ -13,9 +12,15 @@ const PageHome = ({ workspaces, isLoggedIn, currentUser }) => (
           <br />
           made with React & Rails
         </h1>
-        <Button buttonFor="hero" color="green" size="lg" style={{ textTransform: 'none' }}>
-          Contact Julian Flynn
-        </Button>
+        <a
+          href="https://github.com/juliantrueflynn/slack_clone"
+          className="Btn Btn__styled Btn__lg Btn__hero Btn__green"
+          rel="noopener noreferrer"
+          target="_blank"
+          title="Slack Clone GitHub"
+        >
+          View GitHub Repo
+        </a>
       </div>
       <div className="Page__container">
         <PublicWorkspacesContainer

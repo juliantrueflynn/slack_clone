@@ -1,8 +1,4 @@
-import {
-  SIGN_UP,
-  SIGN_IN,
-  SIGN_OUT,
-} from '../actions/actionTypes';
+import { SIGN_UP, SIGN_IN, SIGN_OUT } from '../actions/actionTypes';
 
 const nullCurrentUser = { currentUser: null };
 

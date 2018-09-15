@@ -14,6 +14,15 @@
   padding-bottom: 8px;
 }
 
+.Dropdown__profile .Menu--dropdown .MenuItem > .MenuItem__content:not(.MenuItem__content--active) {
+  background-color: #FFF;
+  transition: background-color ease-in-out .15s;
+}
+
+.Dropdown__profile .Menu--dropdown .MenuItem > .MenuItem__content:not(.MenuItem__content--active):not(.MenuItem__content--text):hover {
+  background-color: rgba(223,230,233,.45);
+}
+
 .Dropdown__profile .MenuItem__switch-workspace {
   border-top: 1px solid #E9E9E9;
   padding-top: 15px;

@@ -1,6 +1,9 @@
+json.user do
+  json.(workspace_sub.user, :id, :slug, :email, :username)
+end
+
 json.workspace_sub do
-  json.(workspace_sub, :id, :user_id, :workspace_id)
-  json.user_slug workspace_sub.user.slug
+  json.(workspace_sub, :id, :workspace_id)
   json.workspace_slug workspace_sub.workspace.slug
 end
 

@@ -1,4 +1,9 @@
-import { FAVORITE, MESSAGE } from '../actions/actionTypes';
+import {
+  FAVORITE,
+  MESSAGE,
+  SIGN_OUT,
+  WORKSPACE,
+} from '../actions/actionTypes';
 
 const favoriteReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -34,6 +39,9 @@ const favoriteReducer = (state = {}, action) => {
 
       return nextState;
     }
+    case WORKSPACE.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
+      return {};
     default:
       return state;
   }

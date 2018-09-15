@@ -1,5 +1,7 @@
 .Btn__unstyled {
   border-style: none;
+  text-transform: none;
+  padding: 0;
 }
 
 .Btn__styled {

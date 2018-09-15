@@ -8,6 +8,7 @@ const workspaceErrorsReducer = (state = [], action) => {
     case WORKSPACE.SHOW.FAILURE:
     case WORKSPACE.CREATE.FAILURE:
       return [...action.errors];
+    case WORKSPACE.SHOW.REQUEST:
     case WORKSPACE.CREATE.REQUEST:
       return [];
     default:

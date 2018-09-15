@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Button from './Button';
 import PublicWorkspacesItem from './PublicWorkspacesItem';
 import './PublicWorkspaces.css';
 
@@ -9,6 +9,7 @@ const PublicWorkspaces = ({
   createWorkspaceSubRequest,
   deleteWorkspaceSubRequest,
   currentUser,
+  modalOpen,
 }) => {
   if (!workspaces || !isLoggedIn) return null;
 
@@ -20,9 +21,13 @@ const PublicWorkspaces = ({
         </h2>
         <div className="PublicWorkspaces__subtitle">
           You can also&nbsp;
-          <Link to="/create-workspace" className="PublicWorkspaces__create-workspace">
+          <Button
+            onClick={() => modalOpen('MODAL_WORKSPACE')}
+            buttonFor="create-workspace"
+            unStyled
+          >
             create a workspace
-          </Link>
+          </Button>
         </div>
       </header>
       <div className="PublicWorkspaces__list" role="list">

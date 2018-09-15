@@ -10,15 +10,19 @@
 
 .PublicWorkspaces__item-title {
   color: #636E72;
+}
+
+a.PublicWorkspaces__item-title {
   transition: color ease-in-out .2s;
 }
 
-.PublicWorkspaces__item-title:hover {
+a.PublicWorkspaces__item-title:hover {
   color: #3B4244;
 }
 
 .PublicWorkspaces__item .Btn {
   margin-left: auto;
+  text-transform: uppercase;
 }
 
 .PublicWorkspaces__item .Btn__workspace-sub--unsub {

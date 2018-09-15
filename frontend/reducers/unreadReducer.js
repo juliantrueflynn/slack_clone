@@ -1,4 +1,4 @@
-import { WORKSPACE, UNREAD } from '../actions/actionTypes';
+import { WORKSPACE, UNREAD, SIGN_OUT } from '../actions/actionTypes';
 
 const unreadReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -20,6 +20,9 @@ const unreadReducer = (state = {}, action) => {
       nextState[unread.id] = unread;
       return nextState;
     }
+    case WORKSPACE.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
+      return {};
     default:
       return state;
   }

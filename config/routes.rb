@@ -11,8 +11,8 @@ Rails.application.routes.draw do
       resources :favorites, only: [:index]
       resources :unreads, only: :index
       resources :reads, only: [:index, :create]
+      resource :user_appearance, only: [:create, :destroy]
     end
-    resource :user_appearance, only: [:create, :destroy]
     resources :workspace_subs, only: [:create, :destroy], param: :workspace_id
     resources :sidebar_channel_subs, only: [:update]
     resource :dm_chat, only: [:create]

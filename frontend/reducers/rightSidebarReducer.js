@@ -1,4 +1,9 @@
-import { RIGHT_SIDEBAR_OPEN, RIGHT_SIDEBAR_CLOSE, WORKSPACE } from '../actions/actionTypes';
+import {
+  RIGHT_SIDEBAR_OPEN,
+  RIGHT_SIDEBAR_CLOSE,
+  WORKSPACE,
+  SIGN_OUT,
+} from '../actions/actionTypes';
 
 const rightSidebarReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -9,8 +14,8 @@ const rightSidebarReducer = (state = {}, action) => {
       return { sidebarType, sidebarProps };
     }
     case RIGHT_SIDEBAR_CLOSE:
-      return {};
-    case WORKSPACE.SHOW.RECEIVE:
+    case WORKSPACE.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
       return {};
     default:
       return state;

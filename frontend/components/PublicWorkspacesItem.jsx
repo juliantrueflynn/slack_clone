@@ -34,9 +34,16 @@ class PublicWorkspacesItem extends React.Component {
 
     return (
       <div key={workspace.id} className="PublicWorkspaces__item" role="listitem">
-        <Link to={workspace.slug} className="PublicWorkspaces__item-title">
-          {workspace.title}
-        </Link>
+        {this.isSubscriber() && (
+          <Link to={workspace.slug} className="PublicWorkspaces__item-title">
+            {workspace.title}
+          </Link>
+        )}
+        {this.isSubscriber() || (
+          <div to={workspace.slug} className="PublicWorkspaces__item-title">
+            {workspace.title}
+          </div>
+        )}
         <Button
           buttonFor="workspace-sub"
           size="sm"

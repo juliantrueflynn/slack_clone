@@ -4,7 +4,6 @@ import { Route, Redirect, withRouter } from 'react-router-dom';
 import PageHome from '../components/PageHome';
 import SessionForm from '../components/SessionForm';
 import WorkspacePageContainer from '../components/WorkspacePageContainer';
-import PageWorkspaceCreate from '../components/PageWorkspaceCreate';
 import MessageThreadContainer from '../components/MessageThreadContainer';
 import UserFavoritesContainer from '../components/UserFavoritesContainer';
 import UserViewContainer from '../components/UserViewContainer';
@@ -27,12 +26,6 @@ export const routesConfig = [
     component: SessionForm,
     exact: true,
     isAuth: true,
-  },
-  {
-    path: '/create-workspace',
-    component: PageWorkspaceCreate,
-    exact: true,
-    isProtected: true,
   },
   {
     path: '/:workspaceSlug',

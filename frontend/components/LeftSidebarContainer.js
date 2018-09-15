@@ -2,12 +2,12 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import LeftSidebar from './LeftSidebar';
 import {
-  selectWorkspaces,
   selectSubbedChats,
   selectUnsubbedChats,
   hasUreadChannels,
   hasUreadThreads,
   selectDmChats,
+  selectSubbedWorkspaces,
 } from '../reducers/selectors';
 import { modalOpen } from '../actions/interactiveActions';
 import { createChannel, updateChannelSub, fetchChannels } from '../actions/channelActions';
@@ -16,7 +16,7 @@ const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   hasUnreadChannels: hasUreadChannels(state),
   hasUnreadThreads: hasUreadThreads(state),
   currentUser: state.session.currentUser,
-  workspaces: selectWorkspaces(state),
+  workspaces: selectSubbedWorkspaces(state),
   currWorkspace: state.entities.workspaces[workspaceSlug],
   subbedChannels: selectSubbedChats(state).filter(ch => !ch.hasDm),
   unsubbedChannels: selectUnsubbedChats(state),

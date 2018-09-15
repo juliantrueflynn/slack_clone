@@ -1,5 +1,10 @@
 import merge from 'lodash.merge';
-import { REACTION, MESSAGE } from '../actions/actionTypes';
+import {
+  REACTION,
+  MESSAGE,
+  SIGN_OUT,
+  WORKSPACE,
+} from '../actions/actionTypes';
 
 const reactionReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -33,6 +38,9 @@ const reactionReducer = (state = {}, action) => {
       reactions.forEach((reaction) => { nextState[reaction.id] = reaction; });
       return Object.assign({}, state, nextState);
     }
+    case WORKSPACE.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
+      return {};
     default:
       return state;
   }

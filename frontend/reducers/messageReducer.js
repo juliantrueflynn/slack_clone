@@ -6,6 +6,7 @@ import {
   READ,
   FAVORITE,
   WORKSPACE,
+  SIGN_OUT,
 } from '../actions/actionTypes';
 
 const messageReducer = (state = {}, action) => {
@@ -225,6 +226,9 @@ const messageReducer = (state = {}, action) => {
 
       return nextState;
     }
+    case WORKSPACE.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
+      return {};
     default:
       return state;
   }

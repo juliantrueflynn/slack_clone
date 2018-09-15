@@ -3,6 +3,7 @@ import {
   MODAL_CLOSE,
   REACTION,
   MESSAGE,
+  WORKSPACE,
 } from '../actions/actionTypes';
 
 const modalReducer = (state = null, action) => {
@@ -13,6 +14,7 @@ const modalReducer = (state = null, action) => {
       return action.modal;
     case REACTION.CREATE.RECEIVE:
     case MESSAGE.INDEX.RECEIVE:
+    case WORKSPACE.SHOW.REQUEST:
     case MODAL_CLOSE:
       return null;
     default:

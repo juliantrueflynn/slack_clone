@@ -1,4 +1,9 @@
-import { WORKSPACE, READ, MESSAGE } from '../actions/actionTypes';
+import {
+  WORKSPACE,
+  READ,
+  MESSAGE,
+  SIGN_OUT,
+} from '../actions/actionTypes';
 
 const readReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -30,6 +35,9 @@ const readReducer = (state = {}, action) => {
       nextState[read.id] = read;
       return nextState;
     }
+    case WORKSPACE.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
+      return {};
     default:
       return state;
   }

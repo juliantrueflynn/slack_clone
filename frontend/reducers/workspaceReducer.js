@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import { WORKSPACE, WORKSPACE_SUB } from '../actions/actionTypes';
+import { WORKSPACE, WORKSPACE_SUB, SIGN_OUT } from '../actions/actionTypes';
 
 const workspaceReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -35,11 +35,15 @@ const workspaceReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case WORKSPACE.CREATE.RECEIVE: {
-      const { workspace, channels } = action.workspace;
+      const { owner, workspace, channels } = action.workspace;
       nextState = Object.assign({}, state);
-      workspace.channels = channels.map(ch => ch.slug);
-      workspace.members = [workspace.ownerSlug];
-      nextState[workspace.slug] = workspace;
+      nextState[workspace.slug] = {
+        ownerId: owner.id,
+        members: [owner.slug],
+        channels: channels.map(ch => ch.slug),
+        ...workspace,
+      };
+
       return nextState;
     }
     case WORKSPACE.DESTROY.RECEIVE:
@@ -47,9 +51,9 @@ const workspaceReducer = (state = {}, action) => {
       delete nextState[action.workspaceSlug];
       return nextState;
     case WORKSPACE_SUB.CREATE.RECEIVE: {
-      const { workspaceSub } = action.workspaceSub;
+      const { user, workspaceSub } = action.workspaceSub;
       nextState = Object.assign({}, state);
-      nextState[workspaceSub.workspaceSlug].members.push(workspaceSub.userSlug);
+      nextState[workspaceSub.workspaceSlug].members.push(user.slug);
       return nextState;
     }
     case WORKSPACE_SUB.DESTROY.RECEIVE: {
@@ -60,6 +64,9 @@ const workspaceReducer = (state = {}, action) => {
       ));
       nextState[workspaceSlug].members = members;
       return nextState;
+    }
+    case SIGN_OUT.RECEIVE: {
+      return {};
     }
     default:
       return state;

@@ -10,4 +10,5 @@
 
 .PageHome .Btn__hero {
   margin-top: 10px;
+  display: inline-block;
 }

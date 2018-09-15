@@ -4,19 +4,18 @@ import { withRouter } from 'react-router-dom';
 import { ActionCable } from 'react-actioncable-provider';
 import { decamelizeKeys, camelizeKeys } from 'humps';
 import { selectSubbedChats, selectSubbedWorkspaces } from '../reducers/selectors';
-import { createUserAppearance } from '../actions/userAppearanceActions';
+import { destroyUserAppearance } from '../actions/userAppearanceActions';
 
-const mapStateToProps = (state, { match: { params } }) => ({
-  workspaceSlug: params.workspaceSlug,
+const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
+  workspaceSlug,
   isLoggedIn: !!state.session.currentUser,
   subbedWorkspaces: selectSubbedWorkspaces(state),
   subbedChats: selectSubbedChats(state),
-  isUsersLoaded: !!Object.values(state.entities.members).length,
 });
 
 const mapDispatchToProps = dispatch => ({
   actionCableReceive: received => dispatch(camelizeKeys(received)),
-  createUserAppearanceRequest: appearance => dispatch(createUserAppearance.request(appearance)),
+  destroyUserAppearanceRequest: appearance => dispatch(destroyUserAppearance.request(appearance)),
 });
 
 const withActionCable = (WrappedComponent) => {
@@ -27,14 +26,10 @@ const withActionCable = (WrappedComponent) => {
     }
 
     componentDidUpdate(prevProps) {
-      const {
-        isUsersLoaded,
-        createUserAppearanceRequest,
-        workspaceSlug,
-      } = this.props;
+      const { destroyUserAppearanceRequest, workspaceSlug } = this.props;
 
-      if (workspaceSlug && isUsersLoaded && !prevProps.isUsersLoaded) {
-        createUserAppearanceRequest({ workspaceSlug });
+      if (prevProps.workspaceSlug && prevProps.workspaceSlug !== workspaceSlug) {
+        destroyUserAppearanceRequest(prevProps.workspaceSlug);
       }
     }
 
@@ -46,10 +41,10 @@ const withActionCable = (WrappedComponent) => {
     render() {
       const {
         workspaceSlug,
+        destroyUserAppearanceRequest,
         subbedWorkspaces,
         subbedChats,
         isLoggedIn,
-        isUsersLoaded,
         ...props
       } = this.props;
 
@@ -59,12 +54,6 @@ const withActionCable = (WrappedComponent) => {
           {isLoggedIn && (
             <ActionCable
               channel={{ channel: 'AppChannel' }}
-              onReceived={this.handleReceived}
-            />
-          )}
-          {workspaceSlug && (
-            <ActionCable
-              channel={decamelizeKeys({ channel: 'AppearanceChannel', workspaceSlug })}
               onReceived={this.handleReceived}
             />
           )}

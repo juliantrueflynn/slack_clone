@@ -27,11 +27,11 @@
   border-radius: 3px;
 }
 
-.PublicWorkspaces .PublicWorkspaces__create-workspace {
+.PublicWorkspaces .Btn__create-workspace {
   font-weight: 700;
   transition: color ease-in-out .2s;
 }
 
-.PublicWorkspaces .PublicWorkspaces__create-workspace:hover {
+.PublicWorkspaces .Btn__create-workspace:hover {
   color: #03466F;
 }

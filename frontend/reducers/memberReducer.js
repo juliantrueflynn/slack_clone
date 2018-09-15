@@ -7,6 +7,7 @@ import {
   CHANNEL,
   MESSAGE,
   WORKSPACE_SUB,
+  SIGN_OUT,
 } from '../actions/actionTypes';
 
 const memberReducer = (state = {}, action) => {
@@ -46,18 +47,17 @@ const memberReducer = (state = {}, action) => {
       return merge({}, nextState);
     }
     case WORKSPACE_SUB.CREATE.RECEIVE: {
-      const { workspaceSub, channelSubs } = action.workspaceSub;
+      const { user, workspaceSub, channelSubs } = action.workspaceSub;
 
       nextState = Object.assign({}, state);
-      nextState[workspaceSub.userSlug] = {
-        id: workspaceSub.id,
-        slug: workspaceSub.userSlug,
+      nextState[user.slug] = {
         subs: [],
-        workspaces: [workspaceSub.workspaceSlug]
+        workspaces: [workspaceSub.workspaceSlug],
+        ...user,
       };
 
       channelSubs.forEach((sub) => {
-        nextState[workspaceSub.userSlug].subs.push(sub.id);
+        nextState[user.slug].subs.push(sub.id);
       });
 
       return nextState;
@@ -67,7 +67,9 @@ const memberReducer = (state = {}, action) => {
 
       nextState = Object.assign({}, state);
       reactions.forEach(({ id, userSlug }) => {
-        if (nextState[userSlug]) nextState[userSlug].reactions.push(id);
+        if (nextState[userSlug] && nextState[userSlug].reactions) {
+          nextState[userSlug].reactions.push(id);
+        }
       });
 
       return nextState;
@@ -99,20 +101,21 @@ const memberReducer = (state = {}, action) => {
 
       return nextState;
     }
-    case USER_APPEARANCE.CREATE.RECEIVE: {
-      const { userSlug, status } = action;
-      nextState = Object.assign({}, state);
-      if (!nextState[userSlug]) return state;
-      nextState[userSlug].status = status;
-      return nextState;
-    }
+    case USER_APPEARANCE.CREATE.RECEIVE:
     case USER_APPEARANCE.DESTROY.RECEIVE: {
-      const { userSlug, status } = action;
-      nextState = Object.assign({}, state);
-      if (!nextState[userSlug]) return state;
-      nextState[userSlug].status = status;
-      return nextState;
+      const { userId, userSlug, status } = action;
+      nextState = {};
+      nextState[userSlug] = {
+        id: userId,
+        slug: userSlug,
+        status,
+      };
+
+      return merge({}, state, nextState);
     }
+    case WORKSPACE.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
+      return {};
     default:
       return state;
   }

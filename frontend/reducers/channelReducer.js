@@ -6,7 +6,8 @@ import {
   MESSAGE,
   DM_CHAT,
   CHANNEL_SUB,
-  WORKSPACE_SUB
+  WORKSPACE_SUB,
+  SIGN_OUT
 } from '../actions/actionTypes';
 
 const channelReducer = (state = {}, action) => {
@@ -106,13 +107,30 @@ const channelReducer = (state = {}, action) => {
       return nextState;
     }
     case WORKSPACE.CREATE.RECEIVE: {
-      const { channels } = action.workspace;
+      const {
+        workspace,
+        owner,
+        channels,
+        channelSubs,
+      } = action.workspace;
       nextState = Object.assign({}, state);
-      channels.forEach((channel) => { nextState[channel.slug] = channel; });
+      channels.forEach((channel) => {
+        nextState[channel.slug] = {
+          workspaceSlug: workspace.slug,
+          members: [owner.slug],
+          subs: [],
+          ...channel
+        };
+      });
+
+      channelSubs.forEach((sub) => {
+        nextState[sub.channelSlug].subs.push(sub.id);
+      });
+
       return nextState;
     }
     case WORKSPACE_SUB.CREATE.RECEIVE: {
-      const { workspaceSub, channelSubs } = action.workspaceSub;
+      const { user, channelSubs } = action.workspaceSub;
 
       nextState = Object.assign({}, state);
       channelSubs.forEach((sub) => {
@@ -125,8 +143,8 @@ const channelReducer = (state = {}, action) => {
           };
         }
 
-        nextState[sub.channelSlug].members.push(sub.userSlug);
-        nextState[sub.channelSlug].subs.push(workspaceSub.userSlug);
+        nextState[sub.channelSlug].members.push(user.slug);
+        nextState[sub.channelSlug].subs.push(user.slug);
       });
 
       return nextState;
@@ -212,6 +230,8 @@ const channelReducer = (state = {}, action) => {
         return acc;
       }, nextState);
     }
+    case SIGN_OUT.RECEIVE:
+      return {};
     default:
       return state;
   }

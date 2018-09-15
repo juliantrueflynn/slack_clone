@@ -11,19 +11,19 @@ class UserAppearance < ApplicationRecord
   end
 
   def broadcast_name
-    "appearance_#{workspace_slug}"
+    "workspace_#{workspace_slug}"
   end
 
   private
 
   after_create_commit { broadcast 'CREATE' }
-  after_update_commit { broadcast 'UPDATE' }
   after_destroy { broadcast 'DESTROY', 'OFFLINE' }
 
   def broadcast(type, new_status = nil)
-    HashDispatcherJob.perform_later channel_name: "appearance_#{workspace_slug}",
+    HashDispatcherJob.perform_later channel_name: "workspace_#{workspace_slug}",
       type: action_type(type),
       status: new_status || status,
+      user_id: user_id,
       user_slug: user.slug
   end
 end

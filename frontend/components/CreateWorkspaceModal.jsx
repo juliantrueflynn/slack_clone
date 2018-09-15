@@ -3,9 +3,9 @@ import Form from './Form';
 import Label from './Label';
 import Button from './Button';
 import withForm from './withForm';
-import withPublicView from './withPublicView';
+import withModal from './withModal';
 
-class PageWorkspaceCreate extends React.Component {
+class CreateWorkspaceModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = { title: '', slug: '' };
@@ -30,10 +30,6 @@ class PageWorkspaceCreate extends React.Component {
 
     return (
       <div className="Page__container">
-        <h1 className="Page__title">
-          Create New Workspace
-        </h1>
-
         <Form formFor="workspace" onSubmit={this.handleFormSubmit}>
           <div className="Form__group">
             <Label htmlFor="title">
@@ -68,4 +64,9 @@ class PageWorkspaceCreate extends React.Component {
   }
 }
 
-export default withPublicView(withForm({ formFor: 'workspace' })(PageWorkspaceCreate));
+const modalProps = {
+  modalType: 'MODAL_WORKSPACE',
+  modalTitle: 'Create a Workspace'
+};
+
+export default withModal(modalProps)(withForm({ formFor: 'workspace' })(CreateWorkspaceModal));

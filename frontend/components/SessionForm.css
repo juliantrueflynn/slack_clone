@@ -1,6 +1,6 @@
 .SessionForm {
   text-align: center;
-  max-width: 450px;
+  width: 450px;
   margin: 0 auto;
   -ms-flex-preferred-size: 0;
   flex-basis: 0;

@@ -4,6 +4,7 @@ import {
   WORKSPACE,
   DM_CHAT,
   CHANNEL,
+  SIGN_OUT,
 } from '../actions/actionTypes';
 
 const channelSubReducer = (state = {}, action) => {
@@ -47,6 +48,9 @@ const channelSubReducer = (state = {}, action) => {
       if (nextState[id]) nextState[id].inSidebar = inSidebar;
       return nextState;
     }
+    case WORKSPACE.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
+      return {};
     default:
       return state;
   }

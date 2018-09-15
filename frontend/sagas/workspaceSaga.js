@@ -9,16 +9,8 @@ import {
 import * as actions from '../actions/workspaceActions';
 import { WORKSPACE } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiDelete } from '../util/apiUtil';
-import { selectCurrentUserId } from '../reducers/selectors';
+import { selectCurrentUser } from '../reducers/selectors';
 import { navigate } from '../actions/interactiveActions';
-
-function* redirectOwner({ workspace: { workspace } }) {
-  const currentUserId = yield select(selectCurrentUserId);
-
-  if (currentUserId === workspace.ownerId) {
-    yield put(navigate({ path: `/${workspace.slug}` }));
-  }
-}
 
 function* fetchDeleteWorkspace({ workspaceSlug }) {
   try {
@@ -34,6 +26,14 @@ function* addNewWorkspace({ workspace }) {
     yield call(apiCreate, 'workspaces', workspace);
   } catch (error) {
     yield put(actions.createWorkspace.failure(error));
+  }
+}
+
+function* redirectOwner({ workspace: { workspace, owner } }) {
+  const currUser = yield select(selectCurrentUser);
+
+  if (currUser.id === owner.id) {
+    yield put(navigate({ path: `/${workspace.slug}` }));
   }
 }
 
@@ -57,7 +57,10 @@ function* loadWorkspace({ workspaceSlug }) {
 
 function* newWorkspaceFlow() {
   yield takeLatest(WORKSPACE.CREATE.REQUEST, addNewWorkspace);
-  yield takeLatest(WORKSPACE.CREATE.RECEIVE, redirectOwner);
+}
+
+function* watchNewWorkspace() {
+  yield takeLatest(WORKSPACE.CREATE.RECEIVE, redirectOwner);  
 }
 
 function* watchWorkspaces() {
@@ -75,6 +78,7 @@ function* watchDeleteWorkspace() {
 export default function* workspaceSaga() {
   yield all([
     fork(newWorkspaceFlow),
+    fork(watchNewWorkspace),
     fork(watchWorkspaces),
     fork(watchWorkspacePage),
     fork(watchDeleteWorkspace),
