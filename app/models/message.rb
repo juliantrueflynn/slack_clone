@@ -62,7 +62,35 @@ class Message < ApplicationRecord
     !!parent_message_id
   end
 
-  after_create_commit :broadcast_create
+  after_create_commit :generate_unread, :broadcast_create
   after_update_commit :broadcast_update
   after_destroy :broadcast_destroy
+
+  private
+
+  def generate_unread
+    if channel.unread
+      channel.unread.update(active_at: created_at)
+    elsif unread
+      unread.update(active_at: created_at)
+    else
+      set_new_unread
+    end
+  end
+
+  def set_new_unread
+    if parent_message_id
+      Unread.create(
+        active_at: created_at,
+        unreadable_id: parent_message_id,
+        unreadable_type: 'Message'
+      )
+    else
+      Unread.create(
+        active_at: created_at,
+        unreadable_id: channel_id,
+        unreadable_type: 'Channel'
+      )
+    end
+  end
 end

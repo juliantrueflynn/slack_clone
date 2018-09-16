@@ -21,12 +21,17 @@ class MessageThread extends React.Component {
   render() {
     const {
       message,
-      threadMessages,
+      messages,
       channel,
       authors,
     } = this.props;
 
     if (!message) return null;
+
+    const childMessages = message.thread.reduce((acc, curr) => {
+      acc.push(messages[curr]);
+      return acc;
+    }, [message]);
 
     const sidebarProps = {
       path: `/thread/${message.slug}`
@@ -36,7 +41,7 @@ class MessageThread extends React.Component {
       <RightSidebarContainer sidebarType="Thread" sidebarProps={sidebarProps}>
         <div className="MessageThread">
           <MessagesPane
-            messages={threadMessages}
+            messages={childMessages}
             users={authors}
             channel={channel}
             isInSidebar

@@ -62,23 +62,21 @@ const messageReducer = (state = {}, action) => {
       } = action.messages;
 
       messages.forEach((message) => {
-        const children = messages.filter(child => child.parentMessageSlug === message.slug);
-        const messageThread = children.map(child => child.slug);
-        const popThreadMsg = children[children.length - 1];
+        const children = messages.filter(msg => msg.parentMessageSlug === message.slug);
+        const thread = children.map(child => child.slug);
+        const lastThreadMsg = children[thread.length - 1];
         const lastReadInMs = Date.parse(message.lastRead);
-        const lastActiveInMs = popThreadMsg && Date.parse(popThreadMsg.createdAt);
+        const lastActiveInMs = lastThreadMsg && Date.parse(lastThreadMsg.createdAt);
 
         nextState[message.slug] = {
           reactionIds: [],
           favoriteId: null,
           readId: null,
-          lastActive: popThreadMsg && popThreadMsg.createdAt,
+          lastActive: lastThreadMsg && lastThreadMsg.createdAt,
           hasUnreads: lastReadInMs < lastActiveInMs,
-          thread: children.map(child => child.slug),
+          thread,
           ...message,
         };
-
-        nextState[message.slug].thread = merge([], nextState[message.slug].thread, messageThread);
       });
 
       reactions.forEach(({ messageSlug, id }) => {
@@ -96,7 +94,7 @@ const messageReducer = (state = {}, action) => {
         nextState[read.slug].readId = read.id;
       });
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case MESSAGE.SHOW.RECEIVE: {
       const {
@@ -104,27 +102,32 @@ const messageReducer = (state = {}, action) => {
         childMessages,
         reactions,
         favorites,
+        read,
       } = action.message;
-      const { slug } = message;
-      nextState = { [slug]: message };
-      if (!nextState[slug].thread) nextState[slug].thread = [];
 
-      const newReactions = [];
-      reactions.forEach((reaction) => { newReactions.push(reaction.id); });
+      nextState = {};
+      nextState[message.slug] = {
+        reactionIds: [],
+        readId: read && read.id,
+        thread: [],
+        ...message,
+      };
 
-      nextState[slug].reactionIds = Object.assign([], nextState[slug].reactionIds, newReactions);
+      childMessages.forEach((child) => {
+        nextState[child.slug] = {
+          reactionIds: [],
+          favoriteId: null,
+          thread: null,
+          ...child,
+        };
+      });
 
-      if (childMessages) {
-        childMessages.forEach((child) => {
-          nextState[child.slug] = child;
-          if (nextState[slug].thread.indexOf(child.slug) === -1) {
-            nextState[slug].thread.push(child.slug);
-          }
-        });
-      }
+      reactions.forEach((reaction) => {
+        nextState[reaction.messageSlug].reactionIds.push(reaction.id);
+      });
 
-      favorites.forEach(({ id, messageSlug }) => {
-        if (nextState[messageSlug]) nextState[messageSlug].favoriteId = id;
+      favorites.forEach((fav) => {
+        nextState[fav.messageSlug].favoriteId = fav.id;
       });
 
       return merge({}, state, nextState);

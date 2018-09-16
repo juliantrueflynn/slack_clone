@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     resources :users, only: [:show]
     resources :user_threads, only: [:index]
     resources :reads, only: [:update]
-    resource :unread, only: [:update]
+    resources :unreads, only: [:create, :update]
     resources :workspaces, only: [:index, :show, :create, :update, :destroy], param: :slug do
       resources :channels, only: [:index]
       resources :favorites, only: [:index]

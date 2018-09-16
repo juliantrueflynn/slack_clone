@@ -121,12 +121,18 @@ export const selectThreadLastUpdate = ({ entities: { messages } }, thread) => {
   return messages[lastSlug] ? messages[lastSlug].createdAt : '';
 };
 
+export const selectMessageBySlug = ({ entities: { messages }, ui }, slug) => (
+  messages[slug || ui.displayMessageSlug]
+);
+
 export const selectThreadFromSlug = ({ entities: { messages }, ui }, messageSlug) => {
   const msgSlug = messageSlug || ui.displayMessageSlug;
   const message = messages[msgSlug];
+
   if (!message || !message.thread) return [];
+
   return message.thread.reduce((acc, curr) => {
-    if (messages[curr]) acc.push(messages[curr]);
+    acc.push(messages[curr]);
     return acc;
   }, [message]);
 };
@@ -210,4 +216,10 @@ export const hasUreadThreads = ({ entities: { reads, messages } }) => (
   !!values(reads).filter(read => (
     read.readableType === 'Message' && messages[read.slug] && messages[read.slug].hasUnreads
   )).length
+);
+
+export const selectEntities = ({ entities }, entityName) => entities[entityName];
+
+export const selectEntityBySlug = ({ entities }, entityName, slug) => (
+  entities[entityName] && entities[entityName][slug]
 );
