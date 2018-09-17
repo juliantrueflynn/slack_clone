@@ -14,20 +14,10 @@ class ChannelSub < ApplicationRecord
   end
 
   after_create_commit :broadcast_create_sub
-  after_create_commit :generate_read
   after_update_commit :broadcast_update
   after_destroy :broadcast_destroy
 
   private
-
-  def generate_read
-    channel.reads.create(
-      readable_type: 'Channel',
-      workspace_id: workspace.id,
-      user_id: user_id,
-      accessed_at: DateTime.now
-    )
-  end
 
   def broadcast_create_sub
     broadcast_create if workspace.channels.length > 2

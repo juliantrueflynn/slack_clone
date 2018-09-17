@@ -66,10 +66,7 @@ function* fetchChannelPage({ messages: { channel } }) {
   const read = yield select(selectEntityBySlug, 'reads', currChannel.readId);
 
   if (read) {
-    const lastActive = Date.parse(currChannel.lastActive);
-    const lastRead = Date.parse(currChannel.lastRead);
-
-    if (lastActive > lastRead) {
+    if (currChannel.hasUnreads) {
       yield put(actions.updateRead.request(read));
     }
   } else {
