@@ -7,7 +7,8 @@ import {
   DM_CHAT,
   CHANNEL_SUB,
   WORKSPACE_SUB,
-  SIGN_OUT
+  SIGN_OUT,
+  UNREAD
 } from '../actions/actionTypes';
 
 const channelReducer = (state = {}, action) => {
@@ -43,6 +44,12 @@ const channelReducer = (state = {}, action) => {
       };
 
       nextState = merge({}, state, currChannel);
+
+      Object.values(nextState).forEach((ch) => {
+        nextState[ch.slug].isActive = false;
+      });
+
+      nextState[channel.slug].isActive = true;
 
       members.forEach((memberSlug) => {
         if (!nextState[channel.slug].members) {
@@ -100,6 +107,7 @@ const channelReducer = (state = {}, action) => {
         if (nextState[read.slug].lastActive) {
           const lastActive = Date.parse(nextState[read.slug].lastActive);
           const lastRead = Date.parse(read.accessedAt);
+
           nextState[read.slug].hasUnreads = lastActive > lastRead;
         }
       });
@@ -203,19 +211,41 @@ const channelReducer = (state = {}, action) => {
     case MESSAGE.CREATE.RECEIVE: {
       const { message } = action;
       nextState = Object.assign({}, state);
+      nextState[message.channelSlug].messages.push(message.slug);
+      return nextState;
+    }
+    case READ.CREATE.RECEIVE:
+    case READ.UPDATE.RECEIVE: {
+      const { read } = action;
+      if (read.readableType !== 'Channel') return state;
+      nextState = Object.assign({}, state);
+      nextState[read.slug].lastRead = read.accessedAt;
+      nextState[read.slug].readId = read.id;
 
-      if (message.parentMessageId) {
-        nextState[message.channelSlug].messages.push(message.slug);
+      const lastRead = Date.parse(read.accessedAt);
+      const lastActive = Date.parse(nextState[read.slug].lastActive);
+      nextState[read.slug].hasUnreads = lastActive > lastRead;
+
+      if (nextState[read.slug].isActive) {
+        nextState[read.slug].hasUnreads = false;
       }
 
       return nextState;
     }
-    case READ.UPDATE.RECEIVE: {
-      const { readableType, slug, accessedAt } = action.read;
-      if (readableType !== 'Channel') return state;
+    case UNREAD.CREATE.RECEIVE:
+    case UNREAD.UPDATE.RECEIVE: {
+      const { unread } = action;
+      if (unread.unreadableType !== 'Channel') return state;
       nextState = Object.assign({}, state);
-      nextState[slug].lastRead = accessedAt;
-      if (nextState[slug].hasUnreads) nextState[slug].hasUnreads = false;
+      nextState[unread.slug].unreadId = unread.id;
+      const lastRead = Date.parse(nextState[unread.slug].lastRead);
+      const lastActive = Date.parse(unread.activeAt);
+      nextState[unread.slug].hasUnreads = lastActive > lastRead;
+
+      if (nextState[unread.slug].isActive) {
+        nextState[unread.slug].hasUnreads = false;
+      }
+
       return nextState;
     }
     case READ.INDEX.RECEIVE: {

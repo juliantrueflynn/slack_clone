@@ -33,7 +33,10 @@ class Message < ApplicationRecord
   has_many :favorites
   has_many :reactions
   has_many :reads, foreign_key: :readable_id
-  has_one :unread, foreign_key: :unreadable_id, dependent: :delete
+  has_one :unread,
+    -> { where(unreadable_type: 'Message') },
+    foreign_key: :unreadable_id,
+    dependent: :delete
 
   scope :exclude_children, -> { where(parent_message_id: nil) }
   scope :with_thread_replies, -> { includes(thread_replies: [:author, :replies]).where.not(thread_replies_messages: { id: nil }) }
@@ -69,9 +72,9 @@ class Message < ApplicationRecord
   private
 
   def generate_unread
-    if channel.unread
+    if parent_message_id.nil? && channel.unread
       channel.unread.update(active_at: created_at)
-    elsif unread
+    elsif parent_message_id && unread
       unread.update(active_at: created_at)
     else
       set_new_unread
@@ -79,17 +82,17 @@ class Message < ApplicationRecord
   end
 
   def set_new_unread
-    if parent_message_id
-      Unread.create(
-        active_at: created_at,
-        unreadable_id: parent_message_id,
-        unreadable_type: 'Message'
-      )
-    else
+    if parent_message_id.nil?
       Unread.create(
         active_at: created_at,
         unreadable_id: channel_id,
         unreadable_type: 'Channel'
+      )
+    else
+      Unread.create(
+        active_at: created_at,
+        unreadable_id: parent_message_id,
+        unreadable_type: 'Message'
       )
     end
   end

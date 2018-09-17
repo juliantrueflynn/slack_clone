@@ -29,7 +29,7 @@ end
 
 json.reads do
   json.array! current_user.reads.where(workspace_id: @workspace.id) do |read|
-    json.(read, :id, :accessed_at, :readable_id, :readable_type, :updated_at)
+    json.(read, :id, :accessed_at, :readable_id, :readable_type, :is_read)
     entity = read.readable_type.constantize.find_by(id: read.readable_id)
     json.slug entity ? entity.slug : nil
   end

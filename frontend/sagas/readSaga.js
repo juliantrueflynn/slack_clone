@@ -6,10 +6,10 @@ import {
   select,
   call,
 } from 'redux-saga/effects';
-import { READ, MESSAGE } from '../actions/actionTypes';
+import { READ, MESSAGE, UNREAD } from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiFetch } from '../util/apiUtil';
 import * as actions from '../actions/readActions';
-import { selectWorkspaceSlug, selectCurrentChannel } from '../reducers/selectors';
+import { selectUIByDisplay, selectEntityBySlug, selectEntities } from '../reducers/selectors';
 
 function* fetchIndex({ workspaceSlug }) {
   try {
@@ -22,7 +22,7 @@ function* fetchIndex({ workspaceSlug }) {
 
 function* fetchCreate({ read }) {
   try {
-    const workspaceSlug = yield select(selectWorkspaceSlug);
+    const workspaceSlug = yield select(selectUIByDisplay, 'displayWorkspaceSlug');
     const created = yield call(apiCreate, `workspaces/${workspaceSlug}/reads`, read);
     yield put(actions.createRead.receive(created));
   } catch (error) {
@@ -30,9 +30,9 @@ function* fetchCreate({ read }) {
   }
 }
 
-function* fetchUpdate({ readId }) {
+function* fetchUpdate({ read }) {
   try {
-    const updated = yield call(apiUpdate, `reads/${readId}`);
+    const updated = yield call(apiUpdate, `reads/${read.id}`, read);
     yield put(actions.updateRead.receive(updated));
   } catch (error) {
     yield put(actions.updateRead.failure(error));
@@ -47,7 +47,7 @@ function* fetchMessageThread({ message: { message, read, childMessages } }) {
   let hasUnread = true;
   if (!childMessages.length) {
     hasUnread = false;
-  } else if (lastEntry && lastActive < lastRead) {
+  } else if (lastEntry && lastRead > lastActive) {
     hasUnread = false;
   }
 
@@ -61,11 +61,46 @@ function* fetchMessageThread({ message: { message, read, childMessages } }) {
   }
 }
 
-function* fetchChannelPage() {
-  const channel = yield select(selectCurrentChannel);
+function* fetchChannelPage({ messages: { channel } }) {
+  const currChannel = yield select(selectEntityBySlug, 'channels', channel.slug);
+  const read = yield select(selectEntityBySlug, 'reads', currChannel.readId);
 
-  if (channel.hasUnreads) {
-    yield put(actions.updateRead.request(channel.readId));
+  if (read) {
+    const lastActive = Date.parse(currChannel.lastActive);
+    const lastRead = Date.parse(currChannel.lastRead);
+
+    if (lastActive > lastRead) {
+      yield put(actions.updateRead.request(read));
+    }
+  } else {
+    const newRead = { readableId: channel.id, readableType: 'Channel' };
+    yield put(actions.createRead.request(newRead));
+  }
+}
+
+function* setMessageRead({ unread }) {
+  const { unreadableType: readableType, unreadableId: readableId, slug } = unread;
+  const read = { readableId, readableType };
+  let entityRead;
+  let currSlug;
+  if (readableType === 'Channel') {
+    entityRead = yield select(selectEntityBySlug, 'channels', slug);
+    currSlug = yield select(selectUIByDisplay, 'displayChannelSlug');
+  } else {
+    const messages = yield select(selectEntities, 'messages');
+    const threadMessage = messages[slug];
+    currSlug = yield select(selectUIByDisplay, 'displayMessageslug');
+    entityRead = messages[threadMessage.parentMessageSlug];
+  }
+
+  if (entityRead && currSlug === slug) {
+    read.id = entityRead && entityRead.readId;
+
+    if (read.id) {
+      yield put(actions.updateRead.request(read));
+    } else {
+      yield put(actions.createRead.request(read));
+    }
   }
 }
 
@@ -89,6 +124,10 @@ function* watchChannelPage() {
   yield takeLatest(MESSAGE.INDEX.RECEIVE, fetchChannelPage);
 }
 
+function* watchMessageCreate() {
+  yield takeLatest(UNREAD.UPDATE.RECEIVE, setMessageRead);
+}
+
 export default function* readSaga() {
   yield all([
     fork(watchIndex),
@@ -96,5 +135,6 @@ export default function* readSaga() {
     fork(watchUpdated),
     fork(watchMessageThread),
     fork(watchChannelPage),
+    fork(watchMessageCreate),
   ]);
 }

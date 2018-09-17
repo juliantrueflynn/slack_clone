@@ -37,7 +37,10 @@ class Channel < ApplicationRecord
     through: :messages,
     source: :reactions
   has_many :reads, foreign_key: :readable_id
-  has_one :unread, foreign_key: :unreadable_id, dependent: :delete
+  has_one :unread,
+    -> { where(unreadable_type: 'Channel') },
+    foreign_key: :unreadable_id,
+    dependent: :delete
 
   scope :with_subs, -> { includes(channel_subs: :user) }
   scope :with_dm, -> { where(has_dm: true) }

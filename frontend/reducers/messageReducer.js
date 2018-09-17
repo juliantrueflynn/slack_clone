@@ -44,6 +44,7 @@ const messageReducer = (state = {}, action) => {
           nextState[read.slug].lastRead = read.accessedAt;
           nextState[read.slug].hasUnreads = lastActive > lastRead;
         }
+
         nextState[read.slug].id = read.readableId;
         nextState[read.slug].slug = read.slug;
         nextState[read.slug].readId = read.id;
@@ -189,20 +190,18 @@ const messageReducer = (state = {}, action) => {
       nextState = { [messageSlug]: { reactionIds: [reaction.id] } };
       return merge({}, state, nextState);
     }
-    case READ.CREATE.RECEIVE: {
-      const { read } = action;
-      if (read.readableType !== 'Message') return state;
-      nextState = Object.assign({}, state);
-      nextState[read.slug].lastRead = read.accessedAt;
-      nextState[read.slug].readId = read.id;
-      return nextState;
-    }
+    case READ.CREATE.RECEIVE:
     case READ.UPDATE.RECEIVE: {
       const { read } = action;
       if (read.readableType !== 'Message') return state;
       nextState = Object.assign({}, state);
       nextState[read.slug].lastRead = read.accessedAt;
       nextState[read.slug].readId = read.id;
+
+      const lastRead = Date.parse(read.accessedAt);
+      const lastActive = Date.parse(nextState[read.slug].lastActive);
+      nextState[read.slug].hasUnreads = lastActive > lastRead;
+
       return nextState;
     }
     case FAVORITE.CREATE.RECEIVE: {

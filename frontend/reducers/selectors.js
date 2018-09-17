@@ -223,3 +223,5 @@ export const selectEntities = ({ entities }, entityName) => entities[entityName]
 export const selectEntityBySlug = ({ entities }, entityName, slug) => (
   entities[entityName] && entities[entityName][slug]
 );
+
+export const selectUIByDisplay = ({ ui }, display) => ui[display];

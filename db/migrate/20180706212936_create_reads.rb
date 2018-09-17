@@ -6,6 +6,7 @@ class CreateReads < ActiveRecord::Migration[5.1]
       t.references :user, foreign_key: {on_delete: :cascade}, index: false
       t.references :workspace, foreign_key: {on_delete: :cascade}, index: false
       t.datetime :accessed_at, null: false
+      t.boolean :is_read, default: false
 
       t.timestamps
     end
