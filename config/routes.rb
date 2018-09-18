@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     resources :workspaces, only: [:index, :show, :create, :update, :destroy], param: :slug do
       resources :channels, only: [:index]
       resources :favorites, only: [:index]
-      resources :unreads, only: :index
+      resources :user_unreads, only: :index
       resources :reads, only: [:index, :create]
       resource :user_appearance, only: [:create, :destroy]
     end

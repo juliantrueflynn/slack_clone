@@ -11,7 +11,7 @@ import { fetchUnreads } from '../actions/unreadActions';
 
 function* fetchIndex({ workspaceSlug }) {
   try {
-    const received = yield call(apiFetch, `workspaces/${workspaceSlug}/unreads`);
+    const received = yield call(apiFetch, `workspaces/${workspaceSlug}/user_unreads`);
     yield put(fetchUnreads.receive(received));
   } catch (error) {
     yield put(fetchUnreads.failure(error));

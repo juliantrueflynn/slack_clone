@@ -65,6 +65,10 @@ class Message < ApplicationRecord
     !!parent_message_id
   end
 
+  # def after_created_at(accessed_at, workspace_id)
+  #   Message.where('messages.created_at > ?', accessed_at)
+  # end
+
   after_create_commit :generate_unread, :broadcast_create
   after_update_commit :broadcast_update
   after_destroy :broadcast_destroy

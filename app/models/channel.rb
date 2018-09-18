@@ -25,7 +25,11 @@ class Channel < ApplicationRecord
   has_many :all_messages, class_name: 'Message'
   has_many :entries, class_name: 'Message'
   has_many :messages,
-    -> { includes(:parent_message) }
+    -> { includes(:parent_message) } do
+    def after_created_at(accessed_at)
+      where('messages.created_at > ?', accessed_at)
+    end
+  end
   has_many :parent_messages,
     -> { Message.exclude_children },
     class_name: 'Message'

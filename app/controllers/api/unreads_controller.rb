@@ -1,9 +1,4 @@
 class Api::UnreadsController < ApplicationController
-  def index
-    workspace = Workspace.find_by(slug: params[:workspace_slug])
-    @unreads = workspace.unreads.where(unreadable_type: 'Channel')
-  end
-
   def create
     @unread = Unread.new(unread_params)
     entity = @unread.unreadable_type.constantize.find_by(id: @unread.unreadable_id)
