@@ -1,10 +1,5 @@
 const values = entities => Object.values(entities);
 
-export const selectWorkspaceIdBySlug = ({ entities: { workspaces }, ui }, slug) => {
-  const workspaceSlug = slug || ui.displayWorkspaceSlug;
-  return workspaces[workspaceSlug] && workspaces[workspaceSlug].id;
-};
-
 export const selectWorkspaces = ({ entities: { workspaces } }) => (
   values(workspaces).sort((a, b) => workspaces[a.slug].id - workspaces[b.slug].id)
 );
@@ -12,8 +7,6 @@ export const selectWorkspaces = ({ entities: { workspaces } }) => (
 export const selectSubbedWorkspaces = ({ entities: { workspaces }, session: { currentUser } }) => (
   values(workspaces).filter(workspace => workspace.members.includes(currentUser.slug))
 );
-
-export const selectWorkspaceSlug = state => state.ui.displayWorkspaceSlug;
 
 export const selectSubbedChats = ({ entities: { channels }, session: { currentUser } }) => (
   values(channels)

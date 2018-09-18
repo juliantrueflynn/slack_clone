@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { fetchMember } from '../actions/memberActions';
 import { createDmChat } from '../actions/channelActions';
-import { selectWorkspaceIdBySlug, selectDmWithUser } from '../reducers/selectors';
+import { selectDmWithUser } from '../reducers/selectors';
 import UserView from './UserView';
 
 const mapStateToProps = (state, { match: { params } }) => ({
@@ -11,7 +11,6 @@ const mapStateToProps = (state, { match: { params } }) => ({
   userSlug: params.userSlug,
   hasDmWith: selectDmWithUser(state, params.userSlug),
   isChannelsLoaded: !!Object.values(state.entities.channels).length,
-  workspaceId: selectWorkspaceIdBySlug(state, params.workspaceSlug),
 });
 
 const mapDispatchToProps = dispatch => ({

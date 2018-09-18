@@ -2,14 +2,14 @@ class Api::DmChatsController < ApplicationController
   before_action :ensure_unique_dm_chat
 
   def create
-    @channel ||= Channel.new(dm_chat_params)
-    @channel.has_dm = true
-    @channel.member_ids.unshift(current_user.id)
+    @dm_chat ||= Channel.new(dm_chat_params)
+    @dm_chat.has_dm = true
+    @dm_chat.member_ids.unshift(current_user.id)
 
-    if @channel.save
-      render json: ['success']
+    if @dm_chat.save
+      render json: @dm_chat
     else
-      render json: @channel.errors.full_messages, status: 422
+      render json: @dm_chat.errors.full_messages, status: 422
     end
   end
 

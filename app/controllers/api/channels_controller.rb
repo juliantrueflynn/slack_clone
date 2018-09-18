@@ -14,7 +14,7 @@ class Api::ChannelsController < ApplicationController
     @channel = current_user.created_channels.build(channel_params)
 
     if @channel.save
-      render json: ['success']
+      render json: @channel
     else
       render json: @channel.errors.full_messages, status: 422
     end

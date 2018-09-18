@@ -13,9 +13,9 @@ Rails.application.routes.draw do
       resources :reads, only: [:index, :create]
       resource :user_appearance, only: [:create, :destroy]
     end
+    resource :dm_chat, only: [:create]
     resources :workspace_subs, only: [:create, :destroy], param: :workspace_id
     resources :sidebar_channel_subs, only: [:update]
-    resource :dm_chat, only: [:create]
     resources :channels, only: [:show, :create, :update, :destroy], param: :slug do
       resources :messages, only: [:index]
     end

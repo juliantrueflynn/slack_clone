@@ -9,7 +9,7 @@ import {
 import * as action from '../actions/channelActions';
 import { CHANNEL, DM_CHAT } from '../actions/actionTypes';
 import * as api from '../util/apiUtil';
-import { selectWorkspaceSlug, selectCurrentUserId } from '../reducers/selectors';
+import { selectUIByDisplay, selectEntities, selectEntityBySlug } from '../reducers/selectors';
 import { navigate, modalClose } from '../actions/interactiveActions';
 
 function* fetchIndex({ workspaceSlug }) {
@@ -21,29 +21,31 @@ function* fetchIndex({ workspaceSlug }) {
   }
 }
 
+function* redirectToChannel(chat) {
+  if (chat) {
+    const workspaceSlug = yield select(selectUIByDisplay, 'displayWorkspaceSlug');
+    yield put(navigate({ path: `/${workspaceSlug}/messages/${chat.slug}` }));
+  }
+}
+
 function* fetchCreate({ channel }) {
   try {
-    yield call(api.apiCreate, 'channels', channel);
+    const chat = yield call(api.apiCreate, 'channels', channel);
+    yield put(modalClose('CHAT_MODAL'));
+    yield call(redirectToChannel, chat);
   } catch (error) {
     yield put(action.createChannel.failure(error));
   }
 }
 
-function* fetchCreateDm({ dmChat }) {
+function* fetchCreateDm({ dmChat: { workspaceSlug, ...dmChat } }) {
   try {
-    yield call(api.apiCreate, 'dm_chat', dmChat);
+    const workspace = yield select(selectEntityBySlug, 'workspaces', workspaceSlug);
+    const workspaceId = workspace && workspace.id;
+    const chat = yield call(api.apiCreate, 'dm_chat', { workspaceId, ...dmChat });
+    yield call(redirectToChannel, chat);
   } catch (error) {
-    yield put(action.createChannel.failure(error));
-  }
-}
-
-function* fetchRedirectOwner({ channel }) {
-  const currentUserId = yield select(selectCurrentUserId);
-  const workspaceSlug = yield select(selectWorkspaceSlug);
-
-  if (currentUserId === channel.ownerId) {
-    yield put(modalClose('MODAL_CHAT'));
-    yield put(navigate({ path: `/${workspaceSlug}/${channel.slug}` }));
+    yield put(action.createDmChat.failure(error));
   }
 }
 
@@ -78,7 +80,6 @@ function* watchIndex() {
 
 function* watchCreate() {
   yield takeLatest(CHANNEL.CREATE.REQUEST, fetchCreate);
-  yield takeLatest(CHANNEL.CREATE.RECEIVE, fetchRedirectOwner);
 }
 
 function* watchCreateDm() {

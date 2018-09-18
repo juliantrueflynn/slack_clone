@@ -1,6 +1,6 @@
 json.channel do
   json.(dm_chat, *dm_chat.attributes.keys)
-  json.workspace_slug dm_chat.workspace ? dm_chat.workspace.slug : nil
+  json.workspace_slug dm_chat.workspace.slug
 end
 
 json.members dm_chat.members.pluck(:slug)
