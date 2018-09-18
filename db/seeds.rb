@@ -88,13 +88,23 @@ random_num(min: 50, max: 60).times do
 
   loop do
     parent = rand < 0.7 ? nil : chat.messages.sample
-    user.messages.create!(
+    user.messages.create(
       body: random_message_body,
       channel_id: chat.id,
       parent_message_id: parent ? parent.id : nil
     )
 
-    break if rand < 0.7
+    break if rand < 0.5
+  end
+
+  if rand < 0.7 && chat.is_user_sub?(User.first.id)
+    chat.reads.create(
+      readable_id: chat.id,
+      readable_type: 'Channel',
+      accessed_at: DateTime.now,
+      user_id: User.first.id,
+      workspace_id: chat.workspace.id
+    )
   end
 
   if rand < 0.5

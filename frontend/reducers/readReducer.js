@@ -3,6 +3,7 @@ import {
   READ,
   MESSAGE,
   SIGN_OUT,
+  DM_CHAT,
 } from '../actions/actionTypes';
 
 const readReducer = (state = {}, action) => {
@@ -17,6 +18,14 @@ const readReducer = (state = {}, action) => {
         acc[curr.id] = curr;
         return acc;
       }, {});
+    }
+    case DM_CHAT.CREATE.RECEIVE: {
+      const { dmChat: { reads } } = action;
+      reads.forEach((read) => {
+        nextState[read.id] = read;
+      });
+
+      return nextState;
     }
     case MESSAGE.INDEX.RECEIVE: {
       const { messages: { reads } } = action;
