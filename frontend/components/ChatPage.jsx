@@ -4,7 +4,7 @@ import LeftSidebarContainer from './LeftSidebarContainer';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import ChannelHeader from './ChannelHeader';
 import AllUnreadsContainer from './AllUnreadsContainer';
-import AllThreads from './AllThreads';
+import AllThreadsContainer from './AllThreadsContainer';
 import ChannelContainer from './ChannelContainer';
 import './ChatPage.css';
 
@@ -61,16 +61,12 @@ class ChatPage extends React.Component {
 
   render() {
     const {
-      chatPath,
-      messages,
       isWorkspaceLoaded,
       routes,
       rightSidebarClose,
       chatTitle,
       isRightSidebarOpen,
       users,
-      currentUser,
-      channels,
     } = this.props;
 
     if (!isWorkspaceLoaded) {
@@ -89,14 +85,8 @@ class ChatPage extends React.Component {
             <div className="ChatPage__container">
               <EmojiModalContainer />
               <AllUnreadsContainer authors={users} />
+              <AllThreadsContainer users={users} />
               <ChannelContainer chatTitle={chatTitle} authors={users} />
-              <AllThreads
-                chatPath={chatPath}
-                messages={messages}
-                users={users}
-                currentUser={currentUser}
-                channels={channels}
-              />
             </div>
             {routes.map(route => (
               <RouteWithSubRoutes key={route.path} {...route} />

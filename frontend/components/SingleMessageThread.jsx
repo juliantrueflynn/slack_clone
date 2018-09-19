@@ -4,24 +4,24 @@ import Avatar from './Avatar';
 import './SingleMessageThread.css';
 
 const SingleMessageThread = ({
-  threadLastUpdate,
-  threadUsers,
-  message,
+  threadMessages,
+  users,
+  messageSlug,
   isInSidebar,
-  match: { params: { channelSlug, workspaceSlug } }
+  matchUrl,
 }) => {
-  const { parentMessageId, thread } = message;
-
-  if (isInSidebar || !message || parentMessageId || !thread || !thread.length) {
+  if (isInSidebar || !threadMessages || !threadMessages.length) {
     return null;
   }
 
-  const threadUrl = `/${workspaceSlug}/messages/${channelSlug}/thread/${message.slug}`;
-  let threadLength = thread.length;
+  const threadUrl = `${matchUrl}/thread/${messageSlug}`;
+  const authors = threadMessages.map(msg => users[msg.authorSlug]);
+  const lastMessageDate = threadMessages.slice(-1).createdAt;
+  let threadLength = threadMessages.length;
   threadLength += threadLength === 1 ? ' reply' : ' replies';
-  let users = threadUsers;
-  if (threadUsers.length !== thread.length) {
-    users = threadUsers.slice(1);
+  let threadUsers = authors;
+  if (authors.length !== threadMessages.length) {
+    threadUsers = authors.slice(1);
   }
 
   return (
@@ -29,7 +29,7 @@ const SingleMessageThread = ({
       <Link to={threadUrl} className="SingleMessageThread__link">
         <ul className="SingleMessageThread__items">
           <li className="SingleMessageThread__item SingleMessageThread__avatars">
-            {users.map(user => (
+            {threadUsers.map(user => (
               <Avatar key={user.id} author={user} avatarFor="thread" size="24" />
             ))}
           </li>
@@ -38,7 +38,7 @@ const SingleMessageThread = ({
           </li>
           <li className="SingleMessageThread__item SingleMessageThread__date">
             <time className="SingleMessage__date-text">
-              {threadLastUpdate}
+              {lastMessageDate}
             </time>
           </li>
         </ul>

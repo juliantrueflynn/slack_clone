@@ -25,28 +25,27 @@ class Message extends React.Component {
 
   render() {
     const {
+      match: { url },
       message,
       author,
-      match,
       updateMessageRequest,
       reactions,
-      threadLastUpdate,
+      threadMessages,
       createReactionRequest,
       users,
-      threadUsers,
       isInSidebar,
     } = this.props;
     const { isEditing } = this.state;
 
     if (!message) return null;
 
-    const authorUrl = author && `${match.url}/team/${author.slug}`;
+    const authorUrl = author && `${url}/team/${author.slug}`;
     let msgClassName = 'Message';
     if (isEditing) msgClassName += ' Message--editing';
 
     return (
       <div className={msgClassName} role="listitem">
-        <Avatar baseUrl={match.url} author={author} />
+        <Avatar baseUrl={url} author={author} />
         <div className="Message__body">
           <MessageHoverMenuContainer
             isEditing={isEditing}
@@ -72,23 +71,19 @@ class Message extends React.Component {
               messageSlug={message.slug}
             />
           </div>
-          {message.parentMessageId && (
-            <div className="Message__footer">
-              <Reactions
-                createReactionRequest={createReactionRequest}
-                reactions={reactions}
-                messageId={message.id}
-                users={users}
-              />
-              <SingleMessageThread
-                message={message}
-                match={match}
-                threadUsers={threadUsers}
-                threadLastUpdate={threadLastUpdate}
-                isInSidebar={isInSidebar}
-              />
-            </div>
-          )}
+          <Reactions
+            createReactionRequest={createReactionRequest}
+            reactions={reactions}
+            messageId={message.id}
+            users={users}
+          />
+          <SingleMessageThread
+            matchUrl={url}
+            messageSlug={message.slug}
+            users={users}
+            threadMessages={threadMessages}
+            isInSidebar={isInSidebar}
+          />
         </div>
       </div>
     );

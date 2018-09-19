@@ -15,13 +15,14 @@ const AllThreads = ({
   }
 
   const parentMessages = Object.values(messages);
+  const channelTitle = channel => channel && channel.title;
 
   return (
     parentMessages.map(parent => (
       <div key={parent.slug} className="AllThread__item">
         <div className="AllThreads__meta">
           <strong>
-            {channels[parent.channelSlug].title}
+            {channelTitle(channels[parent.channelSlug])}
           </strong>
           <MessageThreadAuthors
             messages={messages}
@@ -31,7 +32,7 @@ const AllThreads = ({
           />
         </div>
         <MessageContainer message={parent} />
-        <div className="ThreadsList" role="list">
+        <div className="AllThreads__list" role="list">
           {parent.thread && parent.thread.map(childSlug => (
             <MessageContainer key={childSlug} message={messages[childSlug]} />
           ))}

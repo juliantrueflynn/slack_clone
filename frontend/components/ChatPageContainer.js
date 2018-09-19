@@ -8,14 +8,11 @@ import ChatPage from './ChatPage';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   chatPath,
-  messages: state.entities.messages,
-  channels: state.entities.channels,
   chatTitle: selectChatTitleBySlug(state, chatPath),
   rightSidebarProps: state.ui.rightSidebar && state.ui.rightSidebar.sidebarProps,
   isWorkspaceLoaded: !!state.ui.displayWorkspaceSlug,
   isRightSidebarOpen: isRightSidebarOpen(state),
   users: state.entities.members,
-  currentUser: state.session.currentUser,
 });
 
 const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug, chatPath } } }) => ({

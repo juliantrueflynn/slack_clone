@@ -5,16 +5,14 @@ import { updateMessage } from '../actions/messageActions';
 import { deleteReaction, createReaction } from '../actions/reactionActions';
 import {
   getReactionCounts,
-  selectThreadLastUpdate,
   isModalOpen,
-  selectThreadMembers,
+  selectMessageChildren,
 } from '../reducers/selectors';
 
 const mapStateToProps = (state, { message }) => ({
   reactions: message && getReactionCounts(state, message.slug),
-  threadLastUpdate: message && message.thread && selectThreadLastUpdate(state, message.thread),
   isReactionModalOpen: isModalOpen(state, 'MODAL_REACTION'),
-  threadUsers: selectThreadMembers(state, message.slug),
+  threadMessages: selectMessageChildren(state, message.thread),
 });
 
 const mapDispatchToProps = dispatch => ({
