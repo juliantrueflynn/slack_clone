@@ -3,12 +3,12 @@ Rails.application.routes.draw do
     resource :session, only: [:create, :destroy, :show]
     resource :user, only: [:create, :update]
     resources :users, only: [:show]
-    resources :user_threads, only: [:index]
     resources :reads, only: [:update]
     resources :unreads, only: [:create, :update]
     resources :workspaces, only: [:index, :show, :create, :update, :destroy], param: :slug do
       resources :channels, only: [:index]
       resources :favorites, only: [:index]
+      resources :user_threads, only: [:index]
       resources :user_unreads, only: :index
       resources :reads, only: [:index, :create]
       resource :user_appearance, only: [:create, :destroy]

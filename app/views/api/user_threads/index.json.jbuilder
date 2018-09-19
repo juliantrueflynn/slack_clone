@@ -1,32 +1,25 @@
-json.parent_messages do
-  json.array! @user_threads do |parent|
-    json.(parent, :id, :slug, :body, :author_id, :parent_message_id, :channel_id, :created_at)
-    json.author_slug parent.author.slug
+json.messages do
+  json.array! @user_threads do |message|
+    json.(message, *message.attributes.keys)
+    json.author_slug message.author.slug
+    json.channel_slug message.channel.slug
+    json.parent_message_slug message.parent_message.slug if message.is_child? 
   end
 end
 
-@user_threads.each do |parent|
-  json.childMessages do
-    json.array! parent.replies do |child|
-      json.(child, :id, :slug, :body, :author_id, :channel_id, :parent_message_id, :created_at)
-      json.parent_message_slug parent.slug
-      json.author_slug child.author.slug
+json.reactions do
+  json.array! @user_threads do |message|
+    message.reactions.each do |reaction|
+      json.(reaction, :id, :user_id, :emoji)
+      json.message_slug message.slug
+      json.user_slug reaction.user.slug
     end
   end
+end
 
-  parent.replies.each do |reply|
-    json.favorites do
-      json.array! reply.favorites do |fav|
-        json.(fav, :id, :message_id, :user_id)
-        json.message_slug reply.slug
-      end
-    end
-
-    json.reactions do
-      json.array! reply.reactions do |reaction|
-        json.(reaction, :id, :message_id, :user_id, :emoji)
-        json.message_slug reply.slug
-      end
-    end
+json.favorites do
+  json.array! current_user.favorites.where(message_id: @user_threads.pluck(:id)) do |favorite|
+    json.(favorite, :id)
+    json.message_slug favorite.message.slug
   end
 end

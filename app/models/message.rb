@@ -53,8 +53,11 @@ class Message < ApplicationRecord
     Message.with_thread_replies.where(id: Message.users_parents_ids(author_id))
   end
 
-  def self.threads_with_author_id(author_id)
-    Message.parents_with_author_id(author_id).or(Message.children_with_author_id(author_id))
+  def self.threads_by_workspace_id_and_author_id(workspace_id, author_id)
+    Message.parents_with_author_id(author_id)
+      .or(Message.children_with_author_id(author_id))
+      .includes(:workspace)
+      .where(workspaces: { id: workspace_id })
   end
 
   def broadcast_name
@@ -64,10 +67,6 @@ class Message < ApplicationRecord
   def is_child?
     !!parent_message_id
   end
-
-  # def after_created_at(accessed_at, workspace_id)
-  #   Message.where('messages.created_at > ?', accessed_at)
-  # end
 
   after_create_commit :generate_unread, :broadcast_create
   after_update_commit :broadcast_update
