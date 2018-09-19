@@ -25,7 +25,7 @@ class MessagesPane extends React.Component {
       users,
       messages,
       channel,
-      isInSidebar,
+      isThreadHidden,
     } = this.props;
 
     if (!messages) return null;
@@ -33,12 +33,12 @@ class MessagesPane extends React.Component {
     return (
       <div className="MessagesPane">
         <div role="list" ref={this.messagesList} className="MessagesPane__list">
-          {isInSidebar || (
+          {isThreadHidden || (
             <ChannelBlurb
               title={channel.title}
               owner={users[channel.ownerSlug]}
               createdAt={channel.createdAt}
-              isInSidebar={isInSidebar}
+              isThreadHidden={isThreadHidden}
             />
           )}
           {messages.map(message => (
@@ -47,7 +47,7 @@ class MessagesPane extends React.Component {
               author={users[message.authorSlug]}
               message={message}
               users={users}
-              isInSidebar={isInSidebar}
+              isThreadHidden={isThreadHidden}
             />
           ))}
         </div>

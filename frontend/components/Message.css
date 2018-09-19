@@ -14,7 +14,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-left: 6px;
+  margin-left: 8px;
 }
 
 .Message__content-meta {
@@ -24,6 +24,7 @@
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  margin-bottom: 4px;
 }
 
 .Message__content {

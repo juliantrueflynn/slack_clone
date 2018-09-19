@@ -171,20 +171,40 @@ const messageReducer = (state = {}, action) => {
       delete nextState[action.message.slug];
       return nextState;
     case USER_THREAD.INDEX.RECEIVE: {
-      const { messageThreads: { parentMessages, childMessages } } = action;
+      const { messageThreads: { messages, reactions, favorites } } = action;
       nextState = {};
+      const parents = messages.filter(msg => !msg.parentMessageId);
+      const children = messages.filter(msg => msg.parentMessageId);
 
-      parentMessages.forEach((parent) => {
-        nextState[parent.slug] = parent;
-        nextState[parent.slug].thread = [];
+      parents.forEach((parent) => {
+        nextState[parent.slug] = {
+          thread: [],
+          reactionIds: [],
+          favoriteId: null,
+          isActiveThread: true,
+          ...parent,
+        };
       });
 
-      childMessages.forEach((child) => {
-        nextState[child.slug] = child;
+      children.forEach((child) => {
+        nextState[child.slug] = {
+          favoriteId: null,
+          reactionIds: [],
+          ...child,
+        };
+
         nextState[child.parentMessageSlug].thread.push(child.slug);
       });
 
-      return nextState;
+      reactions.forEach((reaction) => {
+        nextState[reaction.messageSlug].reactionIds.push(reaction.id);
+      });
+
+      favorites.forEach((favorite) => {
+        nextState[favorite.messageSlug].favoriteId = favorite.id;
+      });
+
+      return merge({}, state, nextState);
     }
     case REACTION.CREATE.RECEIVE: {
       const { reaction, messageSlug } = action;

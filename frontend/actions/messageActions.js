@@ -29,7 +29,7 @@ export const deleteMessage = {
 };
 
 export const fetchUserThreads = {
-  request: () => actionCreator(USER_THREAD.INDEX.REQUEST),
+  request: workspaceSlug => actionCreator(USER_THREAD.INDEX.REQUEST, { workspaceSlug }),
   receive: messageThreads => actionCreator(USER_THREAD.INDEX.RECEIVE, { messageThreads }),
   failure: errors => actionCreator(USER_THREAD.INDEX.FAILURE, { errors }),
 };

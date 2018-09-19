@@ -11,21 +11,21 @@
   display: block;
 }
 
-.MessageForm__aside > .Form {
+.MessageForm__has-submit > .Form {
   padding: 10px;
 }
 
-.MessageForm__aside .Editor {
+.MessageForm__has-submit .Editor {
   border-width: 1px;
 }
 
-.MessageForm__aside .Form__actions {
+.MessageForm__has-submit .Form__actions {
   display: flex;
   flex: 1;
   margin-top: 10px;
 }
 
-.MessageForm__aside .Btn {
+.MessageForm__has-submit .Btn {
   margin-left: auto;
   display: block;
 }

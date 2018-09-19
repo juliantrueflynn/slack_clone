@@ -3,9 +3,9 @@ import { USER_THREAD } from '../actions/actionTypes';
 import { fetchUserThreads } from '../actions/messageActions';
 import { apiFetch } from '../util/apiUtil';
 
-function* fetchUserThreadIndex() {
+function* fetchUserThreadIndex({ workspaceSlug }) {
   try {
-    const messageThreads = yield call(apiFetch, 'user_threads');
+    const messageThreads = yield call(apiFetch, `workspaces/${workspaceSlug}/user_threads`);
     yield put(fetchUserThreads.receive(messageThreads));
   } catch (error) {
     yield put(fetchUserThreads.failure(error));

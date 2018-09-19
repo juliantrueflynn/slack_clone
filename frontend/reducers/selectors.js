@@ -77,29 +77,9 @@ export const isModalOpen = ({ ui: { displayModal: modal } }, type) => (
   modal && modal.modalType && modal.modalType === type
 );
 
-export const selectThreadLastUpdate = ({ entities: { messages } }, thread) => {
-  if (!thread.length) return null;
-  const lastSlug = thread[thread.length - 1];
-  return messages[lastSlug] ? messages[lastSlug].createdAt : '';
-};
-
-export const selectMessageChildren = (({ entities: { messages } }, thread) => {
+export const selectMessageChildren = ({ entities: { messages } }, thread) => {
   if (!thread) return [];
   return thread.map(slug => messages[slug]);
-});
-
-export const selectThreadMembers = ({ entities: { messages, members } }, messageSlug) => {
-  const message = messages[messageSlug];
-
-  if (!message) return [];
-
-  const thread = message.thread.reduce((acc, curr) => {
-    acc.push(messages[curr]);
-    return acc;
-  }, [message]);
-
-  return thread.map(msg => members[msg.authorSlug])
-    .filter((user, i, self) => self.indexOf(user) === i);
 };
 
 export const selectCurrentUser = ({ session: { currentUser } }) => currentUser;

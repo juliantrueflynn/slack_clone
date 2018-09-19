@@ -7,29 +7,26 @@ const SingleMessageThread = ({
   threadMessages,
   users,
   messageSlug,
-  isInSidebar,
+  isThreadHidden,
   matchUrl,
 }) => {
-  if (isInSidebar || !threadMessages || !threadMessages.length) {
+  if (isThreadHidden || !threadMessages || !threadMessages.length) {
     return null;
   }
 
   const threadUrl = `${matchUrl}/thread/${messageSlug}`;
-  const authors = threadMessages.map(msg => users[msg.authorSlug]);
+  const allAuthors = threadMessages.map(msg => users[msg.authorSlug]);
+  const authors = allAuthors.filter((user, i, self) => self.indexOf(user) === i);
   const lastMessageDate = threadMessages.slice(-1).createdAt;
   let threadLength = threadMessages.length;
   threadLength += threadLength === 1 ? ' reply' : ' replies';
-  let threadUsers = authors;
-  if (authors.length !== threadMessages.length) {
-    threadUsers = authors.slice(1);
-  }
 
   return (
     <div className="SingleMessageThread">
       <Link to={threadUrl} className="SingleMessageThread__link">
         <ul className="SingleMessageThread__items">
           <li className="SingleMessageThread__item SingleMessageThread__avatars">
-            {threadUsers.map(user => (
+            {authors.map(user => (
               <Avatar key={user.id} author={user} avatarFor="thread" size="24" />
             ))}
           </li>

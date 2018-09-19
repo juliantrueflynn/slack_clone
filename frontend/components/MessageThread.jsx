@@ -44,9 +44,13 @@ class MessageThread extends React.Component {
             messages={childMessages}
             users={authors}
             channel={channel}
-            isInSidebar
+            isThreadHidden
           />
-          <MessageFormContainer channelId={message.channelId} parentMessageId={message.id} />
+          <MessageFormContainer
+            channelId={message.channelId}
+            parentMessageId={message.id}
+            hasSubmitButton
+          />
         </div>
       </RightSidebarContainer>
     );

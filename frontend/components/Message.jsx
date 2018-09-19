@@ -33,7 +33,7 @@ class Message extends React.Component {
       threadMessages,
       createReactionRequest,
       users,
-      isInSidebar,
+      isThreadHidden,
     } = this.props;
     const { isEditing } = this.state;
 
@@ -82,7 +82,7 @@ class Message extends React.Component {
             messageSlug={message.slug}
             users={users}
             threadMessages={threadMessages}
-            isInSidebar={isInSidebar}
+            isThreadHidden={isThreadHidden}
           />
         </div>
       </div>

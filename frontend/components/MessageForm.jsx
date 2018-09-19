@@ -34,10 +34,11 @@ class MessageForm extends React.Component {
   }
 
   render() {
-    const { parentMessageId, placeholder } = this.props;
+    const { placeholder, hasSubmitButton, parentMessageId } = this.props;
     const { editorState } = this.state;
-    let classNames = 'MessageForm MessageForm__';
-    classNames += parentMessageId ? 'aside' : 'chat';
+    let classNames = 'MessageForm';
+    if (hasSubmitButton) classNames += ' MessageForm__has-submit';
+    classNames += parentMessageId ? ' MessageForm__thread' : ' MessageForm__chat';
 
     return (
       <div className={classNames}>
@@ -48,7 +49,7 @@ class MessageForm extends React.Component {
               onChange={this.onChange}
               placeholder={placeholder || 'Reply...'}
             />
-            {parentMessageId && (
+            {hasSubmitButton && (
               <div className="Form__actions">
                 <Button type="submit" buttonFor="submit" size="sm">
                   Send

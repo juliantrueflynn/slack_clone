@@ -1,40 +1,26 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import './MessageThreadAuthors.css';
 
 const MessageThreadAuthors = ({
   authors,
-  messages,
   messageThread,
   currentUserSlug,
 }) => {
-  if (!messageThread) {
-    return null;
-  }
-
-  const slugs = messageThread.map(slug => messages[slug].authorSlug).filter((val, pos, self) => (
-    self.indexOf(val) === pos && currentUserSlug !== val
+  const authorSlugs = messageThread.map(msg => msg.authorSlug).filter((val, i, self) => (
+    self.indexOf(val) === i && currentUserSlug !== val
   ));
 
-  const threadAuthor = (userSlug) => {
-    const author = authors[userSlug];
+  const authorList = authorSlugs.reduce((acc, curr) => {
+    acc.push(authors[curr].username);
+    return acc;
+  }, []);
+  authorList.push('and you');
 
-    return (
-      <Fragment>
-        {author.username}
-        {slugs.length === 1 ? ' ' : ', '}
-      </Fragment>
-    );
-  };
+  const seperator = authorSlugs.length === 1 ? ' ' : ', ';
 
   return (
     <div className="MessageThreadAuthors">
-      {slugs.map(authorSlug => (
-        <div className="MessageThreadAuthor__item" key={authorSlug}>
-          {threadAuthor(authorSlug)}
-        </div>
-      ))}
-      <span>
-        and you
-      </span>
+      {authorList.join(seperator)}
     </div>
   );
 };

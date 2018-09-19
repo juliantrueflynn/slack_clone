@@ -11,7 +11,7 @@ const Avatar = ({
 }) => {
   if (!author) return null;
 
-  const imgSize = size || 40;
+  const imgSize = size || 36;
   let classNames = 'Avatar';
   if (avatarFor) classNames += ` Avatar__${avatarFor}`;
   classNames += ` Avatar--${baseUrl ? 'link' : 'div'}`;

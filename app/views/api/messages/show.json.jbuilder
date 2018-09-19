@@ -1,44 +1,37 @@
 json.message do
-  json.(@message, :id, :body, :slug, :author_id, :channel_id, :created_at, :updated_at)
+  json.(@message, *@message.attributes.keys)
   json.author_slug @message.author.slug
   json.channel_slug @message.channel.slug
 end
 
-json.childMessages do
-  json.array! @message.replies do |reply|
-    @message.single_message_replies.each do |child|
-      json.(child, :id, :slug, :body, :author_id, :channel_id, :parent_message_id, :created_at, :updated_at)
-      json.parent_message_slug @message.slug
-      json.author_slug child.author.slug
-    end
+json.child_messages do
+  json.array! @message.replies.includes(:author, :parent_message) do |child|
+    json.(child, *child.attributes.keys)
+    json.parent_message_slug child.parent_message.slug
+    json.author_slug child.author.slug
   end
 end
 
-json.favorites do
-  json.array! @message.favorites do |favorite|
-    json.(favorite, :id, :message_id, :user_id)
-    json.message_slug @message.slug
-  end
+replies = @message.replies.to_a
+message_thread = replies.unshift(@message)
+message_thread_ids = message_thread.pluck(:id)
 
-  @message.replies.each do |reply|
-    json.array! reply.favorites do |favorite|
-      json.(favorite, :id, :message_id, :user_id)
-      json.message_slug reply.slug
-    end
+json.favorites do
+  favorites = current_user.favorites.includes(:message).where(message_id: message_thread_ids)
+
+  json.array! favorites do |favorite|
+    json.(favorite, :id, :message_id, :user_id)
+    json.message_slug favorite.message.slug
   end
 end
 
 json.reactions do
-  json.array! @message.reactions do |reaction|
-    json.(reaction, :id, :message_id, :user_id, :emoji)
-    json.message_slug @message.slug
-  end
+  reactions = Reaction.includes(:user, :message).where(message_id: message_thread_ids)
 
-  @message.replies.each do |reply|
-    json.array! reply.reactions do |reaction|
-      json.(reaction, :id, :message_id, :user_id, :emoji)
-      json.message_slug reply.slug
-    end
+  json.array! reactions do |reaction|
+    json.(reaction, :id, :message_id, :user_id, :emoji)
+    json.message_slug reaction.message.slug
+    json.user_slug reaction.user.slug
   end
 end
 
