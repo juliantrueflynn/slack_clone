@@ -3,9 +3,9 @@ import EmojiModalContainer from './EmojiModalContainer';
 import LeftSidebarContainer from './LeftSidebarContainer';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import ChannelHeader from './ChannelHeader';
-import ChannelPage from './ChannelPage';
+import AllUnreadsContainer from './AllUnreadsContainer';
 import AllThreads from './AllThreads';
-import AllUnreads from './AllUnreads';
+import ChannelContainer from './ChannelContainer';
 import './ChatPage.css';
 
 class ChatPage extends React.Component {
@@ -30,8 +30,8 @@ class ChatPage extends React.Component {
       history,
       fetchEntriesRequest,
       rightSidebarClose,
+      chatPath,
       location: { pathname },
-      match: { params: { chatPath } },
     } = this.props;
 
     if (prevProps.location.pathname !== pathname) {
@@ -42,7 +42,7 @@ class ChatPage extends React.Component {
       history.push(this.selectRedirectUrl());
     }
 
-    if (!chatPath && prevProps.match.params.chatPath) {
+    if (!chatPath && prevProps.chatPath) {
       rightSidebarClose();
     }
   }
@@ -61,21 +61,19 @@ class ChatPage extends React.Component {
 
   render() {
     const {
-      match: { params: { chatPath } },
+      chatPath,
       messages,
       isWorkspaceLoaded,
       routes,
       rightSidebarClose,
       chatTitle,
       isRightSidebarOpen,
-      channel,
       users,
       currentUser,
       channels,
-      createChannelSubRequest,
     } = this.props;
 
-    if (!isWorkspaceLoaded || !channel) {
+    if (!isWorkspaceLoaded) {
       return null;
     }
 
@@ -90,27 +88,14 @@ class ChatPage extends React.Component {
           <div className="ChatPage__row">
             <div className="ChatPage__container">
               <EmojiModalContainer />
-              <AllUnreads
-                messages={messages}
-                authors={users}
-                chatPath={chatPath}
-                channels={channels}
-              />
+              <AllUnreadsContainer authors={users} />
+              <ChannelContainer chatTitle={chatTitle} authors={users} />
               <AllThreads
                 chatPath={chatPath}
                 messages={messages}
                 users={users}
                 currentUser={currentUser}
                 channels={channels}
-                channelId={channel.id}
-              />
-              <ChannelPage
-                channel={channel}
-                messages={messages}
-                chatTitle={chatTitle}
-                authors={users}
-                currentUserSlug={currentUser.slug}
-                createChannelSubRequest={createChannelSubRequest}
               />
             </div>
             {routes.map(route => (

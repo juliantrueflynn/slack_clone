@@ -177,28 +177,20 @@ export const selectCurrentMessage = ({ entities: { messages }, ui }) => (
   messages[ui.displayMessageSlug]
 );
 
-export const selectChatMessages = ({ entities: { channels, messages } }, chatPath) => {
-  const chat = channels[chatPath];
+export const selectChannelMessagesBySlug = ({ entities: { messages, channels } }, chatSlug) => {
+  const chat = channels[chatSlug];
 
-  if (chat) {
-    return values(messages)
-      .filter(msg => (msg.thread && chat && chat.id === msg.channelId && !msg.parentMessageId))
-      .sort((a, b) => messages[a.slug].id - messages[b.slug].id);
-  }
-
-  return messages;
-};
-
-export const selectChatChannels = ({ entities: { channels } }, chatPath) => {
-  if (chatPath === 'unreads') {
-    return channels;
-  }
-
-  return values(channels);
+  return values(messages)
+    .filter(msg => (chat.id === msg.channelId && !msg.parentMessageId))
+    .sort((a, b) => messages[a.slug].id - messages[b.slug].id);
 };
 
 export const selectCurrentChannel = ({ entities: { channels }, ui }) => (
   channels[ui.displayChannelSlug]
+);
+
+export const selectUnreadChannels = ({ entities: { channels } }) => (
+  values(channels).filter(ch => ch.hasUnreads && !ch.hasDm)
 );
 
 export const hasUreadChannels = ({ entities: { reads, channels } }) => (

@@ -10,6 +10,19 @@
   align-items: center;
 }
 
+.AllUnreadsItem__meta {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  color: #636E72;
+  font-size: 14px;
+}
+
+.AllUnreadsItem__header .Btn__unread {
+  margin-left: 15px;
+  background-color: #FFF;
+}
+
 .AllUnreadsItem__title {
   margin: 0;
   display: inline-block;

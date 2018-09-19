@@ -3,15 +3,14 @@ import AllUnreadsItem from './AllUnreadsItem';
 
 const AllUnreads = ({
   chatPath,
-  channels,
+  unreadChannels,
   messages,
   authors,
+  clearUnreads,
 }) => {
   if (chatPath !== 'unreads') {
     return null;
   }
-
-  const unreadChannels = channels.filter(ch => ch.hasUnreads);
 
   return (
     unreadChannels.map(channel => (
@@ -20,6 +19,7 @@ const AllUnreads = ({
         channel={channel}
         authors={authors}
         messages={messages}
+        clearUnreads={clearUnreads}
       />
     ))
   );

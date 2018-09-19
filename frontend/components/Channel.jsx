@@ -3,14 +3,14 @@ import MessagesPane from './MessagesPane';
 import MessageFormContainer from './MessageFormContainer';
 import ChannelSubscribe from './ChannelSubscribe';
 
-const ChannelPage = ({
+const Channel = ({
   messages,
   channel,
   rightSidebar,
   authors,
   createChannelSubRequest,
   chatTitle,
-  currentUserSlug,
+  currentUser,
 }) => {
   if (!channel) {
     return null;
@@ -19,6 +19,7 @@ const ChannelPage = ({
   const placeholder = channel.hasDm ? `@${chatTitle}` : chatTitle;
   const formPlaceholder = placeholder && `Message ${placeholder}`;
   const ownerName = authors[channel.ownerSlug] && authors[channel.ownerSlug].username;
+  const currentUserSlug = currentUser && currentUser.slug;
 
   return (
     <Fragment>
@@ -40,4 +41,4 @@ const ChannelPage = ({
   );
 };
 
-export default ChannelPage;
+export default Channel;
