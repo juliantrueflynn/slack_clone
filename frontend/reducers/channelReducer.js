@@ -8,7 +8,8 @@ import {
   CHANNEL_SUB,
   WORKSPACE_SUB,
   SIGN_OUT,
-  UNREAD
+  UNREAD,
+  CLEAR_UNREADS
 } from '../actions/actionTypes';
 
 const channelReducer = (state = {}, action) => {
@@ -251,15 +252,24 @@ const channelReducer = (state = {}, action) => {
     }
     case READ.INDEX.RECEIVE: {
       const { unreads } = action;
-
-      if (!unreads) return state;
+      const unreadChannels = Object.values(state).filter(ch => ch.hasUnreads);
 
       nextState = Object.assign({}, state);
-      return unreads.reduce((acc, curr) => {
-        acc[curr.channelSlug].hasUnreads = true;
-        acc[curr.channelSlug].messages.push(curr.slug);
-        return acc;
-      }, nextState);
+      unreadChannels.forEach((channel) => {
+        nextState[channel.slug].messages = [];
+      });
+
+      unreads.forEach((message) => {
+        nextState[message.channelSlug].messages.push(message.slug);
+      });
+
+      return nextState;
+    }
+    case CLEAR_UNREADS: {
+      const { channelSlug } = action;
+      nextState = Object.assign({}, state);
+      nextState[channelSlug].hasUnreads = false;
+      return nextState;
     }
     case SIGN_OUT.RECEIVE:
       return {};

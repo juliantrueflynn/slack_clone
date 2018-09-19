@@ -1,29 +1,25 @@
 import {
   all,
   fork,
-  put,
   takeLatest,
-  call,
+  select,
 } from 'redux-saga/effects';
-import { UNREAD } from '../actions/actionTypes';
-import { apiFetch } from '../util/apiUtil';
-import { fetchUnreads } from '../actions/unreadActions';
+import { CLEAR_UNREADS } from '../actions/actionTypes';
+import { fetchUpdate } from './readSaga';
+import { selectEntityBySlug } from '../reducers/selectors';
 
-function* fetchIndex({ workspaceSlug }) {
-  try {
-    const received = yield call(apiFetch, `workspaces/${workspaceSlug}/user_unreads`);
-    yield put(fetchUnreads.receive(received));
-  } catch (error) {
-    yield put(fetchUnreads.failure(error));
-  }
+function* fetchClearUnreads({ channelSlug }) {
+  const currChannel = yield select(selectEntityBySlug, 'channels', channelSlug);
+  const { readId } = currChannel;
+  yield fetchUpdate({ readId });
 }
 
-function* watchIndex() {
-  yield takeLatest(UNREAD.INDEX.REQUEST, fetchIndex);
+function* watchClearUnreads() {
+  yield takeLatest(CLEAR_UNREADS, fetchClearUnreads);
 }
 
 export default function* unreadSaga() {
   yield all([
-    fork(watchIndex),
+    fork(watchClearUnreads),
   ]);
 }

@@ -13,7 +13,7 @@ import { selectUIByDisplay, selectEntityBySlug, selectEntities } from '../reduce
 
 function* fetchIndex({ workspaceSlug }) {
   try {
-    const received = yield call(apiFetch, `workspaces/${workspaceSlug}/reads`);
+    const received = yield call(apiFetch, `workspaces/${workspaceSlug}/user_unreads`);
     yield put(actions.fetchUnreads.receive(received));
   } catch (error) {
     yield put(actions.fetchUnreads.failure(error));
@@ -30,9 +30,9 @@ function* fetchCreate({ read }) {
   }
 }
 
-function* fetchUpdate({ read }) {
+export function* fetchUpdate({ readId }) {
   try {
-    const updated = yield call(apiUpdate, `reads/${read.id}`, read);
+    const updated = yield call(apiUpdate, `reads/${readId}`);
     yield put(actions.updateRead.receive(updated));
   } catch (error) {
     yield put(actions.updateRead.failure(error));
@@ -67,7 +67,7 @@ function* fetchChannelPage({ messages: { channel } }) {
 
   if (read) {
     if (currChannel.hasUnreads) {
-      yield put(actions.updateRead.request(read));
+      yield put(actions.updateRead.request(read.id));
     }
   } else {
     const newRead = { readableId: channel.id, readableType: 'Channel' };
@@ -80,6 +80,7 @@ function* setMessageRead({ unread }) {
   const read = { readableId, readableType };
   let entityRead;
   let currSlug;
+
   if (readableType === 'Channel') {
     entityRead = yield select(selectEntityBySlug, 'channels', slug);
     currSlug = yield select(selectUIByDisplay, 'displayChannelSlug');
@@ -94,7 +95,7 @@ function* setMessageRead({ unread }) {
     read.id = entityRead && entityRead.readId;
 
     if (read.id) {
-      yield put(actions.updateRead.request(read));
+      yield put(actions.updateRead.request(read.id));
     } else {
       yield put(actions.createRead.request(read));
     }
