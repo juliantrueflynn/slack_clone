@@ -1,8 +1,6 @@
 class Api::UnreadsController < ApplicationController
   def create
     @unread = Unread.new(unread_params)
-    entity = @unread.unreadable_type.constantize.find_by(id: @unread.unreadable_id)
-    @unread.workspace_id = entity.workspace.id
 
     if @unread.save
       render json: ['success']
