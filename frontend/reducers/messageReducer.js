@@ -69,16 +69,10 @@ const messageReducer = (state = {}, action) => {
       messages.forEach((message) => {
         const children = messages.filter(msg => msg.parentMessageSlug === message.slug);
         const thread = children.map(child => child.slug);
-        const lastThreadMsg = children[thread.length - 1];
-        const lastReadInMs = parseDateToMilliseconds(message.lastRead);
-        const lastActiveInMs = lastThreadMsg && parseDateToMilliseconds(lastThreadMsg.createdAt);
 
         nextState[message.slug] = {
           reactionIds: [],
           favoriteId: null,
-          readId: null,
-          lastActive: lastThreadMsg && lastThreadMsg.createdAt,
-          hasUnreads: lastReadInMs < lastActiveInMs,
           thread,
           ...message,
         };
@@ -99,6 +93,10 @@ const messageReducer = (state = {}, action) => {
         nextState[read.slug].readId = read.id;
       });
 
+      Object.values(state).filter(msg => msg.isActiveThread).forEach((message) => {
+        nextState[message.slug].isActiveThread = false;
+      });
+
       return merge({}, state, nextState);
     }
     case MESSAGE.SHOW.RECEIVE: {
@@ -113,13 +111,13 @@ const messageReducer = (state = {}, action) => {
       nextState = Object.assign({}, state);
 
       Object.values(nextState).forEach((prevMessage) => {
-        nextState[prevMessage.slug] = { isActive: false };
+        nextState[prevMessage.slug] = { isOpen: false };
       });
 
       nextState[message.slug] = {
         reactionIds: [],
         readId: read && read.id,
-        isActive: true,
+        isOpen: true,
         thread: [],
         ...message,
       };
@@ -146,7 +144,7 @@ const messageReducer = (state = {}, action) => {
     case RIGHT_SIDEBAR_CLOSE: {
       nextState = {};
       Object.values(state).forEach((message) => {
-        nextState[message.slug] = { isActive: false };
+        nextState[message.slug] = { isOpen: false };
       });
 
       return merge({}, nextState);
@@ -241,7 +239,7 @@ const messageReducer = (state = {}, action) => {
       const lastActive = parseDateToMilliseconds(nextState[read.slug].lastActive);
       nextState[read.slug].hasUnreads = lastActive > lastRead;
 
-      if (nextState[read.slug].isActive) {
+      if (nextState[read.slug].isOpen || nextState[read.slug].isActiveThread) {
         nextState[read.slug].hasUnreads = false;
       }
 
@@ -259,7 +257,7 @@ const messageReducer = (state = {}, action) => {
       const lastActive = parseDateToMilliseconds(unread.activeAt);
       nextState[unread.slug].hasUnreads = lastActive > lastRead;
 
-      if (nextState[unread.slug].isActive) {
+      if (nextState[unread.slug].isOpen || nextState[unread.slug].isActiveThread) {
         nextState[unread.slug].hasUnreads = false;
       }
 
@@ -285,6 +283,10 @@ const messageReducer = (state = {}, action) => {
         acc[curr.slug].isUnread = true;
         return acc;
       }, {});
+
+      Object.values(state).filter(msg => msg.isActiveThread).forEach((message) => {
+        nextState[message.slug].isActiveThread = false;
+      });
 
       return merge({}, state, nextState);
     }
