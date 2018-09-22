@@ -87,22 +87,28 @@ random_num(min: 50, max: 60).times do
   next unless chat
 
   loop do
-    parent = rand < 0.7 ? nil : chat.messages.sample
+    user.messages.create(body: random_message_body, channel_id: chat.id)
+
+    break if rand < 0.4
+  end
+
+  loop do
+    break if chat.parent_messages.empty?
+    break if rand < 0.8
+
+    parent = chat.parent_messages.sample
     user.messages.create(
       body: random_message_body,
       channel_id: chat.id,
-      parent_message_id: parent ? parent.id : nil
+      parent_message_id: parent.id
     )
 
-    if parent
-      unread_params = { unreadable_id: parent.id, unreadable_type: 'Message' }
-      message_unread = Unread.find_or_initialize_by(unread_params) do |unread|
-        unread.active_at = parent.replies.last.created_at
-      end
-      message_unread.save!
+    unread_params = { unreadable_id: parent.id, unreadable_type: 'Message' }
+    message_unread = Unread.find_or_initialize_by(unread_params) do |unread|
+      unread.active_at = parent.replies.last.created_at
     end
 
-    break if rand < 0.4
+    message_unread.save!
   end
 
   if rand < 0.5
