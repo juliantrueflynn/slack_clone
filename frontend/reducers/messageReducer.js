@@ -8,7 +8,10 @@ import {
   WORKSPACE,
   SIGN_OUT,
   CLEAR_UNREADS,
+  UNREAD,
+  RIGHT_SIDEBAR_CLOSE,
 } from '../actions/actionTypes';
+import parseDateToMilliseconds from '../util/dateUtil';
 
 const messageReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -40,8 +43,8 @@ const messageReducer = (state = {}, action) => {
             hasUnreads: false,
           };
         } else {
-          const lastActive = Date.parse(nextState[read.slug].lastActive);
-          const lastRead = Date.parse(read.accessedAt);
+          const lastActive = parseDateToMilliseconds(nextState[read.slug].lastActive);
+          const lastRead = parseDateToMilliseconds(read.accessedAt);
           nextState[read.slug].lastRead = read.accessedAt;
           nextState[read.slug].hasUnreads = lastActive > lastRead;
         }
@@ -67,8 +70,8 @@ const messageReducer = (state = {}, action) => {
         const children = messages.filter(msg => msg.parentMessageSlug === message.slug);
         const thread = children.map(child => child.slug);
         const lastThreadMsg = children[thread.length - 1];
-        const lastReadInMs = Date.parse(message.lastRead);
-        const lastActiveInMs = lastThreadMsg && Date.parse(lastThreadMsg.createdAt);
+        const lastReadInMs = parseDateToMilliseconds(message.lastRead);
+        const lastActiveInMs = lastThreadMsg && parseDateToMilliseconds(lastThreadMsg.createdAt);
 
         nextState[message.slug] = {
           reactionIds: [],
@@ -107,10 +110,16 @@ const messageReducer = (state = {}, action) => {
         read,
       } = action.message;
 
-      nextState = {};
+      nextState = Object.assign({}, state);
+
+      Object.values(nextState).forEach((prevMessage) => {
+        nextState[prevMessage.slug] = { isActive: false };
+      });
+
       nextState[message.slug] = {
         reactionIds: [],
         readId: read && read.id,
+        isActive: true,
         thread: [],
         ...message,
       };
@@ -132,10 +141,18 @@ const messageReducer = (state = {}, action) => {
         nextState[fav.messageSlug].favoriteId = fav.id;
       });
 
-      return merge({}, state, nextState);
+      return nextState;
+    }
+    case RIGHT_SIDEBAR_CLOSE: {
+      nextState = {};
+      Object.values(state).forEach((message) => {
+        nextState[message.slug] = { isActive: false };
+      });
+
+      return merge({}, nextState);
     }
     case MESSAGE.CREATE.RECEIVE: {
-      const { message } = action;
+      const { message } = action.message;
       const { parentMessageSlug, slug } = message;
       message.thread = parentMessageSlug ? null : [];
       message.lastRead = null;
@@ -182,6 +199,7 @@ const messageReducer = (state = {}, action) => {
           reactionIds: [],
           favoriteId: null,
           isActiveThread: true,
+          hasUnreads: false,
           ...parent,
         };
       });
@@ -216,12 +234,34 @@ const messageReducer = (state = {}, action) => {
       const { read } = action;
       if (read.readableType !== 'Message') return state;
       nextState = Object.assign({}, state);
-      nextState[read.slug].lastRead = read.accessedAt;
       nextState[read.slug].readId = read.id;
+      nextState[read.slug].lastRead = read.accessedAt;
 
-      const lastRead = Date.parse(read.accessedAt);
-      const lastActive = Date.parse(nextState[read.slug].lastActive);
+      const lastRead = parseDateToMilliseconds(read.accessedAt);
+      const lastActive = parseDateToMilliseconds(nextState[read.slug].lastActive);
       nextState[read.slug].hasUnreads = lastActive > lastRead;
+
+      if (nextState[read.slug].isActive) {
+        nextState[read.slug].hasUnreads = false;
+      }
+
+      return nextState;
+    }
+    case UNREAD.CREATE.RECEIVE:
+    case UNREAD.UPDATE.RECEIVE: {
+      const { unread } = action;
+      if (unread.unreadableType !== 'Message') return state;
+      nextState = Object.assign({}, state);
+      nextState[unread.slug].unreadId = unread.id;
+      nextState[unread.slug].lastActive = unread.activeAt;
+
+      const lastRead = parseDateToMilliseconds(nextState[unread.slug].lastRead);
+      const lastActive = parseDateToMilliseconds(unread.activeAt);
+      nextState[unread.slug].hasUnreads = lastActive > lastRead;
+
+      if (nextState[unread.slug].isActive) {
+        nextState[unread.slug].hasUnreads = false;
+      }
 
       return nextState;
     }

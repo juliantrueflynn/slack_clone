@@ -1,4 +1,10 @@
-import { WORKSPACE, UNREAD, SIGN_OUT } from '../actions/actionTypes';
+import merge from 'lodash.merge';
+import {
+  WORKSPACE,
+  UNREAD,
+  SIGN_OUT,
+  MESSAGE,
+} from '../actions/actionTypes';
 
 const unreadReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -12,6 +18,23 @@ const unreadReducer = (state = {}, action) => {
         acc[curr.id] = curr;
         return acc;
       }, {});
+    }
+    case MESSAGE.CREATE.RECEIVE: {
+      const { unread } = action.message;
+      if (!unread) return state;
+      nextState = {};
+      nextState[unread.id] = unread;
+      return merge({}, state, nextState);
+    }
+    case MESSAGE.SHOW.RECEIVE: {
+      const { message: { childMessages, unread } } = action;
+
+      nextState = {};
+      if (childMessages.length && unread) {
+        nextState[unread.slug] = unread;
+      }
+
+      return merge({}, state, nextState);
     }
     case UNREAD.CREATE.RECEIVE:
     case UNREAD.UPDATE.RECEIVE: {

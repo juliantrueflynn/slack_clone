@@ -77,10 +77,21 @@ export const isModalOpen = ({ ui: { displayModal: modal } }, type) => (
   modal && modal.modalType && modal.modalType === type
 );
 
-export const selectMessageChildren = ({ entities: { messages } }, thread) => {
-  if (!thread) return [];
-  return thread.map(slug => messages[slug]);
+export const selectMessageThreadBySlug = ({ entities: { messages } }, parentSlug) => {
+  const message = messages[parentSlug];
+  if (!message || !message.thread) {
+    return [];
+  }
+
+  return message.thread.reduce((acc, curr) => {
+    acc.push(messages[curr]);
+    return acc;
+  }, [message]);
 };
+
+export const selectMessageChildrenBySlug = (state, parentSlug) => (
+  selectMessageThreadBySlug(state, parentSlug).slice(1)
+);
 
 export const selectCurrentUser = ({ session: { currentUser } }) => currentUser;
 

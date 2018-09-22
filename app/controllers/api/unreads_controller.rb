@@ -3,7 +3,7 @@ class Api::UnreadsController < ApplicationController
     @unread = Unread.new(unread_params)
 
     if @unread.save
-      render json: ['success']
+      render 'api/unreads/show'
     else
       render json: @unread.errors.full_messages, status: 422
     end
@@ -13,7 +13,7 @@ class Api::UnreadsController < ApplicationController
     @unread = Unread.find_by(id: params[:id])
 
     if @unread.update(active_at: params[:active_at])
-      render json: ['success']
+      render 'api/unreads/show'
     else
       render json: @unread.errors.full_messages, status: 422
     end

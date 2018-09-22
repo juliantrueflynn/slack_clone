@@ -24,9 +24,7 @@ class ChannelSub < ApplicationRecord
     channel.reads.create(
       readable_id: id,
       readable_type: 'Channel',
-      workspace_id: workspace.id,
       user_id: user.id,
-      accessed_at: DateTime.now
     )
   end
 

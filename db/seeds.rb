@@ -94,17 +94,15 @@ random_num(min: 50, max: 60).times do
       parent_message_id: parent ? parent.id : nil
     )
 
-    break if rand < 0.5
-  end
+    if parent
+      unread_params = { unreadable_id: parent.id, unreadable_type: 'Message' }
+      message_unread = Unread.find_or_initialize_by(unread_params) do |unread|
+        unread.active_at = parent.replies.last.created_at
+      end
+      message_unread.save!
+    end
 
-  if rand < 0.7 && chat.is_user_sub?(User.first.id)
-    chat.reads.create(
-      readable_id: chat.id,
-      readable_type: 'Channel',
-      accessed_at: DateTime.now,
-      user_id: User.first.id,
-      workspace_id: chat.workspace.id
-    )
+    break if rand < 0.4
   end
 
   if rand < 0.5
@@ -116,21 +114,30 @@ random_num(min: 50, max: 60).times do
   end
 end
 
-Channel.all.each do |channel|
-  created_at = channel.messages.last ? channel.messages.last.created_at : DateTime.now
-  Unread.create(
-    unreadable_id: channel.id,
-    unreadable_type: 'Channel',
-    active_at: created_at,
-    workspace_id: channel.workspace.id
-  )
+User.first.channels.shuffle.each do |chat|
+  next unless chat.messages.first
+  next if rand < 0.4
+
+  read_chat_params = {
+    readable_id: chat.id,
+    readable_type: 'Channel',
+    user_id: 1,
+  }
+
+  accessed_at = chat.messages.sample.created_at
+  read_chat = Read.find_or_initialize_by(read_chat_params) do |read|
+    read.accessed_at = accessed_at
+  end
+  read_chat.save!
 end
 
-Message.all.where(parent_message_id: nil).each do |message|
-  Unread.create(
-    unreadable_id: message.id,
-    unreadable_type: 'Message',
-    active_at: message.created_at,
-    workspace_id: message.workspace.id
-  )
+Channel.all.each do |chat|
+  next if chat.messages.empty?
+
+  unread_params = { unreadable_id: chat.id, unreadable_type: 'Channel' }
+  last_message = chat.messages.where(parent_message_id: nil).last
+  chat_unread = Unread.find_or_initialize_by(unread_params) do |unread|
+    unread.active_at = last_message.created_at
+  end
+  chat_unread.save!
 end

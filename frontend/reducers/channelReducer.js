@@ -1,4 +1,5 @@
 import merge from 'lodash.merge';
+import parseDateToMilliseconds from '../util/dateUtil';
 import {
   WORKSPACE,
   CHANNEL,
@@ -94,23 +95,22 @@ const channelReducer = (state = {}, action) => {
         nextState[sub.channelSlug].members.push(sub.userSlug);
       });
 
+      reads.forEach((read) => {
+        if (read.readableType !== 'Channel') return;
+        nextState[read.slug].lastRead = read.accessedAt;
+        nextState[read.slug].readId = read.id;
+      });
+
       unreads.forEach((unread) => {
         if (unread.unreadableType !== 'Channel') return;
         nextState[unread.slug].lastActive = unread.activeAt;
         nextState[unread.slug].unreadId = unread.id;
       });
 
-      reads.forEach((read) => {
-        if (read.readableType !== 'Channel') return;
-        nextState[read.slug].lastRead = read.accessedAt;
-        nextState[read.slug].readId = read.id;
-
-        if (nextState[read.slug].lastActive) {
-          const lastActive = Date.parse(nextState[read.slug].lastActive);
-          const lastRead = Date.parse(read.accessedAt);
-
-          nextState[read.slug].hasUnreads = lastActive > lastRead;
-        }
+      Object.values(nextState).forEach((channel) => {
+        const lastActive = parseDateToMilliseconds(channel.lastActive);
+        const lastRead = parseDateToMilliseconds(channel.lastRead);
+        nextState[channel.slug].hasUnreads = lastActive > lastRead;
       });
 
       return nextState;
@@ -164,7 +164,7 @@ const channelReducer = (state = {}, action) => {
       nextState = Object.assign({}, state);
       nextState[channel.slug] = {
         hasUnreads: false,
-        lastRead: null,
+        lastRead: channel.createdAt,
         lastActive: null,
         inSidebar: true,
         messages: [],
@@ -187,7 +187,7 @@ const channelReducer = (state = {}, action) => {
       nextState = Object.assign({}, state);
       nextState[channel.slug] = {
         hasUnreads: false,
-        lastActive: channel.createdAt,
+        lastActive: null,
         lastRead: channel.createdAt,
         members: [channel.ownerSlug],
         subs: [subs[0].id],
@@ -211,7 +211,7 @@ const channelReducer = (state = {}, action) => {
       return nextState;
     }
     case MESSAGE.CREATE.RECEIVE: {
-      const { message } = action;
+      const { message } = action.message;
       nextState = Object.assign({}, state);
       nextState[message.channelSlug].messages.push(message.slug);
       return nextState;
@@ -224,8 +224,8 @@ const channelReducer = (state = {}, action) => {
       nextState[read.slug].lastRead = read.accessedAt;
       nextState[read.slug].readId = read.id;
 
-      const lastRead = Date.parse(read.accessedAt);
-      const lastActive = Date.parse(nextState[read.slug].lastActive);
+      const lastRead = parseDateToMilliseconds(read.accessedAt);
+      const lastActive = parseDateToMilliseconds(nextState[read.slug].lastActive);
       nextState[read.slug].hasUnreads = lastActive > lastRead;
 
       if (nextState[read.slug].isActive) {
@@ -240,8 +240,8 @@ const channelReducer = (state = {}, action) => {
       if (unread.unreadableType !== 'Channel') return state;
       nextState = Object.assign({}, state);
       nextState[unread.slug].unreadId = unread.id;
-      const lastRead = Date.parse(nextState[unread.slug].lastRead);
-      const lastActive = Date.parse(unread.activeAt);
+      const lastRead = parseDateToMilliseconds(nextState[unread.slug].lastRead);
+      const lastActive = parseDateToMilliseconds(unread.activeAt);
       nextState[unread.slug].hasUnreads = lastActive > lastRead;
 
       if (nextState[unread.slug].isActive) {

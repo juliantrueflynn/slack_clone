@@ -43,7 +43,7 @@ function* fetchChannelShow({ messages: { channel, subs } }) {
   }
 }
 
-function* fetchDmChatMessage({ message }) {
+function* fetchDmChatMessage({ message: { message } }) {
   try {
     const chat = yield select(selectEntityBySlug, 'channels', message.channelSlug);
     const sub = yield select(selectOtherDmSub, chat.subs);

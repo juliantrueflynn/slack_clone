@@ -80,8 +80,7 @@ class Channel < ApplicationRecord
   end
 
   after_create :generate_chat_subs
-  after_create_commit :broadcast_create
-  after_create_commit :generate_unread
+  after_create_commit :generate_unread, :broadcast_create
   after_update_commit :broadcast_update
   after_destroy :broadcast_destroy
 

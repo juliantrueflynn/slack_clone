@@ -39,9 +39,6 @@ class Unread < ApplicationRecord
     "workspace_#{workspace.slug}"
   end
 
-  after_create_commit :broadcast_create
-  after_update_commit :broadcast_update
-
   private
 
   def ensure_workspace_id
@@ -56,8 +53,8 @@ class Unread < ApplicationRecord
     self.active_at = message.created_at if unreadable_type === 'Message'
 
     if unreadable_type === 'Channel'
-      last_message = channel.messages.where(parent_message_id: nil)
-      self.active_at = last_message.created_at
+      last_message = channel.messages.where(parent_message_id: nil).last
+      self.active_at = last_message ? last_message.created_at : nil
     end
   end
 end

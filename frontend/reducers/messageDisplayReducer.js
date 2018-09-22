@@ -1,4 +1,9 @@
-import { MESSAGE, SIGN_OUT, WORKSPACE } from '../actions/actionTypes';
+import {
+  MESSAGE,
+  SIGN_OUT,
+  WORKSPACE,
+  RIGHT_SIDEBAR_CLOSE,
+} from '../actions/actionTypes';
 
 const messageDisplayReducer = (state = null, action) => {
   Object.freeze(state);
@@ -6,6 +11,7 @@ const messageDisplayReducer = (state = null, action) => {
   switch (action.type) {
     case MESSAGE.SHOW.REQUEST:
       return action.messageSlug;
+    case RIGHT_SIDEBAR_CLOSE:
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.REQUEST:
       return null;

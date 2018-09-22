@@ -6,10 +6,22 @@ import {
   select,
   call,
 } from 'redux-saga/effects';
-import { READ, MESSAGE, UNREAD } from '../actions/actionTypes';
+import {
+  READ,
+  MESSAGE,
+  UNREAD,
+  USER_THREAD,
+} from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiFetch } from '../util/apiUtil';
 import * as actions from '../actions/readActions';
-import { selectUIByDisplay, selectEntityBySlug, selectEntities } from '../reducers/selectors';
+import {
+  selectUIByDisplay,
+  selectEntityBySlug,
+  selectEntities,
+  selectCurrentUser,
+  selectMessageThreadBySlug,
+} from '../reducers/selectors';
+import parseDateToMilliseconds from '../util/dateUtil';
 
 function* fetchIndex({ workspaceSlug }) {
   try {
@@ -41,8 +53,8 @@ export function* fetchUpdate({ readId }) {
 
 function* fetchMessageThread({ message: { message, read, childMessages } }) {
   const lastEntry = childMessages[childMessages.length - 1];
-  const lastActive = lastEntry && Date.parse(lastEntry.createdAt);
-  const lastRead = read && Date.parse(read.accessedAt);
+  const lastActive = lastEntry && parseDateToMilliseconds(lastEntry.createdAt);
+  const lastRead = read && parseDateToMilliseconds(read.accessedAt);
 
   let hasUnread = true;
   if (!childMessages.length) {
@@ -75,23 +87,42 @@ function* fetchChannelPage({ messages: { channel } }) {
   }
 }
 
+function* fetchUserThreadIndexPage() {
+  const messages = yield select(selectEntities, 'messages');
+  const unreadMessages = Object.values(messages).filter(message => message.hasUnreads);
+
+  yield all(unreadMessages.map(parent => (
+    parent.readId && call(apiUpdate, `reads/${parent.readId}`)
+  )));
+}
+
 function* setMessageRead({ unread }) {
   const { unreadableType: readableType, unreadableId: readableId, slug } = unread;
   const read = { readableId, readableType };
   let entityRead;
-  let currSlug;
+  let currSlug = yield select(selectUIByDisplay, 'displayChannelSlug');
+  let isCurrPage = false;
+  let isInConvo = true;
 
   if (readableType === 'Channel') {
     entityRead = yield select(selectEntityBySlug, 'channels', slug);
-    currSlug = yield select(selectUIByDisplay, 'displayChannelSlug');
+    isCurrPage = currSlug && currSlug === slug;
   } else {
-    const messages = yield select(selectEntities, 'messages');
-    const threadMessage = messages[slug];
-    currSlug = yield select(selectUIByDisplay, 'displayMessageslug');
-    entityRead = messages[threadMessage.parentMessageSlug];
+    const currUser = yield select(selectCurrentUser);
+    const messageThread = yield select(selectMessageThreadBySlug, slug);
+    isInConvo = messageThread.find(entry => entry.authorSlug === currUser.slug);
+    const [parentMessage] = messageThread;
+    entityRead = parentMessage;
+
+    if (currSlug === 'threads') {
+      isCurrPage = true;
+    } else {
+      currSlug = yield select(selectUIByDisplay, 'displayMessageSlug');
+      isCurrPage = currSlug && currSlug === slug;
+    }
   }
 
-  if (entityRead && currSlug === slug) {
+  if (isInConvo && entityRead && isCurrPage) {
     read.id = entityRead && entityRead.readId;
 
     if (read.id) {
@@ -122,8 +153,15 @@ function* watchChannelPage() {
   yield takeLatest(MESSAGE.INDEX.RECEIVE, fetchChannelPage);
 }
 
+function* watchUserThreadIndex() {
+  yield takeLatest(USER_THREAD.INDEX.REQUEST, fetchUserThreadIndexPage);
+}
+
 function* watchMessageCreate() {
-  yield takeLatest(UNREAD.UPDATE.RECEIVE, setMessageRead);
+  yield all([
+    takeLatest(UNREAD.UPDATE.RECEIVE, setMessageRead),
+    takeLatest(UNREAD.CREATE.RECEIVE, setMessageRead),
+  ]);
 }
 
 export default function* readSaga() {
@@ -133,6 +171,7 @@ export default function* readSaga() {
     fork(watchUpdated),
     fork(watchMessageThread),
     fork(watchChannelPage),
+    fork(watchUserThreadIndex),
     fork(watchMessageCreate),
   ]);
 }
