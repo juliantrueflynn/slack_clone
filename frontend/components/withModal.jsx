@@ -8,7 +8,7 @@ import './WithModal.css';
 
 const withModal = ({ modalTitle, modalType, ...modalProps }) => (WrappedComponent) => {
   const mapStateToProps = state => ({
-    isOpen: state.ui.displayModal === modalType,
+    isOpen: state.ui.displayModal.modalType === modalType,
   });
 
   const mapDispatchToProps = dispatch => ({

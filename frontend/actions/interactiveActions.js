@@ -4,9 +4,10 @@ import {
   MODAL_CLOSE,
 } from './actionTypes';
 
-export const modalOpen = modal => ({
+export const modalOpen = (modalType, modalProps) => ({
   type: MODAL_OPEN,
-  modal,
+  modalType,
+  modalProps,
 });
 
 export const modalClose = () => ({

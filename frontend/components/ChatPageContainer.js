@@ -5,6 +5,8 @@ import { fetchMessages, fetchUserThreads } from '../actions/messageActions';
 import { fetchUnreads } from '../actions/readActions';
 import { loadChatPage } from '../actions/channelActions';
 import { rightSidebarClose } from '../actions/rightSidebarActions';
+import { createReaction } from '../actions/reactionActions';
+import { modalClose } from '../actions/interactiveActions';
 import ChatPage from './ChatPage';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
@@ -14,6 +16,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   isWorkspaceLoaded: !!state.ui.displayWorkspaceSlug,
   isRightSidebarOpen: isRightSidebarOpen(state),
   users: state.entities.members,
+  modal: state.ui.displayModal,
 });
 
 const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug, chatPath } } }) => ({
@@ -30,6 +33,8 @@ const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug, chatPa
   },
   loadChatPage: pagePath => dispatch(loadChatPage(pagePath)),
   rightSidebarClose: () => dispatch(rightSidebarClose()),
+  createReactionRequest: reaction => dispatch(createReaction.request(reaction)),
+  modalClose: () => dispatch(modalClose()),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatPage));

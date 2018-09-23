@@ -21,14 +21,17 @@ class EmojiModal extends React.Component {
   }
 
   render() {
-    const { isOpen, modal } = this.props;
+    const { modal: { modalType, modalProps } } = this.props;
 
-    if (!isOpen) return null;
+    if (modalType !== 'MODAL_REACTION' || !modalProps) return null;
 
-    const { clickPosY, clickPosX } = modal.modalProps;
-    let posY = clickPosY - 343;
-    const posX = clickPosX - 580;
-    if (posY - 20 < 0) posY = 15;
+    const posX = modalProps.clickPosX - 580;
+
+    let posY = modalProps.clickPosY - 343;
+    if (posY - 20 < 0) {
+      posY = 15;
+    }
+
     const style = { top: `${posY}px`, left: `${posX}px` };
 
     return (

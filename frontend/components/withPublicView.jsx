@@ -19,7 +19,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, { location }) => ({
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),
-  modalOpen: modal => dispatch(modalOpen(modal)),
+  modalOpen: (modalType, modalProps) => dispatch(modalOpen(modalType, modalProps)),
   signOutRequest: () => dispatch(signOut.request()),
   sessionRequest: (user) => {
     if (location.pathname === '/signin') {

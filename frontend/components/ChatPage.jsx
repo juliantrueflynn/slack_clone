@@ -1,11 +1,11 @@
 import React from 'react';
-import EmojiModalContainer from './EmojiModalContainer';
+import EmojiModal from './EmojiModal';
 import LeftSidebarContainer from './LeftSidebarContainer';
-import { RouteWithSubRoutes } from '../util/routeUtil';
 import ChannelHeader from './ChannelHeader';
 import AllUnreadsContainer from './AllUnreadsContainer';
 import AllThreadsContainer from './AllThreadsContainer';
 import ChannelContainer from './ChannelContainer';
+import { RouteWithSubRoutes } from '../util/routeUtil';
 import './ChatPage.css';
 
 class ChatPage extends React.Component {
@@ -22,12 +22,7 @@ class ChatPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const {
-      history,
-      rightSidebarClose,
-      chatPath,
-      location: { pathname },
-    } = this.props;
+    const { history, location: { pathname } } = this.props;
 
     if (prevProps.location.pathname !== pathname) {
       this.loadPageData();
@@ -35,10 +30,6 @@ class ChatPage extends React.Component {
 
     if (this.selectRedirectUrl()) {
       history.push(this.selectRedirectUrl());
-    }
-
-    if (!chatPath && prevProps.chatPath) {
-      rightSidebarClose();
     }
   }
 
@@ -68,6 +59,9 @@ class ChatPage extends React.Component {
       chatTitle,
       isRightSidebarOpen,
       users,
+      createReactionRequest,
+      modal,
+      modalClose,
     } = this.props;
 
     if (!isWorkspaceLoaded) {
@@ -84,7 +78,11 @@ class ChatPage extends React.Component {
           <ChannelHeader sectionTitle={chatTitle} rightSidebarClose={rightSidebarClose} />
           <div className="ChatPage__row">
             <div className="ChatPage__container">
-              <EmojiModalContainer />
+              <EmojiModal
+                modal={modal}
+                modalClose={modalClose}
+                createReactionRequest={createReactionRequest}
+              />
               <AllUnreadsContainer authors={users} />
               <AllThreadsContainer users={users} />
               <ChannelContainer chatTitle={chatTitle} authors={users} />

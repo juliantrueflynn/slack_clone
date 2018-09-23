@@ -30,7 +30,8 @@ class MessageHoverMenu extends React.Component {
       clickPosX: nodeBounds.right,
       messageId,
     };
-    modalOpen({ modalType: 'MODAL_REACTION', modalProps });
+
+    modalOpen('MODAL_REACTION', modalProps);
   }
 
   handleFavClick() {

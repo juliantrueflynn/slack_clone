@@ -17,7 +17,7 @@ const mapDispatchToProps = dispatch => ({
   deleteMessageRequest: messageSlug => dispatch(deleteMessage.request(messageSlug)),
   createFavoriteRequest: favorite => dispatch(createFavorite.request(favorite)),
   deleteFavoriteRequest: favoriteId => dispatch(deleteFavorite.request(favoriteId)),
-  modalOpen: modal => dispatch(modalOpen(modal)),
+  modalOpen: (modalType, modalProps) => dispatch(modalOpen(modalType, modalProps)),
   modalClose: () => dispatch(modalClose()),
 });
 

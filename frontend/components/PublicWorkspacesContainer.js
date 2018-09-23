@@ -6,7 +6,7 @@ import { modalOpen } from '../actions/interactiveActions';
 const mapDispatchToProps = dispatch => ({
   createWorkspaceSubRequest: workspaceSub => dispatch(createWorkspaceSub.request(workspaceSub)),
   deleteWorkspaceSubRequest: workspaceId => dispatch(deleteWorkspaceSub.request(workspaceId)),
-  modalOpen: modal => dispatch(modalOpen(modal)),
+  modalOpen: (modalType, modalProps) => dispatch(modalOpen(modalType, modalProps)),
 });
 
 export default connect(null, mapDispatchToProps)(PublicWorkspaces);
