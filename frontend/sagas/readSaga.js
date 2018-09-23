@@ -14,7 +14,12 @@ import {
 } from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiFetch } from '../util/apiUtil';
 import * as actions from '../actions/readActions';
-import { selectUIByDisplay, selectEntityBySlug, selectEntities } from '../reducers/selectors';
+import {
+  selectUIByDisplay,
+  selectEntityBySlug,
+  selectEntities,
+  selectCurrentUser,
+} from '../reducers/selectors';
 import parseDateToMilliseconds from '../util/dateUtil';
 
 function* fetchIndex({ workspaceSlug }) {
@@ -28,8 +33,7 @@ function* fetchIndex({ workspaceSlug }) {
 
 function* fetchCreate({ read }) {
   try {
-    const workspaceSlug = yield select(selectUIByDisplay, 'displayWorkspaceSlug');
-    const created = yield call(apiCreate, `workspaces/${workspaceSlug}/reads`, read);
+    const created = yield call(apiCreate, 'reads', read);
     yield put(actions.createRead.receive(created));
   } catch (error) {
     yield put(actions.createRead.failure(error));
@@ -45,7 +49,8 @@ export function* fetchUpdate({ readId }) {
   }
 }
 
-function* fetchMessageThread({ message: { message, read, childMessages } }) {
+function* fetchMessageThread({ message: { message, childMessages, read } }) {
+  const currUser = yield select(selectCurrentUser);
   const lastEntry = childMessages[childMessages.length - 1];
   const lastActive = lastEntry && parseDateToMilliseconds(lastEntry.createdAt);
   const lastRead = read && parseDateToMilliseconds(read.accessedAt);
@@ -54,6 +59,12 @@ function* fetchMessageThread({ message: { message, read, childMessages } }) {
   if (!childMessages.length) {
     hasUnread = false;
   } else if (lastEntry && lastRead > lastActive) {
+    hasUnread = false;
+  }
+
+  childMessages.unshift(message);
+  const isNotInConvo = childMessages.every(msg => msg.authorSlug !== currUser.slug);
+  if (isNotInConvo) {
     hasUnread = false;
   }
 
@@ -98,7 +109,7 @@ function* fetchUserThreadIndexPage() {
 }
 
 function* setMessageRead({ unread }) {
-  const read = { readableId: unread.unreadableId, readableType: unread.readableType };
+  const read = { readableId: unread.unreadableId, readableType: unread.unreadableType };
   let entity;
   let currSlug = yield select(selectUIByDisplay, 'displayChannelSlug');
   let isCurrPage = false;
@@ -111,7 +122,7 @@ function* setMessageRead({ unread }) {
     entity = yield select(selectEntityBySlug, 'messages', unread.slug);
 
     if (entity && entity.authors) {
-      isInConvo = entity.authors.some(entry => entry.authorSlug === unread.userSlug);
+      isInConvo = entity.authors.some(authorSlug => authorSlug === unread.userSlug);
     }
 
     if (currSlug === 'threads') {

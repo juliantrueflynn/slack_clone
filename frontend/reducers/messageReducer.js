@@ -35,12 +35,11 @@ const messageReducer = (state = {}, action) => {
 
       reads.forEach((read) => {
         if (read.readableType !== 'Message') return;
-        nextState[read.slug] = {
-          id: read.readableId,
-          slug: read.slug,
-          readId: read.id,
-          lastRead: read.accessedAt,
-        };
+        nextState[read.slug] = Object.assign({}, nextState[read.slug]);
+        nextState[read.slug].id = read.readableId;
+        nextState[read.slug].slug = read.slug;
+        nextState[read.slug].readId = read.id;
+        nextState[read.slug].lastRead = read.accessedAt;
       });
 
       Object.values(nextState).forEach((message) => {
@@ -111,6 +110,14 @@ const messageReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
+    case MESSAGE.SHOW.REQUEST: {
+      nextState = Object.assign({}, state);
+      Object.values(nextState).forEach((prevMessage) => {
+        nextState[prevMessage.slug].isOpen = false;
+      });
+
+      return nextState;
+    }
     case MESSAGE.SHOW.RECEIVE: {
       const {
         message,
@@ -120,11 +127,7 @@ const messageReducer = (state = {}, action) => {
         read,
       } = action.message;
 
-      nextState = Object.assign({}, state);
-      Object.values(nextState).forEach((prevMessage) => {
-        nextState[prevMessage.slug].isOpen = false;
-      });
-
+      nextState = {};
       nextState[message.slug] = {
         reactionIds: [],
         readId: read && read.id,
@@ -150,7 +153,7 @@ const messageReducer = (state = {}, action) => {
         nextState[fav.messageSlug].favoriteId = fav.id;
       });
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case RIGHT_SIDEBAR_CLOSE: {
       nextState = Object.assign({}, state);
