@@ -14,12 +14,7 @@ import {
 } from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiFetch } from '../util/apiUtil';
 import * as actions from '../actions/readActions';
-import {
-  selectUIByDisplay,
-  selectEntityBySlug,
-  selectEntities,
-  selectCurrentUser,
-} from '../reducers/selectors';
+import { selectUIByDisplay, selectEntityBySlug, selectEntities } from '../reducers/selectors';
 import parseDateToMilliseconds from '../util/dateUtil';
 
 function* fetchIndex({ workspaceSlug }) {
@@ -106,11 +101,10 @@ function* setMessageRead({ unread }) {
     entity = yield select(selectEntityBySlug, 'channels', unread.slug);
     isCurrPage = currSlug && currSlug === unread.slug;
   } else {
-    const currUser = yield select(selectCurrentUser);
-    entity = yield select(selectEntityBySlug, unread.slug);
+    entity = yield select(selectEntityBySlug, 'messages', unread.slug);
 
-    if (entity.authors) {
-      isInConvo = entity.authors.some(entry => entry.authorSlug === currUser.slug);
+    if (entity && entity.authors) {
+      isInConvo = entity.authors.some(entry => entry.authorSlug === unread.userSlug);
     }
 
     if (currSlug === 'threads') {
