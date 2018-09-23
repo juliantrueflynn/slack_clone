@@ -68,25 +68,14 @@ export const selectChatTitleBySlug = ({ entities: { channels, members }, session
   return chatTitle;
 };
 
-export const isModalOpen = ({ ui: { displayModal: modal } }, type) => (
-  modal && modal.modalType && modal.modalType === type
-);
-
-export const selectMessageThreadBySlug = ({ entities: { messages } }, parentSlug) => {
+export const selectMessageChildrenBySlug = ({ entities: { messages } }, parentSlug) => {
   const message = messages[parentSlug];
   if (!message || !message.thread) {
     return [];
   }
 
-  return message.thread.reduce((acc, curr) => {
-    acc.push(messages[curr]);
-    return acc;
-  }, [message]);
+  return message.thread.map(childSlug => messages[childSlug]);
 };
-
-export const selectMessageChildrenBySlug = (state, parentSlug) => (
-  selectMessageThreadBySlug(state, parentSlug).slice(1)
-);
 
 export const selectCurrentUser = ({ session: { currentUser } }) => currentUser;
 
@@ -118,7 +107,11 @@ export const getReactionCounts = ({ entities: { reactions }, session }, messageS
 export const selectChannelMessagesBySlug = ({ entities: { messages, channels } }, chatSlug) => {
   const chat = channels[chatSlug];
 
-  return chat && values(messages)
+  if (!chat) {
+    return [];
+  }
+
+  return values(messages)
     .filter(msg => (chat.id === msg.channelId && !msg.parentMessageId))
     .sort((a, b) => messages[a.slug].id - messages[b.slug].id);
 };

@@ -14,14 +14,7 @@ class MessageHoverMenu extends React.Component {
   }
 
   handleEmojiToggle(e) {
-    const {
-      isReactionModalOpen,
-      modalClose,
-      modalOpen,
-      message: { id: messageId },
-    } = this.props;
-
-    if (!isReactionModalOpen) modalClose();
+    const { modalOpen, message: { id: messageId } } = this.props;
 
     const menuNode = e.currentTarget.parentNode;
     const nodeBounds = menuNode.getBoundingClientRect();
