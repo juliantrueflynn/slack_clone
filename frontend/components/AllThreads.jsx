@@ -1,6 +1,5 @@
 import React from 'react';
 import AllThreadsItem from './AllThreadsItem';
-import './AllThreads.css';
 
 const AllThreads = ({
   chatPath,
@@ -18,7 +17,7 @@ const AllThreads = ({
   const parentMessages = messagesArr.filter(entry => entry.isActiveThread).reverse();
 
   return (
-    <div className="AllThreads">
+    <div role="list" className="AllThreads">
       {parentMessages.map(parent => (
         <AllThreadsItem
           key={parent.slug}

@@ -13,15 +13,17 @@ const AllUnreads = ({
   }
 
   return (
-    unreadChannels.map(channel => (
-      <AllUnreadsItem
-        key={channel.id}
-        channel={channel}
-        authors={authors}
-        messages={messages}
-        clearUnreads={clearUnreads}
-      />
-    ))
+    <div role="list" className="AllUnreads">
+      {unreadChannels.map(channel => (
+        <AllUnreadsItem
+          key={channel.id}
+          channel={channel}
+          authors={authors}
+          messages={messages}
+          clearUnreads={clearUnreads}
+        />
+      ))}
+    </div>
   );
 };
 

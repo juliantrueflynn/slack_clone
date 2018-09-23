@@ -1,4 +1,5 @@
 import React from 'react';
+import { Switch } from 'react-router-dom';
 import EmojiModal from './EmojiModal';
 import LeftSidebarContainer from './LeftSidebarContainer';
 import ChannelHeader from './ChannelHeader';
@@ -54,6 +55,7 @@ class ChatPage extends React.Component {
   render() {
     const {
       isWorkspaceLoaded,
+      chatPath,
       routes,
       rightSidebarClose,
       chatTitle,
@@ -69,7 +71,13 @@ class ChatPage extends React.Component {
     }
 
     let chatClassNames = 'ChatPage';
+    if (chatPath === 'unreads' || chatPath === 'threads') {
+      chatClassNames += ` ChatPage--${chatPath}`;
+    } else {
+      chatClassNames += ' ChatPage--channel';
+    }
     if (isRightSidebarOpen) chatClassNames += ' ChatPage--sidebar-open';
+    if (modal.modalType) chatClassNames += ' ChatPage--modal-open';
 
     return (
       <div className={chatClassNames}>
@@ -87,9 +95,11 @@ class ChatPage extends React.Component {
               <AllThreadsContainer users={users} />
               <ChannelContainer chatTitle={chatTitle} authors={users} />
             </div>
-            {routes.map(route => (
-              <RouteWithSubRoutes key={route.path} {...route} />
-            ))}
+            <Switch>
+              {routes.map(route => (
+                <RouteWithSubRoutes key={route.path} {...route} />
+              ))}
+            </Switch>
           </div>
         </div>
       </div>
