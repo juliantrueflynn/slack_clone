@@ -20,12 +20,7 @@ class ChannelSub < ApplicationRecord
   private
 
   def generate_read
-    return channel.reads if channel.messages.empty?
-    channel.reads.create(
-      readable_id: id,
-      readable_type: 'Channel',
-      user_id: user.id,
-    )
+    channel.reads.create(readable_type: 'Channel', user_id: user.id)
   end
 
   def broadcast_create_sub

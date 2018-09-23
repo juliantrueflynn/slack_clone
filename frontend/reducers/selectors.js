@@ -68,11 +68,6 @@ export const selectChatTitleBySlug = ({ entities: { channels, members }, session
   return chatTitle;
 };
 
-export const selectModalProps = ({ ui: { displayModal } }) => {
-  if (!displayModal) return {};
-  return displayModal.modalProps;
-};
-
 export const isModalOpen = ({ ui: { displayModal: modal } }, type) => (
   modal && modal.modalType && modal.modalType === type
 );
@@ -132,14 +127,12 @@ export const selectUnreadChannels = ({ entities: { channels } }) => (
   values(channels).filter(ch => ch.hasUnreads && !ch.hasDm)
 );
 
-export const hasUreadChannels = ({ entities: { reads, channels } }) => (
-  !!values(reads).filter(read => read.readableType === 'Channel' && channels[read.slug].hasUnreads).length
+export const hasUreadChannels = ({ entities: { channels } }) => (
+  values(channels).some(ch => ch.hasUnreads && !ch.hasDm)
 );
 
-export const hasUreadThreads = ({ entities: { reads, messages } }) => (
-  !!values(reads).filter(read => (
-    read.readableType === 'Message' && messages[read.slug] && messages[read.slug].hasUnreads
-  )).length
+export const hasUreadThreads = ({ entities: { messages } }) => (
+  values(messages).some(message => message.hasUnreads)
 );
 
 export const selectEntities = ({ entities }, entityName) => entities[entityName];

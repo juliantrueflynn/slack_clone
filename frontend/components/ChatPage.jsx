@@ -9,33 +9,28 @@ import ChannelContainer from './ChannelContainer';
 import './ChatPage.css';
 
 class ChatPage extends React.Component {
-  componentWillMount() {
-    const { history } = this.props;
+  componentDidMount() {
+    const { isWorkspaceLoaded, history } = this.props;
+
+    if (isWorkspaceLoaded) {
+      this.loadPageData();
+    }
 
     if (this.selectRedirectUrl()) {
       history.push(this.selectRedirectUrl());
     }
   }
 
-  componentDidMount() {
-    const { fetchEntriesRequest, isWorkspaceLoaded } = this.props;
-
-    if (isWorkspaceLoaded) {
-      fetchEntriesRequest();
-    }
-  }
-
   componentDidUpdate(prevProps) {
     const {
       history,
-      fetchEntriesRequest,
       rightSidebarClose,
       chatPath,
       location: { pathname },
     } = this.props;
 
     if (prevProps.location.pathname !== pathname) {
-      fetchEntriesRequest(chatPath);
+      this.loadPageData();
     }
 
     if (this.selectRedirectUrl()) {
@@ -45,6 +40,12 @@ class ChatPage extends React.Component {
     if (!chatPath && prevProps.chatPath) {
       rightSidebarClose();
     }
+  }
+
+  loadPageData() {
+    const { chatPath, loadChatPage, fetchEntriesRequest } = this.props;
+    loadChatPage(chatPath);
+    fetchEntriesRequest(chatPath);
   }
 
   selectRedirectUrl() {

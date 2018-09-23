@@ -10,7 +10,8 @@ import {
   WORKSPACE_SUB,
   SIGN_OUT,
   UNREAD,
-  CLEAR_UNREADS
+  CLEAR_UNREADS,
+  LOAD_CHAT_PAGE
 } from '../actions/actionTypes';
 
 const channelReducer = (state = {}, action) => {
@@ -29,6 +30,20 @@ const channelReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
+    case LOAD_CHAT_PAGE: {
+      const { pagePath } = action;
+
+      nextState = Object.assign({}, state);
+      Object.values(nextState).forEach((ch) => {
+        nextState[ch.slug].isOpen = false;
+      });
+
+      if (nextState[pagePath]) {
+        nextState[pagePath].isOpen = true;
+      }
+
+      return nextState;
+    }
     case MESSAGE.INDEX.RECEIVE: {
       const {
         channel,
@@ -37,21 +52,12 @@ const channelReducer = (state = {}, action) => {
         reactions,
       } = action.messages;
 
-      const currChannel = {
-        [channel.slug]: {
-          reactions: reactions.map(reaction => reaction.id),
-          messages: messages.map(msg => msg.slug),
-          ...channel,
-        }
+      nextState = {};
+      nextState[channel.slug] = {
+        reactions: reactions.map(reaction => reaction.id),
+        messages: messages.map(msg => msg.slug),
+        ...channel,
       };
-
-      nextState = merge({}, state, currChannel);
-
-      Object.values(nextState).forEach((ch) => {
-        nextState[ch.slug].isActive = false;
-      });
-
-      nextState[channel.slug].isActive = true;
 
       members.forEach((memberSlug) => {
         if (!nextState[channel.slug].members) {
@@ -59,12 +65,14 @@ const channelReducer = (state = {}, action) => {
           return;
         }
 
-        if (nextState[channel.slug].members.includes(memberSlug)) return;
+        if (nextState[channel.slug].members.includes(memberSlug)) {
+          return;
+        }
 
         nextState[channel.slug].members.push(memberSlug);
       });
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.RECEIVE: {
       const {
@@ -228,7 +236,7 @@ const channelReducer = (state = {}, action) => {
       const lastActive = parseDateToMilliseconds(nextState[read.slug].lastActive);
       nextState[read.slug].hasUnreads = lastActive > lastRead;
 
-      if (nextState[read.slug].isActive) {
+      if (nextState[read.slug].isOpen) {
         nextState[read.slug].hasUnreads = false;
       }
 
@@ -244,7 +252,7 @@ const channelReducer = (state = {}, action) => {
       const lastActive = parseDateToMilliseconds(unread.activeAt);
       nextState[unread.slug].hasUnreads = lastActive > lastRead;
 
-      if (nextState[unread.slug].isActive) {
+      if (nextState[unread.slug].isOpen) {
         nextState[unread.slug].hasUnreads = false;
       }
 

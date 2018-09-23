@@ -68,6 +68,10 @@ class Message < ApplicationRecord
     !!parent_message_id
   end
 
+  def replies_author_slugs
+    Message.includes(:author).where(parent_message_id: parent_message_id).pluck('users.slug').uniq
+  end
+
   after_create_commit :broadcast_create
   after_update_commit :broadcast_update
   after_destroy :broadcast_destroy

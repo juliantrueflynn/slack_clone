@@ -8,7 +8,7 @@ import {
 } from 'redux-saga/effects';
 import { CLEAR_UNREADS, MESSAGE, UNREAD } from '../actions/actionTypes';
 import { fetchUpdate } from './readSaga';
-import { selectEntityBySlug, selectCurrentUser, selectMessageThreadBySlug } from '../reducers/selectors';
+import { selectEntityBySlug, selectCurrentUser } from '../reducers/selectors';
 import { apiUpdate, apiCreate } from '../util/apiUtil';
 import { updateUnread, createUnread } from '../actions/unreadActions';
 
@@ -36,7 +36,7 @@ function* loadUpdateUnread({ unread }) {
   }
 }
 
-function* loadNewUnread({ message: { message, unread } }) {
+function* loadNewUnread({ message: { message, unread, authors } }) {
   const currUser = yield select(selectCurrentUser);
   const unreadProps = {
     activeAt: message.createdAt,
@@ -46,8 +46,7 @@ function* loadNewUnread({ message: { message, unread } }) {
 
   let isInConvo = true;
   if (message.parentMessageId) {
-    const messageThread = yield select(selectMessageThreadBySlug, message.parentMessageSlug);
-    isInConvo = messageThread.find(entry => entry.authorSlug === currUser.slug);
+    isInConvo = authors.some(authorSlug => authorSlug === currUser.slug);
     unreadProps.unreadableType = 'Message';
     unreadProps.unreadableId = message.parentMessageId;
   }

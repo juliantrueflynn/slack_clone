@@ -107,7 +107,6 @@ random_num(min: 50, max: 60).times do
     message_unread = Unread.find_or_initialize_by(unread_params) do |unread|
       unread.active_at = parent.replies.last.created_at
     end
-
     message_unread.save!
   end
 
@@ -124,16 +123,8 @@ User.first.channels.shuffle.each do |chat|
   next unless chat.messages.first
   next if rand < 0.4
 
-  read_chat_params = {
-    readable_id: chat.id,
-    readable_type: 'Channel',
-    user_id: 1,
-  }
-
   accessed_at = chat.messages.sample.created_at
-  read_chat = Read.find_or_initialize_by(read_chat_params) do |read|
-    read.accessed_at = accessed_at
-  end
+  read_chat = chat.reads.find_or_initialize_by(readable_type: 'Channel', user_id: 1)
   read_chat.save!
 end
 

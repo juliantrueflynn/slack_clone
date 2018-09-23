@@ -15,17 +15,17 @@ class EmojiModal extends React.Component {
   }
 
   handleClick(_, emoji) {
-    const { modalProps: { messageId }, createReactionRequest } = this.props;
+    const { modal: { modalProps: { messageId } }, createReactionRequest } = this.props;
     const reaction = { messageId, emoji: emoji.name };
     createReactionRequest(reaction);
   }
 
   render() {
-    const { isOpen, modalProps } = this.props;
+    const { isOpen, modal } = this.props;
 
-    if (!isOpen || !modalProps) return null;
+    if (!isOpen) return null;
 
-    const { clickPosY, clickPosX } = modalProps;
+    const { clickPosY, clickPosX } = modal.modalProps;
     let posY = clickPosY - 343;
     const posX = clickPosX - 580;
     if (posY - 20 < 0) posY = 15;

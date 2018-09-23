@@ -1,5 +1,10 @@
 import { actionCreator } from '../util/actionsUtil';
-import { CHANNEL, CHANNEL_SUB, DM_CHAT } from './actionTypes';
+import {
+  CHANNEL,
+  CHANNEL_SUB,
+  DM_CHAT,
+  LOAD_CHAT_PAGE,
+} from './actionTypes';
 
 export const fetchChannels = {
   request: workspaceSlug => actionCreator(CHANNEL.INDEX.REQUEST, { workspaceSlug }),
@@ -48,3 +53,8 @@ export const deleteChannelSub = {
   request: channelId => actionCreator(CHANNEL_SUB.DESTROY.REQUEST, { channelId }),
   failure: errors => actionCreator(CHANNEL_SUB.DESTROY.FAILURE, { errors }),
 };
+
+export const loadChatPage = pagePath => ({
+  type: LOAD_CHAT_PAGE,
+  pagePath,
+});

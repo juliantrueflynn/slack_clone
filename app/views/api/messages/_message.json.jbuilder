@@ -7,6 +7,7 @@ end
 
 if message.is_child?
   json.unread message.parent_message.unread
+  json.authors message.replies_author_slugs
 else
   json.unread message.channel.unread
 end

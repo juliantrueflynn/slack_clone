@@ -10,6 +10,7 @@ import {
   CLEAR_UNREADS,
   UNREAD,
   RIGHT_SIDEBAR_CLOSE,
+  LOAD_CHAT_PAGE,
 } from '../actions/actionTypes';
 import parseDateToMilliseconds from '../util/dateUtil';
 
@@ -20,45 +21,58 @@ const messageReducer = (state = {}, action) => {
   switch (action.type) {
     case WORKSPACE.SHOW.RECEIVE: {
       const { workspace: { unreads, reads } } = action;
-      nextState = Object.assign({}, state);
 
+      nextState = {};
       unreads.forEach((unread) => {
-        if (unread.unreadableType === 'Channel') return;
-        if (!nextState[unread.slug]) nextState[unread.slug] = {};
-        nextState[unread.slug].id = unread.unreadableId;
-        nextState[unread.slug].slug = unread.slug;
-        nextState[unread.slug].lastActive = unread.activeAt;
-        nextState[unread.slug].lastRead = null;
-        nextState[unread.slug].hasUnreads = false;
-        nextState[unread.slug].unreadId = unread.id;
-        nextState[unread.slug].thread = [];
+        if (unread.unreadableType !== 'Message') return;
+        nextState[unread.slug] = {
+          id: unread.unreadableId,
+          slug: unread.slug,
+          unreadId: unread.id,
+          lastActive: unread.activeAt,
+        };
       });
 
       reads.forEach((read) => {
-        if (read.readableType === 'Channel') return;
-        if (!nextState[read.slug]) {
-          nextState[read.slug] = {
-            lastActive: null,
-            lastRead: read.accessedAt,
-            hasUnreads: false,
-          };
-        } else {
-          const lastActive = parseDateToMilliseconds(nextState[read.slug].lastActive);
-          const lastRead = parseDateToMilliseconds(read.accessedAt);
-          nextState[read.slug].lastRead = read.accessedAt;
-          nextState[read.slug].hasUnreads = lastActive > lastRead;
-        }
+        if (read.readableType !== 'Message') return;
+        nextState[read.slug] = {
+          id: read.readableId,
+          slug: read.slug,
+          readId: read.id,
+          lastRead: read.accessedAt,
+        };
+      });
 
-        nextState[read.slug].id = read.readableId;
-        nextState[read.slug].slug = read.slug;
-        nextState[read.slug].readId = read.id;
-        nextState[read.slug].thread = [];
+      Object.values(nextState).forEach((message) => {
+        const lastActive = parseDateToMilliseconds(message.lastActive);
+        const lastRead = parseDateToMilliseconds(message.lastRead);
+        nextState[message.slug] = {
+          lastActive: message.lastActive || null,
+          lastRead: message.lastRead || null,
+          hasUnreads: lastActive > lastRead,
+          reactionIds: [],
+          thread: [],
+          ...message,
+        };
+      });
+
+      return merge({}, state, nextState);
+    }
+    case LOAD_CHAT_PAGE: {
+      const { pagePath } = action;
+      if (pagePath === 'threads') {
+        return state;
+      }
+
+      nextState = Object.assign({}, state);
+      const activeThreads = Object.values(nextState).filter(msg => msg.isActiveThread);
+      activeThreads.forEach((message) => {
+        nextState[message.slug].isActiveThread = false;
       });
 
       return nextState;
     }
     case MESSAGE.INDEX.RECEIVE: {
-      nextState = Object.assign({}, state);
       const {
         messages,
         reactions,
@@ -66,6 +80,7 @@ const messageReducer = (state = {}, action) => {
         reads,
       } = action.messages;
 
+      nextState = Object.assign({}, state);
       messages.forEach((message) => {
         const children = messages.filter(msg => msg.parentMessageSlug === message.slug);
         const thread = children.map(child => child.slug);
@@ -73,6 +88,7 @@ const messageReducer = (state = {}, action) => {
         nextState[message.slug] = {
           reactionIds: [],
           favoriteId: null,
+          authors: [],
           thread,
           ...message,
         };
@@ -93,10 +109,6 @@ const messageReducer = (state = {}, action) => {
         nextState[read.slug].readId = read.id;
       });
 
-      Object.values(state).filter(msg => msg.isActiveThread).forEach((message) => {
-        nextState[message.slug].isActiveThread = false;
-      });
-
       return merge({}, state, nextState);
     }
     case MESSAGE.SHOW.RECEIVE: {
@@ -109,14 +121,14 @@ const messageReducer = (state = {}, action) => {
       } = action.message;
 
       nextState = Object.assign({}, state);
-
       Object.values(nextState).forEach((prevMessage) => {
-        nextState[prevMessage.slug] = { isOpen: false };
+        nextState[prevMessage.slug].isOpen = false;
       });
 
       nextState[message.slug] = {
         reactionIds: [],
         readId: read && read.id,
+        authors: [],
         isOpen: true,
         thread: [],
         ...message,
@@ -125,7 +137,6 @@ const messageReducer = (state = {}, action) => {
       childMessages.forEach((child) => {
         nextState[child.slug] = {
           reactionIds: [],
-          favoriteId: null,
           thread: null,
           ...child,
         };
@@ -142,44 +153,44 @@ const messageReducer = (state = {}, action) => {
       return nextState;
     }
     case RIGHT_SIDEBAR_CLOSE: {
-      nextState = {};
+      nextState = Object.assign({}, state);
       Object.values(state).forEach((message) => {
-        nextState[message.slug] = { isOpen: false };
+        nextState[message.slug].isOpen = false;
       });
 
-      return merge({}, nextState);
+      return nextState;
     }
     case MESSAGE.CREATE.RECEIVE: {
-      const { message } = action.message;
-      const { parentMessageSlug, slug } = message;
-      message.thread = parentMessageSlug ? null : [];
-      message.lastRead = null;
-      message.readId = null;
-      message.reactionIds = [];
-      message.favoriteId = null;
-      nextState = merge({}, state, { [slug]: message });
-      if (parentMessageSlug) {
-        if (!nextState[parentMessageSlug]) {
-          nextState[parentMessageSlug] = {
+      const { message, authors } = action.message;
+      nextState = Object.assign({}, state);
+      nextState[message.slug] = {
+        thread: message.parentMessageId ? null : [],
+        reactionIds: [],
+        ...message
+      };
+
+      if (message.parentMessageSlug) {
+        if (!nextState[message.parentMessageSlug]) {
+          nextState[message.parentMessageSlug] = {
             id: message.parentMessageId,
-            slug: parentMessageSlug,
+            slug: message.parentMessageSlug,
             thread: [],
-            favoriteId: [],
-            reactionIds: [],
             lastActive: message.createdAt,
-            channelId: message.channelId,
             channelSlug: message.channelSlug,
-            parentMessageId: null,
           };
         }
 
-        nextState[parentMessageSlug].thread.push(slug);
+        nextState[message.parentMessageSlug].authors = authors;
+        nextState[message.parentMessageSlug].thread.push(message.slug);
       }
+
       return nextState;
     }
     case MESSAGE.UPDATE.RECEIVE: {
       const { message } = action;
-      return merge({}, state, { [message.slug]: message });
+      nextState = {};
+      nextState[message.slug] = message;
+      return merge({}, state, nextState);
     }
     case MESSAGE.DESTROY.RECEIVE:
       nextState = Object.assign({}, state);
@@ -195,7 +206,6 @@ const messageReducer = (state = {}, action) => {
         nextState[parent.slug] = {
           thread: [],
           reactionIds: [],
-          favoriteId: null,
           isActiveThread: true,
           hasUnreads: false,
           ...parent,
@@ -204,7 +214,6 @@ const messageReducer = (state = {}, action) => {
 
       children.forEach((child) => {
         nextState[child.slug] = {
-          favoriteId: null,
           reactionIds: [],
           ...child,
         };
@@ -284,20 +293,13 @@ const messageReducer = (state = {}, action) => {
         return acc;
       }, {});
 
-      Object.values(state).filter(msg => msg.isActiveThread).forEach((message) => {
-        nextState[message.slug].isActiveThread = false;
-      });
-
       return merge({}, state, nextState);
     }
     case CLEAR_UNREADS: {
       const { channelSlug } = action;
       nextState = Object.assign({}, state);
       const unreads = Object.values(nextState).filter(msg => msg.channelSlug === channelSlug);
-      unreads.forEach((message) => {
-        nextState[message.slug].isUnread = false;
-      });
-
+      unreads.forEach((message) => { nextState[message.slug].isUnread = false; });
       return nextState;
     }
     case WORKSPACE.SHOW.REQUEST:

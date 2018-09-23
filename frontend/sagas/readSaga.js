@@ -19,7 +19,6 @@ import {
   selectEntityBySlug,
   selectEntities,
   selectCurrentUser,
-  selectMessageThreadBySlug,
 } from '../reducers/selectors';
 import parseDateToMilliseconds from '../util/dateUtil';
 
@@ -97,33 +96,33 @@ function* fetchUserThreadIndexPage() {
 }
 
 function* setMessageRead({ unread }) {
-  const { unreadableType: readableType, unreadableId: readableId, slug } = unread;
-  const read = { readableId, readableType };
-  let entityRead;
+  const read = { readableId: unread.unreadableId, readableType: unread.readableType };
+  let entity;
   let currSlug = yield select(selectUIByDisplay, 'displayChannelSlug');
   let isCurrPage = false;
   let isInConvo = true;
 
-  if (readableType === 'Channel') {
-    entityRead = yield select(selectEntityBySlug, 'channels', slug);
-    isCurrPage = currSlug && currSlug === slug;
+  if (read.readableType === 'Channel') {
+    entity = yield select(selectEntityBySlug, 'channels', unread.slug);
+    isCurrPage = currSlug && currSlug === unread.slug;
   } else {
     const currUser = yield select(selectCurrentUser);
-    const messageThread = yield select(selectMessageThreadBySlug, slug);
-    isInConvo = messageThread.find(entry => entry.authorSlug === currUser.slug);
-    const [parentMessage] = messageThread;
-    entityRead = parentMessage;
+    entity = yield select(selectEntityBySlug, unread.slug);
+
+    if (entity.authors) {
+      isInConvo = entity.authors.some(entry => entry.authorSlug === currUser.slug);
+    }
 
     if (currSlug === 'threads') {
       isCurrPage = true;
     } else {
       currSlug = yield select(selectUIByDisplay, 'displayMessageSlug');
-      isCurrPage = currSlug && currSlug === slug;
+      isCurrPage = currSlug && currSlug === unread.slug;
     }
   }
 
-  if (isInConvo && entityRead && isCurrPage) {
-    read.id = entityRead && entityRead.readId;
+  if (isInConvo && entity && isCurrPage) {
+    read.id = entity.readId;
 
     if (read.id) {
       yield put(actions.updateRead.request(read.id));

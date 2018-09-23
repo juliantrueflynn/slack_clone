@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { isRightSidebarOpen, selectChatTitleBySlug } from '../reducers/selectors';
 import { fetchMessages, fetchUserThreads } from '../actions/messageActions';
 import { fetchUnreads } from '../actions/readActions';
+import { loadChatPage } from '../actions/channelActions';
 import { rightSidebarClose } from '../actions/rightSidebarActions';
 import ChatPage from './ChatPage';
 
@@ -27,6 +28,7 @@ const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug, chatPa
 
     return dispatch(fetchMessages.request(chatPath));
   },
+  loadChatPage: pagePath => dispatch(loadChatPage(pagePath)),
   rightSidebarClose: () => dispatch(rightSidebarClose()),
 });
 

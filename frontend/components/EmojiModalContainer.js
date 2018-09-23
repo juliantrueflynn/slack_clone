@@ -2,10 +2,10 @@ import { connect } from 'react-redux';
 import EmojiModal from './EmojiModal';
 import { createReaction } from '../actions/reactionActions';
 import { modalClose } from '../actions/interactiveActions';
-import { selectModalProps, isModalOpen } from '../reducers/selectors';
+import { isModalOpen } from '../reducers/selectors';
 
 const mapStateToProps = state => ({
-  modalProps: selectModalProps(state),
+  modal: state.ui.displayModal,
   isOpen: isModalOpen(state, 'MODAL_REACTION'),
 });
 

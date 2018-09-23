@@ -14,7 +14,8 @@ const AllThreads = ({
     return null;
   }
 
-  const parentMessages = Object.values(messages).filter(msg => msg.isActiveThread).reverse();
+  const messagesArr = Object.values(messages);
+  const parentMessages = messagesArr.filter(entry => entry.isActiveThread).reverse();
 
   return (
     <div className="AllThreads">
