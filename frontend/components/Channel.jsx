@@ -31,7 +31,7 @@ const Channel = ({
   const currentUserSlug = currentUser && currentUser.slug;
 
   return (
-    <Fragment>
+    <div className="Channel">
       <MessagesPane
         chatTitle={chatTitle}
         messages={messages}
@@ -47,7 +47,7 @@ const Channel = ({
         currentUserSlug={currentUserSlug}
         createChannelSubRequest={createChannelSubRequest}
       />
-    </Fragment>
+    </div>
   );
 };
 

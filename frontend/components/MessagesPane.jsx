@@ -33,29 +33,27 @@ class MessagesPane extends React.Component {
       isThreadHidden,
     } = this.props;
 
-    if (!messages) return null;
+    if (!messages) {
+      return null;
+    }
 
     return (
-      <div className="MessagesPane">
-        <div role="list" ref={this.messagesList} className="MessagesPane__list">
-          {isThreadHidden || (
-            <ChannelBlurb
-              chatTitle={chatTitle}
-              owner={users[channel.ownerSlug]}
-              createdAt={channel.createdAt}
-              isThreadHidden={isThreadHidden}
-            />
-          )}
-          {messages.map(message => (
-            <MessageContainer
-              key={message.slug}
-              author={users[message.authorSlug]}
-              message={message}
-              users={users}
-              isThreadHidden={isThreadHidden}
-            />
-          ))}
-        </div>
+      <div ref={this.messagesList} className="MessagesPane">
+        <ChannelBlurb
+          chatTitle={chatTitle}
+          users={users}
+          channel={channel}
+          isThreadHidden={isThreadHidden}
+        />
+        {messages.map(message => (
+          <MessageContainer
+            key={message.slug}
+            author={users[message.authorSlug]}
+            message={message}
+            users={users}
+            isThreadHidden={isThreadHidden}
+          />
+        ))}
       </div>
     );
   }

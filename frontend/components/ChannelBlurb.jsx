@@ -4,13 +4,17 @@ import './ChannelBlurb.css';
 
 const ChannelBlurb = ({
   chatTitle,
-  owner,
-  createdAt,
-  purpose,
+  users,
+  channel,
+  isThreadHidden,
 }) => {
+  if (isThreadHidden || !channel) {
+    return null;
+  }
+
+  const owner = users[channel.ownerSlug];
   const ownerUsername = owner && `@${owner.username}`;
   const ownerLink = owner && owner.slug;
-  const chatPurpose = purpose && 'Purpose';
 
   return (
     <section className="ChannelBlurb">
@@ -18,25 +22,14 @@ const ChannelBlurb = ({
         {chatTitle}
       </h2>
       <div className="ChannelBlurb__description">
-        {owner && (
-          <Link to={ownerLink}>
-            {ownerUsername}
-          </Link>
-        )}
-        &nbsp;
-        created this channel on
-        &nbsp;
-        {createdAt}
-        &nbsp;
-        this is the beginning of
-        &nbsp;
+        <Link to={ownerLink}>
+          {ownerUsername}
+        </Link>
+        {` created this channel on ${channel.createdAt} this is the beginning of `}
         <strong>
           {chatTitle}
         </strong>
-        &nbsp;
-        channel.
-        &nbsp;
-        {chatPurpose}
+        {' channel.'}
       </div>
     </section>
   );
