@@ -20,7 +20,7 @@ class ChannelSubscribe extends React.Component {
   }
 
   render() {
-    const { channel, currentUserSlug, title } = this.props;
+    const { channel, currentUserSlug, chatTitle } = this.props;
     const isSubbed = channel.members.includes(currentUserSlug);
 
     if (channel.hasDm || isSubbed) return null;
@@ -28,7 +28,7 @@ class ChannelSubscribe extends React.Component {
     return (
       <div className="ChannelSubscribe">
         <h3 className="ChannelSubscribe__title">
-          {title}
+          {chatTitle}
         </h3>
         <div className="ChannelSubscribe__text">
           {this.description()}

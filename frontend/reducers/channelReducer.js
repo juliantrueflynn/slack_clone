@@ -40,6 +40,7 @@ const channelReducer = (state = {}, action) => {
 
       if (nextState[pagePath]) {
         nextState[pagePath].isOpen = true;
+        nextState[pagePath].isLoading = true;
       }
 
       return nextState;
@@ -56,6 +57,7 @@ const channelReducer = (state = {}, action) => {
       nextState[channel.slug] = {
         reactions: reactions.map(reaction => reaction.id),
         messages: messages.map(msg => msg.slug),
+        isLoading: false,
         ...channel,
       };
 

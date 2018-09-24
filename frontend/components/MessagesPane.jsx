@@ -9,6 +9,10 @@ class MessagesPane extends React.Component {
     this.messagesList = React.createRef();
   }
 
+  componentDidMount() {
+    this.scrollToBottom();
+  }
+
   componentDidUpdate() {
     this.scrollToBottom();
   }
@@ -25,6 +29,7 @@ class MessagesPane extends React.Component {
       users,
       messages,
       channel,
+      chatTitle,
       isThreadHidden,
     } = this.props;
 
@@ -35,7 +40,7 @@ class MessagesPane extends React.Component {
         <div role="list" ref={this.messagesList} className="MessagesPane__list">
           {isThreadHidden || (
             <ChannelBlurb
-              title={channel.title}
+              chatTitle={chatTitle}
               owner={users[channel.ownerSlug]}
               createdAt={channel.createdAt}
               isThreadHidden={isThreadHidden}

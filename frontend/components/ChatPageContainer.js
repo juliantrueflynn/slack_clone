@@ -17,6 +17,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   isRightSidebarOpen: isRightSidebarOpen(state),
   users: state.entities.members,
   modal: state.ui.displayModal,
+  isLoading: state.ui.isPageLoading,
 });
 
 const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug, chatPath } } }) => ({

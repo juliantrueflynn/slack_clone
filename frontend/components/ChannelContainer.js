@@ -5,10 +5,11 @@ import { createChannelSub } from '../actions/channelActions';
 import Channel from './Channel';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
+  chatPath,
   channel: state.entities.channels[chatPath],
   messages: selectChannelMessagesBySlug(state, chatPath),
   currentUser: state.session.currentUser,
-  chatPath,
+  isLoading: state.ui.isPageLoading,
 });
 
 const mapDispatchToProps = dispatch => ({

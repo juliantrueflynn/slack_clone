@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './ChannelBlurb.css';
 
 const ChannelBlurb = ({
-  title,
+  chatTitle,
   owner,
   createdAt,
   purpose,
@@ -15,7 +15,7 @@ const ChannelBlurb = ({
   return (
     <section className="ChannelBlurb">
       <h2 className="ChannelBlurb__title">
-        {title}
+        {chatTitle}
       </h2>
       <div className="ChannelBlurb__description">
         {owner && (
@@ -31,7 +31,7 @@ const ChannelBlurb = ({
         this is the beginning of
         &nbsp;
         <strong>
-          {title}
+          {chatTitle}
         </strong>
         &nbsp;
         channel.

@@ -7,8 +7,9 @@ const AllUnreads = ({
   messages,
   authors,
   clearUnreads,
+  isLoading,
 }) => {
-  if (chatPath !== 'unreads') {
+  if (chatPath !== 'unreads' || isLoading) {
     return null;
   }
 

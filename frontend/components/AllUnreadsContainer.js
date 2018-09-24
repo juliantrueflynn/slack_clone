@@ -5,9 +5,10 @@ import { selectUnreadChannels } from '../reducers/selectors';
 import AllUnreads from './AllUnreads';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
+  chatPath,
   unreadChannels: selectUnreadChannels(state),
   messages: state.entities.messages,
-  chatPath
+  isLoading: state.ui.isPageLoading,
 });
 
 const mapDispatchToProps = dispatch => ({

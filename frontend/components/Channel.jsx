@@ -11,8 +11,9 @@ const Channel = ({
   createChannelSubRequest,
   chatTitle,
   currentUser,
+  isLoading,
 }) => {
-  if (!channel) {
+  if (!channel || isLoading) {
     return null;
   }
 
@@ -32,6 +33,7 @@ const Channel = ({
   return (
     <Fragment>
       <MessagesPane
+        chatTitle={chatTitle}
         messages={messages}
         users={authors}
         channel={channel}
@@ -39,7 +41,7 @@ const Channel = ({
       />
       <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} />
       <ChannelSubscribe
-        title={chatTitle}
+        chatTitle={chatTitle}
         ownerName={ownerName}
         channel={channel}
         currentUserSlug={currentUserSlug}

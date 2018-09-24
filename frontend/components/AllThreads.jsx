@@ -10,16 +10,8 @@ const AllThreads = ({
   currentUser,
   isLoading,
 }) => {
-  if (chatPath !== 'threads') {
+  if (chatPath !== 'threads' || isLoading) {
     return null;
-  }
-
-  if (isLoading) {
-    return (
-      <div className="ChatPage__loading">
-        Page loading...
-      </div>
-    );
   }
 
   const messagesArr = Object.values(messages);

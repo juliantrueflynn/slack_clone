@@ -64,6 +64,7 @@ class ChatPage extends React.Component {
       createReactionRequest,
       modal,
       modalClose,
+      isLoading,
     } = this.props;
 
     if (!isWorkspaceLoaded) {
@@ -76,6 +77,7 @@ class ChatPage extends React.Component {
     } else {
       chatClassNames += ' ChatPage--channel';
     }
+    if (isLoading) chatClassNames += ' ChatPage--loading';
     if (isRightSidebarOpen) chatClassNames += ' ChatPage--sidebar-open';
     if (modal.modalType) chatClassNames += ' ChatPage--modal-open';
 
@@ -86,6 +88,11 @@ class ChatPage extends React.Component {
           <ChannelHeader sectionTitle={chatTitle} rightSidebarClose={rightSidebarClose} />
           <div className="ChatPage__row">
             <div className="ChatPage__container">
+              {isLoading && (
+                <div className="ChatPage__loader">
+                  Messages loading...
+                </div>
+              )}
               <EmojiModal
                 modal={modal}
                 modalClose={modalClose}
