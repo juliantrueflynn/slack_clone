@@ -5,6 +5,7 @@ import displayMessageSlug from './messageDisplayReducer';
 import displayUserSlug from './displayUserSlugReducer';
 import displayModal from './modalReducer';
 import isWorkspaceLoading from './isWorkspaceLoadingReducer';
+import isPageLoading from './isPageLoadingReducer';
 import rightSidebar from './rightSidebarReducer';
 
 const uiReducer = combineReducers({
@@ -14,6 +15,7 @@ const uiReducer = combineReducers({
   displayUserSlug,
   displayModal,
   isWorkspaceLoading,
+  isPageLoading,
   rightSidebar,
 });
 

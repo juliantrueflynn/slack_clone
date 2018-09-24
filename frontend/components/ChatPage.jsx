@@ -64,6 +64,7 @@ class ChatPage extends React.Component {
       createReactionRequest,
       modal,
       modalClose,
+      isLoading,
     } = this.props;
 
     if (!isWorkspaceLoaded) {

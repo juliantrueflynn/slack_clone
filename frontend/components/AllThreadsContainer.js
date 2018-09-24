@@ -7,6 +7,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   messages: state.entities.messages,
   channels: state.entities.channels,
   currentUser: state.session.currentUser,
+  isLoading: state.ui.isPageLoading,
 });
 
 export default withRouter(connect(mapStateToProps)(AllThreads));

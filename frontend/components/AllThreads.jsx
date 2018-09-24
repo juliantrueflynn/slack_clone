@@ -2,15 +2,24 @@ import React from 'react';
 import AllThreadsItem from './AllThreadsItem';
 
 const AllThreads = ({
+  match: { params: { workspaceSlug } },
   chatPath,
   messages,
   users,
   channels,
   currentUser,
-  match: { params: { workspaceSlug } },
+  isLoading,
 }) => {
   if (chatPath !== 'threads') {
     return null;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="ChatPage__loading">
+        Page loading...
+      </div>
+    );
   }
 
   const messagesArr = Object.values(messages);
