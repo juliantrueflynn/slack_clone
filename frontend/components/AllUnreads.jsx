@@ -12,6 +12,14 @@ const AllUnreads = ({
     return null;
   }
 
+  if (!unreadChannels.length) {
+    return (
+      <div className="AllUnreads AllUnreads--empty">
+        You are all caught up!
+      </div>
+    );
+  }
+
   return (
     <div role="list" className="AllUnreads">
       {unreadChannels.map(channel => (

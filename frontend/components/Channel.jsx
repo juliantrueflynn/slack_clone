@@ -16,6 +16,14 @@ const Channel = ({
     return null;
   }
 
+  if (!messages.length) {
+    return (
+      <Fragment>
+        Make the 1st message!
+      </Fragment>
+    );
+  }
+
   const placeholder = channel.hasDm ? `@${chatTitle}` : chatTitle;
   const formPlaceholder = placeholder && `Message ${placeholder}`;
   const ownerName = authors[channel.ownerSlug] && authors[channel.ownerSlug].username;

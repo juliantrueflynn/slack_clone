@@ -25,6 +25,14 @@ const AllThreads = ({
   const messagesArr = Object.values(messages);
   const parentMessages = messagesArr.filter(entry => entry.isActiveThread).reverse();
 
+  if (!parentMessages.length) {
+    return (
+      <div className="AllThreads AllThreads--empty">
+        No threads
+      </div>
+    );
+  }
+
   return (
     <div role="list" className="AllThreads">
       {parentMessages.map(parent => (
