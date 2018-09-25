@@ -70,7 +70,7 @@ const RouteSubRoutes = (route) => {
   return (
     <Route
       path={route.path}
-      render={props => (
+      children={props => (
         <route.component {...props} routes={route.routes} />
       )}
     />

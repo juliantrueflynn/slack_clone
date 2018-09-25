@@ -5,7 +5,12 @@ import {
   SIGN_OUT,
 } from '../actions/actionTypes';
 
-const rightSidebarReducer = (state = {}, action) => {
+const _nullState = {
+  sidebarType: null,
+  sidebarProps: null,
+};
+
+const rightSidebarReducer = (state = _nullState, action) => {
   Object.freeze(state);
 
   switch (action.type) {
@@ -16,7 +21,7 @@ const rightSidebarReducer = (state = {}, action) => {
     case RIGHT_SIDEBAR_CLOSE:
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
-      return {};
+      return _nullState;
     default:
       return state;
   }

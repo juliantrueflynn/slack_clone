@@ -39,28 +39,27 @@ end
 
 def seed_workspace(user)
   title = Faker::Company.unique.name
-  user.created_workspaces.create(title: title, slug: "#{title.parameterize}")
+  user.created_workspaces.create(title: title, slug: title.parameterize)
 end
 
 def seed_chats(user)
   workspace = user.workspaces.sample
-  return nil unless workspace
+  return unless workspace
 
   title = Faker::Company.unique.buzzword
-  topic = rand < 0.2 ? Faker::Company.bs : nil
-  user.created_channels.create(title: title, topic: topic, workspace_id: workspace.id)
+  channel = user.created_channels.create(title: title, workspace_id: workspace.id)
 end
 
 User.create!(email: "jtf@gmail.com", username: "jtf", password: "123456")
 
 random_num(min: 2, max: 4).times do
-  seed_workspace(User.first)
+  workspace = seed_workspace(User.first)
 
   random_num(min: 1, max: 3).times do
-    User.first.channels.create(
+    User.first.created_channels.create(
       title: Faker::Company.unique.buzzword,
       topic: (rand < 0.2 ? Faker::Company.bs : nil),
-      workspace_id: Workspace.last.id
+      workspace_id: workspace.id
     )
   end
 end
@@ -75,10 +74,35 @@ end
 
 random_num(min: 30, max: 40).times do
   user = User.all.sample
+  return unless user
 
+  seed_sub_and_members(user)
   seed_workspace(user) if rand < 0.1
   seed_chats(user) if rand < 0.1
-  seed_sub_and_members(user)
+end
+
+random_num(min: 4, max: 8).times do
+  user = User.where.not(id: 1).sample
+  workspace = Workspace.all.sample
+
+  unless user.is_workspace_sub?(workspace)
+    workspace.subs.create(user_id: user.id)
+  end
+
+  title = Faker::Company.unique.buzzword
+  user.created_channels.create(title: title, workspace_id: workspace.id)
+end
+
+Workspace.where.not(owner_id: 1).each do |workspace|
+  next if rand < 0.5 || User.first.is_workspace_sub?(workspace)
+  User.first.workspace_subs.create(workspace_id: workspace.id)
+
+  title = Faker::Company.unique.buzzword
+  User.first.created_channels.create(title: title, workspace_id: workspace.id)
+
+  workspace.channels[2...-1].each do |channel|
+    channel.subs.create(user_id: 1)
+  end
 end
 
 random_num(min: 50, max: 60).times do
