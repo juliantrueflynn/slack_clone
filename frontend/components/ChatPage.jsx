@@ -1,7 +1,6 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 import EmojiModal from './EmojiModal';
-import LeftSidebarContainer from './LeftSidebarContainer';
 import ChannelHeader from './ChannelHeader';
 import AllUnreadsContainer from './AllUnreadsContainer';
 import AllThreadsContainer from './AllThreadsContainer';
@@ -83,31 +82,28 @@ class ChatPage extends React.Component {
 
     return (
       <div className={chatClassNames}>
-        <LeftSidebarContainer />
-        <div className="ChatPage__body">
-          <ChannelHeader sectionTitle={chatTitle} rightSidebarClose={rightSidebarClose} />
-          <div className="ChatPage__row">
-            <div className="ChatPage__container">
-              {isLoading && (
-                <div className="ChatPage__loader">
-                  Messages loading...
-                </div>
-              )}
-              <EmojiModal
-                modal={modal}
-                modalClose={modalClose}
-                createReactionRequest={createReactionRequest}
-              />
-              <AllUnreadsContainer authors={users} />
-              <AllThreadsContainer users={users} />
-              <ChannelContainer chatTitle={chatTitle} authors={users} />
-            </div>
-            <Switch>
-              {routes.map(route => (
-                <RouteWithSubRoutes key={route.path} {...route} />
-              ))}
-            </Switch>
+        <ChannelHeader sectionTitle={chatTitle} rightSidebarClose={rightSidebarClose} />
+        <div className="ChatPage__row">
+          <div className="ChatPage__container">
+            {isLoading && (
+              <div className="ChatPage__loader">
+                Messages loading...
+              </div>
+            )}
+            <EmojiModal
+              modal={modal}
+              modalClose={modalClose}
+              createReactionRequest={createReactionRequest}
+            />
+            <AllUnreadsContainer authors={users} />
+            <AllThreadsContainer users={users} />
+            <ChannelContainer chatTitle={chatTitle} authors={users} />
           </div>
+          <Switch>
+            {routes.map(route => (
+              <RouteWithSubRoutes key={route.path} {...route} />
+            ))}
+          </Switch>
         </div>
       </div>
     );

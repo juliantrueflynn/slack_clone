@@ -18,6 +18,7 @@ const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   currentUser: state.session.currentUser,
   workspaces: selectSubbedWorkspaces(state),
   currWorkspace: state.entities.workspaces[workspaceSlug],
+  currChatSlug: state.ui.displayChannelSlug,
   subbedChannels: selectSubbedChats(state).filter(ch => !ch.hasDm),
   unsubbedChannels: selectUnsubbedChats(state),
   dmChats: selectDmChats(state),

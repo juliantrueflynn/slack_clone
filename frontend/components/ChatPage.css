@@ -1,10 +1,4 @@
 .ChatPage {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
-
-.ChatPage__body {
   position: relative;
   display: flex;
   flex-direction: column;

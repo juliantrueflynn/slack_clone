@@ -21,21 +21,24 @@ const LeftSidebar = ({
   updateChannelSubRequest,
   createChannelRequest,
   fetchChannelsRequest,
+  currChatSlug,
   match: { url, params: { workspaceSlug } },
 }) => {
-  if (!currWorkspace) return null;
+  if (!currWorkspace) {
+    return null;
+  }
 
   const quickLinksList = [
     {
       icon: <FontAwesomeIcon className="Icon" icon={['fas', 'align-left']} />,
       label: 'All Unreads',
-      link: `/${workspaceSlug}/unreads`,
+      link: `${url}/unreads`,
       modifierClassName: hasUnreadChannels ? 'unread' : null,
     },
     {
       icon: <FontAwesomeIcon className="Icon" icon={['far', 'comment']} />,
       label: 'All Threads',
-      link: `/${workspaceSlug}/threads`,
+      link: `${url}/threads`,
       modifierClassName: hasUnreadThreads ? 'unread' : null,
     },
   ];
@@ -51,7 +54,7 @@ const LeftSidebar = ({
 
     return {
       icon: <FontAwesomeIcon icon={circleIcon} size="xs" className={iconClassName} />,
-      link: `/${workspaceSlug}/messages/${ch.slug}`,
+      link: `${url}/messages/${ch.slug}`,
       label: (
         <DmChatMenuItem
           channelId={ch.id}
@@ -70,6 +73,7 @@ const LeftSidebar = ({
           workspaces={workspaces}
           user={members[currentUser.slug]}
           url={url}
+          currChatSlug={currChatSlug}
           modalOpen={modalOpen}
         />
       </div>

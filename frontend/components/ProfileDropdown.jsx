@@ -5,6 +5,7 @@ import Dropdown from './Dropdown';
 import './ProfileDropdown.css';
 
 const ProfileDropdown = ({
+  currChatSlug,
   url,
   modalOpen,
   user,
@@ -25,10 +26,17 @@ const ProfileDropdown = ({
     </div>
   );
 
+  let baseUrl = `${url}/`;
+  if (currChatSlug === 'unreads' || currChatSlug === 'threads') {
+    baseUrl += currChatSlug;
+  } else {
+    baseUrl += `messages/${currChatSlug}`;
+  }
+
   const menuItems = [
     { label: greetingLabel, altClassName: 'user-head' },
     { label: 'Home', link: '/', exact: true },
-    { label: 'Profile & Account', link: `${url}/team/${user.slug}` },
+    { label: 'Profile & Account', link: `${baseUrl}/team/${user.slug}` },
     { label: 'Preferences', onClick: () => modalOpen('SETTINGS') },
     { label: 'Switch Workspace', altClassName: 'switch-workspace' },
   ];

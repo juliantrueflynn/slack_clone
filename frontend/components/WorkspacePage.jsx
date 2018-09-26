@@ -1,5 +1,6 @@
 import React from 'react';
 import { RouteWithSubRoutes } from '../util/routeUtil';
+import LeftSidebarContainer from './LeftSidebarContainer';
 import './WorkspacePage.css';
 
 class WorkspacePage extends React.Component {
@@ -61,9 +62,12 @@ class WorkspacePage extends React.Component {
     }
 
     return (
-      routes.map(route => (
-        <RouteWithSubRoutes key={route.path} {...route} />
-      ))
+      <div className="WorkspacePage">
+        <LeftSidebarContainer />
+        {routes.map(route => (
+          <RouteWithSubRoutes key={route.path} {...route} />
+        ))}
+      </div>
     );
   }
 }
