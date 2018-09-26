@@ -33,6 +33,13 @@ class User < ApplicationRecord
     user.is_password?(password) ? user : nil
   end
 
+  def dm_chat_with_user_id(user_id)
+    Channel.with_dm
+      .joins(:subs).where(channel_subs: { user_id: id })
+      .merge(Channel.joins(:subs).where(channel_subs: { user_id: user_id }))
+      .first
+  end
+
   def is_workspace_sub?(workspace)
     workspaces_subbed = workspace_subs.where(workspace_subs: { workspace_id: workspace.id })
     workspaces_subbed.length > 0

@@ -8,6 +8,7 @@ import {
   MESSAGE,
   WORKSPACE_SUB,
   SIGN_OUT,
+  MEMBER,
 } from '../actions/actionTypes';
 
 const memberReducer = (state = {}, action) => {
@@ -73,6 +74,12 @@ const memberReducer = (state = {}, action) => {
       });
 
       return nextState;
+    }
+    case MEMBER.SHOW.RECEIVE: {
+      const { member } = action;
+      nextState = {};
+      nextState[member.slug] = member;
+      return merge({}, state, nextState);
     }
     case CHANNEL_SUB.CREATE.RECEIVE: {
       const { channelSub: { id, userSlug } } = action;
