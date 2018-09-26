@@ -4,10 +4,10 @@ import { Route, Redirect, withRouter } from 'react-router-dom';
 import PageHome from '../components/PageHome';
 import SessionForm from '../components/SessionForm';
 import WorkspacePageContainer from '../components/WorkspacePageContainer';
-import MessageThreadContainer from '../components/MessageThreadContainer';
-import UserFavoritesContainer from '../components/UserFavoritesContainer';
-import UserViewContainer from '../components/UserViewContainer';
 import ChatPageContainer from '../components/ChatPageContainer';
+import FavoritesDrawer from '../components/FavoritesDrawer';
+import UserProfileDrawer from '../components/UserProfileDrawer';
+import MessageThreadDrawer from '../components/MessageThreadDrawer';
 
 export const routesConfig = [
   {
@@ -38,15 +38,15 @@ export const routesConfig = [
         routes: [
           {
             path: '/:workspaceSlug/(.*)/favorites',
-            component: UserFavoritesContainer,
+            component: FavoritesDrawer,
           },
           {
             path: '/:workspaceSlug/(.*)/team/:userSlug',
-            component: UserViewContainer,
+            component: UserProfileDrawer,
           },
           {
             path: '/:workspaceSlug/(.*)/thread/:messageSlug',
-            component: MessageThreadContainer,
+            component: MessageThreadDrawer,
           }
         ]
       },
@@ -70,7 +70,7 @@ const RouteSubRoutes = (route) => {
   return (
     <Route
       path={route.path}
-      children={props => (
+      render={props => (
         <route.component {...props} routes={route.routes} />
       )}
     />

@@ -8,47 +8,63 @@ class RightSidebar extends React.Component {
     this.handleClose = this.handleClose.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const {
-      rightSidebarOpen,
-      sidebarType,
-      sidebarProps,
-      isOpen,
+      openDrawer,
+      drawer,
+      fetchEntitiesRequest,
     } = this.props;
 
-    if (!isOpen) {
-      rightSidebarOpen(sidebarType, sidebarProps);
+    if (!drawer.sidebarType) {
+      openDrawer(this.drawerType().sidebarType, this.drawerType().sidebarProps);
     }
+
+    fetchEntitiesRequest();
+  }
+
+  drawerType() {
+    const { match: { params } } = this.props;
+
+    const drawerProps = {
+      sidebarType: 'favorites',
+      sidebarProps: null,
+    };
+
+    if (params.messageSlug) {
+      drawerProps.sidebarType = 'thread';
+      drawerProps.sidebarProps = params.messageSlug;
+    }
+
+    if (params.userSlug) {
+      drawerProps.sidebarType = 'team';
+      drawerProps.sidebarProps = params.userSlug;
+    }
+
+    return drawerProps;
   }
 
   handleClose() {
     const {
-      rightSidebarClose,
+      closeDrawer,
       history,
-      match: { params: { 0: chatPath, workspaceSlug } }
+      match: { params: { 0: chatPath, workspaceSlug } },
     } = this.props;
 
-    rightSidebarClose();
+    closeDrawer();
     history.push(`/${workspaceSlug}/${chatPath}`);
   }
 
   render() {
-    const { sidebarType, sidebarProps, children } = this.props;
-    const sidebarSubtitle = sidebarProps && sidebarProps.subtitle;
+    const { drawerTitle, render } = this.props;
 
     return (
       <aside className="RightSidebar">
         <header className="RightSidebar__header">
           <div className="RightSidebar__headings">
-            {sidebarType && (
+            {drawerTitle && (
               <h4 className="RightSidebar__title">
-                {sidebarType}
+                {drawerTitle}
               </h4>
-            )}
-            {sidebarSubtitle && (
-              <span className="RightSidebar__subtitle">
-                {sidebarSubtitle}
-              </span>
             )}
           </div>
 
@@ -58,7 +74,7 @@ class RightSidebar extends React.Component {
         </header>
 
         <div className="RightSidebar__body">
-          {children}
+          {render()}
         </div>
       </aside>
     );
