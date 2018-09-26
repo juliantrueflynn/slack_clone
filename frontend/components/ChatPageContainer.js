@@ -1,23 +1,28 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { isRightSidebarOpen, selectChatTitleBySlug } from '../reducers/selectors';
+import {
+  selectChatTitleBySlug,
+  selectChatMessagesBySlug,
+  selectChatChannelsBySlug,
+} from '../reducers/selectors';
 import { fetchMessages, fetchUserThreads } from '../actions/messageActions';
 import { fetchUnreads } from '../actions/readActions';
-import { loadChatPage } from '../actions/channelActions';
+import { loadChatPage, createChannelSub } from '../actions/channelActions';
 import { rightSidebarClose } from '../actions/rightSidebarActions';
-import { createReaction } from '../actions/reactionActions';
-import { modalClose } from '../actions/interactiveActions';
+import { clearUnreads } from '../actions/unreadActions';
 import ChatPage from './ChatPage';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   chatPath,
-  chatTitle: selectChatTitleBySlug(state, chatPath),
-  rightSidebarProps: state.ui.rightSidebar && state.ui.rightSidebar.sidebarProps,
   isWorkspaceLoaded: !!state.ui.displayWorkspaceSlug,
-  isRightSidebarOpen: isRightSidebarOpen(state),
+  chatTitle: selectChatTitleBySlug(state, chatPath),
+  rightSidebarProps: state.ui.rightSidebar.sidebarProps,
   users: state.entities.members,
   modal: state.ui.displayModal,
   isLoading: state.ui.isPageLoading,
+  channels: selectChatChannelsBySlug(state, chatPath),
+  currentUser: state.session.currentUser,
+  messages: selectChatMessagesBySlug(state, chatPath),
 });
 
 const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug, chatPath } } }) => ({
@@ -34,8 +39,8 @@ const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug, chatPa
   },
   loadChatPage: pagePath => dispatch(loadChatPage(pagePath)),
   rightSidebarClose: () => dispatch(rightSidebarClose()),
-  createReactionRequest: reaction => dispatch(createReaction.request(reaction)),
-  modalClose: () => dispatch(modalClose()),
+  createChannelSubRequest: channelSub => dispatch(createChannelSub.request(channelSub)),
+  clearUnreads: channelSlug => dispatch(clearUnreads(channelSlug)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatPage));

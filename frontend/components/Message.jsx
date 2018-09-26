@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import MessageHoverMenuContainer from './MessageHoverMenuContainer';
+import MessageHoverMenu from './MessageHoverMenu';
 import Reactions from './Reactions';
 import Avatar from './Avatar';
 import MessageContent from './MessageContent';
@@ -33,11 +33,19 @@ class Message extends React.Component {
       threadMessages,
       createReactionRequest,
       users,
+      modalOpen,
+      deleteMessageRequest,
+      createFavoriteRequest,
+      deleteFavoriteRequest,
+      deleteReactionRequest,
       isThreadHidden,
+      currentUser,
     } = this.props;
     const { isEditing } = this.state;
 
-    if (!message) return null;
+    if (!message) {
+      return null;
+    }
 
     const authorUrl = author && `${url}/team/${author.slug}`;
     let msgClassName = 'Message';
@@ -47,10 +55,16 @@ class Message extends React.Component {
       <div className={msgClassName} role="listitem">
         <Avatar baseUrl={url} author={author} />
         <div className="Message__body">
-          <MessageHoverMenuContainer
+          <MessageHoverMenu
+            message={message}
             isEditing={isEditing}
             handleEditToggle={this.handleEditToggle}
-            message={message}
+            createFavoriteRequest={createFavoriteRequest}
+            deleteMessageRequest={deleteMessageRequest}
+            deleteFavoriteRequest={deleteFavoriteRequest}
+            deleteReactionRequest={deleteReactionRequest}
+            currentUser={currentUser}
+            modalOpen={modalOpen}
           />
           <div className="Message__content">
             <div className="Message__content-meta">

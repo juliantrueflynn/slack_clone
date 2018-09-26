@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from './Button';
 import './MessageHoverMenu.css';
@@ -49,31 +50,34 @@ class MessageHoverMenu extends React.Component {
 
   render() {
     const {
-      isAuthor,
-      isFavorited,
       isEditing,
       match: { url },
-      message: { slug, parentMessageId },
+      message,
+      currentUser,
     } = this.props;
 
-    if (isEditing) return null;
+    if (isEditing) {
+      return null;
+    }
+
+    const isAuthor = currentUser.id === message.authorId;
 
     return (
       <div className="MessageHoverMenu">
         <Button unStyled buttonFor="reaction" onClick={this.handleEmojiToggle}>
           <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />
         </Button>
-        {!parentMessageId && (
-          <Button className="Btn Btn__thread" linkTo={`${url}/thread/${slug}`}>
+        {!message.parentMessageId && (
+          <Button className="Btn Btn__thread" linkTo={`${url}/thread/${message.slug}`}>
             <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />
           </Button>
         )}
-        {!isFavorited && (
+        {!message.favoriteId && (
           <Button unStyled buttonFor="fav Btn__fav--empty" onClick={this.handleFavClick}>
             <FontAwesomeIcon icon={['far', 'star']} fixedWidth />
           </Button>
         )}
-        {isFavorited && (
+        {message.favoriteId && (
           <Button unStyled buttonFor="fav Btn__fav--filled" onClick={this.handleUnfavClick}>
             <FontAwesomeIcon icon={['fas', 'star']} fixedWidth />
           </Button>
@@ -93,4 +97,4 @@ class MessageHoverMenu extends React.Component {
   }
 }
 
-export default MessageHoverMenu;
+export default withRouter(MessageHoverMenu);

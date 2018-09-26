@@ -1,27 +1,30 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import MessagesPane from './MessagesPane';
 import MessageFormContainer from './MessageFormContainer';
 import ChannelSubscribe from './ChannelSubscribe';
 
 const Channel = ({
+  chatPath,
   messages,
-  channel,
   rightSidebar,
   authors,
   createChannelSubRequest,
   chatTitle,
   currentUser,
   isLoading,
+  channels,
 }) => {
+  const channel = channels[chatPath];
+
   if (!channel || isLoading) {
     return null;
   }
 
   if (!messages.length) {
     return (
-      <Fragment>
+      <div className="Channel">
         Make the 1st message!
-      </Fragment>
+      </div>
     );
   }
 

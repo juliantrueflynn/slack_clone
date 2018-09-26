@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from './Button';
-import Form from './Form';
+import FormErrors from './FormErrors';
 import withPublicView from './withPublicView';
 import './SessionForm.css';
 
@@ -42,7 +42,8 @@ class SessionForm extends React.Component {
             {isSignInPage ? 'Sign in' : 'Sign up'}
           </h1>
 
-          <Form formFor="session" onSubmit={this.handleFormSubmit}>
+          <form className="Form__session" onSubmit={this.handleFormSubmit}>
+            <FormErrors entity="session" />
             <div className="Form__group">
               <input
                 type="text"
@@ -73,7 +74,7 @@ class SessionForm extends React.Component {
             <Button type="submit" buttonFor="submit" fullWidth>
               {isSignInPage ? 'Sign in' : 'Sign Up'}
             </Button>
-          </Form>
+          </form>
         </div>
       </div>
     );

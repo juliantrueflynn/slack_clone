@@ -1,8 +1,7 @@
 import React from 'react';
 import withModal from './withModal';
-import Label from './Label';
+import FormErrors from './FormErrors';
 // import Button from './Button';
-// import FormErrors from './Layout/FormErrors';
 
 class PreferencesModal extends React.Component {
   constructor(props) {
@@ -25,10 +24,11 @@ class PreferencesModal extends React.Component {
 
     return (
       <form className="Form Form__settings" onSubmit={this.handleSubmit}>
+        <FormErrors entity="profile" />
         <div className="Form__group">
-          <Label htmlFor="title">
+          <label htmlFor="title">
             Name
-          </Label>
+          </label>
           <input
             type="text"
             name="title"

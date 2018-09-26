@@ -14,7 +14,7 @@
   display: flex;
 }
 
-.ChatPage--modal-open .Message:hover .MessageHoverMenu {
+.Workspace--modal-open .Message:hover .MessageHoverMenu {
   display: none;
 }
 

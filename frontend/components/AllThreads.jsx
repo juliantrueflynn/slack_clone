@@ -2,7 +2,6 @@ import React from 'react';
 import AllThreadsItem from './AllThreadsItem';
 
 const AllThreads = ({
-  match: { params: { workspaceSlug } },
   chatPath,
   messages,
   users,
@@ -35,7 +34,6 @@ const AllThreads = ({
           parentMessage={parent}
           users={users}
           messages={messages}
-          workspaceSlug={workspaceSlug}
         />
       ))}
     </div>

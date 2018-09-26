@@ -1,9 +1,8 @@
 import React from 'react';
-import Form from './Form';
-import Label from './Label';
 import Button from './Button';
 import withForm from './withForm';
 import withModal from './withModal';
+import FormErrors from './FormErrors';
 
 class CreateWorkspaceModal extends React.Component {
   constructor(props) {
@@ -30,11 +29,12 @@ class CreateWorkspaceModal extends React.Component {
 
     return (
       <div className="Page__container">
-        <Form formFor="workspace" onSubmit={this.handleFormSubmit}>
+        <form className="Form__workspace" onSubmit={this.handleFormSubmit}>
+          <FormErrors entity="workspace" />
           <div className="Form__group">
-            <Label htmlFor="title">
+            <label htmlFor="title">
               Title
-            </Label>
+            </label>
             <input
               type="text"
               name="title"
@@ -44,9 +44,9 @@ class CreateWorkspaceModal extends React.Component {
             />
           </div>
           <div>
-            <Label htmlFor="slug">
+            <label htmlFor="slug">
               Workspace URL
-            </Label>
+            </label>
             <input
               type="text"
               name="slug"
@@ -58,7 +58,7 @@ class CreateWorkspaceModal extends React.Component {
           <Button type="submit" buttonFor="submit">
             Create Workspace
           </Button>
-        </Form>
+        </form>
       </div>
     );
   }

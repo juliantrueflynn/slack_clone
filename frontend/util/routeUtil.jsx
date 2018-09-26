@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Route, Redirect, withRouter } from 'react-router-dom';
 import PageHome from '../components/PageHome';
 import SessionForm from '../components/SessionForm';
-import WorkspacePageContainer from '../components/WorkspacePageContainer';
+import WorkspaceContainer from '../components/WorkspaceContainer';
 import ChatPageContainer from '../components/ChatPageContainer';
 import FavoritesDrawer from '../components/FavoritesDrawer';
 import UserProfileDrawer from '../components/UserProfileDrawer';
@@ -29,7 +29,7 @@ export const routesConfig = [
   },
   {
     path: '/:workspaceSlug',
-    component: WorkspacePageContainer,
+    component: WorkspaceContainer,
     isProtected: true,
     routes: [
       {

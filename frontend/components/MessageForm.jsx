@@ -2,7 +2,7 @@ import React from 'react';
 import { convertForSubmit, clearEditor, createEmptyEditor } from '../util/editorUtil';
 import MessageEditor from './MessageEditor';
 import Button from './Button';
-import Form from './Form';
+import FormErrors from './FormErrors';
 import './MessageForm.css';
 
 class MessageForm extends React.Component {
@@ -42,7 +42,12 @@ class MessageForm extends React.Component {
 
     return (
       <div className={classNames}>
-        <Form formFor="message" onSubmit={this.handleSubmit} onKeyDown={this.handleEnterSubmit}>
+        <form
+          role="presentation"
+          onSubmit={this.handleSubmit}
+          onKeyDown={this.handleEnterSubmit}
+        >
+          <FormErrors entity="message" />
           <div className="Form__body">
             <MessageEditor
               editorState={editorState}
@@ -57,7 +62,7 @@ class MessageForm extends React.Component {
               </div>
             )}
           </div>
-        </Form>
+        </form>
       </div>
     );
   }

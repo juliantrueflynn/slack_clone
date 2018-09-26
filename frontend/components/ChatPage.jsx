@@ -1,11 +1,10 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
-import EmojiModal from './EmojiModal';
 import ChannelHeader from './ChannelHeader';
-import AllUnreadsContainer from './AllUnreadsContainer';
-import AllThreadsContainer from './AllThreadsContainer';
-import ChannelContainer from './ChannelContainer';
 import { RouteWithSubRoutes } from '../util/routeUtil';
+import AllUnreads from './AllUnreads';
+import AllThreads from './AllThreads';
+import Channel from './Channel';
 import './ChatPage.css';
 
 class ChatPage extends React.Component {
@@ -58,12 +57,12 @@ class ChatPage extends React.Component {
       routes,
       rightSidebarClose,
       chatTitle,
-      isRightSidebarOpen,
       users,
-      createReactionRequest,
-      modal,
-      modalClose,
+      channels,
+      currentUser,
       isLoading,
+      clearUnreads,
+      messages,
     } = this.props;
 
     if (!isWorkspaceLoaded) {
@@ -77,8 +76,6 @@ class ChatPage extends React.Component {
       chatClassNames += ' ChatPage--channel';
     }
     if (isLoading) chatClassNames += ' ChatPage--loading';
-    if (isRightSidebarOpen) chatClassNames += ' ChatPage--sidebar-open';
-    if (modal.modalType) chatClassNames += ' ChatPage--modal-open';
 
     return (
       <div className={chatClassNames}>
@@ -90,14 +87,31 @@ class ChatPage extends React.Component {
                 Messages loading...
               </div>
             )}
-            <EmojiModal
-              modal={modal}
-              modalClose={modalClose}
-              createReactionRequest={createReactionRequest}
+            <AllUnreads
+              chatPath={chatPath}
+              authors={users}
+              unreadChannels={channels}
+              clearUnreads={clearUnreads}
+              isLoading={isLoading}
+              messages={messages}
             />
-            <AllUnreadsContainer authors={users} />
-            <AllThreadsContainer users={users} />
-            <ChannelContainer chatTitle={chatTitle} authors={users} />
+            <AllThreads
+              chatPath={chatPath}
+              users={users}
+              channels={channels}
+              currentUser={currentUser}
+              isLoading={isLoading}
+              messages={messages}
+            />
+            <Channel
+              chatPath={chatPath}
+              chatTitle={chatTitle}
+              authors={users}
+              channels={channels}
+              currentUser={currentUser}
+              isLoading={isLoading}
+              messages={messages}
+            />
           </div>
           <Switch>
             {routes.map(route => (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MessageThreadAuthors from './MessageThreadAuthors';
 import MessageContainer from './MessageContainer';
@@ -12,7 +12,7 @@ const AllThreadsItem = ({
   users,
   channels,
   currentUserSlug,
-  workspaceSlug,
+  match: { params: { workspaceSlug } },
 }) => {
   const channel = channels[parentMessage.channelSlug];
 
@@ -67,4 +67,4 @@ const AllThreadsItem = ({
   );
 };
 
-export default AllThreadsItem;
+export default withRouter(AllThreadsItem);

@@ -1,8 +1,7 @@
 import React from 'react';
-import Label from './Label';
 import Button from './Button';
-import Form from './Form';
 import withModal from './withModal';
+import FormErrors from './FormErrors';
 import './ChatModal.css';
 
 class ChatModal extends React.Component {
@@ -16,8 +15,8 @@ class ChatModal extends React.Component {
     return event => this.setState({ [property]: event.target.value });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
+  handleSubmit(e) {
+    e.preventDefault();
 
     const { title } = this.state;
     const { workspaceId, createChannelRequest } = this.props;
@@ -29,15 +28,16 @@ class ChatModal extends React.Component {
     const { onRequestClose } = this.props;
 
     return (
-      <Form formFor="channel" onSubmit={this.handleSubmit}>
+      <form className="ChatModal" onSubmit={this.handleSubmit}>
+        <FormErrors entity="channel" />
         <p className="Form__text">
           Channels are where your members communicate.
           They&#39;re best when organized around a topic — #leads, for example.
         </p>
         <div className="Form__group">
-          <Label htmlFor="name">
+          <label htmlFor="name">
             Name
-          </Label>
+          </label>
           <input
             id="name"
             type="text"
@@ -54,7 +54,7 @@ class ChatModal extends React.Component {
             Create Channel
           </Button>
         </div>
-      </Form>
+      </form>
     );
   }
 }

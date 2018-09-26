@@ -1,7 +1,8 @@
 import React from 'react';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import LeftSidebarContainer from './LeftSidebarContainer';
-import './WorkspacePage.css';
+import EmojiModal from './EmojiModal';
+import './Workspace.css';
 
 class WorkspacePage extends React.Component {
   componentDidMount() {
@@ -51,7 +52,13 @@ class WorkspacePage extends React.Component {
   }
 
   render() {
-    const { isLoading, routes } = this.props;
+    const {
+      isLoading,
+      routes,
+      modal,
+      modalClose,
+      createReactionRequest,
+    } = this.props;
 
     if (isLoading) {
       return (
@@ -61,12 +68,23 @@ class WorkspacePage extends React.Component {
       );
     }
 
+    let classNames = 'Workspace';
+    if (isLoading) classNames += 'Workspace--loading';
+    if (modal.modalType) classNames += ' Workspace--modal-open';
+
     return (
-      <div className="WorkspacePage">
+      <div className={classNames}>
         <LeftSidebarContainer />
-        {routes.map(route => (
-          <RouteWithSubRoutes key={route.path} {...route} />
-        ))}
+        <div className="Workspace__chat">
+          <EmojiModal
+            modal={modal}
+            modalClose={modalClose}
+            createReactionRequest={createReactionRequest}
+          />
+          {routes.map(route => (
+            <RouteWithSubRoutes key={route.path} {...route} />
+          ))}
+        </div>
       </div>
     );
   }

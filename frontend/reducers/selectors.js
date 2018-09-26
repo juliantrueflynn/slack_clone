@@ -104,21 +104,25 @@ export const getReactionCounts = ({ entities: { reactions }, session }, messageS
     }, {});
 };
 
-export const selectChannelMessagesBySlug = ({ entities: { messages, channels } }, chatSlug) => {
+export const selectChatMessagesBySlug = ({ entities: { messages, channels } }, chatSlug) => {
   const chat = channels[chatSlug];
 
-  if (!chat) {
-    return [];
+  if (chat) {
+    return values(messages)
+      .filter(msg => (chat.id === msg.channelId && !msg.parentMessageId))
+      .sort((a, b) => messages[a.slug].id - messages[b.slug].id);
   }
 
-  return values(messages)
-    .filter(msg => (chat.id === msg.channelId && !msg.parentMessageId))
-    .sort((a, b) => messages[a.slug].id - messages[b.slug].id);
+  return messages;
 };
 
-export const selectUnreadChannels = ({ entities: { channels } }) => (
-  values(channels).filter(ch => ch.hasUnreads && !ch.hasDm)
-);
+export const selectChatChannelsBySlug = ({ entities: { channels } }, chatSlug) => {
+  if (chatSlug === 'unreads') {
+    return values(channels).filter(ch => ch.hasUnreads && !ch.hasDm);
+  }
+
+  return channels;
+};
 
 export const hasUreadChannels = ({ entities: { channels } }) => (
   values(channels).some(ch => ch.hasUnreads && !ch.hasDm)
