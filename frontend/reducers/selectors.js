@@ -56,18 +56,21 @@ export const selectDmWithUser = ({ entities: { channels } }, userSlug) => {
   return dmChatsWithUser[0];
 };
 
-export const selectChatTitleBySlug = ({ entities: { channels, members }, session }, slug) => {
-  let chatTitle;
-  if (slug === 'unreads') {
-    chatTitle = 'All Unreads';
-  } else if (slug === 'threads') {
-    chatTitle = 'All Threads';
-  } else if (channels[slug]) {
-    chatTitle = `#${channels[slug].title}`;
+export const selectChatTitleBySlug = ({ entities: { channels, members }, ui, session }, slug) => {
+  const chatPath = slug || ui.displayChannelSlug;
 
-    if (channels[slug].hasDm) {
+  let chatTitle;
+  if (chatPath === 'unreads') {
+    chatTitle = 'All Unreads';
+  } else if (chatPath === 'threads') {
+    chatTitle = 'All Threads';
+  } else if (channels[chatPath]) {
+    const chat = channels[chatPath];
+    chatTitle = `#${chat.title}`;
+
+    if (chat.hasDm) {
       const { currentUser: { slug: userSlug } } = session;
-      const dmUsers = channels[slug].members.filter(member => member !== userSlug);
+      const dmUsers = chat.members.filter(member => member !== userSlug);
       const dmWith = dmUsers[0];
       chatTitle = members[dmWith] && members[dmWith].username;
     }

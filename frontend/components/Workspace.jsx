@@ -3,6 +3,7 @@ import { RouteWithSubRoutes } from '../util/routeUtil';
 import LeftSidebarContainer from './LeftSidebarContainer';
 import EmojiModal from './EmojiModal';
 import './Workspace.css';
+import ChannelHeader from './ChannelHeader';
 
 class WorkspacePage extends React.Component {
   componentDidMount() {
@@ -30,6 +31,7 @@ class WorkspacePage extends React.Component {
       fetchWorkspaceRequest,
       fetchWorkspacesRequest,
     } = this.props;
+
     const { workspaces: prevWorkspaces } = prevProps;
 
     if (prevProps.workspaceSlug !== workspaceSlug) {
@@ -58,6 +60,9 @@ class WorkspacePage extends React.Component {
       modal,
       modalClose,
       createReactionRequest,
+      chatTitle,
+      drawerType,
+      drawerClose,
     } = this.props;
 
     if (isLoading) {
@@ -75,15 +80,22 @@ class WorkspacePage extends React.Component {
     return (
       <div className={classNames}>
         <LeftSidebarContainer />
-        <div className="Workspace__chat">
-          <EmojiModal
-            modal={modal}
-            modalClose={modalClose}
-            createReactionRequest={createReactionRequest}
+        <div className="Workspace__col">
+          <ChannelHeader
+            sectionTitle={chatTitle}
+            drawerClose={drawerClose}
+            drawerType={drawerType}
           />
-          {routes.map(route => (
-            <RouteWithSubRoutes key={route.path} {...route} />
-          ))}
+          <div className="Workspace__chat">
+            <EmojiModal
+              modal={modal}
+              modalClose={modalClose}
+              createReactionRequest={createReactionRequest}
+            />
+            {routes.map(route => (
+              <RouteWithSubRoutes key={route.path} {...route} />
+            ))}
+          </div>
         </div>
       </div>
     );

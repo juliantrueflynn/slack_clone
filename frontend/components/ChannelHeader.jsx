@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, matchPath } from 'react-router-dom';
 import Menu from './Menu';
 import './ChannelHeader.css';
 
@@ -9,13 +9,18 @@ class ChannelHeader extends React.Component {
     this.handleFavoritesClick = this.handleFavoritesClick.bind(this);
   }
 
+  getMatch() {
+    const { location: { pathname } } = this.props;
+    const matchChat = matchPath(pathname, {
+      path: '/:workspaceSlug/(messages)?/:chatPath',
+    });
+
+    return matchChat;
+  }
+
   handleFavoritesClick() {
-    const {
-      history,
-      match: { isExact, url },
-      drawerClose,
-      drawerType,
-    } = this.props;
+    const { history, drawerClose, drawerType } = this.props;
+    const { url, isExact } = this.getMatch();
 
     if (drawerType !== 'favorites') {
       history.push(`${url}/favorites`);

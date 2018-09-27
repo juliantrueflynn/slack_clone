@@ -1,7 +1,5 @@
 import React from 'react';
-import isEqual from 'lodash.isequal';
 import { Switch } from 'react-router-dom';
-import ChannelHeader from './ChannelHeader';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import AllUnreads from './AllUnreads';
 import AllThreads from './AllThreads';
@@ -22,12 +20,10 @@ class ChatPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { history, messages, location: { pathname } } = this.props;
+    const { history, match: { url } } = this.props;
 
-    if (pathname !== prevProps.location.pathname) {
-      if (!isEqual(messages, prevProps.messages)) {
-        this.loadPageData();
-      }
+    if (url !== prevProps.match.url) {
+      this.loadPageData();
     }
 
     if (this.selectRedirectUrl()) {
@@ -64,7 +60,6 @@ class ChatPage extends React.Component {
       isWorkspaceLoaded,
       chatPath,
       routes,
-      drawerClose,
       chatTitle,
       users,
       channels,
@@ -72,7 +67,6 @@ class ChatPage extends React.Component {
       isLoading,
       clearUnreads,
       messages,
-      drawerType,
     } = this.props;
 
     if (!isWorkspaceLoaded) {
@@ -89,11 +83,6 @@ class ChatPage extends React.Component {
 
     return (
       <div className={chatClassNames}>
-        <ChannelHeader
-          sectionTitle={chatTitle}
-          drawerClose={drawerClose}
-          drawerType={drawerType}
-        />
         <div className="ChatPage__row">
           <div className="ChatPage__container">
             {isLoading && (

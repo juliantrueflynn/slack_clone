@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { fetchWorkspace, fetchWorkspaces } from '../actions/workspaceActions';
-import { modalClose } from '../actions/uiActions';
+import { modalClose, drawerClose } from '../actions/uiActions';
 import { createReaction } from '../actions/reactionActions';
+import { selectChatTitleBySlug } from '../reducers/selectors';
 import Workspace from './Workspace';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
@@ -12,6 +13,8 @@ const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   isLoading: state.ui.isWorkspaceLoading,
   modal: state.ui.displayModal,
   currentUser: state.session.currentUser,
+  chatTitle: selectChatTitleBySlug(state),
+  drawerType: state.ui.drawer.drawerType,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -19,6 +22,7 @@ const mapDispatchToProps = dispatch => ({
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),
   createReactionRequest: reaction => dispatch(createReaction.request(reaction)),
   modalClose: () => dispatch(modalClose()),
+  drawerClose: () => dispatch(drawerClose()),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Workspace));

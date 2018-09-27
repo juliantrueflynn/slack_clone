@@ -17,8 +17,8 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   users: state.entities.members,
   modal: state.ui.displayModal,
   isLoading: state.ui.isPageLoading,
-  channels: selectChatChannelsBySlug(state, chatPath),
   currentUser: state.session.currentUser,
+  channels: selectChatChannelsBySlug(state, chatPath),
   messages: selectChatMessagesBySlug(state, chatPath),
 });
 

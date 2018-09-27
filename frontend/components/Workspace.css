@@ -14,3 +14,12 @@
   flex-grow: 1;
   min-width: 1px;
 }
+
+.Workspace__col {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  flex-grow: 1;
+  min-width: 1px;
+}
