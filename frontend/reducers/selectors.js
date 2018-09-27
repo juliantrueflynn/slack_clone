@@ -14,8 +14,6 @@ export const selectSubbedChats = ({ entities: { channels }, session: { currentUs
     .sort((a, b) => a.title && a.title.localeCompare(b.title))
 );
 
-export const isRightSidebarOpen = ({ ui }) => !!values(ui.rightSidebar).length;
-
 export const selectUnsubbedChats = ({ entities: { channels }, session: { currentUser } }) => (
   values(channels).filter(ch => !ch.members.includes(currentUser.slug) && !ch.hasDm)
 );

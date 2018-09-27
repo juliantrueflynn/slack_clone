@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signOut, signUp, signIn } from '../actions/sessionActions';
 import { fetchWorkspaces } from '../actions/workspaceActions';
-import { modalOpen } from '../actions/interactiveActions';
+import { modalOpen } from '../actions/uiActions';
 import { selectSubbedWorkspaces } from '../reducers/selectors';
 import CreateWorkspaceModal from './CreateWorkspaceModal';
 import Dropdown from './Dropdown';

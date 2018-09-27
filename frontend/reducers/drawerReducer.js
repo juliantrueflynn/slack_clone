@@ -1,24 +1,24 @@
 import {
-  RIGHT_SIDEBAR_OPEN,
-  RIGHT_SIDEBAR_CLOSE,
+  DRAWER_OPEN,
+  DRAWER_CLOSE,
   WORKSPACE,
   SIGN_OUT,
 } from '../actions/actionTypes';
 
 const _nullState = {
-  sidebarType: null,
-  sidebarProps: null,
+  drawerType: null,
+  drawerSlug: null,
 };
 
 const rightSidebarReducer = (state = _nullState, action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case RIGHT_SIDEBAR_OPEN: {
-      const { sidebarType, sidebarProps } = action;
-      return { sidebarType, sidebarProps };
+    case DRAWER_OPEN: {
+      const { drawer } = action;
+      return { ...drawer };
     }
-    case RIGHT_SIDEBAR_CLOSE:
+    case DRAWER_CLOSE:
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return _nullState;

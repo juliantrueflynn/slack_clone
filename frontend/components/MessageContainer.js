@@ -4,7 +4,7 @@ import Message from './Message';
 import { updateMessage, deleteMessage } from '../actions/messageActions';
 import { deleteReaction, createReaction } from '../actions/reactionActions';
 import { getReactionCounts, selectMessageChildrenBySlug } from '../reducers/selectors';
-import { modalOpen } from '../actions/interactiveActions';
+import { modalOpen } from '../actions/uiActions';
 import { deleteFavorite, createFavorite } from '../actions/favoriteActions';
 
 const mapStateToProps = (state, { message }) => ({

@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from './Button';
-import './RightSidebar.css';
+import './Drawer.css';
 
 class RightSidebar extends React.Component {
   constructor(props) {
@@ -15,8 +15,8 @@ class RightSidebar extends React.Component {
       fetchEntitiesRequest,
     } = this.props;
 
-    if (!drawer.sidebarType) {
-      openDrawer(this.drawerType().sidebarType, this.drawerType().sidebarProps);
+    if (!drawer.drawerType) {
+      openDrawer(this.drawerType());
     }
 
     fetchEntitiesRequest();
@@ -24,20 +24,16 @@ class RightSidebar extends React.Component {
 
   drawerType() {
     const { match: { params } } = this.props;
-
-    const drawerProps = {
-      sidebarType: 'favorites',
-      sidebarProps: null,
-    };
+    const drawerProps = { drawerType: 'favorites' };
 
     if (params.messageSlug) {
-      drawerProps.sidebarType = 'thread';
-      drawerProps.sidebarProps = params.messageSlug;
+      drawerProps.drawerType = 'thread';
+      drawerProps.drawerSlug = params.messageSlug;
     }
 
     if (params.userSlug) {
-      drawerProps.sidebarType = 'team';
-      drawerProps.sidebarProps = params.userSlug;
+      drawerProps.drawerType = 'team';
+      drawerProps.drawerSlug = params.userSlug;
     }
 
     return drawerProps;

@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { rightSidebarClose, rightSidebarOpen } from '../actions/rightSidebarActions';
+import { drawerClose, drawerOpen } from '../actions/uiActions';
 import { fetchMessage } from '../actions/messageActions';
 import { fetchFavorites } from '../actions/favoriteActions';
 import { fetchMember } from '../actions/memberActions';
 import { createDmChat } from '../actions/channelActions';
-import RightSidebar from './RightSidebar';
+import Drawer from './Drawer';
 
 const withDrawer = drawerTitle => (WrappedComponent) => {
   const mapStateToProps = state => ({
@@ -15,14 +15,12 @@ const withDrawer = drawerTitle => (WrappedComponent) => {
     members: state.entities.members,
     channels: state.entities.channels,
     currentUser: state.session.currentUser,
-    drawer: state.ui.rightSidebar,
+    drawer: state.ui.drawer,
   });
 
   const mapDispatchToProps = (dispatch, { match: { params } }) => ({
-    openDrawer: (sidebarType, sidebarProps) => (
-      dispatch(rightSidebarOpen(sidebarType, sidebarProps))
-    ),
-    closeDrawer: () => dispatch(rightSidebarClose()),
+    openDrawer: drawer => dispatch(drawerOpen(drawer)),
+    closeDrawer: () => dispatch(drawerClose()),
     fetchEntitiesRequest: () => {
       if (params.messageSlug) {
         dispatch(fetchMessage.request(params.messageSlug));
@@ -56,7 +54,7 @@ const withDrawer = drawerTitle => (WrappedComponent) => {
     const { match, history, location } = props;
 
     return (
-      <RightSidebar
+      <Drawer
         drawerTitle={drawerTitle}
         openDrawer={openDrawer}
         closeDrawer={closeDrawer}

@@ -9,7 +9,7 @@ import {
   SIGN_OUT,
   CLEAR_UNREADS,
   UNREAD,
-  RIGHT_SIDEBAR_CLOSE,
+  DRAWER_CLOSE,
   LOAD_CHAT_PAGE,
 } from '../actions/actionTypes';
 import parseDateToMilliseconds from '../util/dateUtil';
@@ -155,7 +155,7 @@ const messageReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case RIGHT_SIDEBAR_CLOSE: {
+    case DRAWER_CLOSE: {
       nextState = Object.assign({}, state);
       Object.values(state).forEach((message) => {
         nextState[message.slug].isOpen = false;

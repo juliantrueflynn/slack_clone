@@ -10,7 +10,7 @@ import * as action from '../actions/channelActions';
 import { CHANNEL, DM_CHAT } from '../actions/actionTypes';
 import * as api from '../util/apiUtil';
 import { selectUIByDisplay, selectEntityBySlug } from '../reducers/selectors';
-import { navigate, modalClose } from '../actions/interactiveActions';
+import { navigate, modalClose } from '../actions/uiActions';
 
 function* fetchIndex({ workspaceSlug }) {
   try {

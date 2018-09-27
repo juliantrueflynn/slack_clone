@@ -9,7 +9,7 @@ import {
   selectDmChats,
   selectSubbedWorkspaces,
 } from '../reducers/selectors';
-import { modalOpen } from '../actions/interactiveActions';
+import { modalOpen } from '../actions/uiActions';
 import { createChannel, updateChannelSub, fetchChannels } from '../actions/channelActions';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({

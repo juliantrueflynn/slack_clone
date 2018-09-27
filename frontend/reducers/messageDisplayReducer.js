@@ -2,7 +2,7 @@ import {
   MESSAGE,
   SIGN_OUT,
   WORKSPACE,
-  RIGHT_SIDEBAR_CLOSE,
+  DRAWER_CLOSE,
 } from '../actions/actionTypes';
 
 const messageDisplayReducer = (state = null, action) => {
@@ -11,7 +11,7 @@ const messageDisplayReducer = (state = null, action) => {
   switch (action.type) {
     case MESSAGE.SHOW.REQUEST:
       return action.messageSlug;
-    case RIGHT_SIDEBAR_CLOSE:
+    case DRAWER_CLOSE:
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.REQUEST:
       return null;

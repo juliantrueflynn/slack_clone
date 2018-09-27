@@ -128,8 +128,11 @@ function* setMessageRead({ unread }) {
     if (currSlug === 'threads') {
       isCurrPage = true;
     } else {
-      currSlug = yield select(selectUIByDisplay, 'displayMessageSlug');
-      isCurrPage = currSlug && currSlug === unread.slug;
+      const drawer = yield select(selectUIByDisplay, 'drawer');
+      if (drawer.drawerType === 'thread') {
+        currSlug = drawer.drawerSlug;
+        isCurrPage = currSlug === unread.slug;
+      }
     }
   }
 

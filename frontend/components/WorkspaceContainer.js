@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { fetchWorkspace, fetchWorkspaces } from '../actions/workspaceActions';
-import { modalClose } from '../actions/interactiveActions';
+import { modalClose } from '../actions/uiActions';
 import { createReaction } from '../actions/reactionActions';
 import Workspace from './Workspace';
 

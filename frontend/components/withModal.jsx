@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from 'react-modal';
 import Button from './Button';
-import { modalClose } from '../actions/interactiveActions';
+import { modalClose } from '../actions/uiActions';
 import './WithModal.css';
 
 const withModal = ({ modalTitle, modalType, ...modalProps }) => (WrappedComponent) => {

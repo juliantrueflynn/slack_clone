@@ -21,10 +21,12 @@ class ChatPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { history, location: { pathname } } = this.props;
+    const { drawerType, history, location: { pathname } } = this.props;
 
     if (prevProps.location.pathname !== pathname) {
-      this.loadPageData();
+      if (drawerType && drawerType === prevProps.drawerType) {
+        this.loadPageData();
+      }
     }
 
     if (this.selectRedirectUrl()) {
@@ -39,12 +41,18 @@ class ChatPage extends React.Component {
   }
 
   selectRedirectUrl() {
-    const { rightSidebarProps, match: { url, isExact } } = this.props;
+    const {
+      drawerType,
+      drawerSlug,
+      match: { url, isExact }
+    } = this.props;
 
-    if (isExact && rightSidebarProps) {
-      if (rightSidebarProps && rightSidebarProps.path) {
-        return url + rightSidebarProps.path;
+    if (isExact && drawerType) {
+      if (drawerSlug) {
+        return `${url}/${drawerType}/${drawerSlug}`;
       }
+
+      return `${url}/${drawerType}`;
     }
 
     return null;
@@ -55,7 +63,7 @@ class ChatPage extends React.Component {
       isWorkspaceLoaded,
       chatPath,
       routes,
-      rightSidebarClose,
+      drawerClose,
       chatTitle,
       users,
       channels,
@@ -79,7 +87,7 @@ class ChatPage extends React.Component {
 
     return (
       <div className={chatClassNames}>
-        <ChannelHeader sectionTitle={chatTitle} rightSidebarClose={rightSidebarClose} />
+        <ChannelHeader sectionTitle={chatTitle} drawerClose={drawerClose} />
         <div className="ChatPage__row">
           <div className="ChatPage__container">
             {isLoading && (

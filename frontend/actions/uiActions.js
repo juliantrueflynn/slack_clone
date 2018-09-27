@@ -2,6 +2,8 @@ import {
   NAVIGATE,
   MODAL_OPEN,
   MODAL_CLOSE,
+  DRAWER_OPEN,
+  DRAWER_CLOSE,
 } from './actionTypes';
 
 export const modalOpen = (modalType, modalProps) => ({
@@ -17,4 +19,13 @@ export const modalClose = () => ({
 export const navigate = params => ({
   type: NAVIGATE,
   params,
+});
+
+export const drawerOpen = drawer => ({
+  type: DRAWER_OPEN,
+  drawer,
+});
+
+export const drawerClose = () => ({
+  type: DRAWER_CLOSE,
 });

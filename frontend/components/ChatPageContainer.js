@@ -1,14 +1,10 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import {
-  selectChatTitleBySlug,
-  selectChatMessagesBySlug,
-  selectChatChannelsBySlug,
-} from '../reducers/selectors';
+import { selectChatTitleBySlug, selectChatMessagesBySlug, selectChatChannelsBySlug } from '../reducers/selectors';
 import { fetchMessages, fetchUserThreads } from '../actions/messageActions';
 import { fetchUnreads } from '../actions/readActions';
 import { loadChatPage, createChannelSub } from '../actions/channelActions';
-import { rightSidebarClose } from '../actions/rightSidebarActions';
+import { drawerClose } from '../actions/uiActions';
 import { clearUnreads } from '../actions/unreadActions';
 import ChatPage from './ChatPage';
 
@@ -16,7 +12,8 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   chatPath,
   isWorkspaceLoaded: !!state.ui.displayWorkspaceSlug,
   chatTitle: selectChatTitleBySlug(state, chatPath),
-  rightSidebarProps: state.ui.rightSidebar.sidebarProps,
+  drawerType: state.ui.drawer.drawerType,
+  drawerSlug: state.ui.drawer.drawerSlug,
   users: state.entities.members,
   modal: state.ui.displayModal,
   isLoading: state.ui.isPageLoading,
@@ -38,7 +35,7 @@ const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug, chatPa
     return dispatch(fetchMessages.request(chatPath));
   },
   loadChatPage: pagePath => dispatch(loadChatPage(pagePath)),
-  rightSidebarClose: () => dispatch(rightSidebarClose()),
+  drawerClose: () => dispatch(drawerClose()),
   createChannelSubRequest: channelSub => dispatch(createChannelSub.request(channelSub)),
   clearUnreads: channelSlug => dispatch(clearUnreads(channelSlug)),
 });

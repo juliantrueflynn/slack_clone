@@ -10,7 +10,7 @@ import * as actions from '../actions/workspaceActions';
 import { WORKSPACE } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiDelete } from '../util/apiUtil';
 import { selectCurrentUser } from '../reducers/selectors';
-import { navigate } from '../actions/interactiveActions';
+import { navigate } from '../actions/uiActions';
 
 function* fetchDeleteWorkspace({ workspaceSlug }) {
   try {
