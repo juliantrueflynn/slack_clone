@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import './ChannelBlurb.css';
 
 const ChannelBlurb = ({
@@ -7,14 +7,15 @@ const ChannelBlurb = ({
   users,
   channel,
   isThreadHidden,
+  match: { url },
 }) => {
-  if (isThreadHidden || !channel) {
+  if (isThreadHidden || !channel || channel.hasDm) {
     return null;
   }
 
   const owner = users[channel.ownerSlug];
-  const ownerUsername = owner && `@${owner.username}`;
-  const ownerLink = owner && owner.slug;
+  const ownerUsername = `@${owner.username}`;
+  const ownerLink = `${url}/team/${channel.ownerSlug}`;
 
   return (
     <section className="ChannelBlurb">
@@ -35,4 +36,4 @@ const ChannelBlurb = ({
   );
 };
 
-export default ChannelBlurb;
+export default withRouter(ChannelBlurb);

@@ -14,6 +14,16 @@ export const selectSubbedChats = ({ entities: { channels }, session: { currentUs
     .sort((a, b) => a.title && a.title.localeCompare(b.title))
 );
 
+export const selectDrawerPath = ({ ui: { drawer } }) => {
+  const { drawerType, drawerSlug } = drawer;
+
+  if (drawerSlug) {
+    return `/${drawerType}/${drawerSlug}`;
+  }
+
+  return `/${drawerType}`;
+};
+
 export const selectUnsubbedChats = ({ entities: { channels }, session: { currentUser } }) => (
   values(channels).filter(ch => !ch.members.includes(currentUser.slug) && !ch.hasDm)
 );
