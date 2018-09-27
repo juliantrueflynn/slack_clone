@@ -10,11 +10,19 @@ class ChannelHeader extends React.Component {
   }
 
   handleFavoritesClick() {
-    const { history, match: { isExact, url }, drawerClose } = this.props;
+    const {
+      history,
+      match: { isExact, url },
+      drawerClose,
+      drawerType,
+    } = this.props;
 
-    if (isExact) {
+    if (drawerType !== 'favorites') {
       history.push(`${url}/favorites`);
-    } else {
+      return;
+    }
+
+    if (!isExact && drawerType === 'favorites') {
       drawerClose();
       history.push(url);
     }

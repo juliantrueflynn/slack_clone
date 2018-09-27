@@ -11,15 +11,24 @@ class RightSidebar extends React.Component {
   componentDidMount() {
     const {
       openDrawer,
-      drawer,
       fetchEntitiesRequest,
     } = this.props;
 
-    if (!drawer.drawerType) {
-      openDrawer(this.drawerType());
-    }
-
+    openDrawer(this.drawerType());
     fetchEntitiesRequest();
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      openDrawer,
+      fetchEntitiesRequest,
+      location: { pathname },
+    } = this.props;
+
+    if (pathname !== prevProps.location.pathname) {
+      openDrawer(this.drawerType());
+      fetchEntitiesRequest();
+    }
   }
 
   drawerType() {

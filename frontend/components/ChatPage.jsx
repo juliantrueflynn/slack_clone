@@ -1,4 +1,5 @@
 import React from 'react';
+import isEqual from 'lodash.isequal';
 import { Switch } from 'react-router-dom';
 import ChannelHeader from './ChannelHeader';
 import { RouteWithSubRoutes } from '../util/routeUtil';
@@ -20,20 +21,13 @@ class ChatPage extends React.Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    const { drawerType, drawerSlug } = this.props;
-    if (nextProps.drawerType !== drawerType || nextProps.drawerSlug !== drawerSlug) {
-      return false;
-    }
-
-    return true;
-  }
-
   componentDidUpdate(prevProps) {
-    const { history, location: { pathname } } = this.props;
+    const { history, messages, location: { pathname } } = this.props;
 
-    if (prevProps.location.pathname !== pathname) {
-      this.loadPageData();
+    if (pathname !== prevProps.location.pathname) {
+      if (!isEqual(messages, prevProps.messages)) {
+        this.loadPageData();
+      }
     }
 
     if (this.selectRedirectUrl()) {
@@ -78,6 +72,7 @@ class ChatPage extends React.Component {
       isLoading,
       clearUnreads,
       messages,
+      drawerType,
     } = this.props;
 
     if (!isWorkspaceLoaded) {
@@ -94,7 +89,11 @@ class ChatPage extends React.Component {
 
     return (
       <div className={chatClassNames}>
-        <ChannelHeader sectionTitle={chatTitle} drawerClose={drawerClose} />
+        <ChannelHeader
+          sectionTitle={chatTitle}
+          drawerClose={drawerClose}
+          drawerType={drawerType}
+        />
         <div className="ChatPage__row">
           <div className="ChatPage__container">
             {isLoading && (
