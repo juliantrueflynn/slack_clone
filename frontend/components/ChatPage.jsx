@@ -1,9 +1,7 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 import { RouteWithSubRoutes } from '../util/routeUtil';
-import AllUnreads from './AllUnreads';
-import AllThreads from './AllThreads';
-import Channel from './Channel';
+import ChatPageBody from './ChatPageBody';
 import './ChatPage.css';
 
 class ChatPage extends React.Component {
@@ -73,49 +71,30 @@ class ChatPage extends React.Component {
       return null;
     }
 
-    let chatClassNames = 'ChatPage';
+    let chatType = 'channel';
     if (chatPath === 'unreads' || chatPath === 'threads') {
-      chatClassNames += ` ChatPage--${chatPath}`;
-    } else {
-      chatClassNames += ' ChatPage--channel';
+      chatType = chatPath;
     }
-    if (isLoading) chatClassNames += ' ChatPage--loading';
+
+    let chatClassNames = `ChatPage ChatPage--${chatType}`;
+    if (isLoading) {
+      chatClassNames += ' ChatPage--loading';
+    }
 
     return (
       <div className={chatClassNames}>
         <div className="ChatPage__row">
-          <div className="ChatPage__container">
-            {isLoading && (
-              <div className="ChatPage__loader">
-                Messages loading...
-              </div>
-            )}
-            <AllUnreads
-              chatPath={chatPath}
-              authors={users}
-              unreadChannels={channels}
-              clearUnreads={clearUnreads}
-              isLoading={isLoading}
-              messages={messages}
-            />
-            <AllThreads
-              chatPath={chatPath}
-              users={users}
-              channels={channels}
-              currentUser={currentUser}
-              isLoading={isLoading}
-              messages={messages}
-            />
-            <Channel
-              chatPath={chatPath}
-              chatTitle={chatTitle}
-              authors={users}
-              channels={channels}
-              currentUser={currentUser}
-              isLoading={isLoading}
-              messages={messages}
-            />
-          </div>
+          <ChatPageBody
+            chatPath={chatPath}
+            chatType={chatType}
+            chatTitle={chatTitle}
+            messages={messages}
+            channels={channels}
+            users={users}
+            clearUnreads={clearUnreads}
+            isLoading={isLoading}
+            currentUser={currentUser}
+          />
           <Switch>
             {routes.map(route => (
               <RouteWithSubRoutes key={route.path} {...route} />
