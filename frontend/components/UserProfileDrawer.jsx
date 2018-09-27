@@ -29,7 +29,7 @@ class UserProfileDrawer extends React.Component {
     if (dmChat) {
       history.push(`/${workspaceSlug}/messages/${dmChat}`);
     } else {
-      createDmChatRequest({ workspaceSlug, memberIds: [this.user().id] });
+      createDmChatRequest({ workspaceSlug, memberId: this.user().id });
     }
   }
 

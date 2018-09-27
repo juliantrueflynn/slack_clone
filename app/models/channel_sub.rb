@@ -20,6 +20,7 @@ class ChannelSub < ApplicationRecord
   private
 
   def generate_read
+    return if channel.has_dm
     channel.reads.create(readable_type: 'Channel', user_id: user.id)
   end
 

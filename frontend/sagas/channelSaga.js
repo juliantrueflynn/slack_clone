@@ -41,7 +41,7 @@ function* fetchCreate({ channel }) {
 function* fetchCreateDm({ dmChat: { workspaceSlug, ...dmChat } }) {
   try {
     const workspace = yield select(selectEntityBySlug, 'workspaces', workspaceSlug);
-    const workspaceId = workspace && workspace.id;
+    const workspaceId = workspace.id;
     const chat = yield call(api.apiCreate, 'dm_chat', { workspaceId, ...dmChat });
     yield call(redirectToChannel, chat);
   } catch (error) {

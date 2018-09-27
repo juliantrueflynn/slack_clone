@@ -1,5 +1,5 @@
 class Channel < ApplicationRecord
-  attr_accessor :skip_broadcast, :last_read
+  attr_accessor :skip_broadcast, :member_id
   attr_reader :member_ids
 
   before_validation :generate_slug, unless: :slug?
@@ -49,18 +49,12 @@ class Channel < ApplicationRecord
   scope :with_subs, -> { includes(channel_subs: :user) }
   scope :with_dm, -> { where(has_dm: true) }
 
-  def self.with_user_sub(user_id)
-    includes(:subs).where(channel_subs: { user_id: user_id })
+  def self.has_dm_by_workspace_id(workspace_id)
+    with_dm.where(workspace_id: workspace_id)
   end
 
-  def self.has_dm_subs?(member_ids, chat_workspace_id)
-    with_dm.joins(:subs)
-      .where(channel_subs: { user_id: member_ids })
-      .where(workspace_id: chat_workspace_id)
-      .group(:id)
-      .having('count(channels.id) = ?', member_ids.length)
-      .distinct
-      .exists?
+  def self.with_user_sub(user_id)
+    includes(:subs).where(channel_subs: { user_id: user_id })
   end
 
   def member_ids=(member_ids)

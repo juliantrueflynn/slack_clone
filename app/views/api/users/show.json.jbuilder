@@ -6,6 +6,6 @@ if @user.id != current_user.id
     json.array! @user.channels.where(has_dm: false, workspace_id: workspace.id).pluck(:slug)
   end
 
-  dm_chat_with = @user.dm_chat_with_user_id(current_user.id)
-  json.dmChat dm_chat_with ? dm_chat_with.slug : nil
+  dm_chat = current_user.dm_chat_with_user_in_workspace(@user.id, workspace.id)
+  json.dm_chat dm_chat ? dm_chat.slug : nil
 end

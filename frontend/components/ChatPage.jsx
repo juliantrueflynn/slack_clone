@@ -20,13 +20,20 @@ class ChatPage extends React.Component {
     }
   }
 
+  shouldComponentUpdate(nextProps) {
+    const { drawerType, drawerSlug } = this.props;
+    if (nextProps.drawerType !== drawerType || nextProps.drawerSlug !== drawerSlug) {
+      return false;
+    }
+
+    return true;
+  }
+
   componentDidUpdate(prevProps) {
-    const { drawerType, history, location: { pathname } } = this.props;
+    const { history, location: { pathname } } = this.props;
 
     if (prevProps.location.pathname !== pathname) {
-      if (drawerType && drawerType === prevProps.drawerType) {
-        this.loadPageData();
-      }
+      this.loadPageData();
     }
 
     if (this.selectRedirectUrl()) {
