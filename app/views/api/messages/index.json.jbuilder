@@ -22,7 +22,7 @@ end
 
 json.favorites do
   json.array! @channel.favorites.with_user(current_user.id) do |favorite|
-    json.(favorite, :id, :message_id, :user_id)
+    json.(favorite, :id, :message_id)
     json.message_slug favorite.message_slug
   end
 end

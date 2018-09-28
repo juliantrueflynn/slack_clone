@@ -2,7 +2,7 @@ import React from 'react';
 import Button from './Button';
 import './Drawer.css';
 
-class RightSidebar extends React.Component {
+class Drawer extends React.Component {
   constructor(props) {
     super(props);
     this.handleClose = this.handleClose.bind(this);
@@ -14,7 +14,7 @@ class RightSidebar extends React.Component {
       fetchEntitiesRequest,
     } = this.props;
 
-    openDrawer(this.drawerType());
+    openDrawer(this.drawerProps());
     fetchEntitiesRequest();
   }
 
@@ -26,12 +26,12 @@ class RightSidebar extends React.Component {
     } = this.props;
 
     if (pathname !== prevProps.location.pathname) {
-      openDrawer(this.drawerType());
+      openDrawer(this.drawerProps());
       fetchEntitiesRequest();
     }
   }
 
-  drawerType() {
+  drawerProps() {
     const { match: { params } } = this.props;
     const drawerProps = { drawerType: 'favorites' };
 
@@ -61,13 +61,17 @@ class RightSidebar extends React.Component {
 
   render() {
     const { drawerTitle, render } = this.props;
+    const { drawerType } = this.drawerProps();
+
+    let classNames = 'Drawer';
+    if (drawerType) classNames += ` Drawer__${drawerType}`;
 
     return (
-      <aside className="RightSidebar">
-        <header className="RightSidebar__header">
-          <div className="RightSidebar__headings">
+      <aside className={classNames}>
+        <header className="Drawer__header">
+          <div className="Drawer__headings">
             {drawerTitle && (
-              <h4 className="RightSidebar__title">
+              <h4 className="Drawer__title">
                 {drawerTitle}
               </h4>
             )}
@@ -78,7 +82,7 @@ class RightSidebar extends React.Component {
           </Button>
         </header>
 
-        <div className="RightSidebar__body">
+        <div className="Drawer__body">
           {render()}
         </div>
       </aside>
@@ -86,4 +90,4 @@ class RightSidebar extends React.Component {
   }
 }
 
-export default RightSidebar;
+export default Drawer;

@@ -30,14 +30,17 @@
   display: block;
 }
 
-.MessageForm__chat,
-.MessageForm__thread {
+.MessageForm__chat {
   position: absolute;
   bottom: 0;
   right: 0;
   left: 0;
   z-index: 999;
   background-color: #FFF;
+}
+
+.MessageForm__thread {
+  padding: 10px;
 }
 
 .MessageForm__chat {

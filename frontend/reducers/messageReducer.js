@@ -110,6 +110,10 @@ const messageReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
+    case FAVORITE.INDEX.RECEIVE: {
+      const { messages } = action.favorites;
+      return merge({}, state, messages);
+    }
     case MESSAGE.SHOW.REQUEST: {
       nextState = Object.assign({}, state);
       Object.values(nextState).forEach((prevMessage) => {

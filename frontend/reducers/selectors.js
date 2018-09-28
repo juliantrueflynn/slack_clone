@@ -79,15 +79,6 @@ export const selectChatTitleBySlug = ({ entities: { channels, members }, ui, ses
   return chatTitle;
 };
 
-export const selectMessageChildrenBySlug = ({ entities: { messages } }, parentSlug) => {
-  const message = messages[parentSlug];
-  if (!message || !message.thread) {
-    return [];
-  }
-
-  return message.thread.map(childSlug => messages[childSlug]);
-};
-
 export const selectCurrentUser = ({ session: { currentUser } }) => currentUser;
 
 export const selectReactionByMessageEmoji = (state, { messageId, emoji }) => {
@@ -115,17 +106,66 @@ export const getReactionCounts = ({ entities: { reactions }, session }, messageS
     }, {});
 };
 
-export const selectChatMessagesBySlug = ({ entities: { messages, channels } }, chatSlug) => {
+const messageWithAuthor = (message, members) => {
+  const author = members[message.authorSlug];
+  return {
+    authorName: author && author.username,
+    ...message,
+  };
+};
+
+const selectMessagesFavorites = ({ favorites, messages, members }) => (
+  values(favorites).map(({ messageSlug }) => (
+    messageWithAuthor(messages[messageSlug], members)
+  ))
+);
+
+export const selectChatMessagesBySlug = ({ entities }, chatSlug) => {
+  const { messages, channels, members } = entities;
   const chat = channels[chatSlug];
 
   if (chat) {
     return values(messages)
+      .map(message => messageWithAuthor(message, members))
       .filter(msg => (chat.id === msg.channelId && !msg.parentMessageId))
       .sort((a, b) => messages[a.slug].id - messages[b.slug].id);
   }
 
   return messages;
 };
+
+const selectMessageThreadBySlug = ({ messages, members }, slug) => {
+  const message = messages[slug];
+
+  if (!message || !message.thread) {
+    return [];
+  }
+
+  const messageThread = message.thread.reduce((acc, curr) => {
+    acc.push(messages[curr]);
+    return acc;
+  }, [message]);
+
+  return messageThread.map(entry => messageWithAuthor(entry, members));
+};
+
+export const selectDrawerMessagesByType = ({ entities, ui: { drawer } }) => {
+  const { drawerType, drawerSlug } = drawer;
+
+  if (drawerType === 'favorites') {
+    return selectMessagesFavorites(entities);
+  }
+
+  if (drawerType === 'thread') {
+    return selectMessageThreadBySlug(entities, drawerSlug);
+  }
+
+  return [];
+};
+
+export const selectMessageChildrenBySlug = ({ entities }, slug) => (
+  selectMessageThreadBySlug(entities, slug).slice(1)
+);
 
 export const selectChatChannelsBySlug = ({ entities: { channels } }, chatSlug) => {
   if (chatSlug === 'unreads') {

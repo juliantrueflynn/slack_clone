@@ -6,12 +6,13 @@ import { fetchMessage } from '../actions/messageActions';
 import { fetchFavorites } from '../actions/favoriteActions';
 import { fetchMember } from '../actions/memberActions';
 import { createDmChat } from '../actions/channelActions';
+import { selectDrawerMessagesByType } from '../reducers/selectors';
 import Drawer from './Drawer';
 
 const withDrawer = drawerTitle => (WrappedComponent) => {
   const mapStateToProps = state => ({
     isWorkspaceLoaded: !!state.ui.displayWorkspaceSlug,
-    messages: state.entities.messages,
+    messages: selectDrawerMessagesByType(state),
     members: state.entities.members,
     channels: state.entities.channels,
     currentUser: state.session.currentUser,

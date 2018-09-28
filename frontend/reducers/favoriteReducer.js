@@ -1,3 +1,4 @@
+import merge from 'lodash.merge';
 import {
   FAVORITE,
   MESSAGE,
@@ -11,12 +12,8 @@ const favoriteReducer = (state = {}, action) => {
   let nextState;
   switch (action.type) {
     case FAVORITE.INDEX.RECEIVE: {
-      const { favorites } = action;
-
-      return favorites.reduce((acc, curr) => {
-        acc[curr.id] = curr;
-        return acc;
-      }, {});
+      const { favorites } = action.favorites;
+      return merge({}, state, favorites);
     }
     case FAVORITE.CREATE.RECEIVE: {
       const { favorite } = action;

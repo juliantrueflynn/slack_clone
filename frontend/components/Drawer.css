@@ -1,11 +1,11 @@
-.RightSidebar {
+.Drawer {
   width: 500px;
   border-left: 1px solid #E9E9E9;
   display: flex;
   flex-direction: column;
 }
 
-.RightSidebar__header {
+.Drawer__header {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -14,23 +14,57 @@
   padding: 15px 12px;
 }
 
-.RightSidebar__title {
+.Drawer .Btn__close {
+  margin-left: auto;
+  border: none;
+  position: static;
+}
+
+.Drawer__title {
   margin: 0;
 }
 
-.RightSidebar__subtitle {
+.Drawer__subtitle {
   font-size: 80%;
   display: block;
 }
 
-.RightSidebar__body {
+.Drawer__body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  position: relative;
 }
 
-.Btn__close {
-  margin-left: auto;
-  border: none;
-  position: static;
+.Drawer__body .MessagesPane {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.Drawer .MessagesPane .Message:first-child {
+  padding: 10px;
+}
+
+.Drawer .MessagesPane .Message:not(:first-child) {
+  padding: 6px 10px;
+}
+
+.Drawer__thread .MessagesPane .Message:first-child .Btn__thread {
+  display: none;
+}
+
+.Drawer__thread .Message:nth-child(2):before {
+  height: 1px;
+  display: block;
+  content: "";
+  position: absolute;
+  top: -12px;
+  right: 10px;
+  left: 10px;
+  background: #e8e8e8;
+}
+
+.Drawer__thread .Message:nth-child(2) {
+  margin-top: 18px;
 }

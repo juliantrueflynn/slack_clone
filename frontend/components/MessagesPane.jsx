@@ -48,7 +48,6 @@ class MessagesPane extends React.Component {
         {messages.map(message => (
           <MessageContainer
             key={message.slug}
-            author={users[message.authorSlug]}
             message={message}
             users={users}
             isThreadHidden={isThreadHidden}

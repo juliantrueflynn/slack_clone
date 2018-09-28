@@ -27,7 +27,6 @@ class Message extends React.Component {
     const {
       match: { url },
       message,
-      author,
       updateMessageRequest,
       reactions,
       threadMessages,
@@ -47,13 +46,14 @@ class Message extends React.Component {
       return null;
     }
 
-    const authorUrl = author && `${url}/team/${author.slug}`;
+    const authorAvatar = { slug: message.authorSlug, username: message.authorName };
+    const authorUrl = `${url}/team/${message.authorSlug}`;
     let msgClassName = 'Message';
     if (isEditing) msgClassName += ' Message--editing';
 
     return (
       <div className={msgClassName} role="listitem">
-        <Avatar baseUrl={url} author={author} />
+        <Avatar baseUrl={url} author={authorAvatar} />
         <div className="Message__body">
           <MessageHoverMenu
             message={message}
@@ -68,11 +68,9 @@ class Message extends React.Component {
           />
           <div className="Message__content">
             <div className="Message__content-meta">
-              {author && (
-                <Link to={authorUrl} className="Message__author">
-                  {author.username}
-                </Link>
-              )}
+              <Link to={authorUrl} className="Message__author">
+                {message.authorName}
+              </Link>
               <time className="Message__time">
                 {message.createdAt}
               </time>
