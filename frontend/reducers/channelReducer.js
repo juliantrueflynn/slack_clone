@@ -176,7 +176,6 @@ const channelReducer = (state = {}, action) => {
         hasUnreads: false,
         lastRead: channel.createdAt,
         lastActive: null,
-        inSidebar: true,
         messages: [],
         subs: subs.reduce((acc, curr) => {
           acc.push(curr.id);

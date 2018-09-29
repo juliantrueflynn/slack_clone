@@ -4,6 +4,7 @@ import {
   WORKSPACE,
   DM_CHAT,
   CHANNEL,
+  WORKSPACE_SUB,
   SIGN_OUT,
 } from '../actions/actionTypes';
 
@@ -31,6 +32,16 @@ const channelSubReducer = (state = {}, action) => {
 
       nextState = {};
       subs.forEach((sub) => {
+        nextState[sub.id] = sub;
+      });
+
+      return merge({}, state, nextState);
+    }
+    case WORKSPACE_SUB.CREATE.RECEIVE: {
+      const { channelSubs } = action.workspaceSub;
+
+      nextState = {};
+      channelSubs.forEach((sub) => {
         nextState[sub.id] = sub;
       });
 
