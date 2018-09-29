@@ -1,5 +1,6 @@
 import React from 'react';
 import AllUnreadsItem from './AllUnreadsItem';
+import Scrollable from './Scrollable';
 
 const AllUnreads = ({
   chatPath,
@@ -23,15 +24,17 @@ const AllUnreads = ({
 
   return (
     <div role="list" className="AllUnreads">
-      {unreadChannels.map(channel => (
-        <AllUnreadsItem
-          key={channel.id}
-          channel={channel}
-          authors={authors}
-          messages={messages}
-          clearUnreads={clearUnreads}
-        />
-      ))}
+      <Scrollable>
+        {unreadChannels.map(channel => (
+          <AllUnreadsItem
+            key={channel.id}
+            channel={channel}
+            authors={authors}
+            messages={messages}
+            clearUnreads={clearUnreads}
+          />
+        ))}
+      </Scrollable>
     </div>
   );
 };

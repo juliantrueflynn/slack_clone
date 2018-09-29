@@ -1,12 +1,13 @@
 import React from 'react';
-import MessagesPane from './MessagesPane';
 import MessageFormContainer from './MessageFormContainer';
 import ChannelSubscribe from './ChannelSubscribe';
+import ChannelBlurb from './ChannelBlurb';
+import MessageContainer from './MessageContainer';
+import Scrollable from './Scrollable';
 
 const Channel = ({
   chatPath,
   messages,
-  rightSidebar,
   authors,
   createChannelSubRequest,
   chatTitle,
@@ -30,24 +31,33 @@ const Channel = ({
 
   const placeholder = channel.hasDm ? `@${chatTitle}` : chatTitle;
   const formPlaceholder = placeholder && `Message ${placeholder}`;
-  const ownerName = authors[channel.ownerSlug] && authors[channel.ownerSlug].username;
-  const currentUserSlug = currentUser && currentUser.slug;
+  const ownerName = channel.ownerSlug && authors[channel.ownerSlug].username;
+  const messagesLen = messages.length - 1;
+  const lastEntry = messages[messagesLen];
 
   return (
     <div className="Channel">
-      <MessagesPane
-        chatTitle={chatTitle}
-        messages={messages}
-        users={authors}
-        channel={channel}
-        rightSidebar={rightSidebar}
-      />
-      <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} />
+      <Scrollable
+        currentUserId={currentUser.id}
+        lastEntry={lastEntry}
+        messagesLen={messagesLen}
+        isAutoScroll
+      >
+        <ChannelBlurb
+          chatTitle={chatTitle}
+          ownerName={ownerName}
+          channel={channel}
+        />
+        {messages.map(message => (
+          <MessageContainer key={message.slug} users={authors} message={message} />
+        ))}
+      </Scrollable>
+      {/* <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} /> */}
       <ChannelSubscribe
         chatTitle={chatTitle}
         ownerName={ownerName}
         channel={channel}
-        currentUserSlug={currentUserSlug}
+        currentUserSlug={currentUser.slug}
         createChannelSubRequest={createChannelSubRequest}
       />
     </div>

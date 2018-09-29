@@ -1,5 +1,6 @@
 import React from 'react';
 import AllThreadsItem from './AllThreadsItem';
+import Scrollable from './Scrollable';
 
 const AllThreads = ({
   chatPath,
@@ -26,16 +27,18 @@ const AllThreads = ({
 
   return (
     <div role="list" className="AllThreads">
-      {parentMessages.map(parent => (
-        <AllThreadsItem
-          key={parent.slug}
-          currentUserSlug={currentUser.slug}
-          channels={channels}
-          parentMessage={parent}
-          users={users}
-          messages={messages}
-        />
-      ))}
+      <Scrollable>
+        {parentMessages.map(parent => (
+          <AllThreadsItem
+            key={parent.slug}
+            currentUserSlug={currentUser.slug}
+            channels={channels}
+            parentMessage={parent}
+            users={users}
+            messages={messages}
+          />
+        ))}
+      </Scrollable>
     </div>
   );
 };
