@@ -1,5 +1,6 @@
 .AllUnreadsItem__body .Message,
-.MessagesPane .Message {
+.Drawer .Message,
+.Channel .Message {
   padding: 9px 27px;
 }
 

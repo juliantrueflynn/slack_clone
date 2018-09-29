@@ -4,7 +4,7 @@ import './ChannelBlurb.css';
 
 const ChannelBlurb = ({
   chatTitle,
-  users,
+  ownerName,
   channel,
   isThreadHidden,
   match: { url },
@@ -13,8 +13,7 @@ const ChannelBlurb = ({
     return null;
   }
 
-  const owner = users[channel.ownerSlug];
-  const ownerUsername = `@${owner.username}`;
+  const ownerUsername = `@${ownerName}`;
   const ownerLink = `${url}/team/${channel.ownerSlug}`;
 
   return (

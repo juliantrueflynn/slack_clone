@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { ActionCable } from 'react-actioncable-provider';
 import { decamelizeKeys, camelizeKeys } from 'humps';
-import { selectSubbedChats, selectSubbedWorkspaces } from '../reducers/selectors';
+import { selectSubbedWorkspaces } from '../reducers/selectors';
 import { destroyUserAppearance } from '../actions/userAppearanceActions';
 
 const mapStateToProps = state => ({
   workspaceSlug: state.ui.displayWorkspaceSlug,
   isLoggedIn: !!state.session.currentUser,
   subbedWorkspaces: selectSubbedWorkspaces(state),
-  subbedChats: selectSubbedChats(state),
+  subbedChats: Object.values(state.entities.channels),
   workspaces: Object.values(state.entities.workspaces),
 });
 

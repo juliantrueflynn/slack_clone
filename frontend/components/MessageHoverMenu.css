@@ -18,12 +18,12 @@
   display: none;
 }
 
-.Drawer .MessagesPane .Message:first-child .MessageHoverMenu {
+.Drawer .Message:first-child .MessageHoverMenu {
   top: 10px;
   right: 10px;
 }
 
-.Drawer .MessagesPane .Message:not(:first-child) .MessageHoverMenu {
+.Drawer .Message:not(:first-child) .MessageHoverMenu {
   top: -5px;
   right: 10px;
 }

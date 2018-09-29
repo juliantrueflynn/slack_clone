@@ -28,12 +28,6 @@
   background-color: #F7FAFC;
 }
 
-.ChatPage--threads .ChatPage__container > div,
-.ChatPage--unreads .ChatPage__container > div {
-  overflow-y: hidden;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  bottom: 0;
-  overflow: auto;
+.ChatPage--channel .ChatPage__container .Scrollable {
+  margin-bottom: 65px;
 }

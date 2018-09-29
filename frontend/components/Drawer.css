@@ -36,21 +36,26 @@
   position: relative;
 }
 
-.Drawer__body .MessagesPane {
+.Drawer__body {
   position: relative;
   display: flex;
   flex-direction: column;
 }
 
-.Drawer .MessagesPane .Message:first-child {
+.Drawer .Scrollable {
+  top: 0;
+  bottom: inherit;
+}
+
+.Drawer .Scrollable .Message:first-child {
   padding: 10px;
 }
 
-.Drawer .MessagesPane .Message:not(:first-child) {
+.Drawer .Scrollable .Message:not(:first-child) {
   padding: 6px 10px;
 }
 
-.Drawer__thread .MessagesPane .Message:first-child .Btn__thread {
+.Drawer__thread .Message:first-child .Btn__thread {
   display: none;
 }
 

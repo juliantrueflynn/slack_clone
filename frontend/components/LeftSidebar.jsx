@@ -53,22 +53,17 @@ const LeftSidebar = ({
     },
   ];
 
-  const dmChatsItems = dmChats && dmChats.map((ch) => {
-    const dmChatUsers = ch.members.filter(slug => slug !== currentUser.slug);
-    const usernames = dmChatUsers.map(slug => members[slug].username);
-    const dmUser = members[dmChatUsers[0]];
-    const dmUserStatus = dmUser && dmUser.status.toLowerCase();
-    const circleType = dmUserStatus === 'offline' ? 'far' : 'fas';
+  const dmChatsItems = dmChats.map((ch) => {
+    const circleType = ch.userStatus === 'OFFLINE' ? 'far' : 'fas';
     const circleIcon = [circleType, 'circle'];
-    const iconClassName = `Icon Icon__status--${dmUserStatus}`;
 
     return {
-      icon: <FontAwesomeIcon icon={circleIcon} size="xs" className={iconClassName} />,
+      icon: <FontAwesomeIcon icon={circleIcon} size="xs" />,
       link: appendDrawerPath(`${url}/messages/${ch.slug}`),
       label: (
         <DmChatMenuItem
           channelId={ch.id}
-          label={usernames}
+          label={ch.title}
           updateChannelSubRequest={updateChannelSubRequest}
         />
       ),
