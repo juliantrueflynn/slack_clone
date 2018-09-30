@@ -1,4 +1,9 @@
 .ChannelBlurb {
-  margin-top: 95px;
-  padding: 0 27px 30px;
+  padding: 45px 27px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #E9E9E9;
+}
+
+.ChannelBlurb__title {
+  margin: 0 0 15px;
 }

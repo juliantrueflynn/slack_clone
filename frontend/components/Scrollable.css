@@ -1,5 +1,11 @@
 .Scrollable {
   overflow-y: hidden;
+  position: relative;
+  height: 100%;
+}
+
+.Scrollable__body {
+  overflow-y: hidden;
   width: 100%;
   height: 100%;
   position: absolute;

@@ -72,8 +72,10 @@ class Scrollable extends React.Component {
     const { children } = this.props;
 
     return (
-      <div ref={this.messagesList} className="Scrollable" onScroll={this.handleScroll}>
-        {children}
+      <div className="Scrollable">
+        <div ref={this.messagesList} className="Scrollable__body" onScroll={this.handleScroll}>
+          {children}
+        </div>
       </div>
     );
   }

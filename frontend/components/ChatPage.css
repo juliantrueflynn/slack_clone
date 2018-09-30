@@ -18,10 +18,11 @@
   flex: 1;
 }
 
-.ChatPage--channel .ChatPage__container > div,
-.ChatPage--threads .ChatPage__container,
-.ChatPage--unreads .ChatPage__container {
-  position: relative;
+.ChatPage--threads .ChatPage__container > div,
+.ChatPage--unreads .ChatPage__container > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .ChatPage--threads .ChatPage__container {

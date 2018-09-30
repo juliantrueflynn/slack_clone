@@ -30,19 +30,13 @@
 }
 
 .Drawer__body {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  position: relative;
-}
-
-.Drawer__body {
   position: relative;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
-.Drawer .Scrollable {
+.Drawer .Scrollable__body {
   top: 0;
   bottom: inherit;
 }
