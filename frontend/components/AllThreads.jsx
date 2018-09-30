@@ -4,7 +4,7 @@ import Scrollable from './Scrollable';
 
 const AllThreads = ({
   chatPath,
-  messages,
+  convos,
   users,
   channels,
   currentUser,
@@ -14,10 +14,7 @@ const AllThreads = ({
     return null;
   }
 
-  const messagesArr = Object.values(messages);
-  const parentMessages = messagesArr.filter(entry => entry.isActiveThread).reverse();
-
-  if (!parentMessages.length) {
+  if (!convos.length) {
     return (
       <div className="AllThreads AllThreads--empty">
         No threads
@@ -28,14 +25,13 @@ const AllThreads = ({
   return (
     <div role="list" className="AllThreads">
       <Scrollable>
-        {parentMessages.map(parent => (
+        {convos.map(convo => (
           <AllThreadsItem
-            key={parent.slug}
+            key={convo.slug}
             currentUserSlug={currentUser.slug}
             channels={channels}
-            parentMessage={parent}
+            parentMessage={convo}
             users={users}
-            messages={messages}
           />
         ))}
       </Scrollable>

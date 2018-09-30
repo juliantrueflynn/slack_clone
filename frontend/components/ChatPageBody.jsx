@@ -39,7 +39,7 @@ const ChatPageBody = ({
         channels={channels}
         currentUser={currentUser}
         isLoading={isLoading}
-        messages={messages}
+        convos={messages}
       />
       <Channel
         chatPath={chatPath}

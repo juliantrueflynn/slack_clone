@@ -39,7 +39,7 @@
   background-color: #FFF;
 }
 
-.MessageForm__thread {
+.Drawer .MessageForm__thread {
   padding: 10px;
 }
 

@@ -8,24 +8,17 @@ import './AllThreadsItem.css';
 
 const AllThreadsItem = ({
   parentMessage,
-  messages,
   users,
   channels,
   currentUserSlug,
   match: { params: { workspaceSlug } },
 }) => {
-  const channel = channels[parentMessage.channelSlug];
-
-  if (!parentMessage.thread || !channel) {
+  if (!parentMessage.thread) {
     return null;
   }
 
-  const messageThread = parentMessage.thread.reduce((acc, curr) => {
-    acc.push(messages[curr]);
-    return acc;
-  }, [parentMessage]);
-  const channelUrl = `/${workspaceSlug}/${channel.slug}`;
-  const childAuthor = message => users[message.authorSlug];
+  const channel = channels[parentMessage.channelSlug];
+  const channelUrl = `/${workspaceSlug}/${parentMessage.channelSlug}`;
 
   return (
     <div className="AllThreadsItem">
@@ -38,22 +31,22 @@ const AllThreadsItem = ({
         </Link>
         <MessageThreadAuthors
           authors={users}
-          messageThread={messageThread}
+          message={parentMessage}
           currentUserSlug={currentUserSlug}
         />
       </header>
       <div className="AllThreadsItem__body">
         <MessageContainer
-          author={users[parentMessage.authorSlug]}
           message={parentMessage}
+          users={users}
           isThreadHidden
         />
         <div className="AllThreadsItem__list" role="list">
-          {messageThread.slice(1).map(child => (
+          {parentMessage.thread.map(child => (
             <MessageContainer
               key={child.id}
               message={child}
-              author={childAuthor(child)}
+              users={users}
               isThreadHidden
             />
           ))}

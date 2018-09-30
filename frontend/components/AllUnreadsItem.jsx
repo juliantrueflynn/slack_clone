@@ -49,7 +49,7 @@ class AllUnreadsItem extends React.Component {
           {unreadMessages.map(message => (
             <MessageContainer
               key={message.id}
-              author={authors[message.authorSlug]}
+              users={authors}
               message={message}
             />
           ))}

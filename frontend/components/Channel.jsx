@@ -52,7 +52,7 @@ const Channel = ({
           <MessageContainer key={message.slug} users={authors} message={message} />
         ))}
       </Scrollable>
-      {/* <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} /> */}
+      <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} />
       <ChannelSubscribe
         chatTitle={chatTitle}
         ownerName={ownerName}

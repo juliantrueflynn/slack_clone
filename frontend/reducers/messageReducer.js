@@ -48,6 +48,7 @@ const messageReducer = (state = {}, action) => {
         nextState[message.slug] = {
           lastActive: message.lastActive || null,
           lastRead: message.lastRead || null,
+          // isInConvo: true,
           hasUnreads: lastActive > lastRead,
           reactionIds: [],
           thread: [],
@@ -167,6 +168,13 @@ const messageReducer = (state = {}, action) => {
 
       return nextState;
     }
+    // case MESSAGE.CREATE.REQUEST: {
+    //   const { message } = action;
+    //   if (!message.parentMessageId) return state;
+    //   nextState = {};
+    //   nextState[message.parentMessageSlug].isInConvo = true;
+    //   return merge({}, state, nextState);
+    // }
     case MESSAGE.CREATE.RECEIVE: {
       const { message, authors } = action.message;
       nextState = Object.assign({}, state);

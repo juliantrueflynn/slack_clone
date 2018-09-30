@@ -1,26 +1,26 @@
 import React from 'react';
 import './MessageThreadAuthors.css';
 
-const MessageThreadAuthors = ({
-  authors,
-  messageThread,
-  currentUserSlug,
-}) => {
-  const authorSlugs = messageThread.map(msg => msg.authorSlug).filter((val, i, self) => (
-    self.indexOf(val) === i && currentUserSlug !== val
-  ));
+const MessageThreadAuthors = ({ message, authors, currentUserSlug }) => {
+  const authorSlugs = message.thread.reduce((acc, curr) => {
+    if (currentUserSlug === curr.authorSlug || acc.includes(curr.authorSlug)) {
+      return acc;
+    }
 
-  const authorList = authorSlugs.reduce((acc, curr) => {
-    acc.push(authors[curr].username);
+    acc.push(curr.authorSlug);
     return acc;
-  }, []);
-  authorList.push('and you');
+  }, [message.authorSlug]);
 
-  const seperator = authorSlugs.length === 1 ? ' ' : ', ';
+  const authorsList = authorSlugs.map(slug => authors[slug].username);
+  const seperator = authorsList.length === 1 ? ' ' : ', ';
+
+  if (message.authorSlug !== currentUserSlug) {
+    authorsList.push(' and you');
+  }
 
   return (
     <div className="MessageThreadAuthors">
-      {authorList.join(seperator)}
+      {authorsList.join(seperator)}
     </div>
   );
 };
