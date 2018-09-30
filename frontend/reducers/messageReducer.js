@@ -73,12 +73,7 @@ const messageReducer = (state = {}, action) => {
       return nextState;
     }
     case MESSAGE.INDEX.RECEIVE: {
-      const {
-        messages,
-        reactions,
-        favorites,
-        reads,
-      } = action.messages;
+      const { messages, reactions, favorites } = action.messages;
 
       nextState = Object.assign({}, state);
       messages.forEach((message) => {
@@ -103,10 +98,6 @@ const messageReducer = (state = {}, action) => {
 
       favorites.forEach(({ id, messageSlug }) => {
         if (nextState[messageSlug]) nextState[messageSlug].favoriteId = id;
-      });
-
-      reads.forEach((read) => {
-        nextState[read.slug].readId = read.id;
       });
 
       return merge({}, state, nextState);

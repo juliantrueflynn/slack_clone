@@ -18,16 +18,6 @@ const readReducer = (state = {}, action) => {
         return acc;
       }, {});
     }
-    case MESSAGE.INDEX.RECEIVE: {
-      const { messages: { reads } } = action;
-
-      nextState = Object.assign({}, state);
-      reads.forEach((read) => {
-        nextState[read.id] = read;
-      });
-
-      return nextState;
-    }
     case READ.UPDATE.RECEIVE:
     case READ.CREATE.RECEIVE: {
       const { read } = action;

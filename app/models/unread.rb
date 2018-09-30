@@ -17,8 +17,8 @@ class Unread < ApplicationRecord
   end
 
   def self.convos_by_workspace_and_user(workspace_id, user_id)
-    convo_ids = Message.convo_ids_by_workspace_and_user(workspace_id, user_id)
-    Unread.where(unreadable_id: convo_ids, unreadable_type: 'Message')
+    convos = Message.convo_ids_by_workspace_and_user(workspace_id, user_id)
+    Unread.where(unreadable_id: convos, unreadable_type: 'Message')
   end
 
   def broadcast_name

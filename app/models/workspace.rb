@@ -51,11 +51,9 @@ class Workspace < ApplicationRecord
     !!subs.find_by(workspace_subs: { user_id: user_id })
   end
 
-  def convos_by_user_id(user_id)
-    Message.convos_by_workspace_and_user(id, user_id).reduce([]) do |memo, curr|
-      memo << curr << curr.replies
-      memo.flatten(1)
-    end
+  def convos_with_user_id(user_id)
+    Message.convos_by_workspace_with_user(id, user_id)
+      .includes(:parent_message, :channel, :author)
   end
 
   after_create :generate_workspace_subs, :generate_default_chats

@@ -30,10 +30,18 @@ json.subs do
 end
 
 json.reads do
-  json.array! current_user.reads.where(workspace_id: @workspace.id) do |read|
+  reads = current_user.reads.where(workspace_id: @workspace.id)
+  read_chats = reads.where(readable_type: 'Channel')
+  read_convos = reads.where(readable_type: 'Message')
+
+  json.array! read_chats.includes(:channel) do |read|
     json.(read, :id, :accessed_at, :readable_id, :readable_type)
-    entity = read.readable_type.constantize.find_by(id: read.readable_id)
-    json.slug entity ? entity.slug : nil
+    json.slug read.channel.slug
+  end
+
+  json.array! read_convos.includes(:message) do |read|
+    json.(read, :id, :accessed_at, :readable_id, :readable_type)
+    json.slug read.message.slug
   end
 end
 
@@ -41,12 +49,12 @@ json.unreads do
   unread_chats = Unread.channels_by_workspace_id_and_user_id(@workspace.id, user_id)
   unread_convos = Unread.convos_by_workspace_and_user(@workspace.id, user_id)
 
-  json.array! unread_chats do |unread|
+  json.array! unread_chats.includes(:channel) do |unread|
     json.(unread, :id, :active_at, :unreadable_id, :unreadable_type)
     json.slug unread.channel.slug
   end
 
-  json.array! unread_convos do |unread|
+  json.array! unread_convos.includes(:message) do |unread|
     json.(unread, :id, :active_at, :unreadable_id, :unreadable_type)
     json.slug unread.message.slug
   end

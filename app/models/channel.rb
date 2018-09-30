@@ -31,7 +31,7 @@ class Channel < ApplicationRecord
     end
   end
   has_many :parent_messages,
-    -> { Message.exclude_children },
+    -> { Message.without_children },
     class_name: 'Message'
   has_many :favorites,
     -> { joins(:message).select('favorites.*', 'messages.slug AS message_slug') },

@@ -7,7 +7,7 @@ import {
   takeLatest,
 } from 'redux-saga/effects';
 import { CHANNEL_SUB, MESSAGE } from '../actions/actionTypes';
-import { deleteChannelSub, createChannelSub, updateChannelSub } from '../actions/channelActions';
+import * as actions from '../actions/channelActions';
 import { apiCreate, apiDelete, apiUpdate } from '../util/apiUtil';
 import { selectOtherDmSub, selectCurrentUser, selectEntityBySlug } from '../reducers/selectors';
 
@@ -15,31 +15,35 @@ function* fetchCreate({ channelSub }) {
   try {
     yield call(apiCreate, 'channel_subs', channelSub);
   } catch (error) {
-    yield put(createChannelSub.failure(error));
+    yield put(actions.createChannelSub.failure(error));
   }
 }
 
 function* fetchUpdate({ channelSub }) {
   try {
     const sub = yield call(apiUpdate, `channel_subs/${channelSub.channelId}`, channelSub);
-    yield put(updateChannelSub.receive(sub));
+    yield put(actions.updateChannelSub.receive(sub));
   } catch (error) {
-    yield put(createChannelSub.failure(error));
+    yield put(actions.createChannelSub.failure(error));
   }
 }
 
-function* fetchChannelShow({ messages: { channel, subs } }) {
+function* fetchChannelShow({ messages: { channel } }) {
   try {
-    const currUser = yield select(selectCurrentUser);
-    const chatSubs = subs.filter(sub => sub.userSlug && sub.userSlug === currUser.slug);
+    if (channel.hasDm) {
+      const currUser = yield select(selectCurrentUser);
+      const currChat = yield select(selectEntityBySlug, 'channels', channel.slug);
+      const chatSubs = currChat.subs.filter(sub => sub.userSlug && sub.userSlug === currUser.slug);
+      const [userSub] = chatSubs;
 
-    if (chatSubs[0] && !chatSubs[0].inSidebar && channel.hasDm) {
-      const { channelId } = chatSubs[0];
-      const channelSub = { channelId, inSidebar: true };
-      yield fetchUpdate({ channelSub });
+      if (userSub && !userSub.inSidebar) {
+        const { channelId } = chatSubs[0];
+        const channelSub = { channelId, inSidebar: true };
+        yield fetchUpdate({ channelSub });
+      }
     }
   } catch (error) {
-    yield put(createChannelSub.failure(error));
+    yield put(actions.updateChannelSub.failure(error));
   }
 }
 
@@ -52,7 +56,7 @@ function* fetchDmChatMessage({ message: { message } }) {
       yield call(apiUpdate, `sidebar_channel_subs/${sub.id}`);
     }
   } catch (error) {
-    yield put(updateChannelSub.failure(error));
+    yield put(actions.updateChannelSub.failure(error));
   }
 }
 
@@ -60,7 +64,7 @@ function* fetchDestroy({ channelId }) {
   try {
     yield call(apiDelete, `channel_subs/${channelId}`);
   } catch (error) {
-    yield put(deleteChannelSub.failure(error));
+    yield put(actions.deleteChannelSub.failure(error));
   }
 }
 

@@ -17,7 +17,7 @@ class Message < ApplicationRecord
     optional: true
   has_one :workspace, through: :channel
   has_many :replies,
-    -> { includes(:reactions) },
+    -> { includes(:author, :parent_message) },
     class_name: 'Message',
     foreign_key: :parent_message_id
   has_many :thread_replies,
@@ -27,37 +27,41 @@ class Message < ApplicationRecord
     through: :replies,
     source: :author
   has_many :favorites
-  has_many :reactions
+  has_many :reactions,
+    -> { joins(:user).select('reactions.*', 'users.slug AS user_slug') }
   has_many :reads, foreign_key: :readable_id
   has_one :unread,
     -> { where(unreadable_type: 'Message') },
     foreign_key: :unreadable_id,
     dependent: :delete
 
-  scope :exclude_children, -> { where(parent_message_id: nil) }
+  scope :without_children, -> { where(parent_message_id: nil) }
 
-  def self.parents_with_child_by_author(workspace_id, user_id)
+  def self.parent_ids_with_child_by_author(workspace_id, user_id)
     left_outer_joins(:replies, :workspace)
       .where.not(messages: { parent_message_id: nil })
       .where(workspaces: { id: workspace_id })
       .where(author_id: user_id)
+      .pluck(:parent_message_id)
   end
 
-  def self.parents_by_author(workspace_id, user_id)
+  def self.parent_ids_by_author(workspace_id, user_id)
     left_outer_joins(:replies, :workspace)
-      .where(messages: { parent_message_id: nil, author_id: user_id })
+      .where.not(replies_messages: { parent_message_id: nil })
       .where(workspaces: { id: workspace_id })
-  end
-
-  def self.convos_by_workspace_and_user(workspace_id, user_id)
-    children = Message.parents_with_child_by_author(workspace_id, user_id)
-    childs_parents = Message.where(id: children.pluck(:parent_message_id).uniq)
-    convos = parents_by_author(workspace_id, user_id) + childs_parents
-    convos.uniq
+      .where(author_id: user_id)
+      .pluck(:id)
   end
 
   def self.convo_ids_by_workspace_and_user(workspace_id, user_id)
-    convos_by_workspace_and_user(workspace_id, user_id).pluck(:id)
+    child_ids = parent_ids_with_child_by_author(workspace_id, user_id)
+    parent_ids = parent_ids_by_author(workspace_id, user_id)
+    (parent_ids + child_ids).uniq
+  end
+
+  def self.convos_by_workspace_with_user(workspace_id, user_id)
+    convos = convo_ids_by_workspace_and_user(workspace_id, user_id)
+    where(id: convos).or(where(parent_message_id: convos))
   end
 
   def broadcast_name
