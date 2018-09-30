@@ -51,6 +51,13 @@ class Workspace < ApplicationRecord
     !!subs.find_by(workspace_subs: { user_id: user_id })
   end
 
+  def convos_by_user_id(user_id)
+    Message.convos_by_workspace_and_user(id, user_id).reduce([]) do |memo, curr|
+      memo << curr << curr.replies
+      memo.flatten(1)
+    end
+  end
+
   after_create :generate_workspace_subs, :generate_default_chats
   after_create_commit :broadcast_create
   after_update_commit :broadcast_update

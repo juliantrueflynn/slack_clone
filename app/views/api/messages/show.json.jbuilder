@@ -43,12 +43,3 @@ json.read do
     json.nil!
   end
 end
-
-json.unread do
-  unread = Unread.find_by(unreadable_type: 'Message', unreadable_id: @message.id)
-  if unread
-    json.(unread, :id, :active_at, :unreadable_id, :unreadable_type)
-  else
-    json.nil!
-  end
-end

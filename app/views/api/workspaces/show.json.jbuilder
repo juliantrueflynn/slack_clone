@@ -1,5 +1,7 @@
+user_id = current_user.id
+
 json.workspace do
-  json.(@workspace, :id, :title, :slug, :owner_id)
+  json.(@workspace, :id, :title, :slug)
 end
 
 json.channels do
@@ -20,7 +22,7 @@ json.members do
 end
 
 json.subs do
-  json.array! @workspace.chat_subs.with_user_id(current_user.id) do |chat_sub|
+  json.array! @workspace.chat_subs.with_user_id(user_id) do |chat_sub|
     json.(chat_sub, :id, :user_id, :in_sidebar, :channel_id, :created_at)
     json.user_slug chat_sub.user_slug
     json.channel_slug chat_sub.channel_slug
@@ -36,12 +38,15 @@ json.reads do
 end
 
 json.unreads do
-  json.array! Unread.channels_by_workspace_id_and_user_id(@workspace.id, current_user.id) do |unread|
+  unread_chats = Unread.channels_by_workspace_id_and_user_id(@workspace.id, user_id)
+  unread_convos = Unread.convos_by_workspace_and_user(@workspace.id, user_id)
+
+  json.array! unread_chats do |unread|
     json.(unread, :id, :active_at, :unreadable_id, :unreadable_type)
     json.slug unread.channel.slug
   end
 
-  json.array! Unread.threads_by_workspace_id_and_user_id(@workspace.id, current_user.id) do |unread|
+  json.array! unread_convos do |unread|
     json.(unread, :id, :active_at, :unreadable_id, :unreadable_type)
     json.slug unread.message.slug
   end

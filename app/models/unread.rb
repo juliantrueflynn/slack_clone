@@ -16,23 +16,9 @@ class Unread < ApplicationRecord
       .where(channel_subs: { user_id: user_id })
   end
 
-  def self.children_by_workspace_id_and_user_id(workspace_id, user_id)
-    includes(message: :workspace)
-      .where(unreadable_type: 'Message')
-      .where(workspaces: { id: workspace_id })
-      .where(messages: { author_id: user_id })
-  end
-
-  def self.parents_by_workspace_id_and_user_id(workspace_id, user_id)
-    includes(message: :workspace)
-      .where(unreadable_type: 'Message')
-      .where(workspaces: { id: workspace_id })
-      .where(messages: { id: Message.children_with_author_id(1).pluck(:id) })
-  end
-
-  def self.threads_by_workspace_id_and_user_id(workspace_id, user_id)
-    children_by_workspace_id_and_user_id(workspace_id, user_id)
-      .or(parents_by_workspace_id_and_user_id(workspace_id, user_id))
+  def self.convos_by_workspace_and_user(workspace_id, user_id)
+    convo_ids = Message.convo_ids_by_workspace_and_user(workspace_id, user_id)
+    Unread.where(unreadable_id: convo_ids, unreadable_type: 'Message')
   end
 
   def broadcast_name
