@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
-import { NavLink } from 'react-router-dom';
+import React from 'react';
 import Button from './Button';
+import LinkWithDrawer from '../util/linkUtil';
 import './MenuItem.css';
 
 class MenuItem extends React.Component {
@@ -45,38 +45,31 @@ class MenuItem extends React.Component {
     if (modifierClassName) itemClassName += ` MenuItem--${modifierClassName}`;
     const contentClassName = `MenuItem__content MenuItem__content--${itemType}`;
 
-    const itemText = (
-      <Fragment>
-        {icon && (
-          <Fragment>
-            {icon}
-          </Fragment>
-        )}
-        {label}
-      </Fragment>
-    );
-
     return (
       <li className={itemClassName}>
         {itemType === 'link' && (
-          <NavLink
+          <LinkWithDrawer
+            isNavLink
             className={contentClassName}
             onClick={this.handleOnClick}
             activeClassName="MenuItem__content--active"
             {...itemProps}
           >
-            {itemText}
-          </NavLink>
+            {icon}
+            {label}
+          </LinkWithDrawer>
         )}
 
         {itemType === 'btn' && (
           <Button className={contentClassName} {...itemProps}>
-            {itemText}
+            {icon}
+            {label}
           </Button>
         )}
 
         {itemType === 'text' && (
           <span className={contentClassName} {...itemProps}>
+            {icon}
             {label}
           </span>
         )}

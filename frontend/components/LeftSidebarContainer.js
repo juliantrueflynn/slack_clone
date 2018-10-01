@@ -8,7 +8,6 @@ import {
   hasUreadThreads,
   selectDmChats,
   selectSubbedWorkspaces,
-  selectDrawerPath,
 } from '../reducers/selectors';
 import { modalOpen } from '../actions/uiActions';
 import { createChannel, updateChannelSub, fetchChannels } from '../actions/channelActions';
@@ -24,8 +23,6 @@ const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   unsubbedChannels: selectUnsubbedChats(state),
   dmChats: selectDmChats(state),
   members: state.entities.members,
-  isDrawerOpen: !!state.ui.drawer.drawerType,
-  drawerUrl: selectDrawerPath(state),
 });
 
 const mapDispatchToProps = dispatch => ({

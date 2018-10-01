@@ -21,33 +21,23 @@ const LeftSidebar = ({
   createChannelRequest,
   fetchChannelsRequest,
   currChatSlug,
-  isDrawerOpen,
-  drawerUrl,
   match: { url, params: { workspaceSlug } },
 }) => {
   if (!currWorkspace) {
     return null;
   }
 
-  const appendDrawerPath = (linkUrl) => {
-    if (isDrawerOpen) {
-      return linkUrl + drawerUrl;
-    }
-
-    return linkUrl;
-  };
-
   const quickLinksList = [
     {
       icon: <FontAwesomeIcon className="Icon" icon={['fas', 'align-left']} />,
       label: 'All Unreads',
-      link: appendDrawerPath(`${url}/unreads`),
+      link: `${url}/unreads`,
       modifierClassName: hasUnreadChannels ? 'unread' : null,
     },
     {
       icon: <FontAwesomeIcon className="Icon" icon={['far', 'comment']} />,
       label: 'All Threads',
-      link: appendDrawerPath(`${url}/threads`),
+      link: `${url}/threads`,
       modifierClassName: hasUnreadThreads ? 'unread' : null,
     },
   ];
@@ -59,7 +49,7 @@ const LeftSidebar = ({
 
     return {
       icon: <FontAwesomeIcon icon={circleIcon} size="xs" className={classNames} />,
-      link: appendDrawerPath(`${url}/messages/${ch.slug}`),
+      link: `${url}/messages/${ch.slug}`,
       label: (
         <DmChatMenuItem
           channelSubId={ch.userSubId}
@@ -79,7 +69,6 @@ const LeftSidebar = ({
           user={members[currentUser.slug]}
           url={url}
           currChatSlug={currChatSlug}
-          modalOpen={modalOpen}
         />
       </div>
 
@@ -95,7 +84,6 @@ const LeftSidebar = ({
         workspaceId={currWorkspace.id}
         createChannelRequest={createChannelRequest}
         fetchChannelsRequest={fetchChannelsRequest}
-        appendDrawerPath={appendDrawerPath}
       />
 
       <div className="SidebarWidget">

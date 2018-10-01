@@ -9,7 +9,9 @@ const Avatar = ({
   size,
   ...attrs
 }) => {
-  if (!author) return null;
+  if (!author) {
+    return null;
+  }
 
   const imgSize = size || 36;
   let classNames = 'Avatar';

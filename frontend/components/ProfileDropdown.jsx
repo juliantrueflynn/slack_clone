@@ -7,7 +7,6 @@ import './ProfileDropdown.css';
 const ProfileDropdown = ({
   currChatSlug,
   url,
-  modalOpen,
   user,
   workspaces,
   workspaceTitle,
@@ -35,8 +34,13 @@ const ProfileDropdown = ({
 
   const menuItems = [
     { label: greetingLabel, altClassName: 'user-head' },
-    { label: 'Home', link: '/', exact: true },
-    { label: 'Profile & Account', link: `${baseUrl}/team/${user.slug}` },
+    {
+      label: 'Home',
+      link: '/',
+      exact: true,
+      hasNoDrawer: true,
+    },
+    { label: 'Profile & Account', link: `${baseUrl}/team/${user.slug}`, hasNoDrawer: true },
     { label: 'Switch Workspace', altClassName: 'switch-workspace' },
   ];
 

@@ -23,7 +23,6 @@ class ChatsWidget extends React.Component {
       subbedChannels,
       workspaceSlug,
       workspaceId,
-      appendDrawerPath,
       createChannelRequest,
       fetchChannelsRequest,
     } = this.props;
@@ -31,7 +30,7 @@ class ChatsWidget extends React.Component {
     const chatList = subbedChannels.map(item => ({
       icon: <FontAwesomeIcon className="Icon" icon={['fas', 'hashtag']} size="sm" />,
       label: item.title,
-      link: appendDrawerPath(`/${workspaceSlug}/messages/${item.slug}`),
+      link: `/${workspaceSlug}/messages/${item.slug}`,
       modifierClassName: item.hasUnreads ? 'unread' : null,
     }));
 
