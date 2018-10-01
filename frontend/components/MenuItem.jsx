@@ -3,58 +3,86 @@ import { NavLink } from 'react-router-dom';
 import Button from './Button';
 import './MenuItem.css';
 
-const MenuItem = ({
-  className,
-  icon,
-  label,
-  altClassName,
-  modifierClassName,
-  ...props,
-}) => {
-  const { to: link, onClick } = props;
+class MenuItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleOnClick = this.handleOnClick.bind(this);
+  }
 
-  let itemType = 'link';
-  if (!link) itemType = onClick ? 'btn' : 'text';
-  let itemClassName = `${className} MenuItem--${itemType}`;
-  if (altClassName) itemClassName += ` MenuItem__${altClassName}`;
-  if (modifierClassName) itemClassName += ` MenuItem--${modifierClassName}`;
-  const contentClassName = `MenuItem__content MenuItem__content--${itemType}`;
-  const itemText = (
-    <Fragment>
-      {icon && (
-        <Fragment>
-          {icon}
-        </Fragment>
-      )}
-      {label}
-    </Fragment>
-  );
+  handleOnClick() {
+    const { onClick, toggleDdMenu } = this.props;
 
-  return (
-    <li className={itemClassName}>
-      {itemType === 'link' && (
-        <NavLink
-          className={contentClassName}
-          activeClassName="MenuItem__content--active"
-          {...props}
-        >
-          {itemText}
-        </NavLink>
-      )}
+    if (onClick) {
+      onClick();
+    }
 
-      {itemType === 'btn' && (
-        <Button className={contentClassName} {...props}>
-          {itemText}
-        </Button>
-      )}
+    if (toggleDdMenu) {
+      toggleDdMenu();
+    }
+  }
 
-      {itemType === 'text' && (
-        <span className={contentClassName} {...props}>
-          {label}
-        </span>
-      )}
-    </li>
-  );
-};
+  render() {
+    const {
+      className,
+      icon,
+      label,
+      altClassName,
+      modifierClassName,
+      onClick,
+      toggleDdMenu,
+      ...props
+    } = this.props;
+
+    const { to: link } = props;
+
+    const itemProps = Object.assign({}, props);
+    itemProps.onClick = this.handleOnClick;
+
+    let itemType = 'link';
+    if (!link) itemType = onClick ? 'btn' : 'text';
+    let itemClassName = `${className} MenuItem--${itemType}`;
+    if (altClassName) itemClassName += ` MenuItem__${altClassName}`;
+    if (modifierClassName) itemClassName += ` MenuItem--${modifierClassName}`;
+    const contentClassName = `MenuItem__content MenuItem__content--${itemType}`;
+
+    const itemText = (
+      <Fragment>
+        {icon && (
+          <Fragment>
+            {icon}
+          </Fragment>
+        )}
+        {label}
+      </Fragment>
+    );
+
+    return (
+      <li className={itemClassName}>
+        {itemType === 'link' && (
+          <NavLink
+            className={contentClassName}
+            onClick={this.handleOnClick}
+            activeClassName="MenuItem__content--active"
+            {...itemProps}
+          >
+            {itemText}
+          </NavLink>
+        )}
+
+        {itemType === 'btn' && (
+          <Button className={contentClassName} {...itemProps}>
+            {itemText}
+          </Button>
+        )}
+
+        {itemType === 'text' && (
+          <span className={contentClassName} {...itemProps}>
+            {label}
+          </span>
+        )}
+      </li>
+    );
+  }
+}
 
 export default MenuItem;

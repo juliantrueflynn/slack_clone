@@ -7,22 +7,28 @@ const Menu = ({
   menuFor,
   isRow,
   inverseColor,
+  toggleMenu,
   ...props
 }) => {
+  if (!items) {
+    return null;
+  }
+
   let classNames = 'Menu';
   if (menuFor) classNames += ` Menu--${menuFor}`;
   if (isRow) classNames += ' Menu--row';
 
-  if (!items) return null;
+  const itemKey = (label, link) => label + (link || '');
 
   return (
     <ul role="menu" className={classNames} {...props}>
       {items.map(({ link, className, ...item }) => (
         <MenuItem
-          key={item.label + (link || '')}
+          key={itemKey(item.label, link)}
           role="menuitem"
           to={link}
           className="MenuItem"
+          toggleDdMenu={toggleMenu}
           {...item}
         />
       ))}

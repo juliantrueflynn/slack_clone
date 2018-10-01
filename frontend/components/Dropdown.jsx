@@ -13,7 +13,9 @@ class Dropdown extends React.Component {
 
   handleClickOutside() {
     const { isOpen } = this.state;
-    if (isOpen) this.setState({ isOpen: false });
+    if (isOpen) {
+      this.setState({ isOpen: false });
+    }
   }
 
   handleTogglerClick() {
@@ -34,7 +36,9 @@ class Dropdown extends React.Component {
       unStyled,
     } = this.props;
 
-    if (!items) return null;
+    if (!items) {
+      return null;
+    }
 
     let dropdownClassNames = `Dropdown Dropdown--${menuPos || 'left'}`;
     if (menuFor) dropdownClassNames += ` Dropdown__${menuFor}`;
@@ -46,7 +50,7 @@ class Dropdown extends React.Component {
         <Button buttonFor="dropdown" onClick={this.handleTogglerClick} style={style} unStyled={unStyled}>
           {togglerText || children}
         </Button>
-        <Menu menuFor="dropdown" items={items} />
+        <Menu menuFor="dropdown" toggleMenu={this.handleTogglerClick} items={items} />
       </div>
     );
   }

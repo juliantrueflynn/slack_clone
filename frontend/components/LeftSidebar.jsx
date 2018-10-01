@@ -1,6 +1,5 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import PreferencesModal from './PreferencesModal';
 import Menu from './Menu';
 import DmChatMenuItem from './DmChatMenuItem';
 import ChatsWidget from './ChatsWidget';
@@ -108,8 +107,6 @@ const LeftSidebar = ({
 
         <Menu menuFor="dmChats" items={dmChatsItems} />
       </div>
-
-      <PreferencesModal workspaceSlug={workspaceSlug} />
     </aside>
   );
 };

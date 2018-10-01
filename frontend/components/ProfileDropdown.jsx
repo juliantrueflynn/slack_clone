@@ -37,7 +37,6 @@ const ProfileDropdown = ({
     { label: greetingLabel, altClassName: 'user-head' },
     { label: 'Home', link: '/', exact: true },
     { label: 'Profile & Account', link: `${baseUrl}/team/${user.slug}` },
-    { label: 'Preferences', onClick: () => modalOpen('SETTINGS') },
     { label: 'Switch Workspace', altClassName: 'switch-workspace' },
   ];
 
