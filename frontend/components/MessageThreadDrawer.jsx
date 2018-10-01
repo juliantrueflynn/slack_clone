@@ -11,15 +11,11 @@ const MessageThreadDrawer = ({ messages, members, currentUser }) => {
     return null;
   }
 
-  const messagesLen = messages.length - 1;
-  const lastEntry = messages[messagesLen];
-
   return (
     <Fragment>
       <Scrollable
         currentUserId={currentUser.id}
-        lastEntry={lastEntry}
-        messagesLen={messagesLen}
+        messages={messages}
         isMessageThread
         isAutoScroll
       >

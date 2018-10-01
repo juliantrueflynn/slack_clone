@@ -18,28 +18,33 @@ class Scrollable extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const {
-      isMessageThread,
-      isAutoScroll,
-      messagesLen,
-      lastEntry,
-      currentUserId,
-    } = this.props;
+    const { isAutoScroll } = this.props;
     const { isAtBottom } = this.state;
-    const isNewEntryByCurrUser = lastEntry && lastEntry.authorId === currentUserId;
-    const hasNewEntry = prevProps.messagesLen && prevProps.messagesLen !== messagesLen;
+    const hasNewEntry = this.hasNewMessage(prevProps.messages);
 
-    if (!isMessageThread && isAutoScroll) {
-      if (isAtBottom || (isNewEntryByCurrUser && hasNewEntry)) {
-        this.scrollToBottom();
-      }
+    if (isAutoScroll && (isAtBottom || hasNewEntry)) {
+      this.scrollToBottom();
+    }
+  }
+
+  hasNewMessage(prevMessages) {
+    const { isMessageThread, messages, currentUserId } = this.props;
+
+    let hasLenUpdate = prevMessages && prevMessages.length;
+    if (isMessageThread && hasLenUpdate) {
+      hasLenUpdate = prevMessages.length > 1;
     }
 
-    if (isMessageThread && isAutoScroll) {
-      if (isAtBottom || (isNewEntryByCurrUser && hasNewEntry)) {
-        this.scrollToBottom();
-      }
+    if (hasLenUpdate) {
+      const messagesLen = messages.length - 1;
+      const prevMessagesLen = prevMessages.length - 1;
+      const lastEntry = messages[messages.length - 1];
+      const isByCurrUser = lastEntry.authorId === currentUserId;
+      const hasEntry = prevMessagesLen !== messagesLen;
+      return isByCurrUser && hasEntry;
     }
+
+    return false;
   }
 
   handleScroll() {

@@ -32,15 +32,12 @@ const Channel = ({
   const placeholder = channel.hasDm ? `@${chatTitle}` : chatTitle;
   const formPlaceholder = placeholder && `Message ${placeholder}`;
   const ownerName = channel.ownerSlug && authors[channel.ownerSlug].username;
-  const messagesLen = messages.length - 1;
-  const lastEntry = messages[messagesLen];
 
   return (
     <div className="Channel">
       <Scrollable
         currentUserId={currentUser.id}
-        lastEntry={lastEntry}
-        messagesLen={messagesLen}
+        messages={messages}
         isAutoScroll
       >
         <ChannelBlurb
