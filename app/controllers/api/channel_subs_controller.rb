@@ -2,7 +2,7 @@ class Api::ChannelSubsController < ApplicationController
   before_action :set_channel_sub
 
   def create
-    @channel_sub = current_user.channel_subs.build(params[:channel_id])
+    @channel_sub = current_user.channel_subs.build(channel_sub_params)
 
     if @channel_sub.save
       render json: ['success']
@@ -12,7 +12,7 @@ class Api::ChannelSubsController < ApplicationController
   end
 
   def update
-    if @channel_sub.update(channel_sub_params)
+    if @channel_sub.update(in_sidebar: !@channel_sub.in_sidebar)
       render json: ['success']
     else
       render json: @channel_sub.errors.full_messages, status: 422
@@ -30,10 +30,10 @@ class Api::ChannelSubsController < ApplicationController
   private
 
   def set_channel_sub
-    @channel_sub = ChannelSub.find_by(channel_id: params[:channel_id], user_id: current_user.id)
+    @channel_sub = ChannelSub.find_by(id: params[:id])    
   end
 
   def channel_sub_params
-    params.require(:channel_sub).permit(:channel_id, :in_sidebar, :user_id)
+    params.require(:channel_sub).permit(:channel_id)
   end
 end

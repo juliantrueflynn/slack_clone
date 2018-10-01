@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     resources :channels, only: [:show, :create, :update, :destroy], param: :slug do
       resources :messages, only: [:index]
     end
-    resources :channel_subs, only: [:create, :update, :destroy], param: :channel_id
+    resources :channel_subs, only: [:create, :update, :destroy]
     resources :messages, only: [:create, :update, :destroy, :show], param: :slug
     resources :favorites, only: [:create, :destroy]
     resources :reactions, only: [:show, :create, :destroy]

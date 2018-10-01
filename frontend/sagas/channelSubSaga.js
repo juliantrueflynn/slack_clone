@@ -9,7 +9,7 @@ import {
 import { CHANNEL_SUB, MESSAGE } from '../actions/actionTypes';
 import * as actions from '../actions/channelActions';
 import { apiCreate, apiDelete, apiUpdate } from '../util/apiUtil';
-import { selectOtherDmSub, selectCurrentUser, selectEntityBySlug } from '../reducers/selectors';
+import { selectCurrentUser, selectEntityBySlug, selectEntities } from '../reducers/selectors';
 
 function* fetchCreate({ channelSub }) {
   try {
@@ -19,29 +19,37 @@ function* fetchCreate({ channelSub }) {
   }
 }
 
-function* fetchUpdate({ channelSub }) {
+function* fetchUpdate({ id }) {
   try {
-    const sub = yield call(apiUpdate, `channel_subs/${channelSub.channelId}`, channelSub);
-    yield put(actions.updateChannelSub.receive(sub));
+    yield call(apiUpdate, `channel_subs/${id}`);
   } catch (error) {
     yield put(actions.createChannelSub.failure(error));
   }
 }
 
+const operations = {
+  '===': (op1, op2) => op1 === op2,
+  '!==': (op1, op2) => op1 !== op2,
+};
+
+function* updateSubFromOperator(chatSlug, operator) {
+  const chat = yield select(selectEntityBySlug, 'channels', chatSlug);
+
+  if (chat.hasDm) {
+    const user = yield select(selectCurrentUser);
+    const channelSubs = yield select(selectEntities, 'channelSubs');
+    const ids = chat.subs.filter(id => operations[operator](channelSubs[id].userId, user.id));
+    const sub = channelSubs[ids[0]];
+
+    if (sub && !sub.inSidebar) {
+      yield put(actions.updateChannelSub.request(sub.id));
+    }
+  }
+}
+
 function* fetchChannelShow({ messages: { channel } }) {
   try {
-    if (channel.hasDm) {
-      const currUser = yield select(selectCurrentUser);
-      const currChat = yield select(selectEntityBySlug, 'channels', channel.slug);
-      const chatSubs = currChat.subs.filter(sub => sub.userSlug && sub.userSlug === currUser.slug);
-      const [userSub] = chatSubs;
-
-      if (userSub && !userSub.inSidebar) {
-        const { channelId } = chatSubs[0];
-        const channelSub = { channelId, inSidebar: true };
-        yield fetchUpdate({ channelSub });
-      }
-    }
+    yield updateSubFromOperator(channel.slug, '===');
   } catch (error) {
     yield put(actions.updateChannelSub.failure(error));
   }
@@ -49,12 +57,7 @@ function* fetchChannelShow({ messages: { channel } }) {
 
 function* fetchDmChatMessage({ message: { message } }) {
   try {
-    const chat = yield select(selectEntityBySlug, 'channels', message.channelSlug);
-    const sub = yield select(selectOtherDmSub, chat.subs);
-
-    if (!sub.inSidebar && chat.hasDm) {
-      yield call(apiUpdate, `sidebar_channel_subs/${sub.id}`);
-    }
+    yield updateSubFromOperator(message.channelSlug, '!==');
   } catch (error) {
     yield put(actions.updateChannelSub.failure(error));
   }
@@ -72,16 +75,16 @@ function* watchCreate() {
   yield takeLatest(CHANNEL_SUB.CREATE.REQUEST, fetchCreate);
 }
 
+function* watchUpdate() {
+  yield takeLatest(CHANNEL_SUB.UPDATE.REQUEST, fetchUpdate);
+}
+
 function* watchChannelShow() {
   yield takeLatest(MESSAGE.INDEX.RECEIVE, fetchChannelShow);
 }
 
 function* watchDmChatMessage() {
   yield takeLatest(MESSAGE.CREATE.RECEIVE, fetchDmChatMessage);
-}
-
-function* watchUpdate() {
-  yield takeLatest(CHANNEL_SUB.UPDATE.REQUEST, fetchUpdate);
 }
 
 function* watchDestroy() {
@@ -91,9 +94,9 @@ function* watchDestroy() {
 export default function* channelSubSaga() {
   yield all([
     fork(watchCreate),
+    fork(watchUpdate),
     fork(watchChannelShow),
     fork(watchDmChatMessage),
-    fork(watchUpdate),
     fork(watchDestroy),
   ]);
 }

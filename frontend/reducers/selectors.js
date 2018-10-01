@@ -22,18 +22,9 @@ export const selectUnsubbedChats = ({ entities: { channels }, session: { current
   values(channels).filter(ch => !ch.members.includes(currentUser.slug) && !ch.hasDm)
 );
 
-const selectDmWith = (channel, members, currUserSlug) => {
+const selectDmWithUser = (channel, members, currUserSlug) => {
   const dmWith = channel.members.filter(userSlug => userSlug !== currUserSlug);
   return dmWith[0] && members[dmWith[0]];
-};
-
-export const selectOtherDmSub = ({ entities: { channelSubs }, session }, chatSubs) => {
-  const { currentUser: { id: userId } } = session;
-  const otherUserSubId = chatSubs.filter(subId => (
-    channelSubs[subId] && channelSubs[subId].userId !== userId
-  ));
-
-  return otherUserSubId.length ? channelSubs[otherUserSubId[0]] : null;
 };
 
 export const selectDmChats = ({ entities: { channels, channelSubs, members }, session }) => {
@@ -47,11 +38,17 @@ export const selectDmChats = ({ entities: { channels, channelSubs, members }, se
     .filter(sub => channels[sub.channelSlug].hasDm && sub.inSidebar)
     .map(({ channelSlug }) => {
       const channel = Object.assign({}, channels[channelSlug]);
-      const dmUser = selectDmWith(channel, members, currMember.slug);
+      const dmUser = selectDmWithUser(channel, members, currMember.slug);
+      const subs = channel.subs.filter(id => channelSubs[id].userId === currMember.id);
+      const [subId] = subs;
 
       if (dmUser) {
         channel.title = dmUser.username;
         channel.userStatus = dmUser.status;
+      }
+
+      if (subId) {
+        channel.userSubId = subId;
       }
 
       return channel;
@@ -76,7 +73,7 @@ export const selectChatTitleBySlug = ({ entities: { channels, members }, ui, ses
     chatTitle = channel.title;
 
     if (channel.hasDm) {
-      const dmUser = selectDmWith(channel, members, currentUser.slug);
+      const dmUser = selectDmWithUser(channel, members, currentUser.slug);
       chatTitle = dmUser && dmUser.username;
     }
   }

@@ -33,16 +33,9 @@ class User < ApplicationRecord
     user.is_password?(password) ? user : nil
   end
 
-  def dm_chats_by_workspace_id(workspace_id)
-    Channel.has_dm_by_workspace_id(workspace_id)
-      .joins(:subs).where(channel_subs: { user_id: id })
-  end
-
-  def dm_chat_with_user_in_workspace(user_id, workspace_id)
-    with_user = User.find_by(id: user_id)
-    return unless with_user
-    dm_chats = dm_chats_by_workspace_id(workspace_id) && with_user.dm_chats_by_workspace_id(workspace_id)
-    dm_chats.first
+  def find_dm_chat_with_user(workspace_id, user_id)
+    users_ids = [id, user_id]
+    Channel.find_dm_chat_by_workspace_and_users(workspace_id, users_ids)
   end
 
   def is_workspace_sub?(workspace)

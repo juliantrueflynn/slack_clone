@@ -54,9 +54,9 @@ const channelSubReducer = (state = {}, action) => {
       return nextState;
     }
     case CHANNEL_SUB.UPDATE.RECEIVE: {
-      const { channelSub: { id, inSidebar } } = action;
+      const { id, inSidebar } = action.channelSub;
       nextState = Object.assign({}, state);
-      if (nextState[id]) nextState[id].inSidebar = inSidebar;
+      nextState[id].inSidebar = inSidebar;
       return nextState;
     }
     case WORKSPACE.SHOW.REQUEST:

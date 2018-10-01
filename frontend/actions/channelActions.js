@@ -44,7 +44,7 @@ export const createChannelSub = {
 };
 
 export const updateChannelSub = {
-  request: channelSub => actionCreator(CHANNEL_SUB.UPDATE.REQUEST, { channelSub }),
+  request: id => actionCreator(CHANNEL_SUB.UPDATE.REQUEST, { id }),
   receive: channelSub => actionCreator(CHANNEL_SUB.UPDATE.RECEIVE, { channelSub }),
   failure: errors => actionCreator(CHANNEL_SUB.UPDATE.FAILURE, { errors }),
 };

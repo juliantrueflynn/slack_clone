@@ -6,11 +6,7 @@ end
 
 json.channels do
   json.array! current_user.channels.where(workspace_id: @workspace.id) do |chat|
-    if chat.has_dm
-      next unless chat.subs.exists?(user_id: current_user.id)
-    end
-
-    json.(chat, :id, :title, :slug, :has_dm)
+    json.(chat, :id, :title, :slug, :owner_id, :has_dm)
   end
 end
 

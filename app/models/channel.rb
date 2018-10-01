@@ -46,23 +46,29 @@ class Channel < ApplicationRecord
     foreign_key: :unreadable_id,
     dependent: :delete
 
-  scope :with_subs, -> { includes(channel_subs: :user) }
-  scope :with_dm, -> { where(has_dm: true) }
+  def self.dm_chat_by_workspace_id(workspace_id)
+    where(has_dm: true, workspace_id: workspace_id)
+  end
 
-  def self.has_dm_by_workspace_id(workspace_id)
-    with_dm.where(workspace_id: workspace_id)
+  def self.find_dm_chat_by_workspace_and_users(workspace_id, users_ids)
+    joins(:subs)
+      .dm_chat_by_workspace_id(workspace_id)
+      .where(channel_subs: { user_id: users_ids })
+      .group('channels.id')
+      .having('COUNT(channels.id) > 1')
+      .take
   end
 
   def self.with_user_sub(user_id)
     includes(:subs).where(channel_subs: { user_id: user_id })
   end
 
-  def member_ids=(member_ids)
-    @member_ids = member_ids.map(&:to_i)
-  end
-
   def broadcast_name
     "workspace_#{workspace.slug}"
+  end
+
+  def member_ids=(member_ids)
+    @member_ids = member_ids.map(&:to_i)
   end
 
   def is_user_sub?(user_id)
@@ -86,9 +92,15 @@ class Channel < ApplicationRecord
 
   def sub_users_to_dm_chat
     return unless self.member_ids
-    self.member_ids.each_with_index do |member_id, idx|
+
+    self.member_ids.each_with_index do |dm_user_id, idx|
       in_sidebar = idx === 0 ? true : false
-      subs.create(channel_id: id, user_id: member_id, skip_broadcast: true, in_sidebar: in_sidebar)
+      subs.create(
+        channel_id: id,
+        user_id: dm_user_id,
+        in_sidebar: in_sidebar,
+        skip_broadcast: true
+      )
     end
   end
 

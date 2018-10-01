@@ -56,13 +56,14 @@ const LeftSidebar = ({
   const dmChatsItems = dmChats.map((ch) => {
     const circleType = ch.userStatus === 'OFFLINE' ? 'far' : 'fas';
     const circleIcon = [circleType, 'circle'];
+    const classNames = `Icon Icon__${ch.userStatus.toLowerCase()}`;
 
     return {
-      icon: <FontAwesomeIcon icon={circleIcon} size="xs" />,
+      icon: <FontAwesomeIcon icon={circleIcon} size="xs" className={classNames} />,
       link: appendDrawerPath(`${url}/messages/${ch.slug}`),
       label: (
         <DmChatMenuItem
-          channelId={ch.id}
+          channelSubId={ch.userSubId}
           label={ch.title}
           updateChannelSubRequest={updateChannelSubRequest}
         />
