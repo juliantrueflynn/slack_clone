@@ -11,6 +11,7 @@ import {
   UNREAD,
   DRAWER_CLOSE,
   LOAD_CHAT_PAGE,
+  HISTORY,
 } from '../actions/actionTypes';
 import parseDateToMilliseconds from '../util/dateUtil';
 
@@ -72,6 +73,7 @@ const messageReducer = (state = {}, action) => {
 
       return nextState;
     }
+    case HISTORY.INDEX.RECEIVE:
     case MESSAGE.INDEX.RECEIVE: {
       const { messages, reactions, favorites } = action.messages;
 

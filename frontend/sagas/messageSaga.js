@@ -3,11 +3,13 @@ import {
   call,
   fork,
   put,
+  select,
   takeLatest
 } from 'redux-saga/effects';
-import { MESSAGE } from '../actions/actionTypes';
+import { MESSAGE, HISTORY } from '../actions/actionTypes';
 import * as actions from '../actions/messageActions';
 import * as api from '../util/apiUtil';
+import { selectUIByDisplay } from '../reducers/selectors';
 
 function* fetchIndex({ channelSlug }) {
   try {
@@ -15,6 +17,17 @@ function* fetchIndex({ channelSlug }) {
     yield put(actions.fetchMessages.receive(messages));
   } catch (error) {
     yield put(actions.fetchMessage.failure(error));
+  }
+}
+
+function* fetchHistoryIndex({ startDate }) {
+  try {
+    const channelSlug = yield select(selectUIByDisplay, 'displayChannelSlug');
+    const apiUrl = `channels/${channelSlug}/recent_messages/${startDate}`;
+    const history = yield call(api.apiFetch, apiUrl);
+    yield put(actions.fetchHistory.receive(history));
+  } catch (error) {
+    yield put(actions.fetchHistory.failure(error));
   }
 }
 
@@ -55,6 +68,10 @@ function* watchIndex() {
   yield takeLatest(MESSAGE.INDEX.REQUEST, fetchIndex);
 }
 
+function* watchHistoryIndex() {
+  yield takeLatest(HISTORY.INDEX.REQUEST, fetchHistoryIndex);
+}
+
 function* watchRequestMessage() {
   yield takeLatest(MESSAGE.SHOW.REQUEST, loadMessage);
 }
@@ -74,6 +91,7 @@ function* watchDeleteMessage() {
 export default function* messageSaga() {
   yield all([
     fork(watchIndex),
+    fork(watchHistoryIndex),
     fork(watchRequestMessage),
     fork(watchCreateMessage),
     fork(watchEditMessage),

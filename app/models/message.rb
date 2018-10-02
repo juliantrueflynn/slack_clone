@@ -64,6 +64,42 @@ class Message < ApplicationRecord
     where(id: convos).or(where(parent_message_id: convos))
   end
 
+  def self.created_between(start_date, end_date)
+    where("date(created_at) BETWEEN ? AND ?", start_date, end_date)
+  end
+
+  def self.first_parent_created_at(channel_id)
+    entries = without_children.where(channel_id: channel_id)
+    entries.first ? entries.first.created_at : nil
+  end
+
+  def self.days_from_first_post(channel_id, compared_date)
+    last_created = first_parent_created_at(channel_id)
+    return 0 if last_created.nil?
+    (compared_date.to_date - last_created.midnight.to_date).to_i
+  end
+
+  def self.created_recently(channel_id, start_date = nil)
+    entries = where(channel_id: channel_id)
+    return entries if entries.without_children.length < 12
+
+    start_date = DateTime.now if start_date.nil?
+    end_date = start_date.midnight
+    days_between = days_from_first_post(channel_id, start_date)
+
+    messages = []
+    1.step(to: days_between) do |idx|
+      results = entries.without_children.created_between(end_date - idx, start_date)
+
+      if results.length > 12
+        messages = results
+        break
+      end
+    end
+
+    where(id: messages).or(where(parent_message_id: messages))
+  end
+
   def broadcast_name
     "channel_#{channel.slug}"
   end

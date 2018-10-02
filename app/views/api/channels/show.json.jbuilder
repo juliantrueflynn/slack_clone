@@ -4,7 +4,7 @@ json.channel do
 end
 
 json.messages do
-  json.array! @channel.all_messages.includes(:author, :parent_message) do |message|
+  json.array! @channel.recent_entries.includes(:author, :parent_message) do |message|
     json.(message, *message.attributes.keys)
     json.author_slug message.author.slug
     if message.is_child?

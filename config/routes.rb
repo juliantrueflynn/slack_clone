@@ -15,9 +15,10 @@ Rails.application.routes.draw do
     end
     resource :dm_chat, only: [:create]
     resources :workspace_subs, only: [:create, :destroy], param: :workspace_id
-    resources :sidebar_channel_subs, only: [:update]
     resources :channels, only: [:show, :create, :update, :destroy], param: :slug do
-      resources :messages, only: [:index]
+      get '/recent_messages(/:start_date)', to: 'recent_messages#index'
+      resources :messages, only: :index
+      # get ':recent_messages(/:start_date)', to: 'recent_messages#index'
     end
     resources :channel_subs, only: [:create, :update, :destroy]
     resources :messages, only: [:create, :update, :destroy, :show], param: :slug

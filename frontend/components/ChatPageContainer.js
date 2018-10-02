@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { selectChatTitleBySlug, selectChatMessagesBySlug, selectChatChannelsBySlug } from '../reducers/selectors';
-import { fetchMessages, fetchUserThreads } from '../actions/messageActions';
+import { fetchMessages, fetchUserThreads, fetchHistory } from '../actions/messageActions';
 import { fetchUnreads } from '../actions/readActions';
 import { loadChatPage, createChannelSub } from '../actions/channelActions';
 import { drawerClose } from '../actions/uiActions';
@@ -37,6 +37,7 @@ const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug, chatPa
   loadChatPage: pagePath => dispatch(loadChatPage(pagePath)),
   drawerClose: () => dispatch(drawerClose()),
   createChannelSubRequest: channelSub => dispatch(createChannelSub.request(channelSub)),
+  fetchHistoryRequest: startDate => dispatch(fetchHistory.request(startDate)),
   clearUnreads: channelSlug => dispatch(clearUnreads(channelSlug)),
 });
 

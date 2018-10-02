@@ -14,6 +14,8 @@ const LinkWithDrawer = ({
   isDrawerOpen,
   hasNoDrawer,
   drawerUrl,
+  staticContext,
+  dispatch,
   ...props,
 }) => {
   let linkTo = to;

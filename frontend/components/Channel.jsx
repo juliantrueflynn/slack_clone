@@ -9,6 +9,7 @@ const Channel = ({
   chatPath,
   messages,
   authors,
+  fetchHistoryRequest,
   createChannelSubRequest,
   chatTitle,
   currentUser,
@@ -32,11 +33,14 @@ const Channel = ({
   const placeholder = channel.hasDm ? `@${chatTitle}` : chatTitle;
   const formPlaceholder = placeholder && `Message ${placeholder}`;
   const ownerName = channel.ownerSlug && authors[channel.ownerSlug].username;
+  const hasLoaded = !isLoading;
 
   return (
     <div className="Channel">
       <Scrollable
+        fetchHistoryRequest={fetchHistoryRequest}
         currentUserId={currentUser.id}
+        hasLoaded={hasLoaded}
         messages={messages}
         isAutoScroll
       >
@@ -49,7 +53,7 @@ const Channel = ({
           <MessageContainer key={message.slug} users={authors} message={message} />
         ))}
       </Scrollable>
-      {/* <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} /> */}
+      <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} />
       <ChannelSubscribe
         chatTitle={chatTitle}
         ownerName={ownerName}

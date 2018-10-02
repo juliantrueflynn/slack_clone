@@ -9,6 +9,7 @@ export const WORKSPACE = apiActions('WORKSPACE', ['INDEX', 'SHOW', 'CREATE', 'UP
 export const CHANNEL = apiActions('CHANNEL', ['INDEX', 'SHOW', 'CREATE', 'UPDATE', 'DESTROY']);
 export const DM_CHAT = apiActions('DM_CHAT', ['CREATE']);
 export const MESSAGE = apiActions('MESSAGE', ['INDEX', 'SHOW', 'CREATE', 'UPDATE', 'DESTROY']);
+export const HISTORY = apiActions('HISTORY', ['INDEX']);
 export const WORKSPACE_SUB = apiActions('WORKSPACE_SUB', ['CREATE', 'DESTROY']);
 export const CHANNEL_SUB = apiActions('CHANNEL_SUB', ['CREATE', 'UPDATE', 'DESTROY']);
 export const FAVORITE = apiActions('FAVORITE', ['INDEX', 'CREATE', 'DESTROY']);

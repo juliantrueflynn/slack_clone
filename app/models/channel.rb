@@ -22,7 +22,8 @@ class Channel < ApplicationRecord
     class_name: 'User',
     through: :subs,
     source: :user
-  has_many :all_messages, class_name: 'Message'
+  has_many :recent_entries,
+    class_name: 'Message'
   has_many :entries, class_name: 'Message'
   has_many :messages,
     -> { includes(:parent_message) } do

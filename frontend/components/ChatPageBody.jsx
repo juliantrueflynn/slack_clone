@@ -6,12 +6,13 @@ import Channel from './Channel';
 const ChatPageBody = ({
   chatPath,
   chatTitle,
+  messages,
   users,
   channels,
   currentUser,
   isLoading,
   clearUnreads,
-  messages,
+  fetchHistoryRequest,
 }) => {
   if (isLoading) {
     return (
@@ -49,6 +50,7 @@ const ChatPageBody = ({
         currentUser={currentUser}
         isLoading={isLoading}
         messages={messages}
+        fetchHistoryRequest={fetchHistoryRequest}
       />
     </div>
   );

@@ -5,8 +5,11 @@ json.workspace do
 end
 
 json.channels do
-  json.array! current_user.channels.where(workspace_id: @workspace.id) do |chat|
+  channels = current_user.channels.where(workspace_id: @workspace.id)
+
+  json.array! channels.includes(:owner) do |chat|
     json.(chat, :id, :title, :slug, :owner_id, :has_dm)
+    json.owner_slug chat.owner ? chat.owner.slug : nil
   end
 end
 

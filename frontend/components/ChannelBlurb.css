@@ -7,3 +7,8 @@
 .ChannelBlurb__title {
   margin: 0 0 15px;
 }
+
+.Scrollable--has-history .ChannelBlurb,
+.Scrollable--fetching .ChannelBlurb {
+  display: none;
+}
