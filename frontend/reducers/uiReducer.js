@@ -4,6 +4,7 @@ import displayChannelSlug from './channelDisplayReducer';
 import displayModal from './modalReducer';
 import isWorkspaceLoading from './isWorkspaceLoadingReducer';
 import isPageLoading from './isPageLoadingReducer';
+import isDrawerLoading from './isDrawerLoadingReducer';
 import drawer from './drawerReducer';
 
 const uiReducer = combineReducers({
@@ -12,6 +13,7 @@ const uiReducer = combineReducers({
   displayModal,
   isWorkspaceLoading,
   isPageLoading,
+  isDrawerLoading,
   drawer,
 });
 

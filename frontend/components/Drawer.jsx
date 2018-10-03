@@ -60,11 +60,12 @@ class Drawer extends React.Component {
   }
 
   render() {
-    const { drawerTitle, render } = this.props;
+    const { drawerTitle, render, isLoading } = this.props;
     const { drawerType } = this.drawerProps();
 
     let classNames = 'Drawer';
     if (drawerType) classNames += ` Drawer__${drawerType}`;
+    if (isLoading) classNames += ' Drawer__loading';
 
     return (
       <aside className={classNames}>

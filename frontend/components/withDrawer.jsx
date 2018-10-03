@@ -17,6 +17,7 @@ const withDrawer = drawerTitle => (WrappedComponent) => {
     channels: state.entities.channels,
     currentUser: state.session.currentUser,
     drawer: state.ui.drawer,
+    isLoading: state.ui.isDrawerLoading,
   });
 
   const mapDispatchToProps = (dispatch, { match: { params } }) => ({
@@ -52,7 +53,12 @@ const withDrawer = drawerTitle => (WrappedComponent) => {
       return null;
     }
 
-    const { match, history, location } = props;
+    const {
+      match,
+      history,
+      location,
+      isLoading,
+    } = props;
 
     return (
       <Drawer
@@ -64,6 +70,7 @@ const withDrawer = drawerTitle => (WrappedComponent) => {
         match={match}
         history={history}
         location={location}
+        isLoading={isLoading}
         render={drawerProps => (
           <WrappedComponent drawer={drawerProps} {...props} />
         )}

@@ -4,12 +4,19 @@ import withDrawer from './withDrawer';
 import Scrollable from './Scrollable';
 import MessageContainer from './MessageContainer';
 
-const MessageThreadDrawer = ({ messages, members, currentUser }) => {
+const MessageThreadDrawer = ({
+  messages,
+  members,
+  currentUser,
+  isLoading,
+}) => {
   const parentMessage = messages[0];
 
-  if (!parentMessage) {
+  if (!parentMessage || isLoading) {
     return null;
   }
+
+  const hasLoaded = !isLoading;
 
   return (
     <Fragment>
@@ -17,6 +24,7 @@ const MessageThreadDrawer = ({ messages, members, currentUser }) => {
         currentUserId={currentUser.id}
         messages={messages}
         isMessageThread
+        hasLoaded={hasLoaded}
         isAutoScroll
       >
         {messages.map(message => (
