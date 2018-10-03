@@ -2,10 +2,16 @@ json.messages do
   json.array! @recent_messages.includes(:author, :parent_message) do |message|
     json.(message, *message.attributes.keys)
     json.author_slug message.author.slug
+
     if message.is_child?
       json.parent_message_slug message.parent_message.slug
     end
   end
+end
+
+json.channel do
+  channel = @recent_messages.first.channel
+  json.(channel, :slug)
 end
 
 json.favorites do

@@ -23,14 +23,28 @@ class MessageForm extends React.Component {
 
     const { editorState } = this.state;
     const body = convertForSubmit(editorState);
-    const { channelId, parentMessageId, createMessageRequest } = this.props;
+    const {
+      channelId,
+      parentMessageId,
+      parentMessageSlug,
+      createMessageRequest
+    } = this.props;
 
-    createMessageRequest({ body, channelId, parentMessageId });
+    const message = {
+      body,
+      channelId,
+      parentMessageId,
+      parentMessageSlug,
+    };
+
+    createMessageRequest(message);
     this.setState({ editorState: clearEditor(editorState) });
   }
 
   handleEnterSubmit(e) {
-    if (e.key === 'Enter' && !e.shiftKey) this.handleSubmit(e);
+    if (e.key === 'Enter' && !e.shiftKey) {
+      this.handleSubmit(e);
+    }
   }
 
   render() {

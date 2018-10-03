@@ -116,7 +116,7 @@ export const getReactionCounts = ({ entities: { reactions }, session }, messageS
 
 const messagesWithEntitiesMap = ({ messages, members }) => (
   values(messages).reduce((acc, curr) => {
-    const author = members[curr.authorSlug];
+    const author = members && members[curr.authorSlug];
 
     acc[curr.slug] = {
       authorName: author && author.username,
@@ -150,6 +150,20 @@ export const selectMessageChildrenBySlug = ({ entities }, slug) => (
   selectMessageThreadBySlug(entities, slug).slice(1)
 );
 
+const selectAllThreadMessages = (entities) => {
+  const entries = messagesWithEntitiesMap(entities);
+
+  return values(entries)
+    .filter(message => message.isInConvo)
+    .reduce((acc, curr) => {
+      const convo = Object.assign({}, curr);
+      convo.thread = selectMessageChildrenBySlug({ entities }, curr.slug);
+      acc.push(convo);
+      return acc;
+    }, [])
+    .sort((a, b) => new Date(b.lastActive) - new Date(a.lastActive));
+};
+
 export const selectChatMessagesBySlug = ({ entities }, chatSlug) => {
   const { messages, channels, members } = entities;
   const entries = messagesWithEntitiesMap({ messages, members });
@@ -162,14 +176,7 @@ export const selectChatMessagesBySlug = ({ entities }, chatSlug) => {
   }
 
   if (chatSlug === 'threads') {
-    const convos = values(entries).filter(message => message.isActiveThread).reverse();
-
-    return convos.reduce((acc, curr) => {
-      const convo = Object.assign({}, curr);
-      convo.thread = selectMessageChildrenBySlug({ entities }, curr.slug);
-      acc.push(convo);
-      return acc;
-    }, []);
+    return selectAllThreadMessages(entities);
   }
 
   return entries;

@@ -33,10 +33,14 @@ const reactionReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case MESSAGE.SHOW.RECEIVE: {
-      const { message: { reactions } } = action;
-      nextState = {};
-      reactions.forEach((reaction) => { nextState[reaction.id] = reaction; });
-      return Object.assign({}, state, nextState);
+      const { reactions } = action.messages;
+
+      nextState = Object.assign({}, state);
+      reactions.forEach((reaction) => {
+        nextState[reaction.id] = reaction;
+      });
+
+      return nextState;
     }
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:

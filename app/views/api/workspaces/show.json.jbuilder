@@ -38,9 +38,11 @@ json.reads do
     json.slug read.channel.slug
   end
 
-  json.array! read_convos.includes(:message) do |read|
+  json.array! read_convos.includes(message: [:author, :channel]) do |read|
     json.(read, :id, :accessed_at, :readable_id, :readable_type)
     json.slug read.message.slug
+    json.channel_slug read.message.channel.slug
+    json.author_slug read.message.author.slug
   end
 end
 
@@ -53,8 +55,10 @@ json.unreads do
     json.slug unread.channel.slug
   end
 
-  json.array! unread_convos.includes(:message) do |unread|
+  json.array! unread_convos.includes(message: [:author, :channel]) do |unread|
     json.(unread, :id, :active_at, :unreadable_id, :unreadable_type)
     json.slug unread.message.slug
+    json.channel_slug unread.message.channel.slug
+    json.author_slug unread.message.author.slug
   end
 end

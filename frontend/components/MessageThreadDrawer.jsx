@@ -30,6 +30,7 @@ const MessageThreadDrawer = ({ messages, members, currentUser }) => {
         <MessageFormContainer
           channelId={parentMessage.channelId}
           parentMessageId={parentMessage.id}
+          parentMessageSlug={parentMessage.slug}
           hasSubmitButton
         />
       </Scrollable>

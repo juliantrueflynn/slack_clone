@@ -25,6 +25,10 @@
   flex: 1;
 }
 
+.ChatPage--channel .ChatPage__container .Channel {
+  position: relative;
+}
+
 .ChatPage--threads .ChatPage__container {
   background-color: #F7FAFC;
 }

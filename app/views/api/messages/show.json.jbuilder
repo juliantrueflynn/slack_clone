@@ -1,23 +1,22 @@
-json.message do
-  json.(@message, *@message.attributes.keys)
-  json.author_slug @message.author.slug
-  json.channel_slug @message.channel.slug
-end
+messages = Message.parents_or_children(@message.id)
 
-json.child_messages do
-  json.array! @message.replies.includes(:author, :parent_message) do |child|
-    json.(child, *child.attributes.keys)
-    json.parent_message_slug child.parent_message.slug
-    json.author_slug child.author.slug
+json.messages do
+  json.array! messages.includes(:author, :parent_message) do |message|
+    json.(message, *message.attributes.keys)
+    json.author_slug message.author.slug
+
+    if message.is_child?
+      json.parent_message_slug message.parent_message.slug
+    end
   end
 end
 
-replies = @message.replies.to_a
-message_thread = replies.unshift(@message)
-message_thread_ids = message_thread.pluck(:id)
+json.channel do
+  json.(@message.channel, :slug)
+end
 
 json.favorites do
-  favorites = current_user.favorites.includes(:message).where(message_id: message_thread_ids)
+  favorites = current_user.favorites.includes(:message).where(message_id: messages)
 
   json.array! favorites do |favorite|
     json.(favorite, :id, :message_id, :user_id)
@@ -26,7 +25,7 @@ json.favorites do
 end
 
 json.reactions do
-  reactions = Reaction.includes(:user, :message).where(message_id: message_thread_ids)
+  reactions = Reaction.includes(:user, :message).where(message_id: messages)
 
   json.array! reactions do |reaction|
     json.(reaction, :id, :message_id, :user_id, :emoji)
@@ -35,11 +34,3 @@ json.reactions do
   end
 end
 
-json.read do
-  read = current_user.reads.by_message_id(@message.id)
-  if read
-    json.(read, :id, :readable_id, :readable_type, :accessed_at)
-  else
-    json.nil!
-  end
-end

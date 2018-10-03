@@ -26,16 +26,6 @@ const unreadReducer = (state = {}, action) => {
       nextState[unread.id] = unread;
       return merge({}, state, nextState);
     }
-    case MESSAGE.SHOW.RECEIVE: {
-      const { message: { childMessages, unread } } = action;
-
-      nextState = {};
-      if (childMessages.length && unread) {
-        nextState[unread.slug] = unread;
-      }
-
-      return merge({}, state, nextState);
-    }
     case UNREAD.CREATE.RECEIVE:
     case UNREAD.UPDATE.RECEIVE: {
       const { unread } = action;

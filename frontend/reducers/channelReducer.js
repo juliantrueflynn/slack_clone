@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import parseDateToMilliseconds from '../util/dateUtil';
+import parseHasUnreads from '../util/reducerUtil';
 import {
   WORKSPACE,
   CHANNEL,
@@ -117,10 +117,8 @@ const channelReducer = (state = {}, action) => {
         nextState[unread.slug].unreadId = unread.id;
       });
 
-      Object.values(nextState).forEach((channel) => {
-        const lastActive = parseDateToMilliseconds(channel.lastActive);
-        const lastRead = parseDateToMilliseconds(channel.lastRead);
-        nextState[channel.slug].hasUnreads = lastActive > lastRead;
+      Object.values(nextState).forEach(({ slug, lastActive, lastRead }) => {
+        nextState[slug].hasUnreads = parseHasUnreads({ lastActive, lastRead });
       });
 
       return nextState;
@@ -233,9 +231,9 @@ const channelReducer = (state = {}, action) => {
       nextState[read.slug].lastRead = read.accessedAt;
       nextState[read.slug].readId = read.id;
 
-      const lastRead = parseDateToMilliseconds(read.accessedAt);
-      const lastActive = parseDateToMilliseconds(nextState[read.slug].lastActive);
-      nextState[read.slug].hasUnreads = lastActive > lastRead;
+      const lastRead = read.accessedAt;
+      const { lastActive } = nextState[read.slug];
+      nextState[read.slug].hasUnreads = parseHasUnreads({ lastActive, lastRead });
 
       if (nextState[read.slug].isOpen) {
         nextState[read.slug].hasUnreads = false;
@@ -249,9 +247,9 @@ const channelReducer = (state = {}, action) => {
       if (unread.unreadableType !== 'Channel') return state;
       nextState = Object.assign({}, state);
       nextState[unread.slug].unreadId = unread.id;
-      const lastRead = parseDateToMilliseconds(nextState[unread.slug].lastRead);
-      const lastActive = parseDateToMilliseconds(unread.activeAt);
-      nextState[unread.slug].hasUnreads = lastActive > lastRead;
+      const { lastRead } = nextState[unread.slug];
+      const lastActive = unread.activeAt;
+      nextState[unread.slug].hasUnreads = parseHasUnreads({ lastActive, lastRead });
 
       if (nextState[unread.slug].isOpen) {
         nextState[unread.slug].hasUnreads = false;

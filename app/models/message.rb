@@ -2,6 +2,7 @@ class Message < ApplicationRecord
   before_validation :generate_slug, unless: :slug?
 
   attr_accessor :skip_broadcast
+  attr_accessor :parent_mesage_slug
 
   validates_presence_of :slug, :author_id, :channel_id
   validates_uniqueness_of :slug
@@ -79,6 +80,10 @@ class Message < ApplicationRecord
     (compared_date.to_date - last_created.midnight.to_date).to_i
   end
 
+  def self.parents_or_children(id_or_ids)
+    where(id: id_or_ids).or(where(parent_message_id: id_or_ids))
+  end
+
   def self.created_recently(channel_id, start_date = nil)
     entries = where(channel_id: channel_id)
     return entries if entries.without_children.length < 12
@@ -97,7 +102,7 @@ class Message < ApplicationRecord
       end
     end
 
-    where(id: messages).or(where(parent_message_id: messages))
+    parents_or_children(messages)
   end
 
   def broadcast_name

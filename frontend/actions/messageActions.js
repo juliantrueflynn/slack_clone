@@ -15,7 +15,7 @@ export const fetchHistory = {
 
 export const fetchMessage = {
   request: messageSlug => actionCreator(MESSAGE.SHOW.REQUEST, { messageSlug }),
-  receive: message => actionCreator(MESSAGE.SHOW.RECEIVE, { message }),
+  receive: messages => actionCreator(MESSAGE.SHOW.RECEIVE, { messages }),
   failure: errors => actionCreator(MESSAGE.SHOW.FAILURE, { errors }),
 };
 
@@ -36,6 +36,6 @@ export const deleteMessage = {
 
 export const fetchUserThreads = {
   request: workspaceSlug => actionCreator(USER_THREAD.INDEX.REQUEST, { workspaceSlug }),
-  receive: messageThreads => actionCreator(USER_THREAD.INDEX.RECEIVE, { messageThreads }),
+  receive: messages => actionCreator(USER_THREAD.INDEX.RECEIVE, { messages }),
   failure: errors => actionCreator(USER_THREAD.INDEX.FAILURE, { errors }),
 };

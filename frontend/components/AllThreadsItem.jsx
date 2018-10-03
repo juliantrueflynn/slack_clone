@@ -52,8 +52,9 @@ const AllThreadsItem = ({
           ))}
         </div>
         <MessageFormContainer
-          parentMessageId={parentMessage.id}
           channelId={parentMessage.channelId}
+          parentMessageId={parentMessage.id}
+          parentMessageSlug={parentMessage.slug}
         />
       </div>
     </div>

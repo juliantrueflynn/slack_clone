@@ -14,13 +14,7 @@ import {
 } from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiFetch } from '../util/apiUtil';
 import * as actions from '../actions/readActions';
-import {
-  selectUIByDisplay,
-  selectEntityBySlug,
-  selectEntities,
-  selectCurrentUser,
-} from '../reducers/selectors';
-import parseDateToMilliseconds from '../util/dateUtil';
+import { selectUIByDisplay, selectEntityBySlug, selectEntities } from '../reducers/selectors';
 
 function* fetchIndex({ workspaceSlug }) {
   try {
@@ -49,30 +43,14 @@ export function* fetchUpdate({ readId }) {
   }
 }
 
-function* fetchMessageThread({ message: { message, childMessages, read } }) {
-  const currUser = yield select(selectCurrentUser);
-  const lastEntry = childMessages[childMessages.length - 1];
-  const lastActive = lastEntry && parseDateToMilliseconds(lastEntry.createdAt);
-  const lastRead = read && parseDateToMilliseconds(read.accessedAt);
+function* fetchMessageThread({ messages: { messages } }) {
+  const parent = yield select(selectEntityBySlug, 'messages', messages[0].slug);
 
-  let hasUnread = true;
-  if (!childMessages.length) {
-    hasUnread = false;
-  } else if (lastEntry && lastRead > lastActive) {
-    hasUnread = false;
-  }
-
-  childMessages.unshift(message);
-  const isNotInConvo = childMessages.every(msg => msg.authorSlug !== currUser.slug);
-  if (isNotInConvo) {
-    hasUnread = false;
-  }
-
-  if (hasUnread) {
-    if (read) {
-      yield put(actions.updateRead.request(read.id));
+  if (parent.hasUnreads) {
+    if (parent.readId) {
+      yield put(actions.updateRead.request(parent.readId));
     } else {
-      const readProps = { readableId: message.id, readableType: 'Message' };
+      const readProps = { readableId: parent.id, readableType: 'Message' };
       yield put(actions.createRead.request(readProps));
     }
   }
@@ -80,15 +58,14 @@ function* fetchMessageThread({ message: { message, childMessages, read } }) {
 
 function* fetchChannelPage({ messages: { channel } }) {
   const currChannel = yield select(selectEntityBySlug, 'channels', channel.slug);
-  const read = yield select(selectEntityBySlug, 'reads', currChannel.readId);
 
-  if (read) {
-    if (currChannel.hasUnreads) {
-      yield put(actions.updateRead.request(read.id));
+  if (currChannel.hasUnreads) {
+    if (currChannel.readId) {
+      yield put(actions.updateRead.request(currChannel.readId));
+    } else {
+      const newRead = { readableId: channel.id, readableType: 'Channel' };
+      yield put(actions.createRead.request(newRead));
     }
-  } else {
-    const newRead = { readableId: channel.id, readableType: 'Channel' };
-    yield put(actions.createRead.request(newRead));
   }
 }
 
