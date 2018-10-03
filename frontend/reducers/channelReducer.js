@@ -33,17 +33,16 @@ const channelReducer = (state = {}, action) => {
     case LOAD_CHAT_PAGE: {
       const { pagePath } = action;
 
-      nextState = Object.assign({}, state);
+      nextState = {};
       Object.values(nextState).forEach((ch) => {
-        nextState[ch.slug].isOpen = false;
+        nextState[ch.slug] = { isOpen: false };
       });
 
       if (nextState[pagePath]) {
-        nextState[pagePath].isOpen = true;
-        nextState[pagePath].isLoading = true;
+        nextState[pagePath] = { isOpen: true, isLoading: true };
       }
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case MESSAGE.INDEX.RECEIVE: {
       const {

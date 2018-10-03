@@ -1,5 +1,4 @@
 import {
-  DRAWER_OPEN,
   DRAWER_CLOSE,
   MESSAGE,
   FAVORITE,
@@ -8,7 +7,6 @@ import {
 
 const isDrawerLoadingReducer = (state = false, action) => {
   switch (action.type) {
-    case DRAWER_OPEN:
     case MESSAGE.SHOW.REQUEST:
     case FAVORITE.INDEX.REQUEST:
     case MEMBER.SHOW.REQUEST:

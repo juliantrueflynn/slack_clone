@@ -24,10 +24,15 @@ class Drawer extends React.Component {
       fetchEntitiesRequest,
       location: { pathname },
     } = this.props;
+    const { drawerSlug: prevDrawerSlug } = prevProps.drawer;
+    const { drawerType, drawerSlug } = this.drawerProps();
 
     if (pathname !== prevProps.location.pathname) {
-      openDrawer(this.drawerProps());
-      fetchEntitiesRequest();
+      openDrawer({ drawerType, drawerSlug });
+
+      if (drawerSlug !== prevDrawerSlug) {
+        fetchEntitiesRequest();
+      }
     }
   }
 
