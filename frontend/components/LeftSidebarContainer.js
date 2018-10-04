@@ -4,8 +4,6 @@ import LeftSidebar from './LeftSidebar';
 import {
   selectSubbedChats,
   selectUnsubbedChats,
-  hasUreadChannels,
-  hasUreadThreads,
   selectDmChats,
   selectSubbedWorkspaces,
 } from '../reducers/selectors';
@@ -13,8 +11,7 @@ import { modalOpen } from '../actions/uiActions';
 import { createChannel, updateChannelSub, fetchChannels } from '../actions/channelActions';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
-  hasUnreadChannels: hasUreadChannels(state),
-  hasUnreadThreads: hasUreadThreads(state),
+  hasUnreadConvos: Object.values(state.entities.messages).some(convo => convo.hasUnreads),
   currentUser: state.session.currentUser,
   workspaces: selectSubbedWorkspaces(state),
   currWorkspace: state.entities.workspaces[workspaceSlug],

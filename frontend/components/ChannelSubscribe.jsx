@@ -14,24 +14,20 @@ class ChannelSubscribe extends React.Component {
     createChannelSubRequest(channelSub);
   }
 
-  description() {
-    const { ownerName, channel } = this.props;
-    return `Created by ${ownerName} on ${channel.createdAt}`;
-  }
-
   render() {
-    const { channel, currentUserSlug, chatTitle } = this.props;
-    const isSubbed = channel.members.includes(currentUserSlug);
+    const { channel } = this.props;
 
-    if (channel.hasDm || isSubbed) return null;
+    if (channel.hasDm || channel.isSub) {
+      return null;
+    }
 
     return (
       <div className="ChannelSubscribe">
         <h3 className="ChannelSubscribe__title">
-          {chatTitle}
+          {channel.title}
         </h3>
         <div className="ChannelSubscribe__text">
-          {this.description()}
+          {`Created by ${channel.ownerName} on ${channel.createdAt}`}
         </div>
         <Button buttonFor="subscribe" color="green" onClick={this.clickSubscribe}>
           Join Channel

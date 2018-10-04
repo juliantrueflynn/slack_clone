@@ -7,7 +7,6 @@ import ProfileDropdown from './ProfileDropdown';
 import './LeftSidebar.css';
 
 const LeftSidebar = ({
-  hasUnreadChannels,
   hasUnreadThreads,
   subbedChannels,
   currentUser,
@@ -26,6 +25,8 @@ const LeftSidebar = ({
   if (!currWorkspace) {
     return null;
   }
+
+  const hasUnreadChannels = !!subbedChannels.filter(ch => ch.hasUnreads).length;
 
   const quickLinksList = [
     {

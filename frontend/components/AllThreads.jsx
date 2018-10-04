@@ -10,8 +10,16 @@ const AllThreads = ({
   currentUser,
   isLoading,
 }) => {
-  if (chatPath !== 'threads' || isLoading) {
+  if (chatPath !== 'threads') {
     return null;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="ChatPage__loader">
+        Loading
+      </div>
+    );
   }
 
   if (!convos.length) {

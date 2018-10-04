@@ -60,7 +60,7 @@ class WorkspacePage extends React.Component {
       modal,
       modalClose,
       createReactionRequest,
-      chatTitle,
+      channels,
       drawerType,
       drawerClose,
     } = this.props;
@@ -82,7 +82,7 @@ class WorkspacePage extends React.Component {
         <LeftSidebarContainer />
         <div className="Workspace__col">
           <ChannelHeader
-            sectionTitle={chatTitle}
+            channels={channels}
             drawerClose={drawerClose}
             drawerType={drawerType}
           />

@@ -11,11 +11,32 @@ class ChannelHeader extends React.Component {
 
   getMatch() {
     const { location: { pathname } } = this.props;
+    const _defaultMatch = { params: {} };
     const matchChat = matchPath(pathname, {
       path: '/:workspaceSlug/(messages)?/:chatPath',
     });
 
-    return matchChat;
+    return matchChat || _defaultMatch;
+  }
+
+  getTitle() {
+    const { channels } = this.props;
+    const { params: { chatPath } } = this.getMatch();
+
+    if (chatPath === 'unreads') {
+      return 'All Unreads';
+    }
+
+    if (chatPath === 'threads') {
+      return 'All Threads';
+    }
+
+    const channel = channels[chatPath];
+    if (channel) {
+      return channel.hasDm ? channel.title : `#${channel.title}`;
+    }
+
+    return null;
   }
 
   handleFavoritesClick() {
@@ -34,14 +55,13 @@ class ChannelHeader extends React.Component {
   }
 
   render() {
-    const { sectionTitle } = this.props;
     const menuItems = [{ label: 'Favorites', onClick: this.handleFavoritesClick }];
 
     return (
       <header className="ChannelHeader">
         <div className="ChannelHeader__content">
           <h1 className="ChannelHeader__title">
-            {sectionTitle}
+            {this.getTitle()}
           </h1>
           <Menu menuFor="channel-header" isRow items={menuItems} />
         </div>

@@ -6,59 +6,39 @@ import MessageContainer from './MessageContainer';
 import Scrollable from './Scrollable';
 
 const Channel = ({
-  chatPath,
+  channel,
   messages,
   authors,
   fetchHistoryRequest,
   createChannelSubRequest,
-  chatTitle,
   currentUser,
   isLoading,
-  channels,
 }) => {
-  const channel = channels[chatPath];
-
-  if (!channel || isLoading) {
+  if (!channel) {
     return null;
   }
 
-  if (!messages.length) {
-    return (
-      <div className="Channel">
-        Make the 1st message!
-      </div>
-    );
-  }
-
-  const placeholder = channel.hasDm ? `@${chatTitle}` : chatTitle;
+  const placeholder = channel.hasDm ? `@${channel.title}` : channel.title;
   const formPlaceholder = placeholder && `Message ${placeholder}`;
-  const ownerName = channel.ownerSlug && authors[channel.ownerSlug].username;
-  const hasLoaded = !isLoading;
 
   return (
     <div className="Channel">
-      <Scrollable
-        fetchHistoryRequest={fetchHistoryRequest}
-        currentUserId={currentUser.id}
-        hasLoaded={hasLoaded}
-        messages={messages}
-        isAutoScroll
-      >
-        <ChannelBlurb
-          chatTitle={chatTitle}
-          ownerName={ownerName}
-          channel={channel}
-        />
-        {messages.map(message => (
-          <MessageContainer key={message.slug} users={authors} message={message} />
-        ))}
-      </Scrollable>
+      {isLoading || (
+        <Scrollable
+          fetchHistoryRequest={fetchHistoryRequest}
+          currentUserId={currentUser.id}
+          messages={messages}
+          isAutoScroll
+        >
+          <ChannelBlurb channel={channel} currentUserSlug={currentUser.slug} />
+          {messages.map(message => (
+            <MessageContainer key={message.slug} users={authors} message={message} />
+          ))}
+        </Scrollable>
+      )}
       <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} />
       <ChannelSubscribe
-        chatTitle={chatTitle}
-        ownerName={ownerName}
         channel={channel}
-        currentUserSlug={currentUser.slug}
         createChannelSubRequest={createChannelSubRequest}
       />
     </div>

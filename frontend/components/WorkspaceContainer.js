@@ -3,17 +3,16 @@ import { withRouter } from 'react-router-dom';
 import { fetchWorkspace, fetchWorkspaces } from '../actions/workspaceActions';
 import { modalClose, drawerClose } from '../actions/uiActions';
 import { createReaction } from '../actions/reactionActions';
-import { selectChatTitleBySlug } from '../reducers/selectors';
+import { selectChannelsWithEntities } from '../reducers/selectors';
 import Workspace from './Workspace';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   workspaceSlug,
-  channels: state.entities.channels,
+  channels: selectChannelsWithEntities(state),
   workspaces: state.entities.workspaces,
   isLoading: state.ui.isWorkspaceLoading,
   modal: state.ui.displayModal,
   currentUser: state.session.currentUser,
-  chatTitle: selectChatTitleBySlug(state),
   drawerType: state.ui.drawer.drawerType,
 });
 

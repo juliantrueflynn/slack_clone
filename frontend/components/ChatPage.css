@@ -12,14 +12,7 @@
 }
 
 .ChatPage__container,
-.ChatPage--channel .ChatPage__container > div {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.ChatPage--threads .ChatPage__container > div,
-.ChatPage--unreads .ChatPage__container > div {
+.ChatPage__container > div {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -35,4 +28,9 @@
 
 .ChatPage--channel .ChatPage__container .Scrollable {
   margin-bottom: 65px;
+}
+
+.ChatPage__empty {
+  padding-left: 27px;
+  padding-right: 27px;
 }

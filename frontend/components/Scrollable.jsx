@@ -38,14 +38,14 @@ class Scrollable extends React.Component {
     const { messages, isAutoScroll } = this.props;
     const { isAtBottom, lastFetchedDate, isAtTop } = this.state;
 
-    if (!isAutoScroll) {
+    if (!isAutoScroll || !messages.length) {
       return;
     }
 
     const firstMessageDate = messages[0] && messages[0].createdAt;
     const isLoadingHistory = prevState.lastFetchedDate && lastFetchedDate !== firstMessageDate;
 
-    this.setLoadingHistory(isLoadingHistory);
+    this.setStateIfChanged('isLoadingHistory', isLoadingHistory);
 
     if (isAtTop) {
       this.setLastFetched(firstMessageDate);
@@ -73,56 +73,36 @@ class Scrollable extends React.Component {
     }
   }
 
-  setLoadingHistory(loadingHistory) {
-    const { isLoadingHistory } = this.state;
+  setStateIfChanged(propName, value) {
+    const { ...state } = this.state;
 
-    if (isLoadingHistory !== loadingHistory) {
-      this.setState({ isLoadingHistory: loadingHistory });
-    }
-  }
-
-  setAtBottom(scrollLoc) {
-    const { isAtBottom } = this.state;
-
-    if (isAtBottom !== scrollLoc) {
-      this.setState({ isAtBottom: scrollLoc });
-    }
-  }
-
-  setAtTop(scrollLoc) {
-    const { isAtTop } = this.state;
-
-    if (isAtTop !== scrollLoc) {
-      this.setState({ isAtTop: scrollLoc });
+    if (state[propName] !== value) {
+      this.setState({ [propName]: value });
     }
   }
 
   hasNewMessage(prevMessages) {
-    const { messages, currentUserId, hasLoaded } = this.props;
+    const { messages, currentUserId } = this.props;
+    const lastEntry = messages[messages.length - 1];
+    const prevLastEntry = prevMessages[prevMessages.length - 1];
+    const isNewEntryByCurrUser = lastEntry && lastEntry.authorId === currentUserId;
+    const hasNewEntry = prevLastEntry && prevLastEntry.id !== lastEntry.id;
 
-    if (hasLoaded && messages.length) {
-      const lastEntry = messages[messages.length - 1];
-      const prevLastEntry = prevMessages[prevMessages.length - 1];
-      const isNewEntryByCurrUser = lastEntry.authorId === currentUserId;
-      const hasNewEntry = prevLastEntry && lastEntry.id !== prevLastEntry.id;
-      return isNewEntryByCurrUser && hasNewEntry;
-    }
-
-    return false;
+    return isNewEntryByCurrUser && hasNewEntry;
   }
 
   handleScroll() {
-    const { isAutoScroll, fetchHistoryRequest, hasLoaded } = this.props;
+    const { isAutoScroll, fetchHistoryRequest } = this.props;
     const listNode = this.messagesList.current;
     const { scrollHeight, clientHeight, scrollTop } = listNode;
 
     if (isAutoScroll) {
       const isAtBottom = scrollHeight - scrollTop === clientHeight;
-      this.setAtBottom(isAtBottom);
+      this.setStateIfChanged('isAtBottom', isAtBottom);
 
-      if (hasLoaded && fetchHistoryRequest) {
+      if (fetchHistoryRequest) {
         const isAtTop = scrollTop < 220;
-        this.setAtTop(isAtTop);
+        this.setStateIfChanged('isAtTop', isAtTop);
       }
     }
   }
@@ -136,10 +116,9 @@ class Scrollable extends React.Component {
 
   render() {
     const { children } = this.props;
-    const { isLoadingHistory, hasHistory } = this.state;
+    const { hasHistory } = this.state;
 
     let classNames = 'Scrollable';
-    if (isLoadingHistory) classNames += ' Scrollable--fetching';
     classNames += hasHistory ? ' Scrollable--has-history' : ' Scrollable--done';
 
     return (

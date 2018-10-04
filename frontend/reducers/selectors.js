@@ -1,22 +1,15 @@
 const values = entities => Object.values(entities);
+const sortEntityId = (entity, a, b) => entity[a.slug].id - entity[b.slug].id;
+
+export const selectCurrentUser = ({ session: { currentUser } }) => currentUser;
 
 export const selectWorkspaces = ({ entities: { workspaces } }) => (
-  values(workspaces).sort((a, b) => workspaces[a.slug].id - workspaces[b.slug].id)
+  values(workspaces).sort((a, b) => sortEntityId(workspaces, a, b))
 );
 
 export const selectSubbedWorkspaces = ({ entities: { workspaces }, session: { currentUser } }) => (
   values(workspaces).filter(workspace => workspace.members.includes(currentUser.slug))
 );
-
-export const selectDrawerPath = ({ ui: { drawer } }) => {
-  const { drawerType, drawerSlug } = drawer;
-
-  if (drawerSlug) {
-    return `/${drawerType}/${drawerSlug}`;
-  }
-
-  return `/${drawerType}`;
-};
 
 export const selectUnsubbedChats = ({ entities: { channels }, session: { currentUser } }) => (
   values(channels).filter(ch => !ch.members.includes(currentUser.slug) && !ch.hasDm)
@@ -31,7 +24,9 @@ export const selectDmChats = ({ entities: { channels, channelSubs, members }, se
   const { currentUser } = session;
   const currMember = members[currentUser.slug];
 
-  if (!currMember || !currMember.subs) return [];
+  if (!currMember || !currMember.subs) {
+    return [];
+  }
 
   return currMember.subs
     .map(subId => channelSubs[subId])
@@ -55,39 +50,11 @@ export const selectDmChats = ({ entities: { channels, channelSubs, members }, se
     });
 };
 
-export const selectChatTitleBySlug = ({ entities: { channels, members }, ui, session }, slug) => {
-  const chatPath = slug || ui.displayChannelSlug;
-
-  let chatTitle;
-  if (chatPath === 'unreads') {
-    chatTitle = 'All Unreads';
-  }
-
-  if (chatPath === 'threads') {
-    chatTitle = 'All Threads';
-  }
-
-  const channel = channels[chatPath];
-  if (channels[chatPath]) {
-    const { currentUser } = session;
-    chatTitle = channel.title;
-
-    if (channel.hasDm) {
-      const dmUser = selectDmWithUser(channel, members, currentUser.slug);
-      chatTitle = dmUser && dmUser.username;
-    }
-  }
-
-  return chatTitle;
-};
-
 export const selectSubbedChats = ({ entities: { channels }, session: { currentUser } }) => (
   values(channels)
     .filter(ch => ch.members.includes(currentUser.slug))
     .sort((a, b) => a.title && a.title.localeCompare(b.title))
 );
-
-export const selectCurrentUser = ({ session: { currentUser } }) => currentUser;
 
 export const selectReactionByMessageEmoji = (state, { messageId, emoji }) => {
   const { entities: { reactions }, session: { currentUser } } = state;
@@ -105,10 +72,13 @@ export const getReactionCounts = ({ entities: { reactions }, session }, messageS
 
   return values(reactions)
     .filter(reaction => reaction.messageSlug === messageSlug)
-    .reduce((acc, { emoji, userId }) => {
-      if (!acc[emoji]) acc[emoji] = { users: [] };
-      acc[emoji].users.push(userId);
-      acc[emoji].hasCurrentUser = userId === currentUser.id;
+    .reduce((acc, curr) => {
+      if (!acc[curr.emoji]) {
+        acc[curr.emoji] = { users: [] };
+      }
+
+      acc[curr.emoji].users.push(curr.userId);
+      acc[curr.emoji].hasCurrentUser = curr.userId === currentUser.id;
 
       return acc;
     }, {});
@@ -116,12 +86,14 @@ export const getReactionCounts = ({ entities: { reactions }, session }, messageS
 
 const messagesWithEntitiesMap = ({ messages, members }) => (
   values(messages).reduce((acc, curr) => {
+    const message = messages[curr.slug];
     const author = members && members[curr.authorSlug];
 
-    acc[curr.slug] = {
-      authorName: author && author.username,
-      ...curr,
-    };
+    if (author) {
+      message.authorName = author.username;
+    }
+
+    acc[curr.slug] = message;
 
     return acc;
   }, {})
@@ -150,6 +122,12 @@ export const selectMessageChildrenBySlug = ({ entities }, slug) => (
   selectMessageThreadBySlug(entities, slug).slice(1)
 );
 
+const selectChannelMessages = (channel, messages) => (
+  values(messages)
+    .filter(message => (channel.id === message.channelId && !message.parentMessageId))
+    .sort((a, b) => sortEntityId(messages, a, b))
+);
+
 const selectAllThreadMessages = (entities) => {
   const entries = messagesWithEntitiesMap(entities);
 
@@ -164,18 +142,15 @@ const selectAllThreadMessages = (entities) => {
     .sort((a, b) => new Date(b.lastActive) - new Date(a.lastActive));
 };
 
-export const selectChatMessagesBySlug = ({ entities }, chatSlug) => {
+export const selectChatMessagesBySlug = ({ entities }, slug) => {
   const { messages, channels, members } = entities;
   const entries = messagesWithEntitiesMap({ messages, members });
 
-  const chat = channels[chatSlug];
-  if (chat) {
-    return values(entries)
-      .filter(msg => (chat.id === msg.channelId && !msg.parentMessageId))
-      .sort((a, b) => entries[a.slug].id - entries[b.slug].id);
+  if (channels[slug]) {
+    return selectChannelMessages(channels[slug], entries);
   }
 
-  if (chatSlug === 'threads') {
+  if (slug === 'threads') {
     return selectAllThreadMessages(entities);
   }
 
@@ -196,26 +171,56 @@ export const selectDrawerMessagesByType = ({ entities, ui: { drawer } }) => {
   return [];
 };
 
-export const selectChatChannelsBySlug = ({ entities: { channels } }, chatSlug) => {
-  if (chatSlug === 'unreads') {
+const channelsWithEntitiesMap = ({ channels, members }, currentUserSlug) => (
+  values(channels).reduce((acc, curr) => {
+    const channel = channels[curr.slug];
+
+    if (channel.hasDm) {
+      const dmUser = selectDmWithUser(channel, members, currentUserSlug);
+
+      if (dmUser) {
+        channel.title = dmUser.username;
+        channel.dmUserSlug = dmUser.slug;
+      }
+    } else {
+      const owner = members[channel.ownerSlug];
+      channel.ownerName = owner && owner.username;
+      channel.isSub = channel.members.includes(currentUserSlug);
+    }
+
+    acc[curr.slug] = channel;
+
+    return acc;
+  }, {})
+);
+
+export const selectChannelsWithEntities = ({ entities, session: { currentUser } }) => (
+  channelsWithEntitiesMap(entities, currentUser.slug)
+);
+
+const selectThreadChannels = channels => (
+  values(channels).filter(ch => !ch.hasDm).reduce((acc, curr) => {
+    acc[curr.slug] = channels[curr.slug];
+    return acc;
+  }, {})
+);
+
+export const selectChatChannelsBySlug = ({ entities, session: { currentUser } }, slug) => {
+  const { channels, members } = entities;
+
+  if (slug === 'unreads') {
     return values(channels).filter(ch => ch.hasUnreads && !ch.hasDm);
   }
 
-  return channels;
+  if (slug === 'threads') {
+    return selectThreadChannels(channels);
+  }
+
+  return channelsWithEntitiesMap({ channels, members }, currentUser.slug);
 };
 
-export const hasUreadChannels = ({ entities: { channels } }) => (
-  values(channels).some(ch => ch.hasUnreads && !ch.hasDm)
-);
+export const selectEntities = ({ entities }, type) => entities[type];
 
-export const hasUreadThreads = ({ entities: { messages } }) => (
-  values(messages).some(message => message.hasUnreads)
-);
-
-export const selectEntities = ({ entities }, entityName) => entities[entityName];
-
-export const selectEntityBySlug = ({ entities }, entityName, slug) => (
-  entities[entityName] && entities[entityName][slug]
-);
+export const selectEntityBySlug = ({ entities }, type, slug) => entities[type][slug];
 
 export const selectUIByDisplay = ({ ui }, display) => ui[display];

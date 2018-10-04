@@ -1,7 +1,9 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 import { RouteWithSubRoutes } from '../util/routeUtil';
-import ChatPageBody from './ChatPageBody';
+import AllUnreads from './AllUnreads';
+import AllThreads from './AllThreads';
+import Channel from './Channel';
 import './ChatPage.css';
 
 class ChatPage extends React.Component {
@@ -58,7 +60,6 @@ class ChatPage extends React.Component {
       isWorkspaceLoaded,
       chatPath,
       routes,
-      chatTitle,
       messages,
       users,
       channels,
@@ -72,31 +73,50 @@ class ChatPage extends React.Component {
       return null;
     }
 
-    let chatType = 'channel';
+    let chatType;
+    const channel = channels[chatPath];
+    if (channel) {
+      chatType = 'channel';
+    }
+
     if (chatPath === 'unreads' || chatPath === 'threads') {
       chatType = chatPath;
     }
 
-    let chatClassNames = `ChatPage ChatPage--${chatType}`;
-    if (isLoading) {
-      chatClassNames += ' ChatPage--loading';
-    }
+    let chatClassNames = 'ChatPage';
+    if (chatType) chatClassNames += ` ChatPage--${chatType}`;
+    if (isLoading) chatClassNames += ' ChatPage--loading';
+    if (!messages.length) chatClassNames += ' ChatPage--empty';
 
     return (
       <div className={chatClassNames}>
         <div className="ChatPage__row">
-          <ChatPageBody
-            chatPath={chatPath}
-            chatType={chatType}
-            chatTitle={chatTitle}
-            messages={messages}
-            channels={channels}
-            users={users}
-            clearUnreads={clearUnreads}
-            fetchHistoryRequest={fetchHistoryRequest}
-            isLoading={isLoading}
-            currentUser={currentUser}
-          />
+          <div className="ChatPage__container">
+            <AllUnreads
+              chatPath={chatPath}
+              authors={users}
+              unreadChannels={channels}
+              clearUnreads={clearUnreads}
+              isLoading={isLoading}
+              messages={messages}
+            />
+            <AllThreads
+              chatPath={chatPath}
+              users={users}
+              channels={channels}
+              currentUser={currentUser}
+              isLoading={isLoading}
+              convos={messages}
+            />
+            <Channel
+              channel={channel}
+              authors={users}
+              currentUser={currentUser}
+              isLoading={isLoading}
+              messages={messages}
+              fetchHistoryRequest={fetchHistoryRequest}
+            />
+          </div>
           <Switch>
             {routes.map(route => (
               <RouteWithSubRoutes key={route.path} {...route} />

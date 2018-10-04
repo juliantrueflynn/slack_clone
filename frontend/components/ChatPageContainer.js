@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { selectChatTitleBySlug, selectChatMessagesBySlug, selectChatChannelsBySlug } from '../reducers/selectors';
+import { selectChatMessagesBySlug, selectChatChannelsBySlug } from '../reducers/selectors';
 import { fetchMessages, fetchUserThreads, fetchHistory } from '../actions/messageActions';
 import { fetchUnreads } from '../actions/readActions';
 import { loadChatPage, createChannelSub } from '../actions/channelActions';
@@ -11,7 +11,6 @@ import ChatPage from './ChatPage';
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   chatPath,
   isWorkspaceLoaded: !!state.ui.displayWorkspaceSlug,
-  chatTitle: selectChatTitleBySlug(state, chatPath),
   drawerType: state.ui.drawer.drawerType,
   drawerSlug: state.ui.drawer.drawerSlug,
   users: state.entities.members,

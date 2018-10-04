@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, NavLink, Link } from 'react-router-dom';
-import { selectDrawerPath } from '../reducers/selectors';
 
 const mapStateToProps = state => ({
   isDrawerOpen: !!state.ui.drawer.drawerType,
-  drawerUrl: selectDrawerPath(state),
+  drawerType: state.ui.drawer.drawerType,
+  drawerSlug: state.ui.drawer.drawerSlug,
 });
 
 const LinkWithDrawer = ({
@@ -13,7 +13,8 @@ const LinkWithDrawer = ({
   isNavLink,
   isDrawerOpen,
   hasNoDrawer,
-  drawerUrl,
+  drawerType,
+  drawerSlug,
   staticContext,
   dispatch,
   ...props,
@@ -21,7 +22,11 @@ const LinkWithDrawer = ({
   let linkTo = to;
 
   if (isDrawerOpen && !hasNoDrawer) {
-    linkTo += drawerUrl;
+    linkTo += `/${drawerType}`;
+
+    if (drawerSlug) {
+      linkTo += `/${drawerSlug}`;
+    }
   }
 
   if (isNavLink) {

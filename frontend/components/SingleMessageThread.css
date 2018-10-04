@@ -7,15 +7,18 @@
 
 .SingleMessageThread__link {
   display: block;
+  max-width: 550px;
   padding: 3px 4px;
   border: 1px solid;
   border-color: transparent;
   border-radius: 3px;
-  transition: border-color ease-in-out .2s;
+  transition: border-color ease-in-out .1s,
+              background-color ease-in-out .1s;
 }
 
 .SingleMessageThread__link:hover {
   border-color: #e8e8e8;
+  background-color: #FFF;
 }
 
 .SingleMessageThread__items {

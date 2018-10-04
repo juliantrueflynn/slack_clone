@@ -16,15 +16,12 @@ const MessageThreadDrawer = ({
     return null;
   }
 
-  const hasLoaded = !isLoading;
-
   return (
     <Fragment>
       <Scrollable
         currentUserId={currentUser.id}
         messages={messages}
         isMessageThread
-        hasLoaded={hasLoaded}
         isAutoScroll
       >
         {messages.map(message => (

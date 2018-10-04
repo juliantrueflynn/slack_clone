@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import parseHasUnreads from '../util/reducerUtil';
+import { parseHasUnreads } from '../util/dateUtil';
 import {
   WORKSPACE,
   CHANNEL,
