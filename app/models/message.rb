@@ -69,6 +69,10 @@ class Message < ApplicationRecord
     where("date(created_at) BETWEEN ? AND ?", start_date, end_date)
   end
 
+  def self.created_until(until_date)
+    where("date(created_at) > ?", until_date.midnight)
+  end
+
   def self.first_parent_created_at(channel_id)
     entries = without_children.where(channel_id: channel_id)
     entries.first ? entries.first.created_at : nil
@@ -84,25 +88,25 @@ class Message < ApplicationRecord
     where(id: id_or_ids).or(where(parent_message_id: id_or_ids))
   end
 
+  def self.created_previously(channel_id, until_date)
+    entries = where(channel_id: channel_id)
+    return entries if entries.without_children.length < 12
+    entries.created_until(until_date)
+  end
+
   def self.created_recently(channel_id, start_date = nil)
     entries = where(channel_id: channel_id)
     return entries if entries.without_children.length < 12
 
-    start_date = DateTime.now if start_date.nil?
+    start_date ||= DateTime.now
     end_date = start_date.midnight
     days_between = days_from_first_post(channel_id, start_date)
 
-    messages = []
     1.step(to: days_between) do |idx|
-      results = entries.without_children.created_between(end_date - idx, start_date)
-
-      if results.length > 12
-        messages = results
-        break
-      end
+      new_end_date = end_date - idx
+      fetched = entries.without_children.created_between(new_end_date, start_date)
+      return parents_or_children(fetched) if fetched.length > 12
     end
-
-    parents_or_children(messages)
   end
 
   def broadcast_name

@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import { parseHasUnreads } from '../util/dateUtil';
+import { isDateOlderThanOther } from '../util/dateUtil';
 import {
   MESSAGE,
   USER_THREAD,
@@ -52,7 +52,7 @@ const messageReducer = (state = {}, action) => {
         nextState[message.slug] = {
           lastActive: message.lastActive || null,
           lastRead: message.lastRead || null,
-          hasUnreads: parseHasUnreads({ lastActive, lastRead }),
+          hasUnreads: isDateOlderThanOther(lastRead, lastActive),
           isInConvo: true,
           reactionIds: [],
           thread: [],
@@ -201,7 +201,7 @@ const messageReducer = (state = {}, action) => {
 
       const lastRead = read.accessedAt;
       const { lastActive } = nextState[read.slug];
-      nextState[read.slug].hasUnreads = parseHasUnreads({ lastActive, lastRead });
+      nextState[read.slug].hasUnreads = isDateOlderThanOther(lastRead, lastActive);
 
       if (nextState[read.slug].isOpen || nextState[read.slug].isActiveConvo) {
         nextState[read.slug].hasUnreads = false;
@@ -219,7 +219,7 @@ const messageReducer = (state = {}, action) => {
 
       const { lastRead } = nextState[unread.slug];
       const lastActive = unread.activeAt;
-      nextState[unread.slug].hasUnreads = parseHasUnreads({ lastActive, lastRead });
+      nextState[unread.slug].hasUnreads = isDateOlderThanOther(lastRead, lastActive);
 
       if (nextState[unread.slug].isOpen || nextState[unread.slug].isActiveConvo) {
         nextState[unread.slug].hasUnreads = false;

@@ -9,11 +9,17 @@ import {
 import { MESSAGE, HISTORY } from '../actions/actionTypes';
 import * as actions from '../actions/messageActions';
 import * as api from '../util/apiUtil';
-import { selectUIByDisplay } from '../reducers/selectors';
+import { selectUIByDisplay, selectEntityBySlug } from '../reducers/selectors';
 
 function* fetchIndex({ channelSlug }) {
   try {
-    const messages = yield call(api.apiFetch, `channels/${channelSlug}/messages`);
+    const channel = yield select(selectEntityBySlug, 'channels', channelSlug);
+    let apiUrl = `channels/${channel.slug}/messages`;
+    if (channel.lastFetched) {
+      apiUrl += `/${channel.lastFetched}`;
+    }
+
+    const messages = yield call(api.apiFetch, apiUrl);
     yield put(actions.fetchMessages.receive(messages));
   } catch (error) {
     yield put(actions.fetchMessage.failure(error));

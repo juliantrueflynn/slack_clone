@@ -1,4 +1,5 @@
 import React from 'react';
+import { isDateOlderThanOther } from '../util/dateUtil';
 import './Scrollable.css';
 
 class Scrollable extends React.Component {
@@ -10,7 +11,6 @@ class Scrollable extends React.Component {
       isAtTop: false,
       isAtBottom: false,
       isLoadingHistory: false,
-      lastFetchedDate: null,
       hasHistory: false,
     };
   }
@@ -34,21 +34,18 @@ class Scrollable extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const { messages, isAutoScroll } = this.props;
-    const { isAtBottom, lastFetchedDate, isAtTop } = this.state;
+    const { isAtBottom, isAtTop, hasHistory } = this.state;
 
     if (!isAutoScroll || !messages.length) {
       return;
     }
-
-    const firstMessageDate = messages[0] && messages[0].createdAt;
-    const isLoadingHistory = prevState.lastFetchedDate && lastFetchedDate !== firstMessageDate;
-
+    const isLoadingHistory = hasHistory && messages.length > prevProps.messages.length;
     this.setStateIfChanged('isLoadingHistory', isLoadingHistory);
 
     if (isAtTop) {
-      this.setLastFetched(firstMessageDate);
+      this.setLastFetched();
     }
 
     if (isAtBottom || this.hasNewMessage(prevProps.messages)) {
@@ -56,20 +53,18 @@ class Scrollable extends React.Component {
     }
   }
 
-  setLastFetched(fetchedDate) {
-    const { fetchHistoryRequest } = this.props;
-    const { hasHistory, lastFetchedDate } = this.state;
+  setLastFetched() {
+    const { fetchHistoryRequest, messages } = this.props;
+    const { hasHistory } = this.state;
 
-    if (fetchHistoryRequest && hasHistory && lastFetchedDate === fetchedDate) {
+    if (fetchHistoryRequest && hasHistory && !this.hasOldFetchedDate()) {
       this.setState({ hasHistory: false });
     }
 
-    if (fetchHistoryRequest && lastFetchedDate !== fetchedDate) {
-      this.setState({ lastFetchedDate: fetchedDate });
+    const messageCreatedAt = Scrollable.getFirstMessageDate(messages);
 
-      if (hasHistory) {
-        fetchHistoryRequest(fetchedDate);
-      }
+    if (hasHistory && fetchHistoryRequest && this.hasOldFetchedDate()) {
+      fetchHistoryRequest(messageCreatedAt);
     }
   }
 
@@ -79,6 +74,16 @@ class Scrollable extends React.Component {
     if (state[propName] !== value) {
       this.setState({ [propName]: value });
     }
+  }
+
+  static getFirstMessageDate(messages) {
+    return messages[0] ? messages[0].createdAt : null;
+  }
+
+  hasOldFetchedDate() {
+    const { lastFetched, messages } = this.props;
+    const messageCreatedAt = Scrollable.getFirstMessageDate(messages);
+    return isDateOlderThanOther(lastFetched, messageCreatedAt);
   }
 
   hasNewMessage(prevMessages) {

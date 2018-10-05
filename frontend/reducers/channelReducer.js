@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import { parseHasUnreads } from '../util/dateUtil';
+import { isDateOlderThanOther } from '../util/dateUtil';
 import {
   WORKSPACE,
   CHANNEL,
@@ -11,7 +11,8 @@ import {
   SIGN_OUT,
   UNREAD,
   CLEAR_UNREADS,
-  LOAD_CHAT_PAGE
+  LOAD_CHAT_PAGE,
+  HISTORY
 } from '../actions/actionTypes';
 
 const channelReducer = (state = {}, action) => {
@@ -117,7 +118,7 @@ const channelReducer = (state = {}, action) => {
       });
 
       Object.values(nextState).forEach(({ slug, lastActive, lastRead }) => {
-        nextState[slug].hasUnreads = parseHasUnreads({ lastActive, lastRead });
+        nextState[slug].hasUnreads = isDateOlderThanOther(lastRead, lastActive);
       });
 
       return nextState;
@@ -222,6 +223,18 @@ const channelReducer = (state = {}, action) => {
       nextState[message.channelSlug].messages.push(message.slug);
       return nextState;
     }
+    case HISTORY.INDEX.RECEIVE: {
+      const { messages, channel: { slug } } = action.messages;
+
+      if (!messages.length) {
+        return state;
+      }
+
+      const [message] = messages;
+      nextState = Object.assign({}, state);
+      nextState[slug].lastFetched = message.createdAt;
+      return nextState;
+    }
     case READ.CREATE.RECEIVE:
     case READ.UPDATE.RECEIVE: {
       const { read } = action;
@@ -232,7 +245,7 @@ const channelReducer = (state = {}, action) => {
 
       const lastRead = read.accessedAt;
       const { lastActive } = nextState[read.slug];
-      nextState[read.slug].hasUnreads = parseHasUnreads({ lastActive, lastRead });
+      nextState[read.slug].hasUnreads = isDateOlderThanOther(lastRead, lastActive);
 
       if (nextState[read.slug].isOpen) {
         nextState[read.slug].hasUnreads = false;
@@ -248,7 +261,7 @@ const channelReducer = (state = {}, action) => {
       nextState[unread.slug].unreadId = unread.id;
       const { lastRead } = nextState[unread.slug];
       const lastActive = unread.activeAt;
-      nextState[unread.slug].hasUnreads = parseHasUnreads({ lastActive, lastRead });
+      nextState[unread.slug].hasUnreads = isDateOlderThanOther(lastRead, lastActive);
 
       if (nextState[unread.slug].isOpen) {
         nextState[unread.slug].hasUnreads = false;

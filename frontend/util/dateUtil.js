@@ -1,4 +1,4 @@
-const parseDateToMilliseconds = (stringDate) => {
+export const parseDateToMilliseconds = (stringDate) => {
   const parsedDate = Date.parse(stringDate);
   if (Number.isNaN(parsedDate) || !stringDate) {
     return 0;
@@ -7,11 +7,10 @@ const parseDateToMilliseconds = (stringDate) => {
   return parsedDate;
 };
 
-export const parseHasUnreads = ({ lastActive, lastRead }) => {
-  const active = parseDateToMilliseconds(lastActive);
-  const read = parseDateToMilliseconds(lastRead);
-
-  return active > read;
+export const isDateOlderThanOther = (dateStringA, dateStringB) => {
+  const a = parseDateToMilliseconds(dateStringA);
+  const b = parseDateToMilliseconds(dateStringB);
+  return b > a;
 };
 
 const getOrdinal = (int) => {

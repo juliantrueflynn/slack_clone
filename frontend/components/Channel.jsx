@@ -28,6 +28,7 @@ const Channel = ({
           fetchHistoryRequest={fetchHistoryRequest}
           currentUserId={currentUser.id}
           messages={messages}
+          lastFetched={channel.lastFetched}
           isAutoScroll
         >
           <ChannelBlurb channel={channel} currentUserSlug={currentUser.slug} />

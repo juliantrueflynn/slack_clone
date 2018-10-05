@@ -17,8 +17,7 @@ Rails.application.routes.draw do
     resources :workspace_subs, only: [:create, :destroy], param: :workspace_id
     resources :channels, only: [:show, :create, :update, :destroy], param: :slug do
       get '/recent_messages(/:start_date)', to: 'recent_messages#index'
-      resources :messages, only: :index
-      # get ':recent_messages(/:start_date)', to: 'recent_messages#index'
+      get '/messages(/:until_date)', to: 'messages#index'
     end
     resources :channel_subs, only: [:create, :update, :destroy]
     resources :messages, only: [:create, :update, :destroy, :show], param: :slug

@@ -3,7 +3,12 @@ json.channel do
 end
 
 json.messages do
-  messages = Message.created_recently(@channel.id)
+  if params[:until_date]
+    until_date = DateTime.parse(params[:until_date])
+    messages = Message.created_previously(@channel.id, until_date)
+  else
+    messages = Message.created_recently(@channel.id)
+  end
 
   json.array! messages.includes(:parent_message, :author) do |message|
     json.(message, *message.attributes.keys)
