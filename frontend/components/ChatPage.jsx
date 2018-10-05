@@ -67,6 +67,7 @@ class ChatPage extends React.Component {
       isLoading,
       clearUnreads,
       fetchHistoryRequest,
+      switchChannel,
     } = this.props;
 
     if (!isWorkspaceLoaded) {
@@ -110,11 +111,13 @@ class ChatPage extends React.Component {
             />
             <Channel
               channel={channel}
+              chatPath={chatPath}
               authors={users}
               currentUser={currentUser}
               isLoading={isLoading}
               messages={messages}
               fetchHistoryRequest={fetchHistoryRequest}
+              switchChannel={switchChannel}
             />
           </div>
           <Switch>

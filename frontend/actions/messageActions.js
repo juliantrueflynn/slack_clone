@@ -8,7 +8,9 @@ export const fetchMessages = {
 };
 
 export const fetchHistory = {
-  request: startDate => actionCreator(HISTORY.INDEX.REQUEST, { startDate }),
+  request: (channelSlug, startDate) => (
+    actionCreator(HISTORY.INDEX.REQUEST, { channelSlug, startDate })
+  ),
   receive: messages => actionCreator(HISTORY.INDEX.RECEIVE, { messages }),
   failure: errors => actionCreator(HISTORY.INDEX.FAILURE, { errors }),
 };

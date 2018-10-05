@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { selectChatMessagesBySlug, selectChatChannelsBySlug } from '../reducers/selectors';
 import { fetchMessages, fetchUserThreads, fetchHistory } from '../actions/messageActions';
 import { fetchUnreads } from '../actions/readActions';
-import { loadChatPage, createChannelSub } from '../actions/channelActions';
+import { loadChatPage, createChannelSub, switchChannel } from '../actions/channelActions';
 import { drawerClose } from '../actions/uiActions';
 import { clearUnreads } from '../actions/unreadActions';
 import ChatPage from './ChatPage';
@@ -36,7 +36,10 @@ const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug, chatPa
   loadChatPage: pagePath => dispatch(loadChatPage(pagePath)),
   drawerClose: () => dispatch(drawerClose()),
   createChannelSubRequest: channelSub => dispatch(createChannelSub.request(channelSub)),
-  fetchHistoryRequest: startDate => dispatch(fetchHistory.request(startDate)),
+  fetchHistoryRequest: (channelSlug, startDate) => (
+    dispatch(fetchHistory.request(channelSlug, startDate))
+  ),
+  switchChannel: (channelSlug, scrollLoc) => dispatch(switchChannel(channelSlug, scrollLoc)),
   clearUnreads: channelSlug => dispatch(clearUnreads(channelSlug)),
 });
 

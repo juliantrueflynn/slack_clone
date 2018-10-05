@@ -26,9 +26,8 @@ function* fetchIndex({ channelSlug }) {
   }
 }
 
-function* fetchHistoryIndex({ startDate }) {
+function* fetchHistoryIndex({ channelSlug, startDate }) {
   try {
-    const channelSlug = yield select(selectUIByDisplay, 'displayChannelSlug');
     const apiUrl = `channels/${channelSlug}/recent_messages/${startDate}`;
     const history = yield call(api.apiFetch, apiUrl);
     yield put(actions.fetchHistory.receive(history));

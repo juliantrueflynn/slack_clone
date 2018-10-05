@@ -12,7 +12,8 @@ import {
   UNREAD,
   CLEAR_UNREADS,
   LOAD_CHAT_PAGE,
-  HISTORY
+  HISTORY,
+  CHANNEL_SWITCH
 } from '../actions/actionTypes';
 
 const channelReducer = (state = {}, action) => {
@@ -34,16 +35,15 @@ const channelReducer = (state = {}, action) => {
     case LOAD_CHAT_PAGE: {
       const { pagePath } = action;
 
-      nextState = {};
-      Object.values(nextState).forEach((ch) => {
-        nextState[ch.slug] = { isOpen: false };
-      });
-
-      if (nextState[pagePath]) {
-        nextState[pagePath] = { isOpen: true, isLoading: true };
+      if (pagePath === 'unreads' || pagePath === 'threads') {
+        return state;
       }
 
-      return merge({}, state, nextState);
+      nextState = Object.assign({}, state);
+      nextState[pagePath].isOpen = true;
+      nextState[pagePath].isLoading = true;
+
+      return nextState;
     }
     case MESSAGE.INDEX.RECEIVE: {
       const {
@@ -223,8 +223,21 @@ const channelReducer = (state = {}, action) => {
       nextState[message.channelSlug].messages.push(message.slug);
       return nextState;
     }
+    case CHANNEL_SWITCH: {
+      const { channelSlug, scrollLoc } = action;
+
+      if (channelSlug === 'unreads' || channelSlug === 'threads') {
+        return state;
+      }
+
+      nextState = Object.assign({}, state);
+      nextState[channelSlug].scrollLoc = scrollLoc;
+      nextState[channelSlug].isOpen = false;
+
+      return nextState;
+    }
     case HISTORY.INDEX.RECEIVE: {
-      const { messages, channel: { slug } } = action.messages;
+      const { messages: { messages, channel } } = action;
 
       if (!messages.length) {
         return state;
@@ -232,7 +245,7 @@ const channelReducer = (state = {}, action) => {
 
       const [message] = messages;
       nextState = Object.assign({}, state);
-      nextState[slug].lastFetched = message.createdAt;
+      nextState[channel.slug].lastFetched = message.createdAt;
       return nextState;
     }
     case READ.CREATE.RECEIVE:

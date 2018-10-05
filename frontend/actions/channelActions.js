@@ -2,6 +2,7 @@ import { actionCreator } from '../util/actionsUtil';
 import {
   CHANNEL,
   CHANNEL_SUB,
+  CHANNEL_SWITCH,
   DM_CHAT,
   LOAD_CHAT_PAGE,
 } from './actionTypes';
@@ -53,6 +54,12 @@ export const deleteChannelSub = {
   request: channelId => actionCreator(CHANNEL_SUB.DESTROY.REQUEST, { channelId }),
   failure: errors => actionCreator(CHANNEL_SUB.DESTROY.FAILURE, { errors }),
 };
+
+export const switchChannel = (channelSlug, scrollLoc) => ({
+  type: CHANNEL_SWITCH,
+  channelSlug,
+  scrollLoc,
+});
 
 export const loadChatPage = pagePath => ({
   type: LOAD_CHAT_PAGE,

@@ -19,6 +19,7 @@ export const READ = apiActions('READ', ['INDEX', 'CREATE', 'UPDATE']);
 export const UNREAD = apiActions('UNREAD', ['INDEX', 'CREATE', 'UPDATE']);
 export const MEMBER = apiActions('MEMBER', ['INDEX', 'SHOW', 'UPDATE', 'DESTROY']);
 
+export const CHANNEL_SWITCH = 'CHANNEL_SWITCH';
 export const LOAD_CHAT_PAGE = 'LOAD_CHAT_PAGE';
 export const CLEAR_UNREADS = 'CLEAR_UNREADS';
 export const DRAWER_OPEN = 'DRAWER_OPEN';
