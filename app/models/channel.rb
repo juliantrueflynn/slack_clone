@@ -25,12 +25,7 @@ class Channel < ApplicationRecord
   has_many :recent_entries,
     class_name: 'Message'
   has_many :entries, class_name: 'Message'
-  has_many :messages,
-    -> { includes(:parent_message) } do
-    def after_created_at(accessed_at)
-      where('messages.created_at > ?', accessed_at)
-    end
-  end
+  has_many :messages
   has_many :parent_messages,
     -> { Message.without_children },
     class_name: 'Message'
@@ -66,6 +61,23 @@ class Channel < ApplicationRecord
 
   def broadcast_name
     "workspace_#{workspace.slug}"
+  end
+
+  def recent_messages(start_date = nil)
+    return messages if messages.without_children.length < 12
+    after_date = start_date ? DateTime.parse(start_date) : DateTime.now
+    Message.created_recently(id, after_date)
+  end
+
+  def previous_messages(end_date)
+    return messages if messages.without_children.length < 12
+    until_date = DateTime.parse(end_date).midnight
+    messages.created_until(until_date)
+  end
+
+  def history_messages(until_date = nil)
+    return previous_messages(until_date) unless until_date.nil?
+    recent_messages
   end
 
   def member_ids=(member_ids)

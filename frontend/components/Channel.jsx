@@ -9,7 +9,7 @@ import Scrollable from './Scrollable';
 class Channel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { scrollLoc: -1 };
+    this.state = { scrollLoc: 0 };
     this.handleScrollLoc = this.handleScrollLoc.bind(this);
   }
 
@@ -30,16 +30,12 @@ class Channel extends React.Component {
     const {
       channel,
       messages,
-      authors,
+      users,
       fetchHistoryRequest,
       createChannelSubRequest,
       currentUser,
       isLoading,
     } = this.props;
-
-    if (!channel) {
-      return null;
-    }
 
     const placeholder = channel.hasDm ? `@${channel.title}` : channel.title;
     const formPlaceholder = placeholder && `Message ${placeholder}`;
@@ -57,7 +53,7 @@ class Channel extends React.Component {
           >
             <ChannelBlurb channel={channel} currentUserSlug={currentUser.slug} />
             {messages.map(message => (
-              <MessageContainer key={message.slug} users={authors} message={message} />
+              <MessageContainer key={message.slug} users={users} message={message} />
             ))}
           </Scrollable>
         )}

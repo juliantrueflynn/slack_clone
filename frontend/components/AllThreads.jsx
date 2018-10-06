@@ -3,17 +3,12 @@ import AllThreadsItem from './AllThreadsItem';
 import Scrollable from './Scrollable';
 
 const AllThreads = ({
-  chatPath,
-  convos,
+  messages,
   users,
   channels,
   currentUser,
   isLoading,
 }) => {
-  if (chatPath !== 'threads') {
-    return null;
-  }
-
   if (isLoading) {
     return (
       <div className="ChatPage__loader">
@@ -22,7 +17,7 @@ const AllThreads = ({
     );
   }
 
-  if (!convos.length) {
+  if (!messages.length) {
     return (
       <div className="AllThreads AllThreads--empty">
         No threads
@@ -31,9 +26,9 @@ const AllThreads = ({
   }
 
   return (
-    <div role="list" className="AllThreads">
+    <div className="AllThreads">
       <Scrollable>
-        {convos.map(convo => (
+        {messages.map(convo => (
           <AllThreadsItem
             key={convo.slug}
             currentUserSlug={currentUser.slug}

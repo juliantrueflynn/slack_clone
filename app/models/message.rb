@@ -21,9 +21,6 @@ class Message < ApplicationRecord
     -> { includes(:author, :parent_message) },
     class_name: 'Message',
     foreign_key: :parent_message_id
-  has_many :thread_replies,
-    through: :replies,
-    source: :parent_message
   has_many :authors,
     through: :replies,
     source: :author
@@ -65,12 +62,17 @@ class Message < ApplicationRecord
     where(id: convos).or(where(parent_message_id: convos))
   end
 
+  def self.convo_parents_by_workspace_with_user(workspace_id, user_id)
+    convos = convo_ids_by_workspace_and_user(workspace_id, user_id)
+    where(id: convos)
+  end
+
   def self.created_between(start_date, end_date)
     where("date(created_at) BETWEEN ? AND ?", start_date, end_date)
   end
 
   def self.created_until(until_date)
-    where("date(created_at) > ?", until_date.midnight)
+    where("date(created_at) > ?", until_date)
   end
 
   def self.first_parent_created_at(channel_id)
@@ -88,24 +90,15 @@ class Message < ApplicationRecord
     where(id: id_or_ids).or(where(parent_message_id: id_or_ids))
   end
 
-  def self.created_previously(channel_id, until_date)
-    entries = where(channel_id: channel_id)
-    return entries if entries.without_children.length < 12
-    entries.created_until(until_date)
-  end
-
-  def self.created_recently(channel_id, start_date = nil)
-    entries = where(channel_id: channel_id)
-    return entries if entries.without_children.length < 12
-
-    start_date ||= DateTime.now
+  def self.created_recently(channel_id, start_date)
     end_date = start_date.midnight
     days_between = days_from_first_post(channel_id, start_date)
+    entries = where(channel_id: channel_id).without_children
 
     1.step(to: days_between) do |idx|
       new_end_date = end_date - idx
-      fetched = entries.without_children.created_between(new_end_date, start_date)
-      return parents_or_children(fetched) if fetched.length > 12
+      entries_up_to = entries.created_between(new_end_date, start_date)
+      return parents_or_children(entries_up_to) if entries_up_to.length >= 12
     end
   end
 

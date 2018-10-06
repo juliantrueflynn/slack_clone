@@ -89,7 +89,7 @@ class Drawer extends React.Component {
         </header>
 
         <div className="Drawer__body">
-          {render()}
+          {isLoading || render()}
         </div>
       </aside>
     );

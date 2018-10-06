@@ -1,7 +1,8 @@
 @reads.each do |read|
   channel = read.channel
+  reads = channel.messages.includes(:author, :parent_message)
 
-  json.array! channel.messages.after_created_at(read.accessed_at) do |message|
+  json.array! reads.created_until(read.accessed_at) do |message|
     json.(message, *message.attributes.keys)
     json.author_slug message.author.slug
     json.parent_message_slug message.is_child? ? message.parent_message.slug : nil

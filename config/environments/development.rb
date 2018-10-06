@@ -59,5 +59,5 @@ Rails.application.configure do
     Bullet.add_footer = true
   end
 
-  # ActionCable.server.config.logger = Logger.new(nil)
+  ActionCable.server.config.logger = Logger.new(nil)
 end

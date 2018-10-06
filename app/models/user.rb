@@ -19,9 +19,6 @@ class User < ApplicationRecord
   has_many :channel_subs
   has_many :channels, through: :channel_subs
   has_many :messages, foreign_key: :author_id
-  has_many :thread_replies,
-    through: :messages,
-    source: :replies
   has_many :favorites
   has_many :reactions
   has_many :appears, class_name: 'UserAppearance'

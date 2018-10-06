@@ -3,7 +3,7 @@ import { FAVORITE } from './actionTypes';
 
 export const fetchFavorites = {
   request: workspaceSlug => actionCreator(FAVORITE.INDEX.REQUEST, { workspaceSlug }),
-  receive: favorites => actionCreator(FAVORITE.INDEX.RECEIVE, { favorites }),
+  receive: messages => actionCreator(FAVORITE.INDEX.RECEIVE, { messages }),
   failure: errors => actionCreator(FAVORITE.INDEX.FAILURE, { errors }),
 };
 

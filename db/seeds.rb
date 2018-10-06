@@ -156,7 +156,7 @@ Channel.all.each do |chat|
   next if chat.messages.empty?
 
   unread_params = { unreadable_id: chat.id, unreadable_type: 'Channel' }
-  last_message = chat.messages.where(parent_message_id: nil).last
+  last_message = chat.messages.without_children.last
   chat_unread = Unread.find_or_initialize_by(unread_params) do |unread|
     unread.active_at = last_message.created_at
   end

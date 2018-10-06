@@ -56,6 +56,11 @@ class Workspace < ApplicationRecord
       .includes(:parent_message, :channel, :author)
   end
 
+  def convo_parents_with_user_id(user_id)
+    Message.convo_parents_by_workspace_with_user(id, user_id)
+      .includes(:channel, :author)
+  end
+
   after_create :generate_workspace_subs, :generate_default_chats
   after_create_commit :broadcast_create
   after_update_commit :broadcast_update

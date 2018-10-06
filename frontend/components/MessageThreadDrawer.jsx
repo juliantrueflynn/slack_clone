@@ -4,15 +4,10 @@ import withDrawer from './withDrawer';
 import Scrollable from './Scrollable';
 import MessageContainer from './MessageContainer';
 
-const MessageThreadDrawer = ({
-  messages,
-  members,
-  currentUser,
-  isLoading,
-}) => {
+const MessageThreadDrawer = ({ messages, members, currentUser }) => {
   const parentMessage = messages[0];
 
-  if (!parentMessage || isLoading) {
+  if (!parentMessage) {
     return null;
   }
 

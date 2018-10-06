@@ -3,15 +3,18 @@ import AllUnreadsItem from './AllUnreadsItem';
 import Scrollable from './Scrollable';
 
 const AllUnreads = ({
-  chatPath,
   unreadChannels,
   messages,
-  authors,
+  users,
   clearUnreads,
   isLoading,
 }) => {
-  if (chatPath !== 'unreads' || isLoading) {
-    return null;
+  if (isLoading) {
+    return (
+      <div className="AllUnreads AllUnreads--loading">
+        Loading!
+      </div>
+    );
   }
 
   if (!unreadChannels.length) {
@@ -23,13 +26,13 @@ const AllUnreads = ({
   }
 
   return (
-    <div role="list" className="AllUnreads">
+    <div className="AllUnreads">
       <Scrollable>
         {unreadChannels.map(channel => (
           <AllUnreadsItem
             key={channel.id}
             channel={channel}
-            authors={authors}
+            authors={users}
             messages={messages}
             clearUnreads={clearUnreads}
           />

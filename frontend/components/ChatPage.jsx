@@ -93,32 +93,38 @@ class ChatPage extends React.Component {
       <div className={chatClassNames}>
         <div className="ChatPage__row">
           <div className="ChatPage__container">
-            <AllUnreads
-              chatPath={chatPath}
-              authors={users}
-              unreadChannels={channels}
-              clearUnreads={clearUnreads}
-              isLoading={isLoading}
-              messages={messages}
-            />
-            <AllThreads
-              chatPath={chatPath}
-              users={users}
-              channels={channels}
-              currentUser={currentUser}
-              isLoading={isLoading}
-              convos={messages}
-            />
-            <Channel
-              channel={channel}
-              chatPath={chatPath}
-              authors={users}
-              currentUser={currentUser}
-              isLoading={isLoading}
-              messages={messages}
-              fetchHistoryRequest={fetchHistoryRequest}
-              switchChannel={switchChannel}
-            />
+            {chatPath === 'unreads' && (
+              <AllUnreads
+                chatPath={chatPath}
+                authors={users}
+                unreadChannels={channels}
+                clearUnreads={clearUnreads}
+                isLoading={isLoading}
+                messages={messages}
+              />
+            )}
+            {chatPath === 'threads' && (
+              <AllThreads
+                chatPath={chatPath}
+                users={users}
+                channels={channels}
+                currentUser={currentUser}
+                isLoading={isLoading}
+                messages={messages}
+              />
+            )}
+            {channel && (
+              <Channel
+                channel={channel}
+                chatPath={chatPath}
+                users={users}
+                currentUser={currentUser}
+                isLoading={isLoading}
+                messages={messages}
+                fetchHistoryRequest={fetchHistoryRequest}
+                switchChannel={switchChannel}
+              />
+            )}
           </div>
           <Switch>
             {routes.map(route => (

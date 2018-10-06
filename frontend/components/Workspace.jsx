@@ -1,11 +1,12 @@
 import React from 'react';
+import { Switch } from 'react-router-dom';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import LeftSidebarContainer from './LeftSidebarContainer';
 import EmojiModal from './EmojiModal';
-import './Workspace.css';
 import ChannelHeader from './ChannelHeader';
+import './Workspace.css';
 
-class WorkspacePage extends React.Component {
+class Workspace extends React.Component {
   componentDidMount() {
     const {
       workspaceSlug,
@@ -92,9 +93,11 @@ class WorkspacePage extends React.Component {
               modalClose={modalClose}
               createReactionRequest={createReactionRequest}
             />
-            {routes.map(route => (
-              <RouteWithSubRoutes key={route.path} {...route} />
-            ))}
+            <Switch>
+              {routes.map(route => (
+                <RouteWithSubRoutes key={route.path} {...route} />
+              ))}
+            </Switch>
           </div>
         </div>
       </div>
@@ -102,4 +105,4 @@ class WorkspacePage extends React.Component {
   }
 }
 
-export default WorkspacePage;
+export default Workspace;

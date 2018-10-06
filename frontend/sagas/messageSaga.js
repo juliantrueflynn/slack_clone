@@ -9,7 +9,7 @@ import {
 import { MESSAGE, HISTORY } from '../actions/actionTypes';
 import * as actions from '../actions/messageActions';
 import * as api from '../util/apiUtil';
-import { selectUIByDisplay, selectEntityBySlug } from '../reducers/selectors';
+import { selectEntityBySlug } from '../reducers/selectors';
 
 function* fetchIndex({ channelSlug }) {
   try {
@@ -22,7 +22,7 @@ function* fetchIndex({ channelSlug }) {
     const messages = yield call(api.apiFetch, apiUrl);
     yield put(actions.fetchMessages.receive(messages));
   } catch (error) {
-    yield put(actions.fetchMessage.failure(error));
+    yield put(actions.fetchMessages.failure(error));
   }
 }
 

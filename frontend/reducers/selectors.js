@@ -101,7 +101,9 @@ const messagesWithEntitiesMap = ({ messages, members }) => (
 
 const selectMessagesFavorites = ({ favorites, messages, members }) => {
   const entries = messagesWithEntitiesMap({ messages, members });
-  return values(favorites).map(({ messageSlug }) => entries[messageSlug]);
+  return values(favorites)
+    .map(({ messageSlug }) => entries[messageSlug])
+    .filter(message => message.isInDrawer);
 };
 
 const selectMessageThreadBySlug = ({ messages, members }, slug) => {
@@ -124,7 +126,7 @@ export const selectMessageChildrenBySlug = ({ entities }, slug) => (
 
 const selectChannelMessages = (channel, messages) => (
   values(messages)
-    .filter(message => (channel.id === message.channelId && !message.parentMessageId))
+    .filter(message => channel.id === message.channelId && !message.parentMessageId)
     .sort((a, b) => sortEntityId(messages, a, b))
 );
 
@@ -175,7 +177,7 @@ const channelsWithEntitiesMap = ({ channels, members }, currentUserSlug) => (
   values(channels).reduce((acc, curr) => {
     const channel = channels[curr.slug];
 
-    if (channel.hasDm) {
+    if (channel && channel.hasDm) {
       const dmUser = selectDmWithUser(channel, members, currentUserSlug);
 
       if (dmUser) {

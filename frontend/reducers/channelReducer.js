@@ -39,11 +39,10 @@ const channelReducer = (state = {}, action) => {
         return state;
       }
 
-      nextState = Object.assign({}, state);
-      nextState[pagePath].isOpen = true;
-      nextState[pagePath].isLoading = true;
+      nextState = {};
+      nextState[pagePath] = { isOpen: true, isLoading: true };
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case MESSAGE.INDEX.RECEIVE: {
       const {
@@ -230,11 +229,10 @@ const channelReducer = (state = {}, action) => {
         return state;
       }
 
-      nextState = Object.assign({}, state);
-      nextState[channelSlug].scrollLoc = scrollLoc;
-      nextState[channelSlug].isOpen = false;
+      nextState = {};
+      nextState[channelSlug] = { scrollLoc, isOpen: false };
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case HISTORY.INDEX.RECEIVE: {
       const { messages: { messages, channel } } = action;

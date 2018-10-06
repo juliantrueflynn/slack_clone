@@ -2,14 +2,9 @@ json.channel do
   json.(@channel, *@channel.attributes.keys)
 end
 
-json.messages do
-  if params[:until_date]
-    until_date = DateTime.parse(params[:until_date])
-    messages = Message.created_previously(@channel.id, until_date)
-  else
-    messages = Message.created_recently(@channel.id)
-  end
+messages = @channel.history_messages(params[:until_date])
 
+json.messages do
   json.array! messages.includes(:parent_message, :author) do |message|
     json.(message, *message.attributes.keys)
     json.author_slug message.author.slug
@@ -21,14 +16,18 @@ json.messages do
 end
 
 json.favorites do
-  json.array! @channel.favorites.with_user(current_user.id) do |favorite|
+  favorites = Favorite.by_user_and_message_id(current_user.id, messages)
+
+  json.array! favorites do |favorite|
     json.(favorite, :id, :message_id)
-    json.message_slug favorite.message_slug
+    json.message_slug favorite.message.slug
   end
 end
 
 json.reactions do
-  json.array! @channel.reactions.includes(:message, :user) do |reaction|
+  reactions = Reaction.by_message_id(messages)
+
+  json.array! reactions do |reaction|
     json.(reaction, :id, :message_id, :user_id, :emoji)
     json.message_slug reaction.message.slug
     json.user_slug reaction.user.slug

@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { isDateOlderThanOther } from '../util/dateUtil';
 import './Scrollable.css';
 
@@ -34,17 +35,14 @@ class Scrollable extends React.Component {
       this.setState({ hasHistory: hasAllMessagesAlready });
     }
 
-    if (channel.scrollLoc) {
+    if (channel && channel.scrollLoc) {
       const listNode = this.messagesList.current;
       listNode.scrollTop = channel.scrollLoc;
     }
   }
 
   componentDidUpdate(prevProps) {
-    const {
-      messages,
-      isAutoScroll,
-    } = this.props;
+    const { messages, isAutoScroll } = this.props;
     const { isAtBottom, isAtTop, isLoadingHistory } = this.state;
 
     if (!isAutoScroll || !messages.length) {
@@ -65,7 +63,7 @@ class Scrollable extends React.Component {
   }
 
   setLastFetched() {
-    const { fetchHistoryRequest, messages, channel: { slug } } = this.props;
+    const { fetchHistoryRequest, messages, channel } = this.props;
     const { hasHistory, isLoadingHistory } = this.state;
 
     if (fetchHistoryRequest && hasHistory && !this.hasOldFetchedDate()) {
@@ -75,7 +73,7 @@ class Scrollable extends React.Component {
     if (hasHistory && fetchHistoryRequest && this.hasOldFetchedDate() && !isLoadingHistory) {
       const startDate = Scrollable.getFirstMessageDate(messages);
       this.setState({ isLoadingHistory: true });
-      fetchHistoryRequest(slug, startDate);
+      fetchHistoryRequest(channel.slug, startDate);
     }
   }
 
@@ -88,7 +86,8 @@ class Scrollable extends React.Component {
   }
 
   static getFirstMessageDate(messages) {
-    return messages[0] ? messages[0].createdAt : null;
+    const chatEntries = messages.filter(entry => !entry.isInConvo);
+    return chatEntries[0] ? chatEntries[0].createdAt : null;
   }
 
   hasOldFetchedDate() {
@@ -112,7 +111,9 @@ class Scrollable extends React.Component {
     const listNode = this.messagesList.current;
     const { scrollHeight, clientHeight, scrollTop } = listNode;
 
-    updateScrollLoc(scrollTop);
+    if (updateScrollLoc) {
+      updateScrollLoc(scrollTop);
+    }
 
     if (isAutoScroll) {
       const isAtBottom = scrollHeight - scrollTop === clientHeight;
@@ -149,4 +150,4 @@ class Scrollable extends React.Component {
   }
 }
 
-export default Scrollable;
+export default withRouter(Scrollable);

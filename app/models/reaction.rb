@@ -10,6 +10,10 @@ class Reaction < ApplicationRecord
   def broadcast_name
     "channel_#{channel.slug}"
   end
+  
+  def self.by_message_id(message_ids)
+    includes(:user, :message).where(message_id: message_ids)
+  end
 
   after_create_commit :broadcast_create
   after_destroy :broadcast_destroy

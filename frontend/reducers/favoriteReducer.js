@@ -12,8 +12,14 @@ const favoriteReducer = (state = {}, action) => {
   let nextState;
   switch (action.type) {
     case FAVORITE.INDEX.RECEIVE: {
-      const { favorites } = action.favorites;
-      return merge({}, state, favorites);
+      const { favorites } = action.messages;
+
+      nextState = {};
+      favorites.forEach((favorite) => {
+        nextState[favorite.id] = favorite;
+      });
+
+      return merge({}, state, nextState);
     }
     case FAVORITE.CREATE.RECEIVE: {
       const { favorite } = action;
@@ -27,14 +33,14 @@ const favoriteReducer = (state = {}, action) => {
       return nextState;
     }
     case MESSAGE.INDEX.RECEIVE: {
-      const { messages: { favorites } } = action;
+      const { favorites } = action.messages;
 
-      nextState = Object.assign({}, state);
+      nextState = {};
       favorites.forEach((favorite) => {
         nextState[favorite.id] = favorite;
       });
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:

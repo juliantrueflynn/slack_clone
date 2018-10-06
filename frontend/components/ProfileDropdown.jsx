@@ -46,7 +46,7 @@ const ProfileDropdown = ({
 
   if (workspaces) {
     workspaces.forEach((workspace) => {
-      menuItems.push({ label: workspace.title, link: `/${workspace.slug}` });
+      menuItems.push({ label: workspace.title, link: `/${workspace.slug}`, hasNoDrawer: true });
     });
   }
 

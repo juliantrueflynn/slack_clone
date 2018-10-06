@@ -39,7 +39,7 @@ class Unread < ApplicationRecord
     self.active_at = message.created_at if unreadable_type === 'Message'
 
     if unreadable_type === 'Channel'
-      last_message = channel.messages.where(parent_message_id: nil).last
+      last_message = channel.messages.without_children.last
       self.active_at = last_message ? last_message.created_at : nil
     end
   end

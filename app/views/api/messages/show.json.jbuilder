@@ -16,7 +16,7 @@ json.channel do
 end
 
 json.favorites do
-  favorites = current_user.favorites.includes(:message).where(message_id: messages)
+  favorites = Favorite.by_user_and_message_id(current_user.id, messages)
 
   json.array! favorites do |favorite|
     json.(favorite, :id, :message_id, :user_id)
@@ -25,7 +25,7 @@ json.favorites do
 end
 
 json.reactions do
-  reactions = Reaction.includes(:user, :message).where(message_id: messages)
+  reactions = Reaction.by_message_id(messages)
 
   json.array! reactions do |reaction|
     json.(reaction, :id, :message_id, :user_id, :emoji)
