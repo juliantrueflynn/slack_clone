@@ -5,6 +5,7 @@ import ChannelSubscribe from './ChannelSubscribe';
 import ChannelBlurb from './ChannelBlurb';
 import Scrollable from './Scrollable';
 import ChannelEntry from './ChannelEntry';
+import MessageContainer from './MessageContainer';
 
 class Channel extends React.Component {
   constructor(props) {
@@ -53,8 +54,8 @@ class Channel extends React.Component {
             isAutoScroll
           >
             <ChannelBlurb channel={channel} currentUserSlug={currentUser.slug} />
-            {entries.map((entry, idx) => (
-              <ChannelEntry key={idx} entry={entry} users={users} />
+            {entries.map(message => (
+              <MessageContainer key={message.id} message={message} users={users} />
             ))}
           </Scrollable>
         )}

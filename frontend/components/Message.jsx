@@ -5,6 +5,7 @@ import Reactions from './Reactions';
 import Avatar from './Avatar';
 import MessageContent from './MessageContent';
 import SingleMessageThread from './SingleMessageThread';
+import ChannelSub from './ChannelSub';
 import './Message.css';
 
 class Message extends React.Component {
@@ -75,13 +76,18 @@ class Message extends React.Component {
                 {message.createdAt}
               </time>
             </div>
-            <MessageContent
-              isEditing={isEditing}
-              content={message.body}
-              updateMessageRequest={updateMessageRequest}
-              closeEditor={this.handleEditToggle}
-              messageSlug={message.slug}
-            />
+            {message.entityType === 'entry' && (
+              <MessageContent
+                isEditing={isEditing}
+                content={message.body}
+                updateMessageRequest={updateMessageRequest}
+                closeEditor={this.handleEditToggle}
+                messageSlug={message.slug}
+              />
+            )}
+            {message.entityType !== 'entry' && (
+              <ChannelSub sub={message} />
+            )}
           </div>
           <Reactions
             createReactionRequest={createReactionRequest}

@@ -1,24 +1,24 @@
 .AllUnreadsItem__body .Message,
 .Drawer .Message,
-.Channel .Message {
+.Channel .ChannelEntry {
   padding: 9px 27px;
 }
 
-.Message {
+.ChannelEntry {
   position: relative;
   display: flex;
   -ms-flex-direction: row;
   flex-direction: row;
 }
 
-.Message__body {
+.ChannelEntry__body {
   display: flex;
   flex-direction: column;
   width: 100%;
   margin-left: 8px;
 }
 
-.Message__meta {
+.ChannelEntry__meta {
   display: flex;
   -ms-flex-direction: row;
   flex-direction: row;
@@ -28,7 +28,7 @@
   margin-bottom: 4px;
 }
 
-.Message .ChannelSub {
+.ChannelEntry .ChannelSub {
   color: #636e72;
 }
 
@@ -36,11 +36,11 @@
   padding-right: 2px;
 }
 
-.Message:hover {
+.ChannelEntry:hover {
   background-color: #F9F9F9;
 }
 
-.ChatPage--reaction .Message:hover {
+.ChatPage--reaction .ChannelEntry:hover {
   background-color: #FFF;
 }
 
@@ -48,17 +48,17 @@
   background-color: #FFEAA7;
 }
 
-.Message__author {
+.ChannelEntry__author {
   font-weight: bold;
   padding-right: 4px;
   color: inherit;
 }
 
-.Message__author:hover {
+.ChannelEntry__author:hover {
   text-decoration: underline;
 }
 
-.Message__time {
+.ChannelEntry__time {
   color: rgba(0,0,0,0.5);
   font-size: .8em;
 }

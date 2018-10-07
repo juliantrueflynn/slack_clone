@@ -4,12 +4,12 @@ class Message < ApplicationRecord
   attr_accessor :skip_broadcast
   attr_accessor :parent_mesage_slug
 
-  validates_presence_of :slug, :author_id, :channel_id
+  validates_presence_of :slug, :author_id, :entity_type, :channel_id
   validates_uniqueness_of :slug
   validates_length_of :body,
-    within: 1..50000,
-    too_long: 'is too long (max: 50000 characters)',
-    too_short: 'cannot be empty'
+    maximum: 50000,
+    too_long: 'is too long (max: 50000 characters)'
+  validates_inclusion_of :entity_type, in: %w(entry sub_create sub_destroy)
 
   belongs_to :channel
   belongs_to :author, class_name: 'User'
@@ -92,7 +92,7 @@ class Message < ApplicationRecord
 
   def self.created_recently(channel_id, start_date)
     end_date = start_date.midnight
-    days_between = days_from_first_post(channel_id, start_date)
+    days_between = days_from_first_post(channel_id, start_date) + 1
     entries = where(channel_id: channel_id).without_children
 
     1.step(to: days_between) do |idx|

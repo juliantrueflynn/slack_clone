@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(version: 20180912234744) do
     t.string "slug", null: false
     t.bigint "channel_id"
     t.integer "parent_message_id"
+    t.string "entity_type", default: "entry"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["channel_id"], name: "index_messages_on_channel_id"
@@ -73,7 +74,6 @@ ActiveRecord::Schema.define(version: 20180912234744) do
     t.bigint "user_id"
     t.bigint "workspace_id"
     t.datetime "accessed_at", null: false
-    t.boolean "is_read", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["readable_type", "readable_id", "workspace_id", "user_id"], name: "index_read_workspace_user"

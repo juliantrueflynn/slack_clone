@@ -88,7 +88,6 @@ const messagesWithEntitiesMap = ({ messages, members }) => (
   values(messages).reduce((acc, curr) => {
     const message = messages[curr.slug];
     const author = members && members[curr.authorSlug];
-    message.entityType = 'message';
 
     if (author) {
       message.authorName = author.username;
@@ -143,44 +142,24 @@ const selectAllThreadMessages = (entities) => {
     .sort((a, b) => new Date(b.lastActive) - new Date(a.lastActive));
 };
 
-const selectChannelSubsBySlug = ({ channelSubs, channels, members }, slug) => (
-  values(channelSubs).filter(sub => sub.channelSlug === slug).map((sub) => {
-    const author = members[sub.userSlug];
-    const channel = channels[sub.channelSlug];
-    const channelSub = {
-      entityType: 'sub',
-      channelTitle: channel && `#${channel.title}`,
-      group: [],
-      ...sub,
-    };
-
-    if (author) {
-      channelSub.authorSlug = author.slug;
-      channelSub.authorName = author.username;
-    }
-
-    return channelSub;
-  })
-);
-
 const groupByEntityInIndex = (arr) => {
   const entries = [];
   for (let idx = 0; idx < arr.length - 1; idx += 1) {
-    if (arr[idx].entityType === 'sub') {
+    if (arr[idx].entityType !== 'entry') {
       entries.push(arr[idx]);
 
       for (let i = idx + 1; i < arr.length - 1; i += 1) {
-        if (arr[i].entityType === 'message') {
+        if (arr[i].entityType === 'entry') {
           idx = i;
           break;
         }
 
-        entries[entries.length - 1].group.push(arr[i].authorName);
+        entries[entries.length - 1].group.push(arr[i]);
         idx = i;
       }
     }
 
-    if (arr[idx].entityType === 'message') {
+    if (arr[idx].entityType === 'entry') {
       entries.push(arr[idx]);
     }
   }
@@ -189,13 +168,18 @@ const groupByEntityInIndex = (arr) => {
 };
 
 export const selectChatEntriesBySlug = ({ entities }, slug) => {
-  const channel = entities.channels[slug];
+  const { channels } = entities;
+  const channel = channels[slug];
   const entries = messagesWithEntitiesMap(entities);
-  const messages = selectChannelMessages(channel, entries);
-  const subs = selectChannelSubsBySlug(entities, slug);
-  const items = [...subs, ...messages].sort((a, b) => (
-    new Date(b.createdAt) - new Date(a.createdAt)
-  ));
+  const allMessages = selectChannelMessages(channel, entries);
+  const messages = allMessages.filter(msg => msg.entityType === 'entry');
+  const subMessages = allMessages.filter(msg => msg.entityType !== 'entry').map(msg => ({
+    group: [],
+    channelTitle: `#${channel.title}`,
+    ...msg,
+  }));
+
+  const items = [...subMessages, ...messages].sort((a, b) => a.id - b.id);
 
   return groupByEntityInIndex(items);
 };

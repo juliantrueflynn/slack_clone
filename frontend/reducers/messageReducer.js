@@ -120,10 +120,12 @@ const messageReducer = (state = {}, action) => {
     case MESSAGE.CREATE.REQUEST: {
       const { message: { parentMessageSlug } } = action;
 
-      if (parentMessageSlug) {
-        nextState = Object.assign({}, state);
-        nextState[parentMessageSlug].isInConvo = true;
+      if (!parentMessageSlug) {
+        return state;
       }
+
+      nextState = Object.assign({}, state);
+      nextState[parentMessageSlug].isInConvo = true;
 
       return nextState;
     }

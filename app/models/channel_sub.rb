@@ -13,9 +13,9 @@ class ChannelSub < ApplicationRecord
     "channel_#{channel.slug}"
   end
 
-  after_create_commit :broadcast_create_sub, :generate_read
+  after_create_commit :broadcast_create_sub, :generate_read, :generate_create_message
   after_update_commit :broadcast_update
-  after_destroy :broadcast_destroy
+  after_destroy :generate_destroy_message, :broadcast_destroy
 
   private
 
@@ -26,5 +26,13 @@ class ChannelSub < ApplicationRecord
 
   def broadcast_create_sub
     broadcast_create if workspace.channels.length > 2
+  end
+
+  def generate_create_message
+    channel.messages.create(author_id: user_id, entity_type: 'sub_create')
+  end
+
+  def generate_destroy_message
+    channel.messages.create(author_id: user_id, entity_type: 'sub_destroy')
   end
 end

@@ -6,6 +6,7 @@ class CreateMessages < ActiveRecord::Migration[5.1]
       t.string :slug, null: false
       t.references :channel, foreign_key: {on_delete: :cascade}
       t.integer :parent_message_id, default: nil
+      t.string :entity_type, default: 'entry'
 
       t.timestamps
     end
