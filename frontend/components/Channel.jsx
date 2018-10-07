@@ -3,8 +3,8 @@ import { withRouter } from 'react-router-dom';
 import MessageFormContainer from './MessageFormContainer';
 import ChannelSubscribe from './ChannelSubscribe';
 import ChannelBlurb from './ChannelBlurb';
-import MessageContainer from './MessageContainer';
 import Scrollable from './Scrollable';
+import ChannelEntry from './ChannelEntry';
 
 class Channel extends React.Component {
   constructor(props) {
@@ -30,6 +30,7 @@ class Channel extends React.Component {
     const {
       channel,
       messages,
+      entries,
       users,
       fetchHistoryRequest,
       createChannelSubRequest,
@@ -52,8 +53,8 @@ class Channel extends React.Component {
             isAutoScroll
           >
             <ChannelBlurb channel={channel} currentUserSlug={currentUser.slug} />
-            {messages.map(message => (
-              <MessageContainer key={message.slug} users={users} message={message} />
+            {entries.map((entry, idx) => (
+              <ChannelEntry key={idx} entry={entry} users={users} />
             ))}
           </Scrollable>
         )}

@@ -28,7 +28,6 @@ class Workspace extends React.Component {
       history,
       workspaceSlug,
       workspaces,
-      channels,
       fetchWorkspaceRequest,
       fetchWorkspacesRequest,
     } = this.props;
@@ -43,15 +42,22 @@ class Workspace extends React.Component {
       fetchWorkspacesRequest();
     }
 
-    const workspace = workspaces[workspaceSlug];
-    if (isExact && workspace) {
-      const firstChatSlug = workspace.channels[0];
-      const defaultChatSlug = channels[firstChatSlug] && channels[firstChatSlug].slug;
-
-      if (defaultChatSlug) {
-        history.replace(`${url}/messages/${defaultChatSlug}`);
-      }
+    const defaultChat = this.getDefaultChat();
+    if (isExact && defaultChat) {
+      history.replace(`${url}/messages/${defaultChat.slug}`);
     }
+  }
+
+  getDefaultChat() {
+    const { workspaceSlug, workspaces, channels } = this.props;
+
+    const workspace = workspaces[workspaceSlug];
+    if (workspace) {
+      const firstChatSlug = workspace.channels[0];
+      return channels[firstChatSlug];
+    }
+
+    return null;
   }
 
   render() {
@@ -74,6 +80,8 @@ class Workspace extends React.Component {
       );
     }
 
+    const defaultChat = this.getDefaultChat();
+
     let classNames = 'Workspace';
     if (isLoading) classNames += 'Workspace--loading';
     if (modal.modalType) classNames += ' Workspace--modal-open';
@@ -93,11 +101,13 @@ class Workspace extends React.Component {
               modalClose={modalClose}
               createReactionRequest={createReactionRequest}
             />
-            <Switch>
-              {routes.map(route => (
-                <RouteWithSubRoutes key={route.path} {...route} />
-              ))}
-            </Switch>
+            {defaultChat && (
+              <Switch>
+                {routes.map(route => (
+                  <RouteWithSubRoutes key={route.path} {...route} />
+                ))}
+              </Switch>
+            )}
           </div>
         </div>
       </div>
