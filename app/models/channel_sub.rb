@@ -29,7 +29,12 @@ class ChannelSub < ApplicationRecord
   end
 
   def generate_create_message
-    channel.messages.create(author_id: user_id, entity_type: 'sub_create')
+    channel.messages.create(
+      author_id: user_id,
+      entity_type: 'sub_create',
+      created_at: created_at,
+      updated_at: created_at
+    )
   end
 
   def generate_destroy_message
