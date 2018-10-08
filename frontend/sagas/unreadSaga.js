@@ -37,6 +37,10 @@ function* loadUpdateUnread({ unread }) {
 }
 
 function* loadNewUnread({ message: { message, unread, authors } }) {
+  if (message.entityType !== 'entry') {
+    return;
+  }
+
   const currUser = yield select(selectCurrentUser);
   const unreadProps = {
     activeAt: message.createdAt,

@@ -49,6 +49,7 @@ class Message extends React.Component {
 
     const authorAvatar = { slug: message.authorSlug, username: message.authorName };
     const authorUrl = `${url}/team/${message.authorSlug}`;
+    const hasThreadHidden = isThreadHidden || message.entityType !== 'entry' || !message.thread.length;
     let msgClassName = 'Message';
     if (isEditing) msgClassName += ' Message--editing';
 
@@ -68,7 +69,7 @@ class Message extends React.Component {
             modalOpen={modalOpen}
           />
           <div className="Message__content">
-            <div className="Message__content-meta">
+            <div className="Message__meta">
               <Link to={authorUrl} className="Message__author">
                 {message.authorName}
               </Link>
@@ -95,13 +96,14 @@ class Message extends React.Component {
             messageId={message.id}
             users={users}
           />
-          <SingleMessageThread
-            matchUrl={url}
-            messageSlug={message.slug}
-            users={users}
-            threadMessages={threadMessages}
-            isThreadHidden={isThreadHidden}
-          />
+          {hasThreadHidden || (
+            <SingleMessageThread
+              matchUrl={url}
+              messageSlug={message.slug}
+              users={users}
+              threadMessages={threadMessages}
+            />
+          )}
         </div>
       </div>
     );

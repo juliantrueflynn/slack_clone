@@ -10,11 +10,11 @@
   display: none;
 }
 
-.ChannelEntry:hover .MessageHoverMenu {
+.Message:hover .MessageHoverMenu {
   display: flex;
 }
 
-.Workspace--modal-open .ChannelEntry:hover .MessageHoverMenu {
+.Workspace--modal-open .Message:hover .MessageHoverMenu {
   display: none;
 }
 

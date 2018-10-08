@@ -24,19 +24,21 @@ const messageReducer = (state = {}, action) => {
       const { messages, unreads, reads } = action.workspace;
 
       nextState = Object.assign({}, state);
-      messages.forEach((message) => { nextState[message.slug] = message; });
+      messages.filter(msg => msg.entityType === 'entry').forEach((message) => {
+        nextState[message.slug] = message;
+      });
 
-      unreads.filter(unread => unread.unreadableType === 'Message').forEach((unread) => {
+      unreads.filter(unread => nextState[unread.slug] && unread.unreadableType === 'Message').forEach((unread) => {
         nextState[unread.slug].unreadId = unread.id;
         nextState[unread.slug].lastActive = unread.activeAt;
       });
 
-      reads.filter(read => read.readableType === 'Message').forEach((read) => {
+      reads.filter(read => nextState[read.slug] && read.readableType === 'Message').forEach((read) => {
         nextState[read.slug].readId = read.id;
         nextState[read.slug].lastRead = read.accessedAt;
       });
 
-      messages.forEach((message) => {
+      Object.values(nextState).forEach((message) => {
         nextState[message.slug] = {
           hasUnreads: isDateOlderThanOther(message.lastRead, message.lastActive),
           isInConvo: true,
@@ -173,8 +175,12 @@ const messageReducer = (state = {}, action) => {
     case READ.CREATE.RECEIVE:
     case READ.UPDATE.RECEIVE: {
       const { read } = action;
-      if (read.readableType !== 'Message') return state;
       nextState = Object.assign({}, state);
+
+      if (read.readableType !== 'Message' || nextState[read.slug].entityType !== 'entry') {
+        return state;
+      }
+
       nextState[read.slug].readId = read.id;
       nextState[read.slug].lastRead = read.accessedAt;
 
@@ -190,8 +196,12 @@ const messageReducer = (state = {}, action) => {
     case UNREAD.CREATE.RECEIVE:
     case UNREAD.UPDATE.RECEIVE: {
       const { unread } = action;
-      if (unread.unreadableType !== 'Message') return state;
       nextState = Object.assign({}, state);
+
+      if (unread.unreadableType !== 'Message' || nextState[unread.slug].entityType !== 'entry') {
+        return state;
+      }
+
       nextState[unread.slug].unreadId = unread.id;
       nextState[unread.slug].lastActive = unread.activeAt;
 

@@ -61,33 +61,33 @@ class MessageHoverMenu extends React.Component {
     }
 
     const isAuthor = currentUser.id === message.authorId;
-
+    const isMessageType = message.entityType === 'entry';
     return (
       <div className="MessageHoverMenu">
         <Button unStyled buttonFor="reaction" onClick={this.handleEmojiToggle}>
           <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />
         </Button>
-        {!message.parentMessageId && (
+        {(!message.parentMessageId && isMessageType) && (
           <Button className="Btn Btn__thread" linkTo={`${url}/thread/${message.slug}`}>
             <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />
           </Button>
         )}
-        {!message.favoriteId && (
+        {(!message.favoriteId && isMessageType) && (
           <Button unStyled buttonFor="fav Btn__fav--empty" onClick={this.handleFavClick}>
             <FontAwesomeIcon icon={['far', 'star']} fixedWidth />
           </Button>
         )}
-        {message.favoriteId && (
+        {(message.favoriteId && isMessageType) && (
           <Button unStyled buttonFor="fav Btn__fav--filled" onClick={this.handleUnfavClick}>
             <FontAwesomeIcon icon={['fas', 'star']} fixedWidth />
           </Button>
         )}
-        {isAuthor && (
+        {(isAuthor && isMessageType) && (
           <Button unStyled buttonFor="msg-edit" onClick={this.handleEditClick}>
             <FontAwesomeIcon icon={['far', 'edit']} fixedWidth />
           </Button>
         )}
-        {isAuthor && (
+        {(isAuthor && isMessageType) && (
           <Button unStyled buttonFor="msg-delete" onClick={this.handleDeleteClick}>
             <FontAwesomeIcon icon={['far', 'trash-alt']} fixedWidth />
           </Button>

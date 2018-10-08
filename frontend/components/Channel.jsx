@@ -4,7 +4,6 @@ import MessageFormContainer from './MessageFormContainer';
 import ChannelSubscribe from './ChannelSubscribe';
 import ChannelBlurb from './ChannelBlurb';
 import Scrollable from './Scrollable';
-import ChannelEntry from './ChannelEntry';
 import MessageContainer from './MessageContainer';
 
 class Channel extends React.Component {
@@ -31,7 +30,6 @@ class Channel extends React.Component {
     const {
       channel,
       messages,
-      entries,
       users,
       fetchHistoryRequest,
       createChannelSubRequest,
@@ -54,7 +52,7 @@ class Channel extends React.Component {
             isAutoScroll
           >
             <ChannelBlurb channel={channel} currentUserSlug={currentUser.slug} />
-            {entries.map(message => (
+            {messages.map(message => (
               <MessageContainer key={message.id} message={message} users={users} />
             ))}
           </Scrollable>
