@@ -6,6 +6,11 @@ def random_num(min: 3, max: 9)
   [*min.to_i..max.to_i].sample
 end
 
+def rand_date(from: DateTime.now - 90, to: DateTime.now - 2)
+  from ||= DateTime.now
+  Faker::Date.between(from, to)
+end
+
 def random_string
   lorem_ipsum = [
     Faker::Lorem.paragraph(random_num, rand < 0.5, random_num),
@@ -16,7 +21,6 @@ def random_string
     Faker::Lorem.questions(random_num).join(" "),
     Faker::Lorem.word
   ]
-
   lorem_ipsum.sample
 end
 
@@ -34,7 +38,10 @@ def seed_sub_and_members(user)
   return nil unless chat
 
   workspace.subs.create(user_id: user.id) unless workspace.is_user_sub?(user.id)
-  chat.subs.create(user_id: user.id) unless chat.is_user_sub?(user.id)
+
+  unless chat.is_user_sub?(user.id)
+    chat.subs.create(user_id: user.id, created_at: DateTime.now - 3)
+  end
 end
 
 def seed_workspace(user)
@@ -47,16 +54,16 @@ def seed_chats(user)
   return unless workspace
 
   title = Faker::Company.unique.buzzword
-  channel = user.created_channels.create(title: title, workspace_id: workspace.id)
+  user.created_channels.create(title: title, workspace_id: workspace.id)
 end
 
 User.create!(email: "jtf@gmail.com", username: "jtf", password: "123456")
 
-random_num(min: 2, max: 4).times do
+3.times do
   workspace = seed_workspace(User.first)
 
-  random_num(min: 1, max: 3).times do
-    User.first.created_channels.create(
+  3.times do
+    chat = User.first.created_channels.create(
       title: Faker::Company.unique.buzzword,
       topic: (rand < 0.2 ? Faker::Company.bs : nil),
       workspace_id: workspace.id
@@ -64,7 +71,7 @@ random_num(min: 2, max: 4).times do
   end
 end
 
-random_num(min: 8, max: 16).times do
+10.times do
   User.create(
     email: Faker::Internet.unique.email,
     username: Faker::Internet.unique.user_name,
@@ -72,47 +79,21 @@ random_num(min: 8, max: 16).times do
   )
 end
 
-random_num(min: 30, max: 40).times do
-  user = User.all.sample
-  return unless user
+30.times do
+  user = User.where.not(id: 1).sample
 
   seed_sub_and_members(user)
-  seed_workspace(user) if rand < 0.1
-  seed_chats(user) if rand < 0.1
+  seed_chats(user) if rand < 0.3
 end
 
-random_num(min: 4, max: 8).times do
-  user = User.where.not(id: 1).sample
-  workspace = Workspace.all.sample
-
-  unless user.is_workspace_sub?(workspace)
-    workspace.subs.create(user_id: user.id)
-  end
-
-  title = Faker::Company.unique.buzzword
-  user.created_channels.create(title: title, workspace_id: workspace.id)
-end
-
-Workspace.where.not(owner_id: 1).each do |workspace|
-  next if rand < 0.5 || User.first.is_workspace_sub?(workspace)
-  User.first.workspace_subs.create(workspace_id: workspace.id)
-
-  title = Faker::Company.unique.buzzword
-  User.first.created_channels.create(title: title, workspace_id: workspace.id)
-
-  workspace.channels[2...-1].each do |channel|
-    channel.subs.create(user_id: 1)
-  end
-end
-
-random_num(min: 50, max: 60).times do
+50.times do
   user = User.all.sample
   chat = user.channels.sample
+
   next unless chat
 
   loop do
-    user.messages.create(body: random_message_body, channel_id: chat.id)
-
+    message = user.messages.create(body: random_message_body, channel_id: chat.id)
     break if rand < 0.4
   end
 
@@ -121,10 +102,10 @@ random_num(min: 50, max: 60).times do
     break if rand < 0.8
 
     parent = chat.parent_messages.sample
-    user.messages.create(
+    message = user.messages.where(entity_type: 'entry').create(
       body: random_message_body,
       channel_id: chat.id,
-      parent_message_id: parent.id
+      parent_message_id: parent.id,
     )
 
     unread_params = { unreadable_id: parent.id, unreadable_type: 'Message' }
@@ -161,4 +142,20 @@ Channel.all.each do |chat|
     unread.active_at = last_message.created_at
   end
   chat_unread.save!
+end
+
+User.first.channels.each do |chat|
+  next if chat.messages.empty?
+  next if chat.messages.length < 11
+
+  sub_messages = chat.messages.where.not(entity_type: 'entry')
+  messages = chat.messages.where(entity_type: 'entry')
+
+  sub_messages.each do |sub_message|
+    sub_message.update_attribute(:created_at, DateTime.now - 4)
+  end
+
+  sub_date = sub_messages.last.created_at
+  date = sub_date + 10.minutes
+  messages.first.update(created_at: date, updated_at: date)  
 end
