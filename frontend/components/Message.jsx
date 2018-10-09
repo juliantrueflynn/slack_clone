@@ -6,6 +6,7 @@ import Avatar from './Avatar';
 import MessageContent from './MessageContent';
 import SingleMessageThread from './SingleMessageThread';
 import ChannelSub from './ChannelSub';
+import { dateUtil } from '../util/dateUtil';
 import './Message.css';
 
 class Message extends React.Component {
@@ -74,7 +75,7 @@ class Message extends React.Component {
                 {message.authorName}
               </Link>
               <time className="Message__time">
-                {message.createdAt}
+                {dateUtil(message.createdAt).localTime()}
               </time>
             </div>
             {message.entityType === 'entry' && (

@@ -27,10 +27,14 @@
 }
 
 .ChatPage--channel .ChatPage__container .Scrollable {
-  margin-bottom: 80px;
+  margin-bottom: 65px;
 }
 
 .ChatPage__empty {
   padding-left: 27px;
   padding-right: 27px;
+}
+
+.ChatPage .Channel .Message:last-child {
+  margin-bottom: 15px;
 }
