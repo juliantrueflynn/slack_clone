@@ -98,7 +98,7 @@ class ChatPage extends React.Component {
               <AllUnreads
                 chatPath={chatPath}
                 authors={users}
-                unreadChannels={channels}
+                channels={channels}
                 clearUnreads={clearUnreads}
                 isLoading={isLoading}
                 messages={messages}

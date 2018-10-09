@@ -3,7 +3,7 @@ import AllUnreadsItem from './AllUnreadsItem';
 import Scrollable from './Scrollable';
 
 const AllUnreads = ({
-  unreadChannels,
+  channels,
   messages,
   users,
   clearUnreads,
@@ -17,7 +17,7 @@ const AllUnreads = ({
     );
   }
 
-  if (!unreadChannels.length) {
+  if (!channels.length) {
     return (
       <div className="AllUnreads AllUnreads--empty">
         You are all caught up!
@@ -28,7 +28,7 @@ const AllUnreads = ({
   return (
     <div className="AllUnreads">
       <Scrollable>
-        {unreadChannels.map(channel => (
+        {channels.map(channel => (
           <AllUnreadsItem
             key={channel.id}
             channel={channel}

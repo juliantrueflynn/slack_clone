@@ -34,6 +34,7 @@ class Message < ApplicationRecord
     dependent: :delete
 
   scope :without_children, -> { where(parent_message_id: nil) }
+  scope :with_entry_type, -> { where(entity_type: 'entry') }
 
   def self.parent_ids_with_child_by_author(workspace_id, user_id)
     left_outer_joins(:replies, :workspace)

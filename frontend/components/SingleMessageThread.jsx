@@ -8,7 +8,12 @@ const SingleMessageThread = ({
   users,
   messageSlug,
   matchUrl,
+  isThreadHidden,
 }) => {
+  if (isThreadHidden || !threadMessages || !threadMessages.length) {
+    return null;
+  }
+
   const threadUrl = `${matchUrl}/thread/${messageSlug}`;
   const allAuthors = threadMessages.map(msg => users[msg.authorSlug]);
   const authors = allAuthors.filter((user, i, self) => self.indexOf(user) === i);

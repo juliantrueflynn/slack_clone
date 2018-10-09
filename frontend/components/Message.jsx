@@ -50,7 +50,7 @@ class Message extends React.Component {
 
     const authorAvatar = { slug: message.authorSlug, username: message.authorName };
     const authorUrl = `${url}/team/${message.authorSlug}`;
-    const hasThreadHidden = isThreadHidden || message.entityType !== 'entry' || !message.thread.length;
+    const hasThreadHidden = isThreadHidden || message.entityType !== 'entry';
     let msgClassName = 'Message';
     if (isEditing) msgClassName += ' Message--editing';
 
@@ -97,14 +97,13 @@ class Message extends React.Component {
             messageId={message.id}
             users={users}
           />
-          {hasThreadHidden || (
-            <SingleMessageThread
-              matchUrl={url}
-              messageSlug={message.slug}
-              users={users}
-              threadMessages={threadMessages}
-            />
-          )}
+          <SingleMessageThread
+            matchUrl={url}
+            messageSlug={message.slug}
+            users={users}
+            threadMessages={threadMessages}
+            isThreadHidden={isThreadHidden}
+          />
         </div>
       </div>
     );

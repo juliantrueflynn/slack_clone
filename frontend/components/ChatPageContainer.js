@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { selectChatMessagesBySlug, selectChatChannelsBySlug } from '../reducers/selectors';
+import { selectChatPageMessagesBySlug, selectChatPageChannelsBySlug } from '../reducers/selectors';
 import { fetchMessages, fetchUserThreads, fetchHistory } from '../actions/messageActions';
 import { fetchUnreads } from '../actions/readActions';
 import { loadChatPage, createChannelSub, switchChannel } from '../actions/channelActions';
@@ -17,8 +17,8 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   modal: state.ui.displayModal,
   isLoading: state.ui.isPageLoading,
   currentUser: state.session.currentUser,
-  channels: selectChatChannelsBySlug(state, chatPath),
-  messages: selectChatMessagesBySlug(state, chatPath),
+  channels: selectChatPageChannelsBySlug(state, chatPath),
+  messages: selectChatPageMessagesBySlug(state, chatPath),
 });
 
 const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug, chatPath } } }) => ({
@@ -40,7 +40,7 @@ const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug, chatPa
     dispatch(fetchHistory.request(channelSlug, startDate))
   ),
   switchChannel: (channelSlug, scrollLoc) => dispatch(switchChannel(channelSlug, scrollLoc)),
-  clearUnreads: channelSlug => dispatch(clearUnreads(channelSlug)),
+  clearUnreads: (channelSlug, lastRead) => dispatch(clearUnreads(channelSlug, lastRead)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatPage));

@@ -27,7 +27,8 @@ export const updateUserThreadUnreads = {
   failure: errors => actionCreator(USER_THREAD.UPDATE.FAILURE, { errors }),
 };
 
-export const clearUnreads = channelSlug => ({
+export const clearUnreads = (channelSlug, lastRead) => ({
   type: CLEAR_UNREADS,
   channelSlug,
+  lastRead,
 });

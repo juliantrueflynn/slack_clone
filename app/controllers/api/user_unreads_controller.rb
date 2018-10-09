@@ -1,6 +1,6 @@
 class Api::UserUnreadsController < ApplicationController
   def index
     workspace = Workspace.find_by(slug: params[:workspace_slug])
-    @reads = current_user.reads.where(workspace_id: workspace.id, readable_type: 'Channel')
+    @reads = Read.channels_in_workspace_with_user(workspace.id, current_user.id)
   end
 end

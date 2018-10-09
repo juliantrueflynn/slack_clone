@@ -160,7 +160,7 @@ const groupByEntityInIndex = (arr) => {
   return entries;
 };
 
-export const selectChatEntriesBySlug = ({ entities }, slug) => {
+const selectChannelMessagesBySlug = ({ entities }, slug) => {
   const { channels } = entities;
   const channel = channels[slug];
   const entries = messagesWithEntitiesMap(entities);
@@ -179,12 +179,12 @@ export const selectChatEntriesBySlug = ({ entities }, slug) => {
   return groupByEntityInIndex(items, messages);
 };
 
-export const selectChatMessagesBySlug = ({ entities }, slug) => {
+export const selectChatPageMessagesBySlug = ({ entities }, slug) => {
   const { messages, channels, members } = entities;
   const entries = messagesWithEntitiesMap({ messages, members });
 
   if (channels[slug]) {
-    return selectChatEntriesBySlug({ entities }, slug);
+    return selectChannelMessagesBySlug({ entities }, slug);
   }
 
   if (slug === 'threads') {
@@ -242,7 +242,7 @@ const selectThreadChannels = channels => (
   }, {})
 );
 
-export const selectChatChannelsBySlug = ({ entities, session: { currentUser } }, slug) => {
+export const selectChatPageChannelsBySlug = ({ entities, session: { currentUser } }, slug) => {
   const { channels, members } = entities;
 
   if (slug === 'unreads') {

@@ -231,18 +231,10 @@ const messageReducer = (state = {}, action) => {
 
       nextState = unreads.reduce((acc, curr) => {
         acc[curr.slug] = curr;
-        acc[curr.slug].isUnread = true;
         return acc;
       }, {});
 
       return merge({}, state, nextState);
-    }
-    case CLEAR_UNREADS: {
-      const { channelSlug } = action;
-      nextState = Object.assign({}, state);
-      const unreads = Object.values(nextState).filter(msg => msg.channelSlug === channelSlug);
-      unreads.forEach((message) => { nextState[message.slug].isUnread = false; });
-      return nextState;
     }
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:

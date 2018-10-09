@@ -296,9 +296,10 @@ const channelReducer = (state = {}, action) => {
       return nextState;
     }
     case CLEAR_UNREADS: {
-      const { channelSlug } = action;
+      const { channelSlug, lastRead } = action;
       nextState = Object.assign({}, state);
       nextState[channelSlug].hasUnreads = false;
+      nextState[channelSlug].lastRead = lastRead;
       return nextState;
     }
     case SIGN_OUT.RECEIVE:

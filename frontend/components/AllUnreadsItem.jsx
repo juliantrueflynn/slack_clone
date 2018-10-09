@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MessageContainer from './MessageContainer';
 import './AllUnreadsItem.css';
 import Button from './Button';
+import { isDateOlderThanOther } from '../util/dateUtil';
 
 class AllUnreadsItem extends React.Component {
   constructor(props) {
@@ -11,8 +12,10 @@ class AllUnreadsItem extends React.Component {
   }
 
   handleClearUnreadsClick() {
-    const { clearUnreads, channel } = this.props;
-    clearUnreads(channel.slug);
+    const { clearUnreads, channel, messages } = this.props;
+    const messageSlug = channel.messages[channel.messages.length - 1];
+    const lastMessage = messages[messageSlug];
+    clearUnreads(channel.slug, lastMessage.createdAt);
   }
 
   render() {
@@ -25,7 +28,9 @@ class AllUnreadsItem extends React.Component {
     const unreadMessages = channel.messages.reduce((acc, curr) => {
       acc.push(messages[curr]);
       return acc;
-    }, []).filter(message => message.isUnread);
+    }, []).filter(message => (
+      isDateOlderThanOther(channel.lastRead, message.createdAt) && message.entityType === 'entry'
+    ));
 
     const messagesLengthText = `${unreadMessages.length} messages`;
 

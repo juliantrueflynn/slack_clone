@@ -1,4 +1,6 @@
 class Read < ApplicationRecord
+  attr_accessor :skip_callbacks
+
   before_validation :ensure_workspace_id
   before_validation :generate_accessed_at
 
@@ -12,12 +14,20 @@ class Read < ApplicationRecord
 
   def self.messages_by_channel_id_and_user_id(channel_id, user_id)
     joins(:message)
-    .where(readable_type: 'Message', user_id: user_id)
-    .where(messages: { channel_id: channel_id })
+      .where(readable_type: 'Message', user_id: user_id)
+      .where(messages: { channel_id: channel_id })
+  end
+
+  def self.channels_in_workspace_with_user(workspace_id, user_id)
+    where(workspace_id: workspace_id, user_id: user_id, readable_type: 'Channel')
   end
 
   def self.by_message_id(message_id)
     find_by(readable_id: message_id, readable_type: 'Message')
+  end
+
+  def self.by_user_id(user_id)
+    find_by(user_id: user_id)
   end
 
   private
@@ -29,6 +39,7 @@ class Read < ApplicationRecord
   end
 
   def generate_accessed_at
+    return if skip_callbacks
     self.accessed_at = DateTime.now
   end
 end

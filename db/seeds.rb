@@ -149,10 +149,17 @@ User.first.channels.each do |chat|
   next if chat.messages.length < 11
 
   sub_messages = chat.messages.where.not(entity_type: 'entry')
-  messages = chat.messages.where(entity_type: 'entry')
+  messages = chat.messages.with_entry_type
 
   sub_messages.each do |sub_message|
-    sub_message.update_attribute(:created_at, DateTime.now - 4)
+    date = DateTime.now - 4
+    sub_message.update_attribute(:created_at, date)
+
+    user_messages = chat.messages.where(author_id: 1).without_children
+    if user_messages.exists?
+      user_read = chat.reads.by_user_id(1)
+      user_read.update_attribute(accessed_at: user_messages.last.created_at)
+    end
   end
 
   sub_date = sub_messages.last.created_at
