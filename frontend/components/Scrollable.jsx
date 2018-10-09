@@ -25,7 +25,11 @@ class Scrollable extends React.Component {
       channel,
     } = this.props;
 
-    if (!isMessageThread && isAutoScroll) {
+    if (channel && (channel.scrollLoc || channel.scrollLoc === 0)) {
+      const listNode = this.messagesList.current;
+      listNode.scrollTop = channel.scrollLoc;
+      this.setState({ hasHistory: false });
+    } else if (!isMessageThread && isAutoScroll) {
       this.scrollToBottom();
     }
 
@@ -33,11 +37,10 @@ class Scrollable extends React.Component {
       const parents = messages.filter(msg => !msg.parentMessageId);
       const hasAllMessagesAlready = parents.length > 12;
       this.setState({ hasHistory: hasAllMessagesAlready });
-    }
 
-    if (channel && channel.scrollLoc) {
-      const listNode = this.messagesList.current;
-      listNode.scrollTop = channel.scrollLoc;
+      if (channel && (channel.scrollLoc || channel.scrollLoc === 0)) {
+        this.setState({ hasHistory: false });
+      }
     }
   }
 
@@ -135,10 +138,10 @@ class Scrollable extends React.Component {
 
   render() {
     const { children } = this.props;
-    const { hasHistory } = this.state;
+    const { hasHistory, isAtTop } = this.state;
 
     let classNames = 'Scrollable';
-    classNames += hasHistory ? ' Scrollable--has-history' : ' Scrollable--done';
+    classNames += (!hasHistory || isAtTop) ? ' Scrollable--done' : ' Scrollable--has-history';
 
     return (
       <div className={classNames}>

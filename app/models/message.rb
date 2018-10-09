@@ -82,7 +82,7 @@ class Message < ApplicationRecord
 
   def self.days_from_first_post(channel_id, compared_date)
     last_created = first_parent_created_at(channel_id)
-    return 0 if last_created.nil?
+    return 1 if last_created.nil?
     (compared_date.to_date - last_created.midnight.to_date).to_i
   end
 
@@ -92,13 +92,14 @@ class Message < ApplicationRecord
 
   def self.created_recently(channel_id, start_date)
     end_date = start_date.midnight
-    days_between = days_from_first_post(channel_id, start_date) + 1
+    days_between = days_from_first_post(channel_id, start_date)
     entries = where(channel_id: channel_id).without_children
 
     1.step(to: days_between) do |idx|
       new_end_date = end_date - idx
       entries_up_to = entries.created_between(new_end_date, start_date)
       return parents_or_children(entries_up_to) if entries_up_to.length >= 12
+      return parents_or_children(entries_up_to) if idx === days_between
     end
   end
 
