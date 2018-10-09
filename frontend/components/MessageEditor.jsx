@@ -10,6 +10,7 @@ class MessageEditor extends React.Component {
   constructor(props) {
     super(props);
     this.emojiPlugin = createEmojiPlugin(emojiConfig);
+    this.editor = React.createRef();
     this.focus = this.focus.bind(this);
   }
 
@@ -24,9 +25,13 @@ class MessageEditor extends React.Component {
     const editorClassNames = `Editor ${readOnly ? 'Editor__locked' : 'Editor__unlocked'}`;
 
     return (
-      <div className={editorClassNames} role="presentation" onClick={this.focus}>
+      <div
+        role="presentation"
+        className={editorClassNames}
+        onClick={this.focus}
+      >
         <Editor
-          ref={(element) => { this.editor = element; }}
+          ref={this.editor}
           plugins={plugins}
           readOnly={readOnly || false}
           {...props}

@@ -37,7 +37,7 @@ class Channel extends React.Component {
       isLoading,
     } = this.props;
 
-    const placeholder = channel.hasDm ? `@${channel.title}` : channel.title;
+    const placeholder = channel.hasDm ? `@${channel.title}` : `#${channel.title}`;
     const formPlaceholder = placeholder && `Message ${placeholder}`;
 
     return (

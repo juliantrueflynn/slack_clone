@@ -11,7 +11,8 @@ export const createEditor = content => EditorState.createWithContent(content);
 
 export const clearEditor = (editorState) => {
   const emptyContentState = ContentState.createFromText('');
-  return EditorState.push(editorState, emptyContentState, 'remove-range');
+  const clearedEditorState = EditorState.push(editorState, emptyContentState, 'remove-range');
+  return EditorState.moveFocusToEnd(clearedEditorState);
 };
 
 export const convertForSubmit = (editorState) => {
