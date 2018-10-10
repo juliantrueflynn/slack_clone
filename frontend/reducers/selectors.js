@@ -96,6 +96,7 @@ const messagesWithEntitiesMap = ({ messages, members }) => (
 
 const selectMessagesFavorites = ({ favorites, messages, members }) => {
   const entries = messagesWithEntitiesMap({ messages, members });
+
   return values(favorites)
     .map(({ messageSlug }) => entries[messageSlug])
     .filter(message => message.isInDrawer);
@@ -160,7 +161,7 @@ const selectChannelMessagesBySlug = ({ entities }, slug) => {
   const channel = channels[slug];
   const entries = messagesWithEntitiesMap(entities);
   const allMessages = values(entries).filter(msg => (
-    channel.id === msg.channelId && !msg.parentMessageId
+    msg && msg.channelId && msg.channelId === channel.id && !msg.parentMessageId
   ));
   const messages = allMessages.filter(msg => msg.entityType === 'entry');
   const subMessages = allMessages.filter(msg => msg.entityType !== 'entry').map(msg => ({

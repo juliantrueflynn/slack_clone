@@ -23,8 +23,9 @@ const favoriteReducer = (state = {}, action) => {
     }
     case FAVORITE.CREATE.RECEIVE: {
       const { favorite } = action;
-      nextState = { [favorite.id]: favorite };
-      return Object.assign({}, state, nextState);
+      nextState = Object.assign({}, state, nextState);
+      nextState[favorite.id] = favorite;
+      return nextState;
     }
     case FAVORITE.DESTROY.RECEIVE: {
       const { favorite } = action;

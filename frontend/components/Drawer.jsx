@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import Button from './Button';
 import './Drawer.css';
 
@@ -19,11 +20,7 @@ class Drawer extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const {
-      openDrawer,
-      fetchEntitiesRequest,
-      location: { pathname },
-    } = this.props;
+    const { openDrawer, fetchEntitiesRequest, location: { pathname } } = this.props;
     const { drawerSlug: prevDrawerSlug } = prevProps.drawer;
     const { drawerType, drawerSlug } = this.drawerProps();
 
@@ -96,4 +93,4 @@ class Drawer extends React.Component {
   }
 }
 
-export default Drawer;
+export default withRouter(Drawer);

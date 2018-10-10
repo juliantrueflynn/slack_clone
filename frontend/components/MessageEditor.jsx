@@ -15,7 +15,7 @@ class MessageEditor extends React.Component {
   }
 
   focus() {
-    this.editor.focus();
+    this.editor.current.focus();
   }
 
   render() {

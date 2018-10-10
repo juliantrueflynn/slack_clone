@@ -53,12 +53,7 @@ const withDrawer = drawerTitle => (WrappedComponent) => {
       return null;
     }
 
-    const {
-      match,
-      history,
-      location,
-      isLoading,
-    } = props;
+    const { isLoading } = props;
 
     return (
       <Drawer
@@ -67,9 +62,6 @@ const withDrawer = drawerTitle => (WrappedComponent) => {
         closeDrawer={closeDrawer}
         drawer={drawer}
         fetchEntitiesRequest={fetchEntitiesRequest}
-        match={match}
-        history={history}
-        location={location}
         isLoading={isLoading}
         render={drawerProps => (
           <WrappedComponent drawer={drawerProps} {...props} />

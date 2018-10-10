@@ -217,12 +217,14 @@ const messageReducer = (state = {}, action) => {
       const { id, messageSlug } = action.favorite;
       nextState = Object.assign({}, state);
       nextState[messageSlug].favoriteId = id;
+      nextState[messageSlug].isInDrawer = true;
       return nextState;
     }
     case FAVORITE.DESTROY.RECEIVE: {
       const { messageSlug } = action.favorite;
       nextState = Object.assign({}, state);
       nextState[messageSlug].favoriteId = null;
+      nextState[messageSlug].isInDrawer = false;
       return nextState;
     }
     case READ.INDEX.RECEIVE: {
