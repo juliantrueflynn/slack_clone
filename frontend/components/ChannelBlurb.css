@@ -23,11 +23,6 @@
   margin-left: 2px;
 }
 
-.Scrollable--has-history .ChannelBlurb,
-.Scrollable--fetching .ChannelBlurb {
-  display: none;
-}
-
 .ChannelBlurb__label {
   background-color: rgba(5,118,185,0.1);
   padding: 2px 3px;

@@ -55,7 +55,12 @@ class Channel extends React.Component {
           >
             <ChannelBlurb channel={channel} currentUserSlug={currentUser.slug} />
             {messages.map(message => (
-              <MessageContainer key={message.id} message={message} users={users} />
+              <MessageContainer
+                key={message.id}
+                message={message}
+                isDm={channel.hasDm}
+                users={users}
+              />
             ))}
           </Scrollable>
         )}

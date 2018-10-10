@@ -35,6 +35,7 @@ class Message < ApplicationRecord
 
   scope :without_children, -> { where(parent_message_id: nil) }
   scope :with_entry_type, -> { where(entity_type: 'entry') }
+  scope :without_entry_type, -> { where.not(entity_type: 'entry') }
 
   def self.parent_ids_with_child_by_author(workspace_id, user_id)
     left_outer_joins(:replies, :workspace)
@@ -69,11 +70,11 @@ class Message < ApplicationRecord
   end
 
   def self.created_between(start_date, end_date)
-    where("date(created_at) BETWEEN ? AND ?", start_date, end_date)
+    where("created_at BETWEEN ? AND ?", start_date, end_date)
   end
 
   def self.created_until(until_date)
-    where("date(created_at) > ?", until_date)
+    where("created_at > ?", until_date)
   end
 
   def self.first_parent_created_at(channel_id)
@@ -93,15 +94,17 @@ class Message < ApplicationRecord
 
   def self.created_recently(channel_id, start_date)
     end_date = start_date.midnight
-    days_between = days_from_first_post(channel_id, start_date)
+    days_between = days_from_first_post(channel_id, start_date) + 1
     entries = where(channel_id: channel_id).without_children
 
+    results = []
     1.step(to: days_between) do |idx|
       new_end_date = end_date - idx
-      entries_up_to = entries.created_between(new_end_date, start_date)
-      return parents_or_children(entries_up_to) if entries_up_to.length >= 12
-      return parents_or_children(entries_up_to) if idx === days_between
+      results = entries.created_between(new_end_date, start_date)
+      break if results.length >= 12
     end
+
+    parents_or_children(results)
   end
 
   def broadcast_name

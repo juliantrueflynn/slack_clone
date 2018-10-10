@@ -69,7 +69,7 @@ class Channel < ApplicationRecord
 
   def recent_messages(start_date = nil)
     return messages if messages.without_children.length < 12
-    after_date = start_date ? DateTime.parse(start_date) - 1 : DateTime.now
+    after_date = start_date ? DateTime.parse(start_date) : DateTime.now
     Message.created_recently(id, after_date)
   end
 

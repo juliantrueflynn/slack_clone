@@ -242,16 +242,20 @@ const channelReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
+    case HISTORY.INDEX.REQUEST: {
+      const { channelSlug, startDate } = action;
+      nextState = Object.assign({}, state);
+      nextState[channelSlug].lastFetched = startDate;
+      return nextState;
+    }
     case HISTORY.INDEX.RECEIVE: {
       const { messages: { messages, channel } } = action;
 
-      if (!messages.length) {
-        return state;
-      }
-
-      const [message] = messages;
       nextState = Object.assign({}, state);
-      nextState[channel.slug].lastFetched = message.createdAt;
+      messages.forEach((message) => {
+        nextState[channel.slug].messages.push(message.slug);
+      });
+
       return nextState;
     }
     case READ.CREATE.RECEIVE:

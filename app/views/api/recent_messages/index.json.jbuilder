@@ -10,8 +10,12 @@ json.messages do
 end
 
 json.channel do
-  channel = @recent_messages.first.channel
-  json.(channel, :slug)
+  if @recent_messages.first
+    channel = @recent_messages.first.channel
+    json.(channel, :slug)
+  else
+    json.nil!
+  end
 end
 
 json.favorites do

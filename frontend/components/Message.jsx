@@ -29,6 +29,7 @@ class Message extends React.Component {
     const {
       match: { url },
       message,
+      isDm,
       updateMessageRequest,
       reactions,
       threadMessages,
@@ -44,13 +45,13 @@ class Message extends React.Component {
     } = this.props;
     const { isEditing } = this.state;
 
-    if (!message) {
+    if (!message || (message.entityType !== 'entry' && isDm)) {
       return null;
     }
 
     const authorAvatar = { slug: message.authorSlug, username: message.authorName };
     const authorUrl = `${url}/team/${message.authorSlug}`;
-    const hasThreadHidden = isThreadHidden || message.entityType !== 'entry';
+    const dateCreated = dateUtil(message.createdAt).localTime();
     let msgClassName = 'Message';
     if (isEditing) msgClassName += ' Message--editing';
 
@@ -75,7 +76,7 @@ class Message extends React.Component {
                 {message.authorName}
               </Link>
               <time className="Message__time">
-                {dateUtil(message.createdAt).localTime()}
+                {dateCreated}
               </time>
             </div>
             {message.entityType === 'entry' && (
@@ -87,7 +88,7 @@ class Message extends React.Component {
                 messageSlug={message.slug}
               />
             )}
-            {message.entityType !== 'entry' && (
+            {message.entityType === 'entry' || (
               <ChannelSub sub={message} />
             )}
           </div>

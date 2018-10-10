@@ -101,7 +101,7 @@ end
     break if chat.parent_messages.empty?
     break if rand < 0.8
 
-    parent = chat.parent_messages.sample
+    parent = chat.parent_messages.without_entry_type.sample
     message = user.messages.where(entity_type: 'entry').create(
       body: random_message_body,
       channel_id: chat.id,

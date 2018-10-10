@@ -123,7 +123,7 @@ class Scrollable extends React.Component {
       this.setStateIfChanged('isAtBottom', isAtBottom);
 
       if (fetchHistoryRequest) {
-        const isAtTop = scrollTop < 300;
+        const isAtTop = scrollTop < 250;
         this.setStateIfChanged('isAtTop', isAtTop);
       }
     }
@@ -138,13 +138,9 @@ class Scrollable extends React.Component {
 
   render() {
     const { children } = this.props;
-    const { hasHistory, isAtTop } = this.state;
-
-    let classNames = 'Scrollable';
-    classNames += (!hasHistory || isAtTop) ? ' Scrollable--done' : ' Scrollable--has-history';
 
     return (
-      <div className={classNames}>
+      <div className="Scrollable">
         <div ref={this.messagesList} className="Scrollable__body" onScroll={this.handleScroll}>
           {children}
         </div>

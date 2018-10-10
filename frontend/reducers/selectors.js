@@ -141,14 +141,13 @@ const groupByEntityInIndex = (arr) => {
     entries.push(arr[idx]);
 
     if (arr[idx].entityType !== 'entry') {
-      for (let i = idx + 1; i < arr.length; i += 1) {
-        if (arr[i].entityType === 'entry') {
+      for (let i = idx; i < arr.length; i += 1) {
+        if (!arr[i + 1] || arr[i + 1].entityType === 'entry') {
           idx = i;
           break;
         }
 
-        entries[entries.length - 1].group.push(arr[i]);
-        idx = i;
+        entries[entries.length - 1].group.push(arr[i + 1]);
       }
     }
   }
@@ -164,15 +163,17 @@ const selectChannelMessagesBySlug = ({ entities }, slug) => {
     msg && msg.channelId && msg.channelId === channel.id && !msg.parentMessageId
   ));
   const messages = allMessages.filter(msg => msg.entityType === 'entry');
-  const subMessages = allMessages.filter(msg => msg.entityType !== 'entry').map(msg => ({
-    group: [],
-    channelTitle: `#${channel.title}`,
-    ...msg,
-  }));
+  const subMessages = allMessages.filter(msg => msg.entityType !== 'entry').reduce((acc, curr) => {
+    const message = entries[curr.slug];
+    message.group = [];
+    message.channelTitle = `#${channel.title}`;
+    acc.push(message);
+    return acc;
+  }, []);
 
   const items = [...subMessages, ...messages].sort((a, b) => a.id - b.id);
 
-  return groupByEntityInIndex(items, messages);
+  return groupByEntityInIndex(items);
 };
 
 export const selectChatPageMessagesBySlug = ({ entities }, slug) => {
@@ -241,7 +242,7 @@ const selectThreadChannels = channels => (
 );
 
 export const selectChatPageChannelsBySlug = ({ entities, session: { currentUser } }, slug) => {
-  const { channels, members } = entities;
+  const { channels } = entities;
 
   if (slug === 'unreads') {
     return values(channels).filter(ch => ch.hasUnreads && !ch.hasDm);
@@ -251,7 +252,7 @@ export const selectChatPageChannelsBySlug = ({ entities, session: { currentUser 
     return selectThreadChannels(channels);
   }
 
-  return channelsWithEntitiesMap({ channels, members }, currentUser.slug);
+  return channelsWithEntitiesMap(entities, currentUser.slug);
 };
 
 export const selectEntities = ({ entities }, type) => entities[type];
