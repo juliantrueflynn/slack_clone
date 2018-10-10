@@ -86,7 +86,7 @@ const channelReducer = (state = {}, action) => {
       const {
         workspace,
         channels,
-        subs,
+        channelSubs,
         reads,
         unreads,
       } = action.workspace;
@@ -106,7 +106,7 @@ const channelReducer = (state = {}, action) => {
         };
       });
 
-      subs.forEach((sub) => {
+      channelSubs.forEach((sub) => {
         nextState[sub.channelSlug].subs.push(sub.id);
         nextState[sub.channelSlug].members.push(sub.userSlug);
       });

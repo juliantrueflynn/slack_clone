@@ -3,6 +3,7 @@ class CreateWorkspaceSubs < ActiveRecord::Migration[5.1]
     create_table :workspace_subs do |t|
       t.references :user, foreign_key: {on_delete: :cascade}, index: false
       t.references :workspace, foreign_key: {on_delete: :cascade}, index: false
+      t.boolean :is_member, default: true
 
       t.timestamps
     end

@@ -21,7 +21,8 @@ class ChannelSub < ApplicationRecord
 
   def generate_read
     return if channel.has_dm
-    channel.reads.create(readable_type: 'Channel', user_id: user.id)
+    read = channel.reads.find_or_initialize_by_user(user.id)
+    read.save!
   end
 
   def broadcast_create_sub

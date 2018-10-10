@@ -20,11 +20,19 @@ json.members do
   end
 end
 
-json.subs do
+json.channel_subs do
   json.array! @workspace.chat_subs.with_user_id(user_id) do |chat_sub|
     json.(chat_sub, :id, :user_id, :in_sidebar, :channel_id, :created_at)
     json.user_slug chat_sub.user_slug
     json.channel_slug chat_sub.channel_slug
+  end
+end
+
+json.workspace_subs do
+  json.array! @workspace.subs do |workspace_sub|
+    json.(workspace_sub, *workspace_sub.attributes.keys)
+    json.user_slug workspace_sub.user.slug
+    json.workspace_slug @workspace.slug
   end
 end
 

@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(version: 20180912234744) do
   create_table "workspace_subs", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "workspace_id"
+    t.boolean "is_member", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["workspace_id", "user_id"], name: "index_workspace_subs_on_workspace_id_and_user_id", unique: true

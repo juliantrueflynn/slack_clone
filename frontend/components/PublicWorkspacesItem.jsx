@@ -9,18 +9,13 @@ class PublicWorkspacesItem extends React.Component {
     this.handleSubscribe = this.handleSubscribe.bind(this);
   }
 
-  isSubscriber() {
-    const { currentUser, workspace: { members } } = this.props;
-    return members.includes(currentUser.slug);
-  }
-
   handleSubscribe() {
     const {
-      workspace: { id: workspaceId },
+      workspace: { id: workspaceId, isSub },
       createWorkspaceSubRequest,
       deleteWorkspaceSubRequest,
     } = this.props;
-    if (this.isSubscriber()) {
+    if (isSub) {
       deleteWorkspaceSubRequest(workspaceId);
     } else {
       createWorkspaceSubRequest({ workspaceId });
@@ -29,19 +24,25 @@ class PublicWorkspacesItem extends React.Component {
 
   render() {
     const { workspace } = this.props;
-    const buttonText = this.isSubscriber() ? 'Unsubscribe' : 'Subscribe';
-    const buttonModifier = this.isSubscriber() ? 'unsub' : 'sub';
+    const {
+      id,
+      isSub,
+      slug,
+      title
+    } = workspace;
+    const buttonText = isSub ? 'Unsubscribe' : 'Subscribe';
+    const buttonModifier = isSub ? 'unsub' : 'sub';
 
     return (
-      <div key={workspace.id} className="PublicWorkspaces__item" role="listitem">
-        {this.isSubscriber() && (
-          <Link to={workspace.slug} className="PublicWorkspaces__item-title">
-            {workspace.title}
+      <div key={id} className="PublicWorkspaces__item" role="listitem">
+        {isSub && (
+          <Link to={slug} className="PublicWorkspaces__item-title">
+            {title}
           </Link>
         )}
-        {this.isSubscriber() || (
-          <div to={workspace.slug} className="PublicWorkspaces__item-title">
-            {workspace.title}
+        {isSub || (
+          <div to={slug} className="PublicWorkspaces__item-title">
+            {title}
           </div>
         )}
         <Button

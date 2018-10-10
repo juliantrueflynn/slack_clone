@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import workspaces from './workspaceReducer';
+import workspaceSubs from './workspaceSubReducer';
 import channels from './channelReducer';
 import channelSubs from './channelSubReducer';
 import members from './memberReducer';
@@ -11,6 +12,7 @@ import unreads from './unreadReducer';
 
 const entitiesReducer = combineReducers({
   workspaces,
+  workspaceSubs,
   channels,
   channelSubs,
   members,

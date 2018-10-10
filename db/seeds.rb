@@ -125,21 +125,22 @@ end
 end
 
 User.first.channels.shuffle.each do |chat|
-  next unless chat.messages.first
+  messages = chat.messages.without_children.without_entry_type
+  next unless messages.empty?
   next if rand < 0.4
 
-  accessed_at = chat.messages.sample.created_at
-  read_chat = chat.reads.find_or_initialize_by(readable_type: 'Channel', user_id: 1)
-  read_chat.save!
+  accessed_at = messages.sample.created_at
+  read = chat.reads.find_or_initialize_by_user(1)
+  read.save!
 end
 
 Channel.all.each do |chat|
-  next if chat.messages.empty?
+  messages = chat.messages.without_children.without_entry_type
+  next if messages.empty?
 
   unread_params = { unreadable_id: chat.id, unreadable_type: 'Channel' }
-  last_message = chat.messages.without_children.last
   chat_unread = Unread.find_or_initialize_by(unread_params) do |unread|
-    unread.active_at = last_message.created_at
+    unread.active_at = messages.last.created_at
   end
   chat_unread.save!
 end
@@ -158,7 +159,7 @@ User.first.channels.each do |chat|
     user_messages = chat.messages.where(author_id: 1).without_children
     if user_messages.exists?
       user_read = chat.reads.by_user_id(1)
-      user_read.update_attribute(accessed_at: user_messages.last.created_at)
+      user_read.update_attribute(:accessed_at, user_messages.last.created_at)
     end
   end
 

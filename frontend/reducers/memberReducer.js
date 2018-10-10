@@ -31,29 +31,27 @@ const memberReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.RECEIVE: {
-      const { members, subs } = action.workspace;
+      const { members, channelSubs } = action.workspace;
 
       nextState = members.reduce((acc, curr) => {
         acc[curr.slug] = curr;
         acc[curr.slug].subs = [];
-        acc[curr.slug].workspaces = [];
         acc[curr.slug].reactions = [];
         return acc;
       }, {});
 
-      subs.forEach((sub) => {
+      channelSubs.forEach((sub) => {
         nextState[sub.userSlug].subs.push(sub.id);
       });
 
       return merge({}, state, nextState);
     }
     case WORKSPACE_SUB.CREATE.RECEIVE: {
-      const { user, workspaceSub, channelSubs } = action.workspaceSub;
+      const { user, channelSubs } = action.workspaceSub;
 
       nextState = Object.assign({}, state);
       nextState[user.slug] = {
         subs: [],
-        workspaces: [workspaceSub.workspaceSlug],
         ...user,
       };
 

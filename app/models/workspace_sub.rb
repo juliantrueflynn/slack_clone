@@ -21,6 +21,7 @@
 
     default_chats = workspace.channels.first(2)
     default_chats.each do |chat|
+      next if chat.is_user_sub?(user.id)
       user.channel_subs.create(channel_id: chat.id, skip_broadcast: true)
     end
   end
@@ -32,8 +33,6 @@
   end
 
   def broadcast_destroy_subs
-    workspace.chat_subs.where(user_id: user.id).delete_all
-    workspace.favorites.where(user_id: user.id).delete_all
     broadcast_destroy
   end
 end

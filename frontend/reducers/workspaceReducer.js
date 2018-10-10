@@ -13,28 +13,43 @@ const workspaceReducer = (state = {}, action) => {
       workspaces.forEach((workspace) => {
         nextState[workspace.slug] = {
           members: [workspace.ownerSlug],
+          subs: [],
           channels: [],
           ...workspace
         };
       });
 
-      workspaceSubs.forEach(({ workspaceSlug, userSlug }) => {
-        if (workspaceSubs.includes(userSlug)) return;
-        nextState[workspaceSlug].members.push(userSlug);
+      workspaceSubs.forEach((sub) => {
+        const hasSub = nextState[sub.workspaceSlug].members.includes(sub.userSlug);
+        if (!hasSub) {
+          nextState[sub.workspaceSlug].members.push(sub.userSlug);
+        }
+
+        nextState[sub.workspaceSlug].subs.push(sub.id);
+        nextState[sub.workspaceSlug].subId = sub.id;
+        nextState[sub.workspaceSlug].isMember = sub.isMember;
+        nextState[sub.workspaceSlug].isSub = sub.isMember;
       });
 
       return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.RECEIVE: {
-      const { workspace, members, channels } = action.workspace;
+      const {
+        workspace,
+        members,
+        channels,
+        workspaceSubs,
+      } = action.workspace;
+
       nextState = Object.assign({}, state);
       nextState[workspace.slug] = {
         members: members.map(user => user.slug),
         channels: channels.map(ch => ch.slug),
+        subs: workspaceSubs.map(sub => sub.id),
         ...workspace,
       };
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case WORKSPACE.CREATE.RECEIVE: {
       const { owner, workspace, channels } = action.workspace;
