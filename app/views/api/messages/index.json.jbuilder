@@ -1,5 +1,6 @@
 json.channel do
   json.(@channel, *@channel.attributes.keys)
+  json.owner_slug @channel.owner_slug
 end
 
 messages = @channel.history_messages(params[:until_date])

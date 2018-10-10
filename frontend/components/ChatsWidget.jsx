@@ -19,13 +19,16 @@ class ChatsWidget extends React.Component {
 
   render() {
     const {
-      unsubbedChannels,
-      subbedChannels,
+      channels,
       workspaceSlug,
       workspaceId,
       createChannelRequest,
       fetchChannelsRequest,
     } = this.props;
+
+    const chats = channels.sort((a, b) => a.title.localeCompare(b.title));
+    const subbedChannels = chats.filter(ch => ch.isSub);
+    const unsubbedChannels = chats.filter(ch => !ch.isSub);
 
     const chatList = subbedChannels.map(item => ({
       icon: <FontAwesomeIcon className="Icon" icon={['fas', 'hashtag']} size="sm" />,

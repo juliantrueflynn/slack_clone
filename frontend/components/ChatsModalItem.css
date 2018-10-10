@@ -1,0 +1,24 @@
+.ChatsModalItem {
+  display: block;
+  color: #2D3436;
+  padding: 18px 12px;
+  border-top: 1px solid #DFE6E9;
+}
+
+.ChatsModalItem:hover {
+  background-color: rgba(116, 185, 255, 0.1);
+}
+
+.ChatsModalItem__title {
+  margin: 0 0 5px;
+}
+
+.ChatsModalItem__hashtag {
+  margin-right: 6px;
+  opacity: .6;
+}
+
+.ChatsModalItem__byline {
+  font-size: 14px;
+  color: #636E72;
+}

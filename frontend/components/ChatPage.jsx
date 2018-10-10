@@ -67,6 +67,7 @@ class ChatPage extends React.Component {
       isLoading,
       clearUnreads,
       fetchHistoryRequest,
+      createChannelSubRequest,
       switchChannel,
       entries,
     } = this.props;
@@ -125,6 +126,7 @@ class ChatPage extends React.Component {
                 entries={entries}
                 fetchHistoryRequest={fetchHistoryRequest}
                 switchChannel={switchChannel}
+                createChannelSubRequest={createChannelSubRequest}
               />
             )}
           </div>

@@ -6,9 +6,11 @@
 }
 
 .ChannelSubscribe__title {
-  margin: 0 0 10px;
+  margin: 0 0 5px;
+  font-weight: 400;
 }
 
 .ChannelSubscribe__text {
   color: #717274;
+  margin-bottom: 20px;
 }

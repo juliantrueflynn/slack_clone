@@ -8,14 +8,13 @@ import './LeftSidebar.css';
 
 const LeftSidebar = ({
   hasUnreadThreads,
-  subbedChannels,
+  channels,
   currentUser,
   members,
   currWorkspace,
   workspaces,
   modalOpen,
   dmChats,
-  unsubbedChannels,
   updateChannelSubRequest,
   createChannelRequest,
   fetchChannelsRequest,
@@ -26,7 +25,7 @@ const LeftSidebar = ({
     return null;
   }
 
-  const hasUnreadChannels = !!subbedChannels.filter(ch => ch.hasUnreads).length;
+  const hasUnreadChannels = !!channels.filter(ch => ch.isSub && ch.hasUnreads).length;
 
   const quickLinksList = [
     {
@@ -79,8 +78,7 @@ const LeftSidebar = ({
 
       <ChatsWidget
         modalOpen={modalOpen}
-        subbedChannels={subbedChannels}
-        unsubbedChannels={unsubbedChannels}
+        channels={channels}
         workspaceSlug={workspaceSlug}
         workspaceId={currWorkspace.id}
         createChannelRequest={createChannelRequest}

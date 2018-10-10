@@ -50,6 +50,14 @@ export const isDateToday = (date) => {
   return today.toDateString() === date.toDateString();
 };
 
+export const getMonthDayYear = (date) => {
+  const monthName = parseDateToMonthName(date);
+  const day = date.getDate();
+  const year = date.getFullYear();
+
+  return `${monthName} ${day}, ${year}`;
+};
+
 export const dateUtil = (dateString) => {
   const date = new Date(dateString);
 
@@ -57,6 +65,7 @@ export const dateUtil = (dateString) => {
     localTime: () => parseToLocalTime(date),
     dayOrdinal: () => parseDateToOrdinalDay(date),
     monthName: () => parseDateToMonthName(date),
+    monthDayYear: () => getMonthDayYear(date),
     isToday: () => isDateToday(date),
   };
 };

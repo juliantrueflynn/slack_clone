@@ -1,18 +1,13 @@
 const values = entities => Object.values(entities);
-const sortEntityId = (entity, a, b) => entity[a.slug].id - entity[b.slug].id;
 
 export const selectCurrentUser = ({ session: { currentUser } }) => currentUser;
 
 export const selectWorkspaces = ({ entities: { workspaces } }) => (
-  values(workspaces).sort((a, b) => sortEntityId(workspaces, a, b))
+  values(workspaces).sort((a, b) => a.id - b.id)
 );
 
 export const selectSubbedWorkspaces = ({ entities: { workspaces }, session: { currentUser } }) => (
   values(workspaces).filter(workspace => workspace.members.includes(currentUser.slug))
-);
-
-export const selectUnsubbedChats = ({ entities: { channels }, session: { currentUser } }) => (
-  values(channels).filter(ch => !ch.members.includes(currentUser.slug) && !ch.hasDm)
 );
 
 const selectDmWithUser = (channel, members, currUserSlug) => {
@@ -211,6 +206,7 @@ export const selectDrawerMessagesByType = ({ entities, ui: { drawer } }) => {
 const channelsWithEntitiesMap = ({ channels, members }, currentUserSlug) => (
   values(channels).reduce((acc, curr) => {
     const channel = channels[curr.slug];
+    channel.isSub = channel.members.includes(currentUserSlug);
 
     if (channel && channel.hasDm) {
       const dmUser = selectDmWithUser(channel, members, currentUserSlug);
@@ -219,10 +215,11 @@ const channelsWithEntitiesMap = ({ channels, members }, currentUserSlug) => (
         channel.title = dmUser.username;
         channel.dmUserSlug = dmUser.slug;
       }
-    } else {
+    }
+
+    if (channel && !channel.hasDm) {
       const owner = members[channel.ownerSlug];
       channel.ownerName = owner && owner.username;
-      channel.isSub = channel.members.includes(currentUserSlug);
     }
 
     acc[curr.slug] = channel;

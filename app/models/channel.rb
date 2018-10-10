@@ -63,6 +63,10 @@ class Channel < ApplicationRecord
     "workspace_#{workspace.slug}"
   end
 
+  def owner_slug
+    owner ? owner.slug : nil
+  end
+
   def recent_messages(start_date = nil)
     return messages if messages.without_children.length < 12
     after_date = start_date ? DateTime.parse(start_date) - 1 : DateTime.now

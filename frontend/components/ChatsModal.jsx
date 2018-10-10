@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import withModal from './withModal';
+import ChatsModalItem from './ChatsModalItem';
 import './ChatsModal.css';
 
 class ChatsModal extends React.Component {
@@ -14,21 +14,12 @@ class ChatsModal extends React.Component {
 
     return (
       <div className="ChatsModal">
+        <div className="ChatsModal__subhead">
+          Channels you can join
+        </div>
         <div role="list" className="ChatsModal__list">
           {unsubbedChannels && unsubbedChannels.map(chat => (
-            <Link role="listitem" to={`/${workspaceSlug}/${chat.slug}`} className="ChatsModal__item" key={chat.id}>
-              <h3 className="ChatsModalItem__title">
-                {chat.title}
-              </h3>
-              <div className="ChatsModalItem__body">
-                <div className="ChatsModalItem__date">
-                  {chat.createdAt}
-                </div>
-                <div className="ChatsModalItem__owner">
-                  {chat.ownerId}
-                </div>
-              </div>
-            </Link>
+            <ChatsModalItem key={chat.slug} channel={chat} workspaceSlug={workspaceSlug} />
           ))}
         </div>
       </div>

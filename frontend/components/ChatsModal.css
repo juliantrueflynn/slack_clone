@@ -2,6 +2,10 @@
   position: relative;
 }
 
+.Modal__chats .Modal__header {
+  margin-bottom: 30px;
+}
+
 .Modal__chats .Btn__close {
   position: absolute;
   right: 50px;
@@ -20,4 +24,12 @@
   width: 600px;
   margin: 0 auto;
   padding-top: 70px;
+}
+
+.ChatsModal__subhead {
+  padding: 8px 12px;
+  background-color: rgba(223, 230, 233, 0.2);
+  color: #636E72;
+  font-size: 14px;
+  font-weight: 600;
 }

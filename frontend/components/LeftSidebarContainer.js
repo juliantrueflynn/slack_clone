@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import LeftSidebar from './LeftSidebar';
 import {
   selectSubbedChats,
-  selectUnsubbedChats,
   selectDmChats,
   selectSubbedWorkspaces,
 } from '../reducers/selectors';
@@ -16,8 +15,7 @@ const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   workspaces: selectSubbedWorkspaces(state),
   currWorkspace: state.entities.workspaces[workspaceSlug],
   currChatSlug: state.ui.displayChannelSlug,
-  subbedChannels: selectSubbedChats(state).filter(ch => !ch.hasDm),
-  unsubbedChannels: selectUnsubbedChats(state),
+  channels: Object.values(state.entities.channels).filter(ch => !ch.hasDm),
   dmChats: selectDmChats(state),
   members: state.entities.members,
 });

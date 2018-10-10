@@ -39,9 +39,11 @@ class Channel extends React.Component {
 
     const placeholder = channel.hasDm ? `@${channel.title}` : `#${channel.title}`;
     const formPlaceholder = placeholder && `Message ${placeholder}`;
+    let classNames = 'Channel';
+    classNames += channel.isSub ? ' Channel--sub' : ' Channel--unsub';
 
     return (
-      <div className="Channel">
+      <div className={classNames}>
         {isLoading || (
           <Scrollable
             fetchHistoryRequest={fetchHistoryRequest}
@@ -57,7 +59,9 @@ class Channel extends React.Component {
             ))}
           </Scrollable>
         )}
-        <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} />
+        {channel.isSub && (
+          <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} />
+        )}
         <ChannelSubscribe
           channel={channel}
           createChannelSubRequest={createChannelSubRequest}

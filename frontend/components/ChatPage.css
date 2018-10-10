@@ -26,7 +26,7 @@
   background-color: #F7FAFC;
 }
 
-.ChatPage--channel .ChatPage__container .Scrollable {
+.ChatPage--channel .Channel--sub .Scrollable {
   margin-bottom: 65px;
 }
 

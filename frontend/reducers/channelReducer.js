@@ -25,8 +25,14 @@ const channelReducer = (state = {}, action) => {
       const { channels: { channels, workspaceSlug } } = action;
 
       nextState = channels.reduce((acc, curr) => {
-        acc[curr.slug] = curr;
-        acc[curr.slug].workspaceSlug = workspaceSlug;
+        acc[curr.slug] = {
+          members: [],
+          messages: [],
+          subs: [],
+          workspaceSlug,
+          ...curr,
+        };
+
         return acc;
       }, {});
 
@@ -40,21 +46,22 @@ const channelReducer = (state = {}, action) => {
       }
 
       nextState = {};
-      nextState[pagePath] = { isOpen: true, isLoading: true };
+      nextState[pagePath] = {
+        isOpen: true,
+        isLoading: true,
+        slug: pagePath,
+        subs: [],
+        members: [],
+        messages: [],
+      };
 
       return merge({}, state, nextState);
     }
     case MESSAGE.INDEX.RECEIVE: {
-      const {
-        channel,
-        messages,
-        members,
-        reactions,
-      } = action.messages;
+      const { channel, messages, members } = action.messages;
 
       nextState = {};
       nextState[channel.slug] = {
-        reactions: reactions.map(reaction => reaction.id),
         messages: messages.map(msg => msg.slug),
         isLoading: false,
         ...channel,
@@ -211,9 +218,10 @@ const channelReducer = (state = {}, action) => {
       delete nextState[action.channelSlug];
       return nextState;
     case CHANNEL_SUB.CREATE.RECEIVE: {
-      const { channelSub: { id, channelSlug } } = action;
+      const { id, channelSlug, userSlug } = action.channelSub;
       nextState = Object.assign({}, state);
       nextState[channelSlug].subs.push(id);
+      nextState[channelSlug].members.push(userSlug);
       return nextState;
     }
     case MESSAGE.CREATE.RECEIVE: {
