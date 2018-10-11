@@ -9,9 +9,9 @@ import * as actions from '../actions/workspaceActions';
 import { WORKSPACE_SUB } from '../actions/actionTypes';
 import { apiCreate, apiUpdate } from '../util/apiUtil';
 
-function* loadCreateSub({ workspaceSub }) {
+function* loadCreateSub({ workspaceSub: { workspaceId } }) {
   try {
-    yield call(apiCreate, 'workspace_subs', workspaceSub);
+    yield call(apiCreate, 'workspace_subs', { workspaceId });
   } catch (error) {
     yield put(actions.createWorkspaceSub.failure(error));
   }

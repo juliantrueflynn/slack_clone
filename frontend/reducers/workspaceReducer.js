@@ -67,6 +67,19 @@ const workspaceReducer = (state = {}, action) => {
       nextState = Object.assign({}, state);
       delete nextState[action.workspaceSlug];
       return nextState;
+    case WORKSPACE_SUB.CREATE.REQUEST: {
+      const { workspaceSub } = action;
+      nextState = {};
+      nextState[workspaceSub.workspaceSlug] = {
+        id: workspaceSub.workspaceId,
+        slug: workspaceSub.workspaceSlug,
+        isMember: true,
+        isSub: true,
+        subs: [workspaceSub.userSlug],
+        channels: []
+      };
+      return merge({}, state, nextState);
+    }
     case WORKSPACE_SUB.CREATE.RECEIVE: {
       const { user, workspaceSub } = action.workspaceSub;
       nextState = Object.assign({}, state);

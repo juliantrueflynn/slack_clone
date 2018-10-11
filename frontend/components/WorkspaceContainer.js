@@ -1,14 +1,15 @@
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import withActionCable from './withActionCable';
 import { fetchWorkspace, fetchWorkspaces } from '../actions/workspaceActions';
 import { modalClose, drawerClose } from '../actions/uiActions';
 import { createReaction } from '../actions/reactionActions';
-import { selectChannelsWithEntities } from '../reducers/selectors';
+import { destroyUserAppearance } from '../actions/userAppearanceActions';
+import { selectChannelsWithEntitiesMap } from '../reducers/selectors';
 import Workspace from './Workspace';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   workspaceSlug,
-  channels: selectChannelsWithEntities(state),
+  channels: selectChannelsWithEntitiesMap(state),
   workspaces: state.entities.workspaces,
   isLoading: state.ui.isWorkspaceLoading,
   modal: state.ui.displayModal,
@@ -22,6 +23,7 @@ const mapDispatchToProps = dispatch => ({
   createReactionRequest: reaction => dispatch(createReaction.request(reaction)),
   modalClose: () => dispatch(modalClose()),
   drawerClose: () => dispatch(drawerClose()),
+  destroyUserAppearanceRequest: appearance => dispatch(destroyUserAppearance.request(appearance)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Workspace));
+export default withActionCable(connect(mapStateToProps, mapDispatchToProps)(Workspace));

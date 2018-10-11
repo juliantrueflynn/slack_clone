@@ -1,5 +1,7 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
+import { ActionCable } from 'react-actioncable-provider';
+import { decamelizeKeys } from 'humps';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import LeftSidebarContainer from './LeftSidebarContainer';
 import EmojiModal from './EmojiModal';
@@ -30,12 +32,14 @@ class Workspace extends React.Component {
       workspaces,
       fetchWorkspaceRequest,
       fetchWorkspacesRequest,
+      destroyUserAppearanceRequest,
     } = this.props;
 
     const { workspaces: prevWorkspaces } = prevProps;
 
     if (prevProps.workspaceSlug !== workspaceSlug) {
       fetchWorkspaceRequest(workspaceSlug);
+      destroyUserAppearanceRequest(prevProps.workspaceSlug);
     }
 
     if (prevWorkspaces && prevWorkspaces.length !== workspaces.length) {
@@ -62,6 +66,7 @@ class Workspace extends React.Component {
 
   render() {
     const {
+      workspaceSlug,
       isLoading,
       routes,
       modal,
@@ -70,6 +75,7 @@ class Workspace extends React.Component {
       channels,
       drawerType,
       drawerClose,
+      onReceived,
     } = this.props;
 
     if (isLoading) {
@@ -81,6 +87,9 @@ class Workspace extends React.Component {
     }
 
     const defaultChat = this.getDefaultChat();
+    const cableChannels = Object.values(channels).filter(ch => ch.isSub).map(channel => (
+      { channel: 'ChatChannel', channelSlug: channel.slug }
+    ));
 
     let classNames = 'Workspace';
     if (isLoading) classNames += 'Workspace--loading';
@@ -88,6 +97,16 @@ class Workspace extends React.Component {
 
     return (
       <div className={classNames}>
+        <ActionCable channel={decamelizeKeys({ channel: 'WorkspaceChannel', workspaceSlug })} onReceived={onReceived} />
+        <ActionCable channel={decamelizeKeys({ channel: 'AppearanceChannel', workspaceSlug })} onReceived={onReceived} />
+        {cableChannels.map(cable => (
+          <ActionCable
+            key={cable.channelSlug}
+            channel={decamelizeKeys(cable)}
+            onReceived={onReceived}
+          />
+        ))}
+
         <LeftSidebarContainer />
         <div className="Workspace__col">
           <ChannelHeader

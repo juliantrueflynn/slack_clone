@@ -63,13 +63,15 @@ const LeftSidebar = ({
   return (
     <aside className="Sidebar Sidebar--left">
       <div className="SidebarWidget">
-        <ProfileDropdown
-          workspaceTitle={currWorkspace.title}
-          workspaces={workspaces}
-          user={members[currentUser.slug]}
-          url={url}
-          currChatSlug={currChatSlug}
-        />
+        {members[currentUser.slug] && (
+          <ProfileDropdown
+            workspaceTitle={currWorkspace.title}
+            workspaces={workspaces}
+            user={members[currentUser.slug]}
+            url={url}
+            currChatSlug={currChatSlug}
+          />
+        )}
       </div>
 
       <div className="SidebarWidget SidebarWidth__quicklinks">

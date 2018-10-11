@@ -208,7 +208,9 @@ export const selectDrawerMessagesByType = ({ entities, ui: { drawer } }) => {
 const channelsWithEntitiesMap = ({ channels, members }, currentUserSlug) => (
   values(channels).reduce((acc, curr) => {
     const channel = channels[curr.slug];
-    channel.isSub = channel.members.includes(currentUserSlug);
+    if (!channel.isSub) {
+      channel.isSub = channel.members.includes(currentUserSlug);
+    }
 
     if (channel && channel.hasDm) {
       const dmUser = selectDmWithUser(channel, members, currentUserSlug);
@@ -230,7 +232,7 @@ const channelsWithEntitiesMap = ({ channels, members }, currentUserSlug) => (
   }, {})
 );
 
-export const selectChannelsWithEntities = ({ entities, session: { currentUser } }) => (
+export const selectChannelsWithEntitiesMap = ({ entities, session: { currentUser } }) => (
   channelsWithEntitiesMap(entities, currentUser.slug)
 );
 
@@ -242,7 +244,7 @@ const selectThreadChannels = channels => (
 );
 
 export const selectChatPageChannelsBySlug = ({ entities, session: { currentUser } }, slug) => {
-  const { channels } = entities;
+  const { channels, members } = entities;
 
   if (slug === 'unreads') {
     return values(channels).filter(ch => ch.hasUnreads && !ch.hasDm);
@@ -252,7 +254,7 @@ export const selectChatPageChannelsBySlug = ({ entities, session: { currentUser 
     return selectThreadChannels(channels);
   }
 
-  return channelsWithEntitiesMap(entities, currentUser.slug);
+  return channelsWithEntitiesMap({ channels, members }, currentUser.slug);
 };
 
 export const selectEntities = ({ entities }, type) => entities[type];

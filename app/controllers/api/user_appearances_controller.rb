@@ -3,7 +3,7 @@ class Api::UserAppearancesController < ApplicationController
     @user_appearance = current_user.appears.build(workspace_slug: params[:workspace_slug])
 
     if @user_appearance && @user_appearance.save
-      render json: ['success']
+      render json: @user_appearance
     else
       render json: @user_appearance.errors.full_messages, status: 422
     end
@@ -13,9 +13,9 @@ class Api::UserAppearancesController < ApplicationController
     @user_appearance = current_user.appears.find_by(workspace_slug: params[:workspace_slug])
 
     if @user_appearance && @user_appearance.destroy
-      render json: ['success']
+      render json: @user_appearance
     else
-      render json: @read.errors.full_messages, status: 422
+      render json: @user_appearance.errors.full_messages, status: 422
     end
   end
 end

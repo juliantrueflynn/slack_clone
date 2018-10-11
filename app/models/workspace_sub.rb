@@ -8,7 +8,7 @@
   has_many :favorites, through: :user
 
   def broadcast_name
-    "app"
+    "workspace_#{workspace.slug}"
   end
 
   after_create_commit :broadcast_create_sub
