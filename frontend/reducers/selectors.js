@@ -6,8 +6,8 @@ export const selectWorkspaces = ({ entities: { workspaces } }) => (
   values(workspaces).sort((a, b) => a.id - b.id)
 );
 
-export const selectSubbedWorkspaces = ({ entities: { workspaces }, session: { currentUser } }) => (
-  values(workspaces).filter(workspace => workspace.members.includes(currentUser.slug))
+export const selectSubbedWorkspaces = ({ entities: { workspaces } }) => (
+  values(workspaces).filter(({ isSub, isMember }) => isSub && isMember)
 );
 
 const selectDmWithUser = (channel, members, currUserSlug) => {

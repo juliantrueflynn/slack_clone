@@ -12,7 +12,7 @@
   end
 
   after_create_commit :broadcast_create_sub
-  after_destroy :broadcast_destroy_subs
+  after_update_commit :broadcast_update, :generate_channel_sub_messages
 
   private
 
@@ -26,13 +26,27 @@
     end
   end
 
+  def default_sub_message_params
+    date = DateTime.now
+    { author_id: user_id, created_at: date, updated_at: date }
+  end
+
+  def create_sub_messages(entity_type)
+    user.channels.by_workspace_id(workspace.id).reduce([]) do |memo, channel|
+      channel_hash = { channel_id: channel.id, entity_type: entity_type }
+      memo << channel_hash.merge(default_sub_message_params)
+    end
+  end
+
+  def generate_channel_sub_messages
+    entity_type = is_member ? 'sub_create' : 'sub_destroy'
+    sub_entries = create_sub_messages(entity_type)
+    Message.create(sub_entries)
+  end
+
   def broadcast_create_sub
     return if workspace.channels.empty?
     sub_user_to_default_chats
     broadcast_create
-  end
-
-  def broadcast_destroy_subs
-    broadcast_destroy
   end
 end

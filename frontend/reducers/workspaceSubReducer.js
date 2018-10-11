@@ -25,16 +25,16 @@ const workspaceSubReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case WORKSPACE_SUB.CREATE.RECEIVE: {
-      const { user, workspaceSub } = action.workspaceSub;
+      const { workspaceSub } = action.workspaceSub;
       nextState = Object.assign({}, state);
-      nextState[workspaceSub.workspaceSlug].members.push(user.slug);
+      nextState[workspaceSub.id] = workspaceSub;
       return nextState;
     }
-    case WORKSPACE_SUB.UPDATE.RECEIVE: {
+    case WORKSPACE_SUB.UPDATE.REQUEST: {
       const { workspaceSub } = action;
       nextState = Object.assign({}, state);
-      nextState[workspaceSub.id].isMember = workspaceSub.isMember;
-      return nextState;
+      nextState[workspaceSub.id] = workspaceSub;
+      return merge({}, state, nextState);
     }
     default:
       return state;

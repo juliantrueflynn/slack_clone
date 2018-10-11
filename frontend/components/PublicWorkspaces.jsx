@@ -7,7 +7,7 @@ const PublicWorkspaces = ({
   workspaces,
   isLoggedIn,
   createWorkspaceSubRequest,
-  deleteWorkspaceSubRequest,
+  updateWorkspaceSubRequest,
   currentUser,
   modalOpen,
 }) => {
@@ -36,7 +36,7 @@ const PublicWorkspaces = ({
             key={workspace.id}
             currentUser={currentUser}
             createWorkspaceSubRequest={createWorkspaceSubRequest}
-            deleteWorkspaceSubRequest={deleteWorkspaceSubRequest}
+            updateWorkspaceSubRequest={updateWorkspaceSubRequest}
             workspace={workspace}
           />
         ))}

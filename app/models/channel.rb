@@ -46,8 +46,12 @@ class Channel < ApplicationRecord
     foreign_key: :unreadable_id,
     dependent: :delete
 
+  def self.by_workspace_id(workspace_id)
+    where(workspace_id: workspace_id)
+  end
+
   def self.dm_chat_by_workspace_id(workspace_id)
-    where(has_dm: true, workspace_id: workspace_id)
+    where(has_dm: true).by_workspace_id(workspace_id)
   end
 
   def self.find_dm_chat_by_workspace_and_users(workspace_id, users_ids)

@@ -10,14 +10,18 @@ class PublicWorkspacesItem extends React.Component {
   }
 
   handleSubscribe() {
-    const {
-      workspace: { id: workspaceId, isSub },
-      createWorkspaceSubRequest,
-      deleteWorkspaceSubRequest,
-    } = this.props;
-    if (isSub) {
-      deleteWorkspaceSubRequest(workspaceId);
+    const { workspace, createWorkspaceSubRequest, updateWorkspaceSubRequest } = this.props;
+
+    if (workspace.subId) {
+      const workspaceSub = {
+        id: workspace.subId,
+        workspaceSlug: workspace.slug,
+        isMember: !workspace.isMember,
+      };
+
+      updateWorkspaceSubRequest(workspaceSub);
     } else {
+      const { id: workspaceId } = workspace;
       createWorkspaceSubRequest({ workspaceId });
     }
   }

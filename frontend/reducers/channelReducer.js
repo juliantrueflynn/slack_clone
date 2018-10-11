@@ -153,24 +153,21 @@ const channelReducer = (state = {}, action) => {
       return nextState;
     }
     case WORKSPACE_SUB.CREATE.RECEIVE: {
-      const { user, channelSubs } = action.workspaceSub;
+      const { user, workspaceSub: { workspaceSlug }, channelSubs } = action.workspaceSub;
 
-      nextState = Object.assign({}, state);
+      nextState = {};
       channelSubs.forEach((sub) => {
-        if (!nextState[sub.channelSlug]) {
-          nextState[sub.channelSlug] = {
-            id: sub.channelId,
-            slug: sub.channelSlug,
-            members: [],
-            subs: [],
-          };
-        }
-
-        nextState[sub.channelSlug].members.push(user.slug);
-        nextState[sub.channelSlug].subs.push(user.slug);
+        nextState[sub.channelSlug] = {
+          id: sub.channelId,
+          slug: sub.channelSlug,
+          workspaceSlug,
+          members: [user.slug],
+          subs: [sub.id],
+          messages: [],
+        };
       });
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case DM_CHAT.CREATE.RECEIVE: {
       const { dmChat: { channel, subs, members } } = action;

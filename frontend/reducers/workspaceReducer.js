@@ -27,8 +27,8 @@ const workspaceReducer = (state = {}, action) => {
 
         nextState[sub.workspaceSlug].subs.push(sub.id);
         nextState[sub.workspaceSlug].subId = sub.id;
-        nextState[sub.workspaceSlug].isMember = sub.isMember;
         nextState[sub.workspaceSlug].isSub = sub.isMember;
+        nextState[sub.workspaceSlug].isMember = sub.isMember;
       });
 
       return merge({}, state, nextState);
@@ -73,18 +73,21 @@ const workspaceReducer = (state = {}, action) => {
       nextState[workspaceSub.workspaceSlug].members.push(user.slug);
       return nextState;
     }
-    case WORKSPACE_SUB.DESTROY.RECEIVE: {
-      const { user, workspaceSub: { workspaceSlug } } = action.workspaceSub;
+    case WORKSPACE_SUB.UPDATE.REQUEST: {
+      const { workspaceSub } = action;
       nextState = Object.assign({}, state);
-      nextState[workspaceSlug].members = nextState[workspaceSlug].members.filter(userSlug => (
-        userSlug !== user.slug
-      ));
-
+      nextState[workspaceSub.workspaceSlug].isSub = workspaceSub.isMember;
+      nextState[workspaceSub.workspaceSlug].isMember = workspaceSub.isMember;
       return nextState;
     }
-    case SIGN_OUT.RECEIVE: {
-      return {};
+    case WORKSPACE_SUB.UPDATE.RECEIVE: {
+      const { workspaceSub } = action.workspaceSub;
+      nextState = {};
+      nextState[workspaceSub.workspaceSlug] = { subs: [workspaceSub.id] };
+      return merge({}, state, nextState);
     }
+    case SIGN_OUT.RECEIVE:
+      return {};
     default:
       return state;
   }

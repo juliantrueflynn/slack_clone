@@ -5,7 +5,6 @@ import {
   DM_CHAT,
   CHANNEL_SUB,
   CHANNEL,
-  MESSAGE,
   WORKSPACE_SUB,
   SIGN_OUT,
   MEMBER,
@@ -21,12 +20,14 @@ const memberReducer = (state = {}, action) => {
       nextState = Object.assign({}, state);
 
       const currUser = workspaceSubs[0];
-      if (currUser) {
-        nextState[currUser.userSlug] = {
-          id: currUser.userId,
-          slug: currUser.userSlug,
-        };
+      if (!currUser) {
+        return state;
       }
+
+      nextState[currUser.userSlug] = {
+        id: currUser.userId,
+        slug: currUser.userSlug,
+      };
 
       return merge({}, state, nextState);
     }
@@ -34,9 +35,11 @@ const memberReducer = (state = {}, action) => {
       const { members, channelSubs } = action.workspace;
 
       nextState = members.reduce((acc, curr) => {
-        acc[curr.slug] = curr;
-        acc[curr.slug].subs = [];
-        acc[curr.slug].reactions = [];
+        acc[curr.slug] = {
+          subs: [],
+          ...curr,
+        };
+
         return acc;
       }, {});
 
@@ -59,19 +62,7 @@ const memberReducer = (state = {}, action) => {
         nextState[user.slug].subs.push(sub.id);
       });
 
-      return nextState;
-    }
-    case MESSAGE.INDEX.RECEIVE: {
-      const { messages: { reactions } } = action;
-
-      nextState = Object.assign({}, state);
-      reactions.forEach(({ id, userSlug }) => {
-        if (nextState[userSlug] && nextState[userSlug].reactions) {
-          nextState[userSlug].reactions.push(id);
-        }
-      });
-
-      return nextState;
+      return merge({}, state, nextState);
     }
     case MEMBER.SHOW.RECEIVE: {
       const { member } = action;

@@ -3,7 +3,7 @@ json.user do
 end
 
 json.workspace_sub do
-  json.(workspace_sub, :id, :workspace_id)
+  json.(workspace_sub, :id, :workspace_id, :is_member)
   json.workspace_slug workspace_sub.workspace.slug
 end
 
