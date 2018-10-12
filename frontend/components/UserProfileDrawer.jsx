@@ -44,6 +44,11 @@ class UserProfileDrawer extends React.Component {
     const formData = new FormData();
     formData.append('avatar', avatar);
     updateAvatarRequest(formData);
+
+    this.setState({ avatar: null });
+    formData.delete('avatar');
+    const inputNode = e.target.querySelector('#avatar');
+    inputNode.value = '';
   }
 
   handleFileChange(e) {
