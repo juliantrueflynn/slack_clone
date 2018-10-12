@@ -7,10 +7,6 @@
   outline: none;
 }
 
-.Modal__chat .Form__actions {
+.Modal__chat .Btn__group {
   text-align: right;
-}
-
-.Modal__chat .Btn__modal--submit {
-  margin-left: 6px;
 }

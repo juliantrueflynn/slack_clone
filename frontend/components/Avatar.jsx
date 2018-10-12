@@ -15,8 +15,8 @@ const Avatar = ({
 
   const imgSize = size || 36;
   let imgSrc = `https://via.placeholder.com/${imgSize}x${imgSize}`;
-  if (author.avatarUrl) {
-    imgSrc = author.avatarUrl;
+  if (author.avatarThumb) {
+    imgSrc = author.avatarThumb;
   }
 
 

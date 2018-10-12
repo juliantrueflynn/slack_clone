@@ -46,7 +46,7 @@ class ChatModal extends React.Component {
             onChange={this.handleInputValue('title')}
           />
         </div>
-        <div className="Form__actions">
+        <div className="Btn__group">
           <Button buttonFor="modal" size="lg" onClick={() => onRequestClose()}>
             Close
           </Button>

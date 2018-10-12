@@ -52,7 +52,7 @@ class Message extends React.Component {
     const avatar = {
       slug: message.authorSlug,
       username: message.authorName,
-      avatarUrl: message.avatarUrl,
+      avatarThumb: message.avatarThumb,
     };
     const authorUrl = `${url}/team/${message.authorSlug}`;
     const dateCreated = dateUtil(message.createdAt).localTime();

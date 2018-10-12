@@ -1,0 +1,56 @@
+.UserDrawer__banner {
+  padding: 9px 5px;
+}
+
+.UserDrawer__banner > img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 3px;
+}
+
+.UserDrawer__header {
+  border-bottom: 1px solid #E9E9E9;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.UserDrawer__title {
+  margin: 0;
+}
+
+.UserDrawer__header .StatusIcon {
+  margin-left: 8px;
+}
+
+.UserDrawer__body {
+  padding: 10px 15px
+}
+
+.UserDrawer__intro {
+  color: #636E72;
+}
+
+.UserDrawer__intro > p {
+  margin: 0 0 15px;
+}
+
+.UserDrawer__info {
+  margin-bottom: 10px;
+}
+
+.UserDrawer__row {
+  display: flex;
+  align-items: center;
+}
+
+.UserDrawer__col {
+  padding: 6px 0;
+}
+
+.UserDrawer__col:first-child {
+  padding-right: 10px;
+  width: 4.5em;
+  color: #636E72;
+}

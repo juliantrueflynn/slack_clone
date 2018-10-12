@@ -31,6 +31,23 @@ a {
   margin-bottom: 10px;
 }
 
+.Form__row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.Btn__group {
+  padding-top: 10px;
+  margin-left: -3px;
+  margin-right: -3px;
+}
+
+.Btn__group > .Btn {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
 @media only screen and (min-width : 1250px) {
   .content-container__boxed-width {
     width: 920px;

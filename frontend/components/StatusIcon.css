@@ -3,6 +3,14 @@ svg .fa-circle {
 }
 
 .StatusIcon__online {
+  color: #00CEC9;
+}
+
+.StatusIcon__offline {
+  color: #636E72;
+}
+
+.Sidebar .StatusIcon__online {
   color: rgb(85,239,196,.5);
 }
 

@@ -12,6 +12,7 @@ module.exports = {
             "components": [ "Link" ],
             "specialLink": [ "to" ]
         }],
+        "jsx-a11y/label-has-associated-control": 0,
         "jsx-a11y/label-has-for": 0,
         "comma-dangle": ["error", {
             "arrays": "ignore",

@@ -6,7 +6,7 @@ import SessionForm from '../components/SessionForm';
 import WorkspaceContainer from '../components/WorkspaceContainer';
 import ChatPageContainer from '../components/ChatPageContainer';
 import FavoritesDrawer from '../components/FavoritesDrawer';
-import UserProfileDrawer from '../components/UserProfileDrawer';
+import UserDrawer from '../components/UserDrawer';
 import MessageThreadDrawer from '../components/MessageThreadDrawer';
 
 export const routesConfig = [
@@ -42,7 +42,7 @@ export const routesConfig = [
           },
           {
             path: '/:workspaceSlug/(.*)/team/:userSlug',
-            component: UserProfileDrawer,
+            component: UserDrawer,
           },
           {
             path: '/:workspaceSlug/(.*)/thread/:messageSlug',

@@ -8,10 +8,12 @@ class AvatarUploader < CarrierWave::Uploader::Base
   end
 
   def default_url(*args)
-    "images/default/default.jpg"
+    "images/default/" + [version_name, "default.jpg"].compact.join('_')
   end
 
-  process :resize_to_fit => [600, 600]
+  version :banner do
+    process :resize_to_fill => [500, 250]
+  end
 
   version :thumb do
     process resize_to_fill: [36, 36]
