@@ -30,6 +30,8 @@ class MenuItem extends React.Component {
       modifierClassName,
       onClick,
       toggleDdMenu,
+      match,
+      history,
       ...props
     } = this.props;
 

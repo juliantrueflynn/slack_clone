@@ -4,6 +4,7 @@ import Menu from './Menu';
 import DmChatMenuItem from './DmChatMenuItem';
 import ChatsWidget from './ChatsWidget';
 import ProfileDropdown from './ProfileDropdown';
+import StatusIcon from './StatusIcon';
 import './LeftSidebar.css';
 
 const LeftSidebar = ({
@@ -43,12 +44,10 @@ const LeftSidebar = ({
   ];
 
   const dmChatsItems = dmChats.map((ch) => {
-    const circleType = ch.userStatus === 'OFFLINE' ? 'far' : 'fas';
-    const circleIcon = [circleType, 'circle'];
-    const classNames = `Icon Icon__${ch.userStatus.toLowerCase()}`;
+    const member = { status: ch.userStatus };
 
     return {
-      icon: <FontAwesomeIcon icon={circleIcon} size="xs" className={classNames} />,
+      icon: <StatusIcon member={member} />,
       link: `${url}/messages/${ch.slug}`,
       label: (
         <DmChatMenuItem

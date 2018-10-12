@@ -1,6 +1,6 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Avatar from './Avatar';
+import StatusIcon from './StatusIcon';
 import Dropdown from './Dropdown';
 import './ProfileDropdown.css';
 
@@ -50,16 +50,14 @@ const ProfileDropdown = ({
     });
   }
 
-  const userStatus = user.status && user.status.toLowerCase();
-
   return (
     <Dropdown menuFor="profile" items={menuItems} unStyled style={{ textAlign: 'left' }}>
       <div className="Dropdown__workspace">
         {workspaceTitle}
       </div>
       <div className="Dropdown__subtitle">
-        <div className={`Dropdown__status Dropdown__status--${userStatus}`}>
-          <FontAwesomeIcon className="Icon" icon={['fas', 'circle']} size="xs" />
+        <div className="Dropdown__status">
+          <StatusIcon member={user} />
         </div>
         <div className="Dropdown__title">
           {user.username}

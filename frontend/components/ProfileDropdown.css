@@ -34,11 +34,6 @@
   font-weight: bold;
 }
 
-.Dropdown__status--online,
-.Icon__status--online  {
-  color: rgb(85,239,196,.5);
-}
-
 .ProfileDropdown__greeting {
   display: flex;
   align-items: center;

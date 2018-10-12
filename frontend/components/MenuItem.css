@@ -15,16 +15,13 @@
   position: relative;
 }
 
-.SidebarWidget .MenuItem__content > .Icon {
+.SidebarWidget .MenuItem__content > .Icon,
+.Menu--dmChats .StatusIcon {
   margin-right: 8px;
 }
 
 .SidebarWidget .Menu--chats .MenuItem__content > .Icon,
 .SidebarWidget .Menu--quicklinks .MenuItem__content > .Icon {
-  color: rgba(255,255,255,0.4);
-}
-
-.Menu--dmChats .Icon__status--offline {
   color: rgba(255,255,255,0.4);
 }
 
