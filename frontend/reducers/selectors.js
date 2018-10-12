@@ -86,6 +86,7 @@ const messagesWithEntitiesMap = ({ messages, members }) => (
 
     if (author) {
       message.authorName = author.username;
+      message.avatarUrl = author.avatarUrl;
     }
 
     acc[curr.slug] = message;

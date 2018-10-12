@@ -14,13 +14,19 @@ const Avatar = ({
   }
 
   const imgSize = size || 36;
+  let imgSrc = `https://via.placeholder.com/${imgSize}x${imgSize}`;
+  if (author.avatarUrl) {
+    imgSrc = author.avatarUrl;
+  }
+
+
   let classNames = 'Avatar';
   if (avatarFor) classNames += ` Avatar__${avatarFor}`;
   classNames += ` Avatar--${baseUrl ? 'link' : 'div'}`;
 
   const authorImage = (
     <img
-      src={`https://via.placeholder.com/${imgSize}x${imgSize}`}
+      src={imgSrc}
       className="Avatar__image"
       height={imgSize}
       width={imgSize}

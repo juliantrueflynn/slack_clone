@@ -8,6 +8,7 @@ import {
   WORKSPACE_SUB,
   SIGN_OUT,
   MEMBER,
+  AVATAR,
 } from '../actions/actionTypes';
 
 const memberReducer = (state = {}, action) => {
@@ -69,6 +70,12 @@ const memberReducer = (state = {}, action) => {
       nextState = {};
       nextState[member.slug] = member;
       return merge({}, state, nextState);
+    }
+    case AVATAR.UPDATE.RECEIVE: {
+      const { avatarUrl, userSlug } = action;
+      nextState = Object.assign({}, state);
+      nextState[userSlug].avatarUrl = avatarUrl;
+      return nextState;
     }
     case CHANNEL_SUB.CREATE.RECEIVE: {
       const { channelSub: { id, userSlug } } = action;

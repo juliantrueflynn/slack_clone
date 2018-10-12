@@ -49,7 +49,11 @@ class Message extends React.Component {
       return null;
     }
 
-    const authorAvatar = { slug: message.authorSlug, username: message.authorName };
+    const avatar = {
+      slug: message.authorSlug,
+      username: message.authorName,
+      avatarUrl: message.avatarUrl,
+    };
     const authorUrl = `${url}/team/${message.authorSlug}`;
     const dateCreated = dateUtil(message.createdAt).localTime();
     let msgClassName = 'Message';
@@ -57,7 +61,7 @@ class Message extends React.Component {
 
     return (
       <div className={msgClassName} role="listitem">
-        <Avatar baseUrl={url} author={authorAvatar} />
+        <Avatar baseUrl={url} author={avatar} />
         <div className="Message__body">
           <MessageHoverMenu
             message={message}
