@@ -1,4 +1,4 @@
-json.(@user, :id, :slug, :username, :email, :avatar_url)
+json.(@user, :id, :slug, :username, :email, :avatar_displays)
 
 if @user.id != current_user.id
   workspace = Workspace.find_by(slug: params[:workspace_slug])

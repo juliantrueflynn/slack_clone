@@ -12,7 +12,8 @@ bundle.js.map
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
-public/uploads/user
+public/uploads/*
+public/images/default/*
 !/log/.keep
 !/tmp/.keep
 

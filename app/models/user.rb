@@ -64,8 +64,8 @@ class User < ApplicationRecord
   end
 
 
-  def avatar_url
-    avatar.url
+  def avatar_displays
+    { thumb: avatar.thumb.url, large: avatar.url }
   end
 
   after_update_commit :avatar_broadcast
@@ -92,7 +92,7 @@ class User < ApplicationRecord
     return unless is_avatar_update
     HashDispatcherJob.perform_later channel_name: "app",
       type: "AVATAR_UPDATE_RECEIVE",
-      avatar_url: avatar_url,
+      avatar_displays: avatar_displays,
       user_slug: slug
   end
 end

@@ -72,9 +72,9 @@ const memberReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case AVATAR.UPDATE.RECEIVE: {
-      const { avatarUrl, userSlug } = action;
+      const { avatarDisplays, userSlug } = action;
       nextState = Object.assign({}, state);
-      nextState[userSlug].avatarUrl = avatarUrl;
+      nextState[userSlug].avatarDisplays = avatarDisplays;
       return nextState;
     }
     case CHANNEL_SUB.CREATE.RECEIVE: {

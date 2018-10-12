@@ -15,7 +15,7 @@ end
 
 json.members do
   json.array! @workspace.members do |member|
-    json.(member, :id, :username, :email, :slug, :avatar_url)
+    json.(member, :id, :username, :email, :slug, :avatar_displays)
     json.status member.status || 'OFFLINE'
   end
 end
