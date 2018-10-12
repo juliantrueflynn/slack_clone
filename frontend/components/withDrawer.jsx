@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { drawerClose, drawerOpen } from '../actions/uiActions';
 import { fetchMessage } from '../actions/messageActions';
 import { fetchFavorites } from '../actions/favoriteActions';
-import { fetchMember } from '../actions/memberActions';
+import { fetchMember, updateAvatar } from '../actions/memberActions';
 import { createDmChat } from '../actions/channelActions';
 import { selectDrawerMessagesByType } from '../reducers/selectors';
 import Drawer from './Drawer';
@@ -39,6 +39,7 @@ const withDrawer = drawerTitle => (WrappedComponent) => {
       return null;
     },
     createDmChatRequest: dmChat => dispatch(createDmChat.request(dmChat)),
+    updateAvatarRequest: imageUrl => dispatch(updateAvatar.request(imageUrl)),
   });
 
   const WithDrawer = ({
@@ -47,7 +48,7 @@ const withDrawer = drawerTitle => (WrappedComponent) => {
     closeDrawer,
     drawer,
     fetchEntitiesRequest,
-    ...props,
+    ...props
   }) => {
     if (!isWorkspaceLoaded) {
       return null;

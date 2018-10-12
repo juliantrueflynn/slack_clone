@@ -6,10 +6,10 @@ import {
   select,
   takeLatest
 } from 'redux-saga/effects';
-import { MEMBER } from '../actions/actionTypes';
-import { fetchMember } from '../actions/memberActions';
-import { apiFetch } from '../util/apiUtil';
-import { selectUIByDisplay } from '../reducers/selectors';
+import { MEMBER, AVATAR } from '../actions/actionTypes';
+import { fetchMember, updateAvatar } from '../actions/memberActions';
+import { apiFetch, apiUpload } from '../util/apiUtil';
+import { selectUIByDisplay, selectCurrentUser } from '../reducers/selectors';
 
 function* loadFetchMember({ userSlug }) {
   try {
@@ -21,12 +21,27 @@ function* loadFetchMember({ userSlug }) {
   }
 }
 
+function* loadUpdateMember({ imageUrl: body }) {
+  try {
+    const currUser = yield select(selectCurrentUser);
+    const apiArgs = { method: 'PATCH', body };
+    yield call(apiUpload, `users/${currUser.slug}/avatar`, apiArgs);
+  } catch (error) {
+    yield put(updateAvatar.failure(error));
+  }
+}
+
 function* watchShowUser() {
   yield takeLatest(MEMBER.SHOW.REQUEST, loadFetchMember);
+}
+
+function* watchUpdateUser() {
+  yield takeLatest(AVATAR.UPDATE.REQUEST, loadUpdateMember);
 }
 
 export default function* memberSaga() {
   yield all([
     fork(watchShowUser),
+    fork(watchUpdateUser),
   ]);
 }

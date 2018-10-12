@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   attr_reader :password
+  attr_accessor :is_avatar_update
 
   before_validation :generate_slug, unless: :slug?
   after_initialize :ensure_session_token
@@ -56,6 +57,12 @@ class User < ApplicationRecord
     self.session_token
   end
 
+  def broadcast_name
+    "app"
+  end
+
+  after_update_commit :avatar_broadcast
+
   private
 
   def ensure_session_token
@@ -72,5 +79,13 @@ class User < ApplicationRecord
       self.session_token = new_session_token
     end
     self.session_token
+  end
+
+  def avatar_broadcast
+    return unless is_avatar_update
+    HashDispatcherJob.perform_later channel_name: "app",
+      type: "AVATAR_UPDATE_RECEIVE",
+      avatar: image_url,
+      user_slug: slug
   end
 end

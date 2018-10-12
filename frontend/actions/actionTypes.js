@@ -18,6 +18,7 @@ export const USER_THREAD = apiActions('USER_THREAD', ['INDEX', 'UPDATE']);
 export const READ = apiActions('READ', ['INDEX', 'CREATE', 'UPDATE']);
 export const UNREAD = apiActions('UNREAD', ['INDEX', 'CREATE', 'UPDATE']);
 export const MEMBER = apiActions('MEMBER', ['INDEX', 'SHOW', 'UPDATE', 'DESTROY']);
+export const AVATAR = apiActions('AVATAR', ['UPDATE']);
 
 export const CHANNEL_SWITCH = 'CHANNEL_SWITCH';
 export const LOAD_CHAT_PAGE = 'LOAD_CHAT_PAGE';

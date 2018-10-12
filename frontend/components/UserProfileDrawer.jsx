@@ -5,7 +5,10 @@ import withDrawer from './withDrawer';
 class UserProfileDrawer extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { imageFile: null };
     this.handleClick = this.handleClick.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleFileChange = this.handleFileChange.bind(this);
   }
 
   user() {
@@ -33,6 +36,29 @@ class UserProfileDrawer extends React.Component {
     }
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+
+    const { updateAvatarRequest } = this.props;
+    const { imageFile } = this.state;
+    const formData = new FormData();
+    formData.append('image_url', imageFile);
+    updateAvatarRequest(formData);
+  }
+
+  handleFileChange(e) {
+    const imageFile = e.target.files[0];
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.setState({ imageFile });
+    };
+
+    if (imageFile) {
+      reader.readAsDataURL(imageFile);
+    }
+  }
+
   render() {
     const { currentUser } = this.props;
 
@@ -52,6 +78,23 @@ class UserProfileDrawer extends React.Component {
               Message
             </Button>
           </div>
+        )}
+        {isNotCurrUser || (
+          <form onSubmit={this.handleSubmit}>
+            <label htmlFor="avatar">
+              Upload avatar
+              <input
+                type="file"
+                id="avatar"
+                name="user[image_url]"
+                accept="image/*"
+                onChange={this.handleFileChange}
+              />
+            </label>
+            <Button type="submit" buttonFor="avatar">
+              Upload
+            </Button>
+          </form>
         )}
       </div>
     );
