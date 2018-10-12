@@ -104,7 +104,7 @@ ActiveRecord::Schema.define(version: 20180912234744) do
     t.string "password_digest", null: false
     t.string "session_token", null: false
     t.string "slug", null: false
-    t.string "image_url"
+    t.string "avatar"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true

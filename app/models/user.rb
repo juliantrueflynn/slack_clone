@@ -9,6 +9,8 @@ class User < ApplicationRecord
   validates_uniqueness_of :username, :email
   validates_length_of :password, minimum: 6, allow_nil: true
 
+  mount_uploader :avatar, AvatarUploader
+
   has_many :created_workspaces,
     class_name: 'Workspace',
     foreign_key: :owner_id
@@ -85,7 +87,7 @@ class User < ApplicationRecord
     return unless is_avatar_update
     HashDispatcherJob.perform_later channel_name: "app",
       type: "AVATAR_UPDATE_RECEIVE",
-      avatar: image_url,
+      avatar: avatar.url,
       user_slug: slug
   end
 end
