@@ -4,8 +4,8 @@ import { withRouter } from 'react-router-dom';
 import { drawerClose, drawerOpen } from '../actions/uiActions';
 import { fetchMessage } from '../actions/messageActions';
 import { fetchFavorites } from '../actions/favoriteActions';
-import { fetchMember, updateAvatar } from '../actions/memberActions';
-import { createDmChat } from '../actions/channelActions';
+import { fetchUser } from '../actions/memberActions';
+import { createChannel } from '../actions/channelActions';
 import { selectDrawerMessagesByType } from '../reducers/selectors';
 import Drawer from './Drawer';
 
@@ -29,7 +29,7 @@ const withDrawer = drawerTitle => (WrappedComponent) => {
       }
 
       if (params.userSlug) {
-        dispatch(fetchMember.request(params.userSlug));
+        dispatch(fetchUser.request(params.userSlug));
       }
 
       if (!params.messageSlug && !params.userSlug) {
@@ -38,8 +38,7 @@ const withDrawer = drawerTitle => (WrappedComponent) => {
 
       return null;
     },
-    createDmChatRequest: dmChat => dispatch(createDmChat.request(dmChat)),
-    updateAvatarRequest: imageUrl => dispatch(updateAvatar.request(imageUrl)),
+    createChannelRequest: dmChat => dispatch(createChannel.request(dmChat)),
   });
 
   const WithDrawer = ({

@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from './Button';
+import withForm from './withForm';
 import './UserEditor.css';
 
 class UserEditor extends React.Component {
@@ -26,11 +27,13 @@ class UserEditor extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const { updateAvatarRequest } = this.props;
+    const { user, formDispatchRequest } = this.props;
     const { avatar } = this.state;
     const formData = new FormData();
     formData.append('avatar', avatar);
-    updateAvatarRequest(formData);
+    formData.append('username', user.username);
+    formData.append('email', user.email);
+    formDispatchRequest(formData);
 
     this.setState({ avatar: null });
     formData.delete('avatar');
@@ -50,7 +53,7 @@ class UserEditor extends React.Component {
           <input
             type="file"
             id="avatar"
-            name="user[avatar]"
+            name="avatar"
             accept="image/*"
             onChange={this.handleFileChange}
           />
@@ -68,4 +71,4 @@ class UserEditor extends React.Component {
   }
 }
 
-export default UserEditor;
+export default withForm({ action: 'UPDATE', name: 'USER' })(UserEditor);

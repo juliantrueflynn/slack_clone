@@ -5,7 +5,6 @@ import {
   CHANNEL,
   READ,
   MESSAGE,
-  DM_CHAT,
   CHANNEL_SUB,
   WORKSPACE_SUB,
   SIGN_OUT,
@@ -169,40 +168,20 @@ const channelReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case DM_CHAT.CREATE.RECEIVE: {
-      const { dmChat: { channel, subs, members } } = action;
-
-      nextState = Object.assign({}, state);
-      nextState[channel.slug] = {
-        hasUnreads: false,
-        lastRead: channel.createdAt,
-        lastActive: null,
-        messages: [],
-        subs: subs.reduce((acc, curr) => {
-          acc.push(curr.id);
-          return acc;
-        }, []),
-        members: members.reduce((acc, curr) => {
-          acc.push(curr);
-          return acc;
-        }, []),
-        ...channel,
-      };
-
-      return nextState;
-    }
     case CHANNEL.CREATE.RECEIVE: {
-      const { channel: { subs, ...channel } } = action;
+      const { subs, members, ...channel } = action.channel;
 
       nextState = Object.assign({}, state);
       nextState[channel.slug] = {
-        hasUnreads: false,
-        lastActive: null,
         lastRead: channel.createdAt,
-        members: [channel.ownerSlug],
-        subs: [subs[0].id],
+        subs: subs.map(sub => sub.id),
+        members,
         ...channel,
       };
+
+      if (channel.ownerSlug) {
+        nextState[channel.slug].members.push(channel.ownerSlug);
+      }
 
       return nextState;
     }

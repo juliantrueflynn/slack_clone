@@ -16,14 +16,14 @@ class UserAppearance < ApplicationRecord
 
   private
 
-  after_create_commit { broadcast 'CREATE' }
-  after_destroy { broadcast 'DESTROY', 'OFFLINE' }
+  after_create_commit :broadcast_dispatch_create
+  after_destroy :broadcast_dispatch_destroy
 
-  def broadcast(type, new_status = nil)
-    HashDispatcherJob.perform_later channel_name: "appearance_#{workspace_slug}",
-      type: action_type(type),
-      status: new_status || status,
-      user_id: user_id,
-      user_slug: user.slug
+  def broadcast_dispatch_create
+    broadcast_create locals: { status: 'ONLINE' }
+  end
+
+  def broadcast_dispatch_destroy
+    broadcast_destroy locals: { status: 'OFFLINE' }
   end
 end

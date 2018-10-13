@@ -22,7 +22,7 @@ class UserDrawer extends React.Component {
   handleClick() {
     const {
       history,
-      createDmChatRequest,
+      createChannelRequest,
       match: { params: { workspaceSlug } },
     } = this.props;
 
@@ -35,7 +35,7 @@ class UserDrawer extends React.Component {
     if (dmChat) {
       history.push(`/${workspaceSlug}/messages/${dmChat}`);
     } else {
-      createDmChatRequest({ workspaceSlug, memberId: this.user().id });
+      createChannelRequest({ workspaceSlug, hasDm: true, memberId: this.user().id });
     }
   }
 
@@ -45,7 +45,7 @@ class UserDrawer extends React.Component {
   }
 
   render() {
-    const { currentUser, updateAvatarRequest } = this.props;
+    const { currentUser } = this.props;
     const { isEditing } = this.state;
     const member = this.user();
 
@@ -112,11 +112,7 @@ class UserDrawer extends React.Component {
             )}
           </div>
           {isEditing && !isNotCurrUser && (
-            <UserProfileEditor
-              user={member}
-              toggleEditor={this.handleEditToggle}
-              updateAvatarRequest={updateAvatarRequest}
-            />
+            <UserProfileEditor user={member} toggleEditor={this.handleEditToggle} />
           )}
         </div>
       </div>

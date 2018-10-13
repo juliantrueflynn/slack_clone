@@ -2,13 +2,11 @@ import merge from 'lodash.merge';
 import {
   WORKSPACE,
   USER_APPEARANCE,
-  DM_CHAT,
   CHANNEL_SUB,
   CHANNEL,
   WORKSPACE_SUB,
   SIGN_OUT,
-  MEMBER,
-  AVATAR,
+  USER,
 } from '../actions/actionTypes';
 
 const memberReducer = (state = {}, action) => {
@@ -65,17 +63,17 @@ const memberReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case MEMBER.SHOW.RECEIVE: {
-      const { member } = action;
+    case USER.SHOW.RECEIVE: {
+      const { user } = action;
       nextState = {};
-      nextState[member.slug] = member;
+      nextState[user.slug] = user;
       return merge({}, state, nextState);
     }
-    case AVATAR.UPDATE.RECEIVE: {
-      const { avatarBanner, avatarThumb, userSlug } = action;
+    case USER.UPDATE.RECEIVE: {
+      const { user: { avatarBanner, avatarThumb, slug } } = action;
       nextState = Object.assign({}, state);
-      nextState[userSlug].avatarBanner = avatarBanner;
-      nextState[userSlug].avatarThumb = avatarThumb;
+      nextState[slug].avatarBanner = avatarBanner;
+      nextState[slug].avatarThumb = avatarThumb;
       return nextState;
     }
     case CHANNEL_SUB.CREATE.RECEIVE: {
@@ -84,38 +82,22 @@ const memberReducer = (state = {}, action) => {
       nextState[userSlug].subs.push(id);
       return nextState;
     }
-    case DM_CHAT.CREATE.RECEIVE: {
-      const { dmChat: { subs } } = action;
+    case CHANNEL.CREATE.RECEIVE: {
+      const { subs } = action.channel;
 
-      nextState = Object.assign({}, state);
+      nextState = {};
       subs.forEach((sub) => {
-        nextState[sub.userSlug].subs.push(sub.id);
+        nextState[sub.userSlug] = { subs: [sub.id] };
       });
 
-      return Object.assign({}, state, nextState);
-    }
-    case CHANNEL.CREATE.RECEIVE: {
-      const { channel: { ownerSlug, subs } } = action;
-      const sub = subs[0];
-
-      nextState = Object.assign({}, state);
-      if (sub && nextState[ownerSlug].subs) {
-        nextState[ownerSlug].subs.push(sub.id);
-      }
-
-      return nextState;
+      return merge({}, state, nextState);
     }
     case USER_APPEARANCE.CREATE.RECEIVE:
     case USER_APPEARANCE.DESTROY.RECEIVE: {
-      const { userId, userSlug, status } = action;
-      nextState = {};
-      nextState[userSlug] = {
-        id: userId,
-        slug: userSlug,
-        status,
-      };
-
-      return merge({}, state, nextState);
+      const { userSlug, status } = action.userAppearance;
+      nextState = Object.assign({}, state);
+      nextState[userSlug].status = status;
+      return nextState;
     }
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:

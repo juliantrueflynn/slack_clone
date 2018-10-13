@@ -67,7 +67,7 @@ class User < ApplicationRecord
     { thumb: avatar.thumb.url, banner: avatar.banner.url }
   end
 
-  after_update_commit :avatar_broadcast
+  after_update_commit :broadcast_dispatch_update
 
   private
 
@@ -87,12 +87,7 @@ class User < ApplicationRecord
     self.session_token
   end
 
-  def avatar_broadcast
-    return unless is_avatar_update
-    HashDispatcherJob.perform_later channel_name: "app",
-      type: "AVATAR_UPDATE_RECEIVE",
-      avatar_thumb: avatar.thumb.url,
-      avatar_banner: avatar.banner.url,
-      user_slug: slug
+  def broadcast_dispatch_update
+    broadcast_update partial: 'api/users/update'
   end
 end

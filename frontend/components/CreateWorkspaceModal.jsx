@@ -18,10 +18,10 @@ class CreateWorkspaceModal extends React.Component {
   handleFormSubmit(event) {
     event.preventDefault();
 
-    const { createEntityRequest } = this.props;
+    const { formDispatchRequest } = this.props;
     const { title, slug } = this.state;
     const workspace = { title, slug };
-    createEntityRequest({ workspace });
+    formDispatchRequest({ workspace });
   }
 
   render() {
@@ -69,4 +69,6 @@ const modalProps = {
   modalTitle: 'Create a Workspace'
 };
 
-export default withModal(modalProps)(withForm({ formFor: 'workspace' })(CreateWorkspaceModal));
+const formProps = { type: 'WORKSPACE_CREATE_REQUEST' };
+
+export default withModal(modalProps)(withForm(formProps)(CreateWorkspaceModal));

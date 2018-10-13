@@ -2,7 +2,6 @@ import merge from 'lodash.merge';
 import {
   CHANNEL_SUB,
   WORKSPACE,
-  DM_CHAT,
   CHANNEL,
   WORKSPACE_SUB,
   SIGN_OUT,
@@ -27,16 +26,6 @@ const channelSubReducer = (state = {}, action) => {
       nextState[channelSub.id] = channelSub;
       return nextState;
     }
-    case DM_CHAT.CREATE.RECEIVE: {
-      const { dmChat: { subs } } = action;
-
-      nextState = {};
-      subs.forEach((sub) => {
-        nextState[sub.id] = sub;
-      });
-
-      return merge({}, state, nextState);
-    }
     case WORKSPACE_SUB.CREATE.RECEIVE: {
       const { channelSubs } = action.workspaceSub;
 
@@ -48,10 +37,14 @@ const channelSubReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case CHANNEL.CREATE.RECEIVE: {
-      const { channel: { ownerSlug: userSlug, subs, slug: channelSlug } } = action;
-      nextState = Object.assign({}, state);
-      nextState[subs[0].id] = { channelSlug, userSlug, ...subs[0] };
-      return nextState;
+      const { subs } = action.channel;
+
+      nextState = {};
+      subs.forEach((sub) => {
+        nextState[sub.id] = sub;
+      });
+
+      return merge({}, state, nextState);
     }
     case CHANNEL_SUB.UPDATE.RECEIVE: {
       const { id, inSidebar } = action.channelSub;

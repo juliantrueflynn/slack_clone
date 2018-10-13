@@ -2,14 +2,13 @@ class Api::DmChatsController < ApplicationController
   before_action :ensure_unique_dm_chat
 
   def create
-    @dm_chat = Channel.new(dm_chat_params)
-    @dm_chat.has_dm = true
-    @dm_chat.member_ids = [current_user.id, params[:dm_chat][:member_id]]
+    @channel = Channel.new(dm_chat_params)
+    @channel.member_ids = [current_user.id, params[:dm_chat][:member_id]]
 
-    if @dm_chat.save
-      render json: @dm_chat
+    if @channel.save
+      render json: @channel
     else
-      render json: @dm_chat.errors.full_messages, status: 422
+      render json: @channel.errors.full_messages, status: 422
     end
   end
 
@@ -26,6 +25,6 @@ class Api::DmChatsController < ApplicationController
   end
 
   def dm_chat_params
-    params.require(:dm_chat).permit(:workspace_id, :member_id)
+    params.require(:dm_chat).permit(:workspace_id, :member_id, :has_dm)
   end
 end

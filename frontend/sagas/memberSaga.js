@@ -6,37 +6,37 @@ import {
   select,
   takeLatest
 } from 'redux-saga/effects';
-import { MEMBER, AVATAR } from '../actions/actionTypes';
-import { fetchMember, updateAvatar } from '../actions/memberActions';
-import { apiFetch, apiUpload } from '../util/apiUtil';
+import { USER } from '../actions/actionTypes';
+import { fetchUser, updateUser } from '../actions/memberActions';
+import { apiFetch, fetchPromise } from '../util/apiUtil';
 import { selectUIByDisplay, selectCurrentUser } from '../reducers/selectors';
 
 function* loadFetchMember({ userSlug }) {
   try {
     const workspaceSlug = yield select(selectUIByDisplay, 'displayWorkspaceSlug');
-    const member = yield call(apiFetch, `workspaces/${workspaceSlug}/users/${userSlug}`);
-    yield put(fetchMember.receive(member));
+    const user = yield call(apiFetch, `workspaces/${workspaceSlug}/users/${userSlug}`);
+    yield put(fetchUser.receive(user));
   } catch (error) {
-    yield put(fetchMember.failure(error));
+    yield put(fetchUser.failure(error));
   }
 }
 
-function* loadUpdateMember({ imageUrl: body }) {
+function* loadUpdateMember({ user: body }) {
   try {
     const currUser = yield select(selectCurrentUser);
-    const apiArgs = { method: 'PATCH', body };
-    yield call(apiUpload, `users/${currUser.slug}/avatar`, apiArgs);
+    const args = { method: 'PATCH', body };
+    yield call(fetchPromise, `users/${currUser.slug}`, args);
   } catch (error) {
-    yield put(updateAvatar.failure(error));
+    yield put(updateUser.failure(error));
   }
 }
 
 function* watchShowUser() {
-  yield takeLatest(MEMBER.SHOW.REQUEST, loadFetchMember);
+  yield takeLatest(USER.SHOW.REQUEST, loadFetchMember);
 }
 
 function* watchUpdateUser() {
-  yield takeLatest(AVATAR.UPDATE.REQUEST, loadUpdateMember);
+  yield takeLatest(USER.UPDATE.REQUEST, loadUpdateMember);
 }
 
 export default function* memberSaga() {

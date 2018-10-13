@@ -8,35 +8,21 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
-  def has_custom_class_name?
-    self.respond_to?(:class_name)
+  def broadcast_create(**params)
+    broadcast 'create', params
   end
 
-  def payload_name
-    (has_custom_class_name? ? class_name : self.class.name).underscore
+  def broadcast_update(**params)
+    broadcast 'update', params
   end
 
-  def action_type(action = nil)
-    type = payload_name
-    type << "_#{action}" if action
-    type << "_RECEIVE"
-    type.upcase
+  def broadcast_destroy(**params)
+    broadcast 'destroy', params
   end
 
-  def broadcast_create
-    broadcast 'create'
-  end
-
-  def broadcast_update
-    broadcast 'update'
-  end
-
-  def broadcast_destroy
-    broadcast 'destroy'
-  end
-
-  def broadcast(type = nil)
-    ActionDispatcherJob.perform_later(action_type(type), self) unless skip_broadcast?
+  def broadcast(action, **params)
+    return if skip_broadcast?
+    ActionDispatcherJob.perform_later(self, action, params)
   end
 
   private

@@ -100,10 +100,6 @@ class Channel < ApplicationRecord
     !!subs.find_by(channel_subs: { user_id: user_id })
   end
 
-  def class_name
-    has_dm? ? 'DM_CHAT' : self.class.name
-  end
-
   after_create :generate_chat_subs
   after_create_commit :generate_unread, :broadcast_create
   after_update_commit :broadcast_update

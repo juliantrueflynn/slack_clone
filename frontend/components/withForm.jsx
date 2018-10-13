@@ -1,13 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-const withForm = ({ formFor, mapStateToProps }) => (WrappedComponent) => {
+const withForm = ({ action, name, mapStateToProps }) => (WrappedComponent) => {
   const mapDispatchToProps = dispatch => ({
-    createEntityRequest: (entity) => {
-      const type = `${formFor.toUpperCase()}_CREATE_REQUEST`;
-      const payload = { type };
-      payload[formFor] = entity;
-
+    formDispatchRequest: (entity) => {
+      const type = `${name}_${action}_REQUEST`;
+      const entityName = name.toLowerCase();
+      const payload = { type, [entityName]: entity };
       return dispatch(payload);
     }
   });

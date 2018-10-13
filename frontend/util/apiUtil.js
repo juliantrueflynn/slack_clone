@@ -2,7 +2,7 @@ import { decamelizeKeys } from 'humps';
 
 const endpoint = url => `api/${url}`;
 
-const fetchPromise = (url, args) => fetch(endpoint(url), {
+export const fetchPromise = (url, args) => fetch(endpoint(url), {
   credentials: 'include',
   ...args,
 }).then(response => (
@@ -37,4 +37,3 @@ export const apiFetch = (url, props = {}) => apiCall('GET', url, props);
 export const apiCreate = (url, props = {}) => apiCall('POST', url, props);
 export const apiUpdate = (url, props = {}) => apiCall('PATCH', url, props);
 export const apiDelete = url => fetchPromise(url, { method: 'DELETE' });
-export const apiUpload = (url, args) => fetchPromise(url, args);
