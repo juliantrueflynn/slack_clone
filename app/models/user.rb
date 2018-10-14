@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   attr_reader :password
-  attr_accessor :has_update_callback
+  attr_accessor :has_callback
 
   before_validation :generate_slug, unless: :slug?
   after_initialize :ensure_session_token
@@ -69,7 +69,7 @@ class User < ApplicationRecord
     user_appearance.destroy!
   end
 
-  after_update_commit :broadcast_dispatch_update
+  after_update_commit :broadcast_update
 
   private
 
@@ -87,10 +87,5 @@ class User < ApplicationRecord
       self.session_token = new_session_token
     end
     self.session_token
-  end
-
-  def broadcast_dispatch_update
-    return unless has_update_callback
-    broadcast_update partial: 'api/users/update'
   end
 end

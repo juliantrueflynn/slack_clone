@@ -99,18 +99,16 @@ class UserDrawer extends React.Component {
               </div>
             </div>
           )}
-          <div className="Btn__group">
-            {isNotCurrUser && (
-              <Button buttonFor="dm" onClick={this.handleClick}>
-                Message
-              </Button>
-            )}
-            {(isEditing || !isNotCurrUser) && (
-              <Button buttonFor="edit-user" onClick={this.handleEditToggle}>
-                Edit Profile
-              </Button>
-            )}
-          </div>
+          {isNotCurrUser && (
+            <Button buttonFor="dm" onClick={this.handleClick}>
+              Message
+            </Button>
+          )}
+          {(!isEditing && !isNotCurrUser) && (
+            <Button buttonFor="edit-user" onClick={this.handleEditToggle}>
+              Edit Profile
+            </Button>
+          )}
           {isEditing && !isNotCurrUser && (
             <UserProfileEditor user={member} toggleEditor={this.handleEditToggle} />
           )}

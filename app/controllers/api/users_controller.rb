@@ -20,14 +20,8 @@ class Api::UsersController < ApplicationController
   end
 
   def update
-    new_params = {
-      username: params[:username],
-      avatar: params[:avatar],
-      email: params[:email],
-    }
-
-    if @user.update(new_params)
-      render json: @user
+    if @user.update(user_params)
+      render @user
     else
       render json: @user.errors.full_messages, status: 422
     end
@@ -40,6 +34,6 @@ class Api::UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:email, :slug, :username, :password, :avatar)
+    params.fetch(:user, {}).permit(:email, :username, :password, :new_password, :avatar)
   end
 end

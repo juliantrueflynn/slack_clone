@@ -6,9 +6,20 @@ import './UserEditor.css';
 class UserEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { avatar: null };
-    this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.state = {
+      avatar: null,
+      username: '',
+      email: '',
+    };
+
+    this.handleTextInputValue = this.handleTextInputValue.bind(this);
     this.handleFileChange = this.handleFileChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleTextInputValue(name) {
+    return event => this.setState({ [name]: event.target.value });
   }
 
   handleFileChange(e) {
@@ -24,28 +35,60 @@ class UserEditor extends React.Component {
     }
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
-
-    const { user, formDispatchRequest } = this.props;
-    const { avatar } = this.state;
-    const formData = new FormData();
-    formData.append('avatar', avatar);
-    formData.append('username', user.username);
-    formData.append('email', user.email);
-    formDispatchRequest(formData);
-
+  resetForm(formData, formNode) {
     this.setState({ avatar: null });
-    formData.delete('avatar');
-    const inputNode = e.target.querySelector('#avatar');
+
+    formData.forEach((_, key) => {
+      formData.delete(key);
+    });
+
+    const inputNode = formNode.querySelector('#avatar');
     inputNode.value = '';
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+
+    const { formDispatchRequest, user } = this.props;
+    const { ...state } = this.state;
+
+    const formData = new FormData();
+    Object.keys(state).forEach((key) => {
+      formData.append(`user[${key}]`, state[key] || user[key]);
+    });
+
+    formDispatchRequest(formData);
+    this.resetForm(formData, e.target);
+  }
+
   render() {
-    const { toggleEditor } = this.props;
+    const { toggleEditor, user } = this.props;
+    const { username, email } = this.state;
 
     return (
       <form className="UserEditor" onSubmit={this.handleSubmit}>
+        <div className="Form__row">
+          <label htmlFor="username">
+            Username
+          </label>
+          <input
+            type="text"
+            name="user[username]"
+            value={username || user.username}
+            onChange={this.handleTextInputValue('username')}
+          />
+        </div>
+        <div className="Form__row">
+          <label htmlFor="email">
+            Email
+          </label>
+          <input
+            type="text"
+            name="user[email]"
+            value={email || user.email}
+            onChange={this.handleTextInputValue('email')}
+          />
+        </div>
         <div className="Form__row">
           <label htmlFor="avatar">
             Upload avatar
@@ -53,7 +96,7 @@ class UserEditor extends React.Component {
           <input
             type="file"
             id="avatar"
-            name="avatar"
+            name="user[avatar]"
             accept="image/*"
             onChange={this.handleFileChange}
           />

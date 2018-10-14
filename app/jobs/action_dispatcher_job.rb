@@ -8,8 +8,7 @@ class ActionDispatcherJob < ApplicationJob
   end
 
   def default_params
-    partial = "api/#{payload_name.pluralize}/#{payload_name}"
-    { partial: partial, locals: {} }
+    { locals: {} }
   end
 
   def action_type(action_name)
@@ -23,7 +22,7 @@ class ActionDispatcherJob < ApplicationJob
 
   def params
     args = default_params.merge(arguments.third)
-    args[:object] = payload
+    args[:locals][payload_name.to_sym] = payload
     args
   end
 
@@ -32,7 +31,8 @@ class ActionDispatcherJob < ApplicationJob
   end
 
   def render_json
-    json = ApplicationController.render **params
+    partial = "api/#{payload_name.pluralize}/#{payload_name}"
+    json = ApplicationController.render partial: partial, **params
     JSON.parse(json)
   end
 end
