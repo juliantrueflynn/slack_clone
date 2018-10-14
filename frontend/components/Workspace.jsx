@@ -105,7 +105,7 @@ class Workspace extends React.Component {
           />
         ))}
 
-        <LeftSidebarContainer />
+        {defaultChat && (<LeftSidebarContainer />)}
         <div className="Workspace__col">
           <ChannelHeader
             channels={channels}

@@ -6,10 +6,10 @@
   color: #636E72;
 }
 
-.Sidebar .StatusIcon__online {
+.LeftSidebar .StatusIcon__online {
   color: rgb(85,239,196,.5);
 }
 
-.Sidebar .MenuItem .StatusIcon__offline {
+.LeftSidebar .MenuItem .StatusIcon__offline {
   color: rgba(255,255,255,0.4);
 }

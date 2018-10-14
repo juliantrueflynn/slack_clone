@@ -1,19 +1,15 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import LeftSidebar from './LeftSidebar';
-import {
-  selectSubbedChats,
-  selectDmChats,
-  selectSubbedWorkspaces,
-} from '../reducers/selectors';
+import { selectDmChats, selectSubbedWorkspaces, selectEntityBySlug } from '../reducers/selectors';
 import { modalOpen } from '../actions/uiActions';
 import { createChannel, updateChannelSub, fetchChannels } from '../actions/channelActions';
+import LeftSidebar from './LeftSidebar';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   hasUnreadConvos: Object.values(state.entities.messages).some(convo => convo.hasUnreads),
   currentUser: state.session.currentUser,
   workspaces: selectSubbedWorkspaces(state),
-  currWorkspace: state.entities.workspaces[workspaceSlug],
+  currWorkspace: selectEntityBySlug(state, 'workspaces', workspaceSlug),
   currChatSlug: state.ui.displayChannelSlug,
   channels: Object.values(state.entities.channels).filter(ch => !ch.hasDm),
   dmChats: selectDmChats(state),

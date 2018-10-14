@@ -10,47 +10,6 @@ export const selectSubbedWorkspaces = ({ entities: { workspaces } }) => (
   values(workspaces).filter(({ isSub, isMember }) => isSub && isMember)
 );
 
-const selectDmWithUser = (channel, members, currUserSlug) => {
-  const dmWith = channel.members.filter(userSlug => userSlug !== currUserSlug);
-  return dmWith[0] && members[dmWith[0]];
-};
-
-export const selectDmChats = ({ entities: { channels, channelSubs, members }, session }) => {
-  const { currentUser } = session;
-  const currMember = members[currentUser.slug];
-
-  if (!currMember || !currMember.subs) {
-    return [];
-  }
-
-  return currMember.subs
-    .map(subId => channelSubs[subId])
-    .filter(sub => channels[sub.channelSlug].hasDm && sub.inSidebar)
-    .map(({ channelSlug }) => {
-      const channel = Object.assign({}, channels[channelSlug]);
-      const dmUser = selectDmWithUser(channel, members, currMember.slug);
-      const subs = channel.subs.filter(id => channelSubs[id].userId === currMember.id);
-      const [subId] = subs;
-
-      if (dmUser) {
-        channel.title = dmUser.username;
-        channel.userStatus = dmUser.status;
-      }
-
-      if (subId) {
-        channel.userSubId = subId;
-      }
-
-      return channel;
-    });
-};
-
-export const selectSubbedChats = ({ entities: { channels }, session: { currentUser } }) => (
-  values(channels)
-    .filter(ch => ch.members.includes(currentUser.slug))
-    .sort((a, b) => a.title && a.title.localeCompare(b.title))
-);
-
 export const selectReactionByMessageEmoji = (state, { messageId, emoji }) => {
   const { entities: { reactions }, session: { currentUser } } = state;
   const filtered = values(reactions).filter(reaction => (
@@ -204,6 +163,41 @@ export const selectDrawerMessagesByType = ({ entities, ui: { drawer } }) => {
   }
 
   return [];
+};
+
+const selectDmWithUser = (channel, members, currUserSlug) => {
+  const dmWith = channel.members.filter(userSlug => userSlug !== currUserSlug);
+  return dmWith[0] && members[dmWith[0]];
+};
+
+export const selectDmChats = ({ entities: { channels, channelSubs, members }, session }) => {
+  const { currentUser } = session;
+  const currMember = members[currentUser.slug];
+
+  if (!currMember || !currMember.subs) {
+    return [];
+  }
+
+  return currMember.subs
+    .map(subId => channelSubs[subId])
+    .filter(sub => channels[sub.channelSlug].hasDm && sub.inSidebar)
+    .map(({ channelSlug }) => {
+      const channel = Object.assign({}, channels[channelSlug]);
+      const dmUser = selectDmWithUser(channel, members, currMember.slug);
+      const subs = channel.subs.filter(id => channelSubs[id].userId === currMember.id);
+      const [subId] = subs;
+
+      if (dmUser) {
+        channel.title = dmUser.username;
+        channel.userStatus = dmUser.status;
+      }
+
+      if (subId) {
+        channel.userSubId = subId;
+      }
+
+      return channel;
+    });
 };
 
 const channelsWithEntitiesMap = ({ channels, members }, currentUserSlug) => (

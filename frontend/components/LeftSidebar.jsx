@@ -60,7 +60,7 @@ const LeftSidebar = ({
   });
 
   return (
-    <aside className="Sidebar Sidebar--left">
+    <aside className="LeftSidebar">
       <div className="SidebarWidget">
         {members[currentUser.slug] && (
           <ProfileDropdown

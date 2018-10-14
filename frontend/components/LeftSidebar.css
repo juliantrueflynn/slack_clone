@@ -1,23 +1,22 @@
-.Sidebar--left {
-  width: 15%;
-  display: inline-block;
+.LeftSidebar {
+  min-width: 250px;
   background-color: #4D394B;
   color: rgba(255,255,255,.8);
 }
 
-.Sidebar--left a {
+.LeftSidebar a {
   color: inherit;
 }
 
-.Sidebar--left .MenuItem__content,
-.Sidebar--left .menu__text {
+.LeftSidebar .MenuItem__content,
+.LeftSidebar .menu__text {
   text-align: inherit;
 }
 
 .SidebarWidget__header,
 .Dropdown__profile .Btn__dropdown,
-.Sidebar--left .MenuItem__content,
-.Sidebar--left .menu__text {
+.LeftSidebar .MenuItem__content,
+.LeftSidebar .menu__text {
   padding-left: 16px;
   padding-right: 16px;
   width: 100%;
