@@ -60,7 +60,7 @@ function* newWorkspaceFlow() {
 }
 
 function* watchNewWorkspace() {
-  yield takeLatest(WORKSPACE.CREATE.RECEIVE, redirectOwner);  
+  yield takeLatest(WORKSPACE.CREATE.RECEIVE, redirectOwner);
 }
 
 function* watchWorkspaces() {

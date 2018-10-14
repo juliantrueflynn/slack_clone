@@ -1,5 +1,5 @@
 class AppearanceChannel < ApplicationCable::Channel
-  before_unsubscribe :ensure_offline
+  before_unsubscribe :offline
 
   def subscribed
     @slug = params[:workspace_slug]
@@ -7,15 +7,10 @@ class AppearanceChannel < ApplicationCable::Channel
   end
 
   def unsubscribed
-    if current_user.appears.in_workspace(@slug)
-      current_user.appears.in_workspace(@slug).destroy
-    end
-
     stop_all_streams
   end
 
-  def ensure_offline
-    return unless current_user.appears.in_workspace(@slug)
-    current_user.appears.in_workspace(@slug).destroy
+  def offline
+    current_user.offline!(@slug)
   end
 end

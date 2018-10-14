@@ -5,14 +5,13 @@ import channelSaga from './channelSaga';
 import channelSubSaga from './channelSubSaga';
 import workspaceSubSaga from './workspaceSubSaga';
 import messageSaga from './messageSaga';
-import memberSaga from './memberSaga';
+import userSaga from './userSaga';
 import userThreadSaga from './userThreadSaga';
 import favoriteSaga from './favoriteSaga';
 import navigateSaga from './navigateSaga';
 import reactionSaga from './reactionSaga';
 import unreadSaga from './unreadSaga';
 import readSaga from './readSaga';
-import userAppearanceSaga from './userAppearanceSaga';
 
 export default function* root() {
   yield all([
@@ -23,12 +22,11 @@ export default function* root() {
     fork(channelSubSaga),
     fork(workspaceSubSaga),
     fork(messageSaga),
-    fork(memberSaga),
+    fork(userSaga),
     fork(userThreadSaga),
     fork(favoriteSaga),
     fork(reactionSaga),
     fork(unreadSaga),
     fork(readSaga),
-    fork(userAppearanceSaga),
   ]);
 }

@@ -9,7 +9,7 @@ import {
   USER,
 } from '../actions/actionTypes';
 
-const memberReducer = (state = {}, action) => {
+const userReducer = (state = {}, action) => {
   Object.freeze(state);
 
   let nextState;
@@ -31,16 +31,21 @@ const memberReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.RECEIVE: {
-      const { members, channelSubs } = action.workspace;
+      const { members, userAppearances, channelSubs } = action.workspace;
 
       nextState = members.reduce((acc, curr) => {
         acc[curr.slug] = {
           subs: [],
+          status: 'offline',
           ...curr,
         };
 
         return acc;
       }, {});
+
+      userAppearances.forEach((userAppear) => {
+        nextState[userAppear.userSlug].status = userAppear.status;
+      });
 
       channelSubs.forEach((sub) => {
         nextState[sub.userSlug].subs.push(sub.id);
@@ -107,4 +112,4 @@ const memberReducer = (state = {}, action) => {
   }
 };
 
-export default memberReducer;
+export default userReducer;

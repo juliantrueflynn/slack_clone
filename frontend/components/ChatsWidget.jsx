@@ -25,8 +25,7 @@ class ChatsWidget extends React.Component {
       createChannelRequest,
       fetchChannelsRequest,
     } = this.props;
-
-    const chats = channels.sort((a, b) => a.title.localeCompare(b.title));
+    const chats = channels.sort((a, b) => a.title && b.title && a.title.localeCompare(b.title));
     const subbedChannels = chats.filter(ch => ch.isSub);
     const unsubbedChannels = chats.filter(ch => !ch.isSub);
 

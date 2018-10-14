@@ -3,7 +3,7 @@ import workspaces from './workspaceReducer';
 import workspaceSubs from './workspaceSubReducer';
 import channels from './channelReducer';
 import channelSubs from './channelSubReducer';
-import members from './memberReducer';
+import members from './userReducer';
 import messages from './messageReducer';
 import favorites from './favoriteReducer';
 import reactions from './reactionReducer';

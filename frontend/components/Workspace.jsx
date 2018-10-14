@@ -32,14 +32,12 @@ class Workspace extends React.Component {
       workspaces,
       fetchWorkspaceRequest,
       fetchWorkspacesRequest,
-      destroyUserAppearanceRequest,
     } = this.props;
 
     const { workspaces: prevWorkspaces } = prevProps;
 
     if (prevProps.workspaceSlug !== workspaceSlug) {
       fetchWorkspaceRequest(workspaceSlug);
-      destroyUserAppearanceRequest(prevProps.workspaceSlug);
     }
 
     if (prevWorkspaces && prevWorkspaces.length !== workspaces.length) {

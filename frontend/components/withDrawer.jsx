@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { drawerClose, drawerOpen } from '../actions/uiActions';
 import { fetchMessage } from '../actions/messageActions';
 import { fetchFavorites } from '../actions/favoriteActions';
-import { fetchUser } from '../actions/memberActions';
+import { fetchUser } from '../actions/userActions';
 import { createChannel } from '../actions/channelActions';
 import { selectDrawerMessagesByType } from '../reducers/selectors';
 import Drawer from './Drawer';

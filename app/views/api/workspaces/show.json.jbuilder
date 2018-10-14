@@ -14,12 +14,15 @@ json.channels do
 end
 
 json.members do
-  json.array! @workspace.members do |member|
+  json.array! @workspace.users do |member|
     json.(member, :id, :username, :email, :slug)
     json.avatar_banner member.avatar.banner.url
     json.avatar_thumb member.avatar.thumb.url
-    json.status member.status || 'OFFLINE'
   end
+end
+
+json.user_appearances do
+  json.array! @workspace.user_appearances, :status, :user_slug
 end
 
 json.channel_subs do
@@ -31,7 +34,7 @@ json.channel_subs do
 end
 
 json.workspace_subs do
-  json.array! @workspace.subs do |workspace_sub|
+  json.array! @workspace.subs.includes(:user) do |workspace_sub|
     json.(workspace_sub, *workspace_sub.attributes.keys)
     json.user_slug workspace_sub.user.slug
     json.workspace_slug @workspace.slug

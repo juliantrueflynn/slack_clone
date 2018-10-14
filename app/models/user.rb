@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   attr_reader :password
-  attr_accessor :is_avatar_update
+  attr_accessor :has_update_callback
 
   before_validation :generate_slug, unless: :slug?
   after_initialize :ensure_session_token
@@ -63,8 +63,10 @@ class User < ApplicationRecord
     "app"
   end
 
-  def avatar_displays
-    { thumb: avatar.thumb.url, banner: avatar.banner.url }
+  def offline!(workspace_slug)
+    user_appearance = appears.by_workspace_slug(workspace_slug)
+    return if user_appearance.nil?
+    user_appearance.destroy!
   end
 
   after_update_commit :broadcast_dispatch_update
@@ -88,6 +90,7 @@ class User < ApplicationRecord
   end
 
   def broadcast_dispatch_update
+    return unless has_update_callback
     broadcast_update partial: 'api/users/update'
   end
 end

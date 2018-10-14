@@ -3,7 +3,6 @@ import withActionCable from './withActionCable';
 import { fetchWorkspace, fetchWorkspaces } from '../actions/workspaceActions';
 import { modalClose, drawerClose } from '../actions/uiActions';
 import { createReaction } from '../actions/reactionActions';
-import { destroyUserAppearance } from '../actions/userAppearanceActions';
 import { selectChannelsWithEntitiesMap } from '../reducers/selectors';
 import Workspace from './Workspace';
 
@@ -23,7 +22,6 @@ const mapDispatchToProps = dispatch => ({
   createReactionRequest: reaction => dispatch(createReaction.request(reaction)),
   modalClose: () => dispatch(modalClose()),
   drawerClose: () => dispatch(drawerClose()),
-  destroyUserAppearanceRequest: appearance => dispatch(destroyUserAppearance.request(appearance)),
 });
 
 export default withActionCable(connect(mapStateToProps, mapDispatchToProps)(Workspace));

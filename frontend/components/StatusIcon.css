@@ -1,7 +1,3 @@
-svg .fa-circle {
-  color: rgb(85,239,196,.5);
-}
-
 .StatusIcon__online {
   color: #00CEC9;
 }
@@ -14,6 +10,6 @@ svg .fa-circle {
   color: rgb(85,239,196,.5);
 }
 
-.Sidebar .MenuItem .StatusIcon {
+.Sidebar .MenuItem .StatusIcon__offline {
   color: rgba(255,255,255,0.4);
 }

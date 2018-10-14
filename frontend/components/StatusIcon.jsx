@@ -8,14 +8,13 @@ const StatusIcon = ({ member, size, ...props }) => {
   }
 
   let circleType = 'fas';
-  if (!member.status || member.status === 'OFFLINE') {
+  if (!member.status || member.status === 'offline') {
     circleType = 'far';
   }
 
   const icon = [circleType, 'circle'];
   const iconSize = size || 'xs';
-  const userStatus = member.status.toLowerCase();
-  const classNames = `StatusIcon StatusIcon__${userStatus}`;
+  const classNames = `StatusIcon StatusIcon__${member.status}`;
 
   return (
     <FontAwesomeIcon className={classNames} icon={icon} size={iconSize} {...props} />

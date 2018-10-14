@@ -14,11 +14,7 @@ class Workspace < ApplicationRecord
   belongs_to :owner, class_name: 'User'
   has_many :subs, class_name: 'WorkspaceSub'
   has_many :users, through: :subs
-  has_many :members,
-    -> { left_joins(:appears).select('users.*', 'user_appearances.status AS status') },
-    class_name: 'User',
-    through: :subs,
-    source: :user
+  has_many :user_appearances
   has_many :channels
   has_many :favorites, through: :channels
   has_many :channel_subs,

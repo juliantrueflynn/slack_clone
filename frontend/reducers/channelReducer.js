@@ -202,9 +202,9 @@ const channelReducer = (state = {}, action) => {
     }
     case MESSAGE.CREATE.RECEIVE: {
       const { message } = action.message;
-      nextState = Object.assign({}, state);
-      nextState[message.channelSlug].messages.push(message.slug);
-      return nextState;
+      nextState = {};
+      nextState[message.channelSlug] = { messages: [message.slug] };
+      return merge({}, state, nextState);
     }
     case CHANNEL_SWITCH: {
       const { channelSlug, scrollLoc } = action;

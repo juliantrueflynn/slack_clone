@@ -90,12 +90,12 @@ ActiveRecord::Schema.define(version: 20180912234744) do
   end
 
   create_table "user_appearances", force: :cascade do |t|
-    t.string "status", default: "ONLINE", null: false
+    t.string "status", default: "online", null: false
     t.bigint "user_id"
-    t.string "workspace_slug", null: false
+    t.bigint "workspace_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["workspace_slug", "user_id"], name: "index_user_appearances_on_workspace_slug_and_user_id", unique: true
+    t.index ["workspace_id", "user_id"], name: "index_user_appearances_on_workspace_id_and_user_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -145,6 +145,7 @@ ActiveRecord::Schema.define(version: 20180912234744) do
   add_foreign_key "reads", "workspaces", on_delete: :cascade
   add_foreign_key "unreads", "workspaces", on_delete: :cascade
   add_foreign_key "user_appearances", "users", on_delete: :cascade
+  add_foreign_key "user_appearances", "workspaces", on_delete: :cascade
   add_foreign_key "workspace_subs", "users", on_delete: :cascade
   add_foreign_key "workspace_subs", "workspaces", on_delete: :cascade
   add_foreign_key "workspaces", "users", column: "owner_id", on_delete: :cascade
