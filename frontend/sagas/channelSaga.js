@@ -27,7 +27,7 @@ function* redirectToChannel(chat) {
   }
 
   const workspaceSlug = yield select(selectUIByDisplay, 'displayWorkspaceSlug');
-  yield put(navigate({ path: `/${workspaceSlug}/messages/${chat.slug}` }));
+  yield put(navigate(`/${workspaceSlug}/messages/${chat.slug}`));
 }
 
 function* fetchCreate(channel) {

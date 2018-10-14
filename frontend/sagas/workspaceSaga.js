@@ -33,7 +33,7 @@ function* redirectOwner({ workspace: { workspace, owner } }) {
   const currUser = yield select(selectCurrentUser);
 
   if (currUser.id === owner.id) {
-    yield put(navigate({ path: `/${workspace.slug}` }));
+    yield put(navigate(`/${workspace.slug}`, true));
   }
 }
 

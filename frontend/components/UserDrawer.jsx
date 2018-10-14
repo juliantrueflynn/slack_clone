@@ -33,7 +33,7 @@ class UserDrawer extends React.Component {
     const { dmChat } = this.user();
 
     if (dmChat) {
-      history.push(`/${workspaceSlug}/messages/${dmChat}`);
+      history.replace(`/${workspaceSlug}/messages/${dmChat}`);
     } else {
       createChannelRequest({ workspaceSlug, hasDm: true, memberId: this.user().id });
     }

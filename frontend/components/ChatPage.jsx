@@ -27,7 +27,7 @@ class ChatPage extends React.Component {
     }
 
     if (this.selectRedirectUrl()) {
-      history.push(this.selectRedirectUrl());
+      history.replace(this.selectRedirectUrl());
     }
   }
 
