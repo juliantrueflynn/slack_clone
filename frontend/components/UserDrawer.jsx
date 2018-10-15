@@ -2,16 +2,14 @@ import React from 'react';
 import Button from './Button';
 import StatusIcon from './StatusIcon';
 import withDrawer from './withDrawer';
-import UserProfileEditor from './UserEditor';
 import { dateUtil } from '../util/dateUtil';
+import SettingsModal from './SettingsModal';
 import './UserDrawer.css';
 
 class UserDrawer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isEditing: false };
     this.handleClick = this.handleClick.bind(this);
-    this.handleEditToggle = this.handleEditToggle.bind(this);
   }
 
   user() {
@@ -25,37 +23,32 @@ class UserDrawer extends React.Component {
       createChannelRequest,
       match: { params: { workspaceSlug } },
     } = this.props;
+    const user = this.user();
 
-    if (!this.user()) {
+    if (!user) {
       return;
     }
 
-    const { dmChat } = this.user();
+    const { dmChat, id: memberId } = user;
 
     if (dmChat) {
       history.replace(`/${workspaceSlug}/messages/${dmChat}`);
     } else {
-      createChannelRequest({ workspaceSlug, hasDm: true, memberId: this.user().id });
+      createChannelRequest({ workspaceSlug, hasDm: true, memberId });
     }
-  }
-
-  handleEditToggle() {
-    const { isEditing } = this.state;
-    this.setState({ isEditing: !isEditing });
   }
 
   render() {
-    const { currentUser } = this.props;
-    const { isEditing } = this.state;
-    const member = this.user();
+    const { currentUser, openSettingsModal } = this.props;
+    const user = this.user();
 
-    if (!member) {
+    if (!user) {
       return null;
     }
 
-    const { username, dmChat, slug } = member;
+    const { username, dmChat, slug } = user;
     const isNotCurrUser = currentUser.slug !== slug;
-    const dateJoined = dateUtil(member.joinedAt).monthDayYear();
+    const dateJoined = dateUtil(user.joinedAt).monthDayYear();
 
     let profileText = `You haven't direct messaged ${username} yet. Why not say hi?`;
     if (dmChat) {
@@ -67,14 +60,14 @@ class UserDrawer extends React.Component {
     return (
       <div className="UserDrawer">
         <div className="UserDrawer__banner">
-          <img src={member.avatarBanner} alt={`${username} banner`} />
+          <img src={user.avatarBanner} alt={`${username} banner`} />
         </div>
         <div className="UserDrawer__body">
           <header className="UserDrawer__header">
             <h2 className="UserDrawer__title">
               {username}
             </h2>
-            <StatusIcon member={member} />
+            <StatusIcon member={user} />
           </header>
           <div className="UserDrawer__intro">
             <p>{profileText}</p>
@@ -86,7 +79,7 @@ class UserDrawer extends React.Component {
                   Email
                 </div>
                 <div className="UserDrawer__col">
-                  {member.email}
+                  {user.email}
                 </div>
               </div>
               <div className="UserDrawer__row">
@@ -104,14 +97,16 @@ class UserDrawer extends React.Component {
               Message
             </Button>
           )}
-          {(!isEditing && !isNotCurrUser) && (
-            <Button buttonFor="edit-user" onClick={this.handleEditToggle}>
+          {isNotCurrUser || (
+            <Button buttonFor="edit-user" onClick={() => openSettingsModal()}>
               Edit Profile
             </Button>
           )}
-          {isEditing && !isNotCurrUser && (
-            <UserProfileEditor user={member} toggleEditor={this.handleEditToggle} />
-          )}
+          <SettingsModal
+            profilePhoto={user.avatarLarge}
+            username={user.username}
+            email={user.email}
+          />
         </div>
       </div>
     );

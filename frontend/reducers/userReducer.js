@@ -75,10 +75,11 @@ const userReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case USER.UPDATE.RECEIVE: {
-      const { user: { avatarBanner, avatarThumb, slug } } = action;
+      const { user } = action;
       nextState = Object.assign({}, state);
-      nextState[slug].avatarBanner = avatarBanner;
-      nextState[slug].avatarThumb = avatarThumb;
+      nextState[user.slug].avatarBanner = user.avatarBanner;
+      nextState[user.slug].avatarThumb = user.avatarThumb;
+      nextState[user.slug].avatarLarge = user.avatarLarge;
       return nextState;
     }
     case CHANNEL_SUB.CREATE.RECEIVE: {

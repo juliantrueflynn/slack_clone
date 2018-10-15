@@ -12,7 +12,7 @@ const withModal = ({ modalTitle, modalType, ...modalProps }) => (WrappedComponen
   });
 
   const mapDispatchToProps = dispatch => ({
-    onRequestClose: () => dispatch(modalClose()),
+    modalClose: () => dispatch(modalClose()),
   });
 
   class WithModal extends React.Component {
@@ -26,8 +26,8 @@ const withModal = ({ modalTitle, modalType, ...modalProps }) => (WrappedComponen
     }
 
     handleModalClose() {
-      const { onRequestClose } = this.props;
-      onRequestClose();
+      const { modalClose: close } = this.props;
+      close();
     }
 
     render() {

@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { drawerClose, drawerOpen } from '../actions/uiActions';
+import { drawerClose, drawerOpen, modalOpen } from '../actions/uiActions';
 import { fetchMessage } from '../actions/messageActions';
 import { fetchFavorites } from '../actions/favoriteActions';
-import { fetchUser } from '../actions/userActions';
+import { fetchUser, updateAvatar } from '../actions/userActions';
 import { createChannel } from '../actions/channelActions';
 import { selectDrawerMessagesByType } from '../reducers/selectors';
 import Drawer from './Drawer';
@@ -23,6 +23,7 @@ const withDrawer = drawerTitle => (WrappedComponent) => {
   const mapDispatchToProps = (dispatch, { match: { params } }) => ({
     openDrawer: drawer => dispatch(drawerOpen(drawer)),
     closeDrawer: () => dispatch(drawerClose()),
+    openSettingsModal: () => dispatch(modalOpen('MODAL_SETTINGS', null)),
     fetchEntitiesRequest: () => {
       if (params.messageSlug) {
         dispatch(fetchMessage.request(params.messageSlug));
@@ -38,6 +39,7 @@ const withDrawer = drawerTitle => (WrappedComponent) => {
 
       return null;
     },
+    updateAvatarRequest: avatar => dispatch(updateAvatar.request(avatar)),
     createChannelRequest: dmChat => dispatch(createChannel.request(dmChat)),
   });
 

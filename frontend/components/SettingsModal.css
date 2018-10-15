@@ -1,0 +1,39 @@
+.Modal__settings:focus {
+  outline: none;
+}
+
+.Modal__settings .Modal__header {
+  margin-bottom: 15px;
+}
+
+.Modal__settings .Modal__title {
+  text-align: center;
+  padding: 15px 0;
+}
+
+.Modal__settings .Modal__inner-body {
+  margin: 0 auto;
+  width: 800px;
+}
+
+.SettingsModal {
+  display: flex;
+  flex-direction: row;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+.SettingsModal label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 7px;
+}
+
+.SettingsModal__col:first-child {
+  width: 100%;
+}
+
+.SettingsModal__col {
+  padding-left: 15px;
+  padding-right: 15px;
+}
