@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   attr_reader :password
-  attr_accessor :has_callback
 
   before_validation :generate_slug, unless: :slug?
   after_initialize :ensure_session_token
@@ -87,5 +86,11 @@ class User < ApplicationRecord
       self.session_token = new_session_token
     end
     self.session_token
+  end
+
+  def user_broadcast_update
+    return if saved_change_to_session_token?
+    return if saved_change_to_password_digest?
+    broadcast_update
   end
 end
