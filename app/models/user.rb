@@ -68,7 +68,7 @@ class User < ApplicationRecord
     user_appearance.destroy!
   end
 
-  after_update_commit :broadcast_update
+  after_update_commit :user_broadcast_update
 
   private
 

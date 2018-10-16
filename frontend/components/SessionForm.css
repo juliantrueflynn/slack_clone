@@ -40,6 +40,7 @@
   border-color: #FFF;
   box-shadow: 0 2px 8px rgba(0,0,0,.1);
   border-style: solid;
+  border-width: 2px;
 }
 
 .SessionForm .Btn__submit {

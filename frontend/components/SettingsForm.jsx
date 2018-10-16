@@ -1,10 +1,9 @@
 import React from 'react';
 import Button from './Button';
 import withForm from './withForm';
-import withModal from './withModal';
-import './SettingsModal.css';
+import './SettingsForm.css';
 
-class SettingsModal extends React.Component {
+class SettingsForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -50,12 +49,12 @@ class SettingsModal extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const { formDispatchRequest, ...props } = this.props;
+    const { formDispatchRequest, user } = this.props;
     const { ...state } = this.state;
 
     const formData = new FormData();
     Object.keys(state).forEach((key) => {
-      formData.append(`user[${key}]`, state[key] || props[key]);
+      formData.append(`user[${key}]`, state[key] || user[key]);
     });
 
     formDispatchRequest(formData);
@@ -63,12 +62,12 @@ class SettingsModal extends React.Component {
   }
 
   render() {
-    const { modalClose, profilePhoto, ...props } = this.props;
+    const { modalClose, user } = this.props;
     const { username, email } = this.state;
 
     return (
-      <form className="SettingsModal" onSubmit={this.handleSubmit}>
-        <div className="SettingsModal__col">
+      <form className="SettingsForm" onSubmit={this.handleSubmit}>
+        <div className="SettingsForm__col">
           <div className="Form__group">
             <label htmlFor="username">
               Username
@@ -77,7 +76,7 @@ class SettingsModal extends React.Component {
               type="text"
               className="Form__control"
               name="user[username]"
-              value={username || props.username}
+              value={username || user.username}
               onChange={this.handleTextInputValue('username')}
             />
           </div>
@@ -89,22 +88,11 @@ class SettingsModal extends React.Component {
               type="text"
               className="Form__control"
               name="user[email]"
-              value={email || props.email}
+              value={email || user.email}
               onChange={this.handleTextInputValue('email')}
             />
           </div>
-          <div className="Btn__group">
-            <Button type="submit" color="green" buttonFor="save-profile">
-              Save
-            </Button>
-            <Button onClick={() => modalClose()}>
-              Cancel
-            </Button>
-          </div>
-        </div>
-        <div className="SettingsModal__col">
-          <img src={profilePhoto} alt={`${props.username} banner`} />
-          <div className="SettingsModal__uploader">
+          <div className="Form__group">
             <label htmlFor="avatar">
               Upload avatar
             </label>
@@ -116,17 +104,23 @@ class SettingsModal extends React.Component {
               onChange={this.handleFileChange}
             />
           </div>
+          <div className="Btn__group">
+            <Button type="submit" color="green" buttonFor="save-profile" size="lg">
+              Save
+            </Button>
+            <Button onClick={() => modalClose()} size="lg">
+              Cancel
+            </Button>
+          </div>
+        </div>
+        <div className="SettingsForm__col">
+          <img src={user.profilePhoto} alt={`${user.username} banner`} />
         </div>
       </form>
     );
   }
 }
 
-const modalProps = {
-  modalType: 'MODAL_SETTINGS',
-  modalTitle: 'Edit your profile'
-};
+const formProps = { type: 'USER_UPDATE_REQUEST', payloadName: 'user' };
 
-const formProps = { action: 'UPDATE', name: 'USER' };
-
-export default withModal(modalProps)(withForm(formProps)(SettingsModal));
+export default withForm(formProps)(SettingsForm);

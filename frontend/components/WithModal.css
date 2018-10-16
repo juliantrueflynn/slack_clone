@@ -6,14 +6,24 @@
   height: 100%;
 }
 
-.Modal__close {
+.Modal:focus {
+  outline: none;
+}
+
+.Modal .Btn__close {
   position: absolute;
-  right: 0;
-  top: 0;
-  z-index: 1;
+  right: 50px;
+  top: 50px;
+  padding: 0;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+.Modal .Btn__close:hover {
+  background-color: #E8E8E8;
 }
 
 .Modal__title {
   margin: 0;
 }
-

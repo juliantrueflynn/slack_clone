@@ -3,7 +3,7 @@ import Button from './Button';
 import StatusIcon from './StatusIcon';
 import withDrawer from './withDrawer';
 import { dateUtil } from '../util/dateUtil';
-import SettingsModal from './SettingsModal';
+import ProfileModal from './ProfileModal';
 import './UserDrawer.css';
 
 class UserDrawer extends React.Component {
@@ -39,7 +39,7 @@ class UserDrawer extends React.Component {
   }
 
   render() {
-    const { currentUser, openSettingsModal } = this.props;
+    const { currentUser, openProfileModal } = this.props;
     const user = this.user();
 
     if (!user) {
@@ -98,15 +98,17 @@ class UserDrawer extends React.Component {
             </Button>
           )}
           {isNotCurrUser || (
-            <Button buttonFor="edit-user" onClick={() => openSettingsModal()}>
+            <Button buttonFor="edit-user" onClick={() => openProfileModal()}>
               Edit Profile
             </Button>
           )}
-          <SettingsModal
-            profilePhoto={user.avatarLarge}
-            username={user.username}
-            email={user.email}
-          />
+          {isNotCurrUser || (
+            <ProfileModal
+              profilePhoto={user.avatarLarge}
+              username={user.username}
+              email={user.email}
+            />
+          )}
         </div>
       </div>
     );

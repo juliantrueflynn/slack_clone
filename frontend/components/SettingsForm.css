@@ -1,0 +1,15 @@
+.SettingsForm {
+  display: flex;
+  flex-direction: row;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+.SettingsForm__col:first-child {
+  width: 100%;
+}
+
+.SettingsForm__col {
+  padding-left: 15px;
+  padding-right: 15px;
+}

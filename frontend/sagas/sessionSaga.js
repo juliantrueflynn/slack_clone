@@ -6,8 +6,13 @@ import {
   takeLatest
 } from 'redux-saga/effects';
 import * as actions from '../actions/sessionActions';
-import { SIGN_IN, SIGN_UP, SIGN_OUT } from '../actions/actionTypes';
-import { apiCreate, apiDelete } from '../util/apiUtil';
+import {
+  SIGN_IN,
+  SIGN_UP,
+  SIGN_OUT,
+  PASSWORD,
+} from '../actions/actionTypes';
+import { apiCreate, apiDelete, apiUpdate } from '../util/apiUtil';
 
 function* fetchSignIn({ currentUser: user }) {
   try {
@@ -36,6 +41,15 @@ function* fetchSignOut() {
   }
 }
 
+function* loadPasswordChange({ password }) {
+  try {
+    const successMessage = yield call(apiUpdate, 'password', password);
+    yield put(actions.updatePassword.receive(successMessage));
+  } catch (error) {
+    yield put(actions.updatePassword.failure(error));
+  }
+}
+
 function* watchSignIn() {
   yield takeLatest(SIGN_IN.REQUEST, fetchSignIn);
 }
@@ -48,10 +62,15 @@ function* watchSignOut() {
   yield takeLatest(SIGN_OUT.REQUEST, fetchSignOut);
 }
 
+function* watchPasswordChange() {
+  yield takeLatest(PASSWORD.UPDATE.REQUEST, loadPasswordChange);
+}
+
 export default function* sessionSaga() {
   yield all([
     fork(watchSignIn),
     fork(watchSignUp),
     fork(watchSignOut),
+    fork(watchPasswordChange),
   ]);
 }

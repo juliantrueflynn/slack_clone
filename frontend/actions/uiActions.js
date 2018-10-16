@@ -4,6 +4,7 @@ import {
   MODAL_CLOSE,
   DRAWER_OPEN,
   DRAWER_CLOSE,
+  DESTROY_SUCCESS,
 } from './actionTypes';
 
 export const navigate = (path, push) => ({
@@ -29,4 +30,9 @@ export const drawerOpen = drawer => ({
 
 export const drawerClose = () => ({
   type: DRAWER_CLOSE,
+});
+
+export const destroySuccess = (entity = null) => ({
+  type: DESTROY_SUCCESS,
+  entity,
 });
