@@ -1,11 +1,24 @@
+.PageHome,
+.PageHome .PageView__body {
+  height: 100%;
+}
+
 .PageHome__hero {
   color: #FFF;
   background-color: #6C5CE7;
   text-shadow: 0px 1px 2px rgba(0,0,0,0.2);
   padding: 170px 10px;
   text-align: center;
-  margin-bottom: 30px;
   font-weight: 700;
+}
+
+
+.PublicView__home--user .PageHome__hero {
+  margin-bottom: 30px;
+}
+
+.PublicView__home--guest .PageHome__hero {
+  height: 100%;
 }
 
 .PageHome .Btn__hero {

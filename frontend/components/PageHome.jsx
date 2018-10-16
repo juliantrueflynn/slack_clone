@@ -5,7 +5,7 @@ import './PageHome.css';
 
 const PageHome = ({ workspaces, isLoggedIn, currentUser }) => (
   <div className="PageHome">
-    <div className="Page__body">
+    <div className="PageView__body">
       <div className="PageHome__hero">
         <h1 className="PageHome__hero-title">
           Slack Clone
@@ -22,7 +22,7 @@ const PageHome = ({ workspaces, isLoggedIn, currentUser }) => (
           View GitHub Repo
         </a>
       </div>
-      <div className="Page__container">
+      <div className="PublicView__container">
         <PublicWorkspacesContainer
           isLoggedIn={isLoggedIn}
           workspaces={workspaces}

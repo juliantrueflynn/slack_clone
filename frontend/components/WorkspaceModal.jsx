@@ -28,7 +28,7 @@ class WorkspaceModal extends React.Component {
     const { title, slug } = this.state;
 
     return (
-      <div className="Page__container">
+      <div className="PublicView__container">
         <form onSubmit={this.handleFormSubmit}>
           <div className="Form__group">
             <label htmlFor="title">

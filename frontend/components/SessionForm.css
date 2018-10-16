@@ -18,14 +18,14 @@
   margin: 160px auto 0;
 }
 
-.Page__public--signin,
-.Page__public--signup {
+.PublicView__signin,
+.PublicView__signup {
   background-color: #6C5CE7;
   min-height: 100vh;
 }
 
-.Page__public--signin .Page__title,
-.Page__public--signup .Page__title {
+.PublicView__signin .Page__title,
+.PublicView__signup .Page__title {
   margin-top: 0;
   color: #FFF;
 }

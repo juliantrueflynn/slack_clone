@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Link, withRouter } from 'react-router-dom';
+import classNames from 'classnames';
 import { signOut, signUp, signIn } from '../actions/sessionActions';
 import { fetchWorkspaces } from '../actions/workspaceActions';
 import { modalOpen } from '../actions/uiActions';
@@ -49,7 +50,11 @@ const withPublicView = (WrappedComponent) => {
       } = this.props;
       const { workspaces, location: { pathname } } = props;
       const pagePath = pathname.length > 1 ? pathname.slice(1) : 'home';
-      const pageClassName = pagePath ? `Page__public--${pagePath}` : '';
+      const pageClassNames = classNames('PublicView', {
+        [`PublicView__${pagePath}`]: pagePath,
+        [`PublicView__${pagePath}--member`]: pagePath && isLoggedIn,
+        [`PublicView__${pagePath}--guest`]: pagePath && !isLoggedIn,
+      });
 
       const workspaceItems = subbedWorkspaces.map(({ slug, title }) => ({
         key: slug,
@@ -74,11 +79,11 @@ const withPublicView = (WrappedComponent) => {
       }
 
       return (
-        <div className={`Page Page__public ${pageClassName}`}>
-          <header className="header Page__header">
-            <div className="Page__container">
-              <nav className="navbar Page__navbar--public">
-                <Link className="Page__logo" to="/" rel="home">
+        <div className={pageClassNames}>
+          <header className="PublicView__header">
+            <div className="PublicView__container">
+              <nav className="navbar PublicView__navbar--public">
+                <Link className="PublicView__logo" to="/" rel="home">
                   Slack Clone
                 </Link>
                 <Menu menuFor="public" isRow items={navItems} />

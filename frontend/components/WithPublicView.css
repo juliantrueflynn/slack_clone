@@ -1,14 +1,14 @@
-.Page__header {
+.PublicView__header {
   background-color: #6C5CE7;
   padding: 15px 0;
   width: 100%;
 }
 
-.Page__public--create-workspace .Page__header {
+.PublicView--create-workspace .PublicView__header {
   background-color: #FFF;
 }
 
-.Page__public {
+.PublicView {
   min-height: 100vh;
   background-color: #F7FAFC;
   display: flex;
@@ -16,7 +16,7 @@
   width: 100%;
 }
 
-.Page__header .Btn__dropdown {
+.PublicView__header .Btn__dropdown {
   text-transform: none;
   border: .5px solid;
   border-color: rgba(255,255,255,0.7);
@@ -28,12 +28,12 @@
               color ease-in-out .2s;
 }
 
-.Page__header .Btn__dropdown:hover {
+.PublicView__header .Btn__dropdown:hover {
   border-color: rgba(255,255,255,0.9);
   color: rgba(255,255,255,1);
 }
 
-.Page__navbar--public {
+.PublicView__navbar--public {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -43,11 +43,11 @@
   flex-direction: row;
 }
 
-.Page__header .Page__container {
+.PublicView__header .PublicView__container {
   padding: 0 10px;
 }
 
-.Page__container {
+.PublicView__container {
   margin: 0 auto;
   -ms-flex-preferred-size: 0;
   flex-basis: 0;
@@ -63,7 +63,7 @@
   padding-top: 8px;
 }
 
-.Page__logo {
+.PublicView__logo {
   color: #FFF;
   display: block;
   padding: 10px 0;
@@ -71,24 +71,24 @@
   font-size: 16px;
 }
 
-.Page__header .MenuItem__content {
+.PublicView__header .MenuItem__content {
   padding: 10px 5px;
   display: block;
 }
 
-.Page__public .Menu--dropdown {
+.PublicView .Menu--dropdown {
   top: 55px;
   right: -15px;
   padding: 20px 10px;
 }
 
-.Page__public .Menu--dropdown .MenuItem > .MenuItem__content {
+.PublicView .Menu--dropdown .MenuItem > .MenuItem__content {
   padding: 10px 15px;
   border-radius: 5px;
   transition: background-color ease-in-out .15s;
 }
 
-.Page__public .Menu--dropdown .MenuItem > .MenuItem__content:hover {
+.PublicView .Menu--dropdown .MenuItem > .MenuItem__content:hover {
   background-color: rgba(223,230,233,.45);
 }
 
@@ -108,6 +108,6 @@
   color: rgba(255,255,255,1);
 }
 
-.Page__public--create-workspace .Page__title {
+.PublicView--create-workspace .PublicView__title {
   margin: 0;
 }
