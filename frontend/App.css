@@ -27,28 +27,6 @@ a {
   display: flex;
 }
 
-.Form__group {
-  margin-bottom: 20px;
-}
-
-.Form__row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.Form__control {
-  cursor: auto;
-  line-height: 1.6;
-  font-size: 16px;
-  padding: 8px 10px;
-  width: 100%;
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 5px;
-  border-color: #636E72;
-}
-
 .Btn__group {
   padding-top: 10px;
   margin-left: -3px;

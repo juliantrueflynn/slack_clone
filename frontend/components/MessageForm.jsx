@@ -2,7 +2,6 @@ import React from 'react';
 import { convertForSubmit, clearEditor, createEmptyEditor } from '../util/editorUtil';
 import MessageEditor from './MessageEditor';
 import Button from './Button';
-import FormErrors from './FormErrors';
 import './MessageForm.css';
 
 class MessageForm extends React.Component {
@@ -61,7 +60,6 @@ class MessageForm extends React.Component {
           onSubmit={this.handleSubmit}
           onKeyDown={this.handleEnterSubmit}
         >
-          <FormErrors entity="message" />
           <div className="Form__body">
             <MessageEditor
               editorState={editorState}

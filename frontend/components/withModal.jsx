@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from 'react-modal';
 import Button from './Button';
-import { modalClose, destroySuccess } from '../actions/uiActions';
+import { modalClose } from '../actions/uiActions';
 import './WithModal.css';
 
 const withModal = ({ modalTitle, modalType, ...modalProps }) => (WrappedComponent) => {
@@ -14,7 +14,6 @@ const withModal = ({ modalTitle, modalType, ...modalProps }) => (WrappedComponen
 
   const mapDispatchToProps = dispatch => ({
     modalClose: () => dispatch(modalClose()),
-    destroySuccess: entity => dispatch(destroySuccess(entity)),
   });
 
   class WithModal extends React.Component {

@@ -1,15 +1,5 @@
-.Modal__chats .Modal__body {
-  position: relative;
-}
-
-.Modal__chats .Modal__header {
-  margin-bottom: 30px;
-}
-
 .Modal__chats .Modal__inner-body {
-  width: 600px;
-  margin: 0 auto;
-  padding-top: 70px;
+  max-width: 600px;
 }
 
 .ChatsModal__subhead {

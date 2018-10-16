@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from './Button';
-import FormErrors from './FormErrors';
 import withPublicView from './withPublicView';
+import withForm from './withForm';
 import './SessionForm.css';
 
 class SessionForm extends React.Component {
@@ -42,8 +42,7 @@ class SessionForm extends React.Component {
             {isSignInPage ? 'Sign in' : 'Sign up'}
           </h1>
 
-          <form className="Form__session" onSubmit={this.handleFormSubmit}>
-            <FormErrors entity="session" />
+          <form onSubmit={this.handleFormSubmit}>
             <div className="Form__group">
               <input
                 type="text"
@@ -81,4 +80,6 @@ class SessionForm extends React.Component {
   }
 }
 
-export default withPublicView(SessionForm);
+const formProps = { payloadName: 'session' };
+
+export default withPublicView(withForm(formProps)(SessionForm));

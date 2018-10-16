@@ -31,8 +31,12 @@ function* redirectToChannel(chat) {
 }
 
 function* fetchCreate(channel) {
-  yield put(modalClose('CHAT_MODAL'));
   const chat = yield call(api.apiCreate, 'channels', channel);
+
+  if (chat) {
+    yield put(modalClose('CHAT_MODAL'));
+  }
+
   return chat;
 }
 

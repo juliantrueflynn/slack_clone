@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from './Button';
 import withModal from './withModal';
-import FormErrors from './FormErrors';
+import withForm from './withForm';
 import './ChatModal.css';
 
 class ChatModal extends React.Component {
@@ -19,17 +19,16 @@ class ChatModal extends React.Component {
     e.preventDefault();
 
     const { title } = this.state;
-    const { workspaceId, createChannelRequest } = this.props;
-    createChannelRequest({ title, workspaceId });
+    const { workspaceId, formDispatchRequest } = this.props;
+    formDispatchRequest({ title, workspaceId });
   }
 
   render() {
+    const { modalClose } = this.props;
     const { title } = this.state;
-    const { onRequestClose } = this.props;
 
     return (
       <form className="ChatModal" onSubmit={this.handleSubmit}>
-        <FormErrors entity="channel" />
         <p className="Form__text">
           Channels are where your members communicate.
           They&#39;re best when organized around a topic — #leads, for example.
@@ -41,13 +40,14 @@ class ChatModal extends React.Component {
           <input
             id="name"
             type="text"
+            className="Form__control"
             placeholder="e.g. leads"
             value={title}
             onChange={this.handleInputValue('title')}
           />
         </div>
         <div className="Btn__group">
-          <Button buttonFor="modal" size="lg" onClick={() => onRequestClose()}>
+          <Button buttonFor="modal" size="lg" onClick={() => modalClose()}>
             Close
           </Button>
           <Button type="submit" buttonFor="modal" modifier="submit" size="lg" color="green">
@@ -59,9 +59,7 @@ class ChatModal extends React.Component {
   }
 }
 
-const modalProps = {
-  modalType: 'MODAL_CHAT',
-  modalTitle: 'Create a Channel'
-};
+const modalProps = { modalType: 'MODAL_CHAT', modalTitle: 'Create a Channel' };
+const formProps = { type: 'CHANNEL_CREATE_REQUEST', payloadName: 'channel' };
 
-export default withModal(modalProps)(ChatModal);
+export default withModal(modalProps)(withForm(formProps)(ChatModal));

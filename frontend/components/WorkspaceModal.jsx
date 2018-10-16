@@ -1,10 +1,9 @@
 import React from 'react';
 import Button from './Button';
-import withForm from './withForm';
 import withModal from './withModal';
-import FormErrors from './FormErrors';
+import withForm from './withForm';
 
-class CreateWorkspaceModal extends React.Component {
+class WorkspaceModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = { title: '', slug: '' };
@@ -25,12 +24,12 @@ class CreateWorkspaceModal extends React.Component {
   }
 
   render() {
+    const { modalClose } = this.props;
     const { title, slug } = this.state;
 
     return (
       <div className="Page__container">
-        <form className="Form__workspace" onSubmit={this.handleFormSubmit}>
-          <FormErrors entity="workspace" />
+        <form onSubmit={this.handleFormSubmit}>
           <div className="Form__group">
             <label htmlFor="title">
               Title
@@ -38,8 +37,9 @@ class CreateWorkspaceModal extends React.Component {
             <input
               type="text"
               name="title"
-              value={title}
+              className="Form__control"
               placeholder="Title"
+              value={title}
               onChange={this.handleInputValueUpdate('title')}
             />
           </div>
@@ -50,25 +50,27 @@ class CreateWorkspaceModal extends React.Component {
             <input
               type="text"
               name="slug"
-              value={slug}
+              className="Form__control"
               placeholder="Workspace URL"
+              value={slug}
               onChange={this.handleInputValueUpdate('slug')}
             />
           </div>
-          <Button type="submit" buttonFor="submit">
-            Create Workspace
-          </Button>
+          <div className="Btn__group">
+            <Button type="submit" color="green" buttonFor="save-profile" size="lg">
+              Create workspace
+            </Button>
+            <Button onClick={() => modalClose()} size="lg">
+              Cancel
+            </Button>
+          </div>
         </form>
       </div>
     );
   }
 }
 
-const modalProps = {
-  modalType: 'MODAL_WORKSPACE',
-  modalTitle: 'Create a Workspace'
-};
+const modalProps = { modalType: 'MODAL_WORKSPACE', modalTitle: 'Create a Workspace' };
+const formProps = { type: 'WORKSPACE_CREATE_REQUEST', payloadName: 'workspace' };
 
-const formProps = { type: 'WORKSPACE_CREATE_REQUEST' };
-
-export default withModal(modalProps)(withForm(formProps)(CreateWorkspaceModal));
+export default withModal(modalProps)(withForm(formProps)(WorkspaceModal));

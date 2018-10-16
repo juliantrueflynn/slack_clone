@@ -5,7 +5,7 @@ import { signOut, signUp, signIn } from '../actions/sessionActions';
 import { fetchWorkspaces } from '../actions/workspaceActions';
 import { modalOpen } from '../actions/uiActions';
 import { selectSubbedWorkspaces } from '../reducers/selectors';
-import CreateWorkspaceModal from './CreateWorkspaceModal';
+import WorkspaceModal from './WorkspaceModal';
 import Dropdown from './Dropdown';
 import Menu from './Menu';
 import './WithPublicView.css';
@@ -96,7 +96,7 @@ const withPublicView = (WrappedComponent) => {
             </div>
           </header>
           <WrappedComponent {...this.props} />
-          <CreateWorkspaceModal />
+          <WorkspaceModal />
         </div>
       );
     }

@@ -24,6 +24,28 @@
   background-color: #E8E8E8;
 }
 
-.Modal__title {
+.Modal .Modal__header {
+  margin-bottom: 15px;
+}
+
+.Modal .Modal__title {
+  text-align: center;
+  padding: 15px 0;
   margin: 0;
+}
+
+.Modal .Modal__inner-body {
+  margin: 0 auto;
+  padding-top: 70px;
+  max-width: 800px;
+}
+
+.Modal form label {
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: block;  
+}
+
+.Modal form .Btn__group:last-child {
+  margin-top: 30px;
 }
