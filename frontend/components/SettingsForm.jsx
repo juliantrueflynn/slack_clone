@@ -114,7 +114,7 @@ class SettingsForm extends React.Component {
           </div>
         </div>
         <div className="SettingsForm__col">
-          <img src={user.profilePhoto} alt={`${user.username} banner`} />
+          <img src={user.avatarLarge} alt={`${user.username} banner`} />
         </div>
       </form>
     );

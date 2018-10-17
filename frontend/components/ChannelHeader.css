@@ -25,6 +25,6 @@
   margin-left: auto;
 }
 
-.ChannelHeader .Btn__favs {
-  padding: .25em .5em;
+.ChannelHeader .Menu--row > .MenuItem {
+  margin-right: 0;
 }

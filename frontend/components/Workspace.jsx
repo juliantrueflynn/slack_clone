@@ -6,6 +6,7 @@ import { RouteWithSubRoutes } from '../util/routeUtil';
 import LeftSidebarContainer from './LeftSidebarContainer';
 import EmojiModal from './EmojiModal';
 import ChannelHeader from './ChannelHeader';
+import ProfileModal from './ProfileModal';
 import './Workspace.css';
 
 class Workspace extends React.Component {
@@ -68,11 +69,13 @@ class Workspace extends React.Component {
       isLoading,
       routes,
       modal,
+      modalOpen,
       modalClose,
       createReactionRequest,
       channels,
       drawerType,
       drawerClose,
+      currentUser,
       onReceived,
     } = this.props;
 
@@ -109,6 +112,7 @@ class Workspace extends React.Component {
         <div className="Workspace__col">
           <ChannelHeader
             channels={channels}
+            modalOpen={modalOpen}
             drawerClose={drawerClose}
             drawerType={drawerType}
           />
@@ -126,6 +130,7 @@ class Workspace extends React.Component {
               </Switch>
             )}
           </div>
+          {currentUser && (<ProfileModal {...currentUser} />)}
         </div>
       </div>
     );

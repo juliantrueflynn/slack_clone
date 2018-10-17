@@ -22,7 +22,6 @@ class ChatsWidget extends React.Component {
       channels,
       workspaceSlug,
       workspaceId,
-      createChannelRequest,
       fetchChannelsRequest,
     } = this.props;
     const chats = channels.sort((a, b) => a.title && b.title && a.title.localeCompare(b.title));
@@ -49,15 +48,11 @@ class ChatsWidget extends React.Component {
           </Button>
         </header>
         {subbedChannels && <Menu menuFor="chats" items={chatList} />}
-        <ChatModal
-          workspaceId={workspaceId}
-          createChannelRequest={createChannelRequest}
-        />
+        <ChatModal workspaceId={workspaceId} />
         <ChatsModal
           workspaceId={workspaceSlug}
           workspaceSlug={workspaceSlug}
           unsubbedChannels={unsubbedChannels}
-          createChannelRequest={createChannelRequest}
           fetchChannelsRequest={fetchChannelsRequest}
         />
       </div>

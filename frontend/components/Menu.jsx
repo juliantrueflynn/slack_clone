@@ -18,13 +18,13 @@ const Menu = ({
   if (menuFor) classNames += ` Menu--${menuFor}`;
   if (isRow) classNames += ' Menu--row';
 
-  const itemKey = (label, link) => label + (link || '');
+  const itemKey = (item, link) => item.key || item.label + (link || '');
 
   return (
     <ul role="menu" className={classNames} {...props}>
       {items.map(({ link, className, ...item }) => (
         <MenuItem
-          key={itemKey(item.label, link)}
+          key={itemKey(item, link)}
           role="menuitem"
           to={link}
           className="MenuItem"

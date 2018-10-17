@@ -102,13 +102,6 @@ class UserDrawer extends React.Component {
               Edit Profile
             </Button>
           )}
-          {isNotCurrUser || (
-            <ProfileModal
-              profilePhoto={user.avatarLarge}
-              username={user.username}
-              email={user.email}
-            />
-          )}
         </div>
       </div>
     );

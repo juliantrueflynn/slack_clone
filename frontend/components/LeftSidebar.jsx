@@ -17,7 +17,6 @@ const LeftSidebar = ({
   modalOpen,
   dmChats,
   updateChannelSubRequest,
-  createChannelRequest,
   fetchChannelsRequest,
   currChatSlug,
   match: { url, params: { workspaceSlug } },
@@ -82,7 +81,6 @@ const LeftSidebar = ({
         channels={channels}
         workspaceSlug={workspaceSlug}
         workspaceId={currWorkspace.id}
-        createChannelRequest={createChannelRequest}
         fetchChannelsRequest={fetchChannelsRequest}
       />
 

@@ -18,6 +18,7 @@ json.members do
     json.(member, :id, :username, :email, :slug)
     json.avatar_banner member.avatar.banner.url
     json.avatar_thumb member.avatar.thumb.url
+    json.avatar_large member.avatar.large.url
   end
 end
 

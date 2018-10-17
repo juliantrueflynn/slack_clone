@@ -59,7 +59,7 @@ const selectMessagesFavorites = ({ favorites, messages, members }) => {
 
   return values(favorites)
     .map(({ messageSlug }) => entries[messageSlug])
-    .filter(message => message.isInDrawer);
+    .filter(message => message.isInDrawer && message.entityType === 'entry');
 };
 
 const selectMessageThreadBySlug = ({ messages, members }, slug) => {

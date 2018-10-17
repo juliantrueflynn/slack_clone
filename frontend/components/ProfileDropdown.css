@@ -1,3 +1,8 @@
+.Dropdown__profile,
+.Dropdown__profile > .Btn {
+  height: 46px;
+}
+
 .Dropdown__profile .Dropdown__subtitle {
   display: flex;
   flex-direction: row;

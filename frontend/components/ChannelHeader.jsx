@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter, matchPath } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from './Menu';
 import './ChannelHeader.css';
 
@@ -7,6 +8,7 @@ class ChannelHeader extends React.Component {
   constructor(props) {
     super(props);
     this.handleFavoritesClick = this.handleFavoritesClick.bind(this);
+    this.handleProfileClick = this.handleProfileClick.bind(this);
   }
 
   getMatch() {
@@ -54,8 +56,24 @@ class ChannelHeader extends React.Component {
     }
   }
 
+  handleProfileClick() {
+    const { modalOpen } = this.props;
+    modalOpen('MODAL_PROFILE');
+  }
+
   render() {
-    const menuItems = [{ label: 'Favorites', onClick: this.handleFavoritesClick }];
+    const menuItems = [
+      {
+        key: 'favorites',
+        icon: <FontAwesomeIcon icon={['fas', 'star']} fixedWidth />,
+        onClick: this.handleFavoritesClick,
+      },
+      {
+        key: 'profile',
+        icon: <FontAwesomeIcon icon={['fas', 'cog']} fixedWidth />,
+        onClick: this.handleProfileClick,
+      },
+    ];
 
     return (
       <header className="ChannelHeader">

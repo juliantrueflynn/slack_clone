@@ -19,8 +19,8 @@ class ProfileModal extends React.Component {
   render() {
     const { modalClose, ...props } = this.props;
     const { tabOpen } = this.state;
-    const { profilePhoto, username, email } = props;
-    const user = { profilePhoto, username, email };
+    const { avatarLarge, username, email } = props;
+    const user = { avatarLarge, username, email };
     const classNames = `ProfileModal ProfileModal__${tabOpen}`;
     const tabTitle = tabOpen === 'user' ? 'Edit Settings' : 'Change Password';
 

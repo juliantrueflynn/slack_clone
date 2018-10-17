@@ -17,6 +17,7 @@ import {
   faPlusCircle,
   faHashtag,
   faSquare,
+  faCog,
   faStar as fasStar
 } from '@fortawesome/free-solid-svg-icons';
 import { ActionCable } from 'react-actioncable-provider';
@@ -39,7 +40,8 @@ library.add(
   fasStar,
   faSmile,
   faComment,
-  faCircle
+  faCircle,
+  faCog,
 );
 
 const App = ({ isLoggedIn, onReceived }) => (
