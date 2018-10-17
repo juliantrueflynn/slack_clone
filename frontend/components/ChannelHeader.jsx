@@ -1,8 +1,8 @@
 import React from 'react';
-import { withRouter, matchPath } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from './Menu';
 import './ChannelHeader.css';
+import ProfileModal from './ProfileModal';
 
 class ChannelHeader extends React.Component {
   constructor(props) {
@@ -11,19 +11,8 @@ class ChannelHeader extends React.Component {
     this.handleProfileClick = this.handleProfileClick.bind(this);
   }
 
-  getMatch() {
-    const { location: { pathname } } = this.props;
-    const _defaultMatch = { params: {} };
-    const matchChat = matchPath(pathname, {
-      path: '/:workspaceSlug/(messages)?/:chatPath',
-    });
-
-    return matchChat || _defaultMatch;
-  }
-
   getTitle() {
-    const { channels } = this.props;
-    const { params: { chatPath } } = this.getMatch();
+    const { channels, chatPath } = this.props;
 
     if (chatPath === 'unreads') {
       return 'All Unreads';
@@ -42,8 +31,12 @@ class ChannelHeader extends React.Component {
   }
 
   handleFavoritesClick() {
-    const { history, drawerClose, drawerType } = this.props;
-    const { url, isExact } = this.getMatch();
+    const {
+      match: { url, isExact },
+      history,
+      drawerClose,
+      drawerType,
+    } = this.props;
 
     if (drawerType !== 'favorites') {
       history.push(`${url}/favorites`);
@@ -62,6 +55,8 @@ class ChannelHeader extends React.Component {
   }
 
   render() {
+    const { currentUser } = this.props;
+
     const menuItems = [
       {
         key: 'favorites',
@@ -83,9 +78,10 @@ class ChannelHeader extends React.Component {
           </h1>
           <Menu menuFor="channel-header" isRow items={menuItems} />
         </div>
+        {currentUser && (<ProfileModal {...currentUser} />)}
       </header>
     );
   }
 }
 
-export default withRouter(ChannelHeader);
+export default ChannelHeader;

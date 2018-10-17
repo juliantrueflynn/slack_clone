@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 import { RouteWithSubRoutes } from '../util/routeUtil';
+import ChannelHeaderContainer from './ChannelHeaderContainer';
 import AllUnreads from './AllUnreads';
 import AllThreads from './AllThreads';
 import Channel from './Channel';
@@ -93,6 +94,7 @@ class ChatPage extends React.Component {
 
     return (
       <div className={chatClassNames}>
+        <ChannelHeaderContainer />
         <div className="ChatPage__row">
           <div className="ChatPage__container">
             {chatPath === 'unreads' && (
