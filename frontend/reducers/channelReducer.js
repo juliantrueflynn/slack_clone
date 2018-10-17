@@ -185,10 +185,12 @@ const channelReducer = (state = {}, action) => {
 
       return nextState;
     }
-    case CHANNEL.UPDATE.RECEIVE:
+    case CHANNEL.UPDATE.RECEIVE: {
+      const { channel } = action;
       nextState = {};
-      nextState[action.channel.slug] = action.channel;
-      return Object.assign({}, state, nextState);
+      nextState[channel.slug] = channel;
+      return merge({}, state, nextState);
+    }
     case CHANNEL.DESTROY.RECEIVE:
       nextState = Object.assign({}, state);
       delete nextState[action.channelSlug];

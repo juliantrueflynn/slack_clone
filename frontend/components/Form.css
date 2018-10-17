@@ -35,3 +35,19 @@
   border-radius: 5px;
   border-color: #636E72;
 }
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #B2BEC3;
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+  color: #B2BEC3;
+}
+
+:-ms-input-placeholder { /* IE 10+ */
+  color: #B2BEC3;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+  color: #B2BEC3;
+}

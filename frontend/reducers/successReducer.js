@@ -7,10 +7,12 @@ import {
   MODAL_CLOSE,
   MODAL_OPEN,
   DESTROY_SUCCESS,
+  CHANNEL,
 } from '../actions/actionTypes';
 
 const _defaultState = {
   password: null,
+  channel: null,
   user: null,
 };
 
@@ -19,6 +21,11 @@ const successReducer = (state = _defaultState, action) => {
 
   let nextState;
   switch (action.type) {
+    case CHANNEL.UPDATE.RECEIVE: {
+      nextState = Object.assign({}, state);
+      nextState.channel = 'Channel successfully updated.';
+      return nextState;
+    }
     case PASSWORD.UPDATE.RECEIVE: {
       const { success } = action;
       nextState = Object.assign({}, state);

@@ -8,7 +8,7 @@ import {
   faComment,
   faUser,
   faCircle as farCircle,
-  faStar as farStar
+  faStar as farStar,
 } from '@fortawesome/free-regular-svg-icons';
 import {
   faTimes,
@@ -19,7 +19,8 @@ import {
   faHashtag,
   faSquare,
   faCog,
-  faStar as fasStar
+  faUserCog,
+  faStar as fasStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { ActionCable } from 'react-actioncable-provider';
 import { Switch } from 'react-router-dom';
@@ -44,6 +45,7 @@ library.add(
   faCircle,
   faCog,
   faUser,
+  faUserCog,
 );
 
 const App = ({ isLoggedIn, onReceived }) => (

@@ -102,7 +102,7 @@ class Channel < ApplicationRecord
 
   after_create :generate_chat_subs
   after_create_commit :generate_unread, :broadcast_create
-  after_update_commit :broadcast_update
+  after_update_commit :broadcast_update_channel
   after_destroy :broadcast_destroy
 
   private
@@ -132,5 +132,9 @@ class Channel < ApplicationRecord
 
   def generate_unread
     Unread.create(active_at: created_at, unreadable_id: id, unreadable_type: 'Channel')
+  end
+
+  def broadcast_update_channel 
+    broadcast_update partial: 'api/channels/update'
   end
 end

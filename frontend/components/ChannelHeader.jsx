@@ -4,12 +4,12 @@ import Menu from './Menu';
 import Button from './Button';
 import ProfileModal from './ProfileModal';
 import './ChannelHeader.css';
+import ChannelEditorModal from './ChannelEditorModal';
 
 class ChannelHeader extends React.Component {
   constructor(props) {
     super(props);
     this.handleFavoritesClick = this.handleFavoritesClick.bind(this);
-    this.handleProfileClick = this.handleProfileClick.bind(this);
   }
 
   getTitle() {
@@ -59,12 +59,20 @@ class ChannelHeader extends React.Component {
       currentUser,
       channel,
       drawerType,
+      modalOpen,
     } = this.props;
     const subsLen = channel.subs.length;
     const hasTopic = !!channel.topic;
     const isItemActive = drawerType === 'favorites';
+    const modalOpenProfile = () => modalOpen('MODAL_PROFILE');
+    const modalOpenEditChannel = () => modalOpen('MODAL_EDIT_CHANNEL');
 
     const menuItems = [
+      {
+        key: 'edit-channel',
+        icon: <FontAwesomeIcon icon={['fas', 'cog']} size="lg" />,
+        onClick: modalOpenEditChannel,
+      },
       {
         key: 'favorites',
         icon: <FontAwesomeIcon icon={['fas', 'star']} size="lg" />,
@@ -73,8 +81,8 @@ class ChannelHeader extends React.Component {
       },
       {
         key: 'profile',
-        icon: <FontAwesomeIcon icon={['fas', 'cog']} size="lg" />,
-        onClick: this.handleProfileClick,
+        icon: <FontAwesomeIcon icon={['fas', 'user-cog']} size="lg" />,
+        onClick: modalOpenProfile,
       },
     ];
 
@@ -91,7 +99,7 @@ class ChannelHeader extends React.Component {
                 {subsLen}
               </div>
               <div className="ChannelHeader__meta-item ChannelHeader__meta-item-topic">
-                <Button buttonFor="edit-topic" unStyled>
+                <Button onClick={modalOpenEditChannel} buttonFor="edit-topic" unStyled>
                   {channel.topic}
                   {hasTopic || <FontAwesomeIcon icon={['far', 'edit']} size="sm" />}
                   {hasTopic || 'Add topic'}
@@ -101,7 +109,8 @@ class ChannelHeader extends React.Component {
           </div>
           <Menu menuFor="channel-header" isRow items={menuItems} />
         </div>
-        {currentUser && (<ProfileModal {...currentUser} />)}
+        <ProfileModal {...currentUser} />
+        {channel && <ChannelEditorModal channel={channel} />}
       </header>
     );
   }
