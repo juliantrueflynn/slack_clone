@@ -6,6 +6,7 @@ import {
   faTrashAlt,
   faSmile,
   faComment,
+  faUser,
   faCircle as farCircle,
   faStar as farStar
 } from '@fortawesome/free-regular-svg-icons';
@@ -42,6 +43,7 @@ library.add(
   faComment,
   faCircle,
   faCog,
+  faUser,
 );
 
 const App = ({ isLoggedIn, onReceived }) => (

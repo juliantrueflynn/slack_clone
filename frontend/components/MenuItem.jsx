@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import Button from './Button';
 import LinkWithDrawer from '../util/linkUtil';
 import './MenuItem.css';
@@ -30,6 +31,7 @@ class MenuItem extends React.Component {
       modifierClassName,
       onClick,
       toggleDdMenu,
+      isItemActive,
       match,
       history,
       ...props
@@ -41,18 +43,27 @@ class MenuItem extends React.Component {
     itemProps.onClick = this.handleOnClick;
 
     let itemType = 'link';
-    if (!link) itemType = onClick ? 'btn' : 'text';
-    let itemClassName = `${className} MenuItem--${itemType}`;
-    if (altClassName) itemClassName += ` MenuItem__${altClassName}`;
-    if (modifierClassName) itemClassName += ` MenuItem--${modifierClassName}`;
-    const contentClassName = `MenuItem__content MenuItem__content--${itemType}`;
+    if (!link) {
+      itemType = onClick ? 'btn' : 'text';
+    }
+
+    const itemClassNames = classNames(className, {
+      [`MenuItem--${itemType}`]: itemType,
+      [`MenuItem__${altClassName}`]: altClassName,
+      [`MenuItem--${modifierClassName}`]: modifierClassName,
+    });
+
+    const contentClassNames = classNames('MenuItem__content', {
+      [`MenuItem__content--${itemType}`]: itemType,
+      'MenuItem__content--active': isItemActive,
+    });
 
     return (
-      <li className={itemClassName}>
+      <li className={itemClassNames}>
         {itemType === 'link' && (
           <LinkWithDrawer
             isNavLink
-            className={contentClassName}
+            className={contentClassNames}
             onClick={this.handleOnClick}
             activeClassName="MenuItem__content--active"
             {...itemProps}
@@ -63,14 +74,14 @@ class MenuItem extends React.Component {
         )}
 
         {itemType === 'btn' && (
-          <Button className={contentClassName} {...itemProps}>
+          <Button className={contentClassNames} {...itemProps}>
             {icon}
             {label}
           </Button>
         )}
 
         {itemType === 'text' && (
-          <span className={contentClassName} {...itemProps}>
+          <span className={contentClassNames} {...itemProps}>
             {icon}
             {label}
           </span>

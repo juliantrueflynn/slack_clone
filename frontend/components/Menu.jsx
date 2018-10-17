@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import MenuItem from './MenuItem';
 import './Menu.css';
 
@@ -14,14 +15,15 @@ const Menu = ({
     return null;
   }
 
-  let classNames = 'Menu';
-  if (menuFor) classNames += ` Menu--${menuFor}`;
-  if (isRow) classNames += ' Menu--row';
+  const menuClassNames = classNames('Menu', {
+    [`Menu--${menuFor}`]: menuFor,
+    'Menu--row': isRow,
+  });
 
   const itemKey = (item, link) => item.key || item.label + (link || '');
 
   return (
-    <ul role="menu" className={classNames} {...props}>
+    <ul role="menu" className={menuClassNames} {...props}>
       {items.map(({ link, className, ...item }) => (
         <MenuItem
           key={itemKey(item, link)}

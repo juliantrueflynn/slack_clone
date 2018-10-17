@@ -1,8 +1,9 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from './Menu';
-import './ChannelHeader.css';
+import Button from './Button';
 import ProfileModal from './ProfileModal';
+import './ChannelHeader.css';
 
 class ChannelHeader extends React.Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class ChannelHeader extends React.Component {
   }
 
   getTitle() {
-    const { channels, chatPath } = this.props;
+    const { chatPath, channel } = this.props;
 
     if (chatPath === 'unreads') {
       return 'All Unreads';
@@ -22,7 +23,6 @@ class ChannelHeader extends React.Component {
       return 'All Threads';
     }
 
-    const channel = channels[chatPath];
     if (channel) {
       return channel.hasDm ? channel.title : `#${channel.title}`;
     }
@@ -55,17 +55,25 @@ class ChannelHeader extends React.Component {
   }
 
   render() {
-    const { currentUser } = this.props;
+    const {
+      currentUser,
+      channel,
+      drawerType,
+    } = this.props;
+    const subsLen = channel.subs.length;
+    const hasTopic = !!channel.topic;
+    const isItemActive = drawerType === 'favorites';
 
     const menuItems = [
       {
         key: 'favorites',
-        icon: <FontAwesomeIcon icon={['fas', 'star']} fixedWidth />,
+        icon: <FontAwesomeIcon icon={['fas', 'star']} size="lg" />,
         onClick: this.handleFavoritesClick,
+        isItemActive,
       },
       {
         key: 'profile',
-        icon: <FontAwesomeIcon icon={['fas', 'cog']} fixedWidth />,
+        icon: <FontAwesomeIcon icon={['fas', 'cog']} size="lg" />,
         onClick: this.handleProfileClick,
       },
     ];
@@ -73,9 +81,24 @@ class ChannelHeader extends React.Component {
     return (
       <header className="ChannelHeader">
         <div className="ChannelHeader__content">
-          <h1 className="ChannelHeader__title">
-            {this.getTitle()}
-          </h1>
+          <div className="ChannelHeader__info">
+            <h1 className="ChannelHeader__title">
+              {this.getTitle()}
+            </h1>
+            <div className="ChannelHeader__meta">
+              <div className="ChannelHeader__meta-item">
+                <FontAwesomeIcon icon={['far', 'user']} size="sm" />
+                {subsLen}
+              </div>
+              <div className="ChannelHeader__meta-item ChannelHeader__meta-item-topic">
+                <Button buttonFor="edit-topic" unStyled>
+                  {channel.topic}
+                  {hasTopic || <FontAwesomeIcon icon={['far', 'edit']} size="sm" />}
+                  {hasTopic || 'Add topic'}
+                </Button>
+              </div>
+            </div>
+          </div>
           <Menu menuFor="channel-header" isRow items={menuItems} />
         </div>
         {currentUser && (<ProfileModal {...currentUser} />)}
