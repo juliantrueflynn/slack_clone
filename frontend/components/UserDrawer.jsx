@@ -10,18 +10,15 @@ class UserDrawer extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  user() {
-    const { match: { params: { userSlug } }, members } = this.props;
-    return members[userSlug];
-  }
-
   handleClick() {
     const {
+      match: { params: { workspaceSlug } },
       history,
       createChannelRequest,
-      match: { params: { workspaceSlug } },
+      members,
+      userSlug,
     } = this.props;
-    const user = this.user();
+    const user = members[userSlug];
 
     if (!user) {
       return;
@@ -37,8 +34,13 @@ class UserDrawer extends React.Component {
   }
 
   render() {
-    const { currentUser, openProfileModal } = this.props;
-    const user = this.user();
+    const {
+      currentUser,
+      openProfileModal,
+      members,
+      userSlug,
+    } = this.props;
+    const user = members[userSlug];
 
     if (!user) {
       return null;

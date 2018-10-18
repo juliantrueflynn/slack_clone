@@ -79,6 +79,7 @@ class DrawerSwitch extends React.Component {
   render() {
     const {
       drawerType,
+      drawerSlug,
       messages,
       members,
       isLoading,
@@ -104,6 +105,7 @@ class DrawerSwitch extends React.Component {
         <div className="Drawer__body">
           {drawerType === 'team' && (
             <UserDrawer
+              userSlug={drawerSlug}
               createChannelRequest={createChannelRequest}
               currentUser={currentUser}
               members={members}

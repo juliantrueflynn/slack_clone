@@ -25,19 +25,24 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
   closeDrawer: () => dispatch(drawerClose()),
   openProfileModal: () => dispatch(modalOpen('MODAL_PROFILE', null)),
   fetchEntitiesRequest: () => {
-    if (params.messageSlug) {
-      dispatch(fetchMessage.request(params.messageSlug));
+    let entitySlug = params.drawerSlug;
+    let fetchEntity;
+    switch (params.drawerType) {
+      case 'convo':
+        fetchEntity = fetchMessage.request;
+        break;
+      case 'team':
+        fetchEntity = fetchUser.request;
+        break;
+      case 'favorites':
+        entitySlug = params.workspaceSlug;
+        fetchEntity = fetchFavorites.request;
+        break;
+      default:
+        return null;
     }
 
-    if (params.userSlug) {
-      dispatch(fetchUser.request(params.userSlug));
-    }
-
-    if (!params.messageSlug && !params.userSlug) {
-      dispatch(fetchFavorites.request(params.workspaceSlug));
-    }
-
-    return null;
+    return dispatch(fetchEntity(entitySlug));
   },
   createChannelRequest: dmChat => dispatch(createChannel.request(dmChat)),
 });
