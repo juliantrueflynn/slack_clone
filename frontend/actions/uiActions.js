@@ -4,6 +4,8 @@ import {
   MODAL_CLOSE,
   DRAWER_OPEN,
   DRAWER_CLOSE,
+  ACCORDION_OPEN,
+  ACCORDION_CLOSE,
   DESTROY_SUCCESS,
 } from './actionTypes';
 
@@ -30,6 +32,18 @@ export const drawerOpen = drawer => ({
 
 export const drawerClose = () => ({
   type: DRAWER_CLOSE,
+});
+
+export const accordionOpen = (accordionType, accordionItem) => ({
+  type: ACCORDION_OPEN,
+  accordionType,
+  accordionItem,
+});
+
+export const accordionClose = (accordionType, accordionItem) => ({
+  type: ACCORDION_CLOSE,
+  accordionType,
+  accordionItem,
 });
 
 export const destroySuccess = (entity = null) => ({

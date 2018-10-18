@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { drawerClose, drawerOpen, modalOpen } from '../actions/uiActions';
+import { drawerClose, drawerOpen, modalOpen, accordionOpen } from '../actions/uiActions';
 import { fetchMessage } from '../actions/messageActions';
 import { fetchFavorites } from '../actions/favoriteActions';
 import { fetchUser } from '../actions/userActions';
@@ -18,6 +18,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
   drawer: state.ui.drawer,
   drawerType: params.drawerType,
   drawerSlug: params.drawerSlug,
+  accordion: state.ui.accordion.details,
   isLoading: state.ui.isDrawerLoading,
 });
 
@@ -49,6 +50,12 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
 
     return dispatch(fetchEntity(entitySlug));
   },
+  accordionOpen: (accordionType, accordionItem) => (
+    dispatch(accordionOpen(accordionType, accordionItem))
+  ),
+  accordionClose: (accordionType, accordionItem) => (
+    dispatch(accordionOpen(accordionType, accordionItem))
+  ),
   createChannelRequest: dmChat => dispatch(createChannel.request(dmChat)),
 });
 

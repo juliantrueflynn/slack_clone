@@ -9,19 +9,39 @@ class ChannelDetailsDrawer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      detailsActive: true,
-      membersActive: false,
+      details: true,
+      members: false,
     };
   }
 
-  handleAccordionClick(name) {
+  componentDidMount() {
+    const { accordion } = this.props;
+
+    if (!accordion) {
+      return;
+    }
+
+    Object.keys(accordion).forEach((key) => {
+      this.setState({ [key]: accordion[key] });
+    });
+  }
+
+  handleItemToggle(name) {
+    const { accordionOpen, accordionClose } = this.props;
     const { ...state } = this.state;
+
+    if (state[name]) {
+      accordionClose('details', name);
+    } else {
+      accordionOpen('details', name);
+    }
+
     this.setState({ [name]: !state[name] });
   }
 
   render() {
-    const { channel, members } = this.props;
-    const { detailsActive, membersActive } = this.state;
+    const { channel, users } = this.props;
+    const { details, members } = this.state;
 
     if (!channel) {
       return null;
@@ -34,12 +54,12 @@ class ChannelDetailsDrawer extends React.Component {
       <div className="ChannelDetailsDrawer">
         <div className="ChannelDetailsDrawer__section">
           <h3 className="ChannelDetailsDrawer__section-title">
-            <Button buttonFor="accordion" unStyled onClick={() => this.handleAccordionClick('detailsActive')}>
+            <Button buttonFor="accordion" unStyled onClick={() => this.handleItemToggle('details')}>
               <FontAwesomeIcon icon="info-circle" />
               Channel Details
             </Button>
           </h3>
-          {detailsActive && (
+          {details && (
             <div className="ChannelDetailsDrawer__section-body">
               <h4>Purpose</h4>
               {channel.topic || 'Set a channel topic'}
@@ -50,18 +70,18 @@ class ChannelDetailsDrawer extends React.Component {
         </div>
         <div className="ChannelDetailsDrawer__section">
           <h3 className="ChannelDetailsDrawer__section-title">
-            <Button buttonFor="accordion" unStyled onClick={() => this.handleAccordionClick('membersActive')}>
+            <Button buttonFor="accordion" unStyled onClick={() => this.handleItemToggle('members')}>
               <FontAwesomeIcon icon="users" />
               {`${usersLen} Members`}
             </Button>
           </h3>
-          {membersActive && (
+          {members && (
             <div className="ChannelDetailsDrawer__section-body">
               {channel.members.map(userSlug => (
                 <div key={userSlug} className="ChannelDetailsDrawer__member">
-                  <StatusIcon member={members[userSlug]} />
-                  <Avatar author={members[userSlug]} size="22" />
-                  {members[userSlug].username}
+                  <StatusIcon member={users[userSlug]} />
+                  <Avatar author={users[userSlug]} size="22" />
+                  {users[userSlug].username}
                 </div>
               ))}
             </div>
