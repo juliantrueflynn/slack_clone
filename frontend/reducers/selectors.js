@@ -158,7 +158,7 @@ export const selectDrawerMessagesByType = ({ entities, ui: { drawer } }) => {
     return selectMessagesFavorites(entities);
   }
 
-  if (drawerType === 'thread') {
+  if (drawerType === 'convo') {
     return selectMessageThreadBySlug(entities, drawerSlug);
   }
 
@@ -254,6 +254,6 @@ export const selectChatPageChannelsBySlug = ({ entities, session: { currentUser 
 
 export const selectEntities = ({ entities }, type) => entities[type];
 
-export const selectEntityBySlug = ({ entities }, type, slug) => entities[type][slug];
+export const selectEntityBySlug = ({ entities }, type, slug) => slug && entities[type][slug];
 
 export const selectUIByDisplay = ({ ui }, display) => ui[display];

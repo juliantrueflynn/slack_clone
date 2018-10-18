@@ -68,7 +68,7 @@ class MessageHoverMenu extends React.Component {
           <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />
         </Button>
         {(!message.parentMessageId && isMessageType) && (
-          <Button className="Btn Btn__thread" linkTo={`${url}/thread/${message.slug}`}>
+          <Button className="Btn Btn__convo" linkTo={`${url}/convo/${message.slug}`}>
             <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />
           </Button>
         )}

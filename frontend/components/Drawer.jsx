@@ -1,9 +1,12 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import classNames from 'classnames';
+import UserDrawer from './UserDrawer';
+import FavoritesDrawer from './FavoritesDrawer';
+import MessageThreadDrawer from './MessageThreadDrawer';
 import Button from './Button';
 import './Drawer.css';
 
-class Drawer extends React.Component {
+class DrawerSwitch extends React.Component {
   constructor(props) {
     super(props);
     this.handleClose = this.handleClose.bind(this);
@@ -13,84 +16,113 @@ class Drawer extends React.Component {
     const {
       openDrawer,
       fetchEntitiesRequest,
+      drawerType,
+      drawerSlug,
     } = this.props;
 
-    openDrawer(this.drawerProps());
+    openDrawer({ drawerType, drawerSlug });
     fetchEntitiesRequest();
   }
 
   componentDidUpdate(prevProps) {
-    const { openDrawer, fetchEntitiesRequest, location: { pathname } } = this.props;
-    const { drawerSlug: prevDrawerSlug } = prevProps.drawer;
-    const { drawerType, drawerSlug } = this.drawerProps();
+    const {
+      location: { pathname },
+      openDrawer,
+      fetchEntitiesRequest,
+      drawerType,
+      drawerSlug,
+    } = this.props;
 
     if (pathname !== prevProps.location.pathname) {
       openDrawer({ drawerType, drawerSlug });
 
-      if (drawerSlug !== prevDrawerSlug) {
+      if (drawerSlug !== prevProps.drawerSlug) {
         fetchEntitiesRequest();
       }
     }
   }
 
-  drawerProps() {
-    const { match: { params } } = this.props;
-    const drawerProps = { drawerType: 'favorites' };
+  getDrawerTitle() {
+    const { drawerType } = this.props;
 
-    if (params.messageSlug) {
-      drawerProps.drawerType = 'thread';
-      drawerProps.drawerSlug = params.messageSlug;
+    switch (drawerType) {
+      case 'favorites':
+        return 'Starred items';
+      case 'convo':
+        return 'Thread';
+      case 'team':
+        return 'Workspace directory';
+      case 'details': {
+        return 'About channel'; // TODO: get channel name drom drawer props
+      }
+      default:
+        return null;
     }
-
-    if (params.userSlug) {
-      drawerProps.drawerType = 'team';
-      drawerProps.drawerSlug = params.userSlug;
-    }
-
-    return drawerProps;
   }
 
   handleClose() {
     const {
       closeDrawer,
       history,
-      match: { params: { 0: chatPath, workspaceSlug } },
+      match: { params: { 0: pagePath, chatPath, workspaceSlug } },
     } = this.props;
 
+    let chatPagePath = pagePath;
+    if (chatPath) {
+      chatPagePath += `/${chatPath}`;
+    }
+
     closeDrawer();
-    history.push(`/${workspaceSlug}/${chatPath}`);
+    history.push(`/${workspaceSlug}/${chatPagePath}`);
   }
 
   render() {
-    const { drawerTitle, render, isLoading } = this.props;
-    const { drawerType } = this.drawerProps();
+    const {
+      drawerType,
+      messages,
+      members,
+      isLoading,
+      currentUser,
+      createChannelRequest,
+    } = this.props;
 
-    let classNames = 'Drawer';
-    if (drawerType) classNames += ` Drawer__${drawerType}`;
-    if (isLoading) classNames += ' Drawer__loading';
+    const drawerClassNames = classNames('Drawer', {
+      [`Drawer__${drawerType}`]: drawerType,
+      Drawer__loading: isLoading,
+    });
 
     return (
-      <aside className={classNames}>
+      <aside className={drawerClassNames}>
         <header className="Drawer__header">
           <div className="Drawer__headings">
-            {drawerTitle && (
-              <h4 className="Drawer__title">
-                {drawerTitle}
-              </h4>
-            )}
+            {this.getDrawerTitle()}
           </div>
-
           <Button unStyled buttonFor="close" onClick={this.handleClose}>
             &#10006;
           </Button>
         </header>
-
         <div className="Drawer__body">
-          {isLoading || render()}
+          {drawerType === 'team' && (
+            <UserDrawer
+              createChannelRequest={createChannelRequest}
+              currentUser={currentUser}
+              members={members}
+            />
+          )}
+          {drawerType === 'favorites' && (
+            <FavoritesDrawer messages={messages} members={members} />
+          )}
+          {(drawerType === 'convo' && !isLoading) && (
+            <MessageThreadDrawer
+              messages={messages}
+              members={members}
+              currentUser={currentUser}
+            />
+          )}
         </div>
       </aside>
     );
   }
 }
 
-export default withRouter(Drawer);
+export default DrawerSwitch;

@@ -106,7 +106,7 @@ function* setMessageRead({ unread }) {
       isCurrPage = true;
     } else {
       const drawer = yield select(selectUIByDisplay, 'drawer');
-      if (drawer.drawerType === 'thread') {
+      if (drawer.drawerType === 'convo') {
         currSlug = drawer.drawerSlug;
         isCurrPage = currSlug === unread.slug;
       }

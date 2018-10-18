@@ -5,9 +5,7 @@ import PageHome from '../components/PageHome';
 import SessionForm from '../components/SessionForm';
 import WorkspaceContainer from '../components/WorkspaceContainer';
 import ChatPageContainer from '../components/ChatPageContainer';
-import FavoritesDrawer from '../components/FavoritesDrawer';
-import UserDrawer from '../components/UserDrawer';
-import MessageThreadDrawer from '../components/MessageThreadDrawer';
+import DrawerContainer from '../components/DrawerContainer';
 
 export const routesConfig = [
   {
@@ -33,20 +31,16 @@ export const routesConfig = [
     isProtected: true,
     routes: [
       {
-        path: '/:workspaceSlug/(messages)?/:chatPath',
+        path: '/:workspaceSlug/(messages)*/:chatPath',
         component: ChatPageContainer,
         routes: [
           {
-            path: '/:workspaceSlug/(.*)/favorites',
-            component: FavoritesDrawer,
+            path: '/:workspaceSlug/(messages)+/:chatPath/:drawerType/:drawerSlug?',
+            component: DrawerContainer,
           },
           {
-            path: '/:workspaceSlug/(.*)/team/:userSlug',
-            component: UserDrawer,
-          },
-          {
-            path: '/:workspaceSlug/(.*)/thread/:messageSlug',
-            component: MessageThreadDrawer,
+            path: '/:workspaceSlug/(unreads|threads)/:drawerType/:drawerSlug?',
+            component: DrawerContainer,
           }
         ]
       },

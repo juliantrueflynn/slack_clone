@@ -133,9 +133,7 @@ class ChatPage extends React.Component {
             )}
           </div>
           <Switch>
-            {routes.map(route => (
-              <RouteWithSubRoutes key={route.path} {...route} />
-            ))}
+            {routes.map(route => <RouteWithSubRoutes key={route.path} {...route} />)}
           </Switch>
         </div>
       </div>

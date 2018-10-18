@@ -1,9 +1,7 @@
 import React from 'react';
 import Button from './Button';
 import StatusIcon from './StatusIcon';
-import withDrawer from './withDrawer';
 import { dateUtil } from '../util/dateUtil';
-import ProfileModal from './ProfileModal';
 import './UserDrawer.css';
 
 class UserDrawer extends React.Component {
@@ -108,4 +106,4 @@ class UserDrawer extends React.Component {
   }
 }
 
-export default withDrawer('Workspace Directory')(UserDrawer);
+export default UserDrawer;

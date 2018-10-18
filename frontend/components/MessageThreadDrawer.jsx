@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import MessageFormContainer from './MessageFormContainer';
-import withDrawer from './withDrawer';
 import Scrollable from './Scrollable';
 import MessageContainer from './MessageContainer';
 
@@ -38,4 +37,4 @@ const MessageThreadDrawer = ({ messages, members, currentUser }) => {
   );
 };
 
-export default withDrawer('Thread')(MessageThreadDrawer);
+export default MessageThreadDrawer;

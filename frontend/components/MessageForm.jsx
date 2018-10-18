@@ -51,7 +51,7 @@ class MessageForm extends React.Component {
     const { editorState } = this.state;
     let classNames = 'MessageForm';
     if (hasSubmitButton) classNames += ' MessageForm__has-submit';
-    classNames += parentMessageId ? ' MessageForm__thread' : ' MessageForm__chat';
+    classNames += parentMessageId ? ' MessageForm__convo' : ' MessageForm__chat';
 
     return (
       <div className={classNames}>

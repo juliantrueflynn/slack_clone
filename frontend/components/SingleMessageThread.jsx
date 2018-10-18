@@ -14,7 +14,7 @@ const SingleMessageThread = ({
     return null;
   }
 
-  const threadUrl = `${matchUrl}/thread/${messageSlug}`;
+  const threadUrl = `${matchUrl}/convo/${messageSlug}`;
   const allAuthors = threadMessages.map(msg => users[msg.authorSlug]);
   const authors = allAuthors.filter((user, i, self) => self.indexOf(user) === i);
   const lastMessageDate = threadMessages.slice(-1).createdAt;
@@ -27,7 +27,7 @@ const SingleMessageThread = ({
         <ul className="SingleMessageThread__items">
           <li className="SingleMessageThread__item SingleMessageThread__avatars">
             {authors.map(user => (
-              <Avatar key={user.id} author={user} avatarFor="thread" size="24" />
+              <Avatar key={user.id} author={user} avatarFor="convo" size="24" />
             ))}
           </li>
           <li className="SingleMessageThread__item SingleMessageThread__counter">
