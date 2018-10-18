@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import UserDrawer from './UserDrawer';
 import FavoritesDrawer from './FavoritesDrawer';
 import MessageThreadDrawer from './MessageThreadDrawer';
+import ChannelDetailsDrawer from './ChannelDetailsDrawer';
 import Button from './Button';
 import './Drawer.css';
 
@@ -39,6 +40,10 @@ class DrawerSwitch extends React.Component {
       if (drawerSlug !== prevProps.drawerSlug) {
         fetchEntitiesRequest();
       }
+
+      if (prevProps.drawerType && drawerType !== prevProps.drawerType) {
+        fetchEntitiesRequest();
+      }
     }
   }
 
@@ -53,7 +58,8 @@ class DrawerSwitch extends React.Component {
       case 'team':
         return 'Workspace directory';
       case 'details': {
-        return 'About channel'; // TODO: get channel name drom drawer props
+        const { channel } = this.props;
+        return `About #${channel.title}`;
       }
       default:
         return null;
@@ -82,6 +88,7 @@ class DrawerSwitch extends React.Component {
       drawerSlug,
       messages,
       members,
+      channel,
       isLoading,
       currentUser,
       createChannelRequest,
@@ -120,6 +127,9 @@ class DrawerSwitch extends React.Component {
               members={members}
               currentUser={currentUser}
             />
+          )}
+          {(drawerType === 'details' && channel) && (
+            <ChannelDetailsDrawer members={members} channel={channel} />
           )}
         </div>
       </aside>

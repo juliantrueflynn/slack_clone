@@ -1,15 +1,16 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from './Menu';
 import Button from './Button';
 import ProfileModal from './ProfileModal';
-import './ChannelHeader.css';
 import ChannelEditorModal from './ChannelEditorModal';
+import './ChannelHeader.css';
 
 class ChannelHeader extends React.Component {
   constructor(props) {
     super(props);
-    this.handleFavoritesClick = this.handleFavoritesClick.bind(this);
+    this.handleToggleLinkClick = this.handleToggleLinkClick.bind(this);
   }
 
   getTitle() {
@@ -30,7 +31,7 @@ class ChannelHeader extends React.Component {
     return null;
   }
 
-  handleFavoritesClick() {
+  handleToggleLinkClick(pathName) {
     const {
       match: { url, isExact },
       history,
@@ -38,12 +39,12 @@ class ChannelHeader extends React.Component {
       drawerType,
     } = this.props;
 
-    if (drawerType !== 'favorites') {
-      history.push(`${url}/favorites`);
+    if (drawerType !== pathName) {
+      history.push(`${url}/${pathName}`);
       return;
     }
 
-    if (!isExact && drawerType === 'favorites') {
+    if (!isExact && drawerType === pathName) {
       drawerClose();
       history.push(url);
     }
@@ -60,28 +61,39 @@ class ChannelHeader extends React.Component {
       channel,
       drawerType,
       modalOpen,
+      match: { url },
     } = this.props;
-    const subsLen = channel.subs.length;
-    const hasTopic = !!channel.topic;
-    const isItemActive = drawerType === 'favorites';
+    const subsLen = channel && channel.subs.length;
+    const hasTopic = !!(channel && channel.topic);
+    const isFavsOpen = drawerType === 'favorites';
+    const isDetailsOpen = drawerType === 'details';
     const modalOpenProfile = () => modalOpen('MODAL_PROFILE');
     const modalOpenEditChannel = () => modalOpen('MODAL_EDIT_CHANNEL');
 
-    const menuItems = [
+    const channelMenuItems = [
       {
-        key: 'edit-channel',
-        icon: <FontAwesomeIcon icon={['fas', 'cog']} size="lg" />,
+        key: 'channel-info',
+        icon: <FontAwesomeIcon icon="info-circle" size="lg" />,
+        onClick: () => this.handleToggleLinkClick('details'),
+        isItemActive: isDetailsOpen,
+      },
+      {
+        key: 'channel-edit',
+        icon: <FontAwesomeIcon icon="cog" size="lg" />,
         onClick: modalOpenEditChannel,
       },
+    ];
+
+    const userMenuItems = [
       {
         key: 'favorites',
         icon: <FontAwesomeIcon icon={['fas', 'star']} size="lg" />,
-        onClick: this.handleFavoritesClick,
-        isItemActive,
+        onClick: () => this.handleToggleLinkClick('favorites'),
+        isItemActive: isFavsOpen,
       },
       {
         key: 'profile',
-        icon: <FontAwesomeIcon icon={['fas', 'user-cog']} size="lg" />,
+        icon: <FontAwesomeIcon icon="user-cog" size="lg" />,
         onClick: modalOpenProfile,
       },
     ];
@@ -94,20 +106,30 @@ class ChannelHeader extends React.Component {
               {this.getTitle()}
             </h1>
             <div className="ChannelHeader__meta">
-              <div className="ChannelHeader__meta-item">
-                <FontAwesomeIcon icon={['far', 'user']} size="sm" />
-                {subsLen}
-              </div>
-              <div className="ChannelHeader__meta-item ChannelHeader__meta-item-topic">
-                <Button onClick={modalOpenEditChannel} buttonFor="edit-topic" unStyled>
-                  {channel.topic}
-                  {hasTopic || <FontAwesomeIcon icon={['far', 'edit']} size="sm" />}
-                  {hasTopic || 'Add topic'}
-                </Button>
-              </div>
+              {channel && (
+                <div className="ChannelHeader__meta-item">
+                  <Link to={`${url}/details`}>
+                    <FontAwesomeIcon icon={['far', 'user']} size="sm" />
+                    {subsLen}
+                  </Link>
+                </div>
+              )}
+              {channel && (
+                <div className="ChannelHeader__meta-item ChannelHeader__meta-item-topic">
+                  <Button onClick={modalOpenEditChannel} buttonFor="edit-topic" unStyled>
+                    {channel.topic}
+                    {hasTopic || <FontAwesomeIcon icon={['far', 'edit']} size="sm" />}
+                    {hasTopic || 'Add topic'}
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
-          <Menu menuFor="channel-header" isRow items={menuItems} />
+          <div className="ChannelHeader__navigate">
+            <Menu menuFor="header-channel" isRow items={channelMenuItems} />
+            {/* TODO: Put searchbox */}
+            <Menu menuFor="header-user" isRow items={userMenuItems} />
+          </div>
         </div>
         <ProfileModal {...currentUser} />
         {channel && <ChannelEditorModal channel={channel} />}

@@ -231,6 +231,11 @@ export const selectChannelsWithEntitiesMap = ({ entities, session: { currentUser
   channelsWithEntitiesMap(entities, currentUser.slug)
 );
 
+export const selectChannelWithEntitiesBySlug = ({ entities, session: { currentUser } }, slug) => {
+  const channels = channelsWithEntitiesMap(entities, currentUser.slug);
+  return channels[slug];
+};
+
 const selectThreadChannels = channels => (
   values(channels).filter(ch => !ch.hasDm).reduce((acc, curr) => {
     acc[curr.slug] = channels[curr.slug];

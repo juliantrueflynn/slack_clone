@@ -18,7 +18,9 @@ import {
   faPlusCircle,
   faHashtag,
   faSquare,
+  faInfoCircle,
   faCog,
+  faUsers,
   faUserCog,
   faStar as fasStar,
 } from '@fortawesome/free-solid-svg-icons';
@@ -42,9 +44,11 @@ library.add(
   fasStar,
   faSmile,
   faComment,
+  faInfoCircle,
   faCircle,
   faCog,
   faUser,
+  faUsers,
   faUserCog,
 );
 

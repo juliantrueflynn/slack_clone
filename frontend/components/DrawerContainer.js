@@ -4,8 +4,8 @@ import { drawerClose, drawerOpen, modalOpen } from '../actions/uiActions';
 import { fetchMessage } from '../actions/messageActions';
 import { fetchFavorites } from '../actions/favoriteActions';
 import { fetchUser } from '../actions/userActions';
-import { createChannel } from '../actions/channelActions';
-import { selectDrawerMessagesByType } from '../reducers/selectors';
+import { createChannel, fetchChannel } from '../actions/channelActions';
+import { selectDrawerMessagesByType, selectChannelWithEntitiesBySlug } from '../reducers/selectors';
 import DrawerSwitch from './Drawer';
 
 const mapStateToProps = (state, { match: { params } }) => ({
@@ -13,6 +13,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
   messages: selectDrawerMessagesByType(state),
   members: state.entities.members,
   channels: state.entities.channels,
+  channel: selectChannelWithEntitiesBySlug(state, params.chatPath),
   currentUser: state.session.currentUser,
   drawer: state.ui.drawer,
   drawerType: params.drawerType,
@@ -37,6 +38,10 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
       case 'favorites':
         entitySlug = params.workspaceSlug;
         fetchEntity = fetchFavorites.request;
+        break;
+      case 'details':
+        entitySlug = params.chatPath;
+        fetchEntity = fetchChannel.request;
         break;
       default:
         return null;
