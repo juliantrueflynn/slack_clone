@@ -12,6 +12,7 @@
   flex-direction: row;
   background-color: #F5F5F5;
   padding: 15px 12px;
+  border-bottom: 1px solid #DFE6E9;
 }
 
 .Drawer .Btn__close {

@@ -1,17 +1,14 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { Fragment } from 'react';
+import { withRouter, Link } from 'react-router-dom';
 import Avatar from './Avatar';
 import StatusIcon from './StatusIcon';
-import Button from './Button';
+import AccordionItem from './AccordionItem';
 import { dateUtil } from '../util/dateUtil';
 
 class ChannelDetailsDrawer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      details: true,
-      members: false,
-    };
+    this.state = { details: true, members: false };
   }
 
   componentDidMount() {
@@ -53,8 +50,8 @@ class ChannelDetailsDrawer extends React.Component {
   }
 
   render() {
-    const { channel, users } = this.props;
-    const { details, members } = this.state;
+    const { channel, users, match: { params } } = this.props;
+    const { ...state } = this.state;
 
     if (!channel) {
       return null;
@@ -63,46 +60,59 @@ class ChannelDetailsDrawer extends React.Component {
     const dateCreated = dateUtil(channel.createdAt).monthDayYear();
     const usersLen = channel.members.length;
 
-    return (
-      <div className="ChannelDetailsDrawer">
-        <div className="ChannelDetailsDrawer__section">
-          <h3 className="ChannelDetailsDrawer__section-title">
-            <Button buttonFor="accordion" unStyled onClick={() => this.handleItemToggle('details')}>
-              <FontAwesomeIcon icon="info-circle" />
-              Channel Details
-            </Button>
-          </h3>
-          {details && (
-            <div className="ChannelDetailsDrawer__section-body">
-              <h4>Purpose</h4>
+    const { 0: pagePath, chatPath, workspaceSlug } = params;
+    let teamUrl = `/${workspaceSlug}/${pagePath}`;
+    if (chatPath) {
+      teamUrl += `/${chatPath}`;
+    }
+    teamUrl += '/team';
+
+    const accordionItems = [
+      {
+        icon: 'info-circle',
+        itemTitle: 'Channel Details',
+        name: 'details',
+        body: (
+          <Fragment>
+            <div className="AccordionItem__sub">
+              <h5 className="AccordionItem__sub-title">Purpose</h5>
               {channel.topic || 'Set a channel topic'}
-              <h4>Created</h4>
+            </div>
+            <div className="AccordionItem__sub">
+              <h5 className="AccordionItem__sub-title">Created</h5>
               {`${dateCreated} by ${channel.ownerName}`}
             </div>
-          )}
-        </div>
-        <div className="ChannelDetailsDrawer__section">
-          <h3 className="ChannelDetailsDrawer__section-title">
-            <Button buttonFor="accordion" unStyled onClick={() => this.handleItemToggle('members')}>
-              <FontAwesomeIcon icon="users" />
-              {`${usersLen} Members`}
-            </Button>
-          </h3>
-          {members && (
-            <div className="ChannelDetailsDrawer__section-body">
-              {channel.members.map(userSlug => (
-                <div key={userSlug} className="ChannelDetailsDrawer__member">
-                  <StatusIcon member={users[userSlug]} />
-                  <Avatar author={users[userSlug]} size="22" />
-                  {users[userSlug].username}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+          </Fragment>
+        ),
+      },
+      {
+        icon: 'users',
+        itemTitle: `${usersLen} Members`,
+        name: 'members',
+        body: channel.members.map(userSlug => (
+          <Link key={userSlug} to={`${teamUrl}/${userSlug}`} className="AccordionItem__sub">
+            <StatusIcon member={users[userSlug]} />
+            <Avatar avatarFor="details-drawer" author={users[userSlug]} size="22" />
+            {users[userSlug].username}
+          </Link>
+        )),
+      }
+    ];
+
+    return (
+      <div className="ChannelDetailsDrawer">
+        {accordionItems.map(item => (
+          <AccordionItem
+            key={item.name}
+            name={item.name}
+            isShowing={state[item.name]}
+            itemToggle={() => this.handleItemToggle(item.name)}
+            {...item}
+          />
+        ))}
       </div>
     );
   }
 }
 
-export default ChannelDetailsDrawer;
+export default withRouter(ChannelDetailsDrawer);

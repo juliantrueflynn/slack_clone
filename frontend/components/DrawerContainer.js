@@ -42,6 +42,10 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
         fetchEntity = fetchFavorites.request;
         break;
       case 'details':
+        if (!params.chatPath) {
+          return null;
+        }
+
         entitySlug = params.chatPath;
         fetchEntity = fetchChannel.request;
         break;

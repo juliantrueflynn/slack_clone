@@ -59,6 +59,11 @@ class DrawerSwitch extends React.Component {
         return 'Workspace directory';
       case 'details': {
         const { channel } = this.props;
+
+        if (!channel) {
+          return null;
+        }
+
         return `About #${channel.title}`;
       }
       default:
@@ -91,14 +96,19 @@ class DrawerSwitch extends React.Component {
       channel,
       isLoading,
       currentUser,
-      createChannelRequest,
       accordion,
+      openProfileModal,
+      createChannelRequest,
     } = this.props;
 
     const drawerClassNames = classNames('Drawer', {
       [`Drawer__${drawerType}`]: drawerType,
       Drawer__loading: isLoading,
     });
+
+    if (drawerType === 'details' && !channel) {
+      return null;
+    }
 
     return (
       <aside className={drawerClassNames}>
@@ -114,9 +124,10 @@ class DrawerSwitch extends React.Component {
           {drawerType === 'team' && (
             <UserDrawer
               userSlug={drawerSlug}
-              createChannelRequest={createChannelRequest}
               currentUser={currentUser}
               members={members}
+              openProfileModal={openProfileModal}
+              createChannelRequest={createChannelRequest}
             />
           )}
           {drawerType === 'favorites' && (
