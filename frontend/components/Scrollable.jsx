@@ -100,13 +100,13 @@ class Scrollable extends React.Component {
   }
 
   hasNewMessage(prevMessages) {
-    const { messages, currentUserId } = this.props;
+    const { messages } = this.props;
     const lastEntry = messages[messages.length - 1];
     const prevLastEntry = prevMessages[prevMessages.length - 1];
-    const isNewEntryByCurrUser = lastEntry && lastEntry.authorId === currentUserId;
+    const isByCurrUser = lastEntry && lastEntry.isCurrentUser;
     const hasNewEntry = prevLastEntry && prevLastEntry.id !== lastEntry.id;
 
-    return isNewEntryByCurrUser && hasNewEntry;
+    return isByCurrUser && hasNewEntry;
   }
 
   handleScroll() {

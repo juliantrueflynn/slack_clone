@@ -124,7 +124,7 @@ class ChatPage extends React.Component {
                 channel={channel}
                 chatPath={chatPath}
                 users={users}
-                currentUser={currentUser}
+                currentUserSlug={currentUser.slug}
                 isLoading={isLoading}
                 messages={messages}
                 entries={entries}

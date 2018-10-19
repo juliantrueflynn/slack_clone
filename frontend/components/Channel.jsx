@@ -34,7 +34,7 @@ class Channel extends React.Component {
       users,
       fetchHistoryRequest,
       createChannelSubRequest,
-      currentUser,
+      currentUserSlug,
       isLoading,
     } = this.props;
 
@@ -52,12 +52,11 @@ class Channel extends React.Component {
           <Scrollable
             fetchHistoryRequest={fetchHistoryRequest}
             updateScrollLoc={this.handleScrollLoc}
-            currentUserId={currentUser.id}
             messages={messages}
             channel={channel}
             isAutoScroll
           >
-            <ChannelBlurb channel={channel} currentUserSlug={currentUser.slug} />
+            <ChannelBlurb channel={channel} currentUserSlug={currentUserSlug} />
             {messages.map(message => (
               <MessageContainer
                 key={message.id}

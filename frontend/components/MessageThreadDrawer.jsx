@@ -3,12 +3,7 @@ import MessageFormContainer from './MessageFormContainer';
 import Scrollable from './Scrollable';
 import MessageContainer from './MessageContainer';
 
-const MessageThreadDrawer = ({
-  messages,
-  members,
-  currentUser,
-  isLoading,
-}) => {
+const MessageThreadDrawer = ({ messages, members, isLoading }) => {
   const parentMessage = messages[0];
 
   if (!parentMessage) {
@@ -17,7 +12,6 @@ const MessageThreadDrawer = ({
 
   return (
     <Scrollable
-      currentUserId={currentUser.id}
       messages={messages}
       isMessageThread
       isAutoScroll
