@@ -92,8 +92,6 @@ class DrawerSwitch extends React.Component {
       isLoading,
       currentUser,
       createChannelRequest,
-      accordionOpen,
-      accordionClose,
       accordion,
     } = this.props;
 
@@ -135,8 +133,6 @@ class DrawerSwitch extends React.Component {
             <ChannelDetailsDrawer
               users={members}
               channel={channel}
-              accordionOpen={accordionOpen}
-              accordionClose={accordionClose}
               accordion={accordion}
             />
           )}

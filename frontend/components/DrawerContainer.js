@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { drawerClose, drawerOpen, modalOpen, accordionOpen } from '../actions/uiActions';
+import { drawerClose, drawerOpen, modalOpen } from '../actions/uiActions';
 import { fetchMessage } from '../actions/messageActions';
 import { fetchFavorites } from '../actions/favoriteActions';
 import { fetchUser } from '../actions/userActions';
@@ -26,6 +26,7 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
   openDrawer: drawer => dispatch(drawerOpen(drawer)),
   closeDrawer: () => dispatch(drawerClose()),
   openProfileModal: () => dispatch(modalOpen('MODAL_PROFILE', null)),
+  createChannelRequest: dmChat => dispatch(createChannel.request(dmChat)),
   fetchEntitiesRequest: () => {
     let entitySlug = params.drawerSlug;
     let fetchEntity;
@@ -50,13 +51,6 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
 
     return dispatch(fetchEntity(entitySlug));
   },
-  accordionOpen: (accordionType, accordionItem) => (
-    dispatch(accordionOpen(accordionType, accordionItem))
-  ),
-  accordionClose: (accordionType, accordionItem) => (
-    dispatch(accordionOpen(accordionType, accordionItem))
-  ),
-  createChannelRequest: dmChat => dispatch(createChannel.request(dmChat)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DrawerSwitch));

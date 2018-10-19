@@ -1,6 +1,8 @@
-import { ACCORDION_OPEN, DRAWER_OPEN } from '../actions/actionTypes';
+import { ACCORDION_OPEN, ACCORDION_CLOSE } from '../actions/actionTypes';
 
-const accordionReducer = (state = {}, action) => {
+const _defaultState = { details: {} };
+
+const accordionReducer = (state = _defaultState, action) => {
   Object.freeze(state);
 
   let nextState;
@@ -11,15 +13,10 @@ const accordionReducer = (state = {}, action) => {
       nextState[accordionType][accordionItem] = true;
       return nextState;
     }
-    case DRAWER_OPEN: {
-      const { drawer: { drawerType } } = action;
-
-      if (drawerType !== 'details') {
-        return state;
-      }
-
+    case ACCORDION_CLOSE: {
+      const { accordionType, accordionItem } = action;
       nextState = Object.assign({}, state);
-      nextState.details = {};
+      nextState[accordionType][accordionItem] = false;
       return nextState;
     }
     default:

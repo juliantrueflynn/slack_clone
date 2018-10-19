@@ -11,6 +11,7 @@ class ChannelHeader extends React.Component {
   constructor(props) {
     super(props);
     this.handleToggleLinkClick = this.handleToggleLinkClick.bind(this);
+    this.handleDetailsAccordionClick = this.handleDetailsAccordionClick.bind(this);
   }
 
   getTitle() {
@@ -50,9 +51,14 @@ class ChannelHeader extends React.Component {
     }
   }
 
-  handleProfileClick() {
-    const { modalOpen } = this.props;
-    modalOpen('MODAL_PROFILE');
+  handleDetailsAccordionClick() {
+    const { accordionOpen, accordionClose, accordion } = this.props;
+
+    if (accordion.members) {
+      accordionClose();
+    } else {
+      accordionOpen();
+    }
   }
 
   render() {
@@ -108,7 +114,7 @@ class ChannelHeader extends React.Component {
             <div className="ChannelHeader__meta">
               {channel && (
                 <div className="ChannelHeader__meta-item">
-                  <Link to={`${url}/details`}>
+                  <Link to={`${url}/details`} onClick={this.handleDetailsAccordionClick}>
                     <FontAwesomeIcon icon={['far', 'user']} size="sm" />
                     {subsLen}
                   </Link>

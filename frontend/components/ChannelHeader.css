@@ -41,6 +41,11 @@
   right: -11px;
 }
 
+.ChannelHeader__meta-item > a {
+  display: flex;
+  align-items: center;
+}
+
 .ChannelHeader__meta-item:last-child {
   margin-right: 0;
 }

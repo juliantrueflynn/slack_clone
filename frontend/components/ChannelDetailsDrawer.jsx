@@ -26,16 +26,29 @@ class ChannelDetailsDrawer extends React.Component {
     });
   }
 
-  handleItemToggle(name) {
-    const { accordionOpen, accordionClose } = this.props;
-    const { ...state } = this.state;
+  componentDidUpdate(_, prevState) {
+    const { accordion } = this.props;
+    const { members } = this.state;
 
-    if (state[name]) {
-      accordionClose('details', name);
-    } else {
-      accordionOpen('details', name);
+    if (prevState.members !== members) {
+      return;
     }
 
+    if (accordion.members !== members) {
+      this.setMembersState(accordion.members);
+    }
+  }
+
+  setMembersState(val) {
+    const { members } = this.state;
+
+    if (members !== val) {
+      this.setState({ members: val });
+    }
+  }
+
+  handleItemToggle(name) {
+    const { ...state } = this.state;
     this.setState({ [name]: !state[name] });
   }
 
