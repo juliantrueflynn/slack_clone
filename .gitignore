@@ -13,7 +13,6 @@ bundle.js.map
 /log/*
 /tmp/*
 public/uploads/*
-public/images/default/*
 !/log/.keep
 !/tmp/.keep
 
