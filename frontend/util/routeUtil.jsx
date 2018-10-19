@@ -5,7 +5,7 @@ import PageHome from '../components/PageHome';
 import SessionForm from '../components/SessionForm';
 import WorkspaceContainer from '../components/WorkspaceContainer';
 import ChatPageContainer from '../components/ChatPageContainer';
-import DrawerContainer from '../components/DrawerContainer';
+import DrawerSwitchContainer from '../components/DrawerSwitchContainer';
 
 export const routesConfig = [
   {
@@ -36,11 +36,11 @@ export const routesConfig = [
         routes: [
           {
             path: '/:workspaceSlug/(messages)+/:chatPath/:drawerType/:drawerSlug?',
-            component: DrawerContainer,
+            component: DrawerSwitchContainer,
           },
           {
             path: '/:workspaceSlug/(unreads|threads)/:drawerType/:drawerSlug?',
-            component: DrawerContainer,
+            component: DrawerSwitchContainer,
           }
         ]
       },

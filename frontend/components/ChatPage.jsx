@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
+import classNames from 'classnames';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import ChannelHeaderContainer from './ChannelHeaderContainer';
 import AllUnreads from './AllUnreads';
@@ -87,13 +88,14 @@ class ChatPage extends React.Component {
       chatType = chatPath;
     }
 
-    let chatClassNames = 'ChatPage';
-    if (chatType) chatClassNames += ` ChatPage--${chatType}`;
-    if (isLoading) chatClassNames += ' ChatPage--loading';
-    if (!messages.length) chatClassNames += ' ChatPage--empty';
+    const pageClassNames = classNames('ChatPage', {
+      [`ChatPage--${chatType}`]: chatType,
+      'ChatPage--loading': isLoading,
+      'ChatPage--empty': !messages.length,
+    });
 
     return (
-      <div className={chatClassNames}>
+      <div className={pageClassNames}>
         <ChannelHeaderContainer />
         <div className="ChatPage__row">
           <div className="ChatPage__container">

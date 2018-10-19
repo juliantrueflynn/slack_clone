@@ -1,55 +1,21 @@
 import React from 'react';
 import classNames from 'classnames';
-import UserDrawer from './UserDrawer';
-import FavoritesDrawer from './FavoritesDrawer';
-import MessageThreadDrawer from './MessageThreadDrawer';
-import ChannelDetailsDrawer from './ChannelDetailsDrawer';
 import Button from './Button';
 import './Drawer.css';
 
-class DrawerSwitch extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleClose = this.handleClose.bind(this);
-  }
+const Drawer = ({
+  drawerType,
+  closeDrawer,
+  channel,
+  children,
+}) => {
+  const drawerClassNames = classNames('Drawer', {
+    [`Drawer__${drawerType}`]: drawerType,
+  });
 
-  componentDidMount() {
-    const {
-      openDrawer,
-      fetchEntitiesRequest,
-      drawerType,
-      drawerSlug,
-    } = this.props;
+  const close = () => closeDrawer();
 
-    openDrawer({ drawerType, drawerSlug });
-    fetchEntitiesRequest();
-  }
-
-  componentDidUpdate(prevProps) {
-    const {
-      location: { pathname },
-      openDrawer,
-      fetchEntitiesRequest,
-      drawerType,
-      drawerSlug,
-    } = this.props;
-
-    if (pathname !== prevProps.location.pathname) {
-      openDrawer({ drawerType, drawerSlug });
-
-      if (drawerSlug !== prevProps.drawerSlug) {
-        fetchEntitiesRequest();
-      }
-
-      if (prevProps.drawerType && drawerType !== prevProps.drawerType) {
-        fetchEntitiesRequest();
-      }
-    }
-  }
-
-  getDrawerTitle() {
-    const { drawerType } = this.props;
-
+  const title = () => {
     switch (drawerType) {
       case 'favorites':
         return 'Starred items';
@@ -58,8 +24,6 @@ class DrawerSwitch extends React.Component {
       case 'team':
         return 'Workspace directory';
       case 'details': {
-        const { channel } = this.props;
-
         if (!channel) {
           return null;
         }
@@ -69,88 +33,23 @@ class DrawerSwitch extends React.Component {
       default:
         return null;
     }
-  }
+  };
 
-  handleClose() {
-    const {
-      closeDrawer,
-      history,
-      match: { params: { 0: pagePath, chatPath, workspaceSlug } },
-    } = this.props;
-
-    let chatPagePath = pagePath;
-    if (chatPath) {
-      chatPagePath += `/${chatPath}`;
-    }
-
-    closeDrawer();
-    history.push(`/${workspaceSlug}/${chatPagePath}`);
-  }
-
-  render() {
-    const {
-      drawerType,
-      drawerSlug,
-      messages,
-      members,
-      channel,
-      isLoading,
-      currentUser,
-      accordion,
-      openProfileModal,
-      createChannelRequest,
-    } = this.props;
-
-    const drawerClassNames = classNames('Drawer', {
-      [`Drawer__${drawerType}`]: drawerType,
-      Drawer__loading: isLoading,
-    });
-
-    if (drawerType === 'details' && !channel) {
-      return null;
-    }
-
-    return (
-      <aside className={drawerClassNames}>
-        <header className="Drawer__header">
-          <div className="Drawer__headings">
-            {this.getDrawerTitle()}
-          </div>
-          <Button unStyled buttonFor="close" onClick={this.handleClose}>
-            &#10006;
-          </Button>
-        </header>
-        <div className="Drawer__body">
-          {drawerType === 'team' && (
-            <UserDrawer
-              userSlug={drawerSlug}
-              currentUser={currentUser}
-              members={members}
-              openProfileModal={openProfileModal}
-              createChannelRequest={createChannelRequest}
-            />
-          )}
-          {drawerType === 'favorites' && (
-            <FavoritesDrawer messages={messages} members={members} />
-          )}
-          {(drawerType === 'convo' && !isLoading) && (
-            <MessageThreadDrawer
-              messages={messages}
-              members={members}
-              currentUser={currentUser}
-            />
-          )}
-          {(drawerType === 'details' && channel) && (
-            <ChannelDetailsDrawer
-              users={members}
-              channel={channel}
-              accordion={accordion}
-            />
-          )}
+  return (
+    <div className={drawerClassNames}>
+      <header className="Drawer__header">
+        <div className="Drawer__headings">
+          {title()}
         </div>
-      </aside>
-    );
-  }
-}
+        <Button unStyled buttonFor="close" onClick={close}>
+          &#10006;
+        </Button>
+      </header>
+      <div className="Drawer__body">
+        {children}
+      </div>
+    </div>
+  );
+};
 
-export default DrawerSwitch;
+export default Drawer;

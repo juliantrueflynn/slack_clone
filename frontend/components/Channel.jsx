@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import classNames from 'classnames';
 import MessageFormContainer from './MessageFormContainer';
 import ChannelSubscribe from './ChannelSubscribe';
 import ChannelBlurb from './ChannelBlurb';
@@ -39,11 +40,14 @@ class Channel extends React.Component {
 
     const placeholder = channel.hasDm ? `@${channel.title}` : `#${channel.title}`;
     const formPlaceholder = placeholder && `Message ${placeholder}`;
-    let classNames = 'Channel';
-    classNames += channel.isSub ? ' Channel--sub' : ' Channel--unsub';
+
+    const channelClassNames = classNames('Channel', {
+      'Channel--sub': channel.isSub,
+      'Channel--unsub': !channel.isSub,
+    });
 
     return (
-      <div className={classNames}>
+      <div className={channelClassNames}>
         {isLoading || (
           <Scrollable
             fetchHistoryRequest={fetchHistoryRequest}
@@ -64,9 +68,9 @@ class Channel extends React.Component {
             ))}
           </Scrollable>
         )}
-        {/* {channel.isSub && (
+        {channel.isSub && (
           <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} />
-        )} */}
+        )}
         <ChannelSubscribe
           channel={channel}
           createChannelSubRequest={createChannelSubRequest}

@@ -6,7 +6,7 @@ import { fetchFavorites } from '../actions/favoriteActions';
 import { fetchUser } from '../actions/userActions';
 import { createChannel, fetchChannel } from '../actions/channelActions';
 import { selectDrawerMessagesByType, selectChannelWithEntitiesBySlug } from '../reducers/selectors';
-import DrawerSwitch from './Drawer';
+import DrawerSwitch from './DrawerSwitch';
 
 const mapStateToProps = (state, { match: { params } }) => ({
   isWorkspaceLoaded: !!state.ui.displayWorkspaceSlug,
