@@ -4,7 +4,7 @@ import { Route, Redirect, withRouter } from 'react-router-dom';
 import PageHome from '../components/PageHome';
 import SessionForm from '../components/SessionForm';
 import WorkspaceContainer from '../components/WorkspaceContainer';
-import ChatPageContainer from '../components/ChatPageContainer';
+import ChatPageSwitchContainer from '../components/ChatPageSwitchContainer';
 import DrawerSwitchContainer from '../components/DrawerSwitchContainer';
 
 export const routesConfig = [
@@ -32,7 +32,7 @@ export const routesConfig = [
     routes: [
       {
         path: '/:workspaceSlug/(messages)*/:chatPath',
-        component: ChatPageContainer,
+        component: ChatPageSwitchContainer,
         routes: [
           {
             path: '/:workspaceSlug/(messages)+/:chatPath/:drawerType/:drawerSlug?',

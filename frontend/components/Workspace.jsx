@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch } from 'react-router-dom';
 import { ActionCable } from 'react-actioncable-provider';
 import { decamelizeKeys } from 'humps';
+import classNames from 'classnames';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import LeftSidebarContainer from './LeftSidebarContainer';
 import EmojiModal from './EmojiModal';
@@ -33,13 +34,11 @@ class Workspace extends React.Component {
       fetchWorkspacesRequest,
     } = this.props;
 
-    const { workspaces: prevWorkspaces } = prevProps;
-
     if (prevProps.workspaceSlug !== workspaceSlug) {
       fetchWorkspaceRequest(workspaceSlug);
     }
 
-    if (prevWorkspaces && prevWorkspaces.length !== workspaces.length) {
+    if (prevProps.workspaces && prevProps.workspaces.length !== workspaces.length) {
       fetchWorkspacesRequest();
     }
 
@@ -86,12 +85,19 @@ class Workspace extends React.Component {
       { channel: 'ChatChannel', channelSlug: channel.slug }
     ));
 
-    let classNames = 'Workspace';
-    if (isLoading) classNames += 'Workspace--loading';
-    if (modal.modalType) classNames += ' Workspace--modal-open';
+    const pageClassNames = classNames('Workspace', {
+      'Workspace--loading': isLoading,
+      'Workspace--modal-open': modal.modalType,
+    });
+
+    const childRoutes = defaultChat && !isLoading && (
+      <Switch>
+        {routes.map(route => <RouteWithSubRoutes key={route.path} {...route} />)}
+      </Switch>
+    );
 
     return (
-      <div className={classNames}>
+      <div className={pageClassNames}>
         <ActionCable channel={decamelizeKeys({ channel: 'WorkspaceChannel', workspaceSlug })} onReceived={onReceived} />
         <ActionCable channel={decamelizeKeys({ channel: 'AppearanceChannel', workspaceSlug })} onReceived={onReceived} />
         {cableChannels.map(cable => (
@@ -110,13 +116,7 @@ class Workspace extends React.Component {
               modalClose={modalClose}
               createReactionRequest={createReactionRequest}
             />
-            {defaultChat && (
-              <Switch>
-                {routes.map(route => (
-                  <RouteWithSubRoutes key={route.path} {...route} />
-                ))}
-              </Switch>
-            )}
+            {childRoutes}
           </div>
         </div>
       </div>

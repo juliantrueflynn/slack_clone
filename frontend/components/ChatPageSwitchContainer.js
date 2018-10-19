@@ -4,9 +4,8 @@ import { selectChatPageMessagesBySlug, selectChatPageChannelsBySlug } from '../r
 import { fetchMessages, fetchUserThreads, fetchHistory } from '../actions/messageActions';
 import { fetchUnreads } from '../actions/readActions';
 import { loadChatPage, createChannelSub, switchChannel } from '../actions/channelActions';
-import { drawerClose } from '../actions/uiActions';
 import { clearUnreads } from '../actions/unreadActions';
-import ChatPage from './ChatPage';
+import ChatPageSwitch from './ChatPageSwitch';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   chatPath,
@@ -34,7 +33,6 @@ const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug, chatPa
     return dispatch(fetchMessages.request(chatPath));
   },
   loadChatPage: pagePath => dispatch(loadChatPage(pagePath)),
-  drawerClose: () => dispatch(drawerClose()),
   createChannelSubRequest: channelSub => dispatch(createChannelSub.request(channelSub)),
   fetchHistoryRequest: (channelSlug, startDate) => (
     dispatch(fetchHistory.request(channelSlug, startDate))
@@ -43,4 +41,4 @@ const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug, chatPa
   clearUnreads: (channelSlug, lastRead) => dispatch(clearUnreads(channelSlug, lastRead)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatPage));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatPageSwitch));
