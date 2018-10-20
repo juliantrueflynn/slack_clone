@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import classNames from 'classnames';
 import { dateUtil } from '../util/dateUtil';
 import './ChannelBlurb.css';
 
@@ -67,11 +68,13 @@ const ChannelBlurb = ({ channel, currentUserSlug, match: { url } }) => {
     );
   }
 
-  let classNames = 'ChannelBlurb';
-  classNames += hasDm ? ' ChannelBlurb__dm' : ' ChannelBlurb__channel';
+  const blurbClassNames = classNames('ChannelBlurb', {
+    ChannelBlurb__dm: hasDm,
+    ChannelBlurb__channel: !hasDm,
+  });
 
   return (
-    <section className={classNames}>
+    <section className={blurbClassNames}>
       <h2 className="ChannelBlurb__title">
         {chatTitle}
       </h2>

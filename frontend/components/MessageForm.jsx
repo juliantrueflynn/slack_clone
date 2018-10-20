@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { convertForSubmit, clearEditor, createEmptyEditor } from '../util/editorUtil';
 import MessageEditor from './MessageEditor';
 import Button from './Button';
@@ -49,12 +50,14 @@ class MessageForm extends React.Component {
   render() {
     const { placeholder, hasSubmitButton, parentMessageId } = this.props;
     const { editorState } = this.state;
-    let classNames = 'MessageForm';
-    if (hasSubmitButton) classNames += ' MessageForm__has-submit';
-    classNames += parentMessageId ? ' MessageForm__convo' : ' MessageForm__chat';
+    const formClassNames = classNames('MessageForm', {
+      'MessageForm__has-submit': hasSubmitButton,
+      MessageForm__convo: parentMessageId,
+      MessageForm__chat: !parentMessageId,
+    });
 
     return (
-      <div className={classNames}>
+      <div className={formClassNames}>
         <form
           role="presentation"
           onSubmit={this.handleSubmit}

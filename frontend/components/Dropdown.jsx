@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import onClickOutside from 'react-onclickoutside';
 import Menu from './Menu';
 import Button from './Button';
@@ -40,13 +41,17 @@ class Dropdown extends React.Component {
       return null;
     }
 
-    let dropdownClassNames = `Dropdown Dropdown--${menuPos || 'left'}`;
-    if (menuFor) dropdownClassNames += ` Dropdown__${menuFor}`;
-    if (modifier && menuFor) dropdownClassNames += ` Dropdown__${menuFor}--${modifier}`;
-    dropdownClassNames += ` Dropdown--${isOpen ? 'show' : 'hide'}`;
+    const ddClassNames = classNames('Dropdown', {
+      [`Dropdown--${menuPos}`]: menuPos,
+      'Dropdown--left': !menuPos,
+      [`Dropdown__${menuFor}`]: menuFor,
+      [`Dropdown__${menuFor}--modifier`]: menuFor && modifier,
+      'Dropdown--show': isOpen,
+      'Dropdown--hide': !isOpen,
+    });
 
     return (
-      <div className={dropdownClassNames}>
+      <div className={ddClassNames}>
         <Button buttonFor="dropdown" onClick={this.handleTogglerClick} style={style} unStyled={unStyled}>
           {togglerText || children}
         </Button>

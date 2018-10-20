@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 import './Button.css';
 
 const Button = ({
@@ -10,25 +11,21 @@ const Button = ({
   color,
   linkTo,
   fullWidth,
-  borderThick,
-  borderLess,
   ...props
 }) => {
-  let classNames = 'Btn';
-  if (unStyled) {
-    classNames += ' Btn__unstyled';
-  } else {
-    classNames += ' Btn__styled';
-    if (size) classNames += ` Btn__${size}`;
-  }
-  if (buttonFor && modifier) classNames += ` Btn__${buttonFor}--${modifier}`;
-  if (buttonFor) classNames += ` Btn__${buttonFor}`;
-  if (color) classNames += ` Btn__${color}`;
-  if (fullWidth) classNames += ' Btn__w100';
+  const btnClassNames = classNames('Btn', {
+    Btn__unstyled: unStyled,
+    Btn__styled: !unStyled,
+    Btn__w100: fullWidth,
+    [`Btn__${size}`]: size,
+    [`Btn__${buttonFor}`]: buttonFor,
+    [`Btn__${buttonFor}--${modifier}`]: buttonFor && modifier,
+    [`Btn__${color}`]: color,
+  });
 
-  if (linkTo) return <Link role="button" className={classNames} to={linkTo} {...props} />;
+  if (linkTo) return <Link role="button" className={btnClassNames} to={linkTo} {...props} />;
 
-  return <button type="button" className={classNames} {...props} />;
+  return <button type="button" className={btnClassNames} {...props} />;
 };
 
 export default Button;
