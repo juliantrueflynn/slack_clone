@@ -1,11 +1,5 @@
 import { actionCreator } from '../util/actionsUtil';
-import {
-  CHANNEL,
-  CHANNEL_SUB,
-  CHANNEL_SWITCH,
-  DM_CHAT,
-  LOAD_CHAT_PAGE,
-} from './actionTypes';
+import { CHANNEL, CHANNEL_SUB, CHANNEL_SWITCH } from './actionTypes';
 
 export const fetchChannels = {
   request: workspaceSlug => actionCreator(CHANNEL.INDEX.REQUEST, { workspaceSlug }),
@@ -34,11 +28,6 @@ export const deleteChannel = {
   failure: errors => actionCreator(CHANNEL.DESTROY.FAILURE, { errors }),
 };
 
-export const createDmChat = {
-  request: dmChat => actionCreator(DM_CHAT.CREATE.REQUEST, { dmChat }),
-  failure: errors => actionCreator(DM_CHAT.CREATE.FAILURE, { errors }),
-};
-
 export const createChannelSub = {
   request: channelSub => actionCreator(CHANNEL_SUB.CREATE.REQUEST, { channelSub }),
   failure: errors => actionCreator(CHANNEL_SUB.CREATE.FAILURE, { errors }),
@@ -59,9 +48,4 @@ export const switchChannel = (channelSlug, scrollLoc) => ({
   type: CHANNEL_SWITCH,
   channelSlug,
   scrollLoc,
-});
-
-export const loadChatPage = pagePath => ({
-  type: LOAD_CHAT_PAGE,
-  pagePath,
 });

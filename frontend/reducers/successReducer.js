@@ -1,6 +1,5 @@
 import {
   PASSWORD,
-  LOAD_CHAT_PAGE,
   WORKSPACE,
   SIGN_OUT,
   USER,
@@ -45,7 +44,6 @@ const successReducer = (state = _defaultState, action) => {
       return nextState;
     }
     case WORKSPACE.SHOW.REQUEST:
-    case LOAD_CHAT_PAGE:
     case USER.SHOW.REQUEST:
     case MODAL_OPEN:
     case MODAL_CLOSE:

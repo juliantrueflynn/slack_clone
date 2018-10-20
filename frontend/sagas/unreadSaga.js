@@ -6,33 +6,35 @@ import {
   put,
   select,
 } from 'redux-saga/effects';
-import { CLEAR_UNREADS, MESSAGE, UNREAD } from '../actions/actionTypes';
-import { fetchUpdate } from './readSaga';
-import { selectEntityBySlug, selectCurrentUser } from '../reducers/selectors';
-import { apiUpdate, apiCreate } from '../util/apiUtil';
-import { updateUnread, createUnread } from '../actions/unreadActions';
+import { MESSAGE, UNREAD } from '../actions/actionTypes';
+import { apiUpdate, apiCreate, apiFetch } from '../util/apiUtil';
+import * as actions from '../actions/unreadActions';
+import { selectCurrentUser } from '../reducers/selectors';
 
-function* fetchClearUnreads({ channelSlug }) {
-  const currChannel = yield select(selectEntityBySlug, 'channels', channelSlug);
-  const { readId } = currChannel;
-  yield fetchUpdate({ readId });
+function* fetchIndex({ workspaceSlug }) {
+  try {
+    const received = yield call(apiFetch, `workspaces/${workspaceSlug}/user_unreads`);
+    yield put(actions.fetchUnreads.receive(received));
+  } catch (error) {
+    yield put(actions.fetchUnreads.failure(error));
+  }
 }
 
 function* loadCreateUnread({ unread }) {
   try {
     const created = yield call(apiCreate, 'unreads', unread);
-    yield put(createUnread.receive(created));
+    yield put(actions.createUnread.receive(created));
   } catch (error) {
-    yield put(createUnread.failure(error));
+    yield put(actions.createUnread.failure(error));
   }
 }
 
 function* loadUpdateUnread({ unread }) {
   try {
     const updated = yield call(apiUpdate, `unreads/${unread.id}`, unread);
-    yield put(updateUnread.receive(updated));
+    yield put(actions.updateUnread.receive(updated));
   } catch (error) {
-    yield put(updateUnread.failure(error));
+    yield put(actions.updateUnread.failure(error));
   }
 }
 
@@ -58,15 +60,15 @@ function* loadNewUnread({ message: { message, unread, authors } }) {
   if (isInConvo) {
     if (unread) {
       unreadProps.id = unread.id;
-      yield put(updateUnread.request(unreadProps));
+      yield put(actions.updateUnread.request(unreadProps));
     } else {
-      yield put(createUnread.request(unreadProps));
+      yield put(actions.createUnread.request(unreadProps));
     }
   }
 }
 
-function* watchClearUnreads() {
-  yield takeLatest(CLEAR_UNREADS, fetchClearUnreads);
+function* watchIndex() {
+  yield takeLatest(UNREAD.INDEX.REQUEST, fetchIndex);
 }
 
 function* watchCreateUnread() {
@@ -83,7 +85,7 @@ function* watchCreateMessage() {
 
 export default function* unreadSaga() {
   yield all([
-    fork(watchClearUnreads),
+    fork(watchIndex),
     fork(watchCreateUnread),
     fork(watchUpdateUnread),
     fork(watchCreateMessage),

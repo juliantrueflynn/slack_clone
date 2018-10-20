@@ -11,19 +11,11 @@ import {
   MESSAGE,
   UNREAD,
   USER_THREAD,
+  CLEAR_UNREADS,
 } from '../actions/actionTypes';
-import { apiCreate, apiUpdate, apiFetch } from '../util/apiUtil';
+import { apiCreate, apiUpdate } from '../util/apiUtil';
 import * as actions from '../actions/readActions';
 import { selectUIByDisplay, selectEntityBySlug, selectEntities } from '../reducers/selectors';
-
-function* fetchIndex({ workspaceSlug }) {
-  try {
-    const received = yield call(apiFetch, `workspaces/${workspaceSlug}/user_unreads`);
-    yield put(actions.fetchUnreads.receive(received));
-  } catch (error) {
-    yield put(actions.fetchUnreads.failure(error));
-  }
-}
 
 function* fetchCreate({ read }) {
   try {
@@ -41,6 +33,12 @@ export function* fetchUpdate({ readId }) {
   } catch (error) {
     yield put(actions.updateRead.failure(error));
   }
+}
+
+function* fetchClearUnreads({ channelSlug }) {
+  const currChannel = yield select(selectEntityBySlug, 'channels', channelSlug);
+  const { readId } = currChannel;
+  yield fetchUpdate({ readId });
 }
 
 function* fetchMessageThread({ messages: { messages } }) {
@@ -124,16 +122,16 @@ function* setMessageRead({ unread }) {
   }
 }
 
-function* watchIndex() {
-  yield takeLatest(READ.INDEX.REQUEST, fetchIndex);
-}
-
 function* watchCreated() {
   yield takeLatest(READ.CREATE.REQUEST, fetchCreate);
 }
 
 function* watchUpdated() {
   yield takeLatest(READ.UPDATE.REQUEST, fetchUpdate);
+}
+
+function* watchClearUnreads() {
+  yield takeLatest(CLEAR_UNREADS, fetchClearUnreads);
 }
 
 function* watchMessageThread() {
@@ -157,9 +155,9 @@ function* watchMessageCreate() {
 
 export default function* readSaga() {
   yield all([
-    fork(watchIndex),
     fork(watchCreated),
     fork(watchUpdated),
+    fork(watchClearUnreads),
     fork(watchMessageThread),
     fork(watchChannelPage),
     fork(watchUserThreadIndex),

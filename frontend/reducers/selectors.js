@@ -48,7 +48,7 @@ const messagesWithEntitiesMap = ({ messages, members }, currUserSlug) => (
       message.avatarThumb = author.avatarThumb;
     }
 
-    if (currUserSlug) {
+    if (currUserSlug && message) {
       message.isCurrentUser = currUserSlug === message.authorSlug;
     }
 
@@ -266,3 +266,36 @@ export const selectEntities = ({ entities }, type) => entities[type];
 export const selectEntityBySlug = ({ entities }, type, slug) => slug && entities[type][slug];
 
 export const selectUIByDisplay = ({ ui }, display) => ui[display];
+
+const drawerEntitiesType = (drawerType) => {
+  switch (drawerType) {
+    case 'convo':
+      return 'messages';
+    case 'team':
+      return 'members';
+    case 'details':
+      return 'channels';
+    default:
+      return null;
+  }
+};
+
+export const selectCurrentEntities = ({ entities, ui: { drawer } }, name) => {
+  let entityPath = name;
+
+  if (name === 'drawer') {
+    entityPath = drawerEntitiesType(drawer.drawerType);
+  }
+
+  if (!entityPath) {
+    return null;
+  }
+
+  return entities[entityPath];
+};
+
+export const selectCurrentEntity = (state, name, slug) => {
+  const items = selectCurrentEntities(state, name);
+
+  return items ? items[slug] : null;
+};

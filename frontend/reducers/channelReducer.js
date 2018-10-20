@@ -10,7 +10,6 @@ import {
   SIGN_OUT,
   UNREAD,
   CLEAR_UNREADS,
-  LOAD_CHAT_PAGE,
   HISTORY,
   CHANNEL_SWITCH
 } from '../actions/actionTypes';
@@ -37,18 +36,14 @@ const channelReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case LOAD_CHAT_PAGE: {
-      const { pagePath } = action;
-
-      if (pagePath === 'unreads' || pagePath === 'threads') {
-        return state;
-      }
+    case MESSAGE.INDEX.REQUEST: {
+      const { channelSlug } = action;
 
       nextState = {};
-      nextState[pagePath] = {
+      nextState[channelSlug] = {
         isOpen: true,
         isLoading: true,
-        slug: pagePath,
+        slug: channelSlug,
         subs: [],
         members: [],
         messages: [],
@@ -270,7 +265,7 @@ const channelReducer = (state = {}, action) => {
 
       return nextState;
     }
-    case READ.INDEX.RECEIVE: {
+    case UNREAD.INDEX.RECEIVE: {
       const { unreads } = action;
       const unreadChannels = Object.values(state).filter(ch => ch.hasUnreads);
 

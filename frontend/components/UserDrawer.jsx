@@ -15,10 +15,10 @@ class UserDrawer extends React.Component {
       match: { params: { workspaceSlug } },
       history,
       createChannelRequest,
-      members,
+      users,
       userSlug,
     } = this.props;
-    const user = members[userSlug];
+    const user = users[userSlug];
 
     if (!user) {
       return;
@@ -37,21 +37,21 @@ class UserDrawer extends React.Component {
     const {
       currentUser,
       openProfileModal,
-      members,
+      users,
       userSlug,
     } = this.props;
-    const user = members[userSlug];
+    const user = users[userSlug];
 
     if (!user) {
       return null;
     }
 
-    const { username, dmChat, slug } = user;
-    const isNotCurrUser = currentUser.slug !== slug;
+    const isNotCurrUser = currentUser.slug !== user.slug;
     const dateJoined = dateUtil(user.joinedAt).monthDayYear();
+    const openModal = () => openProfileModal();
 
-    let profileText = `You haven't direct messaged ${username} yet. Why not say hi?`;
-    if (dmChat) {
+    let profileText = `You haven't direct messaged ${user.username} yet. Why not say hi?`;
+    if (user.dmChat) {
       profileText = '';
     } else if (!isNotCurrUser) {
       profileText = 'This is your profile area where you can edit your settings.';
@@ -60,12 +60,12 @@ class UserDrawer extends React.Component {
     return (
       <div className="UserDrawer">
         <div className="UserDrawer__banner">
-          <img src={user.avatarBanner} alt={`${username} banner`} />
+          <img src={user.avatarBanner} alt={`${user.username} banner`} />
         </div>
         <div className="UserDrawer__body">
           <header className="UserDrawer__header">
             <h2 className="UserDrawer__title">
-              {username}
+              {user.username}
             </h2>
             <StatusIcon member={user} />
           </header>
@@ -98,7 +98,7 @@ class UserDrawer extends React.Component {
             </Button>
           )}
           {isNotCurrUser || (
-            <Button buttonFor="edit-user" onClick={() => openProfileModal()}>
+            <Button buttonFor="edit-user" onClick={openModal}>
               Edit Profile
             </Button>
           )}

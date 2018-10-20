@@ -1,5 +1,5 @@
 import { actionCreator } from '../util/actionsUtil';
-import { UNREAD, CLEAR_UNREADS, USER_THREAD } from './actionTypes';
+import { UNREAD, CLEAR_UNREADS } from './actionTypes';
 
 export const fetchUnreads = {
   request: workspaceSlug => actionCreator(UNREAD.INDEX.REQUEST, { workspaceSlug }),
@@ -17,14 +17,6 @@ export const updateUnread = {
   request: unread => actionCreator(UNREAD.UPDATE.REQUEST, { unread }),
   receive: unread => actionCreator(UNREAD.UPDATE.RECEIVE, { unread }),
   failure: errors => actionCreator(UNREAD.UPDATE.FAILURE, { errors }),
-};
-
-export const updateUserThreadUnreads = {
-  request: (workspaceSlug, parentMessages) => (
-    actionCreator(USER_THREAD.UPDATE.REQUEST, { workspaceSlug, parentMessages })
-  ),
-  receive: messageThreads => actionCreator(USER_THREAD.UPDATE.RECEIVE, { messageThreads }),
-  failure: errors => actionCreator(USER_THREAD.UPDATE.FAILURE, { errors }),
 };
 
 export const clearUnreads = (channelSlug, lastRead) => ({

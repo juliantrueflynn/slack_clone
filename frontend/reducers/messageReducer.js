@@ -10,7 +10,6 @@ import {
   SIGN_OUT,
   UNREAD,
   DRAWER_CLOSE,
-  LOAD_CHAT_PAGE,
   HISTORY,
 } from '../actions/actionTypes';
 
@@ -49,12 +48,12 @@ const messageReducer = (state = {}, action) => {
 
       return nextState;
     }
-    case LOAD_CHAT_PAGE: {
-      const { pagePath } = action;
-
+    case MESSAGE.INDEX.REQUEST:
+    case USER_THREAD.INDEX.REQUEST:
+    case UNREAD.INDEX.REQUEST: {
       nextState = {};
       Object.values(state).filter(msg => msg.isInConvo).forEach(({ slug }) => {
-        const isActiveConvo = pagePath === 'threads';
+        const isActiveConvo = action.type === USER_THREAD.INDEX.REQUEST;
         nextState[slug] = { isActiveConvo };
       });
 
@@ -227,7 +226,7 @@ const messageReducer = (state = {}, action) => {
       nextState[messageSlug].isInDrawer = false;
       return nextState;
     }
-    case READ.INDEX.RECEIVE: {
+    case UNREAD.INDEX.RECEIVE: {
       const { unreads } = action;
 
       nextState = unreads.reduce((acc, curr) => {

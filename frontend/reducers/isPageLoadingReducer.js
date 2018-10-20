@@ -1,9 +1,8 @@
 import {
-  LOAD_CHAT_PAGE,
   WORKSPACE,
   USER_THREAD,
   MESSAGE,
-  READ,
+  UNREAD,
 } from '../actions/actionTypes';
 
 const isPageLoadingReducer = (state = false, action) => {
@@ -11,10 +10,12 @@ const isPageLoadingReducer = (state = false, action) => {
 
   switch (action.type) {
     case WORKSPACE.SHOW.REQUEST:
-    case LOAD_CHAT_PAGE:
+    case MESSAGE.INDEX.REQUEST:
+    case UNREAD.INDEX.REQUEST:
+    case USER_THREAD.INDEX.REQUEST:
       return true;
     case MESSAGE.INDEX.RECEIVE:
-    case READ.INDEX.RECEIVE:
+    case UNREAD.INDEX.RECEIVE:
     case USER_THREAD.INDEX.RECEIVE:
       return false;
     default:

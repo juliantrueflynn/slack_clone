@@ -12,35 +12,25 @@ class DrawerSwitch extends React.Component {
   }
 
   componentDidMount() {
-    const {
-      openDrawer,
-      fetchEntitiesRequest,
-      drawerType,
-      drawerSlug,
-    } = this.props;
+    const { openDrawer, drawerType, entitySlug: drawerSlug } = this.props;
 
     openDrawer({ drawerType, drawerSlug });
-    fetchEntitiesRequest();
   }
 
   componentDidUpdate(prevProps) {
     const {
       location: { pathname },
+      fetchEntityRequest,
       openDrawer,
-      fetchEntitiesRequest,
       drawerType,
-      drawerSlug,
+      entitySlug: drawerSlug,
     } = this.props;
 
     if (pathname !== prevProps.location.pathname) {
       openDrawer({ drawerType, drawerSlug });
 
-      if (drawerSlug !== prevProps.drawerSlug) {
-        fetchEntitiesRequest();
-      }
-
       if (prevProps.drawerType && drawerType !== prevProps.drawerType) {
-        fetchEntitiesRequest();
+        fetchEntityRequest();
       }
     }
   }
@@ -63,10 +53,10 @@ class DrawerSwitch extends React.Component {
 
   render() {
     const {
+      entitySlug: drawerSlug,
       drawerType,
-      drawerSlug,
       messages,
-      members,
+      users,
       channel,
       isLoading,
       currentUser,
@@ -85,25 +75,25 @@ class DrawerSwitch extends React.Component {
           <UserDrawer
             userSlug={drawerSlug}
             currentUser={currentUser}
-            members={members}
+            users={users}
             openProfileModal={openProfileModal}
             createChannelRequest={createChannelRequest}
           />
         )}
         {drawerType === 'favorites' && (
-          <FavoritesDrawer messages={messages} members={members} />
+          <FavoritesDrawer messages={messages} users={users} />
         )}
         {drawerType === 'convo' && (
           <MessageThreadDrawer
             messages={messages}
-            members={members}
+            users={users}
             isLoading={isLoading}
             currentUser={currentUser}
           />
         )}
         {(drawerType === 'details' && channel) && (
           <ChannelDetailsDrawer
-            users={members}
+            users={users}
             channel={channel}
             accordion={accordion}
           />

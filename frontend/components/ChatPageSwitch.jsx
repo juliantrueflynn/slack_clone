@@ -11,36 +11,24 @@ class ChatPageSwitch extends React.Component {
   componentDidMount() {
     const { history } = this.props;
 
-    this.loadPageData();
-
     if (this.selectRedirectUrl()) {
       history.push(this.selectRedirectUrl());
     }
   }
 
-  componentDidUpdate(prevProps) {
-    const { history, match: { url } } = this.props;
-
-    if (url !== prevProps.match.url) {
-      this.loadPageData();
-    }
+  componentDidUpdate() {
+    const { history } = this.props;
 
     if (this.selectRedirectUrl()) {
       history.replace(this.selectRedirectUrl());
     }
   }
 
-  loadPageData() {
-    const { chatPath, loadChatPage, fetchEntriesRequest } = this.props;
-    loadChatPage(chatPath);
-    fetchEntriesRequest(chatPath);
-  }
-
   selectRedirectUrl() {
     const {
+      match: { url, isExact },
       drawerType,
       drawerSlug,
-      match: { url, isExact }
     } = this.props;
 
     if (isExact && drawerType) {
@@ -56,10 +44,11 @@ class ChatPageSwitch extends React.Component {
 
   render() {
     const {
-      chatPath,
+      entitySlug: chatPath,
       routes,
       messages,
       users,
+      entity: channel,
       channels,
       currentUser,
       isLoading,
@@ -70,7 +59,6 @@ class ChatPageSwitch extends React.Component {
     } = this.props;
 
     let chatType;
-    const channel = channels[chatPath];
     if (channel) {
       chatType = 'channel';
     }

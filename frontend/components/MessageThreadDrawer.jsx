@@ -3,7 +3,7 @@ import MessageFormContainer from './MessageFormContainer';
 import Scrollable from './Scrollable';
 import MessageContainer from './MessageContainer';
 
-const MessageThreadDrawer = ({ messages, members, isLoading }) => {
+const MessageThreadDrawer = ({ messages, users, isLoading }) => {
   const parentMessage = messages[0];
 
   if (!parentMessage) {
@@ -19,7 +19,7 @@ const MessageThreadDrawer = ({ messages, members, isLoading }) => {
       {isLoading && (
         <MessageContainer
           key={parentMessage.slug}
-          users={members}
+          users={users}
           message={parentMessage}
           isThreadHidden
         />
@@ -27,7 +27,7 @@ const MessageThreadDrawer = ({ messages, members, isLoading }) => {
       {isLoading || messages.map(message => (
         <MessageContainer
           key={message.slug}
-          users={members}
+          users={users}
           message={message}
           isThreadHidden
         />

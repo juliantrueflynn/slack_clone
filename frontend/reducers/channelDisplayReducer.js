@@ -1,13 +1,23 @@
-import { WORKSPACE, SIGN_OUT, LOAD_CHAT_PAGE } from '../actions/actionTypes';
+import {
+  WORKSPACE,
+  MESSAGE,
+  UNREAD,
+  USER_THREAD,
+  SIGN_OUT,
+} from '../actions/actionTypes';
 
 const channelDisplayReducer = (state = null, action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case LOAD_CHAT_PAGE: {
-      const { pagePath } = action;
-      return pagePath;
+    case MESSAGE.INDEX.REQUEST: {
+      const { channelSlug } = action;
+      return channelSlug;
     }
+    case UNREAD.INDEX.REQUEST:
+      return 'unreads';
+    case USER_THREAD.INDEX.REQUEST:
+      return 'threads';
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return null;

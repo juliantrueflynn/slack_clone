@@ -10,14 +10,7 @@ import './Workspace.css';
 
 class Workspace extends React.Component {
   componentDidMount() {
-    const {
-      workspaceSlug,
-      workspaces,
-      fetchWorkspaceRequest,
-      fetchWorkspacesRequest,
-    } = this.props;
-
-    fetchWorkspaceRequest(workspaceSlug);
+    const { workspaces, fetchWorkspacesRequest } = this.props;
 
     if (!workspaces || !workspaces.length) {
       fetchWorkspacesRequest();
@@ -28,15 +21,9 @@ class Workspace extends React.Component {
     const {
       match: { isExact, url },
       history,
-      workspaceSlug,
       workspaces,
-      fetchWorkspaceRequest,
       fetchWorkspacesRequest,
     } = this.props;
-
-    if (prevProps.workspaceSlug !== workspaceSlug) {
-      fetchWorkspaceRequest(workspaceSlug);
-    }
 
     if (prevProps.workspaces && prevProps.workspaces.length !== workspaces.length) {
       fetchWorkspacesRequest();
@@ -49,9 +36,9 @@ class Workspace extends React.Component {
   }
 
   getDefaultChat() {
-    const { workspaceSlug, workspaces, channels } = this.props;
+    const { entitySlug, workspaces, channels } = this.props;
 
-    const workspace = workspaces[workspaceSlug];
+    const workspace = workspaces[entitySlug];
     if (workspace) {
       const firstChatSlug = workspace.channels[0];
       return channels[firstChatSlug];
@@ -62,7 +49,7 @@ class Workspace extends React.Component {
 
   render() {
     const {
-      workspaceSlug,
+      entitySlug: workspaceSlug,
       isLoading,
       routes,
       modal,
