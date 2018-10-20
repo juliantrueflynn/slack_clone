@@ -56,6 +56,7 @@ class Workspace extends React.Component {
       modalClose,
       createReactionRequest,
       channels,
+      currChatSlug,
       onReceived,
     } = this.props;
 
@@ -68,7 +69,9 @@ class Workspace extends React.Component {
     }
 
     const defaultChat = this.getDefaultChat();
-    const cableChannels = Object.values(channels).filter(ch => ch.isSub).map(channel => (
+    const cableChannels = Object.values(channels).filter(ch => (
+      ch.isSub || ch.slug === currChatSlug
+    )).map(channel => (
       { channel: 'ChatChannel', channelSlug: channel.slug }
     ));
 

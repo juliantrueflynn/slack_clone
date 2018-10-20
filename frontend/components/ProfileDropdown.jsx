@@ -1,12 +1,13 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import Avatar from './Avatar';
 import StatusIcon from './StatusIcon';
 import Dropdown from './Dropdown';
 import './ProfileDropdown.css';
 
 const ProfileDropdown = ({
+  match: { url },
   currChatSlug,
-  url,
   user,
   workspaces,
   workspaceTitle,
@@ -67,4 +68,4 @@ const ProfileDropdown = ({
   );
 };
 
-export default ProfileDropdown;
+export default withRouter(ProfileDropdown);

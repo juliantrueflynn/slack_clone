@@ -5,6 +5,8 @@ import DmChatMenuItem from './DmChatMenuItem';
 import ChatsWidget from './ChatsWidget';
 import ProfileDropdown from './ProfileDropdown';
 import StatusIcon from './StatusIcon';
+import ChatModal from './ChatModal';
+import ChatsModal from './ChatsModal';
 import './LeftSidebar.css';
 
 const LeftSidebar = ({
@@ -25,7 +27,11 @@ const LeftSidebar = ({
     return null;
   }
 
+  const user = members[currentUser.slug];
   const hasUnreadChannels = !!channels.filter(ch => ch.isSub && ch.hasUnreads).length;
+  const chats = channels.sort((a, b) => a.title && b.title && a.title.localeCompare(b.title));
+  const subbedChannels = chats.filter(ch => ch.isSub);
+  const unsubbedChannels = chats.filter(ch => !ch.isSub);
 
   const quickLinksList = [
     {
@@ -61,38 +67,37 @@ const LeftSidebar = ({
   return (
     <aside className="LeftSidebar">
       <div className="SidebarWidget">
-        {members[currentUser.slug] && (
+        {user && (
           <ProfileDropdown
+            user={user}
             workspaceTitle={currWorkspace.title}
             workspaces={workspaces}
-            user={members[currentUser.slug]}
-            url={url}
             currChatSlug={currChatSlug}
           />
         )}
       </div>
-
       <div className="SidebarWidget SidebarWidth__quicklinks">
         <Menu items={quickLinksList} menuFor="quicklinks" />
       </div>
-
       <ChatsWidget
         modalOpen={modalOpen}
-        channels={channels}
+        subbedChannels={subbedChannels}
         workspaceSlug={workspaceSlug}
-        workspaceId={currWorkspace.id}
-        fetchChannelsRequest={fetchChannelsRequest}
       />
-
       <div className="SidebarWidget">
         <header className="SidebarWidget__header">
-          <span className="SidebarWidget__title">
+          <div className="SidebarWidget__title">
             Direct Messages
-          </span>
+          </div>
         </header>
-
         <Menu menuFor="dmChats" items={dmChatsItems} />
       </div>
+      <ChatsModal
+        workspaceSlug={workspaceSlug}
+        unsubbedChannels={unsubbedChannels}
+        fetchChannelsRequest={fetchChannelsRequest}
+      />
+      <ChatModal workspaceId={currWorkspace.id} />
     </aside>
   );
 };

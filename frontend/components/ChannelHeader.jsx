@@ -73,7 +73,7 @@ class ChannelHeader extends React.Component {
       modalOpen,
       match: { url },
     } = this.props;
-    const subsLen = channel && channel.subs.length;
+    const subsLen = channel && channel.members.length;
     const hasTopic = !!(channel && channel.topic);
     const isFavsOpen = drawerType === 'favorites';
     const isDetailsOpen = drawerType === 'details';

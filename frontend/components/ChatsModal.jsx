@@ -18,8 +18,8 @@ class ChatsModal extends React.Component {
           Channels you can join
         </div>
         <div role="list" className="ChatsModal__list">
-          {unsubbedChannels && unsubbedChannels.map(chat => (
-            <ChatsModalItem key={chat.slug} channel={chat} workspaceSlug={workspaceSlug} />
+          {unsubbedChannels && unsubbedChannels.map(ch => (
+            <ChatsModalItem key={ch.slug} channel={ch} workspaceSlug={workspaceSlug} />
           ))}
         </div>
       </div>
@@ -27,9 +27,6 @@ class ChatsModal extends React.Component {
   }
 }
 
-const modalProps = {
-  modalType: 'MODAL_CHATS',
-  modalTitle: 'Browse channels'
-};
+const modalProps = { modalType: 'MODAL_CHATS', modalTitle: 'Browse channels' };
 
 export default withModal(modalProps)(ChatsModal);

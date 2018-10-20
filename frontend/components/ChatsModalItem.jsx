@@ -12,7 +12,7 @@ const ChatsModalItem = ({ channel, workspaceSlug }) => {
     title,
   } = channel;
 
-  const channelUrl = `/${workspaceSlug}/${slug}`;
+  const channelUrl = `/${workspaceSlug}/messages/${slug}`;
   const dateCreated = dateUtil(createdAt).monthDayYear();
 
   return (

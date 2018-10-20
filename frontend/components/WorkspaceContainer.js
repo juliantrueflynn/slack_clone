@@ -9,6 +9,7 @@ import Workspace from './Workspace';
 
 const mapStateToProps = state => ({
   channels: selectChannelsWithEntitiesMap(state),
+  currChatSlug: state.ui.displayChannelSlug,
   workspaces: state.entities.workspaces,
   isLoading: state.ui.isWorkspaceLoading,
   modal: state.ui.displayModal,
