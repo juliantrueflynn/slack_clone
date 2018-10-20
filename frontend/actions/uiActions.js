@@ -4,9 +4,9 @@ import {
   MODAL_CLOSE,
   DRAWER_OPEN,
   DRAWER_CLOSE,
-  ACCORDION_OPEN,
-  ACCORDION_CLOSE,
   DESTROY_SUCCESS,
+  ACCORDION_TOGGLE,
+  ACCORDION_OPEN,
 } from './actionTypes';
 
 export const navigate = (path, push) => ({
@@ -34,19 +34,19 @@ export const drawerClose = () => ({
   type: DRAWER_CLOSE,
 });
 
+export const destroySuccess = (entity = null) => ({
+  type: DESTROY_SUCCESS,
+  entity,
+});
+
+export const accordionToggle = (accordionType, accordionItem) => ({
+  type: ACCORDION_TOGGLE,
+  accordionType,
+  accordionItem,
+});
+
 export const accordionOpen = (accordionType, accordionItem) => ({
   type: ACCORDION_OPEN,
   accordionType,
   accordionItem,
-});
-
-export const accordionClose = (accordionType, accordionItem) => ({
-  type: ACCORDION_CLOSE,
-  accordionType,
-  accordionItem,
-});
-
-export const destroySuccess = (entity = null) => ({
-  type: DESTROY_SUCCESS,
-  entity,
 });

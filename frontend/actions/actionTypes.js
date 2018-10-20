@@ -26,5 +26,5 @@ export const DRAWER_CLOSE = 'DRAWER_CLOSE';
 export const NAVIGATE = 'NAVIGATE';
 export const MODAL_OPEN = 'MODAL_OPEN';
 export const MODAL_CLOSE = 'MODAL_CLOSE';
+export const ACCORDION_TOGGLE = 'ACCORDION_TOGGLE';
 export const ACCORDION_OPEN = 'ACCORDION_OPEN';
-export const ACCORDION_CLOSE = 'ACCORDION_CLOSE';

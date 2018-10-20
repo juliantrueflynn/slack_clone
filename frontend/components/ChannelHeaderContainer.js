@@ -3,8 +3,8 @@ import { withRouter } from 'react-router-dom';
 import {
   modalOpen,
   drawerClose,
+  accordionToggle,
   accordionOpen,
-  accordionClose,
 } from '../actions/uiActions';
 import { selectChannelsWithEntitiesMap } from '../reducers/selectors';
 import ChannelHeader from './ChannelHeader';
@@ -21,8 +21,8 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
 const mapDispatchToProps = dispatch => ({
   modalOpen: modalType => dispatch(modalOpen(modalType)),
   drawerClose: () => dispatch(drawerClose()),
+  accordionToggle: () => dispatch(accordionToggle('details', 'members')),
   accordionOpen: () => dispatch(accordionOpen('details', 'members')),
-  accordionClose: () => dispatch(accordionClose('details', 'members'))
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChannelHeader));

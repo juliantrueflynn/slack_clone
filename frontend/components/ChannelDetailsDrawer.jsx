@@ -31,7 +31,7 @@ class ChannelDetailsDrawer extends React.Component {
       return;
     }
 
-    if (accordion.members !== members) {
+    if (accordion.members !== undefined && accordion.members !== members) {
       this.setMembersState(accordion.members);
     }
   }

@@ -52,10 +52,14 @@ class ChannelHeader extends React.Component {
   }
 
   handleDetailsAccordionClick() {
-    const { accordionOpen, accordionClose, accordion } = this.props;
+    const {
+      accordionOpen,
+      accordionToggle,
+      drawerType,
+    } = this.props;
 
-    if (accordion.members) {
-      accordionClose();
+    if (drawerType === 'details') {
+      accordionToggle();
     } else {
       accordionOpen();
     }
