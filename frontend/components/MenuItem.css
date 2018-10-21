@@ -15,26 +15,26 @@
   position: relative;
 }
 
-.SidebarWidget .MenuItem__content > .Icon,
+.SidebarMenu .MenuItem__content > .Icon,
 .Menu--dmChats .StatusIcon {
   margin-right: 8px;
 }
 
-.SidebarWidget .Menu--chats .MenuItem__content > .Icon,
-.SidebarWidget .Menu--quicklinks .MenuItem__content > .Icon {
+.SidebarMenu .Menu--chats .MenuItem__content > .Icon,
+.SidebarMenu .Menu--quicklinks .MenuItem__content > .Icon {
   color: rgba(255,255,255,0.4);
 }
 
-.SidebarWidget .MenuItem__content--btn:hover:not(.MenuItem__content--active),
-.SidebarWidget .MenuItem__content--link:hover:not(.MenuItem__content--active) {
+.SidebarMenu .MenuItem__content--btn:hover:not(.MenuItem__content--active),
+.SidebarMenu .MenuItem__content--link:hover:not(.MenuItem__content--active) {
   background-color: rgba(223,230,233,.45);
 }
 
-.SidebarWidget .MenuItem__content--btn:hover:not(.MenuItem__content--active),
-.SidebarWidget .MenuItem__content--link:hover:not(.MenuItem__content--active) {
+.SidebarMenu .MenuItem__content--btn:hover:not(.MenuItem__content--active),
+.SidebarMenu .MenuItem__content--link:hover:not(.MenuItem__content--active) {
   background-color: rgba(0,0,0,0.1);
 }
 
-.SidebarWidget .MenuItem__content--active {
+.SidebarMenu .MenuItem__content--active {
   background-color: #4C9689;
 }

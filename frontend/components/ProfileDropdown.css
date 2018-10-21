@@ -85,3 +85,7 @@
 .Dropdown__profile .Dropdown__title {
   text-align: left;
 }
+
+.Dropdown__workspace {
+  font-weight: bold;
+}

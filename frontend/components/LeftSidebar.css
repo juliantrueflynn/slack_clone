@@ -8,60 +8,11 @@
   color: inherit;
 }
 
-.LeftSidebar .MenuItem__content,
-.LeftSidebar .menu__text {
-  text-align: inherit;
-}
-
-.SidebarWidget__header,
+.SidebarMenu__header,
 .Dropdown__profile .Btn__dropdown,
-.LeftSidebar .MenuItem__content,
-.LeftSidebar .menu__text {
+.SidebarMenu .MenuItem__content,
+.SidebarMenu .menu__text {
   padding-left: 16px;
   padding-right: 16px;
   width: 100%;
-}
-
-.SidebarWidget {
-  margin-bottom: 20px;
-}
-
-.SidebarWidget:last-child {
-  margin-bottom: 0;
-}
-
-.SidebarWidget > .Menu > .MenuItem > .MenuItem__content {
-  color: rgba(255,255,255,0.75);
-}
-
-.SidebarWidget > .Menu > .MenuItem--unread > .MenuItem__content {
-  color: #FFF;
-  font-weight: bold;
-}
-
-.SidebarWidget__header {
-  margin-bottom: 5px;
-  display: flex;
-  flex-direction: row;
-}
-
-.SidebarWidget__title {
-  display: block;
-}
-
-.SidebarWidget__title .Btn:hover {
-  color: rgba(255,255,255,1);
-}
-
-.SidebarWidget__header .Btn {
-  display: block;
-  margin-right: auto;
-}
-
-.Dropdown__workspace {
-  font-weight: bold;
-}
-
-.SidebarWidget__header .Btn:focus {
-  outline: none;
 }

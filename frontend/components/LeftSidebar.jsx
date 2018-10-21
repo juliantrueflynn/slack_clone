@@ -1,10 +1,10 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Menu from './Menu';
+import Button from './Button';
 import DmChatMenuItem from './DmChatMenuItem';
-import ChatsWidget from './ChatsWidget';
 import ProfileDropdown from './ProfileDropdown';
 import StatusIcon from './StatusIcon';
+import SidebarMenu from './SidebarMenu';
 import ChatModal from './ChatModal';
 import ChatsModal from './ChatsModal';
 import './LeftSidebar.css';
@@ -32,6 +32,8 @@ const LeftSidebar = ({
   const chats = channels.sort((a, b) => a.title && b.title && a.title.localeCompare(b.title));
   const subbedChannels = chats.filter(ch => ch.isSub);
   const unsubbedChannels = chats.filter(ch => !ch.isSub);
+  const chatsModalOpen = () => modalOpen('MODAL_CHATS');
+  const chatModalOpen = () => modalOpen('MODAL_CHAT');
 
   const quickLinksList = [
     {
@@ -47,6 +49,13 @@ const LeftSidebar = ({
       modifierClassName: hasUnreadThreads ? 'unread' : null,
     },
   ];
+
+  const channelsItems = subbedChannels.map(item => ({
+    icon: <FontAwesomeIcon className="Icon" icon={['fas', 'hashtag']} size="sm" />,
+    label: item.title,
+    link: `/${workspaceSlug}/messages/${item.slug}`,
+    modifierClassName: item.hasUnreads ? 'unread' : null,
+  }));
 
   const dmChatsItems = dmChats.map((ch) => {
     const member = { status: ch.userStatus };
@@ -66,7 +75,7 @@ const LeftSidebar = ({
 
   return (
     <aside className="LeftSidebar">
-      <div className="SidebarWidget">
+      <div className="SidebarMenu">
         {user && (
           <ProfileDropdown
             user={user}
@@ -76,22 +85,16 @@ const LeftSidebar = ({
           />
         )}
       </div>
-      <div className="SidebarWidget SidebarWidth__quicklinks">
-        <Menu items={quickLinksList} menuFor="quicklinks" />
-      </div>
-      <ChatsWidget
-        modalOpen={modalOpen}
-        subbedChannels={subbedChannels}
-        workspaceSlug={workspaceSlug}
-      />
-      <div className="SidebarWidget">
-        <header className="SidebarWidget__header">
-          <div className="SidebarWidget__title">
-            Direct Messages
-          </div>
-        </header>
-        <Menu menuFor="dmChats" items={dmChatsItems} />
-      </div>
+      <SidebarMenu menuFor="quicklinks" menuItems={quickLinksList} />
+      <SidebarMenu menuFor="chats" menuItems={channelsItems}>
+        <Button unStyled buttonFor="chats" onClick={chatsModalOpen}>
+          Channels
+        </Button>
+        <Button unStyled buttonFor="widget" onClick={chatModalOpen}>
+          <FontAwesomeIcon icon={['fas', 'plus-circle']} />
+        </Button>
+      </SidebarMenu>
+      <SidebarMenu menuFor="dmChats" widgetTitle="Direct Messages" menuItems={dmChatsItems} />
       <ChatsModal
         workspaceSlug={workspaceSlug}
         unsubbedChannels={unsubbedChannels}
