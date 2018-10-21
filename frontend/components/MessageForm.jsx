@@ -50,6 +50,7 @@ class MessageForm extends React.Component {
   render() {
     const { placeholder, hasSubmitButton, parentMessageId } = this.props;
     const { editorState } = this.state;
+    const editorPlaceholder = placeholder || 'Reply...';
     const formClassNames = classNames('MessageForm', {
       'MessageForm__has-submit': hasSubmitButton,
       MessageForm__convo: parentMessageId,
@@ -67,7 +68,7 @@ class MessageForm extends React.Component {
             <MessageEditor
               editorState={editorState}
               onChange={this.onChange}
-              placeholder={placeholder || 'Reply...'}
+              placeholder={editorPlaceholder}
             />
             {hasSubmitButton && (
               <div className="Form__actions">

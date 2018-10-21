@@ -4,11 +4,11 @@
   box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.15);
 }
 
-.ChatPage--reaction .MessageHoverMenu {
+.Workspace--modal-open .MessageHoverMenu {
   border: none;
 }
 
-.ChatPage--reaction .MessageHoverMenu > .Btn {
+.Workspace--modal-open .MessageHoverMenu > .Btn {
   display: none;
 }
 

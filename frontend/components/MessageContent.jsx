@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import MessageEditor from './MessageEditor';
 import { mountEditorState, convertForSubmit } from '../util/editorUtil';
 import Button from './Button';
@@ -36,8 +36,8 @@ class MessageContent extends React.Component {
     closeEditor();
   }
 
-  handleEditSubmit(event) {
-    event.preventDefault();
+  handleEditSubmit(e) {
+    e.preventDefault();
 
     const { messageSlug: slug, updateMessageRequest, closeEditor } = this.props;
     const { editorState } = this.state;
@@ -49,26 +49,21 @@ class MessageContent extends React.Component {
   render() {
     const { isEditing } = this.props;
     const { editorState } = this.state;
-    const classNames = `msg__editor-container ${isEditing ? 'msg__editor-container--editing' : ''}`;
 
     return (
-      <div className={classNames}>
-        <MessageEditor
-          editorState={editorState}
-          onChange={this.onChange}
-          readOnly={!isEditing}
-        />
+      <Fragment>
+        <MessageEditor editorState={editorState} onChange={this.onChange} readOnly={!isEditing} />
         {isEditing && (
-          <div className="msg__actions">
-            <Button buttonFor="cancel" onClick={this.handleEditClose}>
+          <Fragment>
+            <Button buttonFor="cancel" onClick={this.handleEditClose} color="white" size="xs">
               Cancel
             </Button>
-            <Button type="submit" buttonFor="submit" onClick={this.handleEditSubmit}>
+            <Button type="submit" buttonFor="submit" onClick={this.handleEditSubmit} color="green" size="xs">
               Save changes
             </Button>
-          </div>
+          </Fragment>
         )}
-      </div>
+      </Fragment>
     );
   }
 }

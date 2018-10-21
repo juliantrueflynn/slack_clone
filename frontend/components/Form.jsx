@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { camelize } from 'humps';
 import './Form.css';
 
@@ -19,10 +20,12 @@ class Form extends React.Component {
       errors,
     } = this.props;
     const hasErrors = !!(errors && errors.length);
-    const classNames = `Form Form__${formFor}`;
+    const formClassNames = classNames('Form', {
+      [`Form__${formFor}`]: formFor,
+    });
 
     return (
-      <div className={classNames}>
+      <div className={formClassNames}>
         {hasErrors && (
           <div className="Form__alert Form__alert--errors">
             <ul>

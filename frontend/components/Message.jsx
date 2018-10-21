@@ -59,10 +59,7 @@ class Message extends React.Component {
     const dateCreated = dateUtil(message.createdAt).localTime();
     const entryReactions = reactions.filter(item => item.messageId === message.id);
     const hasReactions = !!entryReactions.length;
-    const entryClassNames = classNames('Message', {
-      [`Message__${message.entityType}`]: message.entityType,
-      'Message--editing': isEditing,
-    });
+    const entryClassNames = classNames('Message', { 'Message--editing': isEditing });
 
     return (
       <div className={entryClassNames} role="listitem">

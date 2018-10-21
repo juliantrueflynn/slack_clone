@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import 'draft-js/dist/Draft.css';
 import 'draft-js-emoji-plugin/lib/plugin.css';
 import Editor from 'draft-js-plugins-editor';
@@ -21,19 +22,20 @@ class MessageEditor extends React.Component {
   render() {
     const { readOnly, ...props } = this.props;
     const { EmojiSuggestions, EmojiSelect } = this.emojiPlugin;
+
     const plugins = [this.emojiPlugin];
-    const editorClassNames = `Editor ${readOnly ? 'Editor__locked' : 'Editor__unlocked'}`;
+    const hasReadOnly = readOnly || false;
+    const editorClassNames = classNames('Editor', {
+      Editor__locked: hasReadOnly,
+      Editor__unlocked: !hasReadOnly,
+    });
 
     return (
-      <div
-        role="presentation"
-        className={editorClassNames}
-        onClick={this.focus}
-      >
+      <div role="presentation" className={editorClassNames} onClick={this.focus}>
         <Editor
           ref={this.editor}
           plugins={plugins}
-          readOnly={readOnly || false}
+          readOnly={hasReadOnly}
           {...props}
         />
         {readOnly || (<EmojiSuggestions />)}

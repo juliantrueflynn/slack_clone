@@ -1,7 +1,7 @@
 .AllUnreadsItem__body .Message,
 .Drawer .Message,
 .Channel .Message {
-  padding: 9px 27px;
+  padding: 7px 27px;
 }
 
 .Message {
@@ -36,16 +36,12 @@
   padding-right: 2px;
 }
 
-.Message:hover {
+.Message:not(.Message--editing):hover {
   background-color: #F9F9F9;
 }
 
-.ChatPage--reaction .Message:hover {
+.Workspace--modal-open .Message:hover {
   background-color: #FFF;
-}
-
-.Message--editing {
-  background-color: #FFEAA7;
 }
 
 .Message__author {
@@ -61,4 +57,20 @@
 .Message__time {
   color: rgba(0,0,0,0.5);
   font-size: .8em;
+}
+
+.Message--editing {
+  background-color: rgba(255, 234, 167, 0.6);
+}
+
+.Message--editing .Message__meta {
+  display: none;
+}
+
+.Message--editing .Message__content .Editor__unlocked {
+  margin-bottom: 8px;
+}
+
+.Message--editing .Message__content .Btn__cancel {
+  margin-right: 8px;
 }
