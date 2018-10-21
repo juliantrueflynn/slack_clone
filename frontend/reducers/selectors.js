@@ -12,13 +12,14 @@ export const selectSubbedWorkspaces = ({ entities: { workspaces } }) => (
 
 export const selectReactionByMessageEmoji = (state, { messageId, emoji }) => {
   const { entities: { reactions }, session: { currentUser } } = state;
-  const filtered = values(reactions).filter(reaction => (
+
+  const usersReactions = values(reactions).filter(reaction => (
     reaction.userId === currentUser.id
     && reaction.messageId === messageId
     && reaction.emoji === emoji
   ));
 
-  return !filtered.length ? null : filtered[0];
+  return usersReactions[0];
 };
 
 export const getReactionCounts = ({ entities: { reactions }, session }, messageSlug) => {

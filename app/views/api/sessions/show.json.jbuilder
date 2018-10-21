@@ -1,1 +1,1 @@
-json.(@user, :id, :slug, :username, :email)
+json.partial! 'api/sessions/session', user: @user
