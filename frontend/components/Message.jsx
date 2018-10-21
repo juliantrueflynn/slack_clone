@@ -103,9 +103,9 @@ class Message extends React.Component {
           </div>
           {hasReactions && (
             <Reactions
-              createReactionRequest={createReactionRequest}
+              createReaction={createReactionRequest}
               reactions={entryReactions}
-              currentUserId={currentUser.id}
+              userId={currentUser.id}
               messageId={message.id}
             />
           )}

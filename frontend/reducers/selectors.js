@@ -22,13 +22,13 @@ export const selectReactionByMessageEmoji = (state, { messageId, emoji }) => {
   return usersReactions[0];
 };
 
-const messagesWithEntitiesMap = ({ messages, members }, currUserSlug) => (
+const messagesWithEntitiesMap = ({ messages, members }, userSlug) => (
   values(messages).reduce((acc, curr) => {
     const message = messages[curr.slug];
     const author = members && members[curr.authorSlug];
 
-    if (currUserSlug && message) {
-      message.isCurrentUser = currUserSlug === message.authorSlug;
+    if (userSlug && message) {
+      message.isCurrentUser = userSlug === message.authorSlug;
     }
 
     acc[curr.slug] = {

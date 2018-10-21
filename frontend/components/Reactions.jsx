@@ -9,14 +9,14 @@ class Reactions extends React.Component {
   }
 
   handleClick(emoji) {
-    const { createReactionRequest, messageId } = this.props;
-    createReactionRequest({ emoji, messageId });
+    const { createReaction, messageId } = this.props;
+    createReaction({ emoji, messageId });
   }
 
   render() {
     const { reactions, currentUserId } = this.props;
 
-    const emojiStyle = {
+    const reactionStyle = {
       height: 17,
       width: 17,
       top: 0,
@@ -35,16 +35,16 @@ class Reactions extends React.Component {
       return acc;
     }, {});
 
-    console.log(reactionCounts);
+    const reactionItems = Object.values(reactionCounts);
 
     return (
       <ul className="Reactions">
-        {Object.values(reactionCounts).map(reaction => (
+        {reactionItems.map(reaction => (
           <ReactionItem
             key={reaction.emoji}
-            emojiStyle={emojiStyle}
+            reactionStyle={reactionStyle}
             createReaction={this.handleClick}
-            {...reaction}
+            reaction={reaction}
           />
         ))}
       </ul>
