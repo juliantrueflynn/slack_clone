@@ -1,6 +1,5 @@
 import React from 'react';
-import Emojify from 'react-emojione';
-import Button from './Button';
+import ReactionItem from './ReactionItem';
 import './Reactions.css';
 
 class Reactions extends React.Component {
@@ -14,19 +13,8 @@ class Reactions extends React.Component {
     createReactionRequest({ emoji, messageId });
   }
 
-  itemClassNames(emoji) {
-    const { reactions } = this.props;
-    let classNames = 'Reactions__item';
-    if (reactions[emoji].hasCurrentUser) classNames += ' Reactions__item--has-user';
-
-    return classNames;
-  }
-
   render() {
-    const { reactions } = this.props;
-    const emojiNames = Object.keys(reactions);
-
-    if (!emojiNames || !emojiNames.length) return null;
+    const { reactions, currentUserId } = this.props;
 
     const emojiStyle = {
       height: 17,
@@ -35,19 +23,29 @@ class Reactions extends React.Component {
       display: 'block',
     };
 
+    const reactionCounts = reactions.reduce((acc, curr) => {
+      if (!acc[curr.emoji]) {
+        acc[curr.emoji] = { users: [] };
+      }
+
+      acc[curr.emoji].emoji = curr.emoji;
+      acc[curr.emoji].users.push(curr.userId);
+      acc[curr.emoji].hasCurrentUser = curr.userId === currentUserId;
+
+      return acc;
+    }, {});
+
+    console.log(reactionCounts);
+
     return (
       <ul className="Reactions">
-        {emojiNames.map(emoji => (
-          <li className={this.itemClassNames(emoji)} key={emoji}>
-            <Button buttonFor="reaction" unStyled onClick={() => this.handleClick(emoji)}>
-              <Emojify style={emojiStyle} className="Reactions__emoji">
-                {`:${emoji}:`}
-              </Emojify>
-              <div className="Reactions__counter">
-                {reactions[emoji].users.length}
-              </div>
-            </Button>
-          </li>
+        {Object.values(reactionCounts).map(reaction => (
+          <ReactionItem
+            key={reaction.emoji}
+            emojiStyle={emojiStyle}
+            createReaction={this.handleClick}
+            {...reaction}
+          />
         ))}
       </ul>
     );

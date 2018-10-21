@@ -22,38 +22,20 @@ export const selectReactionByMessageEmoji = (state, { messageId, emoji }) => {
   return usersReactions[0];
 };
 
-export const getReactionCounts = ({ entities: { reactions }, session }, messageSlug) => {
-  const { currentUser } = session;
-
-  return values(reactions)
-    .filter(reaction => reaction.messageSlug === messageSlug)
-    .reduce((acc, curr) => {
-      if (!acc[curr.emoji]) {
-        acc[curr.emoji] = { users: [] };
-      }
-
-      acc[curr.emoji].users.push(curr.userId);
-      acc[curr.emoji].hasCurrentUser = curr.userId === currentUser.id;
-
-      return acc;
-    }, {});
-};
-
 const messagesWithEntitiesMap = ({ messages, members }, currUserSlug) => (
   values(messages).reduce((acc, curr) => {
     const message = messages[curr.slug];
     const author = members && members[curr.authorSlug];
 
-    if (author) {
-      message.authorName = author.username;
-      message.avatarThumb = author.avatarThumb;
-    }
-
     if (currUserSlug && message) {
       message.isCurrentUser = currUserSlug === message.authorSlug;
     }
 
-    acc[curr.slug] = message;
+    acc[curr.slug] = {
+      authorName: author && author.username,
+      avatarThumb: author && author.avatarThumb,
+      ...message,
+    };
 
     return acc;
   }, {})
@@ -142,8 +124,8 @@ const selectChannelMessagesBySlug = ({ entities }, slug) => {
 };
 
 export const selectChatPageMessagesBySlug = ({ entities, session: { currentUser } }, slug) => {
-  const { messages, channels, members } = entities;
-  const entries = messagesWithEntitiesMap({ messages, members }, currentUser.slug);
+  const { channels } = entities;
+  const entries = messagesWithEntitiesMap(entities, currentUser.slug);
 
   if (channels[slug]) {
     return selectChannelMessagesBySlug({ entities }, slug);

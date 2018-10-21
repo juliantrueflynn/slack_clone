@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 import MessageHoverMenu from './MessageHoverMenu';
 import Reactions from './Reactions';
 import Avatar from './Avatar';
@@ -31,10 +32,10 @@ class Message extends React.Component {
       message,
       isDm,
       updateMessageRequest,
-      reactions,
       threadMessages,
       createReactionRequest,
       users,
+      reactions,
       modalOpen,
       deleteMessageRequest,
       createFavoriteRequest,
@@ -56,11 +57,15 @@ class Message extends React.Component {
     };
     const authorUrl = `${url}/team/${message.authorSlug}`;
     const dateCreated = dateUtil(message.createdAt).localTime();
-    let msgClassName = 'Message';
-    if (isEditing) msgClassName += ' Message--editing';
+    const entryReactions = reactions.filter(item => item.messageId === message.id);
+    const hasReactions = !!entryReactions.length;
+    const entryClassNames = classNames('Message', {
+      [`Message__${message.entityType}`]: message.entityType,
+      'Message--editing': isEditing,
+    });
 
     return (
-      <div className={msgClassName} role="listitem">
+      <div className={entryClassNames} role="listitem">
         <Avatar baseUrl={url} author={avatar} />
         <div className="Message__body">
           <MessageHoverMenu
@@ -96,12 +101,14 @@ class Message extends React.Component {
               <ChannelSub sub={message} />
             )}
           </div>
-          <Reactions
-            createReactionRequest={createReactionRequest}
-            reactions={reactions}
-            messageId={message.id}
-            users={users}
-          />
+          {hasReactions && (
+            <Reactions
+              createReactionRequest={createReactionRequest}
+              reactions={entryReactions}
+              currentUserId={currentUser.id}
+              messageId={message.id}
+            />
+          )}
           <SingleMessageThread
             matchUrl={url}
             messageSlug={message.slug}

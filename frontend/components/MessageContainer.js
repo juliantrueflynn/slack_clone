@@ -3,12 +3,12 @@ import { withRouter } from 'react-router-dom';
 import Message from './Message';
 import { updateMessage, deleteMessage } from '../actions/messageActions';
 import { deleteReaction, createReaction } from '../actions/reactionActions';
-import { getReactionCounts, selectMessageChildrenBySlug } from '../reducers/selectors';
+import { selectMessageChildrenBySlug } from '../reducers/selectors';
 import { modalOpen } from '../actions/uiActions';
 import { deleteFavorite, createFavorite } from '../actions/favoriteActions';
 
 const mapStateToProps = (state, { message }) => ({
-  reactions: message && getReactionCounts(state, message.slug),
+  reactions: Object.values(state.entities.reactions),
   isReactionModalOpen: state.ui.displayModal.modalType === 'MODAL_REACTION',
   threadMessages: selectMessageChildrenBySlug(state, message.slug),
   currentUser: state.session.currentUser,
