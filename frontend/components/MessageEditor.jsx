@@ -15,12 +15,39 @@ class MessageEditor extends React.Component {
     this.focus = this.focus.bind(this);
   }
 
+  componentDidMount() {
+    const { isNotConvoForm, readOnly } = this.props;
+
+    if (!readOnly && isNotConvoForm) {
+      setTimeout(() => this.focus(), 1);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { containerId, readOnly } = this.props;
+
+    if (!prevProps.readOnly && !readOnly) {
+      if (prevProps.containerId && prevProps.containerId !== containerId) {
+        this.focus();
+      }
+    }
+
+    if (prevProps.readOnly && !readOnly) {
+      this.focus();
+    }
+  }
+
   focus() {
     this.editor.current.focus();
   }
 
   render() {
-    const { readOnly, ...props } = this.props;
+    const {
+      readOnly,
+      editorState,
+      onChange,
+      placeholder,
+    } = this.props;
     const { EmojiSuggestions, EmojiSelect } = this.emojiPlugin;
 
     const plugins = [this.emojiPlugin];
@@ -35,8 +62,10 @@ class MessageEditor extends React.Component {
         <Editor
           ref={this.editor}
           plugins={plugins}
+          editorState={editorState}
+          onChange={onChange}
           readOnly={hasReadOnly}
-          {...props}
+          placeholder={placeholder}
         />
         {readOnly || (<EmojiSuggestions />)}
         {readOnly || (<EmojiSelect />)}

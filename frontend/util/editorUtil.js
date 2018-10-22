@@ -7,8 +7,6 @@ import {
 
 export const createEmptyEditor = () => EditorState.createEmpty();
 
-export const createEditor = content => EditorState.createWithContent(content);
-
 export const clearEditor = (editorState) => {
   const emptyContentState = ContentState.createFromText('');
   const clearedEditorState = EditorState.push(editorState, emptyContentState, 'remove-range');
@@ -22,16 +20,12 @@ export const convertForSubmit = (editorState) => {
 };
 
 export const mountEditorState = (content) => {
-  let editorState;
-
   try {
     const newContentState = convertFromRaw(JSON.parse(content));
-    editorState = EditorState.createWithContent(newContentState);
+    return EditorState.createWithContent(newContentState);
   } catch (errors) {
-    editorState = createEmptyEditor();
+    return createEmptyEditor();
   }
-
-  return editorState;
 };
 
 export const emojiConfig = {

@@ -18,8 +18,8 @@ class MessageForm extends React.Component {
     this.setState({ editorState });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
+  handleSubmit(e) {
+    e.preventDefault();
 
     const { editorState } = this.state;
     const body = convertForSubmit(editorState);
@@ -48,8 +48,14 @@ class MessageForm extends React.Component {
   }
 
   render() {
-    const { placeholder, hasSubmitButton, parentMessageId } = this.props;
+    const {
+      placeholder,
+      hasSubmitButton,
+      parentMessageId,
+      channelId,
+    } = this.props;
     const { editorState } = this.state;
+    const containerId = parentMessageId || channelId;
     const editorPlaceholder = placeholder || 'Reply...';
     const formClassNames = classNames('MessageForm', {
       'MessageForm__has-submit': hasSubmitButton,
@@ -67,6 +73,8 @@ class MessageForm extends React.Component {
           <div className="Form__body">
             <MessageEditor
               editorState={editorState}
+              containerId={containerId}
+              isNotConvoForm={!parentMessageId}
               onChange={this.onChange}
               placeholder={editorPlaceholder}
             />
