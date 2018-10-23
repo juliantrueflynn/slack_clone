@@ -38,6 +38,10 @@ class Workspace < ApplicationRecord
         where(channel_subs: { user_id: user_id })
       end
     end
+  
+  def self.by_slug(slug)
+    find_by(slug: slug)
+  end
 
   def broadcast_name
     "app"

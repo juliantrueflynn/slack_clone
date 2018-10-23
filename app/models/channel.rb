@@ -1,4 +1,6 @@
 class Channel < ApplicationRecord
+  searchkick default_fields: [:title]
+
   attr_accessor :skip_broadcast, :member_id
   attr_reader :member_ids
 

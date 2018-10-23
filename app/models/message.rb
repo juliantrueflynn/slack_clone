@@ -1,4 +1,6 @@
 class Message < ApplicationRecord
+  searchkick
+
   before_validation :generate_slug, unless: :slug?
 
   attr_accessor :skip_broadcast
@@ -36,6 +38,7 @@ class Message < ApplicationRecord
   scope :without_children, -> { where(parent_message_id: nil) }
   scope :with_entry_type, -> { where(entity_type: 'entry') }
   scope :without_entry_type, -> { where.not(entity_type: 'entry') }
+  scope :search_import, -> { with_entry_type }
 
   def self.parent_ids_with_child_by_author(workspace_id, user_id)
     left_outer_joins(:replies, :workspace)
@@ -109,6 +112,29 @@ class Message < ApplicationRecord
 
   def broadcast_name
     "channel_#{channel.slug}"
+  end
+
+  def body_json
+    ActiveSupport::JSON.decode(body)
+  end
+
+  def plain_text
+    return if body.nil?
+    lines = body_json["blocks"].pluck('text')
+    lines.join(" ")
+  end
+
+  def search_data
+    {
+      id: id,
+      body: plain_text,
+      channel_id: channel_id,
+      workspace_id: workspace.id
+    }
+  end
+
+  def should_index?
+    entity_type
   end
 
   def is_child?

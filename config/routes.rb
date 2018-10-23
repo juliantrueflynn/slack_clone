@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       resources :user_unreads, only: :index
       resources :reads, only: :index
       resource :user_appearance, only: :destroy
+      get '/search(/:query)', to: 'search#index'
     end
     resource :user_appearance, only: :create
     resource :dm_chat, only: :create
