@@ -17,12 +17,14 @@ class ChannelEditorModal extends React.Component {
     const { channel } = this.props;
     const { title, topic } = this.state;
 
-    if (channel.title && !title) {
-      this.setState({ title: channel.title });
-    }
+    if (channel) {
+      if (channel.title && !title) {
+        this.setState({ title: channel.title });
+      }
 
-    if (channel.topic && !topic) {
-      this.setState({ topic: channel.topic });
+      if (channel.topic && !topic) {
+        this.setState({ topic: channel.topic });
+      }
     }
   }
 
@@ -47,7 +49,6 @@ class ChannelEditorModal extends React.Component {
         <div className="Form__group">
           <label htmlFor="title">Title</label>
           <input
-            id="title"
             type="text"
             className="Form__control"
             value={title}
@@ -57,7 +58,6 @@ class ChannelEditorModal extends React.Component {
         <div className="Form__group">
           <label htmlFor="topic">Topic</label>
           <input
-            id="topic"
             type="text"
             className="Form__control"
             placeholder="e.g. Discuss XYZ"

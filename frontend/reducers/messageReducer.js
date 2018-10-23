@@ -11,6 +11,8 @@ import {
   UNREAD,
   DRAWER_CLOSE,
   HISTORY,
+  SEARCH,
+  MODAL_CLOSE,
 } from '../actions/actionTypes';
 
 const messageReducer = (state = {}, action) => {
@@ -98,6 +100,33 @@ const messageReducer = (state = {}, action) => {
 
       favorites.forEach((fav) => {
         nextState[fav.messageSlug].favoriteId = fav.id;
+      });
+
+      return merge({}, state, nextState);
+    }
+    case MODAL_CLOSE:
+    case SEARCH.INDEX.REQUEST: {
+      nextState = Object.assign({}, state);
+      Object.values(nextState).forEach((message) => {
+        nextState[message.slug] = {};
+        nextState[message.slug].isInSearch = false;
+      });
+
+      return nextState;
+    }
+    case SEARCH.INDEX.RECEIVE: {
+      const { messages, reactions } = action.messages;
+
+      nextState = {};
+      messages.forEach((message) => {
+        nextState[message.slug] = message;
+        nextState[message.slug].isInSearch = true;
+        nextState[message.slug].reactionIds = [];
+        nextState[message.slug].thread = [];
+      });
+
+      reactions.forEach((reaction) => {
+        nextState[reaction.messageSlug].reactionIds.push(reaction.id);
       });
 
       return merge({}, state, nextState);

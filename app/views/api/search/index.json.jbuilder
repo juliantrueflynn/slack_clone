@@ -12,16 +12,6 @@ json.channels do
   json.array! channels.pluck(:slug)
 end
 
-json.favorites do
-  user_id = current_user.id
-  favorites = Favorite.by_user_and_message_id(user_id, @messages)
-
-  json.array! favorites do |favorite|
-    json.(favorite, :id, :message_id)
-    json.message_slug favorite.message.slug
-  end
-end
-
 json.reactions do
   reactions = Reaction.by_message_id(@messages)
 

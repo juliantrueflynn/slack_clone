@@ -22,6 +22,7 @@ import {
   faCog,
   faUsers,
   faUserCog,
+  faSearch,
   faStar as fasStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { ActionCable } from 'react-actioncable-provider';
@@ -43,6 +44,7 @@ library.add(
   farStar,
   fasStar,
   faSmile,
+  faSearch,
   faComment,
   faInfoCircle,
   faCircle,

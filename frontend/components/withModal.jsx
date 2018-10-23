@@ -1,15 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 import Modal from 'react-modal';
 import Button from './Button';
 import { modalClose } from '../actions/uiActions';
 import './WithModal.css';
 
-const withModal = ({ modalTitle, modalType, ...modalProps }) => (WrappedComponent) => {
+const withModal = ({ modalTitle, modalType }) => (WrappedComponent) => {
   const mapStateToProps = state => ({
     isOpen: state.ui.displayModal.modalType === modalType,
-    success: state.success,
+    modalProps: state.ui.displayModal.modalProps,
   });
 
   const mapDispatchToProps = dispatch => ({
@@ -32,6 +33,13 @@ const withModal = ({ modalTitle, modalType, ...modalProps }) => (WrappedComponen
     }
 
     render() {
+      const {
+        isOpen,
+        modalClose: close,
+        hasNoFullBg,
+        modalProps,
+        ...props
+      } = this.props;
       const style = {
         overlay: { backgroundColor: 'white' },
         content: { border: 'none' },
@@ -40,14 +48,19 @@ const withModal = ({ modalTitle, modalType, ...modalProps }) => (WrappedComponen
       const lowerCaseType = modalType.toLowerCase();
       const typeClassName = lowerCaseType.slice(6);
 
+      const modalClassNames = classNames('Modal', {
+        [`Modal__${typeClassName}`]: typeClassName,
+        'Modal__not-full-bg': hasNoFullBg,
+        'Modal__full-bg': !hasNoFullBg,
+      });
+
       return (
         <Modal
-          className={`Modal Modal__${typeClassName}`}
+          className={modalClassNames}
           style={style}
           contentLabel={modalTitle}
           shouldCloseOnOverlayClick={false}
-          {...modalProps}
-          {...this.props}
+          isOpen={isOpen}
         >
           <div className="Modal__body">
             <Button buttonFor="close" unStyled onClick={this.handleModalClose}>
@@ -59,7 +72,7 @@ const withModal = ({ modalTitle, modalType, ...modalProps }) => (WrappedComponen
                   {modalTitle}
                 </h1>
               </header>
-              <WrappedComponent {...this.props} />
+              <WrappedComponent modalClose={close} {...modalProps} {...props} />
             </div>
           </div>
         </Modal>

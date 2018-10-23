@@ -12,6 +12,7 @@ import navigateSaga from './navigateSaga';
 import reactionSaga from './reactionSaga';
 import unreadSaga from './unreadSaga';
 import readSaga from './readSaga';
+import searchSaga from './searchSaga';
 
 export default function* root() {
   yield all([
@@ -28,5 +29,6 @@ export default function* root() {
     fork(reactionSaga),
     fork(unreadSaga),
     fork(readSaga),
+    fork(searchSaga),
   ]);
 }

@@ -17,6 +17,7 @@ export const USER_THREAD = apiActions('USER_THREAD', ['INDEX', 'UPDATE']);
 export const READ = apiActions('READ', ['CREATE', 'UPDATE']);
 export const UNREAD = apiActions('UNREAD', ['INDEX', 'CREATE', 'UPDATE']);
 export const PASSWORD = apiActions('PASSWORD', ['UPDATE']);
+export const SEARCH = apiActions('SEARCH', ['INDEX']);
 
 export const DESTROY_SUCCESS = 'DESTROY_SUCCESS';
 export const CHANNEL_SWITCH = 'CHANNEL_SWITCH';

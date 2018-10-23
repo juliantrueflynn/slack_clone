@@ -5,6 +5,7 @@ import {
   drawerClose,
   accordionToggle,
   accordionOpen,
+  fetchSearch,
 } from '../actions/uiActions';
 import { selectChannelsWithEntitiesMap } from '../reducers/selectors';
 import ChannelHeader from './ChannelHeader';
@@ -16,13 +17,16 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   channels: selectChannelsWithEntitiesMap(state),
   currentUser: state.entities.members[state.session.currentUser.slug],
   accordion: state.ui.accordion.details,
+  messages: Object.values(state.entities.messages),
+  users: state.entities.members,
 });
 
 const mapDispatchToProps = dispatch => ({
-  modalOpen: modalType => dispatch(modalOpen(modalType)),
+  modalOpen: (modalType, modalProps = null) => dispatch(modalOpen(modalType, modalProps)),
   drawerClose: () => dispatch(drawerClose()),
   accordionToggle: () => dispatch(accordionToggle('details', 'members')),
   accordionOpen: () => dispatch(accordionOpen('details', 'members')),
+  fetchSearchRequest: query => dispatch(fetchSearch.request(query)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChannelHeader));

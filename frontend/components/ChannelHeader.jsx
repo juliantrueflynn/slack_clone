@@ -5,6 +5,7 @@ import Menu from './Menu';
 import Button from './Button';
 import ProfileModal from './ProfileModal';
 import ChannelEditorModal from './ChannelEditorModal';
+import SearchModal from './SearchModal';
 import './ChannelHeader.css';
 
 class ChannelHeader extends React.Component {
@@ -71,6 +72,9 @@ class ChannelHeader extends React.Component {
       channel,
       drawerType,
       modalOpen,
+      fetchSearchRequest,
+      messages,
+      users,
       match: { url },
     } = this.props;
     const subsLen = channel && channel.members.length;
@@ -79,6 +83,7 @@ class ChannelHeader extends React.Component {
     const isDetailsOpen = drawerType === 'details';
     const modalOpenProfile = () => modalOpen('MODAL_PROFILE');
     const modalOpenEditChannel = () => modalOpen('MODAL_EDIT_CHANNEL');
+    const modalOpenSearch = () => modalOpen('MODAL_SEARCH');
 
     const channelMenuItems = [
       {
@@ -137,12 +142,21 @@ class ChannelHeader extends React.Component {
           </div>
           <div className="ChannelHeader__navigate">
             <Menu menuFor="header-channel" isRow items={channelMenuItems} />
-            {/* TODO: Put searchbox */}
+            <Button onClick={modalOpenSearch} buttonFor="nav-search" unStyled>
+              <FontAwesomeIcon icon="search" size="lg" />
+              <span className="Btn__nav-search-txt">Search</span>
+            </Button>
             <Menu menuFor="header-user" isRow items={userMenuItems} />
           </div>
         </div>
         <ProfileModal {...currentUser} />
         {channel && <ChannelEditorModal channel={channel} />}
+        <SearchModal
+          messages={messages}
+          users={users}
+          fetchSearchRequest={fetchSearchRequest}
+          hasNoFullBg
+        />
       </header>
     );
   }
