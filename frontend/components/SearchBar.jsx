@@ -6,7 +6,6 @@ import './SearchBar.css';
 class SearchBar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { query: '' };
     this.input = React.createRef();
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputVal = this.handleInputVal.bind(this);
@@ -24,25 +23,25 @@ class SearchBar extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const { fetchSearchRequest } = this.props;
-    const { query } = this.state;
+    const { fetchSearchRequest, query } = this.props;
     fetchSearchRequest(query);
   }
 
-  handleInputVal(prop) {
-    return event => this.setState({ [prop]: event.target.value });
+  handleInputVal(e) {
+    const { setQuery } = this.props;
+    setQuery(e.target.value);
   }
 
   handleClearClick() {
-    const { destroySearch } = this.props;
+    const { setQuery, destroySearch } = this.props;
 
     destroySearch();
-    this.setState({ query: '' });
+    setQuery('');
     this.focus();
   }
 
   render() {
-    const { query } = this.state;
+    const { query } = this.props;
 
     return (
       <form className="SearchBar" onSubmit={this.handleSubmit}>
@@ -54,7 +53,7 @@ class SearchBar extends React.Component {
           ref={this.input}
           className="SearchBar__input"
           value={query}
-          onChange={this.handleInputVal('query')}
+          onChange={this.handleInputVal}
           placeholder="Search"
         />
         <Button onClick={this.handleClearClick} buttonFor="clear" unStyled>

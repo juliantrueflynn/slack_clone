@@ -5,10 +5,9 @@
 .Modal__overlay--search .Modal {
   position: absolute;
   top: 10px;
-  right: 110px;
-  left: 110px;
+  right: 109px;
+  left: 109px;
   bottom: 10px;
-  background-color: #FFF;
   border-radius: 6px;
 }
 
@@ -50,8 +49,6 @@
   overflow-y: hidden;
   overflow: hidden;
   position: relative;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
 }
 
 .SearchModal__body {
@@ -60,4 +57,18 @@
   overflow-y: auto;
   position: absolute;
   overflow: auto;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.SearchModal--empty .SearchModal__body {
+  height: auto;
+}
+
+.SearchModal--loading .SearchModal__empty-txt {
+  display: none;
+}
+
+.SearchModal__empty-txt {
+  color: #636E72;
 }
