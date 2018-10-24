@@ -7,7 +7,7 @@ import {
   accordionOpen,
 } from '../actions/uiActions';
 import { fetchSearch, destroySearch } from '../actions/searchActions';
-import { selectChannelsWithEntitiesMap, selectSearchMessages } from '../reducers/selectors';
+import { selectSearchMessages } from '../reducers/selectors';
 import ChannelHeader from './ChannelHeader';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
@@ -15,7 +15,6 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   channel: state.entities.channels[chatPath],
   drawerType: state.ui.drawer.drawerType,
   messages: selectSearchMessages(state),
-  channels: selectChannelsWithEntitiesMap(state),
   users: state.entities.members,
   currentUser: state.entities.members[state.session.currentUser.slug],
   accordion: state.ui.accordion.details,

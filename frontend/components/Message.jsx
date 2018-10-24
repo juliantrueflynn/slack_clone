@@ -43,8 +43,9 @@ class Message extends React.Component {
       deleteFavoriteRequest,
       deleteReactionRequest,
       isThreadHidden,
-      hasNoHoverMenu,
+      isSearch,
       currentUser,
+      children,
     } = this.props;
     const { isEditing } = this.state;
 
@@ -68,7 +69,7 @@ class Message extends React.Component {
       <div className={entryClassNames} role={entryRole}>
         <Avatar baseUrl={url} author={avatar} />
         <div className="Message__body">
-          {hasNoHoverMenu || (
+          {isSearch || (
             <MessageHoverMenu
               message={message}
               isEditing={isEditing}
@@ -103,7 +104,7 @@ class Message extends React.Component {
               <ChannelSub sub={message} />
             )}
           </div>
-          {hasReactions && (
+          {(hasReactions && !isSearch) && (
             <Reactions
               createReaction={createReactionRequest}
               reactions={entryReactions}
@@ -118,6 +119,7 @@ class Message extends React.Component {
             threadMessages={threadMessages}
             isThreadHidden={isThreadHidden}
           />
+          {children}
         </div>
       </div>
     );

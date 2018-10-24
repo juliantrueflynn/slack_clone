@@ -75,7 +75,6 @@ class ChannelHeader extends React.Component {
       fetchSearchRequest,
       destroySearch,
       messages,
-      channels,
       users,
       isSearchLoading,
       match: { url },
@@ -156,7 +155,6 @@ class ChannelHeader extends React.Component {
         {channel && <ChannelEditorModal channel={channel} />}
         <SearchModal
           messages={messages}
-          channels={channels}
           users={users}
           fetchSearchRequest={fetchSearchRequest}
           destroySearch={destroySearch}

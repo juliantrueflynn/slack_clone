@@ -9,7 +9,6 @@ import './SearchModal.css';
 const SearchModal = ({
   users,
   messages,
-  channels,
   fetchSearchRequest,
   destroySearch,
   query,
@@ -34,12 +33,7 @@ const SearchModal = ({
         <div className="SearchModal__body">
           {isSearchLoading && 'Loading'}
           {isSearchLoading || messages.map(message => (
-            <SearchModalItem
-              key={message.id}
-              message={message}
-              channels={channels}
-              users={users}
-            />
+            <SearchModalItem key={message.id} message={message} users={users} />
           ))}
         </div>
       </div>

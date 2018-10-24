@@ -42,9 +42,17 @@ const messagesWithEntitiesMap = ({ messages, members }, userSlug) => (
 );
 
 export const selectSearchMessages = ({ entities, session: { currentUser } }) => {
+  const { channels } = entities;
   const entries = messagesWithEntitiesMap(entities, currentUser.slug);
 
-  return values(entries).filter(message => message.isInSearch);
+  return values(entries).map((message) => {
+    const entry = Object.assign({}, message);
+    const channel = channels[message.channelSlug];
+    entry.thread = entry.thread && entry.thread.length;
+    entry.channelTitle = channel && channel.title;
+
+    return entry;
+  }).filter(message => message.isInSearch).sort((a, b) => b.id - a.id);
 };
 
 const selectMessagesFavorites = ({ favorites, ...entities }) => {

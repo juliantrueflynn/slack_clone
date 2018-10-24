@@ -31,3 +31,19 @@
 .SearchModalItem .Message:hover {
   background-color: transparent;
 }
+
+.SearchModalItem__social {
+  font-size: 13px;
+  margin-top: 9px;
+  display: flex;
+  color: #636E72;
+}
+
+.SearchModalItem__threads {
+  margin-right: 20px;
+}
+
+.SearchModalItem__reactions svg,
+.SearchModalItem__threads svg {
+  margin-right: 4px;
+}
