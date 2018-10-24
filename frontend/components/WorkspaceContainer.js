@@ -11,7 +11,7 @@ const mapStateToProps = state => ({
   channels: selectChannelsWithEntitiesMap(state),
   currChatSlug: state.ui.displayChannelSlug,
   workspaces: state.entities.workspaces,
-  isLoading: state.ui.isWorkspaceLoading,
+  isLoading: state.isLoading.workspace,
   modal: state.ui.displayModal,
 });
 

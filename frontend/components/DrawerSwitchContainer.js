@@ -11,7 +11,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
   channel: selectChannelWithEntitiesBySlug(state, params.chatPath),
   drawerType: params.drawerType,
   accordion: state.ui.accordion.details,
-  isLoading: state.ui.isDrawerLoading,
+  isLoading: state.isLoading.drawer,
 });
 
 const mapDispatchToProps = dispatch => ({

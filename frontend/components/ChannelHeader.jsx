@@ -77,6 +77,7 @@ class ChannelHeader extends React.Component {
       messages,
       channels,
       users,
+      isSearchLoading,
       match: { url },
     } = this.props;
     const subsLen = channel && channel.members.length;
@@ -159,6 +160,7 @@ class ChannelHeader extends React.Component {
           users={users}
           fetchSearchRequest={fetchSearchRequest}
           destroySearch={destroySearch}
+          isSearchLoading={isSearchLoading}
         />
       </header>
     );

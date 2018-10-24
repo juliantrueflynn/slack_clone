@@ -14,6 +14,7 @@ const SearchModal = ({
   destroySearch,
   query,
   modalClose,
+  isSearchLoading,
 }) => {
   const close = () => modalClose();
 
@@ -31,7 +32,8 @@ const SearchModal = ({
       </header>
       <div className="SearchModal__scroller">
         <div className="SearchModal__body">
-          {messages.map(message => (
+          {isSearchLoading && 'Loading'}
+          {isSearchLoading || messages.map(message => (
             <SearchModalItem
               key={message.id}
               message={message}
