@@ -5,20 +5,20 @@ import {
   drawerClose,
   accordionToggle,
   accordionOpen,
-  fetchSearch,
 } from '../actions/uiActions';
-import { selectChannelsWithEntitiesMap } from '../reducers/selectors';
+import { fetchSearch, destroySearch } from '../actions/searchActions';
+import { selectChannelsWithEntitiesMap, selectSearchMessages } from '../reducers/selectors';
 import ChannelHeader from './ChannelHeader';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   chatPath,
   channel: state.entities.channels[chatPath],
   drawerType: state.ui.drawer.drawerType,
+  messages: selectSearchMessages(state),
   channels: selectChannelsWithEntitiesMap(state),
+  users: state.entities.members,
   currentUser: state.entities.members[state.session.currentUser.slug],
   accordion: state.ui.accordion.details,
-  messages: Object.values(state.entities.messages),
-  users: state.entities.members,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -27,6 +27,7 @@ const mapDispatchToProps = dispatch => ({
   accordionToggle: () => dispatch(accordionToggle('details', 'members')),
   accordionOpen: () => dispatch(accordionOpen('details', 'members')),
   fetchSearchRequest: query => dispatch(fetchSearch.request(query)),
+  destroySearch: () => dispatch(destroySearch()),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChannelHeader));

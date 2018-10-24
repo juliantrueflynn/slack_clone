@@ -7,6 +7,7 @@ const FavoritesDrawer = ({ messages, users }) => (
     {messages.map(message => (
       <MessageContainer
         key={message.slug}
+        role="listitem"
         users={users}
         message={message}
         isThreadHidden

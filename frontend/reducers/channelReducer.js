@@ -11,7 +11,8 @@ import {
   UNREAD,
   CLEAR_UNREADS,
   HISTORY,
-  CHANNEL_SWITCH
+  CHANNEL_SWITCH,
+  SEARCH
 } from '../actions/actionTypes';
 
 const channelReducer = (state = {}, action) => {
@@ -122,6 +123,19 @@ const channelReducer = (state = {}, action) => {
       });
 
       return nextState;
+    }
+    case SEARCH.INDEX.RECEIVE: {
+      const { channels } = action.messages;
+
+      nextState = {};
+      channels.forEach((channel) => {
+        nextState[channel.slug] = channel;
+        nextState[channel.slug].messages = [];
+        nextState[channel.slug].subs = [];
+        nextState[channel.slug].members = [];
+      });
+
+      return merge({}, state, nextState);
     }
     case WORKSPACE.CREATE.RECEIVE: {
       const {

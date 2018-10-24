@@ -30,6 +30,7 @@ class Message extends React.Component {
     const {
       match: { url },
       message,
+      role,
       isDm,
       updateMessageRequest,
       threadMessages,
@@ -42,6 +43,7 @@ class Message extends React.Component {
       deleteFavoriteRequest,
       deleteReactionRequest,
       isThreadHidden,
+      hasNoHoverMenu,
       currentUser,
     } = this.props;
     const { isEditing } = this.state;
@@ -60,22 +62,25 @@ class Message extends React.Component {
     const entryReactions = reactions.filter(item => item.messageId === message.id);
     const hasReactions = !!entryReactions.length;
     const entryClassNames = classNames('Message', { 'Message--editing': isEditing });
+    const entryRole = role || null;
 
     return (
-      <div className={entryClassNames} role="listitem">
+      <div className={entryClassNames} role={entryRole}>
         <Avatar baseUrl={url} author={avatar} />
         <div className="Message__body">
-          <MessageHoverMenu
-            message={message}
-            isEditing={isEditing}
-            handleEditToggle={this.handleEditToggle}
-            createFavoriteRequest={createFavoriteRequest}
-            deleteMessageRequest={deleteMessageRequest}
-            deleteFavoriteRequest={deleteFavoriteRequest}
-            deleteReactionRequest={deleteReactionRequest}
-            currentUser={currentUser}
-            modalOpen={modalOpen}
-          />
+          {hasNoHoverMenu || (
+            <MessageHoverMenu
+              message={message}
+              isEditing={isEditing}
+              handleEditToggle={this.handleEditToggle}
+              createFavoriteRequest={createFavoriteRequest}
+              deleteMessageRequest={deleteMessageRequest}
+              deleteFavoriteRequest={deleteFavoriteRequest}
+              deleteReactionRequest={deleteReactionRequest}
+              currentUser={currentUser}
+              modalOpen={modalOpen}
+            />
+          )}
           <div className="Message__content">
             <div className="Message__meta">
               <Link to={authorUrl} className="Message__author">

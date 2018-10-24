@@ -1,0 +1,33 @@
+.SearchModalItem {
+  padding: 9px;
+  border-radius: 6px;
+  background-color: #FFF;
+  border: 1px solid #DFE6E9;
+  margin-bottom: 10px;
+}
+
+.SearchModalItem:hover {
+  box-shadow: 0px 1px 2px 0px rgba(178, 190, 195, 0.2)
+}
+
+.SearchModalItem__meta {
+  color: #636E72;
+  margin-bottom: 9px;
+  font-size: 13px;
+}
+
+.SearchModalItem:hover .SearchModalItem__meta {
+  color: #74B9FF;
+}
+
+.SearchModalItem__meta-hashtag {
+  margin-right: 3px;
+}
+
+.SearchModalItem__meta-sep {
+  margin: 0 7px;
+}
+
+.SearchModalItem .Message:hover {
+  background-color: transparent;
+}

@@ -9,7 +9,12 @@ end
 json.channels do
   channel_ids = @messages.pluck(:channel_id)
   channels = Channel.where(id: channel_ids)
-  json.array! channels.pluck(:slug)
+  workspace_slug = params[:workspace_slug]
+
+  json.array! channels do |channel|
+    json.(channel, :id, :slug, :title, :workspace_id)
+    json.workspace_slug workspace_slug
+  end
 end
 
 json.reactions do

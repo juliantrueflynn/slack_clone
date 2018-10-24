@@ -13,6 +13,7 @@ import {
   HISTORY,
   SEARCH,
   MODAL_CLOSE,
+  SEARCH_DESTROY,
 } from '../actions/actionTypes';
 
 const messageReducer = (state = {}, action) => {
@@ -104,11 +105,11 @@ const messageReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
+    case SEARCH_DESTROY:
     case MODAL_CLOSE:
     case SEARCH.INDEX.REQUEST: {
       nextState = Object.assign({}, state);
       Object.values(nextState).forEach((message) => {
-        nextState[message.slug] = {};
         nextState[message.slug].isInSearch = false;
       });
 

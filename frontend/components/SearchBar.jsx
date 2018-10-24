@@ -7,8 +7,18 @@ class SearchBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = { query: '' };
+    this.input = React.createRef();
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputVal = this.handleInputVal.bind(this);
+    this.handleClearClick = this.handleClearClick.bind(this);
+  }
+
+  componentDidMount() {
+    this.focus();
+  }
+
+  focus() {
+    this.input.current.focus();
   }
 
   handleSubmit(e) {
@@ -23,6 +33,14 @@ class SearchBar extends React.Component {
     return event => this.setState({ [prop]: event.target.value });
   }
 
+  handleClearClick() {
+    const { destroySearch } = this.props;
+
+    destroySearch();
+    this.setState({ query: '' });
+    this.focus();
+  }
+
   render() {
     const { query } = this.state;
 
@@ -33,11 +51,15 @@ class SearchBar extends React.Component {
         </Button>
         <input
           type="text"
+          ref={this.input}
           className="SearchBar__input"
           value={query}
           onChange={this.handleInputVal('query')}
           placeholder="Search"
         />
+        <Button onClick={this.handleClearClick} buttonFor="clear" unStyled>
+          Clear
+        </Button>
       </form>
     );
   }

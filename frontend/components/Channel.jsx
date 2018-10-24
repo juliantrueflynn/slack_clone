@@ -60,6 +60,7 @@ class Channel extends React.Component {
             {messages.map(message => (
               <MessageContainer
                 key={message.id}
+                role="listitem"
                 message={message}
                 isDm={channel.hasDm}
                 users={users}

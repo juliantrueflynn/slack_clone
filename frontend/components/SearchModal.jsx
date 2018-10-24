@@ -1,30 +1,54 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBar from './SearchBar';
-import MessageContainer from './MessageContainer';
+import SearchModalItem from './SearchModalItem';
+import Button from './Button';
 import withModal from './withModal';
+import './SearchModal.css';
 
-class SearchModal extends React.Component {
-  render() {
-    const {
-      messages,
-      users,
-      fetchSearchRequest,
-      query,
-    } = this.props;
-    const searchEntries = messages.filter(msg => msg.isInSearch);
+const SearchModal = ({
+  users,
+  messages,
+  channels,
+  fetchSearchRequest,
+  destroySearch,
+  query,
+  modalClose,
+}) => {
+  const close = () => modalClose();
 
-    return (
-      <div className="SearchModal">
-        <SearchBar fetchSearchRequest={fetchSearchRequest} searchQuery={query} />
-
-        {searchEntries.map(message => (
-          <MessageContainer key={message.id} message={message} users={users} />
-        ))}
+  return (
+    <div className="SearchModal">
+      <header className="SearchModal__searchbar">
+        <SearchBar
+          fetchSearchRequest={fetchSearchRequest}
+          destroySearch={destroySearch}
+          searchQuery={query}
+        />
+        <Button onClick={close} buttonFor="modal-close" unStyled>
+          <FontAwesomeIcon icon="times" />
+        </Button>
+      </header>
+      <div className="SearchModal__scroller">
+        <div className="SearchModal__body">
+          {messages.map(message => (
+            <SearchModalItem
+              key={message.id}
+              message={message}
+              channels={channels}
+              users={users}
+            />
+          ))}
+        </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
-const modalProps = { modalType: 'MODAL_SEARCH' };
+const modalProps = {
+  modalType: 'MODAL_SEARCH',
+  unStyled: true,
+  shouldCloseOnOverlayClick: true,
+};
 
 export default withModal(modalProps)(SearchModal);

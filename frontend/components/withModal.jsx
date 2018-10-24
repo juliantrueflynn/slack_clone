@@ -7,7 +7,12 @@ import Button from './Button';
 import { modalClose } from '../actions/uiActions';
 import './WithModal.css';
 
-const withModal = ({ modalTitle, modalType }) => (WrappedComponent) => {
+const withModal = ({
+  modalTitle,
+  modalType,
+  unStyled,
+  ...modalOptions
+}) => (WrappedComponent) => {
   const mapStateToProps = state => ({
     isOpen: state.ui.displayModal.modalType === modalType,
     modalProps: state.ui.displayModal.modalProps,
@@ -18,40 +23,34 @@ const withModal = ({ modalTitle, modalType }) => (WrappedComponent) => {
   });
 
   class WithModal extends React.Component {
-    constructor(props) {
-      super(props);
-      this.handleModalClose = this.handleModalClose.bind(this);
-    }
-
-    componentWillMount() {
+    componentDidMount() {
       Modal.setAppElement('#root');
-    }
-
-    handleModalClose() {
-      const { modalClose: close } = this.props;
-      close();
     }
 
     render() {
       const {
         isOpen,
         modalClose: close,
-        hasNoFullBg,
         modalProps,
         ...props
       } = this.props;
+
+      const handleClose = () => close();
       const style = {
-        overlay: { backgroundColor: 'white' },
         content: { border: 'none' },
       };
 
       const lowerCaseType = modalType.toLowerCase();
       const typeClassName = lowerCaseType.slice(6);
 
+      const overlayClassNames = classNames('Modal__overlay', {
+        'Modal__overlay--unstyled': unStyled,
+        'Modal__overlay--styled': !unStyled,
+        [`Modal__overlay--${typeClassName}`]: typeClassName,
+      });
+
       const modalClassNames = classNames('Modal', {
         [`Modal__${typeClassName}`]: typeClassName,
-        'Modal__not-full-bg': hasNoFullBg,
-        'Modal__full-bg': !hasNoFullBg,
       });
 
       return (
@@ -59,19 +58,26 @@ const withModal = ({ modalTitle, modalType }) => (WrappedComponent) => {
           className={modalClassNames}
           style={style}
           contentLabel={modalTitle}
-          shouldCloseOnOverlayClick={false}
           isOpen={isOpen}
+          shouldCloseOnOverlayClick={false}
+          onRequestClose={handleClose}
+          overlayClassName={overlayClassNames}
+          {...modalOptions}
         >
           <div className="Modal__body">
-            <Button buttonFor="close" unStyled onClick={this.handleModalClose}>
-              <FontAwesomeIcon icon="times" size="2x" />
-            </Button>
+            {unStyled || (
+              <Button buttonFor="close" unStyled onClick={handleClose}>
+                <FontAwesomeIcon icon="times" size="2x" />
+              </Button>
+            )}
             <div className="Modal__inner-body">
-              <header className="Modal__header">
-                <h1 className="Modal__title">
-                  {modalTitle}
-                </h1>
-              </header>
+              {modalTitle && (
+                <header className="Modal__header">
+                  <h1 className="Modal__title">
+                    {modalTitle}
+                  </h1>
+                </header>
+              )}
               <WrappedComponent modalClose={close} {...modalProps} {...props} />
             </div>
           </div>

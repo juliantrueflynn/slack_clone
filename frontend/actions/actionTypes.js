@@ -18,6 +18,7 @@ export const READ = apiActions('READ', ['CREATE', 'UPDATE']);
 export const UNREAD = apiActions('UNREAD', ['INDEX', 'CREATE', 'UPDATE']);
 export const PASSWORD = apiActions('PASSWORD', ['UPDATE']);
 export const SEARCH = apiActions('SEARCH', ['INDEX']);
+export const SEARCH_DESTROY = 'SEARCH_DESTROY';
 
 export const DESTROY_SUCCESS = 'DESTROY_SUCCESS';
 export const CHANNEL_SWITCH = 'CHANNEL_SWITCH';

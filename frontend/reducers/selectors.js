@@ -41,16 +41,22 @@ const messagesWithEntitiesMap = ({ messages, members }, userSlug) => (
   }, {})
 );
 
-const selectMessagesFavorites = ({ favorites, messages, members }) => {
-  const entries = messagesWithEntitiesMap({ messages, members });
+export const selectSearchMessages = ({ entities, session: { currentUser } }) => {
+  const entries = messagesWithEntitiesMap(entities, currentUser.slug);
+
+  return values(entries).filter(message => message.isInSearch);
+};
+
+const selectMessagesFavorites = ({ favorites, ...entities }) => {
+  const entries = messagesWithEntitiesMap(entities);
 
   return values(favorites)
     .map(({ messageSlug }) => entries[messageSlug])
     .filter(message => message.isInDrawer && message.entityType === 'entry');
 };
 
-const selectMessageThreadBySlug = ({ messages, members }, slug) => {
-  const entries = messagesWithEntitiesMap({ messages, members });
+const selectMessageThreadBySlug = (entities, slug) => {
+  const entries = messagesWithEntitiesMap(entities);
   const message = entries[slug];
 
   if (!message || !message.thread) {

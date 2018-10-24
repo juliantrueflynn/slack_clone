@@ -73,7 +73,9 @@ class ChannelHeader extends React.Component {
       drawerType,
       modalOpen,
       fetchSearchRequest,
+      destroySearch,
       messages,
+      channels,
       users,
       match: { url },
     } = this.props;
@@ -153,9 +155,10 @@ class ChannelHeader extends React.Component {
         {channel && <ChannelEditorModal channel={channel} />}
         <SearchModal
           messages={messages}
+          channels={channels}
           users={users}
           fetchSearchRequest={fetchSearchRequest}
-          hasNoFullBg
+          destroySearch={destroySearch}
         />
       </header>
     );
