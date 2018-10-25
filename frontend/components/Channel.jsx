@@ -68,9 +68,9 @@ class Channel extends React.Component {
             ))}
           </Scrollable>
         )}
-        {channel.isSub && (
+        {/* {channel.isSub && (
           <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} />
-        )}
+        )} */}
         <ChannelSubscribe
           channel={channel}
           createChannelSubRequest={createChannelSubRequest}

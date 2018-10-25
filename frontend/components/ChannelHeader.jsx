@@ -16,7 +16,7 @@ class ChannelHeader extends React.Component {
   }
 
   getTitle() {
-    const { chatPath, channel } = this.props;
+    const { chatPath, channels } = this.props;
 
     if (chatPath === 'unreads') {
       return 'All Unreads';
@@ -26,6 +26,7 @@ class ChannelHeader extends React.Component {
       return 'All Threads';
     }
 
+    const channel = channels[chatPath];
     if (channel) {
       return channel.hasDm ? channel.title : `#${channel.title}`;
     }
@@ -53,11 +54,7 @@ class ChannelHeader extends React.Component {
   }
 
   handleDetailsAccordionClick() {
-    const {
-      accordionOpen,
-      accordionToggle,
-      drawerType,
-    } = this.props;
+    const { accordionOpen, accordionToggle, drawerType } = this.props;
 
     if (drawerType === 'details') {
       accordionToggle();
@@ -69,7 +66,8 @@ class ChannelHeader extends React.Component {
   render() {
     const {
       currentUser,
-      channel,
+      chatPath,
+      channels,
       drawerType,
       modalOpen,
       fetchSearchRequest,
@@ -79,6 +77,7 @@ class ChannelHeader extends React.Component {
       isSearchLoading,
       match: { url },
     } = this.props;
+    const channel = channels[chatPath];
     const subsLen = channel && channel.members.length;
     const hasTopic = !!(channel && channel.topic);
     const isFavsOpen = drawerType === 'favorites';
@@ -155,6 +154,7 @@ class ChannelHeader extends React.Component {
         {channel && <ChannelEditorModal channel={channel} />}
         <SearchModal
           messages={messages}
+          channels={channels}
           users={users}
           fetchSearchRequest={fetchSearchRequest}
           destroySearch={destroySearch}
