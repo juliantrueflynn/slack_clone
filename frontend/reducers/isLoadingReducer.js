@@ -7,6 +7,7 @@ import {
   DRAWER_CLOSE,
   FAVORITE,
   USER,
+  SIGN_OUT,
 } from '../actions/actionTypes';
 
 const _defaultState = {
@@ -21,8 +22,7 @@ const isLoadingReducer = (state = _defaultState, action) => {
   const nextState = Object.assign({}, state);
   switch (action.type) {
     case WORKSPACE.SHOW.REQUEST:
-      nextState.workspace = true;
-      return nextState;
+      return { workspace: true, ..._defaultState };
     case USER_THREAD.INDEX.REQUEST:
     case UNREAD.INDEX.REQUEST:
     case MESSAGE.INDEX.REQUEST:
@@ -53,6 +53,8 @@ const isLoadingReducer = (state = _defaultState, action) => {
     case SEARCH.INDEX.RECEIVE:
       nextState.search = false;
       return nextState;
+    case SIGN_OUT.RECEIVE:
+      return _defaultState;
     default:
       return state;
   }

@@ -47,7 +47,7 @@ const successReducer = (state = _defaultState, action) => {
     case USER.SHOW.REQUEST:
     case MODAL_OPEN:
     case MODAL_CLOSE:
-    case SIGN_OUT:
+    case SIGN_OUT.RECEIVE:
       return _defaultState;
     default:
       return state;

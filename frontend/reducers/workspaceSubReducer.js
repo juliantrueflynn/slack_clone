@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import { WORKSPACE_SUB, WORKSPACE } from '../actions/actionTypes';
+import { WORKSPACE_SUB, WORKSPACE, SIGN_OUT } from '../actions/actionTypes';
 
 const workspaceSubReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -36,6 +36,8 @@ const workspaceSubReducer = (state = {}, action) => {
       nextState[workspaceSub.id] = workspaceSub;
       return merge({}, state, nextState);
     }
+    case SIGN_OUT.RECEIVE:
+      return {};
     default:
       return state;
   }

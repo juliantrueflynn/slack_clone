@@ -13,7 +13,7 @@ const messageDisplayReducer = (state = null, action) => {
       return action.messageSlug;
     case DRAWER_CLOSE:
     case WORKSPACE.SHOW.REQUEST:
-    case SIGN_OUT.REQUEST:
+    case SIGN_OUT.RECEIVE:
       return null;
     default:
       return state;

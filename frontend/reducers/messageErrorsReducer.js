@@ -1,4 +1,4 @@
-import { MESSAGE } from '../actions/actionTypes';
+import { MESSAGE, SIGN_OUT } from '../actions/actionTypes';
 
 const messageErrorsReducer = (state = [], action) => {
   Object.freeze(state);
@@ -8,6 +8,7 @@ const messageErrorsReducer = (state = [], action) => {
     case MESSAGE.UPDATE.FAILURE:
     case MESSAGE.DESTROY.FAILURE:
       return [...action.errors];
+    case SIGN_OUT.RECEIVE:
     case MESSAGE.CREATE.REQUEST:
     case MESSAGE.UPDATE.REQUEST:
     case MESSAGE.DESTROY.REQUEST:

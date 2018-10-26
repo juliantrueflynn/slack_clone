@@ -1,8 +1,8 @@
 import { SIGN_UP, SIGN_IN, SIGN_OUT } from '../actions/actionTypes';
 
-const nullCurrentUser = { currentUser: null };
+const _defaultState = { currentUser: null };
 
-const sessionReducer = (state = nullCurrentUser, action) => {
+const sessionReducer = (state = _defaultState, action) => {
   Object.freeze(state);
 
   switch (action.type) {
@@ -12,7 +12,7 @@ const sessionReducer = (state = nullCurrentUser, action) => {
       return { currentUser };
     }
     case SIGN_OUT.RECEIVE:
-      return nullCurrentUser;
+      return _defaultState;
     default:
       return state;
   }

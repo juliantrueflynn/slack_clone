@@ -4,14 +4,15 @@ import {
   REACTION,
   MESSAGE,
   WORKSPACE,
+  SIGN_OUT,
 } from '../actions/actionTypes';
 
-const _nullState = {
+const _defaultState = {
   modalType: null,
   modalProps: null,
 };
 
-const modalReducer = (state = _nullState, action) => {
+const modalReducer = (state = _defaultState, action) => {
   Object.freeze(state);
 
   switch (action.type) {
@@ -19,11 +20,12 @@ const modalReducer = (state = _nullState, action) => {
       const { modalType, modalProps } = action;
       return { modalType, modalProps };
     }
+    case SIGN_OUT.RECEIVE:
     case REACTION.CREATE.RECEIVE:
     case MESSAGE.INDEX.RECEIVE:
     case WORKSPACE.SHOW.REQUEST:
     case MODAL_CLOSE:
-      return _nullState;
+      return _defaultState;
     default:
       return state;
   }

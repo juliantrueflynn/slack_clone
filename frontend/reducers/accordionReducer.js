@@ -1,4 +1,4 @@
-import { ACCORDION_TOGGLE, ACCORDION_OPEN } from '../actions/actionTypes';
+import { ACCORDION_TOGGLE, ACCORDION_OPEN, SIGN_OUT } from '../actions/actionTypes';
 
 const _defaultState = { details: {} };
 
@@ -21,6 +21,8 @@ const accordionReducer = (state = _defaultState, action) => {
 
       return nextState;
     }
+    case SIGN_OUT.RECEIVE:
+      return _defaultState;
     default:
       return state;
   }

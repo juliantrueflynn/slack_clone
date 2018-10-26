@@ -1,4 +1,9 @@
-import { MODAL_CLOSE, CHANNEL, MESSAGE } from '../actions/actionTypes';
+import {
+  MODAL_CLOSE,
+  CHANNEL,
+  MESSAGE,
+  SIGN_OUT,
+} from '../actions/actionTypes';
 
 const channelErrorsReducer = (state = [], action) => {
   Object.freeze(state);
@@ -11,6 +16,7 @@ const channelErrorsReducer = (state = [], action) => {
     case CHANNEL.UPDATE.FAILURE:
     case CHANNEL.DESTROY.FAILURE:
       return [...action.errors];
+    case SIGN_OUT.RECEIVE:
     case CHANNEL.CREATE.REQUEST:
     case CHANNEL.CREATE.RECEIVE:
       return [];

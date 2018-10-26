@@ -11,8 +11,8 @@ const searchQueryReducer = (state = '', action) => {
   switch (action.type) {
     case SEARCH.INDEX.REQUEST:
       return action.query;
-    case WORKSPACE.INDEX.REQUEST:
-    case SIGN_OUT:
+    case WORKSPACE.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
     case SEARCH_DESTROY:
       return '';
     default:
