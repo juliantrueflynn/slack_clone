@@ -14,30 +14,67 @@ class SearchModal extends React.Component {
     super(props);
     this.state = {
       query: '',
+      results: [],
       channelFilter: [],
       peopleFilter: [],
     };
-    this.handleQuery = this.handleQuery.bind(this);
+    this.setQuery = this.setQuery.bind(this);
     this.handleFilterToggle = this.handleFilterToggle.bind(this);
   }
 
-  handleQuery(query) {
+  componentDidUpdate(prevProps, prevState) {
+    const { messages } = this.props;
+    const { results, channelFilter, peopleFilter } = this.state;
+    const prevLastMsg = prevProps.messages[prevProps.messages.length - 1];
+    const lastMsg = messages[messages.length - 1];
+    const hasChannelFilterDiff = channelFilter.length === prevState.channelFilter.length;
+    const hasPeopleFilterDiff = peopleFilter.length === prevState.peopleFilter.length;
+
+    if (hasChannelFilterDiff || hasPeopleFilterDiff) {
+      if (lastMsg && !results.length && !channelFilter.length && !peopleFilter.length) {
+        this.setResults(messages);
+      }
+
+      if (lastMsg && prevLastMsg && lastMsg.id !== prevLastMsg.id) {
+        this.setResults(messages);
+      }
+    }
+  }
+
+  setResults(results) {
+    this.setState({ results });
+  }
+
+  setQuery(query) {
     this.setState({ query });
+  }
+
+  filterResults(newFilter, currFilter) {
+    const { messages } = this.props;
+
+    return messages.filter(({ authorSlug, channelSlug }) => (
+      !newFilter.length || (newFilter.includes(authorSlug) || newFilter.includes(channelSlug))
+    )).filter(({ authorSlug, channelSlug }) => (
+      !currFilter.length || (currFilter.includes(authorSlug) || currFilter.includes(channelSlug))
+    ));
   }
 
   handleFilterToggle(type, slug) {
     const { ...state } = this.state;
     const stateFilter = state[type];
-    let nextState = stateFilter;
+    let newFilter = stateFilter;
 
     if (stateFilter.includes(slug)) {
-      nextState = stateFilter.filter(entitySlug => entitySlug !== slug);
+      newFilter = stateFilter.filter(entitySlug => entitySlug !== slug);
     } else {
       stateFilter.push(slug);
-      nextState = stateFilter;
+      newFilter = stateFilter;
     }
 
-    this.setState({ [type]: nextState });
+    const altType = type === 'channelFilter' ? state.peopleFilter : state.channelFilter;
+    const results = this.filterResults(newFilter, altType);
+
+    this.setState({ [type]: newFilter, results });
   }
 
   render() {
@@ -49,9 +86,15 @@ class SearchModal extends React.Component {
       modalClose,
       isSearchLoading,
     } = this.props;
-    const { query, channelFilter, peopleFilter } = this.state;
+    const {
+      query,
+      results,
+      channelFilter,
+      peopleFilter,
+    } = this.state;
+
     const close = () => modalClose();
-    const hasLen = !!messages.length;
+    const hasLen = !!results.length;
     const loadingText = isSearchLoading && 'Loading';
 
     const channelsMap = messages.reduce((acc, curr) => {
@@ -69,7 +112,7 @@ class SearchModal extends React.Component {
 
     const searchClassNames = classNames('SearchModal', {
       'SearchModal--fill': hasLen,
-      'SearchModal--empty': !hasLen,
+      'SearchModal--empty': !hasLen && !peopleFilter.length && !channelFilter.length,
       'SearchModal--loading': isSearchLoading,
     });
 
@@ -79,7 +122,7 @@ class SearchModal extends React.Component {
           <SearchBar
             fetchSearchRequest={fetchSearchRequest}
             destroySearch={destroySearch}
-            setQuery={this.handleQuery}
+            setQuery={this.setQuery}
             query={query}
           />
           <Button onClick={close} buttonFor="modal-close" unStyled>
@@ -92,10 +135,10 @@ class SearchModal extends React.Component {
               <div className="SearchModal__results">
                 <span className="SearchModal__empty-txt">Type and hit enter to search</span>
                 <h4 className="SearchModal__results-count">
-                  {`${messages.length} results`}
+                  {`${results.length} results`}
                 </h4>
                 {loadingText}
-                {isSearchLoading || messages.map(message => (
+                {isSearchLoading || results.map(message => (
                   <SearchModalItem key={message.id} message={message} users={users} />
                 ))}
               </div>
