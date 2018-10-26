@@ -1,0 +1,23 @@
+.SearchModalAside {
+  width: 20%;
+  padding: 0 15px;
+}
+
+.SearchModal--empty .SearchModalAside {
+  display: none;
+}
+
+.SearchModalAside__title {
+  margin: 0 0 10px;
+  color: #636E72;
+}
+
+.SearchModalAside__widget {
+  margin-bottom: 30px;
+}
+
+.SearchModalAside__widget-title {
+  margin: 0 0 15px;
+  font-weight: normal;
+  color: #636E72;
+}

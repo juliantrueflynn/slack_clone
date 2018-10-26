@@ -14,9 +14,9 @@
 .Modal__overlay--search .Modal__body,
 .Modal__overlay--search .Modal__inner-body,
 .SearchModal,
-.SearchModal__row,
 .SearchModal__scroller,
-.SearchModal__body {
+.SearchModal__body,
+.SearchModal__row {
   height: 100%;
   width: 100%;
 }
@@ -50,6 +50,7 @@
   overflow-y: hidden;
   overflow: hidden;
   position: relative;
+  border-bottom-right-radius: 6px;
 }
 
 .SearchModal__body {
@@ -59,24 +60,10 @@
   position: absolute;
   overflow: auto;
   border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
 }
 
 .SearchModal--empty .SearchModal__body {
   height: auto;
-}
-
-.SearchModal--fill .SearchModal__empty-txt,
-.SearchModal--loading .SearchModal__empty-txt {
-  display: none;
-}
-
-.SearchModal__empty-txt {
-  color: #636E72;
-}
-
-.SearchModal--empty .SearchModal__aside {
-  display: none;
 }
 
 .SearchModal__row {
@@ -85,36 +72,3 @@
   margin: 0 -15px;
 }
 
-.SearchModal__results {
-  width: 80%;
-  padding: 0 15px;
-}
-
-.SearchModal__aside {
-  width: 20%;
-  padding: 0 15px;
-}
-
-.SearchModal__widget {
-  margin-bottom: 30px;
-}
-
-.SearchModal__aside-title {
-  margin: 0 0 10px;
-  color: #636E72;
-}
-
-.SearchModal__widget-title {
-  margin: 0 0 15px;
-  font-weight: normal;
-  color: #636E72;
-}
-
-.SearchModal__results-count {
-  color: #636E72;
-  margin: 0 0 15px;
-}
-
-.SearchModal--empty .SearchModal__results-count {
-  display: none;
-}

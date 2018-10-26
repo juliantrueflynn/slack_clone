@@ -2,22 +2,23 @@ import React from 'react';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBar from './SearchBar';
-import SearchModalItem from './SearchModalItem';
-import SearchModalFilter from './SearchModalFilter';
-import Avatar from './Avatar';
 import Button from './Button';
+import SearchModalResults from './SearchModalResults';
+import SearchModalAside from './SearchModalAside';
 import withModal from './withModal';
 import './SearchModal.css';
 
 class SearchModal extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       query: '',
       results: [],
       channelFilter: [],
       peopleFilter: [],
     };
+
     this.setQuery = this.setQuery.bind(this);
     this.handleFilterToggle = this.handleFilterToggle.bind(this);
   }
@@ -86,6 +87,7 @@ class SearchModal extends React.Component {
       modalClose,
       isSearchLoading,
     } = this.props;
+
     const {
       query,
       results,
@@ -95,20 +97,6 @@ class SearchModal extends React.Component {
 
     const close = () => modalClose();
     const hasLen = !!results.length;
-    const loadingText = isSearchLoading && 'Loading';
-
-    const channelsMap = messages.reduce((acc, curr) => {
-      const { channelSlug: id, channelTitle: label } = curr;
-      acc[id] = { id, label };
-      return acc;
-    }, {});
-    const peopleMap = messages.reduce((acc, curr) => {
-      const { authorSlug: id, authorName: label } = curr;
-      acc[id] = { id, label };
-      return acc;
-    }, {});
-    const channels = Object.values(channelsMap);
-    const people = Object.values(peopleMap);
 
     const searchClassNames = classNames('SearchModal', {
       'SearchModal--fill': hasLen,
@@ -132,47 +120,18 @@ class SearchModal extends React.Component {
         <div className="SearchModal__scroller">
           <div className="SearchModal__body">
             <div className="SearchModal__row">
-              <div className="SearchModal__results">
-                <span className="SearchModal__empty-txt">Type and hit enter to search</span>
-                <h4 className="SearchModal__results-count">
-                  {`${results.length} results`}
-                </h4>
-                {loadingText}
-                {isSearchLoading || results.map(message => (
-                  <SearchModalItem key={message.id} message={message} users={users} />
-                ))}
-              </div>
-              <aside className="SearchModal__aside">
-                <h3 className="SearchModal__aside-title">Filter by</h3>
-                <div className="SearchModal__widget">
-                  <h4 className="SearchModal__widget-title">People</h4>
-                  {people.map(author => (
-                    <SearchModalFilter
-                      key={author.id}
-                      filterType="people"
-                      filterState={peopleFilter}
-                      toggle={this.handleFilterToggle}
-                      {...author}
-                    >
-                      <Avatar author={users[author.id]} size="18" />
-                    </SearchModalFilter>
-                  ))}
-                </div>
-                <div className="SearchModal__widget">
-                  <h4 className="SearchModal__widget-title">Channels</h4>
-                  {channels.map(channel => (
-                    <SearchModalFilter
-                      key={channel.id}
-                      filterType="channel"
-                      filterState={channelFilter}
-                      toggle={this.handleFilterToggle}
-                      {...channel}
-                    >
-                      <FontAwesomeIcon icon="hashtag" size="sm" />
-                    </SearchModalFilter>
-                  ))}
-                </div>
-              </aside>
+              <SearchModalResults
+                results={results}
+                isLoading={isSearchLoading}
+                users={users}
+              />
+              <SearchModalAside
+                messages={messages}
+                users={users}
+                peopleFilter={peopleFilter}
+                channelFilter={channelFilter}
+                handleFilterToggle={this.handleFilterToggle}
+              />
             </div>
           </div>
         </div>

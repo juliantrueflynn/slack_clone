@@ -1,0 +1,22 @@
+.SearchModalResults {
+  width: 80%;
+  padding: 0 15px;
+}
+
+.SearchModalResults__count {
+  color: #636E72;
+  margin: 0 0 15px;
+}
+
+.SearchModal--fill .SearchModalResults__empty-txt,
+.SearchModal--loading .SearchModalResults__empty-txt {
+  display: none;
+}
+
+.SearchModal__empty-txt {
+  color: #636E72;
+}
+
+.SearchModal--empty .SearchModalResults__count {
+  display: none;
+}
