@@ -24,8 +24,12 @@ class SearchModal extends React.Component {
   }
 
   componentDidMount() {
-    const { searchQuery: query } = this.props;
+    const { searchQuery: query, fetchSearchRequest } = this.props;
     this.setState({ query });
+
+    if (query) {
+      fetchSearchRequest(query);
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -112,7 +116,7 @@ class SearchModal extends React.Component {
 
     return (
       <div className={searchClassNames}>
-        <header className="SearchModal__searchbar">
+        <div className="SearchModal__searchbar">
           <SearchBar
             fetchSearchRequest={fetchSearchRequest}
             createSearch={createSearch}
@@ -123,7 +127,7 @@ class SearchModal extends React.Component {
           <Button onClick={close} buttonFor="modal-close" unStyled>
             <FontAwesomeIcon icon="times" />
           </Button>
-        </header>
+        </div>
         <div className="SearchModal__scroller">
           <div className="SearchModal__body">
             <div className="SearchModal__row">

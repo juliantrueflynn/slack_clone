@@ -7,6 +7,7 @@ import ProfileModal from './ProfileModal';
 import ChannelEditorModal from './ChannelEditorModal';
 import SearchModal from './SearchModal';
 import './ChannelHeader.css';
+import ChannelHeaderSearch from './ChannelHeaderSearch';
 
 class ChannelHeader extends React.Component {
   constructor(props) {
@@ -85,7 +86,6 @@ class ChannelHeader extends React.Component {
     const isDetailsOpen = drawerType === 'details';
     const modalOpenProfile = () => modalOpen('MODAL_PROFILE');
     const modalOpenEditChannel = () => modalOpen('MODAL_EDIT_CHANNEL');
-    const modalOpenSearch = () => modalOpen('MODAL_SEARCH');
 
     const channelMenuItems = [
       {
@@ -144,12 +144,11 @@ class ChannelHeader extends React.Component {
           </div>
           <div className="ChannelHeader__navigate">
             <Menu menuFor="header-channel" isRow items={channelMenuItems} />
-            <Button onClick={modalOpenSearch} buttonFor="nav-search" unStyled>
-              <FontAwesomeIcon icon="search" size="lg" />
-              <span className="Btn__nav-search-txt">
-                {searchQuery || 'Search'}
-              </span>
-            </Button>
+            <ChannelHeaderSearch
+              query={searchQuery}
+              destroySearch={destroySearch}
+              modalOpen={modalOpen}
+            />
             <Menu menuFor="header-user" isRow items={userMenuItems} />
           </div>
         </div>
