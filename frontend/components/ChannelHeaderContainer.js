@@ -19,6 +19,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   currentUser: state.entities.members[state.session.currentUser.slug],
   accordion: state.ui.accordion.details,
   isSearchLoading: state.isLoading.search,
+  searchQuery: state.ui.searchQuery,
 });
 
 const mapDispatchToProps = dispatch => ({

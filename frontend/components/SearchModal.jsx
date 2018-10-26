@@ -23,6 +23,11 @@ class SearchModal extends React.Component {
     this.handleFilterToggle = this.handleFilterToggle.bind(this);
   }
 
+  componentDidMount() {
+    const { searchQuery: query } = this.props;
+    this.setState({ query });
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const { messages } = this.props;
     const { results, channelFilter, peopleFilter } = this.state;
@@ -83,6 +88,7 @@ class SearchModal extends React.Component {
       users,
       messages,
       fetchSearchRequest,
+      createSearch,
       destroySearch,
       modalClose,
       isSearchLoading,
@@ -109,6 +115,7 @@ class SearchModal extends React.Component {
         <header className="SearchModal__searchbar">
           <SearchBar
             fetchSearchRequest={fetchSearchRequest}
+            createSearch={createSearch}
             destroySearch={destroySearch}
             setQuery={this.setQuery}
             query={query}

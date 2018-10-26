@@ -4,6 +4,7 @@ import displayChannelSlug from './channelDisplayReducer';
 import displayModal from './modalReducer';
 import accordion from './accordionReducer';
 import drawer from './drawerReducer';
+import searchQuery from './searchQueryReducer';
 
 const uiReducer = combineReducers({
   displayWorkspaceSlug,
@@ -11,6 +12,7 @@ const uiReducer = combineReducers({
   displayModal,
   accordion,
   drawer,
+  searchQuery,
 });
 
 export default uiReducer;

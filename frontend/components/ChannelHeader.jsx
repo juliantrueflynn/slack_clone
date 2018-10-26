@@ -71,6 +71,7 @@ class ChannelHeader extends React.Component {
       drawerType,
       modalOpen,
       fetchSearchRequest,
+      searchQuery,
       destroySearch,
       messages,
       users,
@@ -145,7 +146,9 @@ class ChannelHeader extends React.Component {
             <Menu menuFor="header-channel" isRow items={channelMenuItems} />
             <Button onClick={modalOpenSearch} buttonFor="nav-search" unStyled>
               <FontAwesomeIcon icon="search" size="lg" />
-              <span className="Btn__nav-search-txt">Search</span>
+              <span className="Btn__nav-search-txt">
+                {searchQuery || 'Search'}
+              </span>
             </Button>
             <Menu menuFor="header-user" isRow items={userMenuItems} />
           </div>
@@ -153,6 +156,7 @@ class ChannelHeader extends React.Component {
         <ProfileModal {...currentUser} />
         {channel && <ChannelEditorModal channel={channel} />}
         <SearchModal
+          searchQuery={searchQuery}
           messages={messages}
           channels={channels}
           users={users}
