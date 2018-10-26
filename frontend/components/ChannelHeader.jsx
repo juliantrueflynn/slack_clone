@@ -1,23 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from './Menu';
-import Button from './Button';
 import ProfileModal from './ProfileModal';
-import ChannelEditorModal from './ChannelEditorModal';
 import SearchModal from './SearchModal';
-import './ChannelHeader.css';
 import ChannelHeaderSearch from './ChannelHeaderSearch';
+import ChannelHeaderMeta from './ChannelHeaderMeta';
+import './ChannelHeader.css';
 
 class ChannelHeader extends React.Component {
   constructor(props) {
     super(props);
     this.handleToggleLinkClick = this.handleToggleLinkClick.bind(this);
-    this.handleDetailsAccordionClick = this.handleDetailsAccordionClick.bind(this);
   }
 
   getTitle() {
-    const { chatPath, channels } = this.props;
+    const { chatPath, channel } = this.props;
 
     if (chatPath === 'unreads') {
       return 'All Unreads';
@@ -27,7 +24,6 @@ class ChannelHeader extends React.Component {
       return 'All Threads';
     }
 
-    const channel = channels[chatPath];
     if (channel) {
       return channel.hasDm ? channel.title : `#${channel.title}`;
     }
@@ -54,21 +50,11 @@ class ChannelHeader extends React.Component {
     }
   }
 
-  handleDetailsAccordionClick() {
-    const { accordionOpen, accordionToggle, drawerType } = this.props;
-
-    if (drawerType === 'details') {
-      accordionToggle();
-    } else {
-      accordionOpen();
-    }
-  }
-
   render() {
     const {
       currentUser,
-      chatPath,
-      channels,
+      channel,
+      accordionOpen,
       drawerType,
       modalOpen,
       fetchSearchRequest,
@@ -77,11 +63,7 @@ class ChannelHeader extends React.Component {
       messages,
       users,
       isSearchLoading,
-      match: { url },
     } = this.props;
-    const channel = channels[chatPath];
-    const subsLen = channel && channel.members.length;
-    const hasTopic = !!(channel && channel.topic);
     const isFavsOpen = drawerType === 'favorites';
     const isDetailsOpen = drawerType === 'details';
     const modalOpenProfile = () => modalOpen('MODAL_PROFILE');
@@ -122,25 +104,12 @@ class ChannelHeader extends React.Component {
             <h1 className="ChannelHeader__title">
               {this.getTitle()}
             </h1>
-            <div className="ChannelHeader__meta">
-              {channel && (
-                <div className="ChannelHeader__meta-item">
-                  <Link to={`${url}/details`} onClick={this.handleDetailsAccordionClick}>
-                    <FontAwesomeIcon icon={['far', 'user']} size="sm" />
-                    {subsLen}
-                  </Link>
-                </div>
-              )}
-              {channel && (
-                <div className="ChannelHeader__meta-item ChannelHeader__meta-item-topic">
-                  <Button onClick={modalOpenEditChannel} buttonFor="edit-topic" unStyled>
-                    {channel.topic}
-                    {hasTopic || <FontAwesomeIcon icon={['far', 'edit']} size="sm" />}
-                    {hasTopic || 'Add topic'}
-                  </Button>
-                </div>
-              )}
-            </div>
+            <ChannelHeaderMeta
+              channel={channel}
+              accordionOpen={accordionOpen}
+              modalOpen={modalOpenEditChannel}
+              currentUser={currentUser}
+            />
           </div>
           <div className="ChannelHeader__navigate">
             <Menu menuFor="header-channel" isRow items={channelMenuItems} />
@@ -153,11 +122,9 @@ class ChannelHeader extends React.Component {
           </div>
         </div>
         <ProfileModal {...currentUser} />
-        {channel && <ChannelEditorModal channel={channel} />}
         <SearchModal
           searchQuery={searchQuery}
           messages={messages}
-          channels={channels}
           users={users}
           fetchSearchRequest={fetchSearchRequest}
           destroySearch={destroySearch}

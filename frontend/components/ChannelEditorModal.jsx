@@ -41,20 +41,24 @@ class ChannelEditorModal extends React.Component {
   }
 
   render() {
-    const { modalClose } = this.props;
+    const { modalClose, currentUser, channel } = this.props;
     const { title, topic } = this.state;
+
+    const isOwner = currentUser.id === channel.ownerId;
 
     return (
       <form onSubmit={this.handleSubmit}>
-        <div className="Form__group">
-          <label htmlFor="title">Title</label>
-          <input
-            type="text"
-            className="Form__control"
-            value={title}
-            onChange={this.handleInputVal('title')}
-          />
-        </div>
+        {isOwner && (
+          <div className="Form__group">
+            <label htmlFor="title">Title</label>
+            <input
+              type="text"
+              className="Form__control"
+              value={title}
+              onChange={this.handleInputVal('title')}
+            />
+          </div>
+        )}
         <div className="Form__group">
           <label htmlFor="topic">Topic</label>
           <input

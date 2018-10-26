@@ -1,0 +1,57 @@
+.ChannelHeaderMeta {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.ChannelHeaderMeta__item {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+  color: #636E72;
+  position: relative;
+}
+
+.ChannelHeaderMeta__item::after {
+  content: "";
+  width: 1px;
+  height: 100%;
+  background-color: #B2BEC3;
+  position: absolute;
+  right: -11px;
+}
+
+.ChannelHeaderMeta__item > a {
+  display: flex;
+  align-items: center;
+  color: inherit;
+}
+
+.ChannelHeaderMeta__item > a:hover {
+  color: #74B9FF;
+}
+
+.ChannelHeaderMeta__item:last-child {
+  margin-right: 0;
+}
+
+.ChannelHeaderMeta__item:last-child::after {
+  content: none;
+}
+
+.ChannelHeader .Btn__edit-topic {
+  display: flex;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+
+.ChannelHeader .Btn__edit-topic:hover {
+  border: 1px solid #B2BEC3;
+  position: relative;
+}
+
+.ChannelHeaderMeta__item svg {
+  margin-right: 4px;
+}

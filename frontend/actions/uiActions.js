@@ -5,7 +5,6 @@ import {
   DRAWER_OPEN,
   DRAWER_CLOSE,
   DESTROY_SUCCESS,
-  ACCORDION_TOGGLE,
   ACCORDION_OPEN,
   SEARCH,
 } from './actionTypes';
@@ -39,12 +38,6 @@ export const drawerClose = () => ({
 export const destroySuccess = (entity = null) => ({
   type: DESTROY_SUCCESS,
   entity,
-});
-
-export const accordionToggle = (accordionType, accordionItem) => ({
-  type: ACCORDION_TOGGLE,
-  accordionType,
-  accordionItem,
 });
 
 export const accordionOpen = (accordionType, accordionItem) => ({
