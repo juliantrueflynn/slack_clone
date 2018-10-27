@@ -28,6 +28,10 @@ const Drawer = ({
           return null;
         }
 
+        if (channel.hasDm) {
+          return 'About this conversation';
+        }
+
         return `About #${channel.title}`;
       }
       default:

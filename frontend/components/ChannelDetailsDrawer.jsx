@@ -4,6 +4,8 @@ import Avatar from './Avatar';
 import StatusIcon from './StatusIcon';
 import AccordionItem from './AccordionItem';
 import { dateUtil } from '../util/dateUtil';
+import UserPreview from './UserPreview';
+import './ChannelDetailsDrawer.css';
 
 class ChannelDetailsDrawer extends React.Component {
   constructor(props) {
@@ -67,40 +69,49 @@ class ChannelDetailsDrawer extends React.Component {
     }
     teamUrl += '/team';
 
-    const accordionItems = [
-      {
-        icon: 'info-circle',
-        itemTitle: 'Channel Details',
-        name: 'details',
-        body: (
-          <Fragment>
-            <div className="AccordionItem__sub">
-              <h5 className="AccordionItem__sub-title">Purpose</h5>
-              {channel.topic || 'Set a channel topic'}
-            </div>
-            <div className="AccordionItem__sub">
-              <h5 className="AccordionItem__sub-title">Created</h5>
-              {`${dateCreated} by ${channel.ownerName}`}
-            </div>
-          </Fragment>
-        ),
-      },
-      {
-        icon: 'users',
-        itemTitle: `${usersLen} Members`,
-        name: 'members',
-        body: channel.members.map(userSlug => (
-          <Link key={userSlug} to={`${teamUrl}/${userSlug}`} className="AccordionItem__sub">
-            <StatusIcon member={users[userSlug]} />
-            <Avatar avatarFor="details-drawer" author={users[userSlug]} size="22" />
-            {users[userSlug].username}
-          </Link>
-        )),
-      }
-    ];
+    let accordionItems = [];
+
+    if (!channel.hasDm) {
+      accordionItems = [
+        {
+          icon: 'info-circle',
+          itemTitle: 'Channel Details',
+          name: 'details',
+          body: (
+            <Fragment>
+              <div className="AccordionItem__sub">
+                <h5 className="AccordionItem__sub-title">Purpose</h5>
+                {channel.topic || 'Set a channel topic'}
+              </div>
+              <div className="AccordionItem__sub">
+                <h5 className="AccordionItem__sub-title">Created</h5>
+                {`${dateCreated} by ${channel.ownerName}`}
+              </div>
+            </Fragment>
+          ),
+        },
+        {
+          icon: 'users',
+          itemTitle: `${usersLen} Members`,
+          name: 'members',
+          body: channel.members.map(userSlug => (
+            <Link key={userSlug} to={`${teamUrl}/${userSlug}`} className="AccordionItem__sub">
+              <StatusIcon member={users[userSlug]} />
+              <Avatar avatarFor="details-drawer" author={users[userSlug]} size="22" />
+              {users[userSlug].username}
+            </Link>
+          )),
+        }
+      ];
+    }
+
+    const user = users[channel.dmUserSlug];
 
     return (
       <div className="ChannelDetailsDrawer">
+        {channel.hasDm && user && (
+          <UserPreview user={user} avatarSize="52" avatarVersion="avatarLarge" />
+        )}
         {accordionItems.map(item => (
           <AccordionItem
             key={item.name}

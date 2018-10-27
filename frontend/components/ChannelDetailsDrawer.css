@@ -1,0 +1,12 @@
+.ChannelDetailsDrawer .UserPreview {
+  padding: 12px 8px;
+  align-items: top;
+}
+
+.ChannelDetailsDrawer .UserPreview__email {
+  color: #636E72;
+}
+
+.ChannelDetailsDrawer .UserPreview .StatusIcon {
+  margin-right: 5px;
+}
