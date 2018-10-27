@@ -1,0 +1,20 @@
+.UserPreview {
+  display: flex;
+}
+
+.UserPreview__align-center {
+  align-items: center;
+}
+
+.UserPreview__username {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.UserPreview__content {
+  margin-left: 8px;
+}
+
+.UserPreview__username .StatusIcon {
+  margin-left: 6px;
+}

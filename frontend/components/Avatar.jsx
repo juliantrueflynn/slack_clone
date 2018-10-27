@@ -8,6 +8,7 @@ const Avatar = ({
   baseUrl,
   avatarFor,
   size,
+  avatarVersion,
   ...attrs
 }) => {
   if (!author) {
@@ -21,22 +22,21 @@ const Avatar = ({
     slug,
   } = author;
 
-  const imgSize = size || 36;
-  let imgSrc = `https://via.placeholder.com/${imgSize}x${imgSize}`;
-  if (avatarThumb) {
-    imgSrc = avatarThumb;
+  let imgVersion = avatarThumb;
+  if (avatarVersion) {
+    imgVersion = author[avatarVersion];
   }
 
+  const avatarLink = `${baseUrl}/team/${slug}`;
+  const imgSize = size || 36;
   const avatarClassNames = classNames('Avatar', {
     [`Avatar__${avatarFor}`]: avatarFor,
     [`Avatar__${avatarFor}--${status}`]: avatarFor && status,
   });
 
-  const avatarLink = `${baseUrl}/team/${slug}`;
-
   const authorImage = (
     <img
-      src={imgSrc}
+      src={imgVersion}
       className="Avatar__image"
       height={imgSize}
       width={imgSize}

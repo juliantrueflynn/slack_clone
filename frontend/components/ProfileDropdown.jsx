@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import Avatar from './Avatar';
+import UserPreview from './UserPreview';
 import StatusIcon from './StatusIcon';
 import Dropdown from './Dropdown';
 import './ProfileDropdown.css';
@@ -12,20 +12,6 @@ const ProfileDropdown = ({
   workspaces,
   workspaceTitle,
 }) => {
-  const greetingLabel = (
-    <div className="ProfileDropdown__greeting">
-      <Avatar author={user} avatarFor="greeting" size="40" />
-      <div className="ProfileDropdown__greeting-user">
-        <div className="ProfileDropdown__greeting-name">
-          {user.username}
-        </div>
-        <div className="ProfileDropdown__greeting-email">
-          {user.email}
-        </div>
-      </div>
-    </div>
-  );
-
   let baseUrl = `${url}/`;
   if (currChatSlug === 'unreads' || currChatSlug === 'threads') {
     baseUrl += currChatSlug;
@@ -34,7 +20,10 @@ const ProfileDropdown = ({
   }
 
   const menuItems = [
-    { label: greetingLabel, altClassName: 'user-head' },
+    {
+      label: <UserPreview user={user} avatarSize="40" hasNoStatus alignCenter />,
+      altClassName: 'user-head',
+    },
     {
       label: 'Home',
       link: '/',
