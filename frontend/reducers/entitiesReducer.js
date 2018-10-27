@@ -9,6 +9,7 @@ import favorites from './favoriteReducer';
 import reactions from './reactionReducer';
 import reads from './readReducer';
 import unreads from './unreadReducer';
+import pins from './pinReducer';
 
 const entitiesReducer = combineReducers({
   workspaces,
@@ -17,6 +18,7 @@ const entitiesReducer = combineReducers({
   channelSubs,
   members,
   messages,
+  pins,
   favorites,
   reactions,
   reads,

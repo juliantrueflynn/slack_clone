@@ -1,5 +1,10 @@
 import { actionCreator } from '../util/actionsUtil';
-import { MESSAGE, USER_THREAD, HISTORY } from './actionTypes';
+import {
+  MESSAGE,
+  USER_THREAD,
+  HISTORY,
+  PIN,
+} from './actionTypes';
 
 export const fetchMessages = {
   request: channelSlug => actionCreator(MESSAGE.INDEX.REQUEST, { channelSlug }),
@@ -40,4 +45,14 @@ export const fetchUserThreads = {
   request: workspaceSlug => actionCreator(USER_THREAD.INDEX.REQUEST, { workspaceSlug }),
   receive: messages => actionCreator(USER_THREAD.INDEX.RECEIVE, { messages }),
   failure: errors => actionCreator(USER_THREAD.INDEX.FAILURE, { errors }),
+};
+
+export const createPin = {
+  request: pin => actionCreator(PIN.CREATE.REQUEST, { pin }),
+  failure: errors => actionCreator(PIN.CREATE.FAILURE, { errors }),
+};
+
+export const destroyPin = {
+  request: id => actionCreator(PIN.DESTROY.REQUEST, { id }),
+  failure: errors => actionCreator(PIN.DESTROY.FAILURE, { errors }),
 };

@@ -53,11 +53,17 @@ const channelReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case MESSAGE.INDEX.RECEIVE: {
-      const { channel, messages, members } = action.messages;
+      const {
+        channel,
+        messages,
+        members,
+        pins,
+      } = action.messages;
 
       nextState = {};
       nextState[channel.slug] = {
         messages: messages.map(msg => msg.slug),
+        pins: pins.map(pin => pin.id),
         isLoading: false,
         ...channel,
       };

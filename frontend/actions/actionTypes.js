@@ -16,6 +16,7 @@ export const REACTION = apiActions('REACTION', ['CREATE', 'DESTROY']);
 export const USER_THREAD = apiActions('USER_THREAD', ['INDEX', 'UPDATE']);
 export const READ = apiActions('READ', ['CREATE', 'UPDATE']);
 export const UNREAD = apiActions('UNREAD', ['INDEX', 'CREATE', 'UPDATE']);
+export const PIN = apiActions('PIN', ['CREATE', 'DESTROY']);
 export const PASSWORD = apiActions('PASSWORD', ['UPDATE']);
 export const SEARCH = apiActions('SEARCH', ['INDEX']);
 export const SEARCH_DESTROY = 'SEARCH_DESTROY';

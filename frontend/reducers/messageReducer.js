@@ -72,6 +72,7 @@ const messageReducer = (state = {}, action) => {
         reactions,
         favorites,
         channel,
+        pins,
       } = action.messages;
 
       nextState = Object.assign({}, state);
@@ -94,6 +95,12 @@ const messageReducer = (state = {}, action) => {
           nextState[message.slug].isInDrawer = true;
         }
       });
+
+      if (pins) {
+        pins.forEach((pin) => {
+          nextState[pin.messageSlug].pinId = pin.id;
+        });
+      }
 
       reactions.forEach((reaction) => {
         nextState[reaction.messageSlug].reactionIds.push(reaction.id);
