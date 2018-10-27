@@ -4,6 +4,11 @@ class Pin < ApplicationRecord
 
   belongs_to :message
   belongs_to :user
+  has_one :channel, through: :message
+
+  def broadcast_name
+    "channel_#{channel.slug}"
+  end
 
   def message_slug
     message.slug

@@ -14,6 +14,7 @@ import {
   SEARCH,
   MODAL_CLOSE,
   SEARCH_DESTROY,
+  PIN,
 } from '../actions/actionTypes';
 
 const messageReducer = (state = {}, action) => {
@@ -272,6 +273,26 @@ const messageReducer = (state = {}, action) => {
       }, {});
 
       return merge({}, state, nextState);
+    }
+    case PIN.CREATE.RECEIVE: {
+      const { pin } = action;
+      nextState = Object.assign({}, state);
+
+      if (nextState[pin.messageSlug]) {
+        nextState[pin.messageSlug].pinId = pin.id;
+      }
+
+      return nextState;
+    }
+    case PIN.DESTROY.RECEIVE: {
+      const { pin } = action;
+      nextState = Object.assign({}, state);
+
+      if (nextState[pin.messageSlug]) {
+        nextState[pin.messageSlug].pinId = null;
+      }
+
+      return nextState;
     }
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:

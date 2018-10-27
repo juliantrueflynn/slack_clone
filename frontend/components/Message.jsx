@@ -42,6 +42,8 @@ class Message extends React.Component {
       createFavoriteRequest,
       deleteFavoriteRequest,
       deleteReactionRequest,
+      createPinRequest,
+      destroyPinRequest,
       isThreadHidden,
       isSearch,
       currentUser,
@@ -78,6 +80,8 @@ class Message extends React.Component {
               deleteMessageRequest={deleteMessageRequest}
               deleteFavoriteRequest={deleteFavoriteRequest}
               deleteReactionRequest={deleteReactionRequest}
+              createPinRequest={createPinRequest}
+              destroyPinRequest={destroyPinRequest}
               currentUser={currentUser}
               modalOpen={modalOpen}
             />

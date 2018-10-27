@@ -1,7 +1,12 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Message from './Message';
-import { updateMessage, deleteMessage } from '../actions/messageActions';
+import {
+  updateMessage,
+  deleteMessage,
+  createPin,
+  destroyPin,
+} from '../actions/messageActions';
 import { deleteReaction, createReaction } from '../actions/reactionActions';
 import { selectMessageChildrenBySlug } from '../reducers/selectors';
 import { modalOpen } from '../actions/uiActions';
@@ -21,6 +26,8 @@ const mapDispatchToProps = dispatch => ({
   deleteReactionRequest: id => dispatch(deleteReaction.request(id)),
   createFavoriteRequest: favorite => dispatch(createFavorite.request(favorite)),
   deleteFavoriteRequest: favoriteId => dispatch(deleteFavorite.request(favoriteId)),
+  createPinRequest: pin => dispatch(createPin.request(pin)),
+  destroyPinRequest: id => dispatch(destroyPin.request(id)),
   modalOpen: (modalType, modalProps) => dispatch(modalOpen(modalType, modalProps)),
 });
 

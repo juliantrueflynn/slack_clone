@@ -54,7 +54,17 @@ class MessageHoverMenu extends React.Component {
       match: { url },
       message,
       currentUser,
+      createPinRequest,
+      destroyPinRequest,
     } = this.props;
+
+    const pinToggle = () => {
+      if (message.pinId) {
+        destroyPinRequest(message.pinId);
+      } else {
+        createPinRequest({ messageId: message.id });
+      }
+    };
 
     if (isEditing) {
       return null;
@@ -90,6 +100,11 @@ class MessageHoverMenu extends React.Component {
         {(isAuthor && isMessageType) && (
           <Button unStyled buttonFor="msg-delete" onClick={this.handleDeleteClick}>
             <FontAwesomeIcon icon={['far', 'trash-alt']} fixedWidth />
+          </Button>
+        )}
+        {isMessageType && (
+          <Button unStyled onClick={pinToggle}>
+            {message.pinId ? 'Un-pin' : 'Pin'}
           </Button>
         )}
       </div>
