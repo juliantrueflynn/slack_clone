@@ -1,0 +1,1 @@
+json.(pin, :message_slug, :user_slug, *pin.attributes.keys)

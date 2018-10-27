@@ -5,6 +5,14 @@ class Pin < ApplicationRecord
   belongs_to :message
   belongs_to :user
 
+  def message_slug
+    message.slug
+  end
+
+  def user_slug
+    user.slug
+  end
+
   private
 
   after_create_commit :broadcast_create

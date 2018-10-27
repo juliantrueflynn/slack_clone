@@ -35,4 +35,10 @@ json.reactions do
   end
 end
 
+json.pins do
+  pins = Pin.where(message_id: messages).includes(:message, :user)
+
+  json.array! pins, :id, :user_id, :message_id, :message_slug, :user_slug
+end
+
 json.members @channel.members.pluck(:slug)

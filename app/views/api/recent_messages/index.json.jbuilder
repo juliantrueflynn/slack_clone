@@ -37,3 +37,9 @@ json.reactions do
     json.user_slug reaction.user.slug
   end
 end
+
+json.pins do
+  pins = Pin.where(message_id: @recent_messages).includes(:message, :user)
+
+  json.array! pins, :id, :user_id, :message_id, :message_slug, :user_slug
+end
