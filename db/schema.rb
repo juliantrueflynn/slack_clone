@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180912234744) do
+ActiveRecord::Schema.define(version: 20181027210426) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,12 @@ ActiveRecord::Schema.define(version: 20180912234744) do
     t.datetime "updated_at", null: false
     t.index ["channel_id"], name: "index_messages_on_channel_id"
     t.index ["slug"], name: "index_messages_on_slug", unique: true
+  end
+
+  create_table "pins", force: :cascade do |t|
+    t.bigint "message_id"
+    t.bigint "user_id"
+    t.index ["message_id"], name: "index_pins_on_message_id"
   end
 
   create_table "reactions", force: :cascade do |t|
@@ -139,6 +145,8 @@ ActiveRecord::Schema.define(version: 20180912234744) do
   add_foreign_key "favorites", "users", on_delete: :cascade
   add_foreign_key "messages", "channels", on_delete: :cascade
   add_foreign_key "messages", "users", column: "author_id", on_delete: :cascade
+  add_foreign_key "pins", "messages", on_delete: :cascade
+  add_foreign_key "pins", "users", on_delete: :cascade
   add_foreign_key "reactions", "messages", on_delete: :cascade
   add_foreign_key "reactions", "users", on_delete: :cascade
   add_foreign_key "reads", "users", on_delete: :cascade

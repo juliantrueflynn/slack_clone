@@ -26,6 +26,7 @@ class Message < ApplicationRecord
   has_many :authors,
     through: :replies,
     source: :author
+  has_many :pins
   has_many :favorites
   has_many :reactions,
     -> { joins(:user).select('reactions.*', 'users.slug AS user_slug') }

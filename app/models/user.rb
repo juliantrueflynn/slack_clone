@@ -25,6 +25,7 @@ class User < ApplicationRecord
   has_many :reactions
   has_many :appears, class_name: 'UserAppearance'
   has_many :reads
+  has_many :pins
 
   def self.find_by_email_and_password(email, password)
     user = User.find_by(email: email)

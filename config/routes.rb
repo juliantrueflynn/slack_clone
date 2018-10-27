@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       resource :user_appearance, only: :destroy
       get '/search(/:query)', to: 'search#index'
     end
+    resources :pins, only: [:create, :destroy]
     resource :user_appearance, only: :create
     resource :dm_chat, only: :create
     resources :workspace_subs, only: [:create, :update]
