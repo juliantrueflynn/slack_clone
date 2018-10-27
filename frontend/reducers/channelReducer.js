@@ -108,12 +108,18 @@ const channelReducer = (state = {}, action) => {
 
       reads.forEach((read) => {
         if (read.readableType !== 'Channel') return;
+        if (!nextState[read.slug]) {
+          return;
+        }
         nextState[read.slug].lastRead = read.accessedAt;
         nextState[read.slug].readId = read.id;
       });
 
       unreads.forEach((unread) => {
         if (unread.unreadableType !== 'Channel') return;
+        if (!nextState[unread.slug]) {
+          return;
+        }
         nextState[unread.slug].lastActive = unread.activeAt;
         nextState[unread.slug].unreadId = unread.id;
       });
@@ -209,6 +215,14 @@ const channelReducer = (state = {}, action) => {
       nextState = Object.assign({}, state);
       nextState[channelSlug].subs.push(id);
       nextState[channelSlug].members.push(userSlug);
+      return nextState;
+    }
+    case CHANNEL_SUB.DESTROY.RECEIVE: {
+      const { channelSub } = action;
+      nextState = Object.assign({}, state);
+      const channel = nextState[channelSub.channelSlug];
+      channel.subs = channel.subs.filter(subId => subId !== channelSub.id);
+      channel.members = channel.members.filter(userSlug => userSlug !== channelSub.userSlug);
       return nextState;
     }
     case MESSAGE.CREATE.RECEIVE: {

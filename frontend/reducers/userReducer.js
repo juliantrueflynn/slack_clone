@@ -88,6 +88,12 @@ const userReducer = (state = {}, action) => {
       nextState[userSlug].subs.push(id);
       return nextState;
     }
+    case CHANNEL_SUB.DESTROY.RECEIVE: {
+      const { channelSub: { id, userSlug } } = action;
+      nextState = Object.assign({}, state);
+      nextState[userSlug].subs = nextState[userSlug].subs.filter(subId => id === subId);
+      return nextState;
+    }
     case CHANNEL.CREATE.RECEIVE: {
       const { subs } = action.channel;
 

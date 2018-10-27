@@ -26,29 +26,41 @@
   color: #636E72;
 }
 
-.ChannelHeader .Menu {
+.ChannelHeader .Menu--header-user {
   margin: 0;
   background-color: #FFF;
   color: #636E72;
 }
 
-.ChannelHeader__navigate .MenuItem {
+.ChannelHeader__navigate .Menu--header-user .MenuItem {
   margin-right: 0;
 }
 
-.ChannelHeader__navigate .MenuItem__content {
+.ChannelHeader__navigate .Dropdown__channel-edit .Menu {
+  top: 32px;
+}
+
+.ChannelHeader__navigate .Dropdown__channel-edit,
+.ChannelHeader__navigate .Btn__channel-details,
+.ChannelHeader__navigate .Menu--header-user .MenuItem__content {
   padding: 7px;
   border-radius: 4px;
 }
 
-.ChannelHeader__navigate .MenuItem__content:focus {
+.ChannelHeader__navigate .Menu--header-user .MenuItem__content:focus {
   outline: none;
 }
 
-.ChannelHeader__navigate .MenuItem__content:not(.MenuItem__content--active):hover {
+.ChannelHeader__navigate .Menu--header-user .MenuItem__content:not(.MenuItem__content--active):hover {
   color: #74B9FF;
 }
 
-.ChannelHeader__navigate .MenuItem__content--active {
+.ChannelHeader__navigate .Btn__channel-details--active,
+.ChannelHeader__navigate .Menu--header-user .MenuItem__content--active {
   background-color: #DFE6E9;
+}
+
+.Dropdown__channel-edit .MenuItem__content--active {
+  background-color: #74B9FF;
+  color: #FFF;
 }

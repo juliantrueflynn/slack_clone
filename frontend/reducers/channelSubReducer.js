@@ -52,6 +52,12 @@ const channelSubReducer = (state = {}, action) => {
       nextState[id].inSidebar = inSidebar;
       return nextState;
     }
+    case CHANNEL_SUB.DESTROY.RECEIVE: {
+      const { channelSub } = action;
+      nextState = Object.assign({}, state);
+      delete nextState[channelSub.id];
+      return nextState;
+    }
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return {};

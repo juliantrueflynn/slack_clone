@@ -11,6 +11,7 @@ const Button = ({
   color,
   linkTo,
   fullWidth,
+  isActive,
   ...props
 }) => {
   const btnClassNames = classNames('Btn', {
@@ -20,6 +21,7 @@ const Button = ({
     [`Btn__${size}`]: size,
     [`Btn__${buttonFor}`]: buttonFor,
     [`Btn__${buttonFor}--${modifier}`]: buttonFor && modifier,
+    [`Btn__${buttonFor}--active`]: buttonFor && isActive,
     [`Btn__${color}`]: color,
   });
 

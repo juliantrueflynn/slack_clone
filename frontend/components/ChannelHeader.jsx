@@ -5,12 +5,14 @@ import ProfileModal from './ProfileModal';
 import SearchModal from './SearchModal';
 import ChannelHeaderSearch from './ChannelHeaderSearch';
 import ChannelHeaderMeta from './ChannelHeaderMeta';
+import Dropdown from './Dropdown';
 import './ChannelHeader.css';
+import Button from './Button';
 
 class ChannelHeader extends React.Component {
   constructor(props) {
     super(props);
-    this.handleToggleLinkClick = this.handleToggleLinkClick.bind(this);
+    this.handleLinkToggle = this.handleLinkToggle.bind(this);
   }
 
   getTitle() {
@@ -31,7 +33,7 @@ class ChannelHeader extends React.Component {
     return null;
   }
 
-  handleToggleLinkClick(pathName) {
+  handleLinkToggle(pathName) {
     const {
       match: { url, isExact },
       history,
@@ -63,31 +65,50 @@ class ChannelHeader extends React.Component {
       messages,
       users,
       isSearchLoading,
+      destroyChannelSubRequest,
+      match: { url },
     } = this.props;
+
+    const chatTitle = this.getTitle();
     const isFavsOpen = drawerType === 'favorites';
     const isDetailsOpen = drawerType === 'details';
     const modalOpenProfile = () => modalOpen('MODAL_PROFILE');
     const modalOpenEditChannel = () => modalOpen('MODAL_EDIT_CHANNEL');
+    const leaveChannel = () => {
+      const channelSub = { id: channel.subId, channelSlug: channel.slug };
+      destroyChannelSubRequest(channelSub);
+    };
 
-    const channelMenuItems = [
+    let editMenuItems = [];
+    const ddItems = [
       {
-        key: 'channel-info',
-        icon: <FontAwesomeIcon icon="info-circle" size="lg" />,
-        onClick: () => this.handleToggleLinkClick('details'),
-        isItemActive: isDetailsOpen,
-      },
-      {
-        key: 'channel-edit',
-        icon: <FontAwesomeIcon icon="cog" size="lg" />,
-        onClick: modalOpenEditChannel,
-      },
+        label: 'View channel details',
+        link: `${url}/details`,
+        hasNoDrawer: true,
+      }
     ];
+    if (channel && !channel.hasDm) {
+      editMenuItems = ddItems.concat([
+        { label: 'Edit channel', onClick: modalOpenEditChannel },
+        { label: `Leave ${chatTitle}`, onClick: leaveChannel },
+      ]);
+    }
+
+    if (channel && channel.hasDm) {
+      editMenuItems = ddItems.concat([
+        {
+          label: `View ${chatTitle}’s profile`,
+          link: `${url}/team/${channel.dmUserSlug}`,
+          hasNoDrawer: true,
+        }
+      ]);
+    }
 
     const userMenuItems = [
       {
         key: 'favorites',
         icon: <FontAwesomeIcon icon={['fas', 'star']} size="lg" />,
-        onClick: () => this.handleToggleLinkClick('favorites'),
+        onClick: () => this.handleLinkToggle('favorites'),
         isItemActive: isFavsOpen,
       },
       {
@@ -101,9 +122,7 @@ class ChannelHeader extends React.Component {
       <header className="ChannelHeader">
         <div className="ChannelHeader__content">
           <div className="ChannelHeader__info">
-            <h1 className="ChannelHeader__title">
-              {this.getTitle()}
-            </h1>
+            <h1 className="ChannelHeader__title">{chatTitle}</h1>
             <ChannelHeaderMeta
               channel={channel}
               accordionOpen={accordionOpen}
@@ -112,7 +131,21 @@ class ChannelHeader extends React.Component {
             />
           </div>
           <div className="ChannelHeader__navigate">
-            <Menu menuFor="header-channel" isRow items={channelMenuItems} />
+            {channel && (
+              <Button
+                buttonFor="channel-details"
+                onClick={() => this.handleLinkToggle('details')}
+                isActive={isDetailsOpen}
+                unStyled
+              >
+                <FontAwesomeIcon icon="info-circle" size="lg" />
+              </Button>
+            )}
+            {channel && (
+              <Dropdown menuFor="channel-edit" items={editMenuItems} unStyled>
+                <FontAwesomeIcon icon="cog" size="lg" />
+              </Dropdown>
+            )}
             <ChannelHeaderSearch
               query={searchQuery}
               destroySearch={destroySearch}

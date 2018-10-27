@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { modalOpen, drawerClose, accordionOpen } from '../actions/uiActions';
 import { fetchSearch, destroySearch } from '../actions/searchActions';
+import { destroyChannelSub } from '../actions/channelActions';
 import { selectSearchMessages, selectChannelWithEntitiesBySlug } from '../reducers/selectors';
 import ChannelHeader from './ChannelHeader';
 
@@ -22,6 +23,7 @@ const mapDispatchToProps = dispatch => ({
   accordionOpen: () => dispatch(accordionOpen('details', 'members')),
   fetchSearchRequest: query => dispatch(fetchSearch.request(query)),
   destroySearch: () => dispatch(destroySearch()),
+  destroyChannelSubRequest: id => dispatch(destroyChannelSub.request(id)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChannelHeader));

@@ -181,7 +181,7 @@ export const selectDmChats = ({ entities: { channels, channelSubs, members }, se
 
   return currMember.subs
     .map(subId => channelSubs[subId])
-    .filter(sub => channels[sub.channelSlug].hasDm && sub.inSidebar)
+    .filter(sub => sub && channels[sub.channelSlug].hasDm && sub.inSidebar)
     .map(({ channelSlug }) => {
       const channel = Object.assign({}, channels[channelSlug]);
       const dmUser = selectDmWithUser(channel, members, currMember.slug);
@@ -201,23 +201,39 @@ export const selectDmChats = ({ entities: { channels, channelSubs, members }, se
     });
 };
 
-const channelsWithEntitiesMap = ({ channels, members }, currentUserSlug) => (
+const channelsWithEntitiesMap = ({ channels, members, channelSubs }, currUserSlug) => (
   values(channels).reduce((acc, curr) => {
     const channel = channels[curr.slug];
-    if (!channel.isSub) {
-      channel.isSub = channel.members.includes(currentUserSlug);
+
+    if (!channel) {
+      return acc;
     }
 
-    if (channel && channel.hasDm) {
-      const dmUser = selectDmWithUser(channel, members, currentUserSlug);
+    if (!channel.isSub) {
+      channel.isSub = channel.members.includes(currUserSlug);
+    }
+
+    if (channelSubs) {
+      const userSubs = values(channelSubs).filter(sub => (
+        sub.channelId === channel.id && sub.userSlug === currUserSlug
+      ));
+
+      const [sub] = userSubs;
+      if (sub) {
+        channel.subId = sub.id;
+      } else {
+        channel.isSub = false;
+      }
+    }
+
+    if (channel.hasDm) {
+      const dmUser = selectDmWithUser(channel, members, currUserSlug);
 
       if (dmUser) {
         channel.title = dmUser.username;
         channel.dmUserSlug = dmUser.slug;
       }
-    }
-
-    if (channel && !channel.hasDm) {
+    } else {
       const owner = members[channel.ownerSlug];
       channel.ownerName = owner && owner.username;
     }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import Button from './Button';
 import StatusIcon from './StatusIcon';
 import { dateUtil } from '../util/dateUtil';
@@ -108,4 +109,4 @@ class UserDrawer extends React.Component {
   }
 }
 
-export default UserDrawer;
+export default withRouter(UserDrawer);
