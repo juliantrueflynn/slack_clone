@@ -40,7 +40,7 @@ export const updateChannelSub = {
 };
 
 export const destroyChannelSub = {
-  request: channelSub => actionCreator(CHANNEL_SUB.DESTROY.REQUEST, { channelSub }),
+  request: id => actionCreator(CHANNEL_SUB.DESTROY.REQUEST, { id }),
   failure: errors => actionCreator(CHANNEL_SUB.DESTROY.FAILURE, { errors }),
 };
 

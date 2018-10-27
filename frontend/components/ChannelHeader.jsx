@@ -6,8 +6,8 @@ import SearchModal from './SearchModal';
 import ChannelHeaderSearch from './ChannelHeaderSearch';
 import ChannelHeaderMeta from './ChannelHeaderMeta';
 import Dropdown from './Dropdown';
-import './ChannelHeader.css';
 import Button from './Button';
+import './ChannelHeader.css';
 
 class ChannelHeader extends React.Component {
   constructor(props) {
@@ -120,40 +120,38 @@ class ChannelHeader extends React.Component {
 
     return (
       <header className="ChannelHeader">
-        <div className="ChannelHeader__content">
-          <div className="ChannelHeader__info">
-            <h1 className="ChannelHeader__title">{chatTitle}</h1>
-            <ChannelHeaderMeta
-              channel={channel}
-              accordionOpen={accordionOpen}
-              modalOpen={modalOpenEditChannel}
-              currentUser={currentUser}
-            />
-          </div>
-          <div className="ChannelHeader__navigate">
-            {channel && (
-              <Button
-                buttonFor="channel-details"
-                onClick={() => this.handleLinkToggle('details')}
-                isActive={isDetailsOpen}
-                unStyled
-              >
-                <FontAwesomeIcon icon="info-circle" size="lg" />
-              </Button>
-            )}
-            {channel && (
-              <Dropdown menuFor="channel-edit" items={editMenuItems} unStyled>
-                <FontAwesomeIcon icon="cog" size="lg" />
-              </Dropdown>
-            )}
-            <ChannelHeaderSearch
-              query={searchQuery}
-              destroySearch={destroySearch}
-              modalOpen={modalOpen}
-            />
-            <Menu menuFor="header-user" isRow items={userMenuItems} />
-          </div>
+        <div className="ChannelHeader__info">
+          <h1 className="ChannelHeader__title">{chatTitle}</h1>
+          <ChannelHeaderMeta
+            channel={channel}
+            accordionOpen={accordionOpen}
+            modalOpen={modalOpenEditChannel}
+            currentUser={currentUser}
+          />
         </div>
+        <nav className="ChannelHeader__navigate">
+          {channel && (
+            <Button
+              buttonFor="channel-details"
+              onClick={() => this.handleLinkToggle('details')}
+              isActive={isDetailsOpen}
+              unStyled
+            >
+              <FontAwesomeIcon icon="info-circle" size="lg" />
+            </Button>
+          )}
+          {channel && (
+            <Dropdown menuFor="channel-edit" items={editMenuItems} unStyled>
+              <FontAwesomeIcon icon="cog" size="lg" />
+            </Dropdown>
+          )}
+          <ChannelHeaderSearch
+            query={searchQuery}
+            destroySearch={destroySearch}
+            modalOpen={modalOpen}
+          />
+          <Menu menuFor="header-user" isRow items={userMenuItems} />
+        </nav>
         <ProfileModal {...currentUser} />
         <SearchModal
           searchQuery={searchQuery}

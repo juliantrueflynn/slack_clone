@@ -63,9 +63,9 @@ function* fetchDmChatMessage({ message: { message } }) {
   }
 }
 
-function* fetchDestroy({ channelSub }) {
+function* fetchDestroy({ id }) {
   try {
-    yield call(apiDelete, `channel_subs/${channelSub.id}`);
+    yield call(apiDelete, `channel_subs/${id}`);
   } catch (error) {
     yield put(actions.destroyChannelSub.failure(error));
   }
