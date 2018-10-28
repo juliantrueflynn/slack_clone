@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactionItem from './ReactionItem';
+import ReactionItem from './ReactionsItem';
 import './Reactions.css';
 
 class Reactions extends React.Component {
@@ -14,7 +14,7 @@ class Reactions extends React.Component {
   }
 
   render() {
-    const { reactions, currentUserId } = this.props;
+    const { reactions, currUserId } = this.props;
 
     const reactionStyle = {
       height: 17,
@@ -30,7 +30,6 @@ class Reactions extends React.Component {
 
       acc[curr.emoji].emoji = curr.emoji;
       acc[curr.emoji].users.push(curr.userId);
-      acc[curr.emoji].hasCurrentUser = curr.userId === currentUserId;
 
       return acc;
     }, {});
@@ -45,6 +44,7 @@ class Reactions extends React.Component {
             reactionStyle={reactionStyle}
             createReaction={this.handleClick}
             reaction={reaction}
+            currUserId={currUserId}
           />
         ))}
       </ul>

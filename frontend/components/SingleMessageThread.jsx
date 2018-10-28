@@ -10,9 +10,8 @@ const SingleMessageThread = ({
   users,
   slug,
   matchUrl,
-  isThreadHidden,
 }) => {
-  if (isThreadHidden || !thread || !thread.length) {
+  if (!thread || !thread.length) {
     return null;
   }
 

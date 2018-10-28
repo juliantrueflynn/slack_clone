@@ -38,7 +38,6 @@ const SearchModalItem = ({ message, users }) => {
         message={message}
         users={users}
         isThreadHidden
-        isSearch
       >
         {(hasThread || hasReactions) && (
           <div className="SearchModalItem__social">

@@ -9,24 +9,20 @@ import SingleMessageThread from './SingleMessageThread';
 import ChannelSub from './ChannelSub';
 import { dateUtil } from '../util/dateUtil';
 import './Message.css';
+import MessagePin from './MessagePin';
 
 const Message = ({
   match: { url },
   message,
   role,
-  updateMessageRequest,
-  createReactionRequest,
   users,
   reactions,
+  pins,
   modalOpen,
-  deleteMessageRequest,
-  createFavoriteRequest,
-  deleteFavoriteRequest,
-  deleteReactionRequest,
-  createPinRequest,
-  destroyPinRequest,
+  createReactionRequest,
+  updateMessageRequest,
+  shouldShowPins,
   isThreadHidden,
-  isSearch,
   currentUser,
   handleEditToggle,
   handleHover,
@@ -34,6 +30,7 @@ const Message = ({
   editMessageId,
   ddToggle,
   children,
+  ...props
 }) => {
   const hasHover = message.id === hoverMessageId;
   const isEditing = message.id === editMessageId;
@@ -46,6 +43,8 @@ const Message = ({
   const dateCreated = dateUtil(message.createdAt).localTime();
   const entryReactions = reactions.filter(item => item.messageId === message.id);
   const hasReactions = !!entryReactions.length;
+  const hasChildren = !!children;
+  const isPinned = !!message.pinId;
 
   const toggleHover = () => {
     if (handleHover) {
@@ -57,6 +56,7 @@ const Message = ({
   const entryClassNames = classNames('Message', {
     'Message--editing': isEditing,
     'Message--hover': hasHover && !isEditing,
+    'Message--pinned': isPinned,
   });
 
   return (
@@ -66,57 +66,54 @@ const Message = ({
       onMouseLeave={toggleHover}
       className={entryClassNames}
     >
-      <Avatar baseUrl={url} author={avatar} />
-      <div className="Message__body">
-        {isSearch || isEditing || (
-          <MessageHoverMenu
-            {...message}
-            ddToggle={ddToggle}
-            isEditing={isEditing}
-            handleEditToggle={handleEditToggle}
-            createFavorite={createFavoriteRequest}
-            deleteMessage={deleteMessageRequest}
-            deleteFavorite={deleteFavoriteRequest}
-            deleteReaction={deleteReactionRequest}
-            createPin={createPinRequest}
-            destroyPin={destroyPinRequest}
-            currentUser={currentUser}
-            modalOpen={modalOpen}
-          />
-        )}
-        <div className="Message__content">
-          <div className="Message__meta">
-            <Link to={authorUrl} className="Message__author">
-              {message.authorName}
-            </Link>
-            <time className="Message__time">{dateCreated}</time>
+      {shouldShowPins && isPinned && (
+        <MessagePin pinId={message.pinId} users={users} pins={pins} currUserId={currentUser.id} />
+      )}
+      {isEditing || (
+        <MessageHoverMenu
+          ddToggle={ddToggle}
+          isEditing={isEditing}
+          handleEditToggle={handleEditToggle}
+          currentUser={currentUser}
+          modalOpen={modalOpen}
+          {...message}
+          {...props}
+        />
+      )}
+      <div className="Message__container">
+        <Avatar baseUrl={url} author={avatar} />
+        <div className="Message__body">
+          <div className="Message__content">
+            <div className="Message__meta">
+              <Link to={authorUrl} className="Message__author">
+                {message.authorName}
+              </Link>
+              <time className="Message__time">{dateCreated}</time>
+            </div>
+            {message.entityType === 'entry' && (
+              <MessageContent
+                isEditing={isEditing}
+                content={message.body}
+                updateMessageRequest={updateMessageRequest}
+                closeEditor={handleEditToggle}
+                messageSlug={message.slug}
+              />
+            )}
+            {message.entityType !== 'entry' && <ChannelSub sub={message} />}
           </div>
-          {message.entityType === 'entry' && (
-            <MessageContent
-              isEditing={isEditing}
-              content={message.body}
-              updateMessageRequest={updateMessageRequest}
-              closeEditor={handleEditToggle}
-              messageSlug={message.slug}
+          {(hasReactions && !hasChildren) && (
+            <Reactions
+              createReaction={createReactionRequest}
+              reactions={entryReactions}
+              currUserId={currentUser.id}
+              messageId={message.id}
             />
           )}
-          {message.entityType === 'entry' || <ChannelSub sub={message} />}
+          {hasChildren || isThreadHidden || (
+            <SingleMessageThread matchUrl={url} users={users} {...message} />
+          )}
+          {children}
         </div>
-        {(hasReactions && !isSearch) && (
-          <Reactions
-            createReaction={createReactionRequest}
-            reactions={entryReactions}
-            userId={currentUser.id}
-            messageId={message.id}
-          />
-        )}
-        <SingleMessageThread
-          matchUrl={url}
-          users={users}
-          isThreadHidden={isThreadHidden}
-          {...message}
-        />
-        {children}
       </div>
     </div>
   );

@@ -30,14 +30,14 @@ class MessageHoverMenu extends React.Component {
     const {
       id,
       favoriteId,
-      createFavorite,
-      deleteFavorite,
+      createFavoriteRequest,
+      deleteFavoriteRequest,
     } = this.props;
 
     if (favoriteId) {
-      deleteFavorite(favoriteId);
+      deleteFavoriteRequest(favoriteId);
     } else {
-      createFavorite(id);
+      createFavoriteRequest(id);
     }
   }
 
@@ -55,7 +55,7 @@ class MessageHoverMenu extends React.Component {
       createPin,
       destroyPin,
       ddToggle,
-      deleteMessage,
+      deleteMessageRequest,
       match: { url },
     } = this.props;
 
@@ -73,7 +73,7 @@ class MessageHoverMenu extends React.Component {
 
     if (isAuthor) {
       ddItems.push({ label: 'Edit message', onClick: () => handleEditToggle(id) });
-      ddItems.push({ label: 'Delete message', onClick: () => deleteMessage(slug) });
+      ddItems.push({ label: 'Delete message', onClick: () => deleteMessageRequest(slug) });
     }
 
     const favIcon = favoriteId ? ['fas', 'star'] : ['far', 'star'];

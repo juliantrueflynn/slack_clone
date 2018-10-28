@@ -1,14 +1,18 @@
 .AllUnreadsItem__body .Message,
 .Drawer .Message,
 .Channel .Message {
-  padding: 7px 27px;
+  padding: 5px 27px;
 }
 
 .Message {
   position: relative;
+}
+
+.Message__container {
   display: flex;
   -ms-flex-direction: row;
   flex-direction: row;
+  padding: 2px 0;
 }
 
 .Message__body {
@@ -36,11 +40,11 @@
   padding-right: 2px;
 }
 
-.Message--hover:not(.Message--editing) {
+.Message--hover:not(.Message--editing):not(.Message--pinned) {
   background-color: #F9F9F9;
 }
 
-.Workspace--modal-open .Message--hover {
+.Workspace--modal-open .Message--hover:not(.Message--pinned) {
   background-color: #FFF;
 }
 
@@ -59,8 +63,9 @@
   font-size: .8em;
 }
 
+.Message--pinned,
 .Message--editing {
-  background-color: rgba(255, 234, 167, 0.6);
+  background-color: rgba(255, 234, 167, 0.4);
 }
 
 .Message--editing .Reactions,

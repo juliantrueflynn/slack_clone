@@ -1,15 +1,15 @@
-.ReactionItem {
+.ReactionsItem {
   margin-right: 5px;
 }
 
-.ReactionItem:last-child {
+.ReactionsItem:last-child {
   margin-right: 0;
 }
 
-.Reactions .Btn__reaction {
+.ReactionsItem .Btn__reaction {
   border: 1px solid;
   border-color: #e8e8e8;
-  background-color: #FFF;
+  background-color: rgba(255, 255, 255, 0.6);
   padding: 2px;
   border-radius: 3px;
   font-size: 13px;
@@ -19,19 +19,19 @@
   transition: border-color ease-in-out .2s;
 }
 
-.Reactions .Btn__reaction:hover {
+.ReactionsItem .Btn__reaction:hover {
   border-color: #0576b9;
 }
 
-.ReactionItem__counter {
+.ReactionsItem__counter {
   margin: 0 1px 0 2px;
 }
 
-.ReactionItem--has-user .Btn__reaction {
+.ReactionsItem--has-user .Btn__reaction {
   background-color: rgba(5,118,185,.05);
   border-color: rgba(5,118,185,.3);
 }
 
-.ReactionItem--has-user .ReactionItem__counter {
+.ReactionsItem--has-user .ReactionItem__counter {
   color: rgba(5,118,185,1);
 }

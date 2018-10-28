@@ -24,6 +24,7 @@ import {
   faUserCog,
   faSearch,
   faEllipsisH,
+  faThumbtack,
   faStar as fasStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { ActionCable } from 'react-actioncable-provider';
@@ -54,6 +55,7 @@ library.add(
   faUser,
   faUsers,
   faUserCog,
+  faThumbtack,
 );
 
 const App = ({ isLoggedIn, onReceived }) => (

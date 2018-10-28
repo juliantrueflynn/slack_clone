@@ -2,12 +2,17 @@ import React from 'react';
 import Emojify from 'react-emojione';
 import classNames from 'classnames';
 import Button from './Button';
-import './ReactionItem.css';
+import './ReactionsItem.css';
 
-const ReactionItem = ({ reactionStyle, reaction, createReaction }) => {
+const ReactionItem = ({
+  reactionStyle,
+  reaction,
+  createReaction,
+  currUserId,
+}) => {
   const create = () => createReaction(reaction.emoji);
-  const reactionClassNames = classNames('ReactionItem', {
-    'Reactions__item--has-user': reaction.hasCurrentUser,
+  const reactionClassNames = classNames('ReactionsItem', {
+    'ReactionsItem--has-user': reaction.users.includes(currUserId),
   });
 
   return (

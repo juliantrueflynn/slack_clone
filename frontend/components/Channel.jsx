@@ -56,7 +56,7 @@ class Channel extends React.Component {
             isAutoScroll
           >
             <ChannelBlurb channel={channel} currentUserSlug={currentUserSlug} />
-            <MessagesList role="listitem" messages={messages} isDm={channel.hasDm} />
+            <MessagesList role="listitem" messages={messages} shouldShowPins isDm={channel.hasDm} />
           </Scrollable>
         )}
         {channel.isSub && (
