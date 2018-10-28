@@ -23,7 +23,7 @@ const mapDispatchToProps = dispatch => ({
   deleteMessageRequest: messageSlug => dispatch(deleteMessage.request(messageSlug)),
   createReactionRequest: reaction => dispatch(createReaction.request(reaction)),
   deleteReactionRequest: id => dispatch(deleteReaction.request(id)),
-  createFavoriteRequest: favorite => dispatch(createFavorite.request(favorite)),
+  createFavoriteRequest: messageId => dispatch(createFavorite.request({ messageId })),
   deleteFavoriteRequest: favoriteId => dispatch(deleteFavorite.request(favoriteId)),
   createPinRequest: pin => dispatch(createPin.request(pin)),
   destroyPinRequest: id => dispatch(destroyPin.request(id)),

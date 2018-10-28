@@ -23,6 +23,7 @@ class Message extends React.Component {
 
   toggleHover(id) {
     const { handleHover } = this.props;
+
     if (!handleHover) {
       return;
     }
@@ -73,7 +74,7 @@ class Message extends React.Component {
 
     const entryClassNames = classNames('Message', {
       'Message--editing': isEditing,
-      'Message--hover': hasHover,
+      'Message--hover': hasHover && !isEditing,
     });
 
     return (
@@ -87,16 +88,16 @@ class Message extends React.Component {
         <div className="Message__body">
           {isSearch || (
             <MessageHoverMenu
-              message={message}
+              {...message}
               ddToggle={ddToggle}
               isEditing={isEditing}
               handleEditToggle={this.handleEditToggle}
-              createFavoriteRequest={createFavoriteRequest}
-              deleteMessageRequest={deleteMessageRequest}
-              deleteFavoriteRequest={deleteFavoriteRequest}
-              deleteReactionRequest={deleteReactionRequest}
-              createPinRequest={createPinRequest}
-              destroyPinRequest={destroyPinRequest}
+              createFavorite={createFavoriteRequest}
+              deleteMessage={deleteMessageRequest}
+              deleteFavorite={deleteFavoriteRequest}
+              deleteReaction={deleteReactionRequest}
+              createPin={createPinRequest}
+              destroyPin={destroyPinRequest}
               currentUser={currentUser}
               modalOpen={modalOpen}
             />

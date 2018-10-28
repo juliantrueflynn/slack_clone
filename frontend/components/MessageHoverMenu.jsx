@@ -8,15 +8,12 @@ import './MessageHoverMenu.css';
 class MessageHoverMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.handleEmojiToggle = this.handleEmojiToggle.bind(this);
-    this.handleFavClick = this.handleFavClick.bind(this);
-    this.handleUnfavClick = this.handleUnfavClick.bind(this);
-    this.handleEditClick = this.handleEditClick.bind(this);
-    this.handleDeleteClick = this.handleDeleteClick.bind(this);
+    this.handleReactionToggle = this.handleReactionToggle.bind(this);
+    this.handleFavToggle = this.handleFavToggle.bind(this);
   }
 
-  handleEmojiToggle(e) {
-    const { modalOpen, message: { id: messageId } } = this.props;
+  handleReactionToggle(e) {
+    const { modalOpen, id: messageId } = this.props;
 
     const menuNode = e.currentTarget.parentNode;
     const nodeBounds = menuNode.getBoundingClientRect();
@@ -29,81 +26,77 @@ class MessageHoverMenu extends React.Component {
     modalOpen('MODAL_REACTION', modalProps);
   }
 
-  handleFavClick() {
-    const { createFavoriteRequest, message: { id: messageId } } = this.props;
-    createFavoriteRequest({ messageId });
-  }
+  handleFavToggle() {
+    const {
+      id,
+      favoriteId,
+      createFavorite,
+      deleteFavorite,
+    } = this.props;
 
-  handleUnfavClick() {
-    const { message: { favoriteId }, deleteFavoriteRequest } = this.props;
-    deleteFavoriteRequest(favoriteId);
-  }
-
-  handleEditClick() {
-    const { handleEditToggle } = this.props;
-    handleEditToggle(true);
-  }
-
-  handleDeleteClick() {
-    const { deleteMessageRequest, message: { slug } } = this.props;
-    deleteMessageRequest(slug);
+    if (favoriteId) {
+      deleteFavorite(favoriteId);
+    } else {
+      createFavorite(id);
+    }
   }
 
   render() {
     const {
       isEditing,
-      match: { url },
-      message,
+      handleEditToggle,
+      id,
+      slug,
+      favoriteId,
+      parentMessageId,
+      entityType,
+      authorId,
+      pinId,
       currentUser,
-      createPinRequest,
-      destroyPinRequest,
+      createPin,
+      destroyPin,
       ddToggle,
+      deleteMessage,
+      match: { url },
     } = this.props;
 
     if (isEditing) {
       return null;
     }
 
-    const isAuthor = currentUser.id === message.authorId;
-    const isMessageType = message.entityType === 'entry';
+    const isAuthor = currentUser.id === authorId;
+    const isMessageType = entityType === 'entry';
     const ddItems = [];
 
-    if (message.pinId) {
-      const onClick = () => destroyPinRequest(message.pinId);
+    if (pinId) {
+      const onClick = () => destroyPin(pinId);
       ddItems.push({ label: 'Un-pin message', onClick });
     } else {
-      const onClick = () => createPinRequest({ messageId: message.id });
+      const onClick = () => createPin({ messageId: id });
       ddItems.push({ label: 'Pin message', onClick });
     }
 
+    if (isAuthor) {
+      ddItems.push({ label: 'Edit message', onClick: () => handleEditToggle(true) });
+      ddItems.push({ label: 'Delete message', onClick: () => deleteMessage(slug) });
+    }
+
+    const favIcon = favoriteId ? ['fas', 'star'] : ['far', 'star'];
+    const favClassName = favoriteId ? 'filled' : 'empty';
+
     return (
       <div className="MessageHoverMenu">
-        <Button unStyled buttonFor="reaction" onClick={this.handleEmojiToggle}>
+        <Button unStyled buttonFor="reaction" onClick={this.handleReactionToggle}>
           <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />
         </Button>
-        {(!message.parentMessageId && isMessageType) && (
-          <Button className="Btn Btn__convo" linkTo={`${url}/convo/${message.slug}`}>
+        {(!parentMessageId && isMessageType) && (
+          <Button className="Btn Btn__convo" linkTo={`${url}/convo/${slug}`}>
             <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />
           </Button>
         )}
-        {(!message.favoriteId && isMessageType) && (
-          <Button unStyled buttonFor="fav Btn__fav--empty" onClick={this.handleFavClick}>
-            <FontAwesomeIcon icon={['far', 'star']} fixedWidth />
-          </Button>
-        )}
-        {(message.favoriteId && isMessageType) && (
-          <Button unStyled buttonFor="fav Btn__fav--filled" onClick={this.handleUnfavClick}>
-            <FontAwesomeIcon icon={['fas', 'star']} fixedWidth />
-          </Button>
-        )}
-        {(isAuthor && isMessageType) && (
-          <Button unStyled buttonFor="msg-edit" onClick={this.handleEditClick}>
-            <FontAwesomeIcon icon={['far', 'edit']} fixedWidth />
-          </Button>
-        )}
-        {(isAuthor && isMessageType) && (
-          <Button unStyled buttonFor="msg-delete" onClick={this.handleDeleteClick}>
-            <FontAwesomeIcon icon={['far', 'trash-alt']} fixedWidth />
+        {isMessageType && (
+          <Button unStyled buttonFor="fav" modifier={favClassName} onClick={this.handleFavToggle}>
+            <FontAwesomeIcon icon={favIcon} fixedWidth />
           </Button>
         )}
         {isMessageType && (

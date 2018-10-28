@@ -35,7 +35,8 @@
   border-color: rgba(0,0,0,0.28);
 }
 
-.MessageHoverMenu > .Btn {
+.MessageHoverMenu > .Btn,
+.MessageHoverMenu .Dropdown__message > .Btn {
   border-width: 0;
   padding: 3px 6px;
   font-size: 14px;
@@ -43,7 +44,7 @@
   border-right: 0.5px solid rgba(0,0,0,0.18);
 }
 
-.MessageHoverMenu > .Btn:last-child {
+.MessageHoverMenu .Dropdown__message > .Btn {
   border-right: 0;
 }
 
