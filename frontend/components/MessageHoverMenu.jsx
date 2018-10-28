@@ -60,10 +60,6 @@ class MessageHoverMenu extends React.Component {
       match: { url },
     } = this.props;
 
-    if (isEditing) {
-      return null;
-    }
-
     const isAuthor = currentUser.id === authorId;
     const isMessageType = entityType === 'entry';
     const ddItems = [];
@@ -77,7 +73,7 @@ class MessageHoverMenu extends React.Component {
     }
 
     if (isAuthor) {
-      ddItems.push({ label: 'Edit message', onClick: () => handleEditToggle(true) });
+      ddItems.push({ label: 'Edit message', onClick: () => handleEditToggle(id) });
       ddItems.push({ label: 'Delete message', onClick: () => deleteMessage(slug) });
     }
 

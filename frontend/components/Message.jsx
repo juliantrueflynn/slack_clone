@@ -11,24 +11,12 @@ import { dateUtil } from '../util/dateUtil';
 import './Message.css';
 
 class Message extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { isEditing: false };
-    this.handleEditToggle = this.handleEditToggle.bind(this);
-  }
-
-  handleEditToggle(isEditing = false) {
-    this.setState({ isEditing });
-  }
-
   toggleHover(id) {
     const { handleHover } = this.props;
 
-    if (!handleHover) {
-      return;
+    if (handleHover) {
+      handleHover(id);
     }
-
-    handleHover(id);
   }
 
   render() {
@@ -51,17 +39,19 @@ class Message extends React.Component {
       isThreadHidden,
       isSearch,
       currentUser,
+      handleEditToggle,
       hoverMessageId,
+      editMessageId,
       ddToggle,
       children,
     } = this.props;
-    const { isEditing } = this.state;
 
     if (!message || (message.entityType !== 'entry' && isDm)) {
       return null;
     }
 
     const hasHover = message.id === hoverMessageId;
+    const isEditing = message.id === editMessageId;
     const avatar = {
       slug: message.authorSlug,
       username: message.authorName,
@@ -86,12 +76,12 @@ class Message extends React.Component {
       >
         <Avatar baseUrl={url} author={avatar} />
         <div className="Message__body">
-          {isSearch || (
+          {isSearch || isEditing || (
             <MessageHoverMenu
               {...message}
               ddToggle={ddToggle}
               isEditing={isEditing}
-              handleEditToggle={this.handleEditToggle}
+              handleEditToggle={handleEditToggle}
               createFavorite={createFavoriteRequest}
               deleteMessage={deleteMessageRequest}
               deleteFavorite={deleteFavoriteRequest}
@@ -114,7 +104,7 @@ class Message extends React.Component {
                 isEditing={isEditing}
                 content={message.body}
                 updateMessageRequest={updateMessageRequest}
-                closeEditor={this.handleEditToggle}
+                closeEditor={handleEditToggle}
                 messageSlug={message.slug}
               />
             )}

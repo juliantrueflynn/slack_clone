@@ -35,8 +35,7 @@
   border-color: rgba(0,0,0,0.28);
 }
 
-.MessageHoverMenu > .Btn,
-.MessageHoverMenu .Dropdown__message > .Btn {
+.MessageHoverMenu .Btn {
   border-width: 0;
   padding: 3px 6px;
   font-size: 14px;
@@ -44,11 +43,12 @@
   border-right: 0.5px solid rgba(0,0,0,0.18);
 }
 
-.MessageHoverMenu .Dropdown__message > .Btn {
+.MessageHoverMenu .Btn__dropdown,
+.MessageHoverMenu .Btn:last-child {
   border-right: 0;
 }
 
-.MessageHoverMenu > .Btn:hover {
+.MessageHoverMenu .Btn:hover {
   color: #0576B9;
 }
 

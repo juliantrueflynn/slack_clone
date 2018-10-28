@@ -63,6 +63,8 @@
   background-color: rgba(255, 234, 167, 0.6);
 }
 
+.Message--editing .Reactions,
+.Message--editing .SingleMessageThread,
 .Message--editing .Message__meta {
   display: none;
 }

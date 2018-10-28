@@ -4,9 +4,14 @@ import MessageContainer from './MessageContainer';
 class MessagesList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hoverMessageId: -1, isDdOpen: false };
+    this.state = { editMessageId: -1, hoverMessageId: -1, isDdOpen: false };
     this.handleHover = this.handleHover.bind(this);
     this.handleDdToggle = this.handleDdToggle.bind(this);
+    this.handleEditToggle = this.handleEditToggle.bind(this);
+  }
+
+  handleEditToggle(editMessageId) {
+    this.setState({ editMessageId });
   }
 
   handleHover(hoverMessageId) {
@@ -23,14 +28,16 @@ class MessagesList extends React.Component {
 
   render() {
     const { messages, children, ...props } = this.props;
-    const { hoverMessageId } = this.state;
+    const { hoverMessageId, editMessageId } = this.state;
 
     return messages.map(message => (
       <MessageContainer
         key={message.id}
         message={message}
         hoverMessageId={hoverMessageId}
+        editMessageId={editMessageId}
         handleHover={this.handleHover}
+        handleEditToggle={this.handleEditToggle}
         ddToggle={this.handleDdToggle}
         {...props}
       />

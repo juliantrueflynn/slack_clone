@@ -33,7 +33,7 @@ class MessageContent extends React.Component {
     const { closeEditor, content } = this.props;
     const initialEditorState = mountEditorState(content);
     this.setState({ editorState: initialEditorState });
-    closeEditor();
+    closeEditor(-1);
   }
 
   handleEditSubmit(e) {
