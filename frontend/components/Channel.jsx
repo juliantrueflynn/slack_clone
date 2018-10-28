@@ -59,9 +59,9 @@ class Channel extends React.Component {
             <MessagesList role="listitem" messages={messages} isDm={channel.hasDm} />
           </Scrollable>
         )}
-        {/* {channel.isSub && (
+        {channel.isSub && (
           <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} />
-        )} */}
+        )}
         <ChannelSubscribe
           channel={channel}
           createChannelSubRequest={createChannelSubRequest}

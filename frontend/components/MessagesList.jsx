@@ -31,16 +31,18 @@ class MessagesList extends React.Component {
     const { hoverMessageId, editMessageId } = this.state;
 
     return messages.map(message => (
-      <MessageContainer
-        key={message.id}
-        message={message}
-        hoverMessageId={hoverMessageId}
-        editMessageId={editMessageId}
-        handleHover={this.handleHover}
-        handleEditToggle={this.handleEditToggle}
-        ddToggle={this.handleDdToggle}
-        {...props}
-      />
+      message && (
+        <MessageContainer
+          key={message.id}
+          message={message}
+          hoverMessageId={hoverMessageId}
+          editMessageId={editMessageId}
+          handleHover={this.handleHover}
+          handleEditToggle={this.handleEditToggle}
+          ddToggle={this.handleDdToggle}
+          {...props}
+        />
+      )
     ));
   }
 }

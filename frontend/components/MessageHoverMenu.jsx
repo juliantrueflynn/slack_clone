@@ -43,7 +43,6 @@ class MessageHoverMenu extends React.Component {
 
   render() {
     const {
-      isEditing,
       handleEditToggle,
       id,
       slug,
