@@ -5,7 +5,7 @@ import { decamelizeKeys } from 'humps';
 import classNames from 'classnames';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import LeftSidebarContainer from './LeftSidebarContainer';
-import EmojiModal from './EmojiModal';
+import ReactionModal from './ReactionModal';
 import './Workspace.css';
 
 class Workspace extends React.Component {
@@ -101,11 +101,13 @@ class Workspace extends React.Component {
         {defaultChat && (<LeftSidebarContainer />)}
         <div className="Workspace__col">
           <div className="Workspace__chat">
-            <EmojiModal
-              modal={modal}
-              modalClose={modalClose}
-              createReactionRequest={createReactionRequest}
-            />
+            {modal.modalType === 'MODAL_REACTION' && (
+              <ReactionModal
+                modalProps={modal.modalProps}
+                modalClose={modalClose}
+                createReactionRequest={createReactionRequest}
+              />
+            )}
             {childRoutes}
           </div>
         </div>

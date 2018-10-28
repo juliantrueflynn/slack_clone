@@ -4,6 +4,10 @@
   height: 100%;
 }
 
+body.reaction-modal-open .Scrollable__body {
+  overflow: hidden;
+}
+
 .Scrollable__body {
   overflow-y: hidden;
   width: 100%;
