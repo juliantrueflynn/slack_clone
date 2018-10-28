@@ -13,15 +13,26 @@ class Dropdown extends React.Component {
   }
 
   handleClickOutside() {
+    const { ddToggle } = this.props;
     const { isOpen } = this.state;
+
     if (isOpen) {
       this.setState({ isOpen: false });
+
+      if (ddToggle) {
+        ddToggle(!isOpen);
+      }
     }
   }
 
   handleTogglerClick() {
+    const { ddToggle } = this.props;
     const { isOpen } = this.state;
     this.setState({ isOpen: !isOpen });
+
+    if (ddToggle) {
+      ddToggle(!isOpen);
+    }
   }
 
   render() {

@@ -31,7 +31,7 @@
   background-color: #FFF;
 }
 
-.AllThreadsItem__body > .Message {
+.AllThreadsItem__body .Message:first-child {
   padding-top: 12px;
 }
 

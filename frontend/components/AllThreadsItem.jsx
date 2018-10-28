@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MessageThreadAuthors from './MessageThreadAuthors';
-import MessageContainer from './MessageContainer';
+import MessagesList from './MessagesList';
 import MessageFormContainer from './MessageFormContainer';
 import './AllThreadsItem.css';
 
@@ -19,6 +19,10 @@ const AllThreadsItem = ({
 
   const channel = channels[parentMessage.channelSlug];
   const channelUrl = `/${workspaceSlug}/${parentMessage.channelSlug}`;
+  const threadMessages = parentMessage.thread.reduce((acc, curr) => {
+    acc.push(curr);
+    return acc;
+  }, [parentMessage]);
 
   return (
     <div className="AllThreadsItem">
@@ -36,20 +40,8 @@ const AllThreadsItem = ({
         />
       </header>
       <div className="AllThreadsItem__body">
-        <MessageContainer
-          message={parentMessage}
-          users={users}
-          isThreadHidden
-        />
         <div className="AllThreadsItem__list" role="list">
-          {parentMessage.thread.map(child => (
-            <MessageContainer
-              key={child.id}
-              message={child}
-              users={users}
-              isThreadHidden
-            />
-          ))}
+          <MessagesList messages={threadMessages} role="listitem" isThreadHidden />
         </div>
         <MessageFormContainer
           channelId={parentMessage.channelId}

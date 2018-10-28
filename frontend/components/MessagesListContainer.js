@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import Message from './Message';
 import {
   updateMessage,
   deleteMessage,
@@ -10,10 +9,12 @@ import {
 import { deleteReaction, createReaction } from '../actions/reactionActions';
 import { modalOpen } from '../actions/uiActions';
 import { deleteFavorite, createFavorite } from '../actions/favoriteActions';
+import MessagesList from './MessagesList';
 
 const mapStateToProps = state => ({
   reactions: Object.values(state.entities.reactions),
   isReactionModalOpen: state.ui.displayModal.modalType === 'MODAL_REACTION',
+  // threadMessages: selectMessageChildrenBySlug(state, message.slug),
   currentUser: state.session.currentUser,
   users: state.entities.members,
 });
@@ -30,4 +31,4 @@ const mapDispatchToProps = dispatch => ({
   modalOpen: (modalType, modalProps) => dispatch(modalOpen(modalType, modalProps)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Message));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MessagesList));

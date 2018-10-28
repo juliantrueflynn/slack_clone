@@ -36,11 +36,11 @@
   padding-right: 2px;
 }
 
-.Message:not(.Message--editing):hover {
+.Message--hover:not(.Message--editing) {
   background-color: #F9F9F9;
 }
 
-.Workspace--modal-open .Message:hover {
+.Workspace--modal-open .Message--hover {
   background-color: #FFF;
 }
 

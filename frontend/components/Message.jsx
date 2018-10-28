@@ -21,9 +21,13 @@ class Message extends React.Component {
     this.setState({ isEditing });
   }
 
-  hasHover() {
-    const { message: { id }, isReactionModalOpen, isMouseOver } = this.props;
-    return id === isMouseOver && !isReactionModalOpen;
+  toggleHover(id) {
+    const { handleHover } = this.props;
+    if (!handleHover) {
+      return;
+    }
+
+    handleHover(id);
   }
 
   render() {
@@ -33,7 +37,6 @@ class Message extends React.Component {
       role,
       isDm,
       updateMessageRequest,
-      threadMessages,
       createReactionRequest,
       users,
       reactions,
@@ -47,6 +50,8 @@ class Message extends React.Component {
       isThreadHidden,
       isSearch,
       currentUser,
+      hoverMessageId,
+      ddToggle,
       children,
     } = this.props;
     const { isEditing } = this.state;
@@ -55,6 +60,7 @@ class Message extends React.Component {
       return null;
     }
 
+    const hasHover = message.id === hoverMessageId;
     const avatar = {
       slug: message.authorSlug,
       username: message.authorName,
@@ -64,16 +70,25 @@ class Message extends React.Component {
     const dateCreated = dateUtil(message.createdAt).localTime();
     const entryReactions = reactions.filter(item => item.messageId === message.id);
     const hasReactions = !!entryReactions.length;
-    const entryClassNames = classNames('Message', { 'Message--editing': isEditing });
-    const entryRole = role || null;
+
+    const entryClassNames = classNames('Message', {
+      'Message--editing': isEditing,
+      'Message--hover': hasHover,
+    });
 
     return (
-      <div className={entryClassNames} role={entryRole}>
+      <div
+        role={role}
+        onMouseEnter={() => this.toggleHover(message.id)}
+        onMouseLeave={() => this.toggleHover(-1)}
+        className={entryClassNames}
+      >
         <Avatar baseUrl={url} author={avatar} />
         <div className="Message__body">
           {isSearch || (
             <MessageHoverMenu
               message={message}
+              ddToggle={ddToggle}
               isEditing={isEditing}
               handleEditToggle={this.handleEditToggle}
               createFavoriteRequest={createFavoriteRequest}
@@ -91,9 +106,7 @@ class Message extends React.Component {
               <Link to={authorUrl} className="Message__author">
                 {message.authorName}
               </Link>
-              <time className="Message__time">
-                {dateCreated}
-              </time>
+              <time className="Message__time">{dateCreated}</time>
             </div>
             {message.entityType === 'entry' && (
               <MessageContent
@@ -104,9 +117,7 @@ class Message extends React.Component {
                 messageSlug={message.slug}
               />
             )}
-            {message.entityType === 'entry' || (
-              <ChannelSub sub={message} />
-            )}
+            {message.entityType === 'entry' || <ChannelSub sub={message} />}
           </div>
           {(hasReactions && !isSearch) && (
             <Reactions
@@ -118,10 +129,9 @@ class Message extends React.Component {
           )}
           <SingleMessageThread
             matchUrl={url}
-            messageSlug={message.slug}
             users={users}
-            threadMessages={threadMessages}
             isThreadHidden={isThreadHidden}
+            {...message}
           />
           {children}
         </div>

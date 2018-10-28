@@ -28,7 +28,7 @@
   margin: 0 7px;
 }
 
-.SearchModalItem .Message:hover {
+.SearchModalItem .Message--hover {
   background-color: transparent;
 }
 

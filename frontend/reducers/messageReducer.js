@@ -80,10 +80,19 @@ const messageReducer = (state = {}, action) => {
       messages.forEach((message) => {
         const children = messages.filter(msg => msg.parentMessageId === message.id);
         const thread = children.map(child => child.slug);
+        const authors = children.reduce((acc, curr) => {
+          if (acc.includes(curr.authorSlug)) {
+            return acc;
+          }
+
+          acc.push(curr.authorSlug);
+
+          return acc;
+        }, []);
 
         nextState[message.slug] = {
           reactionIds: [],
-          authors: [],
+          authors,
           thread,
           ...message,
         };

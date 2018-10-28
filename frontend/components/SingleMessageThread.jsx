@@ -4,21 +4,21 @@ import Avatar from './Avatar';
 import './SingleMessageThread.css';
 
 const SingleMessageThread = ({
-  threadMessages,
+  thread,
+  authors,
+  lastMessageDate,
   users,
-  messageSlug,
+  slug,
   matchUrl,
   isThreadHidden,
 }) => {
-  if (isThreadHidden || !threadMessages || !threadMessages.length) {
+  if (isThreadHidden || !thread || !thread.length) {
     return null;
   }
 
-  const threadUrl = `${matchUrl}/convo/${messageSlug}`;
-  const allAuthors = threadMessages.map(msg => users[msg.authorSlug]);
-  const authors = allAuthors.filter((user, i, self) => self.indexOf(user) === i);
-  const lastMessageDate = threadMessages.slice(-1).createdAt;
-  let threadLength = threadMessages.length;
+  const threadUrl = `${matchUrl}/convo/${slug}`;
+  const threadAuthors = authors.map(userSlug => users[userSlug]);
+  let threadLength = thread.length;
   threadLength += threadLength === 1 ? ' reply' : ' replies';
 
   return (
@@ -26,7 +26,7 @@ const SingleMessageThread = ({
       <Link to={threadUrl} className="SingleMessageThread__link">
         <ul className="SingleMessageThread__items">
           <li className="SingleMessageThread__item SingleMessageThread__avatars">
-            {authors.map(user => (
+            {threadAuthors.map(user => (
               <Avatar key={user.id} author={user} avatarFor="convo" size="24" />
             ))}
           </li>

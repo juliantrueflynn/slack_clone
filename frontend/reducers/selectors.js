@@ -31,6 +31,11 @@ const messagesWithEntitiesMap = ({ messages, members }, userSlug) => (
       message.isCurrentUser = userSlug === message.authorSlug;
     }
 
+    if (message.thread && message.thread.length) {
+      const lastMsg = messages[message.thread.length - 1];
+      message.lastMessageDate = lastMsg && lastMsg.createdAt;
+    }
+
     acc[curr.slug] = {
       authorName: author && author.username,
       avatarThumb: author && author.avatarThumb,
@@ -138,18 +143,15 @@ const selectChannelMessagesBySlug = ({ entities }, slug) => {
 };
 
 export const selectChatPageMessagesBySlug = ({ entities, session: { currentUser } }, slug) => {
-  const { channels } = entities;
-  const entries = messagesWithEntitiesMap(entities, currentUser.slug);
-
-  if (channels[slug]) {
-    return selectChannelMessagesBySlug({ entities }, slug);
+  if (slug === 'unreads') {
+    return messagesWithEntitiesMap(entities, currentUser.slug);
   }
 
   if (slug === 'threads') {
     return selectAllThreadMessages(entities);
   }
 
-  return entries;
+  return selectChannelMessagesBySlug({ entities }, slug);
 };
 
 export const selectDrawerMessagesByType = ({ entities, ui: { drawer } }) => {

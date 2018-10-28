@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Dropdown from './Dropdown';
 import Button from './Button';
 import './MessageHoverMenu.css';
 
@@ -56,15 +57,8 @@ class MessageHoverMenu extends React.Component {
       currentUser,
       createPinRequest,
       destroyPinRequest,
+      ddToggle,
     } = this.props;
-
-    const pinToggle = () => {
-      if (message.pinId) {
-        destroyPinRequest(message.pinId);
-      } else {
-        createPinRequest({ messageId: message.id });
-      }
-    };
 
     if (isEditing) {
       return null;
@@ -72,6 +66,16 @@ class MessageHoverMenu extends React.Component {
 
     const isAuthor = currentUser.id === message.authorId;
     const isMessageType = message.entityType === 'entry';
+    const ddItems = [];
+
+    if (message.pinId) {
+      const onClick = () => destroyPinRequest(message.pinId);
+      ddItems.push({ label: 'Un-pin message', onClick });
+    } else {
+      const onClick = () => createPinRequest({ messageId: message.id });
+      ddItems.push({ label: 'Pin message', onClick });
+    }
+
     return (
       <div className="MessageHoverMenu">
         <Button unStyled buttonFor="reaction" onClick={this.handleEmojiToggle}>
@@ -103,9 +107,9 @@ class MessageHoverMenu extends React.Component {
           </Button>
         )}
         {isMessageType && (
-          <Button unStyled onClick={pinToggle}>
-            {message.pinId ? 'Un-pin' : 'Pin'}
-          </Button>
+          <Dropdown menuFor="message" items={ddItems} menuPos="right" unStyled ddToggle={ddToggle}>
+            <FontAwesomeIcon icon="ellipsis-h" fixedWidth />
+          </Dropdown>
         )}
       </div>
     );

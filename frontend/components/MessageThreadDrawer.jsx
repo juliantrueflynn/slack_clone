@@ -2,6 +2,7 @@ import React from 'react';
 import MessageFormContainer from './MessageFormContainer';
 import Scrollable from './Scrollable';
 import MessageContainer from './MessageContainer';
+import MessagesList from './MessagesList';
 
 const MessageThreadDrawer = ({ messages, users, isLoading }) => {
   const parentMessage = messages[0];
@@ -24,14 +25,7 @@ const MessageThreadDrawer = ({ messages, users, isLoading }) => {
           isThreadHidden
         />
       )}
-      {isLoading || messages.map(message => (
-        <MessageContainer
-          key={message.slug}
-          users={users}
-          message={message}
-          isThreadHidden
-        />
-      ))}
+      {isLoading || <MessagesList messages={messages} isThreadHidden />}
       <MessageFormContainer
         channelId={parentMessage.channelId}
         parentMessageId={parentMessage.id}

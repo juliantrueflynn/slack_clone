@@ -1,18 +1,10 @@
 import React from 'react';
 import Scrollable from './Scrollable';
-import MessageContainer from './MessageContainer';
+import MessagesList from './MessagesList';
 
-const FavoritesDrawer = ({ messages, users }) => (
+const FavoritesDrawer = ({ messages }) => (
   <Scrollable>
-    {messages.map(message => (
-      <MessageContainer
-        key={message.slug}
-        role="listitem"
-        users={users}
-        message={message}
-        isThreadHidden
-      />
-    ))}
+    <MessagesList messages={messages} role="listitem" isThreadHidden />
   </Scrollable>
 );
 

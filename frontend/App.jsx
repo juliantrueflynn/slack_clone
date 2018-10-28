@@ -23,6 +23,7 @@ import {
   faUsers,
   faUserCog,
   faSearch,
+  faEllipsisH,
   faStar as fasStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { ActionCable } from 'react-actioncable-provider';
@@ -36,6 +37,7 @@ library.add(
   faTrashAlt,
   faEdit,
   faSquare,
+  faEllipsisH,
   faTimesCircle,
   farCircle,
   faPlusCircle,

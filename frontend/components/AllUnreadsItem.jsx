@@ -1,9 +1,9 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import MessageContainer from './MessageContainer';
-import './AllUnreadsItem.css';
-import Button from './Button';
 import { isDateOlderThanOther } from '../util/dateUtil';
+import Button from './Button';
+import MessagesList from './MessagesList';
+import './AllUnreadsItem.css';
 
 class AllUnreadsItem extends React.Component {
   constructor(props) {
@@ -19,11 +19,7 @@ class AllUnreadsItem extends React.Component {
   }
 
   render() {
-    const {
-      channel,
-      messages,
-      authors,
-    } = this.props;
+    const { channel, messages } = this.props;
 
     const unreadMessages = channel.messages.reduce((acc, curr) => {
       acc.push(messages[curr]);
@@ -35,7 +31,7 @@ class AllUnreadsItem extends React.Component {
     const messagesLengthText = `${unreadMessages.length} messages`;
 
     return (
-      <div className="AllUnreadsItem">
+      <div className="AllUnreadsItem" role="listitem">
         <header className="AllUnreadsItem__header">
           <FontAwesomeIcon className="AllUnreadsItem__title-hashtag" icon="hashtag" size="sm" />
           <h3 className="AllUnreadsItem__title">
@@ -51,13 +47,7 @@ class AllUnreadsItem extends React.Component {
           </div>
         </header>
         <div className="AllUnreadsItem__body">
-          {unreadMessages.map(message => (
-            <MessageContainer
-              key={message.id}
-              users={authors}
-              message={message}
-            />
-          ))}
+          <MessagesList messages={unreadMessages} />
         </div>
       </div>
     );
