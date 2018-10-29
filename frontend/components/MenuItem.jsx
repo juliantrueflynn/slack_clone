@@ -11,14 +11,14 @@ class MenuItem extends React.Component {
   }
 
   handleOnClick() {
-    const { onClick, toggleDdMenu } = this.props;
+    const { onClick, toggleMenu } = this.props;
 
     if (onClick) {
       onClick();
     }
 
-    if (toggleDdMenu) {
-      toggleDdMenu();
+    if (toggleMenu) {
+      toggleMenu();
     }
   }
 
@@ -30,7 +30,7 @@ class MenuItem extends React.Component {
       altClassName,
       modifierClassName,
       onClick,
-      toggleDdMenu,
+      toggleMenu,
       isItemActive,
       match,
       history,

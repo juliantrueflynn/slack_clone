@@ -11,12 +11,12 @@ class ReactionModal extends React.Component {
 
   componentDidMount() {
     const bodyEl = document.querySelector('body');
-    bodyEl.classList.add('reaction-modal-open');
+    bodyEl.classList.add('popover-open');
   }
 
   componentWillUnmount() {
     const bodyEl = document.querySelector('body');
-    bodyEl.classList.remove('reaction-modal-open');
+    bodyEl.classList.remove('popover-open');
   }
 
   handleClickOutside() {

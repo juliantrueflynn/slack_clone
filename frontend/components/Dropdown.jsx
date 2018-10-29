@@ -8,8 +8,34 @@ import './Dropdown.css';
 class Dropdown extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isOpen: false };
+
+    this.state = {
+      isOpen: false,
+      clickPosY: -1,
+      menuStyle: {},
+    };
+
     this.handleTogglerClick = this.handleTogglerClick.bind(this);
+    this.handleStyleFromHeight = this.handleStyleFromHeight.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { isOpen, shouldPos } = this.props;
+
+    if (shouldPos) {
+      if (!prevProps.isOpen && isOpen) {
+        Dropdown.setBodyClassList('add');
+      }
+
+      if (prevProps.isOpen && !isOpen) {
+        Dropdown.setBodyClassList('remove');
+      }
+    }
+  }
+
+  static setBodyClassList(addOrRemove) {
+    const bodyEl = document.querySelector('body');
+    bodyEl.classList[addOrRemove]('popover-open');
   }
 
   handleClickOutside() {
@@ -25,18 +51,37 @@ class Dropdown extends React.Component {
     }
   }
 
-  handleTogglerClick() {
-    const { ddToggle } = this.props;
+  handleTogglerClick(e) {
+    const { ddToggle, shouldPos } = this.props;
     const { isOpen } = this.state;
-    this.setState({ isOpen: !isOpen });
+
+    const nextState = { isOpen: !isOpen };
 
     if (ddToggle) {
       ddToggle(!isOpen);
     }
+
+    if (shouldPos) {
+      const { y } = e.target.getBoundingClientRect();
+      nextState.clickPosY = y;
+    }
+
+    this.setState(nextState);
+  }
+
+  handleStyleFromHeight(height) {
+    const { clickPosY } = this.state;
+
+    let menuStyle = {};
+    if ((clickPosY + height + 90) > window.innerHeight) {
+      menuStyle = { top: `-${height}px` };
+    }
+
+    this.setState({ menuStyle });
   }
 
   render() {
-    const { isOpen } = this.state;
+    const { isOpen, menuStyle } = this.state;
     const {
       menuFor,
       menuPos,
@@ -44,13 +89,10 @@ class Dropdown extends React.Component {
       togglerText,
       children,
       modifier,
+      shouldPos,
       style,
       unStyled,
     } = this.props;
-
-    if (!items) {
-      return null;
-    }
 
     const ddClassNames = classNames('Dropdown', {
       [`Dropdown--${menuPos}`]: menuPos,
@@ -66,7 +108,15 @@ class Dropdown extends React.Component {
         <Button buttonFor="dropdown" onClick={this.handleTogglerClick} style={style} unStyled={unStyled}>
           {togglerText || children}
         </Button>
-        <Menu menuFor="dropdown" toggleMenu={this.handleTogglerClick} items={items} />
+        <Menu
+          menuFor="dropdown"
+          items={items}
+          style={menuStyle}
+          isDdOpen={isOpen}
+          shouldPos={shouldPos}
+          handleStyleFromHeight={this.handleStyleFromHeight}
+          toggleMenu={this.handleTogglerClick}
+        />
       </div>
     );
   }

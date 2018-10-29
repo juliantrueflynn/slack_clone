@@ -52,8 +52,8 @@ class MessageHoverMenu extends React.Component {
       authorId,
       pinId,
       currentUser,
-      createPin,
-      destroyPin,
+      createPinRequest,
+      destroyPinRequest,
       ddToggle,
       deleteMessageRequest,
       match: { url },
@@ -64,10 +64,10 @@ class MessageHoverMenu extends React.Component {
     const ddItems = [];
 
     if (pinId) {
-      const onClick = () => destroyPin(pinId);
+      const onClick = () => destroyPinRequest(pinId);
       ddItems.push({ label: 'Un-pin message', onClick });
     } else {
-      const onClick = () => createPin({ messageId: id });
+      const onClick = () => createPinRequest({ messageId: id });
       ddItems.push({ label: 'Pin message', onClick });
     }
 
@@ -95,7 +95,14 @@ class MessageHoverMenu extends React.Component {
           </Button>
         )}
         {isMessageType && (
-          <Dropdown menuFor="message" items={ddItems} menuPos="right" unStyled ddToggle={ddToggle}>
+          <Dropdown
+            menuFor="message"
+            items={ddItems}
+            menuPos="right"
+            ddToggle={ddToggle}
+            shouldPos
+            unStyled
+          >
             <FontAwesomeIcon icon="ellipsis-h" fixedWidth />
           </Dropdown>
         )}
