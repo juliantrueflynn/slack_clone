@@ -46,10 +46,9 @@ const Message = ({
   const hasChildren = !!children;
   const isPinned = !!message.pinId;
 
-  const toggleHover = () => {
+  const toggleHover = (int) => {
     if (handleHover) {
-      const hoverId = hasHover ? -1 : message.id;
-      handleHover(hoverId);
+      handleHover(int);
     }
   };
 
@@ -60,59 +59,62 @@ const Message = ({
   });
 
   return (
-    <div
-      role={role}
-      onMouseEnter={toggleHover}
-      onMouseLeave={toggleHover}
-      className={entryClassNames}
-    >
-      {shouldShowPins && isPinned && (
-        <MessagePin pinId={message.pinId} users={users} pins={pins} currUserId={currentUser.id} />
-      )}
-      {isEditing || (
-        <MessageHoverMenu
-          ddToggle={ddToggle}
-          isEditing={isEditing}
-          handleEditToggle={handleEditToggle}
-          currentUser={currentUser}
-          modalOpen={modalOpen}
-          {...message}
-          {...props}
-        />
-      )}
-      <div className="Message__container">
-        <Avatar baseUrl={url} author={avatar} />
-        <div className="Message__body">
-          <div className="Message__content">
-            <div className="Message__meta">
-              <Link to={authorUrl} className="Message__author">
-                {message.authorName}
-              </Link>
-              <time className="Message__time">{dateCreated}</time>
+    <div role={role} className={entryClassNames}>
+      <div
+        role="presentation"
+        className="Message__container"
+        onClick={() => toggleHover(message.id)}
+        onMouseEnter={() => toggleHover(message.id)}
+        onMouseLeave={() => toggleHover(-1)}
+      >
+        {shouldShowPins && isPinned && (
+          <MessagePin pinId={message.pinId} users={users} pins={pins} currUserId={currentUser.id} />
+        )}
+        {isEditing || (
+          <MessageHoverMenu
+            ddToggle={ddToggle}
+            isEditing={isEditing}
+            handleEditToggle={handleEditToggle}
+            currentUser={currentUser}
+            modalOpen={modalOpen}
+            {...message}
+            {...props}
+          />
+        )}
+        <div className="Message__row">
+          <Avatar baseUrl={url} author={avatar} />
+          <div className="Message__body">
+            <div className="Message__content">
+              <div className="Message__meta">
+                <Link to={authorUrl} className="Message__author">
+                  {message.authorName}
+                </Link>
+                <time className="Message__time">{dateCreated}</time>
+              </div>
+              {message.entityType === 'entry' && (
+                <MessageContent
+                  isEditing={isEditing}
+                  content={message.body}
+                  updateMessageRequest={updateMessageRequest}
+                  closeEditor={handleEditToggle}
+                  messageSlug={message.slug}
+                />
+              )}
+              {message.entityType !== 'entry' && <ChannelSub sub={message} />}
             </div>
-            {message.entityType === 'entry' && (
-              <MessageContent
-                isEditing={isEditing}
-                content={message.body}
-                updateMessageRequest={updateMessageRequest}
-                closeEditor={handleEditToggle}
-                messageSlug={message.slug}
+            {(hasReactions && !hasChildren) && (
+              <Reactions
+                createReaction={createReactionRequest}
+                reactions={entryReactions}
+                currUserId={currentUser.id}
+                messageId={message.id}
               />
             )}
-            {message.entityType !== 'entry' && <ChannelSub sub={message} />}
+            {hasChildren || isThreadHidden || (
+              <SingleMessageThread matchUrl={url} users={users} {...message} />
+            )}
+            {children}
           </div>
-          {(hasReactions && !hasChildren) && (
-            <Reactions
-              createReaction={createReactionRequest}
-              reactions={entryReactions}
-              currUserId={currentUser.id}
-              messageId={message.id}
-            />
-          )}
-          {hasChildren || isThreadHidden || (
-            <SingleMessageThread matchUrl={url} users={users} {...message} />
-          )}
-          {children}
         </div>
       </div>
     </div>

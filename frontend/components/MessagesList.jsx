@@ -16,20 +16,28 @@ class MessagesList extends React.Component {
     this.handleEditToggle = this.handleEditToggle.bind(this);
   }
 
-  handleEditToggle(editMessageId) {
-    this.setState({ editMessageId });
-  }
+  handleEditToggle(messageId) {
+    const { editMessageId } = this.state;
 
-  handleHover(hoverMessageId) {
-    const { isDdOpen } = this.state;
-
-    if (!isDdOpen) {
-      this.setState({ hoverMessageId });
+    if (editMessageId !== messageId) {
+      this.setState({ editMessageId: messageId });
     }
   }
 
-  handleDdToggle(isDdOpen) {
-    this.setState({ isDdOpen });
+  handleHover(messageId) {
+    const { isDdOpen, hoverMessageId } = this.state;
+
+    if (!isDdOpen && hoverMessageId !== messageId) {
+      this.setState({ hoverMessageId: messageId });
+    }
+  }
+
+  handleDdToggle(nextState) {
+    const { isDdOpen } = this.state;
+
+    if (isDdOpen !== nextState) {
+      this.setState({ isDdOpen: nextState });
+    }
   }
 
   render() {

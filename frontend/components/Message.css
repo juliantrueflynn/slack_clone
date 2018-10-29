@@ -1,14 +1,14 @@
-.AllUnreadsItem__body .Message,
-.Drawer .Message,
-.Channel .Message {
-  padding: 5px 27px;
-}
-
 .Message {
   position: relative;
 }
 
-.Message__container {
+.AllUnreadsItem__body .Message__container,
+.Drawer .Message__container,
+.Channel .Message__container {
+  padding: 5px 27px;
+}
+
+.Message__row {
   display: flex;
   -ms-flex-direction: row;
   flex-direction: row;
