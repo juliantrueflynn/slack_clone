@@ -3,7 +3,7 @@
 }
 
 .AllUnreadsItem__body .Message__container,
-.Drawer .Message__container,
+.Drawer__convo .Message__container,
 .Channel .Message__container {
   padding: 5px 27px;
 }
@@ -15,11 +15,14 @@
   padding: 2px 0;
 }
 
+.Message--has-avatar .Message__body {
+  margin-left: 8px;
+}
+
 .Message__body {
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-left: 8px;
 }
 
 .Message__meta {
@@ -63,7 +66,7 @@
   font-size: .8em;
 }
 
-.Message--pinned,
+.Scrollable .Message--pinned,
 .Message--editing {
   background-color: rgba(255, 234, 167, 0.4);
 }

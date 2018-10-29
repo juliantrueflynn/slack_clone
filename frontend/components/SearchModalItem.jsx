@@ -34,11 +34,7 @@ const SearchModalItem = ({ message, users }) => {
           {dateCreated}
         </span>
       </div>
-      <MessageContainer
-        message={message}
-        users={users}
-        isThreadHidden
-      >
+      <MessageContainer message={message} users={users} shouldHideEngagement>
         {(hasThread || hasReactions) && (
           <div className="SearchModalItem__social">
             {hasThread && (

@@ -8,12 +8,14 @@ import {
   FAVORITE,
   USER,
   SIGN_OUT,
+  CHANNEL,
 } from '../actions/actionTypes';
 
 const _defaultState = {
-  search: false,
-  workspace: false,
-  channel: false,
+  search: true,
+  workspace: true,
+  channel: true,
+  drawer: true,
 };
 
 const isLoadingReducer = (state = _defaultState, action) => {
@@ -31,6 +33,8 @@ const isLoadingReducer = (state = _defaultState, action) => {
     case MESSAGE.SHOW.REQUEST:
     case FAVORITE.INDEX.REQUEST:
     case USER.SHOW.REQUEST:
+    case CHANNEL.SHOW.REQUEST:
+    case DRAWER_CLOSE:
       nextState.drawer = true;
       return nextState;
     case SEARCH.INDEX.REQUEST:
@@ -47,7 +51,7 @@ const isLoadingReducer = (state = _defaultState, action) => {
     case MESSAGE.SHOW.RECEIVE:
     case FAVORITE.INDEX.RECEIVE:
     case USER.SHOW.RECEIVE:
-    case DRAWER_CLOSE:
+    case CHANNEL.SHOW.RECEIVE:
       nextState.drawer = false;
       return nextState;
     case SEARCH.INDEX.RECEIVE:

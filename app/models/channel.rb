@@ -38,6 +38,7 @@ class Channel < ApplicationRecord
   has_many :reactions,
     through: :messages,
     source: :reactions
+  has_many :pins, through: :messages
   has_many :reads, foreign_key: :readable_id do
     def find_or_initialize_by_user(user_id)
       find_or_initialize_by(user_id: user_id, readable_type: 'Channel')

@@ -61,7 +61,7 @@ class Dropdown extends React.Component {
       ddToggle(!isOpen);
     }
 
-    if (shouldPos) {
+    if (shouldPos && e) {
       const { y } = e.target.getBoundingClientRect();
       nextState.clickPosY = y;
     }

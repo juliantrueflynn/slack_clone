@@ -1,6 +1,10 @@
 import React from 'react';
 
 const ChannelSub = ({ sub }) => {
+  if (!sub.group) {
+    return null;
+  }
+
   const parentText = (entity) => {
     const typeText = entity.entityType === 'sub_create' ? 'joined' : 'left';
     const isParent = sub.id === entity.id;

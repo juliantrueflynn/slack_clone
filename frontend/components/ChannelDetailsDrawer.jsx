@@ -5,12 +5,13 @@ import StatusIcon from './StatusIcon';
 import AccordionItem from './AccordionItem';
 import { dateUtil } from '../util/dateUtil';
 import UserPreview from './UserPreview';
+import PinnedMessagesItem from './PinnedMessagesItem';
 import './ChannelDetailsDrawer.css';
 
 class ChannelDetailsDrawer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { details: true, members: false };
+    this.state = { details: true, members: false, pinned: false };
   }
 
   componentDidMount() {
@@ -52,10 +53,17 @@ class ChannelDetailsDrawer extends React.Component {
   }
 
   render() {
-    const { channel, users, match: { params } } = this.props;
+    const {
+      channel,
+      messages,
+      users,
+      isLoading,
+      destroyPinRequest,
+      match: { params },
+    } = this.props;
     const { ...state } = this.state;
 
-    if (!channel) {
+    if (!channel || isLoading) {
       return null;
     }
 
@@ -104,6 +112,19 @@ class ChannelDetailsDrawer extends React.Component {
         }
       ];
     }
+
+    accordionItems.push({
+      icon: 'thumbtack',
+      itemTitle: 'Pinned Messages',
+      name: 'pinned',
+      body: messages && messages.map(message => (
+        <PinnedMessagesItem
+          key={message.id}
+          message={message}
+          destroyPinRequest={destroyPinRequest}
+        />
+      ))
+    });
 
     const user = users[channel.dmUserSlug];
 

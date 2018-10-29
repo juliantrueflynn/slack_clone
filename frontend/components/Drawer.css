@@ -42,11 +42,11 @@
   bottom: inherit;
 }
 
-.Drawer .Scrollable .Message:first-child {
+.Drawer .Scrollable .Message:first-child .Message__container {
   padding: 10px;
 }
 
-.Drawer .Scrollable .Message:not(:first-child) {
+.Drawer .Scrollable .Message:not(:first-child) .Message__container {
   padding: 6px 10px;
 }
 

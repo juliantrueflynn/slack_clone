@@ -63,6 +63,7 @@ class DrawerSwitch extends React.Component {
       accordion,
       openProfileModal,
       createChannelRequest,
+      destroyPinRequest,
     } = this.props;
 
     if (drawerType === 'details' && !channel) {
@@ -94,8 +95,11 @@ class DrawerSwitch extends React.Component {
         {(drawerType === 'details' && channel) && (
           <ChannelDetailsDrawer
             users={users}
+            messages={messages}
             channel={channel}
             accordion={accordion}
+            isLoading={isLoading}
+            destroyPinRequest={destroyPinRequest}
           />
         )}
       </Drawer>

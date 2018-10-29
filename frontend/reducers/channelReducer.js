@@ -28,6 +28,7 @@ const channelReducer = (state = {}, action) => {
           members: [],
           messages: [],
           subs: [],
+          pins: [],
           workspaceSlug,
           ...curr,
         };
@@ -82,6 +83,12 @@ const channelReducer = (state = {}, action) => {
       });
 
       return merge({}, state, nextState);
+    }
+    case CHANNEL.SHOW.RECEIVE: {
+      const { channel, pins } = action.channel;
+      nextState = Object.assign({}, state);
+      nextState[channel.slug].pins = pins.map(pin => pin.id);
+      return nextState;
     }
     case WORKSPACE.SHOW.RECEIVE: {
       const {

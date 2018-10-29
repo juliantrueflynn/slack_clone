@@ -1,0 +1,23 @@
+.PinnedMessagesItem {
+  border-radius: 5px;
+  border: 1px solid #DFE6E9;
+  padding: 10px 12px;
+  margin: 0 16px 8px;
+}
+
+.PinnedMessagesItem__container {
+  position: relative;
+}
+
+.PinnedMessagesItem .Btn__destroy {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: none;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.PinnedMessagesItem:hover .Btn__destroy {
+  display: block;
+}

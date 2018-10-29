@@ -1,4 +1,10 @@
-import { MESSAGE, HISTORY, PIN } from '../actions/actionTypes';
+import merge from 'lodash.merge';
+import {
+  MESSAGE,
+  HISTORY,
+  PIN,
+  CHANNEL,
+} from '../actions/actionTypes';
 
 const pinReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -9,10 +15,22 @@ const pinReducer = (state = {}, action) => {
     case MESSAGE.INDEX.RECEIVE: {
       const { pins } = action.messages;
 
-      return pins.reduce((acc, curr) => {
+      nextState = pins.reduce((acc, curr) => {
         acc[curr.id] = curr;
         return acc;
       }, {});
+
+      return merge({}, state, nextState);
+    }
+    case CHANNEL.SHOW.RECEIVE: {
+      const { pins } = action.channel;
+
+      nextState = pins.reduce((acc, curr) => {
+        acc[curr.id] = curr;
+        return acc;
+      }, {});
+
+      return merge({}, state, nextState);
     }
     case PIN.CREATE.RECEIVE: {
       const { pin } = action;

@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import withEntityWrapper from './withEntityWrapper';
 import { drawerClose, drawerOpen, modalOpen } from '../actions/uiActions';
 import { createChannel } from '../actions/channelActions';
+import { destroyPin } from '../actions/messageActions';
 import { selectDrawerMessagesByType, selectChannelWithEntitiesBySlug } from '../reducers/selectors';
 import DrawerSwitch from './DrawerSwitch';
 
@@ -19,6 +20,7 @@ const mapDispatchToProps = dispatch => ({
   closeDrawer: () => dispatch(drawerClose()),
   openProfileModal: () => dispatch(modalOpen('MODAL_PROFILE', null)),
   createChannelRequest: dmChat => dispatch(createChannel.request(dmChat)),
+  destroyPinRequest: id => dispatch(destroyPin.request(id)),
 });
 
 const entityProps = { entityName: 'drawer', pathName: 'drawerSlug' };

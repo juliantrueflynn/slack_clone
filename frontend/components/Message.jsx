@@ -18,9 +18,9 @@ const Message = ({
   users,
   reactions,
   pins,
-  modalOpen,
   createReactionRequest,
   updateMessageRequest,
+  messageDate,
   shouldShowPins,
   isThreadHidden,
   currentUser,
@@ -28,10 +28,29 @@ const Message = ({
   handleHover,
   hoverMessageId,
   editMessageId,
+  shouldHideAvatar,
+  shouldHideEngagement,
   ddToggle,
   children,
   ...props
 }) => {
+  if (!message) {
+    return null;
+  }
+
+  const date = dateUtil(message.createdAt);
+  const time = date.localTime();
+  let dateCreated = messageDate;
+  if (!messageDate) {
+    if (date.isToday()) {
+      dateCreated = date.localTime();
+    } else {
+      const month = date.monthName();
+      const day = date.dayOrdinal();
+      dateCreated = `${month} ${day}, ${time}`;
+    }
+  }
+
   const hasHover = message.id === hoverMessageId;
   const isEditing = message.id === editMessageId;
   const avatar = {
@@ -40,22 +59,17 @@ const Message = ({
     avatarThumb: message.avatarThumb,
   };
   const authorUrl = `${url}/team/${message.authorSlug}`;
-  const dateCreated = dateUtil(message.createdAt).localTime();
   const entryReactions = reactions.filter(item => item.messageId === message.id);
   const hasReactions = !!entryReactions.length;
-  const hasChildren = !!children;
   const isPinned = !!message.pinId;
 
-  const toggleHover = (int) => {
-    if (handleHover) {
-      handleHover(int);
-    }
-  };
+  const toggleHover = hoverId => handleHover && handleHover(hoverId);
 
   const entryClassNames = classNames('Message', {
     'Message--editing': isEditing,
     'Message--hover': hasHover && !isEditing,
     'Message--pinned': isPinned,
+    'Message--has-avatar': !shouldHideAvatar,
   });
 
   return (
@@ -76,13 +90,12 @@ const Message = ({
             isEditing={isEditing}
             handleEditToggle={handleEditToggle}
             currentUser={currentUser}
-            modalOpen={modalOpen}
             {...message}
             {...props}
           />
         )}
         <div className="Message__row">
-          <Avatar baseUrl={url} author={avatar} />
+          {shouldHideAvatar || <Avatar baseUrl={url} author={avatar} />}
           <div className="Message__body">
             <div className="Message__content">
               <div className="Message__meta">
@@ -102,7 +115,7 @@ const Message = ({
               )}
               {message.entityType !== 'entry' && <ChannelSub sub={message} />}
             </div>
-            {(hasReactions && !hasChildren) && (
+            {(hasReactions && !shouldHideEngagement) && (
               <Reactions
                 createReaction={createReactionRequest}
                 reactions={entryReactions}
@@ -110,7 +123,7 @@ const Message = ({
                 messageId={message.id}
               />
             )}
-            {hasChildren || isThreadHidden || (
+            {isThreadHidden || shouldHideEngagement || (
               <SingleMessageThread matchUrl={url} users={users} {...message} />
             )}
             {children}

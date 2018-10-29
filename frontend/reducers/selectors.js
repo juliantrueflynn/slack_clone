@@ -154,7 +154,7 @@ export const selectChatPageMessagesBySlug = ({ entities, session: { currentUser 
   return selectChannelMessagesBySlug({ entities }, slug);
 };
 
-export const selectDrawerMessagesByType = ({ entities, ui: { drawer } }) => {
+export const selectDrawerMessagesByType = ({ entities, ui: { displayChannelSlug, drawer } }) => {
   const { drawerType, drawerSlug } = drawer;
 
   if (drawerType === 'favorites') {
@@ -165,7 +165,13 @@ export const selectDrawerMessagesByType = ({ entities, ui: { drawer } }) => {
     return selectMessageThreadBySlug(entities, drawerSlug);
   }
 
-  return [];
+  if (drawerType === 'details') {
+    const chatSlug = displayChannelSlug;
+    const messages = messagesWithEntitiesMap(entities);
+    return values(messages).filter(msg => msg.pinId && msg.channelSlug === chatSlug);
+  }
+
+  return entities.messages;
 };
 
 const selectDmWithUser = (channel, members, currUserSlug) => {
