@@ -18,7 +18,7 @@ class Scrollable extends React.Component {
 
   componentDidMount() {
     const {
-      isMessageThread,
+      shouldMountAtBottom,
       isAutoScroll,
       fetchHistoryRequest,
       messages,
@@ -29,7 +29,7 @@ class Scrollable extends React.Component {
       const listNode = this.messagesList.current;
       listNode.scrollTop = channel.scrollLoc;
       this.setState({ hasHistory: false });
-    } else if (!isMessageThread && isAutoScroll) {
+    } else if (shouldMountAtBottom && isAutoScroll) {
       this.scrollToBottom();
     }
 

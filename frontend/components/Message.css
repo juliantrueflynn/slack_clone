@@ -66,7 +66,7 @@
   font-size: .8em;
 }
 
-.Scrollable .Message--pinned,
+.Channel .Message--pinned,
 .Message--editing {
   background-color: rgba(255, 234, 167, 0.4);
 }

@@ -54,14 +54,15 @@ class Channel extends React.Component {
             messages={messages}
             channel={channel}
             isAutoScroll
+            shouldMountAtBottom
           >
             <ChannelBlurb channel={channel} currentUserSlug={currentUserSlug} />
             <MessagesList role="listitem" messages={messages} shouldShowPins isDm={channel.hasDm} />
           </Scrollable>
         )}
-        {/* {channel.isSub && (
+        {channel.isSub && (
           <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} />
-        )} */}
+        )}
         <ChannelSubscribe
           channel={channel}
           createChannelSubRequest={createChannelSubRequest}

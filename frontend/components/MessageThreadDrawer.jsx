@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import MessageFormContainer from './MessageFormContainer';
-import Scrollable from './Scrollable';
 import MessageContainer from './MessageContainer';
 import MessagesList from './MessagesList';
 
@@ -12,11 +11,7 @@ const MessageThreadDrawer = ({ messages, users, isLoading }) => {
   }
 
   return (
-    <Scrollable
-      messages={messages}
-      isMessageThread
-      isAutoScroll
-    >
+    <Fragment>
       {isLoading && (
         <MessageContainer
           key={parentMessage.slug}
@@ -32,7 +27,7 @@ const MessageThreadDrawer = ({ messages, users, isLoading }) => {
         parentMessageSlug={parentMessage.slug}
         hasSubmitButton
       />
-    </Scrollable>
+    </Fragment>
   );
 };
 

@@ -2,11 +2,14 @@ import React from 'react';
 import classNames from 'classnames';
 import Button from './Button';
 import './Drawer.css';
+import Scrollable from './Scrollable';
 
 const Drawer = ({
   drawerType,
   closeDrawer,
   channel,
+  messages,
+  isLoading,
   children,
 }) => {
   const drawerClassNames = classNames('Drawer', {
@@ -39,19 +42,26 @@ const Drawer = ({
     }
   };
 
+  const isConvoDrawer = drawerType === 'convo';
+  const isDrawerMessagesLoading = isConvoDrawer && isLoading;
+
   return (
     <div className={drawerClassNames}>
-      <header className="Drawer__header">
-        <div className="Drawer__headings">
-          {title()}
-        </div>
-        <Button unStyled buttonFor="close" onClick={close}>
-          &#10006;
-        </Button>
-      </header>
-      <div className="Drawer__body">
-        {children}
-      </div>
+      {isDrawerMessagesLoading || (
+        <Scrollable messages={messages} isAutoScroll>
+          <header className="Drawer__header">
+            <div className="Drawer__headings">
+              {title()}
+            </div>
+            <Button unStyled buttonFor="close" onClick={close}>
+              &#10006;
+            </Button>
+          </header>
+          <div className="Drawer__body">
+            {children}
+          </div>
+        </Scrollable>
+      )}
     </div>
   );
 };

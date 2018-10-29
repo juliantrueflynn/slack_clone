@@ -71,7 +71,13 @@ class DrawerSwitch extends React.Component {
     }
 
     return (
-      <Drawer drawerType={drawerType} closeDrawer={this.handleClose} channel={channel}>
+      <Drawer
+        drawerType={drawerType}
+        closeDrawer={this.handleClose}
+        channel={channel}
+        messages={messages}
+        isLoading={isLoading}
+      >
         {drawerType === 'team' && (
           <UserDrawer
             userSlug={drawerSlug}
