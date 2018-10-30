@@ -1,6 +1,6 @@
 import * as saga from 'redux-saga/effects';
 import { SEARCH } from '../actions/actionTypes';
-import { fetchSearch } from '../actions/uiActions';
+import { fetchSearch } from '../actions/searchActions';
 import { apiFetch } from '../util/apiUtil';
 import { selectUIByDisplay } from '../reducers/selectors';
 

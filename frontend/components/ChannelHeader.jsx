@@ -69,9 +69,7 @@ class ChannelHeader extends React.Component {
       match: { url },
     } = this.props;
 
-    const chatTitle = this.getTitle();
-    const isFavsOpen = drawerType === 'favorites';
-    const modalOpenProfile = () => modalOpen('MODAL_PROFILE');
+    const searchMessages = messages.filter(msg => msg.isInSearch).sort((a, b) => b.id - a.id);
     const modalOpenEditChannel = () => modalOpen('MODAL_EDIT_CHANNEL');
 
     const userMenuItems = [
@@ -79,19 +77,19 @@ class ChannelHeader extends React.Component {
         key: 'favorites',
         icon: <FontAwesomeIcon icon={['fas', 'star']} size="lg" />,
         onClick: () => this.handleLinkToggle('favorites'),
-        isItemActive: isFavsOpen,
+        isItemActive: drawerType === 'favorites',
       },
       {
         key: 'profile',
         icon: <FontAwesomeIcon icon="user-cog" size="lg" />,
-        onClick: modalOpenProfile,
+        onClick: () => modalOpen('MODAL_PROFILE'),
       },
     ];
 
     return (
       <header className="ChannelHeader">
         <div className="ChannelHeader__info">
-          <h1 className="ChannelHeader__title">{chatTitle}</h1>
+          <h1 className="ChannelHeader__title">{this.getTitle()}</h1>
           <ChannelHeaderMeta
             channel={channel}
             accordionOpen={accordionOpen}
@@ -103,7 +101,7 @@ class ChannelHeader extends React.Component {
           {channel && (
             <ChannelActionMenus
               channel={channel}
-              chatTitle={chatTitle}
+              chatTitle={this.getTitle()}
               drawerType={drawerType}
               url={url}
               modalOpen={modalOpenEditChannel}
@@ -121,7 +119,7 @@ class ChannelHeader extends React.Component {
         <ProfileModal {...currentUser} />
         <SearchModal
           searchQuery={searchQuery}
-          messages={messages}
+          messages={searchMessages}
           users={users}
           fetchSearchRequest={fetchSearchRequest}
           destroySearch={destroySearch}

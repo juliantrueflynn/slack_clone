@@ -10,24 +10,15 @@ export const selectSubbedWorkspaces = ({ entities: { workspaces } }) => (
   values(workspaces).filter(({ isSub, isMember }) => isSub && isMember)
 );
 
-export const selectReactionByMessageEmoji = (state, { messageId, emoji }) => {
-  const { entities: { reactions }, session: { currentUser } } = state;
-
-  const usersReactions = values(reactions).filter(reaction => (
-    reaction.userId === currentUser.id
-    && reaction.messageId === messageId
-    && reaction.emoji === emoji
-  ));
-
-  return usersReactions[0];
-};
-
-const messagesWithEntitiesMap = ({ messages, members }, userSlug) => (
+export const messagesWithEntitiesMap = ({ messages, members, channels }, userSlug) => (
   values(messages).reduce((acc, curr) => {
     const message = messages[curr.slug];
-    const author = members && members[curr.authorSlug];
 
-    if (userSlug && message) {
+    if (!message) {
+      return acc;
+    }
+
+    if (userSlug) {
       message.isCurrentUser = userSlug === message.authorSlug;
     }
 
@@ -35,6 +26,13 @@ const messagesWithEntitiesMap = ({ messages, members }, userSlug) => (
       const lastMsg = messages[message.thread.length - 1];
       message.lastMessageDate = lastMsg && lastMsg.createdAt;
     }
+
+    if (channels) {
+      const channel = channels[message.channelSlug];
+      message.channelTitle = channel && channel.title;
+    }
+
+    const author = members && members[curr.authorSlug];
 
     acc[curr.slug] = {
       authorName: author && author.username,
@@ -44,6 +42,10 @@ const messagesWithEntitiesMap = ({ messages, members }, userSlug) => (
 
     return acc;
   }, {})
+);
+
+export const selectMessagesWithEntities = ({ entities, session: { currentUser } }) => (
+  values(messagesWithEntitiesMap(entities, currentUser.slug))
 );
 
 export const selectSearchMessages = ({ entities, session: { currentUser } }) => {
@@ -60,14 +62,6 @@ export const selectSearchMessages = ({ entities, session: { currentUser } }) => 
   }).filter(message => message.isInSearch).sort((a, b) => b.id - a.id);
 };
 
-const selectMessagesFavorites = ({ favorites, ...entities }) => {
-  const entries = messagesWithEntitiesMap(entities);
-
-  return values(favorites)
-    .map(({ messageSlug }) => entries[messageSlug])
-    .filter(message => message.isInDrawer && message.entityType === 'entry');
-};
-
 const selectMessageThreadBySlug = (entities, slug) => {
   const entries = messagesWithEntitiesMap(entities);
   const message = entries[slug];
@@ -82,10 +76,6 @@ const selectMessageThreadBySlug = (entities, slug) => {
   }, [message]);
 };
 
-export const selectMessageChildrenBySlug = ({ entities }, slug) => (
-  selectMessageThreadBySlug(entities, slug).slice(1)
-);
-
 const selectAllThreadMessages = (entities) => {
   const entries = messagesWithEntitiesMap(entities);
 
@@ -93,7 +83,7 @@ const selectAllThreadMessages = (entities) => {
     .filter(message => message.isInConvo)
     .reduce((acc, curr) => {
       const convo = Object.assign({}, curr);
-      convo.thread = selectMessageChildrenBySlug({ entities }, curr.slug);
+      convo.thread = selectMessageThreadBySlug(entities, curr.slug).slice(1);
       acc.push(convo);
       return acc;
     }, [])
@@ -154,6 +144,19 @@ export const selectChatPageMessagesBySlug = ({ entities, session: { currentUser 
   return selectChannelMessagesBySlug({ entities }, slug);
 };
 
+const selectMessagesFavorites = ({ favorites, ...entities }) => {
+  const entries = messagesWithEntitiesMap(entities);
+
+  return values(favorites)
+    .map(({ messageSlug }) => entries[messageSlug])
+    .filter(message => message.isInDrawer && message.entityType === 'entry');
+};
+
+const selectPinnedMessagesBySlug = (entities, chatSlug) => {
+  const messages = messagesWithEntitiesMap(entities);
+  return values(messages).filter(msg => msg.pinId && msg.channelSlug === chatSlug);
+};
+
 export const selectDrawerMessagesByType = ({ entities, ui: { displayChannelSlug, drawer } }) => {
   const { drawerType, drawerSlug } = drawer;
 
@@ -166,12 +169,10 @@ export const selectDrawerMessagesByType = ({ entities, ui: { displayChannelSlug,
   }
 
   if (drawerType === 'details') {
-    const chatSlug = displayChannelSlug;
-    const messages = messagesWithEntitiesMap(entities);
-    return values(messages).filter(msg => msg.pinId && msg.channelSlug === chatSlug);
+    return selectPinnedMessagesBySlug(entities, displayChannelSlug);
   }
 
-  return entities.messages;
+  return [];
 };
 
 const selectDmWithUser = (channel, members, currUserSlug) => {

@@ -1,11 +1,8 @@
 import React from 'react';
-import Scrollable from './Scrollable';
 import MessagesList from './MessagesList';
 
 const FavoritesDrawer = ({ messages }) => (
-  <Scrollable>
-    <MessagesList messages={messages} role="listitem" isThreadHidden />
-  </Scrollable>
+  <MessagesList messages={messages} role="listitem" isThreadHidden />
 );
 
 export default FavoritesDrawer;

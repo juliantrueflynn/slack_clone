@@ -49,7 +49,7 @@ class MessagesList extends React.Component {
     }
 
     return (
-      <div className="MessagesList" ref={this.list}>
+      <div className="MessagesList">
         {messages.map(message => (
           <MessageContainer
             key={message.id}
