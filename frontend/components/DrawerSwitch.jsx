@@ -64,6 +64,7 @@ class DrawerSwitch extends React.Component {
       openProfileModal,
       createChannelRequest,
       destroyPinRequest,
+      modalOpen,
     } = this.props;
 
     if (drawerType === 'details' && !channel) {
@@ -106,6 +107,7 @@ class DrawerSwitch extends React.Component {
             accordion={accordion}
             isLoading={isLoading}
             destroyPinRequest={destroyPinRequest}
+            modalOpen={modalOpen}
           />
         )}
       </Drawer>

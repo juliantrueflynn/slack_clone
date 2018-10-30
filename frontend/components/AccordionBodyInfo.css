@@ -1,0 +1,33 @@
+.AccordionBodyInfo__topic-sub:hover .Btn__edit-topic {
+  display: block;
+}
+
+.AccordionBodyInfo__topic-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.AccordionBodyInfo__topic-header .AccordionBodyInfo__subtitle {
+  margin-bottom: 0;
+}
+
+.AccordionItem__details .Btn__edit-topic {
+  color: #0984E3;
+  font-size: 14px;
+  font-weight: bold;
+  display: none;
+  margin-left: 10px;
+  padding: 0 3px;
+}
+
+.AccordionItem__details .Btn__edit-topic:hover {
+  color: #74B9FF;
+  text-decoration: underline;
+}
+
+.AccordionBodyInfo__subtitle {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #636E72;
+}

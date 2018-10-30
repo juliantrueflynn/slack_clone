@@ -1,11 +1,9 @@
-import React, { Fragment } from 'react';
-import { withRouter, Link } from 'react-router-dom';
-import Avatar from './Avatar';
-import StatusIcon from './StatusIcon';
+import React from 'react';
 import AccordionItem from './AccordionItem';
-import { dateUtil } from '../util/dateUtil';
 import UserPreview from './UserPreview';
-import PinnedMessagesItem from './PinnedMessagesItem';
+import AccordionBodyInfo from './AccordionBodyInfo';
+import AccordionBodyMembers from './AccordionBodyMembers';
+import AccordionBodyPins from './AccordionBodyPins';
 import './ChannelDetailsDrawer.css';
 
 class ChannelDetailsDrawer extends React.Component {
@@ -59,7 +57,7 @@ class ChannelDetailsDrawer extends React.Component {
       users,
       isLoading,
       destroyPinRequest,
-      match: { params },
+      modalOpen,
     } = this.props;
     const { ...state } = this.state;
 
@@ -67,63 +65,29 @@ class ChannelDetailsDrawer extends React.Component {
       return null;
     }
 
-    const dateCreated = dateUtil(channel.createdAt).monthDayYear();
     const usersLen = channel.members.length;
-
-    const { 0: pagePath, chatPath, workspaceSlug } = params;
-    let teamUrl = `/${workspaceSlug}/${pagePath}`;
-    if (chatPath) {
-      teamUrl += `/${chatPath}`;
-    }
-    teamUrl += '/team';
-
-    let accordionItems = [];
+    const accordionItems = [];
 
     if (!channel.hasDm) {
-      accordionItems = [
-        {
-          icon: 'info-circle',
-          itemTitle: 'Channel Details',
-          name: 'details',
-          body: (
-            <Fragment>
-              <div className="AccordionItem__sub">
-                <h5 className="AccordionItem__sub-title">Purpose</h5>
-                {channel.topic || 'Set a channel topic'}
-              </div>
-              <div className="AccordionItem__sub">
-                <h5 className="AccordionItem__sub-title">Created</h5>
-                {`${dateCreated} by ${channel.ownerName}`}
-              </div>
-            </Fragment>
-          ),
-        },
-        {
-          icon: 'users',
-          itemTitle: `${usersLen} Members`,
-          name: 'members',
-          body: channel.members.map(userSlug => (
-            <Link key={userSlug} to={`${teamUrl}/${userSlug}`} className="AccordionItem__sub">
-              <StatusIcon member={users[userSlug]} />
-              <Avatar avatarFor="details-drawer" author={users[userSlug]} size="22" />
-              {users[userSlug].username}
-            </Link>
-          )),
-        }
-      ];
+      accordionItems.push({
+        icon: 'info-circle',
+        itemTitle: 'Channel Details',
+        name: 'details',
+        body: <AccordionBodyInfo channel={channel} modalOpen={modalOpen} />,
+      });
+      accordionItems.push({
+        icon: 'users',
+        itemTitle: `${usersLen} Members`,
+        name: 'members',
+        body: <AccordionBodyMembers members={channel.members} users={users} />
+      });
     }
 
     accordionItems.push({
       icon: 'thumbtack',
       itemTitle: 'Pinned Messages',
       name: 'pinned',
-      body: messages && messages.map(message => (
-        <PinnedMessagesItem
-          key={message.id}
-          message={message}
-          destroyPinRequest={destroyPinRequest}
-        />
-      ))
+      body: <AccordionBodyPins messages={messages} destroyPinRequest={destroyPinRequest} />,
     });
 
     const user = users[channel.dmUserSlug];
@@ -147,4 +111,4 @@ class ChannelDetailsDrawer extends React.Component {
   }
 }
 
-export default withRouter(ChannelDetailsDrawer);
+export default ChannelDetailsDrawer;

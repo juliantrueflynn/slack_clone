@@ -21,6 +21,7 @@ const mapDispatchToProps = dispatch => ({
   openProfileModal: () => dispatch(modalOpen('MODAL_PROFILE', null)),
   createChannelRequest: dmChat => dispatch(createChannel.request(dmChat)),
   destroyPinRequest: id => dispatch(destroyPin.request(id)),
+  modalOpen: (modalType, modalProps = {}) => dispatch(modalOpen(modalType, modalProps)),
 });
 
 const entityProps = { entityName: 'drawer', pathName: 'drawerSlug' };
