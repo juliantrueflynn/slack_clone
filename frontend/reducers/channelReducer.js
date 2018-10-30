@@ -120,21 +120,17 @@ const channelReducer = (state = {}, action) => {
       });
 
       reads.forEach((read) => {
-        if (read.readableType !== 'Channel') return;
-        if (!nextState[read.slug]) {
-          return;
+        if (read.readableType === 'Channel') {
+          nextState[read.slug].lastRead = read.accessedAt;
+          nextState[read.slug].readId = read.id;
         }
-        nextState[read.slug].lastRead = read.accessedAt;
-        nextState[read.slug].readId = read.id;
       });
 
       unreads.forEach((unread) => {
-        if (unread.unreadableType !== 'Channel') return;
-        if (!nextState[unread.slug]) {
-          return;
+        if (unread.unreadableType === 'Channel') {
+          nextState[unread.slug].lastActive = unread.activeAt;
+          nextState[unread.slug].unreadId = unread.id;
         }
-        nextState[unread.slug].lastActive = unread.activeAt;
-        nextState[unread.slug].unreadId = unread.id;
       });
 
       Object.values(nextState).forEach(({ slug, lastActive, lastRead }) => {
@@ -308,13 +304,8 @@ const channelReducer = (state = {}, action) => {
     }
     case UNREAD.INDEX.RECEIVE: {
       const { unreads } = action;
-      const unreadChannels = Object.values(state).filter(ch => ch.hasUnreads);
 
       nextState = Object.assign({}, state);
-      unreadChannels.forEach((channel) => {
-        nextState[channel.slug].messages = [];
-      });
-
       unreads.forEach((message) => {
         nextState[message.channelSlug].messages.push(message.slug);
       });
