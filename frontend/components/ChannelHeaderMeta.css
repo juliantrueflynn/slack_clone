@@ -10,6 +10,7 @@
   margin-right: 16px;
   color: #636E72;
   position: relative;
+  margin-left: 5px;
 }
 
 .ChannelHeaderMeta__item::after {
@@ -19,6 +20,10 @@
   background-color: #B2BEC3;
   position: absolute;
   right: -11px;
+}
+
+.ChannelHeaderMeta__item:first-child {
+  margin-left: 0;
 }
 
 .ChannelHeaderMeta__item > a {
@@ -45,6 +50,7 @@
   border: 1px solid transparent;
   border-radius: 4px;
   padding: 1px 4px;
+  margin-left: -3px;
 }
 
 .ChannelHeader .Btn__edit-topic:hover {

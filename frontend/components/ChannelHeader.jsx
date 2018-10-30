@@ -1,12 +1,12 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from './Menu';
-import ProfileModal from './ProfileModal';
-import SearchModal from './SearchModal';
 import ChannelHeaderSearch from './ChannelHeaderSearch';
 import ChannelHeaderMeta from './ChannelHeaderMeta';
-import Dropdown from './Dropdown';
-import Button from './Button';
+import ChannelActionMenus from './ChannelActionMenus';
+import ProfileModal from './ProfileModal';
+import SearchModal from './SearchModal';
+import ChannelEditorModal from './ChannelEditorModal';
 import './ChannelHeader.css';
 
 class ChannelHeader extends React.Component {
@@ -71,38 +71,8 @@ class ChannelHeader extends React.Component {
 
     const chatTitle = this.getTitle();
     const isFavsOpen = drawerType === 'favorites';
-    const isDetailsOpen = drawerType === 'details';
     const modalOpenProfile = () => modalOpen('MODAL_PROFILE');
     const modalOpenEditChannel = () => modalOpen('MODAL_EDIT_CHANNEL');
-    const leaveChannel = () => {
-      const channelSub = { id: channel.subId, channelSlug: channel.slug };
-      destroyChannelSubRequest(channelSub);
-    };
-
-    let editMenuItems = [];
-    const ddItems = [
-      {
-        label: 'View channel details',
-        link: `${url}/details`,
-        hasNoDrawer: true,
-      }
-    ];
-    if (channel && !channel.hasDm) {
-      editMenuItems = ddItems.concat([
-        { label: 'Edit channel', onClick: modalOpenEditChannel },
-        { label: `Leave ${chatTitle}`, onClick: leaveChannel },
-      ]);
-    }
-
-    if (channel && channel.hasDm) {
-      editMenuItems = ddItems.concat([
-        {
-          label: `View ${chatTitle}’s profile`,
-          link: `${url}/team/${channel.dmUserSlug}`,
-          hasNoDrawer: true,
-        }
-      ]);
-    }
 
     const userMenuItems = [
       {
@@ -126,24 +96,20 @@ class ChannelHeader extends React.Component {
             channel={channel}
             accordionOpen={accordionOpen}
             modalOpen={modalOpenEditChannel}
-            currentUser={currentUser}
+            users={users}
           />
         </div>
         <nav className="ChannelHeader__navigate">
           {channel && (
-            <Button
-              buttonFor="channel-details"
-              onClick={() => this.handleLinkToggle('details')}
-              isActive={isDetailsOpen}
-              unStyled
-            >
-              <FontAwesomeIcon icon="info-circle" size="lg" />
-            </Button>
-          )}
-          {channel && (
-            <Dropdown menuFor="channel-edit" items={editMenuItems} unStyled>
-              <FontAwesomeIcon icon="cog" size="lg" />
-            </Dropdown>
+            <ChannelActionMenus
+              channel={channel}
+              chatTitle={chatTitle}
+              drawerType={drawerType}
+              url={url}
+              modalOpen={modalOpenEditChannel}
+              destroyChannelSub={destroyChannelSubRequest}
+              linkToggle={this.handleLinkToggle}
+            />
           )}
           <ChannelHeaderSearch
             query={searchQuery}
@@ -161,6 +127,7 @@ class ChannelHeader extends React.Component {
           destroySearch={destroySearch}
           isSearchLoading={isSearchLoading}
         />
+        <ChannelEditorModal currentUser={currentUser} channel={channel} />
       </header>
     );
   }
