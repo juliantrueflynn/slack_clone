@@ -29,7 +29,12 @@ class ChatPageSwitch extends React.Component {
       match: { url, isExact },
       drawerType,
       drawerSlug,
+      entity: channel,
     } = this.props;
+
+    if (isExact && drawerType === 'details' && !channel) {
+      return null;
+    }
 
     if (isExact && drawerType) {
       if (drawerSlug) {

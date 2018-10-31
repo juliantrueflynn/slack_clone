@@ -12,10 +12,10 @@ import {
 } from '../actions/actionTypes';
 
 const _defaultState = {
-  search: true,
-  workspace: true,
-  channel: true,
-  drawer: true,
+  search: false,
+  workspace: false,
+  channel: false,
+  drawer: false,
 };
 
 const isLoadingReducer = (state = _defaultState, action) => {

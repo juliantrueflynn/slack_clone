@@ -43,25 +43,23 @@ const Drawer = ({
   };
 
   const isConvoDrawer = drawerType === 'convo';
-  const isDrawerMessagesLoading = isConvoDrawer && isLoading;
+  const convoMessages = isConvoDrawer && !isLoading ? messages : null;
 
   return (
     <div className={drawerClassNames}>
-      {isDrawerMessagesLoading || (
-        <Scrollable messages={messages} isAutoScroll>
-          <header className="Drawer__header">
-            <div className="Drawer__headings">
-              {title()}
-            </div>
-            <Button unStyled buttonFor="close" onClick={close}>
-              &#10006;
-            </Button>
-          </header>
-          <div className="Drawer__body">
-            {children}
-          </div>
+      <header className="Drawer__header">
+        <div className="Drawer__headings">
+          {title()}
+        </div>
+        <Button unStyled buttonFor="close" onClick={close}>
+          &#10006;
+        </Button>
+      </header>
+      <div className="Drawer__body">
+        <Scrollable messages={convoMessages} isAutoScroll={isConvoDrawer}>
+          {children}
         </Scrollable>
-      )}
+      </div>
     </div>
   );
 };

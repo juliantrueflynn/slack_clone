@@ -41,12 +41,14 @@ const LeftSidebar = ({
       label: 'All Unreads',
       link: `${url}/unreads`,
       modifierClassName: hasUnreadChannels ? 'unread' : null,
+      hasNoDrawer: true,
     },
     {
       icon: <FontAwesomeIcon className="Icon" icon={['far', 'comment']} />,
       label: 'All Threads',
       link: `${url}/threads`,
       modifierClassName: hasUnreadThreads ? 'unread' : null,
+      hasNoDrawer: true,
     },
   ];
 

@@ -48,7 +48,7 @@ class Scrollable extends React.Component {
     const { messages, isAutoScroll } = this.props;
     const { isAtBottom, isAtTop, isLoadingHistory } = this.state;
 
-    if (!isAutoScroll || !messages.length) {
+    if (!isAutoScroll || !messages || !messages.length) {
       return;
     }
 
@@ -60,7 +60,7 @@ class Scrollable extends React.Component {
       this.setLastFetched();
     }
 
-    if (isAtBottom || this.hasNewMessage(prevProps.messages)) {
+    if (isAtBottom || (prevProps.messages && this.hasNewMessage(prevProps.messages))) {
       this.scrollToBottom();
     }
   }
