@@ -8,16 +8,32 @@ import AllThreads from './AllThreads';
 import Channel from './Channel';
 
 class ChatPageSwitch extends React.Component {
+  constructor(props) {
+    super(props);
+    this.prevLocation = null;
+  }
+
   componentDidMount() {
     const { history } = this.props;
 
     if (this.selectRedirectUrl()) {
-      history.push(this.selectRedirectUrl());
+      history.replace(this.selectRedirectUrl());
     }
   }
 
-  componentDidUpdate() {
-    const { history } = this.props;
+  componentDidUpdate(prevProps) {
+    const {
+      match: { isExact },
+      drawerType,
+      history,
+      drawerClose,
+      entity: channel,
+    } = this.props;
+
+    if (channel && drawerType && isExact && !prevProps.isExact) {
+      drawerClose();
+      return;
+    }
 
     if (this.selectRedirectUrl()) {
       history.replace(this.selectRedirectUrl());

@@ -5,6 +5,7 @@ import { selectChatPageMessagesBySlug, selectChatPageChannelsBySlug } from '../r
 import { fetchHistory } from '../actions/messageActions';
 import { createChannelSub, switchChannel } from '../actions/channelActions';
 import { clearUnreads } from '../actions/unreadActions';
+import { drawerClose } from '../actions/uiActions';
 import ChatPageSwitch from './ChatPageSwitch';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
@@ -21,6 +22,7 @@ const mapDispatchToProps = dispatch => ({
   fetchHistoryRequest: (chatSlug, startDate) => dispatch(fetchHistory.request(chatSlug, startDate)),
   switchChannel: (channelSlug, scrollLoc) => dispatch(switchChannel(channelSlug, scrollLoc)),
   clearUnreads: (channelSlug, lastRead) => dispatch(clearUnreads(channelSlug, lastRead)),
+  drawerClose: () => dispatch(drawerClose()),
 });
 
 const entityProps = { entityName: 'channels', pathName: 'chatPath' };

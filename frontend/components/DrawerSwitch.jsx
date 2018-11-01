@@ -19,17 +19,16 @@ class DrawerSwitch extends React.Component {
 
   componentDidUpdate(prevProps) {
     const {
-      location: { pathname },
+      match: { url },
       fetchEntityRequest,
       openDrawer,
       drawerType,
       entitySlug: drawerSlug,
     } = this.props;
 
-    if (pathname !== prevProps.location.pathname) {
-      openDrawer({ drawerType, drawerSlug });
-
+    if (url !== prevProps.match.url) {
       if (prevProps.drawerType && drawerType !== prevProps.drawerType) {
+        openDrawer({ drawerType, drawerSlug });
         fetchEntityRequest();
       }
     }
@@ -48,7 +47,7 @@ class DrawerSwitch extends React.Component {
     }
 
     closeDrawer();
-    history.push(`/${workspaceSlug}/${chatPagePath}`);
+    history.replace(`/${workspaceSlug}/${chatPagePath}`);
   }
 
   render() {
