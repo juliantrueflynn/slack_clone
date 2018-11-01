@@ -35,11 +35,7 @@ export const routesConfig = [
         component: ChatPageSwitchContainer,
         routes: [
           {
-            path: '/:workspaceSlug/(messages)+/:chatPath/:drawerType/:drawerSlug?',
-            component: DrawerSwitchContainer,
-          },
-          {
-            path: '/:workspaceSlug/(unreads|threads)/:drawerType/:drawerSlug?',
+            path: '/:workspaceSlug/(threads|unreads|messages/[A-Za-z0-9]{24})/:drawerType/:drawerSlug?',
             component: DrawerSwitchContainer,
           }
         ]

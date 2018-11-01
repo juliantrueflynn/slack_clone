@@ -38,16 +38,11 @@ class DrawerSwitch extends React.Component {
     const {
       closeDrawer,
       history,
-      match: { params: { 0: pagePath, chatPath, workspaceSlug } },
+      match: { params: { 0: drawerParent, workspaceSlug } },
     } = this.props;
 
-    let chatPagePath = pagePath;
-    if (chatPath) {
-      chatPagePath += `/${chatPath}`;
-    }
-
     closeDrawer();
-    history.replace(`/${workspaceSlug}/${chatPagePath}`);
+    history.replace(`/${workspaceSlug}/${drawerParent}`);
   }
 
   render() {
