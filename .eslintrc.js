@@ -21,6 +21,7 @@ module.exports = {
             "exports": "ignore",
             "functions": "ignore"
         }],
+        "prefer-destructuring": ["error", {"object": true, "array": false}],
         "react/no-children-prop": false,
     },
     "globals": {

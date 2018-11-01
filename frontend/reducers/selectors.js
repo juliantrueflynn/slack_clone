@@ -257,9 +257,11 @@ export const selectChannelsWithEntitiesMap = ({ entities, session: { currentUser
   channelsWithEntitiesMap(entities, currentUser.slug)
 );
 
-export const selectChannelWithEntitiesBySlug = ({ entities, session: { currentUser } }, slug) => {
+export const selectChannelWithEntitiesBySlug = ({ entities, ...rest }, slug) => {
+  const { ui: { displayChannelSlug }, session: { currentUser } } = rest;
+  const chatSlug = slug || displayChannelSlug;
   const channels = channelsWithEntitiesMap(entities, currentUser.slug);
-  return channels[slug];
+  return channels[chatSlug];
 };
 
 const selectThreadChannels = channels => (

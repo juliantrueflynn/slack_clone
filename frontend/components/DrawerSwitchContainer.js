@@ -9,7 +9,7 @@ import DrawerSwitch from './DrawerSwitch';
 
 const mapStateToProps = (state, { match: { params } }) => ({
   messages: selectDrawerMessagesByType(state),
-  channel: selectChannelWithEntitiesBySlug(state, params.chatPath),
+  channel: selectChannelWithEntitiesBySlug(state),
   drawerType: params.drawerType,
   accordion: state.ui.accordion.details,
   isLoading: state.isLoading.drawer,

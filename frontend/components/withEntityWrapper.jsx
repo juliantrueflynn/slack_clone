@@ -60,7 +60,8 @@ const withEntityWrapper = ({ entityName, pathName }) => (WrappedComponent) => {
           slug = workspaceSlug;
           fetchEntity = fetchFavorites.request;
         } else if (drawerType === 'details' && drawerParent) {
-          slug = drawerParent;
+          const splitPath = drawerParent.split('/');
+          slug = splitPath[1];
           fetchEntity = fetchChannel.request;
         }
       }
