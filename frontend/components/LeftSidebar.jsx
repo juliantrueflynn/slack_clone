@@ -22,6 +22,8 @@ const LeftSidebar = ({
   fetchChannelsRequest,
   currChatSlug,
   match: { url, params: { workspaceSlug } },
+  history,
+  drawer: { drawerType, drawerSlug },
 }) => {
   if (!currWorkspace) {
     return null;
@@ -34,21 +36,33 @@ const LeftSidebar = ({
   const unsubbedChannels = chats.filter(ch => !ch.isSub);
   const chatsModalOpen = () => modalOpen('MODAL_CHATS');
   const chatModalOpen = () => modalOpen('MODAL_CHAT');
+  const handleHistoryPush = (linkUrl) => {
+    let menuUrl = `${workspaceSlug}/${linkUrl}`;
+    if (drawerType && drawerType !== 'details') {
+      menuUrl += `/${drawerType}`;
+
+      if (drawerSlug) {
+        menuUrl += `/${drawerSlug}`;
+      }
+    }
+
+    history.push(`/${menuUrl}`);
+  };
 
   const quickLinksList = [
     {
       icon: <FontAwesomeIcon className="Icon" icon={['fas', 'align-left']} />,
       label: 'All Unreads',
-      link: `${url}/unreads`,
+      onClick: () => handleHistoryPush('unreads'),
+      isItemActive: currChatSlug === 'unreads',
       modifierClassName: hasUnreadChannels ? 'unread' : null,
-      hasNoDrawer: true,
     },
     {
       icon: <FontAwesomeIcon className="Icon" icon={['far', 'comment']} />,
       label: 'All Threads',
-      link: `${url}/threads`,
+      onClick: () => handleHistoryPush('threads'),
+      isItemActive: currChatSlug === 'threads',
       modifierClassName: hasUnreadThreads ? 'unread' : null,
-      hasNoDrawer: true,
     },
   ];
 

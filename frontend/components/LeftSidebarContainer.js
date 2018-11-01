@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { selectDmChats, selectSubbedWorkspaces, selectEntityBySlug } from '../reducers/selectors';
 import { modalOpen } from '../actions/uiActions';
-import { createChannel, updateChannelSub, fetchChannels } from '../actions/channelActions';
+import { updateChannelSub, fetchChannels } from '../actions/channelActions';
 import LeftSidebar from './LeftSidebar';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
@@ -14,6 +14,7 @@ const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   channels: Object.values(state.entities.channels).filter(ch => !ch.hasDm),
   dmChats: selectDmChats(state),
   members: state.entities.members,
+  drawer: state.ui.drawer,
 });
 
 const mapDispatchToProps = dispatch => ({
