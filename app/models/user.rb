@@ -55,7 +55,7 @@ class User < ApplicationRecord
 
   def reset_session_token!
     generate_unique_session_token
-    save!
+    update_columns(session_token: session_token)
     self.session_token
   end
 
@@ -90,7 +90,6 @@ class User < ApplicationRecord
   end
 
   def user_broadcast_update
-    return if saved_change_to_session_token?
     return if saved_change_to_password_digest?
     broadcast_update
   end
