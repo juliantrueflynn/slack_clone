@@ -306,8 +306,12 @@ const channelReducer = (state = {}, action) => {
       const { unreads } = action;
 
       nextState = Object.assign({}, state);
-      unreads.forEach((message) => {
-        nextState[message.channelSlug].messages.push(message.slug);
+      unreads.forEach(({ channelSlug, slug }) => {
+        if (nextState[channelSlug].messages.includes(slug)) {
+          return;
+        }
+
+        nextState[channelSlug].messages.push(slug);
       });
 
       return nextState;
