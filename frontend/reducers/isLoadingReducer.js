@@ -24,7 +24,8 @@ const isLoadingReducer = (state = _defaultState, action) => {
   const nextState = Object.assign({}, state);
   switch (action.type) {
     case WORKSPACE.SHOW.REQUEST:
-      return { workspace: true, ..._defaultState };
+      nextState.workspace = true;
+      return nextState;
     case USER_THREAD.INDEX.REQUEST:
     case UNREAD.INDEX.REQUEST:
     case MESSAGE.INDEX.REQUEST:

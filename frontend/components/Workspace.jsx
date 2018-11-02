@@ -22,10 +22,12 @@ class Workspace extends React.Component {
       match: { isExact, url },
       history,
       workspaces,
+      isLoading,
       fetchWorkspacesRequest,
     } = this.props;
 
-    if (prevProps.workspaces && prevProps.workspaces.length !== workspaces.length) {
+    const hasLoaded = !isLoading;
+    if (hasLoaded && prevProps.workspaces && prevProps.workspaces.length !== workspaces.length) {
       fetchWorkspacesRequest();
     }
 
@@ -36,9 +38,8 @@ class Workspace extends React.Component {
   }
 
   getDefaultChat() {
-    const { entitySlug, workspaces, channels } = this.props;
+    const { entity: workspace, channels } = this.props;
 
-    const workspace = workspaces[entitySlug];
     if (workspace) {
       const firstChatSlug = workspace.channels[0];
       return channels[firstChatSlug];

@@ -27,7 +27,7 @@ Rails.application.configure do
   end
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
 
   config.action_mailer.perform_caching = false
 
@@ -59,5 +59,5 @@ Rails.application.configure do
     Bullet.add_footer = true
   end
 
-  ActionCable.server.config.logger = Logger.new(nil)
+  # ActionCable.server.config.logger = Logger.new(nil)
 end

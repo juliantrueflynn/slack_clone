@@ -2,12 +2,8 @@ const values = entities => Object.values(entities);
 
 export const selectCurrentUser = ({ session: { currentUser } }) => currentUser;
 
-export const selectWorkspaces = ({ entities: { workspaces } }) => (
-  values(workspaces).sort((a, b) => a.id - b.id)
-);
-
 export const selectSubbedWorkspaces = ({ entities: { workspaces } }) => (
-  values(workspaces).filter(({ isSub, isMember }) => isSub && isMember)
+  values(workspaces).filter(({ isSub, isMember }) => isSub && isMember).sort((a, b) => a.id - b.id)
 );
 
 export const messagesWithEntitiesMap = ({ messages, members, channels }, userSlug) => (

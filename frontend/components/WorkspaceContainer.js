@@ -4,13 +4,13 @@ import withEntityWrapper from './withEntityWrapper';
 import { fetchWorkspaces } from '../actions/workspaceActions';
 import { modalClose } from '../actions/uiActions';
 import { createReaction } from '../actions/reactionActions';
-import { selectChannelsWithEntitiesMap } from '../reducers/selectors';
+import { selectChannelsWithEntitiesMap, selectSubbedWorkspaces } from '../reducers/selectors';
 import Workspace from './Workspace';
 
 const mapStateToProps = state => ({
   channels: selectChannelsWithEntitiesMap(state),
   currChatSlug: state.ui.displayChannelSlug,
-  workspaces: state.entities.workspaces,
+  workspaces: selectSubbedWorkspaces(state),
   isLoading: state.isLoading.workspace,
   modal: state.ui.displayModal,
 });
