@@ -14,6 +14,7 @@ import {
   faTimes,
   faTimesCircle,
   faCircle,
+  faCircleNotch,
   faAlignLeft,
   faPlusCircle,
   faHashtag,
@@ -25,6 +26,8 @@ import {
   faSearch,
   faEllipsisH,
   faThumbtack,
+  faBook,
+  faSpinner,
   faStar as fasStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { ActionCable } from 'react-actioncable-provider';
@@ -40,6 +43,7 @@ library.add(
   faSquare,
   faEllipsisH,
   faTimesCircle,
+  faCircleNotch,
   farCircle,
   faPlusCircle,
   faHashtag,
@@ -48,6 +52,7 @@ library.add(
   fasStar,
   faSmile,
   faSearch,
+  faBook,
   faComment,
   faInfoCircle,
   faCircle,
@@ -56,6 +61,7 @@ library.add(
   faUsers,
   faUserCog,
   faThumbtack,
+  faSpinner,
 );
 
 const App = ({ isLoggedIn, onReceived }) => (

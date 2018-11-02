@@ -42,7 +42,7 @@ const isLoadingReducer = (state = _defaultState, action) => {
       nextState.search = true;
       return nextState;
     case WORKSPACE.SHOW.RECEIVE:
-      nextState.workspace = false;
+      nextState.workspace = true;
       return nextState;
     case USER_THREAD.INDEX.RECEIVE:
     case UNREAD.INDEX.RECEIVE:

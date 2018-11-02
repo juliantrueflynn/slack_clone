@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch } from 'react-router-dom';
 import { ActionCable } from 'react-actioncable-provider';
 import { decamelizeKeys } from 'humps';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import LeftSidebarContainer from './LeftSidebarContainer';
@@ -63,9 +64,22 @@ class Workspace extends React.Component {
 
     if (isLoading) {
       return (
-        <h2>
-          Loading...
-        </h2>
+        <div className="Workspace Workspace--loading">
+          <div className="LeftSidebar" />
+          <div className="Workspace__col">
+            <div className="fa-5x">
+              <span className="Workspace__brand-icon fa-layers fa-fw">
+                <FontAwesomeIcon icon="square" className="Workspace__square-icon" />
+                <FontAwesomeIcon icon="book" inverse transform="shrink-7" />
+              </span>
+            </div>
+            <blockquote className="Workspace__quote">
+              <p>The best way to predict the future is to invent it.</p>
+              <footer>— Alan Kay</footer>
+            </blockquote>
+            <FontAwesomeIcon icon="spinner" spin pulse size="3x" />
+          </div>
+        </div>
       );
     }
 
@@ -76,10 +90,7 @@ class Workspace extends React.Component {
       { channel: 'ChatChannel', channelSlug: channel.slug }
     ));
 
-    const pageClassNames = classNames('Workspace', {
-      'Workspace--loading': isLoading,
-      'Workspace--modal-open': modal.modalType,
-    });
+    const pageClassNames = classNames('Workspace', { 'Workspace--modal-open': modal.modalType });
 
     const childRoutes = defaultChat && !isLoading && (
       <Switch>
@@ -89,8 +100,14 @@ class Workspace extends React.Component {
 
     return (
       <div className={pageClassNames}>
-        <ActionCable channel={decamelizeKeys({ channel: 'WorkspaceChannel', workspaceSlug })} onReceived={onReceived} />
-        <ActionCable channel={decamelizeKeys({ channel: 'AppearanceChannel', workspaceSlug })} onReceived={onReceived} />
+        <ActionCable
+          channel={decamelizeKeys({ channel: 'WorkspaceChannel', workspaceSlug })}
+          onReceived={onReceived}
+        />
+        <ActionCable
+          channel={decamelizeKeys({ channel: 'AppearanceChannel', workspaceSlug })}
+          onReceived={onReceived}
+        />
         {cableChannels.map(cable => (
           <ActionCable
             key={cable.channelSlug}

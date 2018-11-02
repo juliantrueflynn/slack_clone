@@ -23,3 +23,38 @@
   flex-grow: 1;
   min-width: 1px;
 }
+
+.Workspace--loading .Workspace__col {
+  align-items: center;
+  justify-content: center;
+}
+
+.Workspace__quote {
+  margin: 0 0 40px;
+  text-align: center;
+  font-size: 1.1em;
+  max-width: 520px;
+}
+
+.Workspace__brand-icon {
+  margin-bottom: 10px;
+}
+
+.Workspace__square-icon {
+  color: #00CEC9;
+}
+
+.Workspace__quote p {
+  margin: 0 0 10px;
+  font-weight: bold;
+  font-size: 1.7em;
+}
+
+.Workspace__quote footer {
+  display: block;
+  color: #636E72;
+}
+
+.Workspace--loading .fa-spinner {
+  color: #74B9FF;
+}
