@@ -26,8 +26,8 @@ import {
   faSearch,
   faEllipsisH,
   faThumbtack,
-  faBook,
   faSpinner,
+  faQuoteLeft,
   faStar as fasStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { ActionCable } from 'react-actioncable-provider';
@@ -52,7 +52,7 @@ library.add(
   fasStar,
   faSmile,
   faSearch,
-  faBook,
+  faQuoteLeft,
   faComment,
   faInfoCircle,
   faCircle,

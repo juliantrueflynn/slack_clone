@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import LeftSidebarContainer from './LeftSidebarContainer';
 import ReactionModal from './ReactionModal';
+import sampleWisdomQuote from '../util/wisdomQuotesUtil';
 import './Workspace.css';
 
 class Workspace extends React.Component {
@@ -62,20 +63,20 @@ class Workspace extends React.Component {
       onReceived,
     } = this.props;
 
+    const { quoteText, quoteBy } = sampleWisdomQuote;
+
     if (isLoading) {
       return (
         <div className="Workspace Workspace--loading">
           <div className="LeftSidebar" />
           <div className="Workspace__col">
-            <div className="fa-5x">
-              <span className="Workspace__brand-icon fa-layers fa-fw">
-                <FontAwesomeIcon icon="square" className="Workspace__square-icon" />
-                <FontAwesomeIcon icon="book" inverse transform="shrink-7" />
-              </span>
-            </div>
+            <span className="Workspace__brand-icon fa-layers fa-fw fa-5x">
+              <FontAwesomeIcon icon="square" className="Workspace__square-icon" />
+              <FontAwesomeIcon icon="quote-left" inverse transform="shrink-7" />
+            </span>
             <blockquote className="Workspace__quote">
-              <p>The best way to predict the future is to invent it.</p>
-              <footer>— Alan Kay</footer>
+              <p>{quoteText}</p>
+              <footer>{`— ${quoteBy}`}</footer>
             </blockquote>
             <FontAwesomeIcon icon="spinner" spin pulse size="3x" />
           </div>
