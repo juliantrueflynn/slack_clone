@@ -12,7 +12,6 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   drawerType: state.ui.drawer.drawerType,
   messages: selectMessagesWithEntities(state),
   users: state.entities.members,
-  currentUser: state.entities.members[state.session.currentUser.slug],
   isSearchLoading: state.isLoading.search,
   searchQuery: state.ui.searchQuery,
 });

@@ -6,6 +6,7 @@ import ChannelBlurb from './ChannelBlurb';
 import Scrollable from './Scrollable';
 import MessagesList from './MessagesList';
 import MessageFormContainer from './MessageFormContainer';
+import ChannelEditorModal from './ChannelEditorModal';
 
 class Channel extends React.Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class Channel extends React.Component {
       messages,
       fetchHistoryRequest,
       createChannelSubRequest,
-      currentUserSlug,
+      currentUser,
       isLoading,
     } = this.props;
 
@@ -56,7 +57,7 @@ class Channel extends React.Component {
             isAutoScroll
             shouldMountAtBottom
           >
-            <ChannelBlurb channel={channel} currentUserSlug={currentUserSlug} />
+            <ChannelBlurb channel={channel} currentUserSlug={currentUser.slug} />
             <MessagesList role="listitem" messages={messages} shouldShowPins isDm={channel.hasDm} />
           </Scrollable>
         )}
@@ -67,6 +68,7 @@ class Channel extends React.Component {
           channel={channel}
           createChannelSubRequest={createChannelSubRequest}
         />
+        <ChannelEditorModal currentUser={currentUser} channel={channel} />
       </div>
     );
   }

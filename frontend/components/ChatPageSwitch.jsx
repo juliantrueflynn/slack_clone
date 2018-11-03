@@ -79,6 +79,8 @@ class ChatPageSwitch extends React.Component {
       switchChannel,
     } = this.props;
 
+    const user = users[currentUser.slug];
+
     let chatType;
     if (channel) {
       chatType = 'channel';
@@ -116,7 +118,7 @@ class ChatPageSwitch extends React.Component {
             users={users}
             isLoading={isLoading}
             channels={channels}
-            currentUser={currentUser}
+            currentUser={user}
           />
         )}
         {channel && (
@@ -124,7 +126,7 @@ class ChatPageSwitch extends React.Component {
             messages={messages}
             isLoading={isLoading}
             channel={channel}
-            currentUserSlug={currentUser.slug}
+            currentUser={user}
             fetchHistoryRequest={fetchHistoryRequest}
             switchChannel={switchChannel}
             createChannelSubRequest={createChannelSubRequest}

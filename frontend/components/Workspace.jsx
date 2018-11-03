@@ -5,9 +5,10 @@ import { decamelizeKeys } from 'humps';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { RouteWithSubRoutes } from '../util/routeUtil';
+import sampleWisdomQuote from '../util/wisdomQuotesUtil';
 import LeftSidebarContainer from './LeftSidebarContainer';
 import ReactionModal from './ReactionModal';
-import sampleWisdomQuote from '../util/wisdomQuotesUtil';
+import ProfileModal from './ProfileModal';
 import './Workspace.css';
 
 class Workspace extends React.Component {
@@ -60,6 +61,8 @@ class Workspace extends React.Component {
       createReactionRequest,
       channels,
       currChatSlug,
+      users,
+      currentUser,
       onReceived,
     } = this.props;
 
@@ -84,6 +87,7 @@ class Workspace extends React.Component {
       );
     }
 
+    const user = users[currentUser.slug];
     const defaultChat = this.getDefaultChat();
     const cableChannels = Object.values(channels).filter(ch => (
       ch.isSub || ch.slug === currChatSlug
@@ -130,6 +134,7 @@ class Workspace extends React.Component {
             {childRoutes}
           </div>
         </div>
+        {user && <ProfileModal {...user} />}
       </div>
     );
   }

@@ -2,11 +2,10 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from './Menu';
 import ChannelHeaderSearch from './ChannelHeaderSearch';
-import ChannelActionMenus from './ChannelActionMenus';
-import ProfileModal from './ProfileModal';
 import SearchModal from './SearchModal';
-import ChannelEditorModal from './ChannelEditorModal';
 import StatusIcon from './StatusIcon';
+import Dropdown from './Dropdown';
+import Button from './Button';
 import './ChannelHeader.css';
 
 class ChannelHeader extends React.Component {
@@ -60,7 +59,6 @@ class ChannelHeader extends React.Component {
 
   render() {
     const {
-      currentUser,
       messages,
       channels,
       users,
@@ -77,8 +75,9 @@ class ChannelHeader extends React.Component {
     } = this.props;
 
     const channel = this.getChannel();
+    const title = this.getTitle();
     const searchMessages = messages.filter(msg => msg.isInSearch).sort((a, b) => b.id - a.id);
-    const modalOpenEditChannel = () => modalOpen('MODAL_EDIT_CHANNEL');
+    const isDetailsOpen = drawerType === 'details';
 
     const userMenuItems = [
       {
@@ -94,7 +93,17 @@ class ChannelHeader extends React.Component {
       },
     ];
 
+    const ddItems = [
+      {
+        label: 'View channel details',
+        link: `${url}/details`,
+        hasNoDrawer: true,
+      }
+    ];
+
+    let editMenuItems = [];
     let metaItems = [];
+
     if (chatPath === 'unreads') {
       const unreadsLen = Object.values(channels).reduce((acc, curr) => {
         let total = acc;
@@ -102,16 +111,14 @@ class ChannelHeader extends React.Component {
         return total;
       }, 0);
       const label = unreadsLen ? `${unreadsLen} updated convos` : 'No new replies';
-      metaItems = [{ key: 'unreads', label }];
-    }
 
-    if (chatPath === 'threads') {
+      metaItems = [{ key: 'unreads', label }];
+    } else if (chatPath === 'threads') {
       const unreadsLen = messages.filter(convo => convo.hasUnreads).length;
       const label = unreadsLen ? `${unreadsLen} updated convos` : 'No new replies';
-      metaItems = [{ key: 'unreads', label }];
-    }
 
-    if (channel && channel.hasDm) {
+      metaItems = [{ key: 'unreads', label }];
+    } else if (channel && channel.hasDm) {
       const user = users[channel.dmUserSlug];
       const userStatus = user && user.status;
       const email = user && user.email;
@@ -120,9 +127,15 @@ class ChannelHeader extends React.Component {
         { key: 'status', icon: <StatusIcon member={user} />, label: userStatus },
         { key: 'email', label: email },
       ];
-    }
 
-    if (channel && !channel.hasDm) {
+      editMenuItems = ddItems.concat([
+        {
+          label: `View ${title}’s profile`,
+          link: `${url}/team/${channel.dmUserSlug}`,
+          hasNoDrawer: true,
+        }
+      ]);
+    } else if (channel && !channel.hasDm) {
       const subsLen = channel.members.length;
       const hasTopic = !!channel.topic;
 
@@ -136,30 +149,39 @@ class ChannelHeader extends React.Component {
         },
         {
           key: 'topic',
-          onClick: modalOpen,
+          onClick: () => modalOpen('MODAL_EDIT_CHANNEL'),
           icon: hasTopic || <FontAwesomeIcon icon={['far', 'edit']} size="sm" />,
           label: channel.topic || 'Add topic',
         }
       ];
+
+      editMenuItems = ddItems.concat([
+        { label: 'Edit channel', onClick: () => modalOpen('MODAL_EDIT_CHANNEL') },
+        { label: `Leave ${title}`, onClick: () => destroyChannelSubRequest(channel.subId) },
+      ]);
     }
 
     return (
       <header className="ChannelHeader">
         <div className="ChannelHeader__info">
-          <h1 className="ChannelHeader__title">{this.getTitle()}</h1>
+          <h1 className="ChannelHeader__title">{title}</h1>
           <Menu menuFor="header-meta" items={metaItems} isRow unStyled />
         </div>
         <nav className="ChannelHeader__navigate">
           {channel && (
-            <ChannelActionMenus
-              channel={channel}
-              chatTitle={this.getTitle()}
-              drawerType={drawerType}
-              url={url}
-              modalOpen={modalOpenEditChannel}
-              destroyChannelSub={destroyChannelSubRequest}
-              linkToggle={this.handleLinkToggle}
-            />
+            <Button
+              buttonFor="channel-details"
+              onClick={() => this.handleLinkToggle('details')}
+              isActive={isDetailsOpen}
+              unStyled
+            >
+              <FontAwesomeIcon icon="info-circle" size="lg" />
+            </Button>
+          )}
+          {channel && (
+            <Dropdown menuFor="channel-edit" items={editMenuItems} unStyled>
+              <FontAwesomeIcon icon="cog" size="lg" />
+            </Dropdown>
           )}
           <ChannelHeaderSearch
             query={searchQuery}
@@ -168,7 +190,6 @@ class ChannelHeader extends React.Component {
           />
           <Menu menuFor="header-user" isRow items={userMenuItems} />
         </nav>
-        <ProfileModal {...currentUser} />
         <SearchModal
           searchQuery={searchQuery}
           messages={searchMessages}
@@ -177,7 +198,6 @@ class ChannelHeader extends React.Component {
           destroySearch={destroySearch}
           isSearchLoading={isSearchLoading}
         />
-        <ChannelEditorModal currentUser={currentUser} channel={channel} />
       </header>
     );
   }
