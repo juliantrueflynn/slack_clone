@@ -7,7 +7,7 @@
   border: 0;
 }
 
-.MenuItem__content {
+.Menu__styled .MenuItem__content {
   display: block;
   font-size: 15px;
   line-height: 18px;

@@ -26,14 +26,13 @@ class MenuItem extends React.Component {
     const {
       className,
       icon,
+      keyId,
       label,
       altClassName,
       modifierClassName,
       onClick,
       toggleMenu,
       isItemActive,
-      match,
-      history,
       ...props
     } = this.props;
 
@@ -51,6 +50,7 @@ class MenuItem extends React.Component {
       [`MenuItem--${itemType}`]: itemType,
       [`MenuItem__${altClassName}`]: altClassName,
       [`MenuItem--${modifierClassName}`]: modifierClassName,
+      [`MenuItem__${keyId}`]: keyId,
     });
 
     const contentClassNames = classNames('MenuItem__content', {

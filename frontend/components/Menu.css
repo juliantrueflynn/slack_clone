@@ -4,10 +4,10 @@
   align-items: center;
 }
 
-.Menu--row > .MenuItem {
+.Menu--row:not(.Menu__unstyled) > .MenuItem {
   margin-right: 20px;
 }
 
-.Menu--row > .MenuItem:last-child {
+.Menu--row:not(.Menu__unstyled) > .MenuItem:last-child {
   margin-right: 0;
 }

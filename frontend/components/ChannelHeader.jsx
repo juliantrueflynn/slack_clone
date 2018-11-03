@@ -2,11 +2,11 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from './Menu';
 import ChannelHeaderSearch from './ChannelHeaderSearch';
-import ChannelHeaderMeta from './ChannelHeaderMeta';
 import ChannelActionMenus from './ChannelActionMenus';
 import ProfileModal from './ProfileModal';
 import SearchModal from './SearchModal';
 import ChannelEditorModal from './ChannelEditorModal';
+import StatusIcon from './StatusIcon';
 import './ChannelHeader.css';
 
 class ChannelHeader extends React.Component {
@@ -94,19 +94,60 @@ class ChannelHeader extends React.Component {
       },
     ];
 
+    let metaItems = [];
+    if (chatPath === 'unreads') {
+      const unreadsLen = Object.values(channels).reduce((acc, curr) => {
+        let total = acc;
+        total += curr.unreadsLength;
+        return total;
+      }, 0);
+      const label = unreadsLen ? `${unreadsLen} updated convos` : 'No new replies';
+      metaItems = [{ key: 'unreads', label }];
+    }
+
+    if (chatPath === 'threads') {
+      const unreadsLen = messages.filter(convo => convo.hasUnreads).length;
+      const label = unreadsLen ? `${unreadsLen} updated convos` : 'No new replies';
+      metaItems = [{ key: 'unreads', label }];
+    }
+
+    if (channel && channel.hasDm) {
+      const user = users[channel.dmUserSlug];
+      const userStatus = user && user.status;
+      const email = user && user.email;
+
+      metaItems = [
+        { key: 'status', icon: <StatusIcon member={user} />, label: userStatus },
+        { key: 'email', label: email },
+      ];
+    }
+
+    if (channel && !channel.hasDm) {
+      const subsLen = channel.members.length;
+      const hasTopic = !!channel.topic;
+
+      metaItems = [
+        {
+          key: 'details',
+          icon: <FontAwesomeIcon icon={['far', 'user']} size="sm" />,
+          link: `${url}/details`,
+          onClick: () => accordionOpen(),
+          label: subsLen,
+        },
+        {
+          key: 'topic',
+          onClick: modalOpen,
+          icon: hasTopic || <FontAwesomeIcon icon={['far', 'edit']} size="sm" />,
+          label: channel.topic || 'Add topic',
+        }
+      ];
+    }
+
     return (
       <header className="ChannelHeader">
         <div className="ChannelHeader__info">
           <h1 className="ChannelHeader__title">{this.getTitle()}</h1>
-          <ChannelHeaderMeta
-            channel={channel}
-            accordionOpen={accordionOpen}
-            modalOpen={modalOpenEditChannel}
-            users={users}
-            messages={messages}
-            channelsMap={channels}
-            chatPath={chatPath}
-          />
+          <Menu menuFor="header-meta" items={metaItems} isRow unStyled />
         </div>
         <nav className="ChannelHeader__navigate">
           {channel && (

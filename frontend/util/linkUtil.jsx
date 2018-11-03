@@ -17,6 +17,8 @@ const LinkWithDrawer = ({
   drawerSlug,
   staticContext,
   dispatch,
+  match,
+  history,
   ...props
 }) => {
   let linkTo = to;

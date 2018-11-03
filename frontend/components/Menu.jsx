@@ -30,22 +30,29 @@ class Menu extends React.Component {
       shouldPos,
       toggleMenu,
       handleStyleFromHeight,
+      unStyled,
       ...props
     } = this.props;
 
     const menuClassNames = classNames('Menu', {
       [`Menu--${menuFor}`]: menuFor,
       'Menu--row': isRow,
+      Menu__styled: !unStyled,
+      Menu__unstyled: unStyled,
     });
-
-    const itemKey = (item, link) => item.key || item.label + (link || '');
 
     return (
       <ul role="menu" ref={this.menu} className={menuClassNames} {...props}>
-        {items && items.map(({ link, className, ...item }) => (
+        {items && items.map(({
+          link,
+          className,
+          key: keyId,
+          ...item
+        }) => (
           <MenuItem
-            key={itemKey(item, link)}
+            key={keyId || item.label + (link || '')}
             role="menuitem"
+            keyId={keyId}
             to={link}
             className="MenuItem"
             toggleMenu={toggleMenu}
