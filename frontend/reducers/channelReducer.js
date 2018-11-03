@@ -306,7 +306,13 @@ const channelReducer = (state = {}, action) => {
       const { unreads } = action;
 
       nextState = Object.assign({}, state);
+      Object.values(nextState).forEach((channel) => {
+        nextState[channel.slug].unreadsLength = 0;
+      });
+
       unreads.forEach(({ channelSlug, slug }) => {
+        nextState[channelSlug].unreadsLength += 1;
+
         if (nextState[channelSlug].messages.includes(slug)) {
           return;
         }
@@ -320,6 +326,7 @@ const channelReducer = (state = {}, action) => {
       const { channelSlug, lastRead } = action;
       nextState = Object.assign({}, state);
       nextState[channelSlug].hasUnreads = false;
+      nextState[channelSlug].unreadsLength = 0;
       nextState[channelSlug].lastRead = lastRead;
       return nextState;
     }

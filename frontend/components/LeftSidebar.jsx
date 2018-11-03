@@ -10,7 +10,7 @@ import ChatsModal from './ChatsModal';
 import './LeftSidebar.css';
 
 const LeftSidebar = ({
-  hasUnreadThreads,
+  hasUnreadConvos,
   channels,
   currentUser,
   members,
@@ -62,7 +62,7 @@ const LeftSidebar = ({
       label: 'All Threads',
       onClick: () => handleHistoryPush('threads'),
       isItemActive: currChatSlug === 'threads',
-      modifierClassName: hasUnreadThreads ? 'unread' : null,
+      modifierClassName: hasUnreadConvos ? 'unread' : null,
     },
   ];
 

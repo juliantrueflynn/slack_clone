@@ -15,8 +15,13 @@ class ChannelHeader extends React.Component {
     this.handleLinkToggle = this.handleLinkToggle.bind(this);
   }
 
+  getChannel() {
+    const { channels, chatPath } = this.props;
+    return channels[chatPath];
+  }
+
   getTitle() {
-    const { chatPath, channel } = this.props;
+    const { chatPath } = this.props;
 
     if (chatPath === 'unreads') {
       return 'All Unreads';
@@ -26,8 +31,9 @@ class ChannelHeader extends React.Component {
       return 'All Threads';
     }
 
-    if (channel) {
-      return channel.hasDm ? channel.title : `#${channel.title}`;
+    if (this.getChannel()) {
+      const { hasDm, title } = this.getChannel();
+      return hasDm ? title : `#${title}`;
     }
 
     return null;
@@ -55,20 +61,22 @@ class ChannelHeader extends React.Component {
   render() {
     const {
       currentUser,
-      channel,
+      messages,
+      channels,
+      users,
       accordionOpen,
       drawerType,
       modalOpen,
       fetchSearchRequest,
       searchQuery,
       destroySearch,
-      messages,
-      users,
       isSearchLoading,
       destroyChannelSubRequest,
+      chatPath,
       match: { url },
     } = this.props;
 
+    const channel = this.getChannel();
     const searchMessages = messages.filter(msg => msg.isInSearch).sort((a, b) => b.id - a.id);
     const modalOpenEditChannel = () => modalOpen('MODAL_EDIT_CHANNEL');
 
@@ -95,6 +103,9 @@ class ChannelHeader extends React.Component {
             accordionOpen={accordionOpen}
             modalOpen={modalOpenEditChannel}
             users={users}
+            messages={messages}
+            channelsMap={channels}
+            chatPath={chatPath}
           />
         </div>
         <nav className="ChannelHeader__navigate">

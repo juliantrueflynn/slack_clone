@@ -6,14 +6,54 @@ import Button from './Button';
 import './ChannelHeaderMeta.css';
 
 const ChannelHeaderMeta = ({
+  chatPath,
   channel,
+  messages,
+  channelsMap,
+  users,
   modalOpen,
   accordionOpen,
-  users,
   match: { url },
 }) => {
-  if (!channel) {
-    return null;
+  if (chatPath === 'unreads') {
+    const channels = Object.values(channelsMap);
+    const unreadsLen = channels.reduce((acc, curr) => {
+      let total = acc;
+      total += curr.unreadsLength;
+      return total;
+    }, 0);
+    let unreadsLenText;
+    if (unreadsLen) {
+      unreadsLenText = `${unreadsLen} new messages`;
+    } else {
+      unreadsLenText = 'No new messages';
+    }
+
+    return (
+      <div className="ChannelHeaderMeta">
+        <div className="ChannelHeaderMeta__item">
+          {unreadsLenText}
+        </div>
+      </div>
+    );
+  }
+
+  if (chatPath === 'threads') {
+    const unreadConvosLen = messages.filter(convo => convo.hasUnreads).length;
+    let unreadsLenText;
+    if (unreadConvosLen) {
+      unreadsLenText = `${unreadConvosLen} updated convos`;
+    } else {
+      unreadsLenText = 'No new replies';
+    }
+
+    return (
+      <div className="ChannelHeaderMeta">
+        <div className="ChannelHeaderMeta__item">
+          {unreadsLenText}
+        </div>
+      </div>
+    );
   }
 
   if (channel.hasDm) {
