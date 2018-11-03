@@ -56,7 +56,7 @@ class Workspace extends React.Component {
       entitySlug: workspaceSlug,
       isLoading,
       routes,
-      modal,
+      modal: { modalType, modalProps },
       modalClose,
       createReactionRequest,
       channels,
@@ -95,13 +95,7 @@ class Workspace extends React.Component {
       { channel: 'ChatChannel', channelSlug: channel.slug }
     ));
 
-    const pageClassNames = classNames('Workspace', { 'Workspace--modal-open': modal.modalType });
-
-    const childRoutes = defaultChat && !isLoading && (
-      <Switch>
-        {routes.map(route => <RouteWithSubRoutes key={route.path} {...route} />)}
-      </Switch>
-    );
+    const pageClassNames = classNames('Workspace', { 'Workspace--modal-open': modalType });
 
     return (
       <div className={pageClassNames}>
@@ -120,18 +114,21 @@ class Workspace extends React.Component {
             onReceived={onReceived}
           />
         ))}
-
         {defaultChat && (<LeftSidebarContainer />)}
         <div className="Workspace__col">
           <div className="Workspace__chat">
-            {modal.modalType === 'MODAL_REACTION' && (
+            {modalType === 'MODAL_REACTION' && (
               <ReactionModal
-                modalProps={modal.modalProps}
+                modalProps={modalProps}
                 modalClose={modalClose}
                 createReactionRequest={createReactionRequest}
               />
             )}
-            {childRoutes}
+            {defaultChat && (
+              <Switch>
+                {routes.map(route => <RouteWithSubRoutes key={route.path} {...route} />)}
+              </Switch>
+            )}
           </div>
         </div>
         {user && <ProfileModal {...user} />}

@@ -27,12 +27,15 @@ class ChatPageSwitch extends React.Component {
       drawerType,
       history,
       drawerClose,
+      entitySlug,
       entity: channel,
     } = this.props;
 
     if (channel && drawerType && isExact && !prevProps.isExact) {
-      drawerClose();
-      return;
+      if (entitySlug === prevProps.entitySlug) {
+        drawerClose();
+        return;
+      }
     }
 
     if (this.selectRedirectUrl()) {
