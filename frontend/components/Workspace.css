@@ -30,15 +30,16 @@
 }
 
 .Workspace__quote {
-  margin: 0 0 40px;
+  margin: 0 0 45px;
   text-align: center;
-  font-size: 1.1em;
+  font-size: 1.2em;
   max-width: 520px;
 }
 
 .Workspace__brand-icon {
   margin-bottom: 15px;
   display: block;
+  font-size: 3.3em;
 }
 
 .Workspace__square-icon {
@@ -46,9 +47,10 @@
 }
 
 .Workspace__quote p {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   font-weight: bold;
-  font-size: 1.7em;
+  font-size: 1.5em;
+  line-height: 1.22em;
 }
 
 .Workspace__quote footer {

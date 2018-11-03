@@ -70,7 +70,7 @@ class Workspace extends React.Component {
         <div className="Workspace Workspace--loading">
           <div className="LeftSidebar" />
           <div className="Workspace__col">
-            <span className="Workspace__brand-icon fa-layers fa-fw fa-5x">
+            <span className="Workspace__brand-icon fa-layers fa-fw">
               <FontAwesomeIcon icon="square" className="Workspace__square-icon" />
               <FontAwesomeIcon icon="quote-left" inverse transform="shrink-7" />
             </span>
