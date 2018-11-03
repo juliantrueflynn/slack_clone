@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import StatusIcon from './StatusIcon';
@@ -15,84 +15,98 @@ const ChannelHeaderMeta = ({
   accordionOpen,
   match: { url },
 }) => {
+  let metaItems = [];
+  let groupType = chatPath;
+
   if (chatPath === 'unreads') {
-    const channels = Object.values(channelsMap);
-    const unreadsLen = channels.reduce((acc, curr) => {
+    const unreadsLen = Object.values(channelsMap).reduce((acc, curr) => {
       let total = acc;
       total += curr.unreadsLength;
       return total;
     }, 0);
-    let unreadsLenText;
+
+    let content;
     if (unreadsLen) {
-      unreadsLenText = `${unreadsLen} new messages`;
+      content = `${unreadsLen} new messages`;
     } else {
-      unreadsLenText = 'No new messages';
+      content = 'No new messages';
     }
 
-    return (
-      <div className="ChannelHeaderMeta">
-        <div className="ChannelHeaderMeta__item">
-          {unreadsLenText}
-        </div>
-      </div>
-    );
+    metaItems = [
+      { name: 'unreads', content },
+    ];
   }
 
   if (chatPath === 'threads') {
     const unreadConvosLen = messages.filter(convo => convo.hasUnreads).length;
-    let unreadsLenText;
+
+    let content;
     if (unreadConvosLen) {
-      unreadsLenText = `${unreadConvosLen} updated convos`;
+      content = `${unreadConvosLen} updated convos`;
     } else {
-      unreadsLenText = 'No new replies';
+      content = 'No new replies';
     }
 
-    return (
-      <div className="ChannelHeaderMeta">
-        <div className="ChannelHeaderMeta__item">
-          {unreadsLenText}
-        </div>
-      </div>
-    );
+    metaItems = [
+      { name: 'unreads', content },
+    ];
   }
 
-  if (channel.hasDm) {
+  if (channel && channel.hasDm) {
+    groupType = 'dm';
     const user = users[channel.dmUserSlug];
     const userStatus = user && user.status;
     const email = user && user.email;
 
-    return (
-      <div className="ChannelHeaderMeta">
-        <div className="ChannelHeaderMeta__item">
-          <StatusIcon member={user} />
-          {userStatus}
-        </div>
-        <div className="ChannelHeaderMeta__item">
-          {email}
-        </div>
-      </div>
-    );
+    metaItems = [
+      {
+        name: 'status',
+        content: (
+          <Fragment>
+            <StatusIcon member={user} />
+            {userStatus}
+          </Fragment>
+        )
+      },
+      { name: 'email', content: email },
+    ];
   }
 
-  const subsLen = channel && channel.members.length;
-  const hasTopic = !!(channel && channel.topic);
-  const openMembers = () => accordionOpen();
+  if (channel && !channel.hasDm) {
+    groupType = 'channel';
+    const subsLen = channel && channel.members.length;
+    const hasTopic = !!(channel && channel.topic);
+
+    metaItems = [
+      {
+        name: 'details',
+        content: (
+          <Link to={`${url}/details`} onClick={() => accordionOpen()}>
+            <FontAwesomeIcon icon={['far', 'user']} size="sm" />
+            {subsLen}
+          </Link>
+        )
+      },
+      {
+        name: 'topic',
+        content: (
+          <Button onClick={modalOpen} buttonFor="edit-topic" unStyled>
+            {channel.topic}
+            {hasTopic || <FontAwesomeIcon icon={['far', 'edit']} size="sm" />}
+            {hasTopic || 'Add topic'}
+          </Button>
+        )
+      }
+    ];
+  }
 
   return (
-    <div className="ChannelHeaderMeta">
-      <div className="ChannelHeaderMeta__item">
-        <Link to={`${url}/details`} onClick={openMembers}>
-          <FontAwesomeIcon icon={['far', 'user']} size="sm" />
-          {subsLen}
-        </Link>
-      </div>
-      <div className="ChannelHeaderMeta__item ChannelHeaderMeta__item-topic">
-        <Button onClick={modalOpen} buttonFor="edit-topic" unStyled>
-          {channel.topic}
-          {hasTopic || <FontAwesomeIcon icon={['far', 'edit']} size="sm" />}
-          {hasTopic || 'Add topic'}
-        </Button>
-      </div>
+    <div className={`ChannelHeaderMeta ${groupType}`}>
+      {metaItems.map(item => (
+        <div key={item.name} className={`ChannelHeaderMeta__item ${item.name}`}>
+          {item.content}
+        </div>
+      ))}
     </div>
   );
 };
