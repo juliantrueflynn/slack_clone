@@ -13,17 +13,24 @@
 
 .Modal__overlay--search .Modal__body,
 .Modal__overlay--search .Modal__inner-body,
-.SearchModal,
-.SearchModal__scroller,
-.SearchModal__body,
-.SearchModal__row {
+.SearchModal {
   height: 100%;
   width: 100%;
 }
 
 .SearchModal {
-  overflow-y: auto;
   padding-top: 50px;
+  overflow: hidden;
+  border-radius: 6px;
+  background-color: #F7FAFC;
+  position: relative;
+}
+
+.SearchModal .ScrollBar .ScrollBar__container {
+  position: relative;
+  display: flex;
+  flex: 1;
+  padding: 15px;
 }
 
 .SearchModal__searchbar {
@@ -40,35 +47,8 @@
   border-top-right-radius: 6px;
 }
 
-.Btn__modal-close {
+.SearchModal .Btn__modal-close {
   display: flex;
   color: #636E72;
   padding: 0 10px;
 }
-
-.SearchModal__scroller {
-  overflow-y: hidden;
-  overflow: hidden;
-  position: relative;
-  border-bottom-right-radius: 6px;
-}
-
-.SearchModal__body {
-  padding: 15px 30px;
-  background-color: #F7FAFC;
-  overflow-y: auto;
-  position: absolute;
-  overflow: auto;
-  border-bottom-left-radius: 6px;
-}
-
-.SearchModal--empty .SearchModal__body {
-  height: auto;
-}
-
-.SearchModal__row {
-  display: flex;
-  flex: 1;
-  margin: 0 -15px;
-}
-

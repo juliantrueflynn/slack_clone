@@ -37,16 +37,11 @@
   flex: 1;
 }
 
-.Drawer .Scrollable__body {
-  top: 0;
-  bottom: inherit;
-}
-
-.Drawer__convo .Scrollable .Message:first-child .Message__container {
+.Drawer__convo .ScrollBar .Message:first-child .Message__container {
   padding: 10px;
 }
 
-.Drawer__convo .Scrollable .Message:not(:first-child) .Message__container {
+.Drawer__convo .ScrollBar .Message:not(:first-child) .Message__container {
   padding: 6px 10px;
 }
 

@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBar from './SearchBar';
 import Button from './Button';
+import ScrollBar from './ScrollBar';
 import SearchModalResults from './SearchModalResults';
 import SearchModalAside from './SearchModalAside';
 import withModal from './withModal';
@@ -114,7 +115,7 @@ class SearchModal extends React.Component {
     });
 
     return (
-      <div className={searchClassNames}>
+      <div className={searchClassNames} ref={this.container}>
         <div className="SearchModal__searchbar">
           <SearchBar
             fetchSearchRequest={fetchSearchRequest}
@@ -127,24 +128,20 @@ class SearchModal extends React.Component {
             <FontAwesomeIcon icon="times" />
           </Button>
         </div>
-        <div className="SearchModal__scroller">
-          <div className="SearchModal__body">
-            <div className="SearchModal__row">
-              <SearchModalResults
-                results={results}
-                isLoading={isSearchLoading}
-                users={users}
-              />
-              <SearchModalAside
-                messages={messages}
-                users={users}
-                peopleFilter={peopleFilter}
-                channelFilter={channelFilter}
-                handleFilterToggle={this.handleFilterToggle}
-              />
-            </div>
-          </div>
-        </div>
+        <ScrollBar>
+          <SearchModalResults
+            results={results}
+            isLoading={isSearchLoading}
+            users={users}
+          />
+          <SearchModalAside
+            messages={messages}
+            users={users}
+            peopleFilter={peopleFilter}
+            channelFilter={channelFilter}
+            handleFilterToggle={this.handleFilterToggle}
+          />
+        </ScrollBar>
       </div>
     );
   }

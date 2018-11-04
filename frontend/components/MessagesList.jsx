@@ -48,22 +48,18 @@ class MessagesList extends React.Component {
       return null;
     }
 
-    return (
-      <div className="MessagesList">
-        {messages.map(message => (
-          <MessageContainer
-            key={message.id}
-            message={message}
-            hoverMessageId={hoverMessageId}
-            editMessageId={editMessageId}
-            handleHover={this.handleHover}
-            handleEditToggle={this.handleEditToggle}
-            ddToggle={this.handleDdToggle}
-            {...props}
-          />
-        ))}
-      </div>
-    );
+    return messages.map(message => (
+      <MessageContainer
+        key={message.id}
+        message={message}
+        hoverMessageId={hoverMessageId}
+        editMessageId={editMessageId}
+        handleHover={this.handleHover}
+        handleEditToggle={this.handleEditToggle}
+        ddToggle={this.handleDdToggle}
+        {...props}
+      />
+    ));
   }
 }
 

@@ -6,13 +6,17 @@ import './Scrollable.css';
 class Scrollable extends React.Component {
   constructor(props) {
     super(props);
-    this.messagesList = React.createRef();
+    this.list = React.createRef();
+    this.scroller = React.createRef();
     this.handleScroll = this.handleScroll.bind(this);
+    this.handleMouseDown = this.handleMouseDown.bind(this);
     this.state = {
       isAtTop: false,
       isAtBottom: false,
       isLoadingHistory: false,
       hasHistory: false,
+      isDragging: false,
+      lastClientPosition: -1,
     };
   }
 
@@ -26,7 +30,7 @@ class Scrollable extends React.Component {
     } = this.props;
 
     if (channel && (channel.scrollLoc || channel.scrollLoc === 0)) {
-      const listNode = this.messagesList.current;
+      const listNode = this.list.current;
       listNode.scrollTop = channel.scrollLoc;
       this.setState({ hasHistory: false });
     } else if (shouldMountAtBottom && isAutoScroll) {
@@ -111,7 +115,7 @@ class Scrollable extends React.Component {
 
   handleScroll() {
     const { updateScrollLoc, isAutoScroll, fetchHistoryRequest } = this.props;
-    const listNode = this.messagesList.current;
+    const listNode = this.list.current;
     const { scrollHeight, clientHeight, scrollTop } = listNode;
 
     if (updateScrollLoc) {
@@ -129,8 +133,15 @@ class Scrollable extends React.Component {
     }
   }
 
+  handleMouseDown(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    let lastClientPosition = e.clientY;
+    this.setState({ isDragging: true, lastClientPosition });
+  }
+
   scrollToBottom() {
-    const listNode = this.messagesList.current;
+    const listNode = this.list.current;
     const { scrollHeight, clientHeight } = listNode;
     const maxScrollTop = scrollHeight - clientHeight;
     listNode.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
@@ -139,10 +150,19 @@ class Scrollable extends React.Component {
   render() {
     const { children } = this.props;
 
+    const list = this.list.current;
+    let style = {};
+    if (list) {
+      style = { transform: `translateY(${list.scrollTop}px)` };
+    }
+
     return (
       <div className="Scrollable">
-        <div ref={this.messagesList} className="Scrollable__body" onScroll={this.handleScroll}>
+        <div ref={this.list} role="presentation" className="Scrollable__body" onScroll={this.handleScroll}>
           {children}
+        </div>
+        <div className="scrollbar-container">
+          <div className="scrollbar" ref={this.scroller} onMouseDown={this.handleMouseDown} style={style} />
         </div>
       </div>
     );

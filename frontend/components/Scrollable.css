@@ -1,18 +1,25 @@
-.Scrollable {
-  overflow-y: hidden;
-  position: relative;
-  height: 100%;
-}
-
 body.popover-open .Scrollable__body {
   overflow: hidden;
 }
 
+.Scrollable {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
 .Scrollable__body {
-  overflow-y: hidden;
   width: 100%;
   height: 100%;
   position: absolute;
   bottom: 0;
-  overflow: auto;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  transform: translateZ(0);
+  outline: none;
+}
+
+.Scrollable_body:focus {
+  outline: 0;
 }

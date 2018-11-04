@@ -1,15 +1,13 @@
 import React from 'react';
 import classNames from 'classnames';
+import ScrollBar from './ScrollBar';
 import Button from './Button';
 import './Drawer.css';
-import Scrollable from './Scrollable';
 
 const Drawer = ({
   drawerType,
   closeDrawer,
   channel,
-  messages,
-  isLoading,
   children,
 }) => {
   const drawerClassNames = classNames('Drawer', {
@@ -42,9 +40,6 @@ const Drawer = ({
     }
   };
 
-  const isConvoDrawer = drawerType === 'convo';
-  const convoMessages = isConvoDrawer && !isLoading ? messages : null;
-
   return (
     <div className={drawerClassNames}>
       <header className="Drawer__header">
@@ -56,9 +51,9 @@ const Drawer = ({
         </Button>
       </header>
       <div className="Drawer__body">
-        <Scrollable messages={convoMessages} isAutoScroll={isConvoDrawer}>
+        <ScrollBar>
           {children}
-        </Scrollable>
+        </ScrollBar>
       </div>
     </div>
   );

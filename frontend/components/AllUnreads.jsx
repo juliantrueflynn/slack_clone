@@ -1,6 +1,6 @@
 import React from 'react';
+import ScrollBar from './ScrollBar';
 import AllUnreadsItem from './AllUnreadsItem';
-import Scrollable from './Scrollable';
 
 const AllUnreads = ({
   channels,
@@ -19,7 +19,7 @@ const AllUnreads = ({
 
   if (!channels.length) {
     return (
-      <div className="AllUnreads AllUnreads--empty">
+      <div className="ChatPage__empty">
         You are all caught up!
       </div>
     );
@@ -27,7 +27,7 @@ const AllUnreads = ({
 
   return (
     <div className="AllUnreads">
-      <Scrollable>
+      <ScrollBar>
         {channels.map(channel => (
           <AllUnreadsItem
             key={channel.id}
@@ -37,7 +37,7 @@ const AllUnreads = ({
             clearUnreads={clearUnreads}
           />
         ))}
-      </Scrollable>
+      </ScrollBar>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
+import ScrollBar from './ScrollBar';
 import AllThreadsItem from './AllThreadsItem';
-import Scrollable from './Scrollable';
 
 const AllThreads = ({
   messages,
@@ -19,26 +19,24 @@ const AllThreads = ({
 
   if (!messages.length) {
     return (
-      <div className="AllThreads AllThreads--empty">
+      <div className="ChatPage__empty">
         No threads
       </div>
     );
   }
 
   return (
-    <div className="AllThreads">
-      <Scrollable>
-        {messages.map(convo => (
-          <AllThreadsItem
-            key={convo.slug}
-            currentUserSlug={currentUser.slug}
-            channels={channels}
-            parentMessage={convo}
-            users={users}
-          />
-        ))}
-      </Scrollable>
-    </div>
+    <ScrollBar>
+      {messages.map(convo => (
+        <AllThreadsItem
+          key={convo.slug}
+          currentUserSlug={currentUser.slug}
+          channels={channels}
+          parentMessage={convo}
+          users={users}
+        />
+      ))}
+    </ScrollBar>
   );
 };
 
