@@ -12,43 +12,41 @@ const Drawer = ({
   isLoading,
   children,
 }) => {
-  const drawerClassNames = classNames('Drawer', {
-    [`Drawer__${drawerType}`]: drawerType,
-  });
-
+  const isConvo = drawerType === 'convo';
   const close = () => closeDrawer();
 
-  const title = () => {
-    switch (drawerType) {
-      case 'favorites':
-        return 'Starred items';
-      case 'convo':
-        return 'Thread';
-      case 'team':
-        return 'Workspace directory';
-      case 'details': {
-        if (!channel) {
-          return null;
-        }
-
-        if (channel.hasDm) {
-          return 'About this conversation';
-        }
-
-        return `About #${channel.title}`;
+  let title;
+  switch (drawerType) {
+    case 'favorites':
+      title = 'Starred items';
+      break;
+    case 'convo':
+      title = 'Thread';
+      break;
+    case 'team':
+      title = 'Workspace directory';
+      break;
+    case 'details': {
+      if (channel && !channel.hasDm) {
+        title = `About #${channel.title}`;
       }
-      default:
-        return null;
-    }
-  };
 
-  const isConvo = drawerType === 'convo';
+      if (channel && channel.hasDm) {
+        title = 'About this conversation';
+      }
+
+      break;
+    }
+    default: break;
+  }
+
+  const drawerClassNames = `Drawer Drawer__${drawerType}`;
 
   return (
     <div className={drawerClassNames}>
       <header className="Drawer__header">
         <div className="Drawer__headings">
-          {title()}
+          {title}
         </div>
         <Button unStyled buttonFor="close" onClick={close}>
           &#10006;

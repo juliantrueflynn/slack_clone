@@ -4,11 +4,11 @@ import withEntityWrapper from './withEntityWrapper';
 import { drawerClose, drawerOpen, modalOpen } from '../actions/uiActions';
 import { createChannel } from '../actions/channelActions';
 import { destroyPin } from '../actions/messageActions';
-import { selectDrawerMessagesByType, selectChannelWithEntitiesBySlug } from '../reducers/selectors';
+import { selectDrawerMessagesByParams, selectChannelWithEntitiesBySlug } from '../reducers/selectors';
 import DrawerSwitch from './DrawerSwitch';
 
 const mapStateToProps = (state, { match: { params } }) => ({
-  messages: selectDrawerMessagesByType(state),
+  messages: selectDrawerMessagesByParams(state, params),
   channel: selectChannelWithEntitiesBySlug(state),
   drawerType: params.drawerType,
   accordion: state.ui.accordion.details,
