@@ -66,7 +66,13 @@ class DrawerSwitch extends React.Component {
     }
 
     return (
-      <Drawer drawerType={drawerType} closeDrawer={this.handleClose} channel={channel}>
+      <Drawer
+        drawerType={drawerType}
+        closeDrawer={this.handleClose}
+        channel={channel}
+        messages={messages}
+        isLoading={isLoading}
+      >
         {drawerType === 'team' && (
           <UserDrawer
             userSlug={drawerSlug}
@@ -80,12 +86,7 @@ class DrawerSwitch extends React.Component {
           <FavoritesDrawer messages={messages} users={users} />
         )}
         {drawerType === 'convo' && (
-          <MessageThreadDrawer
-            messages={messages}
-            users={users}
-            isLoading={isLoading}
-            currentUser={currentUser}
-          />
+          <MessageThreadDrawer messages={messages} users={users} />
         )}
         {(drawerType === 'details' && channel) && (
           <ChannelDetailsDrawer

@@ -40,11 +40,15 @@ class Channel extends React.Component {
       return;
     }
 
-    const { clientHeight: formHeight } = this.container.current.children[1];
-    const { clientHeight: containerHeight } = this.container.current;
-    const height = containerHeight - formHeight;
+    if (this.container.current.children[1]) {
+      const { clientHeight: formHeight } = this.container.current.children[1];
+      const { clientHeight: containerHeight } = this.container.current;
+      const height = containerHeight - formHeight;
 
-    this.setState({ height });
+      this.setState({ height });
+    } else {
+      this.setState({ height: '100%' });
+    }
   }
 
   handleScrollLoc(scrollLoc) {
@@ -59,26 +63,34 @@ class Channel extends React.Component {
       createChannelSubRequest,
       currentUser,
       isLoading,
+      isLoadingHistory,
     } = this.props;
     const { height } = this.state;
 
     const placeholder = channel.hasDm ? `@${channel.title}` : `#${channel.title}`;
     const formPlaceholder = placeholder && `Message ${placeholder}`;
+    const style = { height };
 
     const channelClassNames = classNames('Channel', {
       'Channel--sub': channel.isSub,
       'Channel--unsub': !channel.isSub,
     });
 
-    const style = { height };
-
     return (
       <div className={channelClassNames} ref={this.container}>
         <div className="Channel__body" style={style}>
-          <ScrollBar>
-            <ChannelBlurb channel={channel} currentUserSlug={currentUser.slug} />
-            <MessagesList role="listitem" messages={messages} shouldShowPins isDm={channel.hasDm} />
-          </ScrollBar>
+          {isLoading || (
+            <ScrollBar
+              fetchHistory={fetchHistoryRequest}
+              isLoadingHistory={isLoadingHistory}
+              channel={channel}
+              messages={messages}
+              shouldAutoScroll
+            >
+              <ChannelBlurb channel={channel} currentUserSlug={currentUser.slug} />
+              <MessagesList role="listitem" messages={messages} shouldShowPins isDm={channel.hasDm} />
+            </ScrollBar>
+          )}
         </div>
         {channel.isSub && (
           <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} />

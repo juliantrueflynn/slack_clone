@@ -13,6 +13,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   drawerSlug: state.ui.drawer.drawerSlug,
   modal: state.ui.displayModal,
   isLoading: state.isLoading.channel,
+  isLoadingHistory: state.isLoading.history,
   channels: selectChatPageChannelsBySlug(state, chatPath),
   messages: selectChatPageMessagesBySlug(state, chatPath),
 });

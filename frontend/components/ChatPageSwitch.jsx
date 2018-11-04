@@ -76,6 +76,7 @@ class ChatPageSwitch extends React.Component {
       channels,
       currentUser,
       isLoading,
+      isLoadingHistory,
       clearUnreads,
       fetchHistoryRequest,
       createChannelSubRequest,
@@ -131,6 +132,7 @@ class ChatPageSwitch extends React.Component {
             channel={channel}
             currentUser={user}
             fetchHistoryRequest={fetchHistoryRequest}
+            isLoadingHistory={isLoadingHistory}
             switchChannel={switchChannel}
             createChannelSubRequest={createChannelSubRequest}
           />

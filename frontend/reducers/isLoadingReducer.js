@@ -9,6 +9,7 @@ import {
   USER,
   SIGN_OUT,
   CHANNEL,
+  HISTORY,
 } from '../actions/actionTypes';
 
 const _defaultState = {
@@ -16,6 +17,7 @@ const _defaultState = {
   workspace: false,
   channel: false,
   drawer: false,
+  history: false,
 };
 
 const isLoadingReducer = (state = _defaultState, action) => {
@@ -41,6 +43,9 @@ const isLoadingReducer = (state = _defaultState, action) => {
     case SEARCH.INDEX.REQUEST:
       nextState.search = true;
       return nextState;
+    case HISTORY.INDEX.REQUEST:
+      nextState.history = true;
+      return nextState;
     case WORKSPACE.SHOW.RECEIVE:
       nextState.workspace = false;
       return nextState;
@@ -57,6 +62,9 @@ const isLoadingReducer = (state = _defaultState, action) => {
       return nextState;
     case SEARCH.INDEX.RECEIVE:
       nextState.search = false;
+      return nextState;
+    case HISTORY.INDEX.RECEIVE:
+      nextState.history = false;
       return nextState;
     case SIGN_OUT.RECEIVE:
       return _defaultState;

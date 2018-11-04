@@ -8,6 +8,8 @@ const Drawer = ({
   drawerType,
   closeDrawer,
   channel,
+  messages,
+  isLoading,
   children,
 }) => {
   const drawerClassNames = classNames('Drawer', {
@@ -40,6 +42,8 @@ const Drawer = ({
     }
   };
 
+  const isConvo = drawerType === 'convo';
+
   return (
     <div className={drawerClassNames}>
       <header className="Drawer__header">
@@ -51,9 +55,16 @@ const Drawer = ({
         </Button>
       </header>
       <div className="Drawer__body">
-        <ScrollBar>
-          {children}
-        </ScrollBar>
+        {isConvo && !isLoading && (
+          <ScrollBar messages={messages} shouldAutoScroll>
+            {children}
+          </ScrollBar>
+        )}
+        {isConvo || (
+          <ScrollBar>
+            {children}
+          </ScrollBar>
+        )}
       </div>
     </div>
   );
