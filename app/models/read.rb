@@ -12,18 +12,26 @@ class Read < ApplicationRecord
   belongs_to :channel, foreign_key: :readable_id, optional: true
   belongs_to :message, foreign_key: :readable_id, optional: true
 
-  def self.messages_by_channel_id_and_user_id(channel_id, user_id)
-    joins(:message)
-      .where(readable_type: 'Message', user_id: user_id)
-      .where(messages: { channel_id: channel_id })
+  def self.by_type(readable_type)
+    where(readable_type: readable_type)
+  end
+
+  def self.channels_with_user(user_id)
+    where(user_id: user_id).by_type('Channel')
   end
 
   def self.channels_in_workspace_with_user(workspace_id, user_id)
-    where(workspace_id: workspace_id, user_id: user_id, readable_type: 'Channel')
+    channels_with_user(user_id).where(workspace_id: workspace_id)
+  end
+
+  def self.messages_by_channel_id_and_user_id(channel_id, user_id)
+    joins(:message)
+      .by_type('Message').where(user_id: user_id)
+      .where(messages: { channel_id: channel_id })
   end
 
   def self.by_message_id(message_id)
-    find_by(readable_id: message_id, readable_type: 'Message')
+    find_by(readable_id: message_id).by_type('Message')
   end
 
   def self.by_user_id(user_id)

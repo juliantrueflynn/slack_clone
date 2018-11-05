@@ -61,6 +61,13 @@ class Workspace < ApplicationRecord
       .includes(:channel, :author)
   end
 
+  def channels_last_read_by_user(user_id)
+    reads.channels_with_user(id)
+      .left_outer_joins(channel: :messages)
+      .where.not(messages: { channel_id: nil })
+      .distinct
+  end
+
   after_create :generate_workspace_subs, :generate_default_chats
   after_create_commit :broadcast_create
   after_update_commit :broadcast_update
