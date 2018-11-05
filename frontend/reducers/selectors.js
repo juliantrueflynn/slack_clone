@@ -153,8 +153,8 @@ const selectPinnedMessagesBySlug = (entities, chatSlug) => {
   return values(messages).filter(msg => msg.pinId && msg.channelSlug === chatSlug);
 };
 
-export const selectDrawerMessagesByParams = ({ entities, ui: { displayChannelSlug } }, params) => {
-  const { drawerType, drawerSlug } = params;
+export const selectDrawerMessages = ({ entities, ui: { displayChannelSlug, drawer } }) => {
+  const { drawerType, drawerSlug } = drawer;
 
   if (drawerType === 'favorites') {
     return selectMessagesFavorites(entities);

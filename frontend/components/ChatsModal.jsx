@@ -10,7 +10,8 @@ class ChatsModal extends React.Component {
   }
 
   render() {
-    const { unsubbedChannels, workspaceSlug } = this.props;
+    const { channels, workspaceSlug } = this.props;
+    const unsubbedChannels = channels.filter(ch => !ch.isSub && !ch.hasDm);
 
     return (
       <div className="ChatsModal">

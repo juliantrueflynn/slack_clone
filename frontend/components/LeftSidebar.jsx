@@ -5,39 +5,33 @@ import DmChatMenuItem from './DmChatMenuItem';
 import ProfileDropdown from './ProfileDropdown';
 import StatusIcon from './StatusIcon';
 import SidebarMenu from './SidebarMenu';
-import ChatModal from './ChatModal';
-import ChatsModal from './ChatsModal';
 import './LeftSidebar.css';
 
 const LeftSidebar = ({
   hasUnreadConvos,
   channels,
   currentUser,
-  members,
   currWorkspace,
   workspaces,
   modalOpen,
   dmChats,
   updateChannelSubRequest,
-  fetchChannelsRequest,
   currChatSlug,
-  match: { url, params: { workspaceSlug } },
-  history,
   drawer: { drawerType, drawerSlug },
+  match: { url },
+  history,
 }) => {
   if (!currWorkspace) {
     return null;
   }
 
-  const user = members[currentUser.slug];
   const hasUnreadChannels = !!channels.filter(ch => ch.isSub && ch.hasUnreads).length;
-  const chats = channels.sort((a, b) => a.title && b.title && a.title.localeCompare(b.title));
-  const subbedChannels = chats.filter(ch => ch.isSub);
-  const unsubbedChannels = chats.filter(ch => !ch.isSub);
-  const chatsModalOpen = () => modalOpen('MODAL_CHATS');
-  const chatModalOpen = () => modalOpen('MODAL_CHAT');
+  const subbedChannels = channels.filter(ch => ch.isSub).sort((a, b) => (
+    a.title && b.title && a.title.localeCompare(b.title)
+  ));
+
   const handleHistoryPush = (linkUrl) => {
-    let menuUrl = `${workspaceSlug}/${linkUrl}`;
+    let menuUrl = `${url}/${linkUrl}`;
     if (drawerType && drawerType !== 'details') {
       menuUrl += `/${drawerType}`;
 
@@ -46,7 +40,7 @@ const LeftSidebar = ({
       }
     }
 
-    history.push(`/${menuUrl}`);
+    history.push(menuUrl);
   };
 
   const quickLinksList = [
@@ -66,11 +60,16 @@ const LeftSidebar = ({
     },
   ];
 
+  const isActiveChannel = (match, location) => (
+    match && location.pathname.includes(`messages/${currChatSlug}`)
+  );
+
   const channelsItems = subbedChannels.map(item => ({
     icon: <FontAwesomeIcon className="Icon" icon={['fas', 'hashtag']} size="sm" />,
     label: item.title,
-    link: `/${workspaceSlug}/messages/${item.slug}`,
+    link: `${url}/messages/${item.slug}`,
     modifierClassName: item.hasUnreads ? 'unread' : null,
+    isActive: isActiveChannel,
   }));
 
   const dmChatsItems = dmChats.map((ch) => {
@@ -91,32 +90,24 @@ const LeftSidebar = ({
 
   return (
     <aside className="LeftSidebar">
-      <div className="SidebarMenu">
-        {user && (
-          <ProfileDropdown
-            user={user}
-            workspaceTitle={currWorkspace.title}
-            workspaces={workspaces}
-            currChatSlug={currChatSlug}
-          />
-        )}
-      </div>
+      {currentUser && (
+        <ProfileDropdown
+          user={currentUser}
+          workspaceTitle={currWorkspace.title}
+          workspaces={workspaces}
+          currChatSlug={currChatSlug}
+        />
+      )}
       <SidebarMenu menuFor="quicklinks" menuItems={quickLinksList} />
       <SidebarMenu menuFor="chats" menuItems={channelsItems}>
-        <Button unStyled buttonFor="chats" onClick={chatsModalOpen}>
+        <Button unStyled buttonFor="chats" onClick={() => modalOpen('MODAL_CHATS')}>
           Channels
         </Button>
-        <Button unStyled buttonFor="widget" onClick={chatModalOpen}>
+        <Button unStyled buttonFor="widget" onClick={() => modalOpen('MODAL_CHAT')}>
           <FontAwesomeIcon icon={['fas', 'plus-circle']} />
         </Button>
       </SidebarMenu>
       <SidebarMenu menuFor="dmChats" widgetTitle="Direct Messages" menuItems={dmChatsItems} />
-      <ChatsModal
-        workspaceSlug={workspaceSlug}
-        unsubbedChannels={unsubbedChannels}
-        fetchChannelsRequest={fetchChannelsRequest}
-      />
-      <ChatModal workspaceId={currWorkspace.id} />
     </aside>
   );
 };

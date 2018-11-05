@@ -38,3 +38,7 @@
 .SidebarMenu .MenuItem__content--active {
   background-color: #4C9689;
 }
+
+.SidebarMenu .MenuItem__content--btn:focus {
+  outline: none;
+}

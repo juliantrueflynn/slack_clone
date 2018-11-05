@@ -10,6 +10,8 @@ import LeftSidebarContainer from './LeftSidebarContainer';
 import ReactionModal from './ReactionModal';
 import ProfileModal from './ProfileModal';
 import './Workspace.css';
+import ChatModal from './ChatModal';
+import ChatsModal from './ChatsModal';
 
 class Workspace extends React.Component {
   componentDidMount() {
@@ -53,16 +55,18 @@ class Workspace extends React.Component {
 
   render() {
     const {
+      entity: workspace,
       entitySlug: workspaceSlug,
       isLoading,
       routes,
       modal: { modalType, modalProps },
       modalClose,
       createReactionRequest,
-      channels,
+      channels: channelsMap,
       currChatSlug,
       users,
       currentUser,
+      fetchChannelsRequest,
       onReceived,
     } = this.props;
 
@@ -89,10 +93,9 @@ class Workspace extends React.Component {
 
     const user = users[currentUser.slug];
     const defaultChat = this.getDefaultChat();
-    const cableChannels = Object.values(channels).filter(ch => (
-      ch.isSub || ch.slug === currChatSlug
-    )).map(channel => (
-      { channel: 'ChatChannel', channelSlug: channel.slug }
+    const channels = Object.values(channelsMap);
+    const cableChannels = channels.filter(ch => ch.isSub || ch.slug === currChatSlug).map(ch => (
+      { channel: 'ChatChannel', channelSlug: ch.slug }
     ));
 
     const pageClassNames = classNames('Workspace', { 'Workspace--modal-open': modalType });
@@ -131,6 +134,14 @@ class Workspace extends React.Component {
             )}
           </div>
         </div>
+        {workspace && <ChatModal workspaceId={workspace.id} />}
+        {defaultChat && (
+          <ChatsModal
+            workspaceSlug={workspaceSlug}
+            channels={channels}
+            fetchChannelsRequest={fetchChannelsRequest}
+          />
+        )}
         {user && <ProfileModal {...user} />}
       </div>
     );

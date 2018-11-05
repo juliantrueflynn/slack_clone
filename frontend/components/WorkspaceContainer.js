@@ -4,6 +4,7 @@ import withEntityWrapper from './withEntityWrapper';
 import { fetchWorkspaces } from '../actions/workspaceActions';
 import { modalClose } from '../actions/uiActions';
 import { createReaction } from '../actions/reactionActions';
+import { fetchChannels } from '../actions/channelActions';
 import { selectChannelsWithEntitiesMap, selectSubbedWorkspaces } from '../reducers/selectors';
 import Workspace from './Workspace';
 
@@ -18,6 +19,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),
   createReactionRequest: reaction => dispatch(createReaction.request(reaction)),
+  fetchChannelsRequest: workspaceSlug => dispatch(fetchChannels.request(workspaceSlug)),
   modalClose: () => dispatch(modalClose()),
 });
 

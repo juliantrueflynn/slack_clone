@@ -1,7 +1,5 @@
 import React from 'react';
-import { Switch } from 'react-router-dom';
 import classNames from 'classnames';
-import { RouteWithSubRoutes } from '../util/routeUtil';
 import ChatPage from './ChatPage';
 import AllUnreads from './AllUnreads';
 import AllThreads from './AllThreads';
@@ -99,14 +97,8 @@ class ChatPageSwitch extends React.Component {
       'ChatPage--loading': isLoading,
     });
 
-    const childRoutes = (
-      <Switch>
-        {routes.map(route => <RouteWithSubRoutes key={route.path} {...route} />)}
-      </Switch>
-    );
-
     return (
-      <ChatPage classNames={pageClassNames} childRoutes={childRoutes}>
+      <ChatPage classNames={pageClassNames} routes={routes}>
         {chatPath === 'unreads' && (
           <AllUnreads
             messages={messages}
