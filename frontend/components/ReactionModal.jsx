@@ -10,13 +10,16 @@ class ReactionModal extends React.Component {
   }
 
   componentDidMount() {
-    const bodyEl = document.querySelector('body');
-    bodyEl.classList.add('popover-open');
+    ReactionModal.setBodyClassList('add');
   }
 
   componentWillUnmount() {
+    ReactionModal.setBodyClassList('remove');
+  }
+
+  static setBodyClassList(addOrRemove) {
     const bodyEl = document.querySelector('body');
-    bodyEl.classList.remove('popover-open');
+    bodyEl.classList[addOrRemove]('popover-open');
   }
 
   handleClickOutside() {
@@ -45,7 +48,10 @@ class ReactionModal extends React.Component {
       posY = 70;
     }
 
-    const style = { top: `${posY}px`, left: `${posX}px` };
+    const style = {
+      top: `${posY}px`,
+      left: `${posX}px`
+    };
 
     return (
       <div className="ReactionModal" style={style}>

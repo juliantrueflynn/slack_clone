@@ -61,3 +61,13 @@
 .Workspace--loading .fa-spinner {
   color: #74B9FF;
 }
+
+body.popover-open .Workspace::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  content: "";
+  z-index: 900;
+}

@@ -3,15 +3,14 @@ import { Switch } from 'react-router-dom';
 import { ActionCable } from 'react-actioncable-provider';
 import { decamelizeKeys } from 'humps';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import classNames from 'classnames';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import sampleWisdomQuote from '../util/wisdomQuotesUtil';
 import LeftSidebarContainer from './LeftSidebarContainer';
 import ReactionModal from './ReactionModal';
 import ProfileModal from './ProfileModal';
-import './Workspace.css';
 import ChatModal from './ChatModal';
 import ChatsModal from './ChatsModal';
+import './Workspace.css';
 
 class Workspace extends React.Component {
   componentDidMount() {
@@ -98,10 +97,8 @@ class Workspace extends React.Component {
       { channel: 'ChatChannel', channelSlug: ch.slug }
     ));
 
-    const pageClassNames = classNames('Workspace', { 'Workspace--modal-open': modalType });
-
     return (
-      <div className={pageClassNames}>
+      <div className="Workspace">
         <ActionCable
           channel={decamelizeKeys({ channel: 'WorkspaceChannel', workspaceSlug })}
           onReceived={onReceived}

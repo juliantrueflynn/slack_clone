@@ -47,10 +47,6 @@
   background-color: #F9F9F9;
 }
 
-.Workspace--modal-open .Message--hover:not(.Message--pinned) {
-  background-color: #FFF;
-}
-
 .Message__author {
   font-weight: bold;
   padding-right: 4px;

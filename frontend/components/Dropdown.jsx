@@ -19,17 +19,15 @@ class Dropdown extends React.Component {
     this.handleStyleFromHeight = this.handleStyleFromHeight.bind(this);
   }
 
-  componentDidUpdate(prevProps) {
-    const { isOpen, shouldPos } = this.props;
+  componentDidUpdate(_, prevState) {
+    const { isOpen } = this.state;
 
-    if (shouldPos) {
-      if (!prevProps.isOpen && isOpen) {
-        Dropdown.setBodyClassList('add');
-      }
+    if (!prevState.isOpen && isOpen) {
+      Dropdown.setBodyClassList('add');
+    }
 
-      if (prevProps.isOpen && !isOpen) {
-        Dropdown.setBodyClassList('remove');
-      }
+    if (prevState.isOpen && !isOpen) {
+      Dropdown.setBodyClassList('remove');
     }
   }
 
@@ -81,7 +79,6 @@ class Dropdown extends React.Component {
   }
 
   render() {
-    const { isOpen, menuStyle } = this.state;
     const {
       menuFor,
       menuPos,
@@ -93,6 +90,7 @@ class Dropdown extends React.Component {
       style,
       unStyled,
     } = this.props;
+    const { isOpen, menuStyle } = this.state;
 
     const ddClassNames = classNames('Dropdown', {
       [`Dropdown--${menuPos}`]: menuPos,

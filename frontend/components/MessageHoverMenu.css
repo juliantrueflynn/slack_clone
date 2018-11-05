@@ -14,8 +14,7 @@
   display: flex;
 }
 
-.SearchModalItem .MessageHoverMenu,
-.Workspace--modal-open .Message--hover .MessageHoverMenu {
+.SearchModalItem .MessageHoverMenu {
   display: none;
 }
 
