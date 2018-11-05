@@ -1,30 +1,12 @@
 import React from 'react';
-import onClickOutside from 'react-onclickoutside';
 import EmojiPicker from 'emoji-picker-react';
+import PopoverOverlayHandler from './PopoverOverlayHandler';
 import './ReactionModal.css';
 
 class ReactionModal extends React.Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
-  }
-
-  componentDidMount() {
-    ReactionModal.setBodyClassList('add');
-  }
-
-  componentWillUnmount() {
-    ReactionModal.setBodyClassList('remove');
-  }
-
-  static setBodyClassList(addOrRemove) {
-    const bodyEl = document.querySelector('body');
-    bodyEl.classList[addOrRemove]('popover-open');
-  }
-
-  handleClickOutside() {
-    const { modalClose } = this.props;
-    modalClose();
   }
 
   handleClick(_, emoji) {
@@ -34,7 +16,7 @@ class ReactionModal extends React.Component {
   }
 
   render() {
-    const { modalProps } = this.props;
+    const { modalProps, modalClose } = this.props;
 
     if (!modalProps) {
       return null;
@@ -54,11 +36,13 @@ class ReactionModal extends React.Component {
     };
 
     return (
-      <div className="ReactionModal" style={style}>
-        <EmojiPicker onEmojiClick={this.handleClick} disableDiversityPicker />
-      </div>
+      <PopoverOverlayHandler onOverlayClick={modalClose}>
+        <div className="ReactionModal" style={style}>
+          <EmojiPicker onEmojiClick={this.handleClick} disableDiversityPicker />
+        </div>
+      </PopoverOverlayHandler>
     );
   }
 }
 
-export default onClickOutside(ReactionModal);
+export default ReactionModal;

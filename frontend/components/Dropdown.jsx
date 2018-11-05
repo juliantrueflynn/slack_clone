@@ -1,8 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
-import onClickOutside from 'react-onclickoutside';
 import Menu from './Menu';
 import Button from './Button';
+import PopoverOverlayHandler from './PopoverOverlayHandler';
 import './Dropdown.css';
 
 class Dropdown extends React.Component {
@@ -17,36 +17,6 @@ class Dropdown extends React.Component {
 
     this.handleTogglerClick = this.handleTogglerClick.bind(this);
     this.handleStyleFromHeight = this.handleStyleFromHeight.bind(this);
-  }
-
-  componentDidUpdate(_, prevState) {
-    const { isOpen } = this.state;
-
-    if (!prevState.isOpen && isOpen) {
-      Dropdown.setBodyClassList('add');
-    }
-
-    if (prevState.isOpen && !isOpen) {
-      Dropdown.setBodyClassList('remove');
-    }
-  }
-
-  static setBodyClassList(addOrRemove) {
-    const bodyEl = document.querySelector('body');
-    bodyEl.classList[addOrRemove]('popover-open');
-  }
-
-  handleClickOutside() {
-    const { ddToggle } = this.props;
-    const { isOpen } = this.state;
-
-    if (isOpen) {
-      this.setState({ isOpen: false });
-
-      if (ddToggle) {
-        ddToggle(!isOpen);
-      }
-    }
   }
 
   handleTogglerClick(e) {
@@ -87,18 +57,27 @@ class Dropdown extends React.Component {
       children,
       modifier,
       shouldPos,
+      ddToggle,
       style,
       unStyled,
     } = this.props;
     const { isOpen, menuStyle } = this.state;
+
+    const onOverlayClick = () => {
+      if (isOpen) {
+        this.setState({ isOpen: false });
+
+        if (ddToggle) {
+          ddToggle(!isOpen);
+        }
+      }
+    };
 
     const ddClassNames = classNames('Dropdown', {
       [`Dropdown--${menuPos}`]: menuPos,
       'Dropdown--left': !menuPos,
       [`Dropdown__${menuFor}`]: menuFor,
       [`Dropdown__${menuFor}--modifier`]: menuFor && modifier,
-      'Dropdown--show': isOpen,
-      'Dropdown--hide': !isOpen,
     });
 
     return (
@@ -106,18 +85,21 @@ class Dropdown extends React.Component {
         <Button buttonFor="dropdown" onClick={this.handleTogglerClick} style={style} unStyled={unStyled}>
           {togglerText || children}
         </Button>
-        <Menu
-          menuFor="dropdown"
-          items={items}
-          style={menuStyle}
-          isDdOpen={isOpen}
-          shouldPos={shouldPos}
-          handleStyleFromHeight={this.handleStyleFromHeight}
-          toggleMenu={this.handleTogglerClick}
-        />
+        {isOpen && (
+          <PopoverOverlayHandler onOverlayClick={onOverlayClick}>
+            <Menu
+              menuFor="dropdown"
+              items={items}
+              style={menuStyle}
+              shouldPos={shouldPos}
+              handleStyleFromHeight={this.handleStyleFromHeight}
+              toggleMenu={this.handleTogglerClick}
+            />
+          </PopoverOverlayHandler>
+        )}
       </div>
     );
   }
 }
 
-export default onClickOutside(Dropdown);
+export default Dropdown;

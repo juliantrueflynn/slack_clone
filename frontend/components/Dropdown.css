@@ -3,10 +3,6 @@
   z-index: 999;
 }
 
-.Dropdown--hide .Menu--dropdown {
-  display: none;
-}
-
 .Menu--dropdown {
   border-top: 1px solid rgba(0,0,0,.1);
   position: absolute;

@@ -9,21 +9,18 @@ class Menu extends React.Component {
     this.menu = React.createRef();
   }
 
-  componentDidUpdate(prevProps) {
-    const { shouldPos, handleStyleFromHeight, isDdOpen } = this.props;
+  componentDidMount() {
+    const { shouldPos, handleStyleFromHeight } = this.props;
 
     if (shouldPos && this.menu.current) {
-      if (!prevProps.isDdOpen && isDdOpen) {
-        const { height } = this.menu.current.getBoundingClientRect();
-        handleStyleFromHeight(height);
-      }
+      const { height } = this.menu.current.getBoundingClientRect();
+      handleStyleFromHeight(height);
     }
   }
 
   render() {
     const {
       items,
-      isDdOpen,
       menuFor,
       isRow,
       inverseColor,
