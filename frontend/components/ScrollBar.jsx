@@ -1,8 +1,8 @@
 import React from 'react';
 import PerfectScrollBar from 'react-perfect-scrollbar';
+import { isDateOlderThanOther } from '../util/dateUtil';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './ScrollBar.css';
-import { isDateOlderThanOther } from '../util/dateUtil';
 
 class ScrollBar extends React.Component {
   constructor(props) {
@@ -12,6 +12,7 @@ class ScrollBar extends React.Component {
     this.handleIsAtTop = this.handleIsAtTop.bind(this);
     this.handleIsAtBottom = this.handleIsAtBottom.bind(this);
     this.handleScrollUp = this.handleScrollUp.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
   }
 
   componentDidMount() {
@@ -20,14 +21,14 @@ class ScrollBar extends React.Component {
 
     if (channel) {
       if (channel.scrollLoc || channel.scrollLoc === 0) {
-        scrollNode.scrollTop = channel.scrollLoc;
+        scrollNode._container.scrollTop = channel.scrollLoc;
         this.setState({ hasHistory: false });
+      } else {
+        this.scrollToBottom();
       }
-
-      this.scrollToBottom();
     }
 
-    if (scrollNode && scrollNode.scrollTop === 0) {
+    if (scrollNode && scrollNode._container.scrollTop === 0) {
       this.setState({ hasHistory: false });
     }
 
@@ -43,7 +44,7 @@ class ScrollBar extends React.Component {
     const { isAtBottom } = this.state;
 
     if (shouldAutoScroll) {
-      if (isAtBottom || (this.hasNewMessage(prevProps.messages))) {
+      if (isAtBottom && prevProps.messages && this.hasNewMessage(prevProps.messages)) {
         this.scrollToBottom();
       }
     }
@@ -58,10 +59,12 @@ class ScrollBar extends React.Component {
     const { messages } = this.props;
     const lastEntry = messages[messages.length - 1];
     const prevLastEntry = prevMessages[prevMessages.length - 1];
-    const isByCurrUser = lastEntry && lastEntry.isCurrentUser;
-    const hasNewEntry = prevLastEntry && prevLastEntry.id !== lastEntry.id;
 
-    return isByCurrUser && hasNewEntry;
+    if (!lastEntry || !prevLastEntry) {
+      return false;
+    }
+
+    return lastEntry.isCurrentUser && prevLastEntry.id !== lastEntry.id;
   }
 
   handleIsAtTop() {
@@ -96,6 +99,15 @@ class ScrollBar extends React.Component {
     }
   }
 
+  handleScroll(e) {
+    const { updateScrollLoc } = this.props;
+    const { isAtBottom } = this.props;
+
+    if (updateScrollLoc && !isAtBottom) {
+      updateScrollLoc(e.scrollTop);
+    }
+  }
+
   hasOldFetchedDate() {
     const { channel, messages } = this.props;
     const messageCreatedAt = ScrollBar.getFirstMessageDate(messages);
@@ -103,12 +115,12 @@ class ScrollBar extends React.Component {
   }
 
   scrollToBottom() {
-    const listNode = this.scroller.current;
+    const scroller = this.scroller.current;
 
-    if (listNode && listNode._container) {
-      const { scrollHeight, clientHeight } = listNode._container;
+    if (scroller && scroller._container) {
+      const { scrollHeight, clientHeight } = scroller._container;
       const maxScrollTop = scrollHeight - clientHeight;
-      listNode._container.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+      scroller._container.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
     }
   }
 
@@ -128,6 +140,7 @@ class ScrollBar extends React.Component {
             onScrollUp={this.handleScrollUp}
             onYReachStart={this.handleIsAtTop}
             onYReachEnd={this.handleIsAtBottom}
+            onScrollY={this.handleScroll}
           >
             {childrenContainer}
           </PerfectScrollBar>

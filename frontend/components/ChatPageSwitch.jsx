@@ -8,7 +8,8 @@ import Channel from './Channel';
 class ChatPageSwitch extends React.Component {
   constructor(props) {
     super(props);
-    this.prevLocation = null;
+    this.state = { scrollLoc: 0 };
+    this.handleScrollLoc = this.handleScrollLoc.bind(this);
   }
 
   componentDidMount() {
@@ -26,10 +27,12 @@ class ChatPageSwitch extends React.Component {
       history,
       drawerClose,
       entitySlug,
-      entity: channel,
+      entity,
+      switchChannel,
     } = this.props;
+    const { scrollLoc } = this.state;
 
-    if (channel && drawerType && isExact && !prevProps.isExact) {
+    if (entity && drawerType && isExact && !prevProps.isExact) {
       if (entitySlug === prevProps.entitySlug) {
         drawerClose();
         return;
@@ -38,6 +41,10 @@ class ChatPageSwitch extends React.Component {
 
     if (this.selectRedirectUrl()) {
       history.replace(this.selectRedirectUrl());
+    }
+
+    if (prevProps.entity && entitySlug !== prevProps.entitySlug) {
+      switchChannel(prevProps.entitySlug, scrollLoc);
     }
   }
 
@@ -64,6 +71,10 @@ class ChatPageSwitch extends React.Component {
     return null;
   }
 
+  handleScrollLoc(scrollLoc) {
+    this.setState({ scrollLoc });
+  }
+
   render() {
     const {
       entitySlug: chatPath,
@@ -78,7 +89,6 @@ class ChatPageSwitch extends React.Component {
       clearUnreads,
       fetchHistoryRequest,
       createChannelSubRequest,
-      switchChannel,
     } = this.props;
 
     const user = users[currentUser.slug];
@@ -119,13 +129,14 @@ class ChatPageSwitch extends React.Component {
         )}
         {channel && (
           <Channel
+            chatPath={chatPath}
             messages={messages}
             isLoading={isLoading}
             channel={channel}
             currentUser={user}
             fetchHistoryRequest={fetchHistoryRequest}
+            updateScrollLoc={this.handleScrollLoc}
             isLoadingHistory={isLoadingHistory}
-            switchChannel={switchChannel}
             createChannelSubRequest={createChannelSubRequest}
           />
         )}

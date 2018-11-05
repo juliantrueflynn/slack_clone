@@ -12,23 +12,13 @@ class Channel extends React.Component {
   constructor(props) {
     super(props);
     this.container = React.createRef();
-    this.state = { scrollLoc: 0, height: -1 };
-    this.handleScrollLoc = this.handleScrollLoc.bind(this);
+    this.state = { height: -1 };
     this.handleStylesFromResize = this.handleStylesFromResize.bind(this);
   }
 
   componentDidMount() {
     this.handleStylesFromResize();
     window.addEventListener('resize', this.handleStylesFromResize);
-  }
-
-  componentDidUpdate(prevProps) {
-    const { chatPath, switchChannel } = this.props;
-    const { scrollLoc } = this.state;
-
-    if (chatPath !== prevProps.chatPath) {
-      switchChannel(prevProps.chatPath, scrollLoc);
-    }
   }
 
   componentWillUnmount() {
@@ -51,10 +41,6 @@ class Channel extends React.Component {
     }
   }
 
-  handleScrollLoc(scrollLoc) {
-    this.setState({ scrollLoc });
-  }
-
   render() {
     const {
       channel,
@@ -64,6 +50,7 @@ class Channel extends React.Component {
       currentUser,
       isLoading,
       isLoadingHistory,
+      updateScrollLoc,
     } = this.props;
     const { height } = this.state;
 
@@ -85,6 +72,7 @@ class Channel extends React.Component {
               isLoadingHistory={isLoadingHistory}
               channel={channel}
               messages={messages}
+              updateScrollLoc={updateScrollLoc}
               shouldAutoScroll
             >
               <ChannelBlurb channel={channel} currentUserSlug={currentUser.slug} />
