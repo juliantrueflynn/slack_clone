@@ -78,12 +78,13 @@ class Dropdown extends React.Component {
     } = this.props;
     const { isOpen, menuStyle } = this.state;
 
-    const dataPopover = isOpen ? 'shown' : 'hidden';
     const ddClassNames = classNames('Dropdown', {
       [`Dropdown--${menuPos}`]: menuPos,
       'Dropdown--left': !menuPos,
       [`Dropdown__${menuFor}`]: menuFor,
       [`Dropdown__${menuFor}--modifier`]: menuFor && modifier,
+      'Dropdown--opened': isOpen,
+      'Dropdown--closed': !isOpen,
     });
 
     return (
@@ -95,7 +96,6 @@ class Dropdown extends React.Component {
           unStyled={unStyled}
           aria-haspopup="true"
           aria-expanded={isOpen}
-          data-popover={dataPopover}
         >
           {togglerText || children}
         </Button>

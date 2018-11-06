@@ -25,17 +25,7 @@ a {
 .App {
   min-height: 100vh;
   display: flex;
-}
-
-.Btn__group {
-  padding-top: 10px;
-  margin-left: -3px;
-  margin-right: -3px;
-}
-
-.Btn__group > .Btn {
-  margin-left: 3px;
-  margin-right: 3px;
+  position: relative;
 }
 
 @media only screen and (min-width : 1250px) {
@@ -43,4 +33,14 @@ a {
     width: 920px;
     margin: 0 auto;
   }
+}
+
+body.popover-open .App::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  content: "";
+  z-index: 700;
 }

@@ -1,5 +1,8 @@
 .Dropdown {
   position: relative;
+}
+
+.Dropdown--opened {
   z-index: 800;
 }
 

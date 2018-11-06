@@ -72,10 +72,8 @@ class App extends React.Component {
     const { isLoggedIn, onReceived } = this.props;
 
     return (
-      <div className="App">
-        {isLoggedIn && (
-          <ActionCable channel={{ channel: 'AppChannel' }} onReceived={onReceived} />
-        )}
+      <div id="appClient" className="App">
+        {isLoggedIn && <ActionCable channel={{ channel: 'AppChannel' }} onReceived={onReceived} />}
         <Switch>
           {routesConfig.map(route => (
             <RouteWithSubRoutes key={route.path} {...route} />

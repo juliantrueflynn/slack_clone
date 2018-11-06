@@ -69,3 +69,14 @@
 .Btn:focus {
   cursor: pointer;
 }
+
+.Btn__group {
+  padding-top: 10px;
+  margin-left: -3px;
+  margin-right: -3px;
+}
+
+.Btn__group > .Btn {
+  margin-left: 3px;
+  margin-right: 3px;
+}
