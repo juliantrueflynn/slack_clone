@@ -15,9 +15,12 @@ class PopoverOverlayHandler extends React.Component {
     bodyEl.classList[addOrRemove]('popover-open');
   }
 
-  handleClickOutside() {
+  handleClickOutside(e) {
     const { onOverlayClick } = this.props;
-    onOverlayClick();
+
+    if (e.target.id === 'workspace') {
+      onOverlayClick(e);
+    }
   }
 
   render() {

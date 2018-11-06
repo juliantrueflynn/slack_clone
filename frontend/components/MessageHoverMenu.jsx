@@ -10,6 +10,7 @@ class MessageHoverMenu extends React.Component {
     super(props);
     this.handleReactionToggle = this.handleReactionToggle.bind(this);
     this.handleFavToggle = this.handleFavToggle.bind(this);
+    this.handleOverlayClick = this.handleOverlayClick.bind(this);
   }
 
   handleReactionToggle(e) {
@@ -39,6 +40,11 @@ class MessageHoverMenu extends React.Component {
     } else {
       createFavoriteRequest(id);
     }
+  }
+
+  handleOverlayClick(e) {
+    const { ddToggle } = this.props;
+    ddToggle(e.target, false);
   }
 
   render() {
@@ -100,6 +106,7 @@ class MessageHoverMenu extends React.Component {
             items={ddItems}
             menuPos="right"
             ddToggle={ddToggle}
+            onOverlayClick={this.handleOverlayClick}
             shouldPos
             unStyled
           >

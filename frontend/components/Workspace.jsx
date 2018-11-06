@@ -10,8 +10,8 @@ import ReactionModal from './ReactionModal';
 import ProfileModal from './ProfileModal';
 import ChatModal from './ChatModal';
 import ChatsModal from './ChatsModal';
-import './Workspace.css';
 import ChannelEditorModal from './ChannelEditorModal';
+import './Workspace.css';
 
 class Workspace extends React.Component {
   componentDidMount() {
@@ -100,7 +100,7 @@ class Workspace extends React.Component {
     ));
 
     return (
-      <div className="Workspace">
+      <div id="workspace" className="Workspace">
         <ActionCable
           channel={decamelizeKeys({ channel: 'WorkspaceChannel', workspaceSlug })}
           onReceived={onReceived}

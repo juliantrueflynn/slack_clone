@@ -17,6 +17,7 @@ class Dropdown extends React.Component {
 
     this.handleTogglerClick = this.handleTogglerClick.bind(this);
     this.handleStyleFromHeight = this.handleStyleFromHeight.bind(this);
+    this.handleOverlayClick = this.handleOverlayClick.bind(this);
   }
 
   handleTogglerClick(e) {
@@ -26,7 +27,7 @@ class Dropdown extends React.Component {
     const nextState = { isOpen: !isOpen };
 
     if (ddToggle) {
-      ddToggle(!isOpen);
+      ddToggle(null, !isOpen);
     }
 
     if (shouldPos && e) {
@@ -35,6 +36,21 @@ class Dropdown extends React.Component {
     }
 
     this.setState(nextState);
+  }
+
+  handleOverlayClick(e) {
+    const { ddToggle, onOverlayClick } = this.props;
+    const { isOpen } = this.state;
+
+    if (isOpen) {
+      this.setState({ isOpen: false });
+
+      if (onOverlayClick) {
+        onOverlayClick(e);
+      } else if (ddToggle) {
+        ddToggle(null, false);
+      }
+    }
   }
 
   handleStyleFromHeight(height) {
@@ -57,21 +73,10 @@ class Dropdown extends React.Component {
       children,
       modifier,
       shouldPos,
-      ddToggle,
       style,
       unStyled,
     } = this.props;
     const { isOpen, menuStyle } = this.state;
-
-    const onOverlayClick = () => {
-      if (isOpen) {
-        this.setState({ isOpen: false });
-
-        if (ddToggle) {
-          ddToggle(!isOpen);
-        }
-      }
-    };
 
     const ddClassNames = classNames('Dropdown', {
       [`Dropdown--${menuPos}`]: menuPos,
@@ -86,7 +91,7 @@ class Dropdown extends React.Component {
           {togglerText || children}
         </Button>
         {isOpen && (
-          <PopoverOverlayHandler onOverlayClick={onOverlayClick}>
+          <PopoverOverlayHandler onOverlayClick={this.handleOverlayClick}>
             <Menu
               menuFor="dropdown"
               items={items}

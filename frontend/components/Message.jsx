@@ -30,7 +30,6 @@ const Message = ({
   editMessageId,
   shouldHideAvatar,
   shouldHideEngagement,
-  ddToggle,
   children,
   ...props
 }) => {
@@ -64,6 +63,7 @@ const Message = ({
   const isPinned = !!message.pinId;
 
   const toggleHover = hoverId => handleHover && handleHover(hoverId);
+  const isHoverOver = () => handleHover && !hasHover && handleHover(message.id);
 
   const entryClassNames = classNames('Message', {
     'Message--editing': isEditing,
@@ -77,7 +77,8 @@ const Message = ({
       <div
         role="presentation"
         className="Message__container"
-        onClick={() => toggleHover(message.id)}
+        onFocus={() => null}
+        onMouseOver={() => isHoverOver(message.id)}
         onMouseEnter={() => toggleHover(message.id)}
         onMouseLeave={() => toggleHover(-1)}
       >
@@ -86,7 +87,6 @@ const Message = ({
         )}
         {isEditing || (
           <MessageHoverMenu
-            ddToggle={ddToggle}
             isEditing={isEditing}
             handleEditToggle={handleEditToggle}
             currentUser={currentUser}

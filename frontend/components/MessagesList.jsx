@@ -32,12 +32,14 @@ class MessagesList extends React.Component {
     }
   }
 
-  handleDdToggle(nextState) {
-    const { isDdOpen } = this.state;
+  handleDdToggle(eTarget, isDdOpen) {
+    const nextState = { isDdOpen };
 
-    if (isDdOpen !== nextState) {
-      this.setState({ isDdOpen: nextState });
+    if (eTarget) {
+      nextState.hoverMessageId = -1;
     }
+
+    this.setState(nextState);
   }
 
   render() {
