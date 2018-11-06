@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from './Button';
 import withForm from './withForm';
-import withModal from './withModal';
+import Modal from './Modal';
 
 class ChannelEditorModal extends React.Component {
   constructor(props) {
@@ -47,42 +47,43 @@ class ChannelEditorModal extends React.Component {
     const isOwner = currentUser.id === channel.ownerId;
 
     return (
-      <form onSubmit={this.handleSubmit}>
-        {isOwner && (
+      <Modal isOpen modalTitle="Update channel" modalFor="channel-edit" close={modalClose}>
+        <form onSubmit={this.handleSubmit}>
+          {isOwner && (
+            <div className="Form__group">
+              <label htmlFor="title">Title</label>
+              <input
+                type="text"
+                className="Form__control"
+                value={title}
+                onChange={this.handleInputVal('title')}
+              />
+            </div>
+          )}
           <div className="Form__group">
-            <label htmlFor="title">Title</label>
+            <label htmlFor="topic">Topic</label>
             <input
               type="text"
               className="Form__control"
-              value={title}
-              onChange={this.handleInputVal('title')}
+              placeholder="e.g. Discuss XYZ"
+              value={topic}
+              onChange={this.handleInputVal('topic')}
             />
           </div>
-        )}
-        <div className="Form__group">
-          <label htmlFor="topic">Topic</label>
-          <input
-            type="text"
-            className="Form__control"
-            placeholder="e.g. Discuss XYZ"
-            value={topic}
-            onChange={this.handleInputVal('topic')}
-          />
-        </div>
-        <div className="Btn__group">
-          <Button type="submit" color="green" buttonFor="save-profile" size="lg">
-            Update
-          </Button>
-          <Button onClick={() => modalClose()} size="lg">
-            Cancel
-          </Button>
-        </div>
-      </form>
+          <div className="Btn__group">
+            <Button type="submit" color="green" buttonFor="save-profile" size="lg">
+              Update
+            </Button>
+            <Button onClick={() => modalClose()} size="lg">
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </Modal>
     );
   }
 }
 
-const modalProps = { modalType: 'MODAL_EDIT_CHANNEL', modalTitle: 'Update channel' };
 const formProps = { type: 'CHANNEL_UPDATE_REQUEST', payloadName: 'channel' };
 
-export default withModal(modalProps)(withForm(formProps)(ChannelEditorModal));
+export default withForm(formProps)(ChannelEditorModal);

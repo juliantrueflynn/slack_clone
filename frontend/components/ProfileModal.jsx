@@ -1,9 +1,9 @@
 import React from 'react';
-import withModal from './withModal';
 import SettingsForm from './SettingsForm';
 import PasswordForm from './PasswordForm';
 import Button from './Button';
 import './ProfileModal.css';
+import Modal from './Modal';
 
 class ProfileModal extends React.Component {
   constructor(props) {
@@ -25,34 +25,31 @@ class ProfileModal extends React.Component {
     const tabTitle = tabOpen === 'user' ? 'Edit Settings' : 'Change Password';
 
     return (
-      <div className={classNames}>
-        <div className="ProfileModal__tabs">
-          <Button buttonFor="user-tab" onClick={this.handleTabClick('user')}>
-            Edit Settings
-          </Button>
-          <Button buttonFor="pw-tab" onClick={this.handleTabClick('password')}>
-            Change Password
-          </Button>
+      <Modal isOpen modalTitle="Edit your profile" modalFor="profile" close={modalClose}>
+        <div className={classNames}>
+          <div className="ProfileModal__tabs">
+            <Button buttonFor="user-tab" onClick={this.handleTabClick('user')}>
+              Edit Settings
+            </Button>
+            <Button buttonFor="pw-tab" onClick={this.handleTabClick('password')}>
+              Change Password
+            </Button>
+          </div>
+          <div className="ProfileModal__body">
+            <h2 className="ProfileModal__title">
+              {tabTitle}
+            </h2>
+            {tabOpen === 'user' && (
+              <SettingsForm modalClose={modalClose} user={user} />
+            )}
+            {tabOpen === 'password' && (
+              <PasswordForm modalClose={modalClose} />
+            )}
+          </div>
         </div>
-        <div className="ProfileModal__body">
-          <h2 className="ProfileModal__title">
-            {tabTitle}
-          </h2>
-          {tabOpen === 'user' && (
-            <SettingsForm modalClose={modalClose} user={user} />
-          )}
-          {tabOpen === 'password' && (
-            <PasswordForm modalClose={modalClose} />
-          )}
-        </div>
-      </div>
+      </Modal>
     );
   }
 }
 
-const modalProps = {
-  modalType: 'MODAL_PROFILE',
-  modalTitle: 'Edit your profile'
-};
-
-export default withModal(modalProps)(ProfileModal);
+export default ProfileModal;

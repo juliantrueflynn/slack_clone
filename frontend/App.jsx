@@ -30,6 +30,7 @@ import {
   faStar as fasStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { ActionCable } from 'react-actioncable-provider';
+import ReactModal from 'react-modal';
 import { Switch } from 'react-router-dom';
 import { routesConfig, RouteWithSubRoutes } from './util/routeUtil';
 import withActionCable from './components/withActionCable';
@@ -62,17 +63,27 @@ library.add(
   faSpinner,
 );
 
-const App = ({ isLoggedIn, onReceived }) => (
-  <div className="App">
-    {isLoggedIn && (
-      <ActionCable channel={{ channel: 'AppChannel' }} onReceived={onReceived} />
-    )}
-    <Switch>
-      {routesConfig.map(route => (
-        <RouteWithSubRoutes key={route.path} {...route} />
-      ))}
-    </Switch>
-  </div>
-);
+class App extends React.Component {
+  componentDidMount() {
+    ReactModal.setAppElement('#root');
+  }
+
+  render() {
+    const { isLoggedIn, onReceived } = this.props;
+
+    return (
+      <div className="App">
+        {isLoggedIn && (
+          <ActionCable channel={{ channel: 'AppChannel' }} onReceived={onReceived} />
+        )}
+        <Switch>
+          {routesConfig.map(route => (
+            <RouteWithSubRoutes key={route.path} {...route} />
+          ))}
+        </Switch>
+      </div>
+    );
+  }
+}
 
 export default withActionCable(App);

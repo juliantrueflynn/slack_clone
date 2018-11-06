@@ -11,6 +11,7 @@ import ProfileModal from './ProfileModal';
 import ChatModal from './ChatModal';
 import ChatsModal from './ChatsModal';
 import './Workspace.css';
+import ChannelEditorModal from './ChannelEditorModal';
 
 class Workspace extends React.Component {
   componentDidMount() {
@@ -91,6 +92,7 @@ class Workspace extends React.Component {
     }
 
     const user = users[currentUser.slug];
+    const channel = channelsMap[currChatSlug];
     const defaultChat = this.getDefaultChat();
     const channels = Object.values(channelsMap);
     const cableChannels = channels.filter(ch => ch.isSub || ch.slug === currChatSlug).map(ch => (
@@ -131,15 +133,23 @@ class Workspace extends React.Component {
             )}
           </div>
         </div>
-        {workspace && <ChatModal workspaceId={workspace.id} />}
-        {defaultChat && (
+        {workspace && modalType === 'MODAL_CHAT' && (
+          <ChatModal workspaceId={workspace.id} modalClose={modalClose} />
+        )}
+        {defaultChat && modalType === 'MODAL_CHATS' && (
           <ChatsModal
             workspaceSlug={workspaceSlug}
             channels={channels}
             fetchChannelsRequest={fetchChannelsRequest}
+            modalClose={modalClose}
           />
         )}
-        {user && <ProfileModal {...user} />}
+        {user && modalType === 'MODAL_PROFILE' && (
+          <ProfileModal {...user} modalClose={modalClose} />
+        )}
+        {channel && modalType === 'MODAL_EDIT_CHANNEL' && (
+          <ChannelEditorModal channel={channel} currentUser={currentUser} modalClose={modalClose} />
+        )}
       </div>
     );
   }

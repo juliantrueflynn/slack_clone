@@ -1,6 +1,6 @@
 import React from 'react';
-import withModal from './withModal';
 import ChatsModalItem from './ChatsModalItem';
+import Modal from './Modal';
 import './ChatsModal.css';
 
 class ChatsModal extends React.Component {
@@ -10,24 +10,24 @@ class ChatsModal extends React.Component {
   }
 
   render() {
-    const { channels, workspaceSlug } = this.props;
+    const { channels, workspaceSlug, modalClose } = this.props;
     const unsubbedChannels = channels.filter(ch => !ch.isSub && !ch.hasDm);
 
     return (
-      <div className="ChatsModal">
-        <div className="ChatsModal__subhead">
-          Channels you can join
+      <Modal isOpen modalFor="chats" modalTitle="Browse channels" close={modalClose}>
+        <div className="ChatsModal">
+          <div className="ChatsModal__subhead">
+            Channels you can join
+          </div>
+          <div role="list" className="ChatsModal__list">
+            {unsubbedChannels && unsubbedChannels.map(ch => (
+              <ChatsModalItem key={ch.slug} channel={ch} workspaceSlug={workspaceSlug} />
+            ))}
+          </div>
         </div>
-        <div role="list" className="ChatsModal__list">
-          {unsubbedChannels && unsubbedChannels.map(ch => (
-            <ChatsModalItem key={ch.slug} channel={ch} workspaceSlug={workspaceSlug} />
-          ))}
-        </div>
-      </div>
+      </Modal>
     );
   }
 }
 
-const modalProps = { modalType: 'MODAL_CHATS', modalTitle: 'Browse channels' };
-
-export default withModal(modalProps)(ChatsModal);
+export default ChatsModal;

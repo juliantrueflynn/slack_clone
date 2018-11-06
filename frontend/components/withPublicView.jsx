@@ -4,7 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 import { signOut, signUp, signIn } from '../actions/sessionActions';
 import { fetchWorkspaces } from '../actions/workspaceActions';
-import { modalOpen } from '../actions/uiActions';
+import { modalOpen, modalClose } from '../actions/uiActions';
 import { selectSubbedWorkspaces } from '../reducers/selectors';
 import WorkspaceModal from './WorkspaceModal';
 import Dropdown from './Dropdown';
@@ -16,11 +16,13 @@ const mapStateToProps = state => ({
   workspaces: Object.values(state.entities.workspaces),
   subbedWorkspaces: selectSubbedWorkspaces(state),
   currentUser: state.session.currentUser,
+  isWorkspaceModalOpen: state.ui.displayModal.modalType,
 });
 
 const mapDispatchToProps = (dispatch, { location }) => ({
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),
   modalOpen: (modalType, modalProps) => dispatch(modalOpen(modalType, modalProps)),
+  modalClose: () => dispatch(modalClose()),
   signOutRequest: () => dispatch(signOut.request()),
   sessionRequest: (user) => {
     if (location.pathname === '/signin') {
@@ -46,6 +48,8 @@ const withPublicView = (WrappedComponent) => {
         signOutRequest,
         isLoggedIn,
         subbedWorkspaces,
+        isWorkspaceModalOpen,
+        modalClose: close,
         ...props
       } = this.props;
       const { workspaces, location: { pathname } } = props;
@@ -101,7 +105,7 @@ const withPublicView = (WrappedComponent) => {
             </div>
           </header>
           <WrappedComponent {...this.props} />
-          <WorkspaceModal />
+          {isWorkspaceModalOpen && <WorkspaceModal modalClose={close} />}
         </div>
       );
     }

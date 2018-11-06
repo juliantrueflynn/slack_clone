@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from './Button';
-import withModal from './withModal';
 import withForm from './withForm';
+import Modal from './Modal';
 
 class WorkspaceModal extends React.Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class WorkspaceModal extends React.Component {
     const { title, slug } = this.state;
 
     return (
-      <div className="PublicView__container">
+      <Modal modalFor="workspace" isOpen modalTitle="Create a Workspace" close={modalClose}>
         <form onSubmit={this.handleFormSubmit}>
           <div className="Form__group">
             <label htmlFor="title">
@@ -65,12 +65,11 @@ class WorkspaceModal extends React.Component {
             </Button>
           </div>
         </form>
-      </div>
+      </Modal>
     );
   }
 }
 
-const modalProps = { modalType: 'MODAL_WORKSPACE', modalTitle: 'Create a Workspace' };
 const formProps = { type: 'WORKSPACE_CREATE_REQUEST', payloadName: 'workspace' };
 
-export default withModal(modalProps)(withForm(formProps)(WorkspaceModal));
+export default withForm(formProps)(WorkspaceModal);

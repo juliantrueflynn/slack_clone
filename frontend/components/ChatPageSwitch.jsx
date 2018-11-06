@@ -26,6 +26,7 @@ class ChatPageSwitch extends React.Component {
       drawerType,
       history,
       drawerClose,
+      modalClose,
       entitySlug,
       entity,
       switchChannel,

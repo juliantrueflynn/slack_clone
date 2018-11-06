@@ -6,7 +6,7 @@ import Button from './Button';
 import ScrollBar from './ScrollBar';
 import SearchModalResults from './SearchModalResults';
 import SearchModalAside from './SearchModalAside';
-import withModal from './withModal';
+import Modal from './Modal';
 import './SearchModal.css';
 
 class SearchModal extends React.Component {
@@ -115,42 +115,43 @@ class SearchModal extends React.Component {
     });
 
     return (
-      <div className={searchClassNames} ref={this.container}>
-        <div className="SearchModal__searchbar">
-          <SearchBar
-            fetchSearchRequest={fetchSearchRequest}
-            createSearch={createSearch}
-            destroySearch={destroySearch}
-            setQuery={this.setQuery}
-            query={query}
-          />
-          <Button onClick={() => modalClose()} buttonFor="modal-close" unStyled>
-            <FontAwesomeIcon icon="times" />
-          </Button>
+      <Modal
+        modalFor="search"
+        isOpen
+        close={modalClose}
+        unStyled
+      >
+        <div className={searchClassNames} ref={this.container}>
+          <div className="SearchModal__searchbar">
+            <SearchBar
+              fetchSearchRequest={fetchSearchRequest}
+              createSearch={createSearch}
+              destroySearch={destroySearch}
+              setQuery={this.setQuery}
+              query={query}
+            />
+            <Button onClick={() => modalClose()} buttonFor="modal-close" unStyled>
+              <FontAwesomeIcon icon="times" />
+            </Button>
+          </div>
+          <ScrollBar>
+            <SearchModalResults
+              results={results}
+              isLoading={isSearchLoading}
+              users={users}
+            />
+            <SearchModalAside
+              messages={messages}
+              users={users}
+              peopleFilter={peopleFilter}
+              channelFilter={channelFilter}
+              handleFilterToggle={this.handleFilterToggle}
+            />
+          </ScrollBar>
         </div>
-        <ScrollBar>
-          <SearchModalResults
-            results={results}
-            isLoading={isSearchLoading}
-            users={users}
-          />
-          <SearchModalAside
-            messages={messages}
-            users={users}
-            peopleFilter={peopleFilter}
-            channelFilter={channelFilter}
-            handleFilterToggle={this.handleFilterToggle}
-          />
-        </ScrollBar>
-      </div>
+      </Modal>
     );
   }
 }
 
-const modalProps = {
-  modalType: 'MODAL_SEARCH',
-  unStyled: true,
-  shouldCloseOnOverlayClick: true,
-};
-
-export default withModal(modalProps)(SearchModal);
+export default SearchModal;

@@ -16,12 +16,14 @@ const ChannelHeader = ({
   drawerType,
   drawerClose,
   modalOpen,
+  modalClose,
   fetchSearchRequest,
   searchQuery,
   destroySearch,
   isSearchLoading,
   destroyChannelSubRequest,
   chatPath,
+  isSearchModalOpen,
   history,
   match: { url, isExact },
 }) => {
@@ -159,14 +161,17 @@ const ChannelHeader = ({
         />
         <Menu menuFor="header-user" isRow items={userMenuItems} />
       </nav>
-      <SearchModal
-        searchQuery={searchQuery}
-        messages={searchMessages}
-        users={users}
-        fetchSearchRequest={fetchSearchRequest}
-        destroySearch={destroySearch}
-        isSearchLoading={isSearchLoading}
-      />
+      {isSearchModalOpen && (
+        <SearchModal
+          modalClose={modalClose}
+          searchQuery={searchQuery}
+          messages={searchMessages}
+          users={users}
+          fetchSearchRequest={fetchSearchRequest}
+          destroySearch={destroySearch}
+          isSearchLoading={isSearchLoading}
+        />
+      )}
     </header>
   );
 };

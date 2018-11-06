@@ -6,7 +6,6 @@ import ChannelSubscribe from './ChannelSubscribe';
 import ChannelBlurb from './ChannelBlurb';
 import MessagesList from './MessagesList';
 import MessageFormContainer from './MessageFormContainer';
-import ChannelEditorModal from './ChannelEditorModal';
 
 class Channel extends React.Component {
   constructor(props) {
@@ -87,7 +86,6 @@ class Channel extends React.Component {
           channel={channel}
           createChannelSubRequest={createChannelSubRequest}
         />
-        <ChannelEditorModal currentUser={currentUser} channel={channel} />
       </div>
     );
   }
