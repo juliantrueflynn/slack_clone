@@ -18,7 +18,7 @@ class PopoverOverlayHandler extends React.Component {
   handleClickOutside(e) {
     const { onOverlayClick } = this.props;
 
-    if (e.target.id === 'workspace') {
+    if (e.target.id === 'workspace' || e.target.dataset.popover === 'hidden') {
       onOverlayClick(e);
     }
   }

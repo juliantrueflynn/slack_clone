@@ -1,6 +1,6 @@
 .Dropdown {
   position: relative;
-  z-index: 999;
+  z-index: 800;
 }
 
 .Menu--dropdown {
@@ -14,6 +14,7 @@
   padding-top: 15px;
   padding-bottom: 15px;
   border-radius: 3px;
+  z-index: 999;
 }
 
 .Btn__dropdown {

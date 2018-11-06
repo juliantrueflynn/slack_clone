@@ -69,5 +69,5 @@ body.popover-open .Workspace::before {
   left: 0;
   bottom: 0;
   content: "";
-  z-index: 900;
+  z-index: 700;
 }
