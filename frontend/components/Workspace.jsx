@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { RouteWithSubRoutes } from '../util/routeUtil';
 import sampleWisdomQuote from '../util/wisdomQuotesUtil';
 import LeftSidebarContainer from './LeftSidebarContainer';
-import ReactionModal from './ReactionModal';
 import ProfileModal from './ProfileModal';
 import ChatModal from './ChatModal';
 import ChatsModal from './ChatsModal';
@@ -59,9 +58,8 @@ class Workspace extends React.Component {
       entitySlug: workspaceSlug,
       isLoading,
       routes,
-      modal: { modalType, modalProps },
+      modalType,
       modalClose,
-      createReactionRequest,
       channels: channelsMap,
       currChatSlug,
       users,
@@ -119,13 +117,6 @@ class Workspace extends React.Component {
         {defaultChat && (<LeftSidebarContainer />)}
         <div className="Workspace__col">
           <div className="Workspace__chat">
-            {modalType === 'MODAL_REACTION' && (
-              <ReactionModal
-                modalProps={modalProps}
-                modalClose={modalClose}
-                createReactionRequest={createReactionRequest}
-              />
-            )}
             {defaultChat && (
               <Switch>
                 {routes.map(route => <RouteWithSubRoutes key={route.path} {...route} />)}

@@ -13,7 +13,7 @@ const mapStateToProps = state => ({
   currChatSlug: state.ui.displayChannelSlug,
   workspaces: selectSubbedWorkspaces(state),
   isLoading: state.isLoading.workspace,
-  modal: state.ui.displayModal,
+  modalType: state.ui.displayModal.modalType,
 });
 
 const mapDispatchToProps = dispatch => ({

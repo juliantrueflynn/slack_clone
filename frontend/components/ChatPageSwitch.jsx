@@ -4,6 +4,7 @@ import ChatPage from './ChatPage';
 import AllUnreads from './AllUnreads';
 import AllThreads from './AllThreads';
 import Channel from './Channel';
+import ReactionModal from './ReactionModal';
 
 class ChatPageSwitch extends React.Component {
   constructor(props) {
@@ -26,7 +27,6 @@ class ChatPageSwitch extends React.Component {
       drawerType,
       history,
       drawerClose,
-      modalClose,
       entitySlug,
       entity,
       switchChannel,
@@ -83,11 +83,14 @@ class ChatPageSwitch extends React.Component {
       messages,
       users,
       entity: channel,
+      modal: { modalType, modalProps },
+      modalClose,
       channels,
       currentUser,
       isLoading,
       isLoadingHistory,
       clearUnreads,
+      createReactionRequest,
       fetchHistoryRequest,
       createChannelSubRequest,
     } = this.props;
@@ -110,6 +113,13 @@ class ChatPageSwitch extends React.Component {
 
     return (
       <ChatPage classNames={pageClassNames} routes={routes}>
+        {modalType === 'MODAL_REACTION' && (
+          <ReactionModal
+            createReactionRequest={createReactionRequest}
+            modalProps={modalProps}
+            modalClose={modalClose}
+          />
+        )}
         {chatPath === 'unreads' && (
           <AllUnreads
             messages={messages}
