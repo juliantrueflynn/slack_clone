@@ -14,7 +14,7 @@
   background-color: #FFF;
 }
 
-.Modal__overlay--styled .Modal {
+.Modal__overlay .Modal {
   height: 100%;
 }
 
@@ -22,7 +22,7 @@
   outline: none;
 }
 
-.Modal__overlay--styled .Modal .Btn__close {
+.Modal__overlay .Modal .Btn__close {
   position: absolute;
   right: 50px;
   top: 50px;

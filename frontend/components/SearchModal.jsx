@@ -107,11 +107,15 @@ class SearchModal extends React.Component {
     } = this.state;
 
     const hasLen = !!results.length;
+    const isEmpty = !hasLen && !peopleFilter.length && !channelFilter.length;
 
     const searchClassNames = classNames('SearchModal', {
       'SearchModal--fill': hasLen,
-      'SearchModal--empty': !hasLen && !peopleFilter.length && !channelFilter.length,
+      'SearchModal--empty': isEmpty,
       'SearchModal--loading': isSearchLoading,
+    });
+    const overlayClassNames = classNames('Modal__overlay Modal__overlay--search', {
+      'Modal__overlay--search-empty': isEmpty,
     });
 
     return (
@@ -119,6 +123,7 @@ class SearchModal extends React.Component {
         modalFor="search"
         isOpen
         close={modalClose}
+        overlayClassName={overlayClassNames}
         unStyled
       >
         <div className={searchClassNames} ref={this.container}>

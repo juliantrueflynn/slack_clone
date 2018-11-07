@@ -4,10 +4,10 @@
 
 .Modal__overlay--search .Modal {
   position: absolute;
-  top: 10px;
+  top: 9px;
   right: 109px;
   left: 109px;
-  bottom: 10px;
+  bottom: 9px;
   border-radius: 6px;
 }
 
@@ -16,6 +16,17 @@
 .SearchModal {
   height: 100%;
   width: 100%;
+}
+
+.Modal__overlay--search-empty .Modal__body,
+.Modal__overlay--search-empty .Modal__inner-body,
+.Modal__overlay--search-empty .Modal__search,
+.SearchModal {
+  height: auto;
+}
+
+.Modal__overlay--search-empty .Modal {
+  bottom: initial;
 }
 
 .SearchModal {
