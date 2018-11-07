@@ -1,10 +1,11 @@
 import React from 'react';
-import classNames from 'classnames';
-import ChatPage from './ChatPage';
+import Layout from './Layout';
+import ChannelHeaderContainer from './ChannelHeaderContainer';
 import AllUnreads from './AllUnreads';
 import AllThreads from './AllThreads';
 import Channel from './Channel';
 import ReactionModal from './ReactionModal';
+import './ChatPageSwitch.css';
 
 class ChatPageSwitch extends React.Component {
   constructor(props) {
@@ -97,61 +98,55 @@ class ChatPageSwitch extends React.Component {
 
     const user = users[currentUser.slug];
 
-    let chatType;
-    if (channel) {
-      chatType = 'channel';
-    }
-
+    let chatType = 'channel';
     if (chatPath === 'unreads' || chatPath === 'threads') {
       chatType = chatPath;
     }
 
-    const pageClassNames = classNames('ChatPage', {
-      [`ChatPage--${chatType}`]: chatType,
-      'ChatPage--loading': isLoading,
-    });
-
     return (
-      <ChatPage classNames={pageClassNames} routes={routes}>
-        {modalType === 'MODAL_REACTION' && (
-          <ReactionModal
-            createReactionRequest={createReactionRequest}
-            modalProps={modalProps}
-            modalClose={modalClose}
-          />
-        )}
-        {chatPath === 'unreads' && (
-          <AllUnreads
-            messages={messages}
-            users={users}
-            isLoading={isLoading}
-            channels={channels}
-            clearUnreads={clearUnreads}
-          />
-        )}
-        {chatPath === 'threads' && (
-          <AllThreads
-            messages={messages}
-            users={users}
-            isLoading={isLoading}
-            channels={channels}
-            currentUser={user}
-          />
-        )}
-        {channel && (
-          <Channel
-            chatPath={chatPath}
-            messages={messages}
-            isLoading={isLoading}
-            channel={channel}
-            currentUser={user}
-            fetchHistoryRequest={fetchHistoryRequest}
-            updateScrollLoc={this.handleScrollLoc}
-            isLoadingHistory={isLoadingHistory}
-            createChannelSubRequest={createChannelSubRequest}
-          />
-        )}
-      </ChatPage>
+      <div className="ChatPageSwitch">
+        <ChannelHeaderContainer />
+        <Layout layoutFor={chatType} routes={routes} isLoading={isLoading} hasBodyWrapper>
+          {modalType === 'MODAL_REACTION' && (
+            <ReactionModal
+              createReactionRequest={createReactionRequest}
+              modalProps={modalProps}
+              modalClose={modalClose}
+            />
+          )}
+          {chatPath === 'unreads' && (
+            <AllUnreads
+              messages={messages}
+              users={users}
+              isLoading={isLoading}
+              channels={channels}
+              clearUnreads={clearUnreads}
+            />
+          )}
+          {chatPath === 'threads' && (
+            <AllThreads
+              messages={messages}
+              users={users}
+              isLoading={isLoading}
+              channels={channels}
+              currentUser={user}
+            />
+          )}
+          {channel && (
+            <Channel
+              chatPath={chatPath}
+              messages={messages}
+              isLoading={isLoading}
+              channel={channel}
+              currentUser={user}
+              fetchHistoryRequest={fetchHistoryRequest}
+              updateScrollLoc={this.handleScrollLoc}
+              isLoadingHistory={isLoadingHistory}
+              createChannelSubRequest={createChannelSubRequest}
+            />
+          )}
+        </Layout>
+      </div>
     );
   }
 }

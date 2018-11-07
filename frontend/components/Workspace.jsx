@@ -1,9 +1,7 @@
 import React from 'react';
-import { Switch } from 'react-router-dom';
 import { ActionCable } from 'react-actioncable-provider';
 import { decamelizeKeys } from 'humps';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { RouteWithSubRoutes } from '../util/routeUtil';
 import sampleWisdomQuote from '../util/wisdomQuotesUtil';
 import LeftSidebarContainer from './LeftSidebarContainer';
 import ProfileModal from './ProfileModal';
@@ -11,6 +9,7 @@ import ChatModal from './ChatModal';
 import ChatsModal from './ChatsModal';
 import ChannelEditorModal from './ChannelEditorModal';
 import './Workspace.css';
+import Layout from './Layout';
 
 class Workspace extends React.Component {
   componentDidMount() {
@@ -72,9 +71,9 @@ class Workspace extends React.Component {
 
     if (isLoading) {
       return (
-        <div className="Workspace Workspace--loading">
+        <Layout layoutFor="workspace" isLoading>
           <div className="LeftSidebar" />
-          <div className="Workspace__col">
+          <div className="Layout__col">
             <span className="Workspace__brand-icon fa-layers fa-fw">
               <FontAwesomeIcon icon="square" className="Workspace__square-icon" />
               <FontAwesomeIcon icon="quote-left" inverse transform="shrink-7" />
@@ -85,7 +84,7 @@ class Workspace extends React.Component {
             </blockquote>
             <FontAwesomeIcon icon="spinner" spin pulse size="3x" />
           </div>
-        </div>
+        </Layout>
       );
     }
 
@@ -96,9 +95,10 @@ class Workspace extends React.Component {
     const cableChannels = channels.filter(ch => ch.isSub || ch.slug === currChatSlug).map(ch => (
       { channel: 'ChatChannel', channelSlug: ch.slug }
     ));
+    const childRoutes = defaultChat && routes;
 
     return (
-      <div id="workspace" className="Workspace">
+      <Layout layoutFor="workspace" routes={childRoutes}>
         <ActionCable
           channel={decamelizeKeys({ channel: 'WorkspaceChannel', workspaceSlug })}
           onReceived={onReceived}
@@ -114,16 +114,7 @@ class Workspace extends React.Component {
             onReceived={onReceived}
           />
         ))}
-        {defaultChat && (<LeftSidebarContainer />)}
-        <div className="Workspace__col">
-          <div className="Workspace__chat">
-            {defaultChat && (
-              <Switch>
-                {routes.map(route => <RouteWithSubRoutes key={route.path} {...route} />)}
-              </Switch>
-            )}
-          </div>
-        </div>
+        {defaultChat && <LeftSidebarContainer />}
         {workspace && modalType === 'MODAL_CHAT' && (
           <ChatModal workspaceId={workspace.id} modalClose={modalClose} />
         )}
@@ -141,7 +132,7 @@ class Workspace extends React.Component {
         {channel && modalType === 'MODAL_EDIT_CHANNEL' && (
           <ChannelEditorModal channel={channel} currentUser={currentUser} modalClose={modalClose} />
         )}
-      </div>
+      </Layout>
     );
   }
 }

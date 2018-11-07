@@ -19,7 +19,7 @@ const AllUnreads = ({
 
   if (!channels.length) {
     return (
-      <div className="ChatPage__empty">
+      <div className="ChatPageSwitch__empty">
         You are all caught up!
       </div>
     );

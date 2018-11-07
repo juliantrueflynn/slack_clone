@@ -1,0 +1,39 @@
+.ChatPageSwitch {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.ChatPageSwitch > .Layout {
+  height: 100%;
+  width: 100%;
+}
+
+.ChatPageSwitch .Layout__body {
+  overflow: hidden;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.ChatPageSwitch .Channel {
+  position: relative;
+  height: 100%;
+}
+
+.Layout__threads {
+  background-color: #F7FAFC;
+}
+
+.ChatPageSwitch__empty {
+  padding-left: 27px;
+  padding-right: 27px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.ChatPageSwitch .Channel .Message:last-child {
+  margin-bottom: 15px;
+}

@@ -11,7 +11,7 @@ const AllThreads = ({
 }) => {
   if (isLoading) {
     return (
-      <div className="ChatPage__loader">
+      <div className="ChatPageSwitch__loader">
         Loading
       </div>
     );
@@ -19,7 +19,7 @@ const AllThreads = ({
 
   if (!messages.length) {
     return (
-      <div className="ChatPage__empty">
+      <div className="ChatPageSwitch__empty">
         No threads
       </div>
     );
