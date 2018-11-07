@@ -68,13 +68,12 @@ class Dropdown extends React.Component {
     const {
       menuFor,
       menuPos,
-      items,
       togglerText,
       children,
       modifier,
-      shouldPos,
-      style,
-      unStyled,
+      ddToggle,
+      onOverlayClick,
+      ...menuProps
     } = this.props;
     const { isOpen, menuStyle } = this.state;
 
@@ -92,8 +91,7 @@ class Dropdown extends React.Component {
         <Button
           buttonFor="dropdown"
           onClick={this.handleTogglerClick}
-          style={style}
-          unStyled={unStyled}
+          unStyled
           aria-haspopup="true"
           aria-expanded={isOpen}
         >
@@ -103,11 +101,10 @@ class Dropdown extends React.Component {
           <PopoverOverlayHandler onOverlayClick={this.handleOverlayClick}>
             <Menu
               menuFor="dropdown"
-              items={items}
               style={menuStyle}
-              shouldPos={shouldPos}
               handleStyleFromHeight={this.handleStyleFromHeight}
               toggleMenu={this.handleTogglerClick}
+              {...menuProps}
             />
           </PopoverOverlayHandler>
         )}

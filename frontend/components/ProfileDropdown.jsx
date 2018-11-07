@@ -41,7 +41,7 @@ const ProfileDropdown = ({
   }
 
   return (
-    <Dropdown menuFor="profile" items={menuItems} unStyled style={{ textAlign: 'left' }}>
+    <Dropdown menuFor="profile" items={menuItems}>
       <div className="Dropdown__workspace">
         {workspaceTitle}
       </div>

@@ -10,6 +10,7 @@ const Layout = ({
   isLoading,
   hasBodyWrapper,
   children,
+  ...props
 }) => {
   const layoutClassNames = classNames('Layout', {
     [`Layout__${layoutFor}`]: layoutFor,
@@ -27,7 +28,7 @@ const Layout = ({
   }
 
   return (
-    <div className={layoutClassNames}>
+    <div className={layoutClassNames} {...props}>
       {childComp}
       {routes && (
         <Switch>

@@ -3,7 +3,7 @@ import withPublicView from './withPublicView';
 import PublicWorkspacesContainer from './PublicWorkspacesContainer';
 import './PageHome.css';
 
-const PageHome = ({ workspaces, isLoggedIn, currentUser }) => (
+const PageHome = ({ content: { workspaces }, isLoggedIn, currentUser }) => (
   <div className="PageHome">
     <div className="PageView__body">
       <div className="PageHome__hero">
@@ -31,7 +31,6 @@ const PageHome = ({ workspaces, isLoggedIn, currentUser }) => (
       </div>
     </div>
   </div>
-
 );
 
 export default withPublicView(PageHome);

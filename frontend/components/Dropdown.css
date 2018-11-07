@@ -20,11 +20,11 @@
   z-index: 999;
 }
 
-.Btn__dropdown {
+.Dropdown .Btn__dropdown {
   width: 100%;
 }
 
-.Btn__dropdown:focus {
+.Dropdown .Btn__dropdown:focus {
   outline: 0;
   box-shadow: 0 0 0 2px rgba(255,255,255,.4);
 }

@@ -3,9 +3,13 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { camelizeKeys } from 'humps';
 
-const mapStateToProps = state => ({ isLoggedIn: !!state.session.currentUser });
+const mapStateToProps = state => ({
+  isLoggedIn: !!state.session.currentUser,
+});
 
-const mapDispatchToProps = dispatch => ({ actionCableReceive: received => dispatch(received) });
+const mapDispatchToProps = dispatch => ({
+  actionCableReceive: received => dispatch(received),
+});
 
 const withActionCable = (WrappedComponent) => {
   class WithActionCable extends React.Component {

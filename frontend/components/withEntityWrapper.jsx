@@ -83,6 +83,12 @@ const withEntityWrapper = ({ entityName, pathName }) => (WrappedComponent) => {
     />
   );
 
+  const wrappedComponentName = WrappedComponent.displayName
+    || WrappedComponent.name
+    || 'Component';
+
+  WithEntityWrapper.displayName = `withEntityWrapper(${wrappedComponentName})`;
+
   return connect(mapStateToProps, mapDispatchToProps)(WithEntityWrapper);
 };
 

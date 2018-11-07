@@ -12,6 +12,10 @@
   flex-direction: row;
 }
 
+.Dropdown__profile .Btn__dropdown {
+  text-align: left;
+}
+
 .Dropdown__profile .Dropdown__status {
   padding-right: 8px;
   display: flex;
