@@ -15,6 +15,7 @@ class SearchModal extends React.Component {
 
     this.state = {
       query: '',
+      isNewSearch: true,
       results: [],
       channelFilter: [],
       peopleFilter: [],
@@ -22,26 +23,42 @@ class SearchModal extends React.Component {
 
     this.setQuery = this.setQuery.bind(this);
     this.handleFilterToggle = this.handleFilterToggle.bind(this);
+    this.handleSearchRequest = this.handleSearchRequest.bind(this);
   }
 
   componentDidMount() {
-    const { searchQuery: query, fetchSearchRequest } = this.props;
+    const { searchQuery: query } = this.props;
     this.setState({ query });
 
     if (query) {
-      fetchSearchRequest(query);
+      this.handleSearchRequest(query);
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { messages } = this.props;
-    const { results, channelFilter, peopleFilter } = this.state;
+    const { messages, searchQuery } = this.props;
+    const {
+      query,
+      isNewSearch,
+      results,
+      channelFilter,
+      peopleFilter,
+    } = this.state;
     const prevLastMsg = prevProps.messages[prevProps.messages.length - 1];
     const lastMsg = messages[messages.length - 1];
     const hasChannelFilterDiff = channelFilter.length === prevState.channelFilter.length;
     const hasPeopleFilterDiff = peopleFilter.length === prevState.peopleFilter.length;
 
-    if (hasChannelFilterDiff || hasPeopleFilterDiff) {
+    if (searchQuery && prevProps.searchQuery !== searchQuery) {
+      this.setResults(messages);
+    }
+
+    if (searchQuery && searchQuery !== query && prevState.query !== query) {
+      this.setResults([]);
+      this.setIsNewSearch(true);
+    }
+
+    if ((hasChannelFilterDiff || hasPeopleFilterDiff) && !isNewSearch) {
       if (lastMsg && !results.length && !channelFilter.length && !peopleFilter.length) {
         this.setResults(messages);
       }
@@ -56,8 +73,19 @@ class SearchModal extends React.Component {
     this.setState({ results });
   }
 
+  setIsNewSearch(isNewSearch) {
+    this.setState({ isNewSearch });
+  }
+
   setQuery(query) {
     this.setState({ query });
+  }
+
+  handleSearchRequest(query) {
+    const { fetchSearchRequest } = this.props;
+
+    this.setState({ isNewSearch: false });
+    fetchSearchRequest(query);
   }
 
   filterResults(newFilter, currFilter) {
@@ -92,68 +120,58 @@ class SearchModal extends React.Component {
     const {
       users,
       messages,
-      fetchSearchRequest,
-      createSearch,
       destroySearch,
       modalClose,
       isSearchLoading,
     } = this.props;
-
     const {
       query,
       results,
       channelFilter,
       peopleFilter,
+      isNewSearch,
     } = this.state;
 
-    const hasLen = !!results.length;
-    const isEmpty = !hasLen && !peopleFilter.length && !channelFilter.length;
+    const isEmpty = !results.length && !peopleFilter.length && !channelFilter.length;
 
-    const searchClassNames = classNames('SearchModal', {
-      'SearchModal--fill': hasLen,
-      'SearchModal--empty': isEmpty,
-      'SearchModal--loading': isSearchLoading,
-    });
-    const overlayClassNames = classNames('Modal__overlay Modal__overlay--search', {
-      'Modal__overlay--search-empty': isEmpty,
+    const overlayClassNames = classNames('Modal__overlay SearchModal', {
+      'SearchModal--empty': isEmpty && !isNewSearch,
+      'SearchModal--new': isNewSearch,
     });
 
     return (
       <Modal
-        modalFor="search"
         isOpen
+        modalFor="search"
         close={modalClose}
         overlayClassName={overlayClassNames}
         unStyled
       >
-        <div className={searchClassNames} ref={this.container}>
-          <div className="SearchModal__searchbar">
-            <SearchBar
-              fetchSearchRequest={fetchSearchRequest}
-              createSearch={createSearch}
-              destroySearch={destroySearch}
-              setQuery={this.setQuery}
-              query={query}
-            />
-            <Button onClick={() => modalClose()} buttonFor="modal-close" unStyled>
-              <FontAwesomeIcon icon="times" />
-            </Button>
-          </div>
-          <ScrollBar>
-            <SearchModalResults
-              results={results}
-              isLoading={isSearchLoading}
-              users={users}
-            />
-            <SearchModalAside
-              messages={messages}
-              users={users}
-              peopleFilter={peopleFilter}
-              channelFilter={channelFilter}
-              handleFilterToggle={this.handleFilterToggle}
-            />
-          </ScrollBar>
+        <div className="SearchModal__searchbar">
+          <SearchBar
+            searchSubmit={this.handleSearchRequest}
+            destroySearch={destroySearch}
+            setQuery={this.setQuery}
+            query={query}
+          />
+          <Button onClick={() => modalClose()} buttonFor="modal-close" unStyled>
+            <FontAwesomeIcon icon="times" />
+          </Button>
         </div>
+        <ScrollBar>
+          <SearchModalResults
+            results={results}
+            isLoading={isSearchLoading}
+            users={users}
+          />
+          <SearchModalAside
+            messages={messages}
+            users={users}
+            peopleFilter={peopleFilter}
+            channelFilter={channelFilter}
+            handleFilterToggle={this.handleFilterToggle}
+          />
+        </ScrollBar>
       </Modal>
     );
   }

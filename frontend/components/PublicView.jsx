@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import Menu from './Menu';
 import Dropdown from './Dropdown';
 import WorkspaceModal from './WorkspaceModal';
-import Layout from './Layout';
 import './PublicView.css';
 
 class PublicView extends React.Component {
@@ -93,9 +92,7 @@ class PublicView extends React.Component {
             </nav>
           </div>
         </header>
-        <Layout layoutFor={pagePath} hasBodyWrapper>
-          {render({ workspaces })}
-        </Layout>
+        {render({ workspaces })}
         {isWorkspaceModalOpen && <WorkspaceModal modalClose={modalClose} />}
       </div>
     );

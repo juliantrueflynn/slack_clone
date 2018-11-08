@@ -1,40 +1,37 @@
-.Modal__overlay--search {
+.SearchModal {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-.Modal__overlay--search .Modal {
+.SearchModal .Modal {
   position: absolute;
   top: 9px;
   right: 109px;
   left: 109px;
   bottom: 9px;
   border-radius: 6px;
+  height: initial;
 }
 
-.Modal__overlay--search .Modal__body,
-.Modal__overlay--search .Modal__inner-body,
-.SearchModal {
+.SearchModal .Modal__body,
+.SearchModal .Modal__inner-body {
   height: 100%;
   width: 100%;
 }
 
-.Modal__overlay--search-empty .Modal__body,
-.Modal__overlay--search-empty .Modal__inner-body,
-.Modal__overlay--search-empty .Modal__search,
-.SearchModal {
+.SearchModal--new .Modal__inner-body {
   height: auto;
 }
 
-.Modal__overlay--search-empty .Modal {
-  bottom: initial;
-}
-
-.SearchModal {
+.SearchModal .Modal__inner-body {
   padding-top: 50px;
   overflow: hidden;
   border-radius: 6px;
   background-color: #F7FAFC;
   position: relative;
+}
+
+.SearchModal--empty .Modal {
+  bottom: initial;
 }
 
 .SearchModal .ScrollBar .ScrollBar__container {

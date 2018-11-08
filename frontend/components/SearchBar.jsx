@@ -7,8 +7,8 @@ class SearchBar extends React.Component {
   constructor(props) {
     super(props);
     this.input = React.createRef();
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputVal = this.handleInputVal.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClearClick = this.handleClearClick.bind(this);
   }
 
@@ -23,8 +23,8 @@ class SearchBar extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const { fetchSearchRequest, query } = this.props;
-    fetchSearchRequest(query);
+    const { searchSubmit, query } = this.props;
+    searchSubmit(query);
   }
 
   handleInputVal(e) {

@@ -4,7 +4,10 @@ import './SearchModalResults.css';
 
 const SearchModalResults = ({ results, isLoading, users }) => {
   const loadingText = isLoading && 'Loading';
-  const resultsText = `${results.length} results`;
+  let resultsText = `${results.length} results`;
+  if (results.length === 0) {
+    resultsText = 'No matches found';
+  }
 
   return (
     <div className="SearchModalResults">

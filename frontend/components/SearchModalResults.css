@@ -8,15 +8,15 @@
   margin: 0 0 15px;
 }
 
-.SearchModal--fill .SearchModalResults__empty-txt,
-.SearchModal--loading .SearchModalResults__empty-txt {
+.SearchModal--new .SearchModalResults__empty-txt {
+  display: block;
+}
+
+.SearchModalResults__empty-txt {
+  color: #636E72;
   display: none;
 }
 
-.SearchModal__empty-txt {
-  color: #636E72;
-}
-
-.SearchModal--empty .SearchModalResults__count {
+.SearchModal--new .SearchModalResults__count {
   display: none;
 }
