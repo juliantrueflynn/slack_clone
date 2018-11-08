@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from './Button';
-import './ChannelSubscribe.css';
 import { dateUtil } from '../util/dateUtil';
+import './ChannelSubscribe.css';
 
 class ChannelSubscribe extends React.Component {
   constructor(props) {
@@ -10,26 +10,27 @@ class ChannelSubscribe extends React.Component {
   }
 
   clickSubscribe() {
-    const { createChannelSubRequest, channel: { id } } = this.props;
-    const channelSub = { channelId: id };
-    createChannelSubRequest(channelSub);
+    const { createChannelSubRequest, id: channelId } = this.props;
+    createChannelSubRequest({ channelId });
   }
 
   render() {
-    const { channel } = this.props;
+    const {
+      title,
+      createdAt,
+      ownerName,
+      matchUrl,
+    } = this.props;
 
-    if (channel.hasDm || channel.isSub) {
-      return null;
-    }
-
-    const chatTitle = ` #${channel.title}`;
-    const date = dateUtil(channel.createdAt);
+    const chatTitle = ` #${title}`;
+    const date = dateUtil(createdAt);
     let dateCreated;
     if (date.isToday()) {
       dateCreated = `on ${date.monthDayYear()}`;
     } else {
       dateCreated = 'today';
     }
+    const detailsUrl = `${matchUrl}/details`;
 
     return (
       <div className="ChannelSubscribe">
@@ -40,11 +41,16 @@ class ChannelSubscribe extends React.Component {
           </strong>
         </h3>
         <div className="ChannelSubscribe__text">
-          {`Created by ${channel.ownerName} ${dateCreated}`}
+          {`Created by ${ownerName} ${dateCreated}`}
         </div>
-        <Button buttonFor="subscribe" color="green" onClick={this.clickSubscribe}>
-          Join Channel
-        </Button>
+        <div className="Btn__group">
+          <Button buttonFor="subscribe" color="green" onClick={this.clickSubscribe}>
+            Join Channel
+          </Button>
+          <Button buttonFor="details" color="white" linkTo={detailsUrl}>
+            View Details
+          </Button>
+        </div>
       </div>
     );
   }

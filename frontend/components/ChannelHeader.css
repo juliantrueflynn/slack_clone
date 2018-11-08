@@ -4,7 +4,7 @@
   border-bottom: 1px solid #DFE6E9;
   background-color: #FFF;
   padding: 8px 27px;
-  height: 58px;
+  min-height: 58px;
   width: 100%;
 }
 

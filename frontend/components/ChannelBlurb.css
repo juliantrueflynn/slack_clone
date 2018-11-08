@@ -5,7 +5,7 @@
 }
 
 .ChannelBlurb__title {
-  margin: 0 0 15px;
+  margin: 0 0 10px;
   font-weight: 400;
 }
 
@@ -23,6 +23,21 @@
   margin-left: 2px;
 }
 
+.ChannelBlurb__description {
+  font-size: 1.1em;
+}
+
+.ChannelBlurb .Btn__edit-label {
+  display: flex;
+  align-items: center;
+  color: #0984E3;
+  margin-top: 8px;
+}
+
+.ChannelBlurb .Btn__edit-label svg {
+  margin-right: 4px;
+}
+
 .ChannelBlurb__label {
   background-color: rgba(5,118,185,0.1);
   padding: 2px 3px;
@@ -32,4 +47,8 @@
 .ChannelBlurb__label-at {
   font-size: 90%;
   vertical-align: top;
+}
+
+.ChannelBlurb .Btn__edit .Btn__span {
+  color: #0984E3;
 }

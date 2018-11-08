@@ -30,26 +30,27 @@ class Channel extends React.Component {
     }
 
     if (this.container.current.children[1]) {
-      const { clientHeight: formHeight } = this.container.current.children[1];
+      const { clientHeight: bottomNode } = this.container.current.children[1];
       const { clientHeight: containerHeight } = this.container.current;
-      const height = containerHeight - formHeight;
+      const height = containerHeight - bottomNode;
 
       this.setState({ height });
     } else {
-      this.setState({ height: '100%' });
+      this.setState({ height: '100%' }); // remove for production
     }
   }
 
   render() {
     const {
+      isLoading,
       channel,
       messages,
       fetchHistoryRequest,
       createChannelSubRequest,
       currentUser,
-      isLoading,
-      isLoadingHistory,
+      modalOpen,
       updateScrollLoc,
+      match: { url },
     } = this.props;
     const { height } = this.state;
 
@@ -65,16 +66,21 @@ class Channel extends React.Component {
     return (
       <div className={channelClassNames} ref={this.container}>
         <div className="Channel__body" style={style}>
-          {isLoading || (
+          {isLoading.channel || (
             <ScrollBar
               fetchHistory={fetchHistoryRequest}
-              isLoadingHistory={isLoadingHistory}
+              isLoadingHistory={isLoading.history}
               channel={channel}
               messages={messages}
               updateScrollLoc={updateScrollLoc}
               shouldAutoScroll
             >
-              <ChannelBlurb channel={channel} currentUserSlug={currentUser.slug} />
+              <ChannelBlurb
+                channel={channel}
+                currentUserSlug={currentUser.slug}
+                modalOpen={modalOpen}
+                matchUrl={url}
+              />
               <MessagesList role="listitem" messages={messages} shouldShowPins isDm={channel.hasDm} />
             </ScrollBar>
           )}
@@ -82,10 +88,13 @@ class Channel extends React.Component {
         {channel.isSub && (
           <MessageFormContainer channelId={channel.id} placeholder={formPlaceholder} />
         )}
-        <ChannelSubscribe
-          channel={channel}
-          createChannelSubRequest={createChannelSubRequest}
-        />
+        {channel.isSub || channel.hasDm || (
+          <ChannelSubscribe
+            createChannelSubRequest={createChannelSubRequest}
+            matchUrl={url}
+            {...channel}
+          />
+        )}
       </div>
     );
   }

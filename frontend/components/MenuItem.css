@@ -32,7 +32,7 @@
 
 .SidebarMenu .MenuItem__content--btn:hover:not(.MenuItem__content--active),
 .SidebarMenu .MenuItem__content--link:hover:not(.MenuItem__content--active) {
-  background-color: rgba(0,0,0,0.1);
+  background-color: #3E2E3D;
 }
 
 .SidebarMenu .MenuItem__content--active {

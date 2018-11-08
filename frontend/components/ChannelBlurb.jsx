@@ -1,41 +1,53 @@
 import React, { Fragment } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { dateUtil } from '../util/dateUtil';
+import Button from './Button';
 import './ChannelBlurb.css';
 
-const ChannelBlurb = ({ channel, currentUserSlug, match: { url } }) => {
+const ChannelBlurb = ({
+  channel,
+  currentUserSlug,
+  modalOpen,
+  matchUrl,
+}) => {
   const {
     hasDm,
     dmUserSlug,
     ownerSlug,
     ownerName,
     createdAt,
+    topic,
     title,
   } = channel;
+  const openEditor = () => modalOpen('MODAL_EDIT_CHANNEL');
+  const userPathUrl = userSlug => `${matchUrl}/team/${userSlug}`;
   let chatTitle = title;
   let description;
 
   if (hasDm) {
-    const userLink = `${url}/team/${dmUserSlug}`;
     description = (
-      <Fragment>
+      <div className="ChannelBlurb__description">
         {'This is the beginning of your direct message conversation with '}
-        <Link className="ChannelBlurb__label" to={userLink}>
-          <span className="ChannelBlurb__label-at">
-            @
-          </span>
+        <Link className="ChannelBlurb__label" to={userPathUrl(dmUserSlug)}>
+          <span className="ChannelBlurb__label-at">@</span>
           {title}
         </Link>
-      </Fragment>
+      </div>
     );
   } else {
-    const ownerLink = `${url}/team/${ownerSlug}`;
+    const editButton = (
+      <Button buttonFor="edit" onClick={openEditor} unStyled>
+        (
+        <span className="Btn__span">edit</span>
+        )
+      </Button>
+    );
+
     let channelCreator = (
-      <Link className="ChannelBlurb__label" to={ownerLink}>
-        <span className="ChannelBlurb__label-at">
-          @
-        </span>
+      <Link className="ChannelBlurb__label" to={userPathUrl(ownerSlug)}>
+        <span className="ChannelBlurb__label-at">@</span>
         {ownerName}
       </Link>
     );
@@ -45,10 +57,7 @@ const ChannelBlurb = ({ channel, currentUserSlug, match: { url } }) => {
     }
 
     const date = dateUtil(createdAt);
-    let dateCreated = `on ${date.monthName()} ${date.dayOrdinal()}`;
-    if (date.isToday()) {
-      dateCreated = 'today';
-    }
+    const dateCreated = date.isToday() ? 'today' : `on ${date.monthName()} ${date.dayOrdinal()}`;
 
     chatTitle = (
       <Fragment>
@@ -59,12 +68,14 @@ const ChannelBlurb = ({ channel, currentUserSlug, match: { url } }) => {
       </Fragment>
     );
     description = (
-      <Fragment>
+      <div className="ChannelBlurb__description">
         {channelCreator}
         {` created this channel ${dateCreated}. This is the beginning of the `}
         {chatTitle}
-        {' channel.'}
-      </Fragment>
+        {' channel. '}
+        {topic && `Purpose: ${topic} `}
+        {topic && editButton}
+      </div>
     );
   }
 
@@ -75,14 +86,18 @@ const ChannelBlurb = ({ channel, currentUserSlug, match: { url } }) => {
 
   return (
     <section className={blurbClassNames}>
-      <h2 className="ChannelBlurb__title">
-        {chatTitle}
-      </h2>
-      <div className="ChannelBlurb__description">
-        {description}
-      </div>
+      <h2 className="ChannelBlurb__title">{chatTitle}</h2>
+      {description}
+      {!topic && !hasDm && (
+        <div className="ChannelBlurb__editor">
+          <Button buttonFor="edit-label" onClick={openEditor} unStyled>
+            <FontAwesomeIcon icon="pencil-alt" size="xs" />
+            Set a topic
+          </Button>
+        </div>
+      )}
     </section>
   );
 };
 
-export default withRouter(ChannelBlurb);
+export default ChannelBlurb;

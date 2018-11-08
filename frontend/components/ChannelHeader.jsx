@@ -150,7 +150,7 @@ const ChannelHeader = ({
           </Button>
         )}
         {channel && (
-          <Dropdown menuFor="channel-edit" items={editMenuItems} unStyled>
+          <Dropdown menuFor="channel-edit" items={editMenuItems}>
             <FontAwesomeIcon icon="cog" size="lg" />
           </Dropdown>
         )}

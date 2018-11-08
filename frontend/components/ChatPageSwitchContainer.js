@@ -5,7 +5,7 @@ import { selectChatPageMessagesBySlug, selectChatPageChannelsBySlug } from '../r
 import { fetchHistory } from '../actions/messageActions';
 import { createChannelSub, switchChannel } from '../actions/channelActions';
 import { clearUnreads } from '../actions/unreadActions';
-import { drawerClose, modalClose } from '../actions/uiActions';
+import { drawerClose, modalClose, modalOpen } from '../actions/uiActions';
 import { createReaction } from '../actions/reactionActions';
 import ChatPageSwitch from './ChatPageSwitch';
 
@@ -13,8 +13,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   drawerType: state.ui.drawer.drawerType,
   drawerSlug: state.ui.drawer.drawerSlug,
   modal: state.ui.displayModal,
-  isLoading: state.isLoading.channel,
-  isLoadingHistory: state.isLoading.history,
+  isLoading: state.isLoading,
   channels: selectChatPageChannelsBySlug(state, chatPath),
   messages: selectChatPageMessagesBySlug(state, chatPath),
 });
@@ -27,6 +26,7 @@ const mapDispatchToProps = dispatch => ({
   clearUnreads: (channelSlug, lastRead) => dispatch(clearUnreads(channelSlug, lastRead)),
   drawerClose: () => dispatch(drawerClose()),
   modalClose: () => dispatch(modalClose()),
+  modalOpen: modalType => dispatch(modalOpen(modalType, null)),
 });
 
 const entityProps = { entityName: 'channels', pathName: 'chatPath' };

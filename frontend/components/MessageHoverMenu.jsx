@@ -108,7 +108,6 @@ class MessageHoverMenu extends React.Component {
             ddToggle={ddToggle}
             onOverlayClick={this.handleOverlayClick}
             shouldPos
-            unStyled
           >
             <FontAwesomeIcon icon="ellipsis-h" fixedWidth />
           </Dropdown>

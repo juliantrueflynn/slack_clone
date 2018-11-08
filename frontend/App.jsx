@@ -29,6 +29,7 @@ import {
   faThumbtack,
   faSpinner,
   faQuoteLeft,
+  faPencilAlt,
   faStar as fasStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { ActionCable } from 'react-actioncable-provider';
@@ -65,6 +66,7 @@ library.add(
   faUserCog,
   faThumbtack,
   faSpinner,
+  faPencilAlt,
 );
 
 class App extends React.Component {

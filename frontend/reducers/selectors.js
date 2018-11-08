@@ -110,6 +110,11 @@ const groupByEntityInIndex = (arr) => {
 const selectChannelMessagesBySlug = ({ entities }, slug) => {
   const { channels } = entities;
   const channel = channels[slug];
+
+  if (!channel) {
+    return [];
+  }
+
   const entries = messagesWithEntitiesMap(entities);
   const allMessages = values(entries).filter(msg => (
     msg && msg.channelId && msg.channelId === channel.id && !msg.parentMessageId

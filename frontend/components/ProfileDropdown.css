@@ -4,7 +4,7 @@
 
 .Dropdown__profile,
 .Dropdown__profile > .Btn {
-  height: 58px;
+  min-height: 58px;
 }
 
 .Dropdown__profile .Dropdown__subtitle {
@@ -14,6 +14,16 @@
 
 .Dropdown__profile .Btn__dropdown {
   text-align: left;
+}
+
+.Dropdown__profile.Dropdown--opened,
+.Dropdown__profile .Btn__dropdown:hover {
+  background-color: #3E2E3D;
+}
+
+.Dropdown__profile.Dropdown--opened .Dropdown__subtitle,
+.Dropdown__profile .Btn__dropdown:hover .Dropdown__subtitle {
+  color: #FFF;
 }
 
 .Dropdown__profile .Dropdown__status {
@@ -57,7 +67,6 @@
 
 .Dropdown__profile .Btn__dropdown:focus {
   outline: 0;
-  background-color: #453343;
   box-shadow: none;
 }
 
@@ -84,6 +93,8 @@
   text-align: left;
 }
 
-.Dropdown__workspace {
+.Dropdown__profile .Dropdown__workspace {
   font-weight: bold;
+  color: #FFF;
+  margin-bottom: 3px;
 }

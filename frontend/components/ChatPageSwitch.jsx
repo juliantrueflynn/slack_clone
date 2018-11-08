@@ -89,8 +89,8 @@ class ChatPageSwitch extends React.Component {
       channels,
       currentUser,
       isLoading,
-      isLoadingHistory,
       clearUnreads,
+      modalOpen,
       createReactionRequest,
       fetchHistoryRequest,
       createChannelSubRequest,
@@ -106,7 +106,7 @@ class ChatPageSwitch extends React.Component {
     return (
       <div className="ChatPageSwitch">
         <ChannelHeaderContainer />
-        <Layout layoutFor={chatType} routes={routes} isLoading={isLoading} hasBodyWrapper>
+        <Layout layoutFor={chatType} routes={routes} isLoading={isLoading.channel} hasBodyWrapper>
           {modalType === 'MODAL_REACTION' && (
             <ReactionModal
               createReactionRequest={createReactionRequest}
@@ -118,7 +118,7 @@ class ChatPageSwitch extends React.Component {
             <AllUnreads
               messages={messages}
               users={users}
-              isLoading={isLoading}
+              isLoading={isLoading.channel}
               channels={channels}
               clearUnreads={clearUnreads}
             />
@@ -127,7 +127,7 @@ class ChatPageSwitch extends React.Component {
             <AllThreads
               messages={messages}
               users={users}
-              isLoading={isLoading}
+              isLoading={isLoading.channel}
               channels={channels}
               currentUser={user}
             />
@@ -139,9 +139,9 @@ class ChatPageSwitch extends React.Component {
               isLoading={isLoading}
               channel={channel}
               currentUser={user}
+              modalOpen={modalOpen}
               fetchHistoryRequest={fetchHistoryRequest}
               updateScrollLoc={this.handleScrollLoc}
-              isLoadingHistory={isLoadingHistory}
               createChannelSubRequest={createChannelSubRequest}
             />
           )}
