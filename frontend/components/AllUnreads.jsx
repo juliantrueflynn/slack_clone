@@ -1,4 +1,5 @@
 import React from 'react';
+import EmptyDisplay from './EmptyDisplay';
 import ScrollBar from './ScrollBar';
 import AllUnreadsItem from './AllUnreadsItem';
 
@@ -7,21 +8,12 @@ const AllUnreads = ({
   messages,
   users,
   clearUnreads,
-  isLoading,
 }) => {
-  if (isLoading) {
-    return (
-      <div className="AllUnreads AllUnreads--loading">
-        Loading!
-      </div>
-    );
-  }
-
   if (!channels.length) {
     return (
-      <div className="ChatPageSwitch__empty">
-        You are all caught up!
-      </div>
+      <EmptyDisplay topIcon={['far', 'smile-beam']} topIconHexColor="#FECB6E">
+        You&#8217;re all caught up!
+      </EmptyDisplay>
     );
   }
 

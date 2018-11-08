@@ -1,0 +1,28 @@
+.EmptyDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  max-width: 520px;
+  font-size: 1.2em;
+  text-align: center;
+  margin: 0 auto 70px;
+}
+
+.EmptyDisplay__top-icon {
+  margin-bottom: 18px;
+  font-size: 3.4em;
+}
+
+.EmptyDisplay__txt {
+  font-weight: bold;
+  font-size: 1.55em;
+  line-height: 1.22em;
+}
+
+.EmptyDisplay__loading-icon {
+  display: block;
+  margin-top: 45px;
+  color: #74B9FF;
+}

@@ -7,6 +7,8 @@ import {
   faSmile,
   faComment,
   faUser,
+  faSmileBeam,
+  faComments,
   faCircle as farCircle,
   faStar as farStar,
 } from '@fortawesome/free-regular-svg-icons';
@@ -37,6 +39,8 @@ import withActionCable from './components/withActionCable';
 import './App.css';
 
 library.add(
+  faSmileBeam,
+  faComments,
   faTimes,
   faTrashAlt,
   faEdit,

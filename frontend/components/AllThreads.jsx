@@ -1,4 +1,5 @@
 import React from 'react';
+import EmptyDisplay from './EmptyDisplay';
 import ScrollBar from './ScrollBar';
 import AllThreadsItem from './AllThreadsItem';
 
@@ -11,17 +12,15 @@ const AllThreads = ({
 }) => {
   if (isLoading) {
     return (
-      <div className="ChatPageSwitch__loader">
-        Loading
-      </div>
+      <EmptyDisplay hasLoadingIcon />
     );
   }
 
   if (!messages.length) {
     return (
-      <div className="ChatPageSwitch__empty">
-        No threads
-      </div>
+      <EmptyDisplay topIcon={['far', 'comments']} topIconHexColor="#B2BEC3">
+        No conversations started
+      </EmptyDisplay>
     );
   }
 

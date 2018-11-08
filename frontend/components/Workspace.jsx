@@ -1,15 +1,15 @@
 import React from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 import { decamelizeKeys } from 'humps';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import sampleWisdomQuote from '../util/wisdomQuotesUtil';
 import LeftSidebarContainer from './LeftSidebarContainer';
 import ProfileModal from './ProfileModal';
 import ChatModal from './ChatModal';
 import ChatsModal from './ChatsModal';
 import ChannelEditorModal from './ChannelEditorModal';
-import './Workspace.css';
 import Layout from './Layout';
+import EmptyDisplay from './EmptyDisplay';
+import './Workspace.css';
 
 class Workspace extends React.Component {
   componentDidMount() {
@@ -73,17 +73,12 @@ class Workspace extends React.Component {
       return (
         <Layout layoutFor="workspace" isLoading>
           <div className="LeftSidebar" />
-          <div className="Layout__col">
-            <span className="Workspace__brand-icon fa-layers fa-fw">
-              <FontAwesomeIcon icon="square" className="Workspace__square-icon" />
-              <FontAwesomeIcon icon="quote-left" inverse transform="shrink-7" />
-            </span>
+          <EmptyDisplay topIcon="quote-left" hasLoadingIcon>
             <blockquote className="Workspace__quote">
-              <p>{quoteText}</p>
+              {quoteText}
               <footer>{`— ${quoteBy}`}</footer>
             </blockquote>
-            <FontAwesomeIcon icon="spinner" spin pulse size="3x" />
-          </div>
+          </EmptyDisplay>
         </Layout>
       );
     }
