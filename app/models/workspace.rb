@@ -62,7 +62,7 @@ class Workspace < ApplicationRecord
   end
 
   def channels_last_read_by_user(user_id)
-    reads.channels_with_user(id)
+    reads.channels_with_user(user_id)
       .left_outer_joins(channel: :messages)
       .where.not(messages: { channel_id: nil })
       .distinct
