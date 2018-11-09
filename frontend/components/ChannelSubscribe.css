@@ -2,6 +2,11 @@
   padding: 30px 20px;
   text-align: center;
   background-color: #F5F5F5;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 500;
   -webkit-box-shadow: 0px -1px 0px 0px #E9E9E9;
   -moz-box-shadow: 0px -1px 0px 0px #E9E9E9;
   box-shadow: 0px -1px 0px 0px #E9E9E9;

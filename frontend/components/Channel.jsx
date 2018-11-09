@@ -12,7 +12,6 @@ class Channel extends React.Component {
     super(props);
     this.container = React.createRef();
     this.state = { height: -1 };
-    this.handleStylesFromResize = this.handleStylesFromResize.bind(this);
   }
 
   componentDidMount() {
@@ -20,23 +19,39 @@ class Channel extends React.Component {
     window.addEventListener('resize', this.handleStylesFromResize);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { channel } = this.props;
+    const { height } = this.state;
+
+    if (channel.slug !== prevProps.channel.slug) {
+      this.handleStylesFromResize();
+    }
+
+    if (prevState.height && height !== prevState.height) {
+      this.handleStylesFromResize();
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleStylesFromResize);
   }
 
   handleStylesFromResize() {
-    if (!this.container) {
+    const { height: currHeight } = this.state;
+    const pageNode = this.container && this.container.current;
+
+    if (!pageNode) {
       return;
     }
 
-    if (this.container.current.children[1]) {
-      const { clientHeight: bottomNode } = this.container.current.children[1];
-      const { clientHeight: containerHeight } = this.container.current;
+    if (pageNode.children[1]) {
+      const { clientHeight: bottomNode } = pageNode.children[1];
+      const { clientHeight: containerHeight } = pageNode;
       const height = containerHeight - bottomNode;
 
-      this.setState({ height });
-    } else {
-      this.setState({ height: '100%' }); // remove for production
+      if (height !== currHeight) {
+        this.setState({ height });
+      }
     }
   }
 
