@@ -35,23 +35,31 @@
   border-color: rgba(0,0,0,0.28);
 }
 
-.MessageHoverMenu .Btn {
-  border-width: 0;
-  padding: 3px 6px;
-  font-size: 14px;
-  color: rgba(0,0,0,0.7);
-  border-right: 0.5px solid rgba(0,0,0,0.18);
+.MessageHoverMenu .Btn__dropdown:focus {
+  box-shadow: none;
 }
 
 .MessageHoverMenu .Btn__dropdown,
-.MessageHoverMenu .Btn:last-child {
-  border-right: 0;
+.MessageHoverMenu .Menu--message .MenuItem__content {
+  padding: 3px 6px;
+  font-size: 14px;
+  color: rgba(0,0,0,0.7);
 }
 
-.MessageHoverMenu .Btn:hover {
+.MessageHoverMenu .Btn__dropdown,
+.MessageHoverMenu .Menu--message .MenuItem {
+  border-left: 0.5px solid rgba(0,0,0,0.18);
+}
+
+.MessageHoverMenu .Menu--message .MenuItem:first-child {
+  border-left: none;
+}
+
+.MessageHoverMenu .Btn__dropdown:hover,
+.MessageHoverMenu .Menu--message > .MenuItem > .MenuItem__content:hover {
   color: #0576B9;
 }
 
-.Btn__fav--filled {
+.MessageHoverMenu .MenuItem--fav-solid .MenuItem__content--btn {
   color: #FDCB6E !important;
 }

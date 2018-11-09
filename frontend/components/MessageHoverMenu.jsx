@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Dropdown from './Dropdown';
 import Button from './Button';
 import './MessageHoverMenu.css';
+import Menu from './Menu';
 
 class MessageHoverMenu extends React.Component {
   constructor(props) {
@@ -83,26 +84,36 @@ class MessageHoverMenu extends React.Component {
     }
 
     const favIcon = favoriteId ? ['fas', 'star'] : ['far', 'star'];
-    const favClassName = favoriteId ? 'filled' : 'empty';
+    const favClassName = favoriteId ? 'fav-solid' : 'fav-empty';
+
+    const menuItems = [{
+      key: 'reaction',
+      onClick: this.handleReactionToggle,
+      icon: <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />,
+    }];
+
+    if (isMessageType) {
+      if (!parentMessageId) {
+        menuItems.push({
+          key: 'convo',
+          link: `${url}/convo/${slug}`,
+          icon: <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />,
+        });
+      }
+
+      menuItems.push({
+        key: 'favorite',
+        icon: <FontAwesomeIcon icon={favIcon} fixedWidth />,
+        onClick: this.handleFavToggle,
+        modifierClassName: favClassName,
+      });
+    }
 
     return (
       <div className="MessageHoverMenu">
-        <Button unStyled buttonFor="reaction" onClick={this.handleReactionToggle}>
-          <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />
-        </Button>
-        {(!parentMessageId && isMessageType) && (
-          <Button className="Btn Btn__convo" linkTo={`${url}/convo/${slug}`}>
-            <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />
-          </Button>
-        )}
-        {isMessageType && (
-          <Button unStyled buttonFor="fav" modifier={favClassName} onClick={this.handleFavToggle}>
-            <FontAwesomeIcon icon={favIcon} fixedWidth />
-          </Button>
-        )}
+        <Menu menuFor="message" items={menuItems} isRow unStyled />
         {isMessageType && (
           <Dropdown
-            menuFor="message"
             items={ddItems}
             menuPos="right"
             ddToggle={ddToggle}

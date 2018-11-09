@@ -1,6 +1,11 @@
 .Menu--row {
   display: flex;
   flex-direction: row;
+  align-items: stretch;
+}
+
+.Menu--row > li {
+  display: flex;
   align-items: center;
 }
 
