@@ -61,6 +61,7 @@ class MessageHoverMenu extends React.Component {
       destroyPinRequest,
       ddToggle,
       deleteMessageRequest,
+      filterMenuItems,
       match: { url },
     } = this.props;
 
@@ -84,7 +85,7 @@ class MessageHoverMenu extends React.Component {
     const favIcon = favoriteId ? ['fas', 'star'] : ['far', 'star'];
     const favClassName = favoriteId ? 'solid' : 'empty';
 
-    const menuItems = [{
+    let menuItems = [{
       key: 'reaction',
       onClick: this.handleReactionToggle,
       icon: <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />,
@@ -118,6 +119,10 @@ class MessageHoverMenu extends React.Component {
           ddToggle,
         });
       }
+    }
+
+    if (filterMenuItems && filterMenuItems.length) {
+      menuItems = menuItems.filter(item => !filterMenuItems.includes(item.key));
     }
 
     return (
