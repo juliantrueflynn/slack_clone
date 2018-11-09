@@ -15,6 +15,7 @@ const Message = ({
   match: { url },
   message,
   role,
+  style,
   users,
   reactions,
   pins,
@@ -81,6 +82,7 @@ const Message = ({
         onMouseOver={() => isHoverOver(message.id)}
         onMouseEnter={() => toggleHover(message.id)}
         onMouseLeave={() => toggleHover(-1)}
+        style={style}
       >
         {shouldShowPins && isPinned && (
           <MessagePin pinId={message.pinId} users={users} pins={pins} currUserId={currentUser.id} />

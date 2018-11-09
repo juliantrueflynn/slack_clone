@@ -43,7 +43,7 @@
   padding-right: 2px;
 }
 
-.Message--hover:not(.Message--editing):not(.Message--pinned) {
+.Message--hover:not(.Message--editing):not(.Message--pinned) .Message__container {
   background-color: #F9F9F9;
 }
 
