@@ -3,6 +3,7 @@
   border-left: 1px solid #E9E9E9;
   display: flex;
   flex-direction: column;
+  background-color: #FFF;
 }
 
 .Drawer__header {
@@ -30,19 +31,27 @@
   display: block;
 }
 
-.Drawer__body {
+.Drawer__container {
   position: relative;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
+.Drawer__body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
 .Drawer__convo .ScrollBar .Message:first-child .Message__container {
-  padding: 10px;
+  padding: 10px 18px;
 }
 
 .Drawer__convo .ScrollBar .Message:not(:first-child) .Message__container {
-  padding: 6px 10px;
+  padding: 6px 18px;
 }
 
 .Drawer__convo .Message:first-child .Btn__convo {
@@ -55,8 +64,8 @@
   content: "";
   position: absolute;
   top: -12px;
-  right: 10px;
-  left: 10px;
+  right: 18px;
+  left: 18px;
   background: #e8e8e8;
 }
 

@@ -52,17 +52,19 @@ const Drawer = ({
           &#10006;
         </Button>
       </header>
-      <div className="Drawer__body">
-        {isConvo && !isLoading && (
-          <ScrollBar messages={messages} shouldAutoScroll>
-            {children}
-          </ScrollBar>
-        )}
-        {isConvo || (
-          <ScrollBar>
-            {children}
-          </ScrollBar>
-        )}
+      <div className="Drawer__container">
+        <div className="Drawer__body">
+          {isConvo && !isLoading && (
+            <ScrollBar messages={messages} shouldAutoScroll>
+              {children}
+            </ScrollBar>
+          )}
+          {isConvo || (
+            <ScrollBar>
+              {children}
+            </ScrollBar>
+          )}
+        </div>
       </div>
     </div>
   );

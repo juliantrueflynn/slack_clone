@@ -20,12 +20,12 @@
 
 .Drawer .Message:first-child .MessageHoverMenu {
   top: 10px;
-  right: 10px;
+  right: 18px;
 }
 
 .Drawer .Message:not(:first-child) .MessageHoverMenu {
   top: -5px;
-  right: 10px;
+  right: 18px;
 }
 
 .MessageHoverMenu:hover {
