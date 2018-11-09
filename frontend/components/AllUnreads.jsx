@@ -18,19 +18,17 @@ const AllUnreads = ({
   }
 
   return (
-    <div className="AllUnreads">
-      <ScrollBar>
-        {channels.map(channel => (
-          <AllUnreadsItem
-            key={channel.id}
-            channel={channel}
-            authors={users}
-            messages={messages}
-            clearUnreads={clearUnreads}
-          />
-        ))}
-      </ScrollBar>
-    </div>
+    <ScrollBar>
+      {channels.map(channel => (
+        <AllUnreadsItem
+          key={channel.id}
+          channel={channel}
+          authors={users}
+          messages={messages}
+          clearUnreads={clearUnreads}
+        />
+      ))}
+    </ScrollBar>
   );
 };
 

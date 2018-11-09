@@ -12,6 +12,7 @@ class Channel extends React.Component {
     super(props);
     this.container = React.createRef();
     this.state = { height: -1 };
+    this.handleStylesFromResize = this.handleStylesFromResize.bind(this);
   }
 
   componentDidMount() {
