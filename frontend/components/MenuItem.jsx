@@ -49,7 +49,7 @@ class MenuItem extends React.Component {
       itemType = 'dropdown';
     } else if (!link && onClick) {
       itemType = 'btn';
-    } else {
+    } else if (!link && !onClick) {
       itemType = 'text';
     }
 
