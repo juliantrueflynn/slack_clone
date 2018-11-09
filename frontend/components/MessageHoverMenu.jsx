@@ -1,10 +1,8 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Dropdown from './Dropdown';
-import Button from './Button';
-import './MessageHoverMenu.css';
 import Menu from './Menu';
+import './MessageHoverMenu.css';
 
 class MessageHoverMenu extends React.Component {
   constructor(props) {
@@ -84,7 +82,7 @@ class MessageHoverMenu extends React.Component {
     }
 
     const favIcon = favoriteId ? ['fas', 'star'] : ['far', 'star'];
-    const favClassName = favoriteId ? 'fav-solid' : 'fav-empty';
+    const favClassName = favoriteId ? 'solid' : 'empty';
 
     const menuItems = [{
       key: 'reaction',
@@ -107,22 +105,24 @@ class MessageHoverMenu extends React.Component {
         onClick: this.handleFavToggle,
         modifierClassName: favClassName,
       });
+
+
+      if (ddItems.length) {
+        menuItems.push({
+          key: 'dropdown',
+          icon: <FontAwesomeIcon icon="ellipsis-h" fixedWidth />,
+          items: ddItems,
+          menuPos: 'right',
+          shouldPos: true,
+          onOverlayClick: this.handleOverlayClick,
+          ddToggle,
+        });
+      }
     }
 
     return (
       <div className="MessageHoverMenu">
         <Menu menuFor="message" items={menuItems} isRow unStyled />
-        {isMessageType && (
-          <Dropdown
-            items={ddItems}
-            menuPos="right"
-            ddToggle={ddToggle}
-            onOverlayClick={this.handleOverlayClick}
-            shouldPos
-          >
-            <FontAwesomeIcon icon="ellipsis-h" fixedWidth />
-          </Dropdown>
-        )}
       </div>
     );
   }

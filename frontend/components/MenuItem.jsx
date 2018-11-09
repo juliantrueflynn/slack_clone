@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import Button from './Button';
 import LinkWithDrawer from '../util/linkUtil';
 import './MenuItem.css';
+import Dropdown from './Dropdown';
 
 class MenuItem extends React.Component {
   constructor(props) {
@@ -33,6 +34,8 @@ class MenuItem extends React.Component {
       onClick,
       toggleMenu,
       isItemActive,
+      isActive,
+      items,
       ...props
     } = this.props;
 
@@ -42,15 +45,20 @@ class MenuItem extends React.Component {
     itemProps.onClick = this.handleOnClick;
 
     let itemType = 'link';
-    if (!link) {
-      itemType = onClick ? 'btn' : 'text';
+    if (items) {
+      itemType = 'dropdown';
+    } else if (!link && onClick) {
+      itemType = 'btn';
+    } else {
+      itemType = 'text';
     }
 
     const itemClassNames = classNames(className, {
       [`MenuItem--${itemType}`]: itemType,
       [`MenuItem__${altClassName}`]: altClassName,
-      [`MenuItem--${modifierClassName}`]: modifierClassName,
       [`MenuItem__${keyId}`]: keyId,
+      [`MenuItem__${keyId}--${modifierClassName}`]: keyId && modifierClassName,
+      [`MenuItem--${modifierClassName}`]: !keyId && modifierClassName,
     });
 
     const contentClassNames = classNames('MenuItem__content', {
@@ -71,6 +79,13 @@ class MenuItem extends React.Component {
             {icon}
             {label}
           </LinkWithDrawer>
+        )}
+
+        {itemType === 'dropdown' && (
+          <Dropdown items={items} {...itemProps}>
+            {icon}
+            {label}
+          </Dropdown>
         )}
 
         {itemType === 'btn' && (

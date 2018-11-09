@@ -40,18 +40,17 @@
 }
 
 .MessageHoverMenu .Btn__dropdown,
-.MessageHoverMenu .Menu--message .MenuItem__content {
+.MessageHoverMenu .Menu--message > .MenuItem > .MenuItem__content {
   padding: 3px 6px;
   font-size: 14px;
   color: rgba(0,0,0,0.7);
 }
 
-.MessageHoverMenu .Btn__dropdown,
-.MessageHoverMenu .Menu--message .MenuItem {
+.MessageHoverMenu .Menu--message > .MenuItem {
   border-left: 0.5px solid rgba(0,0,0,0.18);
 }
 
-.MessageHoverMenu .Menu--message .MenuItem:first-child {
+.MessageHoverMenu .Menu--message > .MenuItem:first-child {
   border-left: none;
 }
 
@@ -60,6 +59,7 @@
   color: #0576B9;
 }
 
-.MessageHoverMenu .MenuItem--fav-solid .MenuItem__content--btn {
-  color: #FDCB6E !important;
+.MessageHoverMenu .MenuItem__favorite--solid .MenuItem__content:hover svg,
+.MessageHoverMenu .MenuItem__favorite--solid svg {
+  color: #FDCB6E;
 }
