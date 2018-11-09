@@ -17,6 +17,14 @@ class DrawerSwitch extends React.Component {
     openDrawer({ drawerType, drawerSlug });
   }
 
+  componentDidUpdate(prevProps) {
+    const { drawerType, fetchEntityRequest } = this.props;
+
+    if (drawerType && drawerType !== prevProps.drawerType) {
+      fetchEntityRequest();
+    }
+  }
+
   handleClose() {
     const {
       closeDrawer,

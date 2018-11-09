@@ -1,5 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
 import ScrollBar from './ScrollBar';
 import Button from './Button';
 import './Drawer.css';
