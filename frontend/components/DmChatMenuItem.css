@@ -1,0 +1,15 @@
+.DmChatMenuItem {
+  display: inline-block;
+}
+
+.MenuItem__content > .DmChatMenuItem > .Btn {
+  position: absolute;
+  top: 0;
+  right: 16px;
+  bottom: 0;
+  display: none;
+}
+
+.MenuItem__content:hover > .DmChatMenuItem > .Btn {
+  display: block;
+}

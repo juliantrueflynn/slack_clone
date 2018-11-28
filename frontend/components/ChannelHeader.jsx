@@ -2,7 +2,10 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from './Menu';
 import ChannelHeaderSearch from './ChannelHeaderSearch';
+import SearchModal from './SearchModal';
 import StatusIcon from './StatusIcon';
+import Dropdown from './Dropdown';
+import Button from './Button';
 import './ChannelHeader.css';
 
 const ChannelHeader = ({
@@ -13,17 +16,21 @@ const ChannelHeader = ({
   drawerType,
   drawerClose,
   modalOpen,
+  modalClose,
+  fetchSearchRequest,
   searchQuery,
   destroySearch,
+  isSearchLoading,
   destroyChannelSubRequest,
   chatPath,
+  isSearchModalOpen,
   history,
   match: { url, isExact },
 }) => {
   const channel = channels[chatPath];
-  const { dmUserSlug } = channel || {};
-
+  const searchMessages = messages.filter(msg => msg.isInSearch).sort((a, b) => b.id - a.id);
   const isDetailsOpen = drawerType === 'details';
+
 
   const linkToggle = (pathName) => {
     if (drawerType !== pathName) {
@@ -60,7 +67,16 @@ const ChannelHeader = ({
     },
   ];
 
-  let metaMenuItems = [];
+  const ddItems = [
+    {
+      label: 'View channel details',
+      link: `${url}/details`,
+      hasNoDrawer: true,
+    }
+  ];
+
+  let editMenuItems = [];
+  let metaItems = [];
 
   if (chatPath === 'unreads') {
     const unreadsLen = Object.values(channels).reduce((acc, curr) => {
@@ -70,92 +86,74 @@ const ChannelHeader = ({
     }, 0);
     const label = unreadsLen ? `${unreadsLen} unreads` : 'No new messages';
 
-    metaMenuItems = [{ key: 'unreads', label }];
+    metaItems = [{ key: 'unreads', label }];
   } else if (chatPath === 'threads') {
     const unreadsLen = messages.filter(convo => convo.hasUnreads).length;
     const label = unreadsLen ? `${unreadsLen} updated convos` : 'No new replies';
 
-    metaMenuItems = [{ key: 'unreads', label }];
+    metaItems = [{ key: 'unreads', label }];
   } else if (channel && channel.hasDm) {
-    const user = users[dmUserSlug];
+    const user = users[channel.dmUserSlug];
     const userStatus = user && user.status;
     const email = user && user.email;
 
-    metaMenuItems = [
+    metaItems = [
       { key: 'status', icon: <StatusIcon member={user} />, label: userStatus },
       { key: 'email', label: email },
     ];
+
+    editMenuItems = ddItems.concat([
+      {
+        label: `View ${title}’s profile`,
+        link: `${url}/team/${channel.dmUserSlug}`,
+        hasNoDrawer: true,
+      }
+    ]);
   } else if (channel && !channel.hasDm) {
-    metaMenuItems = [
+    metaItems = [
       {
         key: 'details',
-        icon: <FontAwesomeIcon icon="user" size="sm" />,
+        icon: <FontAwesomeIcon icon={['far', 'user']} size="sm" />,
         link: `${url}/details`,
-        onClick: () => accordionOpen('members'),
+        onClick: () => accordionOpen(),
         label: channel.members.length,
-      },
-      {
-        key: 'pinned',
-        icon: <FontAwesomeIcon icon="thumbtack" size="sm" />,
-        link: `${url}/details`,
-        onClick: () => accordionOpen('pinned'),
-        label: channel.pins && channel.pins.length,
-        condition: channel.pins && channel.pins.length,
       },
       {
         key: 'topic',
         onClick: () => modalOpen('MODAL_EDIT_CHANNEL'),
-        icon: !!channel.topic || <FontAwesomeIcon icon="edit" size="sm" />,
+        icon: !!channel.topic || <FontAwesomeIcon icon={['far', 'edit']} size="sm" />,
         label: channel.topic || 'Add topic',
       }
     ];
-  }
 
-  const channelMenuItems = [
-    {
-      key: 'details',
-      icon: <FontAwesomeIcon icon="info-circle" size="lg" fixedWidth />,
-      onClick: () => linkToggle('details'),
-      isItemActive: isDetailsOpen,
-    },
-    {
-      key: 'edit-dropdown',
-      icon: <FontAwesomeIcon icon="cog" size="lg" fixedWidth />,
-      menuFor: 'channel-edit',
-      items: [
-        {
-          label: 'View channel details',
-          link: `${url}/details`,
-          hasNoDrawer: true,
-        },
-        {
-          label: `View ${title}’s profile`,
-          link: `${url}/team/${dmUserSlug}`,
-          hasNoDrawer: true,
-          condition: channel && channel.hasDm,
-        },
-        {
-          label: 'Edit channel',
-          onClick: () => modalOpen('MODAL_EDIT_CHANNEL'),
-          condition: channel && !channel.hasDm,
-        },
-        {
-          label: `Leave ${title}`,
-          onClick: () => destroyChannelSubRequest(channel.slug),
-          condition: channel && !channel.hasDm,
-        }
-      ],
-    }
-  ];
+    editMenuItems = ddItems.concat([
+      { label: 'Edit channel', onClick: () => modalOpen('MODAL_EDIT_CHANNEL') },
+      { label: `Leave ${title}`, onClick: () => destroyChannelSubRequest(channel.subId) },
+    ]);
+  }
 
   return (
     <header className="ChannelHeader">
       <div className="ChannelHeader__info">
         <h1 className="ChannelHeader__title">{title}</h1>
-        <Menu menuFor="header-meta" items={metaMenuItems} isRow unStyled />
+        <Menu menuFor="header-meta" items={metaItems} isRow unStyled />
       </div>
       <nav className="ChannelHeader__navigate">
-        {channel && <Menu items={channelMenuItems} menuFor="edit" isRow unStyled />}
+        {channel && (
+          <Button
+            buttonFor="channel-details"
+            onClick={() => linkToggle('details')}
+            isActive={isDetailsOpen}
+            unStyled
+          >
+            <FontAwesomeIcon icon="info-circle" size="lg" />
+          </Button>
+        )}
+        {channel && (
+          <Dropdown menuFor="channel-edit" items={editMenuItems}>
+            <FontAwesomeIcon icon="cog" size="lg" />
+          </Dropdown>
+        )}
         <ChannelHeaderSearch
           query={searchQuery}
           destroySearch={destroySearch}
@@ -163,6 +161,17 @@ const ChannelHeader = ({
         />
         <Menu menuFor="header-user" isRow items={userMenuItems} />
       </nav>
+      {isSearchModalOpen && (
+        <SearchModal
+          modalClose={modalClose}
+          searchQuery={searchQuery}
+          messages={searchMessages}
+          users={users}
+          fetchSearchRequest={fetchSearchRequest}
+          destroySearch={destroySearch}
+          isSearchLoading={isSearchLoading}
+        />
+      )}
     </header>
   );
 };

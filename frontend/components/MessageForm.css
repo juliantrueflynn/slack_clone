@@ -1,4 +1,36 @@
-.Channel .Form__message {
+.MessageForm > .Form {
+  display: flex;
+  flex-direction: row;
+}
+
+.MessageForm .Form__body {
+  width: 100%;
+}
+
+.MessageForm .Btn__submit {
+  display: block;
+}
+
+.MessageForm__has-submit > .Form {
+  padding: 10px;
+}
+
+.MessageForm__has-submit .Editor {
+  border-width: 1px;
+}
+
+.MessageForm__has-submit .Form__actions {
+  display: flex;
+  flex: 1;
+  margin-top: 10px;
+}
+
+.MessageForm__has-submit .Btn {
+  margin-left: auto;
+  display: block;
+}
+
+.MessageForm__chat {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -7,25 +39,10 @@
   background-color: #FFF;
 }
 
-.Channel .Form__message {
-  padding: 0 18px 20px;
+.Drawer .MessageForm__convo {
+  padding: 15px;
 }
 
-.Drawer .Form__message {
-  padding: 15px 16px;
-}
-
-.Drawer .Form__message .Editor {
-  border-width: 1px;
-}
-
-.Drawer .Form__message .Form__actions {
-  display: flex;
-  flex: 1;
-  margin-top: 10px;
-}
-
-.Drawer .Form__message .Btn__submit {
-  margin-left: auto;
-  display: block;
+.MessageForm__chat {
+  padding: 0 18px 24px;
 }

@@ -2,7 +2,6 @@ import React from 'react';
 import Button from './Button';
 import withPublicView from './withPublicView';
 import withForm from './withForm';
-import FormHandler from './FormHandler';
 import './SessionForm.css';
 
 class SessionForm extends React.Component {
@@ -16,11 +15,10 @@ class SessionForm extends React.Component {
     };
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.handleFieldValueChange = this.handleFieldValueChange.bind(this);
   }
 
-  handleFormSubmit(e) {
-    e.preventDefault();
+  handleFormSubmit(event) {
+    event.preventDefault();
 
     const { sessionRequest } = this.props;
     const { username, email, password } = this.state;
@@ -28,35 +26,14 @@ class SessionForm extends React.Component {
     sessionRequest(user);
   }
 
-  handleFieldValueChange(value, prop) {
-    this.setState({ [prop]: value });
+  handleInputValue(field) {
+    return event => this.setState({ [field]: event.target.value });
   }
 
   render() {
-    const { location: { pathname }, form: { formErrors } } = this.props;
+    const { location: { pathname } } = this.props;
     const { username, email, password } = this.state;
     const isSignInPage = pathname === '/signin';
-
-    const fields = [
-      {
-        id: 'username',
-        type: 'text',
-        value: username,
-        placeholder: 'Username',
-      },
-      {
-        id: 'email',
-        type: 'text',
-        value: email,
-        placeholder: 'Email',
-      },
-      {
-        id: 'password',
-        type: 'password',
-        value: password,
-        placeholder: 'Password',
-      }
-    ];
 
     return (
       <div className="SessionForm">
@@ -64,16 +41,39 @@ class SessionForm extends React.Component {
           <h1 className="Page__title">
             {isSignInPage ? 'Sign in' : 'Sign up'}
           </h1>
-          <FormHandler
-            fields={fields}
-            setFieldValue={this.handleFieldValueChange}
-            submitForm={this.handleFormSubmit}
-            errors={formErrors}
-          >
+
+          <form onSubmit={this.handleFormSubmit}>
+            <div className="Form__group">
+              <input
+                type="text"
+                className="Form__control"
+                placeholder="Username"
+                value={username}
+                onChange={this.handleInputValue('username')}
+              />
+            </div>
+            <div className="Form__group">
+              <input
+                type="text"
+                className="Form__control"
+                placeholder="Email"
+                value={email}
+                onChange={this.handleInputValue('email')}
+              />
+            </div>
+            <div className="Form__group">
+              <input
+                type="password"
+                className="Form__control"
+                placeholder="Password"
+                value={password}
+                onChange={this.handleInputValue('password')}
+              />
+            </div>
             <Button type="submit" buttonFor="submit" fullWidth>
               {isSignInPage ? 'Sign in' : 'Sign Up'}
             </Button>
-          </FormHandler>
+          </form>
         </div>
       </div>
     );

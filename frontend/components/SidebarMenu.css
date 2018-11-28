@@ -1,0 +1,69 @@
+.SidebarMenu {
+  margin-bottom: 20px;
+}
+
+.SidebarMenu:last-child {
+  margin-bottom: 0;
+}
+
+.SidebarMenu .MenuItem__content,
+.SidebarMenu .menu__text {
+  text-align: inherit;
+}
+
+.SidebarMenu > .Menu > .MenuItem > .MenuItem__content {
+  color: rgba(255,255,255,0.75);
+}
+
+.SidebarMenu > .Menu > .MenuItem--unread > .MenuItem__content {
+  color: #FFF;
+  font-weight: bold;
+}
+
+.SidebarMenu__header {
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+}
+
+.SidebarMenu__title {
+  display: block;
+}
+
+.SidebarMenu__title .Btn:hover {
+  color: rgba(255,255,255,1);
+}
+
+.SidebarMenu__header .Btn {
+  display: block;
+  margin-right: auto;
+}
+
+.SidebarMenu__header .Btn:focus {
+  outline: none;
+}
+
+.SidebarMenu > .Menu--chats > .MenuItem > .MenuItem__content--active {
+  pointer-events: none;
+}
+
+.SidebarMenu__chats .SidebarMenu__title {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.SidebarMenu__chats .Btn__chats {
+  padding: 0;
+  margin: 0 auto 0 0;
+  width: 100%;
+  text-align: left;
+}
+
+.SidebarMenu__header > .Btn__widget {
+  color: rgba(255,255,255,0.4);
+}
+
+.SidebarMenu__header > .Btn__widget:hover {
+  color: rgba(255,255,255,0.8);
+}

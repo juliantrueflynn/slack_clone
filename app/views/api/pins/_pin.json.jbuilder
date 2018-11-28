@@ -1,1 +1,1 @@
-json.(pin, :message_slug, :channel_slug, :user_slug, *pin.attributes.keys)
+json.(pin, :message_slug, :user_slug, *pin.attributes.keys)

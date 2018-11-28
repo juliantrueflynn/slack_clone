@@ -1,11 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-  Route,
-  Redirect,
-  Switch,
-  withRouter,
-} from 'react-router-dom';
+import { Route, Redirect, withRouter } from 'react-router-dom';
 import PageHome from '../components/PageHome';
 import SessionForm from '../components/SessionForm';
 import WorkspaceContainer from '../components/WorkspaceContainer';
@@ -72,10 +67,4 @@ const RouteSubRoutes = (route) => {
   );
 };
 
-const RouteWithSubRoutes = withRouter(connect(mapStateToProps, null)(RouteSubRoutes));
-
-export const PageRoutes = ({ routes }) => (
-  <Switch>
-    {routes && routes.map(route => <RouteWithSubRoutes key={route.path} {...route} />)}
-  </Switch>
-);
+export const RouteWithSubRoutes = withRouter(connect(mapStateToProps, null)(RouteSubRoutes));

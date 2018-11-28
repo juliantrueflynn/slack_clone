@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MessageThreadAuthors from './MessageThreadAuthors';
-import MessagesListContainer from './MessagesListContainer';
-import MessageForm from './MessageForm';
+import MessagesList from './MessagesList';
+import MessageFormContainer from './MessageFormContainer';
 import './AllThreadsItem.css';
 
 const AllThreadsItem = ({
@@ -11,7 +11,7 @@ const AllThreadsItem = ({
   users,
   channels,
   currentUserSlug,
-  workspaceSlug,
+  match: { params: { workspaceSlug } },
 }) => {
   if (!parentMessage.thread) {
     return null;
@@ -34,23 +34,16 @@ const AllThreadsItem = ({
           </div>
         </Link>
         <MessageThreadAuthors
-          parentAuthorSlug={parentMessage.authorSlug}
-          authors={parentMessage.authors}
-          users={users}
+          authors={users}
+          message={parentMessage}
           currentUserSlug={currentUserSlug}
         />
       </header>
       <div className="AllThreadsItem__body">
         <div className="AllThreadsItem__list" role="list">
-          <MessagesListContainer
-            messages={threadMessages}
-            role="listitem"
-            isThreadHidden
-            isHoverable
-            isEditable
-          />
+          <MessagesList messages={threadMessages} role="listitem" isThreadHidden />
         </div>
-        <MessageForm
+        <MessageFormContainer
           channelId={parentMessage.channelId}
           parentMessageId={parentMessage.id}
           parentMessageSlug={parentMessage.slug}
@@ -60,4 +53,4 @@ const AllThreadsItem = ({
   );
 };
 
-export default AllThreadsItem;
+export default withRouter(AllThreadsItem);

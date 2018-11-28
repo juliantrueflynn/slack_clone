@@ -1,9 +1,9 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import Button from './Button';
 import LinkWithDrawer from '../util/linkUtil';
-import Dropdown from './Dropdown';
 import './MenuItem.css';
+import Dropdown from './Dropdown';
 
 class MenuItem extends React.Component {
   constructor(props) {
@@ -11,11 +11,11 @@ class MenuItem extends React.Component {
     this.handleOnClick = this.handleOnClick.bind(this);
   }
 
-  handleOnClick(e) {
+  handleOnClick() {
     const { onClick, toggleMenu } = this.props;
 
     if (onClick) {
-      onClick(e);
+      onClick();
     }
 
     if (toggleMenu) {
@@ -35,18 +35,13 @@ class MenuItem extends React.Component {
       toggleMenu,
       isItemActive,
       isActive,
-      condition,
       items,
       ...props
     } = this.props;
 
-    if (condition !== undefined && !condition) {
-      return null;
-    }
-
     const { to: link } = props;
 
-    const itemProps = { ...props };
+    const itemProps = Object.assign({}, props);
     itemProps.onClick = this.handleOnClick;
 
     let itemType = 'link';
@@ -57,13 +52,6 @@ class MenuItem extends React.Component {
     } else if (!link && !onClick) {
       itemType = 'text';
     }
-
-    const iconAndLabelText = (
-      <Fragment>
-        {icon && <span className="MenuItem__icon">{icon}</span>}
-        {label}
-      </Fragment>
-    );
 
     const itemClassNames = classNames(className, {
       [`MenuItem--${itemType}`]: itemType,
@@ -88,20 +76,30 @@ class MenuItem extends React.Component {
             activeClassName="MenuItem__content--active"
             {...itemProps}
           >
-            {iconAndLabelText}
+            {icon}
+            {label}
           </LinkWithDrawer>
         )}
 
         {itemType === 'dropdown' && (
-          <Dropdown items={items} {...itemProps}>{iconAndLabelText}</Dropdown>
+          <Dropdown items={items} {...itemProps}>
+            {icon}
+            {label}
+          </Dropdown>
         )}
 
         {itemType === 'btn' && (
-          <Button className={contentClassNames} {...itemProps}>{iconAndLabelText}</Button>
+          <Button className={contentClassNames} {...itemProps}>
+            {icon}
+            {label}
+          </Button>
         )}
 
         {itemType === 'text' && (
-          <span className={contentClassNames} {...itemProps}>{iconAndLabelText}</span>
+          <span className={contentClassNames} {...itemProps}>
+            {icon}
+            {label}
+          </span>
         )}
       </li>
     );

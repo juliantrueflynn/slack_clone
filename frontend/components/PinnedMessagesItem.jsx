@@ -1,17 +1,11 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { dateUtil } from '../util/dateUtil';
-import Message from './Message';
-import Button from './Button';
+import MessageContainer from './MessageContainer';
 import './PinnedMessagesItem.css';
+import Button from './Button';
 
-const PinnedMessagesItem = ({
-  message,
-  currentUserId,
-  users,
-  url,
-  destroyPinRequest,
-}) => {
+const PinnedMessagesItem = ({ message, destroyPinRequest }) => {
   const date = dateUtil(message.createdAt);
   const month = date.monthName();
   const day = date.dayOrdinal();
@@ -25,12 +19,9 @@ const PinnedMessagesItem = ({
         <Button buttonFor="destroy" onClick={clickDestroy} unStyled>
           <FontAwesomeIcon icon="times" />
         </Button>
-        <Message
+        <MessageContainer
           message={message}
           messageDate={messageDate}
-          users={users}
-          currentUserId={currentUserId}
-          url={url}
           shouldHideEngagement
           shouldHideAvatar
         />

@@ -8,61 +8,63 @@ import {
 } from 'redux-saga/effects';
 import * as action from '../actions/channelActions';
 import { CHANNEL } from '../actions/actionTypes';
-import { apiFetch, apiCreate, apiUpdate } from '../util/apiUtil';
-import { navigate, modalClose, createSuccess } from '../actions/uiActions';
-import { selectCurrentUser } from '../reducers/selectors';
+import * as api from '../util/apiUtil';
+import { selectUIByDisplay, selectEntityBySlug } from '../reducers/selectors';
+import { navigate, modalClose } from '../actions/uiActions';
 
 function* fetchIndex({ workspaceSlug }) {
   try {
-    const channels = yield call(apiFetch, `workspaces/${workspaceSlug}/channels`);
+    const channels = yield call(api.apiFetch, `workspaces/${workspaceSlug}/channels`);
     yield put(action.fetchChannels.receive(channels));
   } catch (error) {
     yield put(action.fetchChannels.failure(error));
   }
 }
 
+function* redirectToChannel(chat) {
+  if (!chat) {
+    return;
+  }
+
+  const workspaceSlug = yield select(selectUIByDisplay, 'displayWorkspaceSlug');
+  yield put(navigate(`/${workspaceSlug}/messages/${chat.slug}`));
+}
+
+function* fetchCreate(channel) {
+  const chat = yield call(api.apiCreate, 'channels', channel);
+
+  if (chat) {
+    yield put(modalClose('CHAT_MODAL'));
+  }
+
+  return chat;
+}
+
+function* fetchCreateDm({ workspaceSlug, ...dmChat }) {
+  const workspace = yield select(selectEntityBySlug, 'workspaces', workspaceSlug);
+  const workspaceId = workspace.id;
+  const chat = yield call(api.apiCreate, 'dm_chat', { workspaceId, ...dmChat });
+  return chat;
+}
+
 function* fetchCreateChannel({ channel }) {
   try {
-    let apiUrl = 'channels';
-    let channelProps = channel;
-
+    let chat;
     if (channel.hasDm) {
-      const { workspaceSlug, ...dmChat } = channel;
-      apiUrl = `workspaces/${channel.workspaceSlug}/dm_chat`;
-      channelProps = { dmChat };
+      chat = yield fetchCreateDm(channel);
+    } else {
+      chat = yield fetchCreate(channel);
     }
 
-    yield call(apiCreate, apiUrl, channelProps);
+    yield redirectToChannel(chat);
   } catch (error) {
     yield put(action.createChannel.failure(error));
   }
 }
 
-function* loadNavigateCreated({ channel: { channel, subs, workspaceSlug } }) {
-  const { slug, ownerSlug, hasDm } = channel;
-  const currUser = yield select(selectCurrentUser);
-  let isOwner = ownerSlug === currUser.slug;
-
-  if (hasDm) {
-    const subsSorted = subs.sort((a, b) => a.id - b.id);
-    const { userSlug } = subsSorted[0] || {};
-    isOwner = userSlug === currUser.slug;
-  }
-
-  if (isOwner) {
-    if (!hasDm) {
-      yield put(modalClose('CHAT_MODAL'));
-    }
-
-    yield put(navigate(`/${workspaceSlug}/messages/${slug}`));
-  }
-}
-
 function* fetchUpdate({ channel }) {
   try {
-    yield call(apiUpdate, `channels/${channel.slug}`, channel);
-
-    yield put(createSuccess('channel', 'Channel successfully updated'));
+    yield call(api.apiUpdate, `channels/${channel.slug}`, channel);
   } catch (error) {
     yield put(action.updateChannel.failure(error));
   }
@@ -70,10 +72,18 @@ function* fetchUpdate({ channel }) {
 
 function* fetchShow({ channelSlug }) {
   try {
-    const channel = yield call(apiFetch, `channels/${channelSlug}`);
+    const channel = yield call(api.apiFetch, `channels/${channelSlug}`);
     yield put(action.fetchChannel.receive(channel));
   } catch (error) {
     yield put(action.fetchChannel.failure(error));
+  }
+}
+
+function* fetchDestroy({ channelSlug }) {
+  try {
+    yield call(api.apiDelete, `channels/${channelSlug}`);
+  } catch (error) {
+    yield put(action.deleteChannel.failure(error));
   }
 }
 
@@ -85,10 +95,6 @@ function* watchCreate() {
   yield takeLatest(CHANNEL.CREATE.REQUEST, fetchCreateChannel);
 }
 
-function* watchCreatedReceive() {
-  yield takeLatest(CHANNEL.CREATE.RECEIVE, loadNavigateCreated);
-}
-
 function* watchUpdate() {
   yield takeLatest(CHANNEL.UPDATE.REQUEST, fetchUpdate);
 }
@@ -97,12 +103,16 @@ function* watchFetch() {
   yield takeLatest(CHANNEL.SHOW.REQUEST, fetchShow);
 }
 
+function* watchDestroy() {
+  yield takeLatest(CHANNEL.DESTROY.REQUEST, fetchDestroy);
+}
+
 export default function* channelSaga() {
   yield all([
     fork(watchIndex),
     fork(watchCreate),
-    fork(watchCreatedReceive),
     fork(watchUpdate),
     fork(watchFetch),
+    fork(watchDestroy),
   ]);
 }

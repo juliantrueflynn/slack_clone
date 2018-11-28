@@ -2,7 +2,7 @@ import {
   SEARCH,
   WORKSPACE,
   MESSAGE,
-  READ,
+  UNREAD,
   USER_THREAD,
   DRAWER_CLOSE,
   FAVORITE,
@@ -30,7 +30,7 @@ const isLoadingReducer = (state = _defaultState, action) => {
       nextState.channel = true;
       return nextState;
     case USER_THREAD.INDEX.REQUEST:
-    case READ.INDEX.REQUEST:
+    case UNREAD.INDEX.REQUEST:
     case MESSAGE.INDEX.REQUEST:
       nextState.channel = true;
       return nextState;
@@ -51,7 +51,7 @@ const isLoadingReducer = (state = _defaultState, action) => {
       nextState.workspace = false;
       return nextState;
     case USER_THREAD.INDEX.RECEIVE:
-    case READ.INDEX.RECEIVE:
+    case UNREAD.INDEX.RECEIVE:
     case MESSAGE.INDEX.RECEIVE:
       nextState.channel = false;
       return nextState;

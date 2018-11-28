@@ -7,62 +7,67 @@ import {
   takeLatest,
 } from 'redux-saga/effects';
 import { CHANNEL_SUB, MESSAGE } from '../actions/actionTypes';
-import { createChannelSub, updateChannelSub, destroyChannelSub } from '../actions/channelActions';
-import { apiCreate, apiDestroy, apiUpdate } from '../util/apiUtil';
-import { selectEntities, selectCurrentUser, selectEntityBySlug } from '../reducers/selectors';
+import * as actions from '../actions/channelActions';
+import { apiCreate, apiDelete, apiUpdate } from '../util/apiUtil';
+import { selectCurrentUser, selectEntityBySlug, selectEntities } from '../reducers/selectors';
 
 function* fetchCreate({ channelSub }) {
   try {
     yield call(apiCreate, 'channel_subs', channelSub);
   } catch (error) {
-    yield put(createChannelSub.failure(error));
+    yield put(actions.createChannelSub.failure(error));
   }
 }
 
-function* fetchUpdate({ channelSlug }) {
+function* fetchUpdate({ id }) {
   try {
-    const response = yield call(apiUpdate, `channels/${channelSlug}/channel_sub`);
-    yield put(updateChannelSub.receive(response));
+    yield call(apiUpdate, `channel_subs/${id}`);
   } catch (error) {
-    yield put(updateChannelSub.failure(error));
+    yield put(actions.createChannelSub.failure(error));
   }
 }
 
-function* fetchDestroy({ channelSlug }) {
-  try {
-    yield call(apiDestroy, `channels/${channelSlug}/channel_sub`);
-  } catch (error) {
-    yield put(destroyChannelSub.failure(error));
-  }
-}
+const operations = {
+  '===': (op1, op2) => op1 === op2,
+  '!==': (op1, op2) => op1 !== op2,
+};
 
-function* updateDmSubBySlug(channelSlug) {
-  const channel = yield select(selectEntityBySlug, 'channels', channelSlug);
+function* updateSubFromOperator(chatSlug, operator) {
+  const chat = yield select(selectEntityBySlug, 'channels', chatSlug);
 
-  if (channel.hasDm) {
+  if (chat.hasDm) {
     const user = yield select(selectCurrentUser);
-    const subsMap = yield select(selectEntities, 'channelSubs');
-    const userSub = channel.subs.map(id => subsMap[id]).filter(sub => sub.userId === user.id)[0];
+    const channelSubs = yield select(selectEntities, 'channelSubs');
+    const ids = chat.subs.filter(id => operations[operator](channelSubs[id].userId, user.id));
+    const sub = channelSubs[ids[0]];
 
-    if (userSub && !userSub.inSidebar) {
-      yield put(updateChannelSub.request(channelSlug));
+    if (sub && !sub.inSidebar) {
+      yield put(actions.updateChannelSub.request(sub.id));
     }
   }
 }
 
 function* fetchChannelShow({ messages: { channel } }) {
   try {
-    yield updateDmSubBySlug(channel.slug);
+    yield updateSubFromOperator(channel.slug, '===');
   } catch (error) {
-    yield put(updateChannelSub.failure(error));
+    yield put(actions.updateChannelSub.failure(error));
   }
 }
 
-function* fetchDmChatMessage({ message }) {
+function* fetchDmChatMessage({ message: { message } }) {
   try {
-    yield updateDmSubBySlug(message.channelSlug);
+    yield updateSubFromOperator(message.channelSlug, '!==');
   } catch (error) {
-    yield put(updateChannelSub.failure(error));
+    yield put(actions.updateChannelSub.failure(error));
+  }
+}
+
+function* fetchDestroy({ id }) {
+  try {
+    yield call(apiDelete, `channel_subs/${id}`);
+  } catch (error) {
+    yield put(actions.destroyChannelSub.failure(error));
   }
 }
 
@@ -74,10 +79,6 @@ function* watchUpdate() {
   yield takeLatest(CHANNEL_SUB.UPDATE.REQUEST, fetchUpdate);
 }
 
-function* watchDestroy() {
-  yield takeLatest(CHANNEL_SUB.DESTROY.REQUEST, fetchDestroy);
-}
-
 function* watchChannelShow() {
   yield takeLatest(MESSAGE.INDEX.RECEIVE, fetchChannelShow);
 }
@@ -86,12 +87,16 @@ function* watchDmChatMessage() {
   yield takeLatest(MESSAGE.CREATE.RECEIVE, fetchDmChatMessage);
 }
 
+function* watchDestroy() {
+  yield takeLatest(CHANNEL_SUB.DESTROY.REQUEST, fetchDestroy);
+}
+
 export default function* channelSubSaga() {
   yield all([
     fork(watchCreate),
     fork(watchUpdate),
-    fork(watchDestroy),
     fork(watchChannelShow),
     fork(watchDmChatMessage),
+    fork(watchDestroy),
   ]);
 }

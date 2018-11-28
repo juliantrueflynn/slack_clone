@@ -38,12 +38,11 @@ ActiveRecord::Schema.define(version: 20181027210426) do
   end
 
   create_table "favorites", force: :cascade do |t|
-    t.bigint "workspace_id"
     t.bigint "message_id"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["workspace_id", "message_id", "user_id"], name: "index_favorites_on_workspace_id_and_message_id_and_user_id", unique: true
+    t.index ["message_id", "user_id"], name: "index_favorites_on_message_id_and_user_id", unique: true
   end
 
   create_table "messages", force: :cascade do |t|
@@ -84,6 +83,16 @@ ActiveRecord::Schema.define(version: 20181027210426) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["readable_type", "readable_id", "workspace_id", "user_id"], name: "index_read_workspace_user"
+  end
+
+  create_table "unreads", force: :cascade do |t|
+    t.integer "unreadable_id", null: false
+    t.string "unreadable_type", null: false
+    t.bigint "workspace_id"
+    t.datetime "active_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["unreadable_type", "unreadable_id", "workspace_id"], name: "index_unread_workspace_user"
   end
 
   create_table "user_appearances", force: :cascade do |t|
@@ -134,7 +143,6 @@ ActiveRecord::Schema.define(version: 20181027210426) do
   add_foreign_key "channels", "workspaces", on_delete: :cascade
   add_foreign_key "favorites", "messages", on_delete: :cascade
   add_foreign_key "favorites", "users", on_delete: :cascade
-  add_foreign_key "favorites", "workspaces", on_delete: :cascade
   add_foreign_key "messages", "channels", on_delete: :cascade
   add_foreign_key "messages", "users", column: "author_id", on_delete: :cascade
   add_foreign_key "pins", "messages", on_delete: :cascade
@@ -143,6 +151,7 @@ ActiveRecord::Schema.define(version: 20181027210426) do
   add_foreign_key "reactions", "users", on_delete: :cascade
   add_foreign_key "reads", "users", on_delete: :cascade
   add_foreign_key "reads", "workspaces", on_delete: :cascade
+  add_foreign_key "unreads", "workspaces", on_delete: :cascade
   add_foreign_key "user_appearances", "users", on_delete: :cascade
   add_foreign_key "user_appearances", "workspaces", on_delete: :cascade
   add_foreign_key "workspace_subs", "users", on_delete: :cascade

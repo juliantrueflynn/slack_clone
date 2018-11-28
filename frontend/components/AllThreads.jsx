@@ -9,7 +9,6 @@ const AllThreads = ({
   channels,
   currentUser,
   isLoading,
-  workspaceSlug,
 }) => {
   if (isLoading) {
     return (
@@ -34,7 +33,6 @@ const AllThreads = ({
           channels={channels}
           parentMessage={convo}
           users={users}
-          workspaceSlug={workspaceSlug}
         />
       ))}
     </ScrollBar>

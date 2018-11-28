@@ -1,11 +1,12 @@
 class Api::FavoritesController < ApplicationController
   def index
-    workspace = Workspace.find_by_slug(params[:workspace_slug])
-    @favorites = current_user.favorites.in_workspace(workspace.id)
+    @favorites = current_user.favorites
+      .includes(:workspace, :channel)
+      .where(workspaces: { slug: params[:workspace_slug] })
   end
 
   def create
-    @favorite = current_user.favorites.build(favorite_params)
+    @favorite = current_user.favorites.build(message_id: params[:message_id])
 
     if @favorite.save
       render 'api/favorites/show'
@@ -17,16 +18,10 @@ class Api::FavoritesController < ApplicationController
   def destroy
     @favorite = Favorite.find_by(id: params[:id])
 
-    if @favorite && @favorite.destroy
+    if @favorite.destroy
       render 'api/favorites/show'
     else
-      render json: ["missing"], status: 422
+      render json: @favorite.errors.full_messages, status: 422
     end
-  end
-
-  private
-
-  def favorite_params
-    params.require(:favorite).permit(:message_id)
   end
 end

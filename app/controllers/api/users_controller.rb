@@ -1,6 +1,10 @@
 class Api::UsersController < ApplicationController
   before_action :set_user, only: [:show, :update]
 
+  def index
+    @users = User.all
+  end
+
   def show
   end
 
@@ -32,6 +36,6 @@ class Api::UsersController < ApplicationController
   def user_params
     params
       .fetch(:user, {})
-      .permit(:email, :username, :password, :avatar)
+      .permit(:email, :username, :password, :new_password, :password_verify, :avatar)
   end
 end

@@ -19,7 +19,7 @@ const UserPreview = ({
 
   return (
     <div className={previewClassNames} {...props}>
-      <Avatar user={user} size={avatarSize} avatarVersion={avatarVersion} />
+      <Avatar author={user} size={avatarSize} avatarVersion={avatarVersion} />
       <div className="UserPreview__content">
         {children || (
           <Fragment>

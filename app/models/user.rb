@@ -33,8 +33,14 @@ class User < ApplicationRecord
     user.is_password?(password) ? user : nil
   end
 
-  def broadcast_name
-    "app"
+  def find_dm_chat_with_user(workspace_id, user_id)
+    users_ids = [id, user_id]
+    Channel.find_dm_chat_by_workspace_and_users(workspace_id, users_ids)
+  end
+
+  def is_workspace_sub?(workspace)
+    workspaces_subbed = workspace_subs.where(workspace_subs: { workspace_id: workspace.id })
+    workspaces_subbed.length > 0
   end
 
   def password=(password)
@@ -51,6 +57,10 @@ class User < ApplicationRecord
     generate_unique_session_token
     update_columns(session_token: session_token)
     self.session_token
+  end
+
+  def broadcast_name
+    "app"
   end
 
   def offline!(workspace_slug)
@@ -73,11 +83,9 @@ class User < ApplicationRecord
 
   def generate_unique_session_token
     self.session_token = new_session_token
-
     while User.find_by(session_token: self.session_token)
       self.session_token = new_session_token
     end
-
     self.session_token
   end
 

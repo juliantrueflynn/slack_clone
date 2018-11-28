@@ -1,28 +1,17 @@
 class Favorite < ApplicationRecord
-  validates_presence_of :workspace_id, :message_id, :user_id
-  validates_uniqueness_of :workspace_id, scope: [:message_id, :user_id]
+  validates_presence_of :message_id, :user_id
+  validates_uniqueness_of :message_id, scope: :user_id
 
-  belongs_to :workspace
   belongs_to :message
   belongs_to :user
+  has_one :channel, through: :message
+  has_one :workspace, through: :channel
 
-  def self.by_message_id(message_ids)
-    includes(:message).where(message_id: message_ids)
+  def self.with_user(user_id)
+    where(user_id: user_id)
   end
 
-  def self.in_workspace(workspace_id)
-    where(workspace_id: workspace_id)
-  end
-
-  def message_slug
-    message.slug
-  end
-
-  before_validation :generate_workspace_id
-
-  private
-
-  def generate_workspace_id
-    self.workspace ||= message.workspace
+  def self.by_user_and_message_id(user_id, message_ids)
+    includes(:message).with_user(user_id).where(message_id: message_ids)
   end
 end

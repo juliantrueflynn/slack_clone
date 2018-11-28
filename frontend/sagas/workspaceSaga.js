@@ -8,9 +8,18 @@ import {
 } from 'redux-saga/effects';
 import * as actions from '../actions/workspaceActions';
 import { WORKSPACE } from '../actions/actionTypes';
-import { navigate } from '../actions/uiActions';
-import { apiFetch, apiCreate } from '../util/apiUtil';
+import { apiFetch, apiCreate, apiDelete } from '../util/apiUtil';
 import { selectCurrentUser } from '../reducers/selectors';
+import { navigate } from '../actions/uiActions';
+
+function* fetchDeleteWorkspace({ workspaceSlug }) {
+  try {
+    yield call(apiDelete, `workspaces/${workspaceSlug}`);
+    yield put(actions.deleteWorkspace.receive(workspaceSlug));
+  } catch (error) {
+    yield put(actions.deleteWorkspace.failure(error));
+  }
+}
 
 function* addNewWorkspace({ workspace }) {
   try {
@@ -62,11 +71,16 @@ function* watchWorkspacePage() {
   yield takeLatest(WORKSPACE.SHOW.REQUEST, loadWorkspace);
 }
 
+function* watchDeleteWorkspace() {
+  yield takeLatest(WORKSPACE.DESTROY.REQUEST, fetchDeleteWorkspace);
+}
+
 export default function* workspaceSaga() {
   yield all([
     fork(newWorkspaceFlow),
     fork(watchNewWorkspace),
     fork(watchWorkspaces),
     fork(watchWorkspacePage),
+    fork(watchDeleteWorkspace),
   ]);
 }

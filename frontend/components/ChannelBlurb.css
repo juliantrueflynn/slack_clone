@@ -1,5 +1,5 @@
 .ChannelBlurb {
-  padding: 45px 27px 45px 18px;
+  padding: 45px 27px;
   margin-bottom: 30px;
   border-bottom: 1px solid #E9E9E9;
 }
@@ -7,22 +7,24 @@
 .ChannelBlurb__title {
   margin: 0 0 10px;
   font-weight: 400;
-  font-size: 1.85em
 }
 
-.ChannelBlurb__dm .ChannelBlurb__title,
-.ChannelBlurb__title-text {
+.ChannelBlurb__dm .ChannelBlurb__title {
   font-weight: bold;
 }
 
-.ChannelBlurb .ChannelBlurb__title-text::before {
-  content: "\0023";
-  font-weight: normal;
-  margin-right: 4px;
+.ChannelBlurb__title-text {
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+.ChannelBlurb__description .ChannelBlurb__title-text {
+  font-weight: bold;
+  margin-left: 2px;
 }
 
 .ChannelBlurb__description {
-  font-size: 1.15em;
+  font-size: 1.1em;
 }
 
 .ChannelBlurb .Btn__edit-label {
@@ -37,30 +39,16 @@
 }
 
 .ChannelBlurb__label {
-  background-color: rgba(5, 118, 185, 0.1);
+  background-color: rgba(5,118,185,0.1);
   padding: 2px 3px;
   border-radius: 4px;
 }
 
-.ChannelBlurb__label:before {
-  content: "\0040";
-  margin-right: 2px;
-  font-size: .95em;
+.ChannelBlurb__label-at {
+  font-size: 90%;
   vertical-align: top;
 }
 
-.ChannelBlurb .ChannelBlurb__parentheses::before {
-  content: "\0028";
-}
-
-.ChannelBlurb .ChannelBlurb__parentheses::after {
-  content: "\0029";
-}
-
-.ChannelBlurb .Btn__edit {
+.ChannelBlurb .Btn__edit .Btn__span {
   color: #0984E3;
-}
-
-.Channel--has-history .ChannelBlurb {
-  display: none;
 }

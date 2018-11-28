@@ -2,60 +2,60 @@ import React from 'react';
 import Button from './Button';
 import withForm from './withForm';
 import Modal from './Modal';
-import FormHandler from './FormHandler';
+import './ChatModal.css';
 
 class ChatModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = { title: '' };
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.handleFieldValueChange = this.handleFieldValueChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleFieldValueChange(value, prop) {
-    this.setState({ [prop]: value });
+  handleInputValue(property) {
+    return event => this.setState({ [property]: event.target.value });
   }
 
-  handleFormSubmit(e) {
+  handleSubmit(e) {
     e.preventDefault();
 
-    const { workspaceId, formDispatchRequest } = this.props;
     const { title } = this.state;
+    const { workspaceId, formDispatchRequest } = this.props;
     formDispatchRequest({ title, workspaceId });
   }
 
   render() {
-    const { modalClose, form: { formErrors } } = this.props;
+    const { modalClose } = this.props;
     const { title } = this.state;
-
-    const fields = [
-      {
-        id: 'title',
-        type: 'text',
-        placeholder: 'e.g. leads',
-        value: title,
-      },
-    ];
 
     return (
       <Modal isOpen modalTitle="Create a Channel" modalFor="chat" close={modalClose}>
-        <p className="Form__text">
-          Channels are where your members communicate.
-          They&#39;re best when organized around a topic — #leads, for example.
-        </p>
-        <FormHandler
-          fields={fields}
-          setFieldValue={this.handleFieldValueChange}
-          submitForm={this.handleFormSubmit}
-          errors={formErrors}
-        >
-          <Button type="submit" size="lg" color="green">
-            Create Channel
-          </Button>
-          <Button buttonFor="modal" size="lg" onClick={() => modalClose()}>
-            Close
-          </Button>
-        </FormHandler>
+        <form className="ChatModal" onSubmit={this.handleSubmit}>
+          <p className="Form__text">
+            Channels are where your members communicate.
+            They&#39;re best when organized around a topic — #leads, for example.
+          </p>
+          <div className="Form__group">
+            <label htmlFor="name">
+              Name
+            </label>
+            <input
+              id="name"
+              type="text"
+              className="Form__control"
+              placeholder="e.g. leads"
+              value={title}
+              onChange={this.handleInputValue('title')}
+            />
+          </div>
+          <div className="Btn__group">
+            <Button buttonFor="modal" size="lg" onClick={() => modalClose()}>
+              Close
+            </Button>
+            <Button type="submit" buttonFor="modal" modifier="submit" size="lg" color="green">
+              Create Channel
+            </Button>
+          </div>
+        </form>
       </Modal>
     );
   }

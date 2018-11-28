@@ -1,4 +1,4 @@
-import { USER, USER_APPEARANCE, PASSWORD } from './actionTypes';
+import { USER, USER_APPEARANCE } from './actionTypes';
 import { actionCreator } from '../util/actionsUtil';
 
 export const fetchUser = {
@@ -15,10 +15,4 @@ export const updateUser = {
 export const createUserAppearance = {
   request: workspaceId => actionCreator(USER_APPEARANCE.CREATE.REQUEST, { workspaceId }),
   failure: errors => actionCreator(USER_APPEARANCE.CREATE.FAILURE, { errors }),
-};
-
-export const updatePassword = {
-  request: password => actionCreator(PASSWORD.UPDATE.REQUEST, { password }),
-  receive: success => actionCreator(PASSWORD.UPDATE.RECEIVE, { success }),
-  failure: errors => actionCreator(PASSWORD.UPDATE.FAILURE, { errors }),
 };

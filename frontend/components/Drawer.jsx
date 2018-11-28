@@ -4,12 +4,11 @@ import Button from './Button';
 import './Drawer.css';
 
 const Drawer = ({
-  isLoading,
   drawerType,
   closeDrawer,
   channel,
   messages,
-  currentUserSlug,
+  isLoading,
   children,
 }) => {
   const isConvo = drawerType === 'convo';
@@ -41,7 +40,6 @@ const Drawer = ({
   }
 
   const drawerClassNames = `Drawer Drawer__${drawerType}`;
-  const lastMessage = isConvo ? messages[messages.length - 1] : null;
 
   return (
     <div className={drawerClassNames}>
@@ -56,11 +54,7 @@ const Drawer = ({
       <div className="Drawer__container">
         <div className="Drawer__body">
           {isConvo && !isLoading && (
-            <ScrollBar
-              lastMessage={lastMessage}
-              currentUserSlug={currentUserSlug}
-              shouldAutoScroll
-            >
+            <ScrollBar messages={messages} shouldAutoScroll>
               {children}
             </ScrollBar>
           )}

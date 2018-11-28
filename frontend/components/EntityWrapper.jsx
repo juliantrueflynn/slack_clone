@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 class EntityWrapper extends React.Component {
   componentDidMount() {
@@ -18,7 +18,11 @@ class EntityWrapper extends React.Component {
   render() {
     const { render } = this.props;
 
-    return render();
+    return (
+      <Fragment>
+        {render()}
+      </Fragment>
+    );
   }
 }
 

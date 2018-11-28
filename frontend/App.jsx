@@ -1,20 +1,18 @@
 import React from 'react';
 import 'sanitize.css';
-import classNames from 'classnames';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-  faEdit as farEdit,
+  faEdit,
   faTrashAlt,
   faSmile,
   faComment,
+  faUser,
   faSmileBeam,
   faComments,
   faCircle as farCircle,
   faStar as farStar,
 } from '@fortawesome/free-regular-svg-icons';
 import {
-  faEdit,
-  faUser,
   faTimes,
   faTimesCircle,
   faCircle,
@@ -32,13 +30,13 @@ import {
   faSpinner,
   faQuoteLeft,
   faPencilAlt,
-  faBars,
   faStar as fasStar,
 } from '@fortawesome/free-solid-svg-icons';
-import ReactModal from 'react-modal';
 import { ActionCable } from 'react-actioncable-provider';
+import ReactModal from 'react-modal';
+import { Switch } from 'react-router-dom';
+import { routesConfig, RouteWithSubRoutes } from './util/routeUtil';
 import withActionCable from './components/withActionCable';
-import { routesConfig, PageRoutes } from './util/routeUtil';
 import './App.css';
 
 library.add(
@@ -47,7 +45,6 @@ library.add(
   faTimes,
   faTrashAlt,
   faEdit,
-  farEdit,
   faSquare,
   faEllipsisH,
   faTimesCircle,
@@ -70,7 +67,6 @@ library.add(
   faThumbtack,
   faSpinner,
   faPencilAlt,
-  faBars,
 );
 
 class App extends React.Component {
@@ -79,16 +75,16 @@ class App extends React.Component {
   }
 
   render() {
-    const { isLoggedIn, onReceived, match: { isExact } } = this.props;
-
-    const appClassNames = classNames('App', {
-      'App--private': !isExact,
-    });
+    const { isLoggedIn, onReceived } = this.props;
 
     return (
-      <div id="appClient" className={appClassNames}>
+      <div id="appClient" className="App">
         {isLoggedIn && <ActionCable channel={{ channel: 'AppChannel' }} onReceived={onReceived} />}
-        <PageRoutes routes={routesConfig} />
+        <Switch>
+          {routesConfig.map(route => (
+            <RouteWithSubRoutes key={route.path} {...route} />
+          ))}
+        </Switch>
       </div>
     );
   }

@@ -1,0 +1,7 @@
+.Modal__chat:focus {
+  outline: none;
+}
+
+.Modal__chat .Btn__group {
+  text-align: right;
+}

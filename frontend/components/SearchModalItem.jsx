@@ -1,16 +1,10 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import MessageContainer from './MessageContainer';
 import { dateUtil } from '../util/dateUtil';
-import Message from './Message';
 import './SearchModalItem.css';
 
-const SearchModalItem = ({
-  message,
-  currentUserId,
-  users,
-  channelsMap,
-  url,
-}) => {
+const SearchModalItem = ({ message, users }) => {
   const date = dateUtil(message.createdAt);
   const monthCreated = date.monthName();
   const dayCreated = date.dayOrdinal();
@@ -33,36 +27,31 @@ const SearchModalItem = ({
       <div className="SearchModalItem__meta">
         <span className="SearchModalItem__meta-channel">
           <span className="SearchModalItem__meta-hashtag">#</span>
-          <strong>{channelsMap[message.channelSlug].title}</strong>
+          <strong>{message.channelTitle}</strong>
         </span>
         <span className="SearchModalItem__meta-sep">–</span>
         <span className="SearchModalItem__meta-date">
           {dateCreated}
         </span>
       </div>
-      <Message
-        message={message}
-        users={users}
-        currentUserId={currentUserId}
-        url={url}
-        shouldHideEngagement
-      />
-      {(hasThread || hasReactions) && (
-        <div className="SearchModalItem__social">
-          {hasThread && (
-            <div className="SearchModalItem__threads">
-              <FontAwesomeIcon icon={['far', 'comment']} />
-              {threadCount}
-            </div>
-          )}
-          {hasReactions && (
-            <div className="SearchModalItem__reactions">
-              <FontAwesomeIcon icon={['far', 'smile']} />
-              {reactionCount}
-            </div>
-          )}
-        </div>
-      )}
+      <MessageContainer message={message} users={users} shouldHideEngagement>
+        {(hasThread || hasReactions) && (
+          <div className="SearchModalItem__social">
+            {hasThread && (
+              <div className="SearchModalItem__threads">
+                <FontAwesomeIcon icon={['far', 'comment']} />
+                {threadCount}
+              </div>
+            )}
+            {hasReactions && (
+              <div className="SearchModalItem__reactions">
+                <FontAwesomeIcon icon={['far', 'smile']} />
+                {reactionCount}
+              </div>
+            )}
+          </div>
+        )}
+      </MessageContainer>
     </div>
   );
 };

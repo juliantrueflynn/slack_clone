@@ -1,16 +1,17 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
+import './Avatar.css';
 
 const Avatar = ({
-  user,
+  author,
   baseUrl,
   avatarFor,
   size,
   avatarVersion,
   ...attrs
 }) => {
-  if (!user) {
+  if (!author) {
     return null;
   }
 
@@ -18,30 +19,22 @@ const Avatar = ({
     avatarThumb,
     status,
     username,
-    authorSlug,
     slug,
-  } = user;
-
-  const userSlug = slug || authorSlug;
-  const avatarLink = `${baseUrl}/team/${userSlug}`;
-  const imgSize = size || 36;
+  } = author;
 
   let imgVersion = avatarThumb;
   if (avatarVersion) {
-    imgVersion = user[avatarVersion];
+    imgVersion = author[avatarVersion];
   }
 
-  const imgStyle = {
-    display: 'block',
-    borderRadius: '3px',
-  };
-
+  const avatarLink = `${baseUrl}/team/${slug}`;
+  const imgSize = size || 36;
   const avatarClassNames = classNames('Avatar', {
     [`Avatar__${avatarFor}`]: avatarFor,
     [`Avatar__${avatarFor}--${status}`]: avatarFor && status,
   });
 
-  const userImage = (
+  const authorImage = (
     <img
       src={imgVersion}
       className="Avatar__image"
@@ -50,7 +43,6 @@ const Avatar = ({
       title={username}
       alt={`${username} avatar`}
       aria-label={username}
-      style={imgStyle}
       {...attrs}
     />
   );
@@ -58,14 +50,14 @@ const Avatar = ({
   if (!baseUrl) {
     return (
       <div className={avatarClassNames}>
-        {userImage}
+        {authorImage}
       </div>
     );
   }
 
   return (
     <Link to={avatarLink} className={avatarClassNames}>
-      {userImage}
+      {authorImage}
     </Link>
   );
 };

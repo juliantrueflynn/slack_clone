@@ -1,0 +1,17 @@
+.ScrollBar {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.ScrollBar__container {
+  height: 100%;
+  width: 100%;
+}
+
+.ChatPage .ScrollBar__container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}

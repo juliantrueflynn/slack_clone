@@ -1,6 +1,5 @@
 import merge from 'lodash.merge';
 import { isDateOlderThanOther } from '../util/dateUtil';
-import { pushReduce, filterPop } from '../util/reducerUtil';
 import {
   MESSAGE,
   USER_THREAD,
@@ -8,13 +7,14 @@ import {
   READ,
   FAVORITE,
   WORKSPACE,
+  SIGN_OUT,
+  UNREAD,
   DRAWER_CLOSE,
   HISTORY,
   SEARCH,
+  MODAL_CLOSE,
   SEARCH_DESTROY,
   PIN,
-  MESSAGE_EDITOR_TOGGLE,
-  SIGN_OUT,
 } from '../actions/actionTypes';
 
 const messageReducer = (state = {}, action) => {
@@ -23,46 +23,51 @@ const messageReducer = (state = {}, action) => {
   let nextState;
   switch (action.type) {
     case WORKSPACE.SHOW.RECEIVE: {
-      const { messages, reads } = action.workspace;
+      const { messages, unreads, reads } = action.workspace;
 
-      nextState = {};
-      messages.forEach((msg) => {
-        nextState[msg.slug] = msg;
-
-        if (msg.parentMessageId) {
-          nextState[msg.parentMessageSlug] = {
-            slug: msg.parentMessageSlug,
-            id: msg.parentMessageId,
-            lastActive: msg.createdAt,
-            channelSlug: msg.channelSlug,
-            isInConvo: true,
-          };
-        }
+      nextState = Object.assign({}, state);
+      messages.filter(msg => msg.entityType === 'entry').forEach((message) => {
+        nextState[message.slug] = message;
       });
 
-      reads.filter(read => read.readableType === 'Message').forEach((read) => {
-        nextState[read.slug] = { slug: read.slug, ...nextState[read.slug] };
+      unreads.filter(unread => nextState[unread.slug] && unread.unreadableType === 'Message').forEach((unread) => {
+        nextState[unread.slug].unreadId = unread.id;
+        nextState[unread.slug].lastActive = unread.activeAt;
+      });
+
+      reads.filter(read => nextState[read.slug] && read.readableType === 'Message').forEach((read) => {
         nextState[read.slug].readId = read.id;
         nextState[read.slug].lastRead = read.accessedAt;
       });
 
-      Object.values(nextState).forEach((msg) => {
-        nextState[msg.slug] = {
-          hasUnreads: isDateOlderThanOther(msg.lastRead, msg.lastActive),
-          authors: [],
-          thread: [],
+      Object.values(nextState).forEach((message) => {
+        nextState[message.slug] = {
+          hasUnreads: isDateOlderThanOther(message.lastRead, message.lastActive),
+          isInConvo: true,
           reactionIds: [],
-          ...msg,
+          thread: [],
+          ...message,
         };
       });
 
       return nextState;
     }
-    case MESSAGE.SHOW.RECEIVE:
-    case MESSAGE.INDEX.RECEIVE:
-    case HISTORY.INDEX.RECEIVE:
+    case MESSAGE.INDEX.REQUEST:
+    case USER_THREAD.INDEX.REQUEST:
+    case UNREAD.INDEX.REQUEST: {
+      nextState = {};
+      Object.values(state).filter(msg => msg.isInConvo).forEach(({ slug }) => {
+        const isActiveConvo = action.type === USER_THREAD.INDEX.REQUEST;
+        nextState[slug] = { isActiveConvo };
+      });
+
+      return merge({}, state, nextState);
+    }
     case USER_THREAD.INDEX.RECEIVE:
-    case FAVORITE.INDEX.RECEIVE: {
+    case MESSAGE.SHOW.RECEIVE:
+    case FAVORITE.INDEX.RECEIVE:
+    case HISTORY.INDEX.RECEIVE:
+    case MESSAGE.INDEX.RECEIVE: {
       const {
         messages,
         reactions,
@@ -71,46 +76,33 @@ const messageReducer = (state = {}, action) => {
         pins,
       } = action.messages;
 
-      nextState = {};
-      messages.forEach((msg) => {
-        nextState[msg.slug] = {
-          channelSlug: channel && channel.slug,
+      nextState = Object.assign({}, state);
+      messages.forEach((message) => {
+        const children = messages.filter(msg => msg.parentMessageId === message.id);
+        const thread = children.map(child => child.slug);
+        const authors = children.reduce((acc, curr) => {
+          if (acc.includes(curr.authorSlug)) {
+            return acc;
+          }
+
+          acc.push(curr.authorSlug);
+
+          return acc;
+        }, []);
+
+        nextState[message.slug] = {
           reactionIds: [],
-          thread: msg.parentMessageId ? null : [],
-          authors: msg.parentMessageId ? null : [],
-          ...msg
+          authors,
+          thread,
+          ...message,
         };
 
+        if (channel) {
+          nextState[message.slug].channelSlug = channel.slug;
+        }
+
         if (action.type === MESSAGE.SHOW.RECEIVE || action.type === FAVORITE.INDEX.RECEIVE) {
-          nextState[msg.slug].isOpen = true;
-        }
-
-        if (action.type === USER_THREAD.INDEX.RECEIVE) {
-          nextState[msg.slug].isInConvo = true;
-          nextState[msg.slug].hasUnreads = false;
-        }
-      });
-
-      messages.filter(msg => msg.parentMessageId).forEach((msg) => {
-        const parent = nextState[msg.parentMessageSlug];
-
-        if (!parent) {
-          nextState[msg.parentMessageSlug] = {
-            slug: msg.parentMessageSlug,
-            id: msg.parentMessageId,
-            channelSlug: msg.channelSlug,
-            reactionIds: [],
-            thread: [msg.slug],
-            authors: [msg.authorSlug],
-          };
-        } else {
-          if (!parent.thread.includes(msg.slug)) {
-            parent.thread.push(msg.slug);
-          }
-
-          if (!parent.authors.includes(msg.authorSlug)) {
-            parent.authors.push(msg.authorSlug);
-          }
+          nextState[message.slug].isInDrawer = true;
         }
       });
 
@@ -131,10 +123,11 @@ const messageReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case SEARCH_DESTROY:
+    case MODAL_CLOSE:
     case SEARCH.INDEX.REQUEST: {
       nextState = Object.assign({}, state);
-      Object.values(nextState).forEach((msg) => {
-        nextState[msg.slug].isInSearch = false;
+      Object.values(nextState).forEach((message) => {
+        nextState[message.slug].isInSearch = false;
       });
 
       return nextState;
@@ -143,14 +136,11 @@ const messageReducer = (state = {}, action) => {
       const { messages, reactions } = action.messages;
 
       nextState = {};
-      messages.forEach((msg) => {
-        nextState[msg.slug] = {
-          isInSearch: true,
-          reactionIds: [],
-          thread: msg.parentMessageId ? null : [],
-          authors: [msg.authorSlug],
-          ...msg
-        };
+      messages.forEach((message) => {
+        nextState[message.slug] = message;
+        nextState[message.slug].isInSearch = true;
+        nextState[message.slug].reactionIds = [];
+        nextState[message.slug].thread = [];
       });
 
       reactions.forEach((reaction) => {
@@ -163,19 +153,19 @@ const messageReducer = (state = {}, action) => {
     case MESSAGE.SHOW.REQUEST: {
       const { messageSlug } = action;
 
-      nextState = Object.assign({}, state);
-      Object.values(state).filter(msg => msg.isOpen).forEach((msg) => {
-        nextState[msg.slug].isOpen = false;
+      nextState = {};
+      Object.values(state).forEach((message) => {
+        nextState[message.slug] = { isOpen: false, isInDrawer: false };
       });
 
-      if (nextState[messageSlug]) {
-        nextState[messageSlug].isOpen = true;
+      if (messageSlug) {
+        nextState[messageSlug] = { isOpen: true };
       }
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case MESSAGE.CREATE.REQUEST: {
-      const { parentMessageSlug } = action.message;
+      const { message: { parentMessageSlug } } = action;
 
       if (!parentMessageSlug) {
         return state;
@@ -187,135 +177,130 @@ const messageReducer = (state = {}, action) => {
       return nextState;
     }
     case MESSAGE.CREATE.RECEIVE: {
-      const { message } = action;
+      const { message, authors } = action.message;
       nextState = Object.assign({}, state);
       nextState[message.slug] = {
-        authors: [message.authorSlug],
+        thread: message.parentMessageId ? null : [],
+        reactionIds: [],
         ...message
       };
 
       if (message.parentMessageSlug) {
-        const parent = {
-          id: message.parentMessageId,
-          slug: message.parentMessageSlug,
-          channelSlug: message.channelSlug,
-          thread: [],
-          reactionIds: [],
-          authors: [],
-          ...nextState[message.parentMessageSlug],
-        };
-
-        parent.lastActive = message.createdAt;
-        parent.authors = parent.authors.reduce((acc, curr) => (
-          pushReduce(acc, curr)
-        ), [message.authorSlug]);
-        parent.thread.push(message.slug);
-
-        if (!parent.isOpen) {
-          parent.hasUnreads = isDateOlderThanOther(parent.lastRead, message.createdAt);
-          nextState[message.slug].isUnread = true;
+        if (!nextState[message.parentMessageSlug]) {
+          nextState[message.parentMessageSlug] = {
+            id: message.parentMessageId,
+            slug: message.parentMessageSlug,
+            thread: [],
+            lastActive: message.createdAt,
+            channelSlug: message.channelSlug,
+          };
         }
 
-        nextState[message.parentMessageSlug] = parent;
+        nextState[message.parentMessageSlug].authors = authors;
+        nextState[message.parentMessageSlug].thread.push(message.slug);
       }
 
       return nextState;
     }
     case MESSAGE.UPDATE.RECEIVE: {
       const { message } = action;
-      nextState = Object.assign({}, state);
-      nextState[message.slug].body = message.body;
-      return nextState;
+      nextState = {};
+      nextState[message.slug] = message;
+      return merge({}, state, nextState);
     }
-    case MESSAGE.DESTROY.RECEIVE: {
-      const { slug, parentMessageSlug } = action.message;
+    case MESSAGE.DESTROY.RECEIVE:
       nextState = Object.assign({}, state);
-
-      if (parentMessageSlug) {
-        const parent = nextState[parentMessageSlug];
-        parent.thread = filterPop(parent.thread, slug);
-      }
-
-      delete nextState[slug];
+      delete nextState[action.message.slug];
       return nextState;
-    }
     case REACTION.CREATE.RECEIVE: {
-      const { id, messageSlug } = action.reaction;
-
-      nextState = Object.assign({}, state);
-      if (nextState[messageSlug]) {
-        nextState[messageSlug].reactionIds.push(id);
-      }
-
-      return nextState;
-    }
-    case REACTION.DESTROY.RECEIVE: {
-      const { id, messageSlug: slug } = action.reaction;
-
-      nextState = Object.assign({}, state);
-
-      if (nextState[slug]) {
-        nextState[slug].reactionIds = filterPop(nextState[slug].reactionIds, id);
-      }
-
-      return nextState;
+      const { reaction, messageSlug } = action;
+      nextState = { [messageSlug]: { reactionIds: [reaction.id] } };
+      return merge({}, state, nextState);
     }
     case READ.CREATE.RECEIVE:
     case READ.UPDATE.RECEIVE: {
       const { read } = action;
+      nextState = Object.assign({}, state);
 
-      if (read.readableType !== 'Message') {
+      if (read.readableType !== 'Message' || nextState[read.slug].entityType !== 'entry') {
         return state;
       }
 
-      nextState = Object.assign({}, state);
       nextState[read.slug].readId = read.id;
       nextState[read.slug].lastRead = read.accessedAt;
-      nextState[read.slug].hasUnreads = false;
+
+      const { lastRead, lastActive } = nextState[read.slug];
+      nextState[read.slug].hasUnreads = isDateOlderThanOther(lastRead, lastActive);
+
+      if (nextState[read.slug].isOpen || nextState[read.slug].isActiveConvo) {
+        nextState[read.slug].hasUnreads = false;
+      }
 
       return nextState;
     }
-    case READ.DESTROY.RECEIVE:
+    case UNREAD.CREATE.RECEIVE:
+    case UNREAD.UPDATE.RECEIVE: {
+      const { unread } = action;
       nextState = Object.assign({}, state);
-      nextState[action.read.slug].readId = null;
+
+      if (unread.unreadableType !== 'Message' || nextState[unread.slug].entityType !== 'entry') {
+        return state;
+      }
+
+      nextState[unread.slug].unreadId = unread.id;
+      nextState[unread.slug].lastActive = unread.activeAt;
+
+      const { lastRead, lastActive } = nextState[unread.slug];
+      nextState[unread.slug].hasUnreads = isDateOlderThanOther(lastRead, lastActive);
+
+      if (nextState[unread.slug].isOpen || nextState[unread.slug].isActiveConvo) {
+        nextState[unread.slug].hasUnreads = false;
+      }
+
       return nextState;
-    case READ.INDEX.RECEIVE:
-      nextState = action.messages.messages.reduce((acc, curr) => {
+    }
+    case FAVORITE.CREATE.RECEIVE: {
+      const { id, messageSlug } = action.favorite;
+      nextState = Object.assign({}, state);
+      nextState[messageSlug].favoriteId = id;
+      nextState[messageSlug].isInDrawer = true;
+      return nextState;
+    }
+    case FAVORITE.DESTROY.RECEIVE: {
+      const { messageSlug } = action.favorite;
+      nextState = Object.assign({}, state);
+      nextState[messageSlug].favoriteId = null;
+      nextState[messageSlug].isInDrawer = false;
+      return nextState;
+    }
+    case UNREAD.INDEX.RECEIVE: {
+      const { unreads } = action;
+
+      nextState = unreads.reduce((acc, curr) => {
         acc[curr.slug] = curr;
         return acc;
       }, {});
 
       return merge({}, state, nextState);
-    case FAVORITE.CREATE.RECEIVE:
-      nextState = Object.assign({}, state);
-      nextState[action.favorite.messageSlug].favoriteId = action.favorite.id;
-      return nextState;
-    case FAVORITE.DESTROY.RECEIVE:
-      nextState = Object.assign({}, state);
-      nextState[action.favorite.messageSlug].favoriteId = null;
-      return nextState;
+    }
     case PIN.CREATE.RECEIVE: {
+      const { pin } = action;
       nextState = Object.assign({}, state);
 
-      if (nextState[action.pin.messageSlug]) {
-        nextState[action.pin.messageSlug].pinId = action.pin.id;
+      if (nextState[pin.messageSlug]) {
+        nextState[pin.messageSlug].pinId = pin.id;
       }
 
       return nextState;
     }
     case PIN.DESTROY.RECEIVE: {
+      const { pin } = action;
       nextState = Object.assign({}, state);
 
-      if (nextState[action.pin.messageSlug]) {
-        nextState[action.pin.messageSlug].pinId = null;
+      if (nextState[pin.messageSlug]) {
+        nextState[pin.messageSlug].pinId = null;
       }
 
-      return nextState;
-    }
-    case MESSAGE_EDITOR_TOGGLE: {
-      const { messageSlug } = action;
-      nextState = Object.assign({}, state);
-      nextState[messageSlug].isEditing = !nextState[messageSlug].isEditing;
       return nextState;
     }
     case WORKSPACE.SHOW.REQUEST:

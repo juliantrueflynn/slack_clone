@@ -1,6 +1,4 @@
 class Api::ReadsController < ApplicationController
-  before_action :set_read, except: :create
-
   def create
     @read = current_user.reads.build(read_params)
 
@@ -12,6 +10,8 @@ class Api::ReadsController < ApplicationController
   end
 
   def update
+    @read = Read.find_by(id: params[:id])
+
     if @read.save
       render 'api/reads/show'
     else
@@ -19,20 +19,8 @@ class Api::ReadsController < ApplicationController
     end
   end
 
-  def destroy
-    if @read && @read.destroy
-      render 'api/reads/show'
-    else
-      render json: ['not found']
-    end
-  end
-
   private
-
-  def set_read
-    @read = Read.find_by(id: params[:id])
-  end
-
+  
   def read_params
     params.require(:read).permit(:readable_id, :readable_type)
   end

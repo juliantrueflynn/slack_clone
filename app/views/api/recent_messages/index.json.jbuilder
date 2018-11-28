@@ -1,7 +1,11 @@
 json.messages do
   json.array! @recent_messages.includes(:author, :parent_message) do |message|
-    json.(message, :parent_message_slug, *message.attributes.keys)
+    json.(message, *message.attributes.keys)
     json.author_slug message.author.slug
+
+    if message.is_child?
+      json.parent_message_slug message.parent_message.slug
+    end
   end
 end
 
@@ -14,19 +18,28 @@ json.channel do
   end
 end
 
-parents = @recent_messages.with_parent
+json.favorites do
+  user_id = current_user.id
+  favorites = Favorite.by_user_and_message_id(user_id, @recent_messages)
+
+  json.array! favorites do |favorite|
+    json.(favorite, :id, :message_id)
+    json.message_slug favorite.message.slug
+  end
+end
 
 json.reactions do
-  reactions = Reaction.by_message_id(parents)
-  json.array! reactions, :id, :user_id, :emoji, :message_id, :message_slug
+  reactions = Reaction.by_message_id(@recent_messages)
+
+  json.array! reactions do |reaction|
+    json.(reaction, :id, :message_id, :user_id, :emoji)
+    json.message_slug reaction.message.slug
+    json.user_slug reaction.user.slug
+  end
 end
 
 json.pins do
-  pins = Pin.where(message_id: parents).includes(:message, :user)
-  json.array! pins, :id, :user_id, :message_id, :message_slug, :user_slug
-end
+  pins = Pin.where(message_id: @recent_messages).includes(:message, :user)
 
-json.favorites do
-  favorites = current_user.favorites.by_message_id(parents)
-  json.array! favorites, :id, :message_id, :message_slug
+  json.array! pins, :id, :user_id, :message_id, :message_slug, :user_slug
 end

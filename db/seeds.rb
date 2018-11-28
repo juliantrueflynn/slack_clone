@@ -6,6 +6,11 @@ def random_num(min: 3, max: 9)
   [*min.to_i..max.to_i].sample
 end
 
+def rand_date(from: DateTime.now - 90, to: DateTime.now - 2)
+  from ||= DateTime.now
+  Faker::Date.between(from, to)
+end
+
 def random_string
   lorem_ipsum = [
     Faker::Lorem.paragraph(random_num, rand < 0.5, random_num),
@@ -32,61 +37,36 @@ def seed_sub_and_members(user)
   chat = workspace.channels.sample
   return nil unless chat
 
-  unless workspace.is_user_sub?(user.id)
-    workspace.subs.create(user_id: user.id)
-  end
+  workspace.subs.create(user_id: user.id) unless workspace.is_user_sub?(user.id)
 
   unless chat.is_user_sub?(user.id)
-    chat.subs.create(user_id: user.id)
+    chat.subs.create(user_id: user.id, created_at: DateTime.now - 3)
   end
+end
+
+def seed_workspace(user)
+  title = Faker::Company.unique.name
+  user.created_workspaces.create(title: title, slug: title.parameterize)
 end
 
 def seed_chats(user)
   workspace = user.workspaces.sample
   return unless workspace
 
-  created_at = DateTime.now - 6
   title = Faker::Company.unique.buzzword
-  user.created_channels.create(
-    title: title,
-    workspace_id: workspace.id,
-    created_at: created_at,
-    updated_at: created_at
-  )
+  user.created_channels.create(title: title, workspace_id: workspace.id)
 end
 
 User.create!(email: "jtf@gmail.com", username: "jtf", password: "123456")
 
 3.times do
-  title = Faker::Company.unique.name
-  created_at = DateTime.now - 8
-
-  workspace = User.first.created_workspaces.create(
-    title: title,
-    slug: title.parameterize,
-    created_at: created_at,
-    updated_at: created_at,
-    skip_broadcast: true
-  )
-
-  default_channels = %w(general random).reduce([]) do |memo, title|
-    memo << {
-      title: title,
-      workspace_id: workspace.id,
-      created_at: created_at,
-      updated_at: created_at
-    }
-  end
-
-  User.first.created_channels.create(default_channels)
+  workspace = seed_workspace(User.first)
 
   3.times do
     chat = User.first.created_channels.create(
       title: Faker::Company.unique.buzzword,
       topic: (rand < 0.2 ? Faker::Company.bs : nil),
-      workspace_id: workspace.id,
-      created_at: created_at,
-      updated_at: created_at
+      workspace_id: workspace.id
     )
   end
 end
@@ -106,65 +86,37 @@ end
   seed_chats(user) if rand < 0.3
 end
 
-Workspace.all.each do |workspace|
-  workspace.channels.first(2).each do |chat|
-    created_at = DateTime.now - 12
-
-    chat.update_attributes(
-      created_at: created_at,
-      updated_at: created_at
-    )
-  end
-end
-
-User.first.workspaces.each do |workspace|
-  chats = User.first.channels.where(workspace_id: workspace.id)
-  chats.each do |chat|
-    chat.messages.create(
-      body: random_message_body,
-      author_id: 1,
-      created_at: chat.created_at + 1,
-      updated_at: chat.created_at + 1
-    )
-  end
-end
-
-60.times do
+50.times do
   user = User.all.sample
   chat = user.channels.sample
 
   next unless chat
 
-  parent_entries = chat.messages.by_entry_parent
-
   loop do
-    user.messages.create(body: random_message_body, channel_id: chat.id)
+    message = user.messages.create(body: random_message_body, channel_id: chat.id)
     break if rand < 0.4
   end
 
   loop do
-    break if parent_entries.empty?
-    break if rand < 0.75
+    break if chat.parent_messages.empty?
+    break if rand < 0.8
 
-    parent = parent_entries.sample
-    user.messages.create(
+    parent = chat.parent_messages.without_entry_type.sample
+    message = user.messages.where(entity_type: 'entry').create(
       body: random_message_body,
       channel_id: chat.id,
-      parent_message_id: parent.id
+      parent_message_id: parent.id,
     )
+
+    unread_params = { unreadable_id: parent.id, unreadable_type: 'Message' }
+    message_unread = Unread.find_or_initialize_by(unread_params) do |unread|
+      unread.active_at = parent.replies.last.created_at
+    end
+    message_unread.save!
   end
 
-  unless parent_entries.empty?
-    convo = parent_entries.sample
-    user.messages.create(
-      body: random_message_body,
-      channel_id: convo.channel_id,
-      parent_message_id: convo.id
-    )
-  end
-
-  if rand < 0.7
-    message = chat.messages.with_entry_type.sample
+  if rand < 0.5
+    message = chat.messages.sample
     next unless message
 
     user.favorites.create(message_id: message.id) if rand < 0.5
@@ -173,34 +125,45 @@ end
 end
 
 User.first.channels.shuffle.each do |chat|
-  messages = chat.messages.with_parent.with_entry_type
-  next if messages.empty?
+  messages = chat.messages.without_children.without_entry_type
+  next unless messages.empty?
   next if rand < 0.4
 
+  accessed_at = messages.sample.created_at
   read = chat.reads.find_or_initialize_by_user(1)
   read.save!
 end
 
 Channel.all.each do |chat|
-  sub_messages = chat.messages.take_while do |sub_msg|
-    sub_msg.update_attributes(
-      created_at: chat.created_at,
-      updated_at: chat.created_at
-    )
+  messages = chat.messages.without_children.without_entry_type
+  next if messages.empty?
+
+  unread_params = { unreadable_id: chat.id, unreadable_type: 'Channel' }
+  chat_unread = Unread.find_or_initialize_by(unread_params) do |unread|
+    unread.active_at = messages.last.created_at
   end
+  chat_unread.save!
 end
 
-Workspace.all.each do |workspace|
-  all_convos = workspace.messages.convos_with_author_id(1)
-  parents = all_convos.where(parent_message_id: nil)
+User.first.channels.each do |chat|
+  next if chat.messages.empty?
+  next if chat.messages.length < 11
 
-  reads = parents.reduce([]) do |memo, curr|
-    memo << {
-      readable_id: curr.id,
-      readable_type: 'Message',
-      workspace_id: workspace.id
-    }
+  sub_messages = chat.messages.where.not(entity_type: 'entry')
+  messages = chat.messages.with_entry_type
+
+  sub_messages.each do |sub_message|
+    date = DateTime.now - 4
+    sub_message.update_attribute(:created_at, date)
+
+    user_messages = chat.messages.where(author_id: 1).without_children
+    if user_messages.exists?
+      user_read = chat.reads.by_user_id(1)
+      user_read.update_attribute(:accessed_at, user_messages.last.created_at)
+    end
   end
 
-  User.first.reads.create(reads)
+  sub_date = sub_messages.last.created_at
+  date = sub_date + 10.minutes
+  messages.first.update(created_at: date, updated_at: date)  
 end

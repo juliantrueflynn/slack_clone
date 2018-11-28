@@ -5,7 +5,7 @@ class Api::SessionsController < ApplicationController
       params[:user][:password]
     )
 
-    if @user
+    if @user && @user.save
       signin(@user)
       render 'api/sessions/show'
     else

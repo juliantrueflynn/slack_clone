@@ -5,8 +5,12 @@ json.workspace do
 end
 
 json.channels do
-  channels = @workspace.channels.without_user_and_dm(user_id)
-  json.array! channels, :id, :slug, :title, :has_dm
+  channels = current_user.channels.where(workspace_id: @workspace.id)
+
+  json.array! channels.includes(:owner) do |chat|
+    json.(chat, :id, :title, :slug, :owner_id, :has_dm)
+    json.owner_slug chat.owner ? chat.owner.slug : nil
+  end
 end
 
 json.members do
@@ -23,9 +27,7 @@ json.user_appearances do
 end
 
 json.channel_subs do
-  channel_subs = @workspace.chat_subs.shared_with_user_id(user_id)
-
-  json.array! channel_subs do |chat_sub|
+  json.array! @workspace.chat_subs.with_user_id(user_id) do |chat_sub|
     json.(chat_sub, :id, :user_id, :in_sidebar, :channel_id, :created_at)
     json.user_slug chat_sub.user_slug
     json.channel_slug chat_sub.channel_slug
@@ -40,19 +42,11 @@ json.workspace_subs do
   end
 end
 
-json.messages do
-  json.array! @workspace.user_convos(user_id).with_parent do |message|
+json.messages do  
+  json.array! @workspace.convo_parents_with_user_id(user_id) do |message|
     json.(message, *message.attributes.keys)
     json.author_slug message.author.slug
     json.channel_slug message.channel.slug
-  end
-
-  messages = @workspace.latest_entries(user_id)
-  json.array! messages.includes(:author, :channel, :parent_message) do |message|
-    json.(message, *message.attributes.keys)
-    json.author_slug message.author.slug
-    json.channel_slug message.channel.slug
-    json.parent_message_slug message.parent_message_slug
   end
 end
 
@@ -69,5 +63,20 @@ json.reads do
   json.array! read_convos.includes(message: [:author, :channel]) do |read|
     json.(read, :id, :accessed_at, :readable_id, :readable_type)
     json.slug read.message.slug
+  end
+end
+
+json.unreads do
+  unread_chats = Unread.channels_by_workspace_id_and_user_id(@workspace.id, user_id)
+  unread_convos = Unread.convos_by_workspace_and_user(@workspace.id, user_id)
+
+  json.array! unread_chats.includes(:channel) do |unread|
+    json.(unread, :id, :active_at, :unreadable_id, :unreadable_type)
+    json.slug unread.channel.slug
+  end
+
+  json.array! unread_convos.includes(:message) do |unread|
+    json.(unread, :id, :active_at, :unreadable_id, :unreadable_type)
+    json.slug unread.message.slug
   end
 end

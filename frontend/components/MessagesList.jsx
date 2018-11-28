@@ -1,51 +1,64 @@
 import React from 'react';
-import Message from './Message';
+import MessageContainer from './MessageContainer';
 
 class MessagesList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { editMessageSlug: null };
+
+    this.state = {
+      editMessageId: -1,
+      hoverMessageId: -1,
+      isDdOpen: false,
+    };
+
+    this.handleHover = this.handleHover.bind(this);
+    this.handleDdToggle = this.handleDdToggle.bind(this);
     this.handleEditToggle = this.handleEditToggle.bind(this);
   }
 
-  handleEditToggle(messageSlug) {
-    const { isEditable, toggleMessageEditor } = this.props;
-    const { editMessageSlug } = this.state;
+  handleEditToggle(messageId) {
+    const { editMessageId } = this.state;
 
-    if (!isEditable) {
-      return;
+    if (editMessageId !== messageId) {
+      this.setState({ editMessageId: messageId });
+    }
+  }
+
+  handleHover(messageId) {
+    const { isDdOpen, hoverMessageId } = this.state;
+
+    if (!isDdOpen && hoverMessageId !== messageId) {
+      this.setState({ hoverMessageId: messageId });
+    }
+  }
+
+  handleDdToggle(eTarget, isDdOpen) {
+    const nextState = { isDdOpen };
+
+    if (eTarget) {
+      nextState.hoverMessageId = -1;
     }
 
-    if (editMessageSlug !== messageSlug) {
-      this.setState({ editMessageSlug: messageSlug });
-
-      if (editMessageSlug) {
-        toggleMessageEditor(editMessageSlug);
-      }
-    } else {
-      this.setState({ editMessageSlug: null });
-    }
-
-    toggleMessageEditor(messageSlug);
+    this.setState(nextState);
   }
 
   render() {
-    const {
-      messages,
-      history,
-      location,
-      toggleEditor,
-      isEditable,
-      ...props
-    } = this.props;
-    const { editMessageSlug } = this.state;
+    const { messages, children, ...props } = this.props;
+    const { hoverMessageId, editMessageId } = this.state;
 
-    return messages && messages.map(message => (
-      <Message
+    if (!messages) {
+      return null;
+    }
+
+    return messages.map(message => (
+      <MessageContainer
         key={message.id}
         message={message}
-        editMessageSlug={editMessageSlug}
-        toggleEditor={this.handleEditToggle}
+        hoverMessageId={hoverMessageId}
+        editMessageId={editMessageId}
+        handleHover={this.handleHover}
+        handleEditToggle={this.handleEditToggle}
+        ddToggle={this.handleDdToggle}
         {...props}
       />
     ));

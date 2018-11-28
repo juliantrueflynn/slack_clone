@@ -2,8 +2,8 @@ import React from 'react';
 import SettingsForm from './SettingsForm';
 import PasswordForm from './PasswordForm';
 import Button from './Button';
-import Modal from './Modal';
 import './ProfileModal.css';
+import Modal from './Modal';
 
 class ProfileModal extends React.Component {
   constructor(props) {

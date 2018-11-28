@@ -1,68 +1,61 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import SearchModalFilter from './SearchModalFilter';
 import Avatar from './Avatar';
-import FormField from './FormField';
 import './SearchModalAside.css';
 
 const SearchModalAside = ({
   messages,
-  channelsMap,
   users,
   peopleFilter,
   channelFilter,
-  toggleCheckbox,
+  handleFilterToggle,
 }) => {
-  const channelsFilterMap = messages.reduce((acc, curr) => {
-    const channel = channelsMap[curr.channelSlug];
-    const { channelSlug: id } = curr;
-    acc[id] = { id, label: channel.title };
+  const channelsMap = messages.reduce((acc, curr) => {
+    const { channelSlug: id, channelTitle: label } = curr;
+    acc[id] = { id, label };
     return acc;
   }, {});
-  const peopleFilterMap = messages.reduce((acc, curr) => {
-    const { authorSlug: id, username: label } = curr;
+  const peopleMap = messages.reduce((acc, curr) => {
+    const { authorSlug: id, authorName: label } = curr;
     acc[id] = { id, label };
     return acc;
   }, {});
 
-  const isChecked = {
-    people: id => peopleFilter.includes(id),
-    channel: id => channelFilter.includes(id),
-  };
-
-  const checkboxMapper = ({ id, label }, type, prefix) => ({
-    id,
-    type: 'checkbox',
-    label: (
-      <Fragment>
-        <div className="SearchModalAside__filter-prefix">{prefix}</div>
-        {label}
-      </Fragment>
-    ),
-    className: null,
-    checked: isChecked[type](id),
-    onChange: () => toggleCheckbox(`${type}Filter`, id),
-  });
-
-  const people = Object.values(peopleFilterMap).map(item => (
-    checkboxMapper(item, 'people', <Avatar user={users[item.id]} size="18" />)
-  ));
-
-  const channels = Object.values(channelsFilterMap).map(item => (
-    checkboxMapper(item, 'channel', <FontAwesomeIcon icon="hashtag" size="sm" />)
-  ));
-
-  const widget = (title, arr) => (
-    <div className={`SearchModalAside__widget SearchModalAside__widget-${title.toLowerCase()}`}>
-      <h4 className="SearchModalAside__widget-title">{title}</h4>
-      {arr.map(item => <FormField key={item.id} {...item} />)}
-    </div>
-  );
+  const people = Object.values(peopleMap);
+  const channels = Object.values(channelsMap);
 
   return (
     <aside className="SearchModalAside">
       <h3 className="SearchModalAside__title">Filter by</h3>
-      {widget('People', people)}
-      {widget('Channels', channels)}
+      <div className="SearchModalAside__widget">
+        <h4 className="SearchModalAside__widget-title">People</h4>
+        {people.map(author => (
+          <SearchModalFilter
+            key={author.id}
+            filterType="people"
+            filterState={peopleFilter}
+            toggle={handleFilterToggle}
+            {...author}
+          >
+            <Avatar author={users[author.id]} size="18" />
+          </SearchModalFilter>
+        ))}
+      </div>
+      <div className="SearchModalAside__widget">
+        <h4 className="SearchModalAside__widget-title">Channels</h4>
+        {channels.map(channel => (
+          <SearchModalFilter
+            key={channel.id}
+            filterType="channel"
+            filterState={channelFilter}
+            toggle={handleFilterToggle}
+            {...channel}
+          >
+            <FontAwesomeIcon icon="hashtag" size="sm" />
+          </SearchModalFilter>
+        ))}
+      </div>
     </aside>
   );
 };

@@ -1,4 +1,9 @@
 class Api::ReactionsController < ApplicationController
+  before_action :set_reaction, except: :create
+
+  def show
+  end
+
   def create
     @reaction = current_user.reactions.build(reaction_params)
 
@@ -10,8 +15,6 @@ class Api::ReactionsController < ApplicationController
   end
 
   def destroy
-    @reaction = Reaction.find_by(id: params[:id])
-
     if @reaction.destroy
       render json: @reaction
     else
@@ -20,6 +23,10 @@ class Api::ReactionsController < ApplicationController
   end
 
   private
+
+  def set_reaction
+    @reaction = Reaction.find_by(id: params[:id])
+  end
 
   def reaction_params
     params.require(:reaction).permit(:message_id, :emoji)

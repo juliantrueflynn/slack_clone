@@ -7,16 +7,16 @@ import './ProfileDropdown.css';
 
 const ProfileDropdown = ({
   match: { url },
-  chatPath,
+  currChatSlug,
   user,
   workspaces,
   workspaceTitle,
 }) => {
   let baseUrl = `${url}/`;
-  if (chatPath === 'unreads' || chatPath === 'threads') {
-    baseUrl += chatPath;
+  if (currChatSlug === 'unreads' || currChatSlug === 'threads') {
+    baseUrl += currChatSlug;
   } else {
-    baseUrl += `messages/${chatPath}`;
+    baseUrl += `messages/${currChatSlug}`;
   }
 
   const menuItems = [
@@ -47,7 +47,7 @@ const ProfileDropdown = ({
       </div>
       <div className="Dropdown__subtitle">
         <div className="Dropdown__status">
-          <StatusIcon member={user} size="xs" />
+          <StatusIcon member={user} />
         </div>
         <div className="Dropdown__title">
           {user.username}

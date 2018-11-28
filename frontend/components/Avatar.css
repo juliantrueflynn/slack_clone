@@ -1,0 +1,10 @@
+.RightSidebar .Avatar {
+  margin-right: 5px;
+  display: block;
+  padding: 0;
+}
+
+.Avatar__image {
+  display: block;
+  border-radius: 3px;
+}

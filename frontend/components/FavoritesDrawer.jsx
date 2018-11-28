@@ -1,5 +1,5 @@
 import React from 'react';
-import MessagesListContainer from './MessagesListContainer';
+import MessagesList from './MessagesList';
 
 const FavoritesDrawer = ({ messages }) => {
   const filterMenuItems = ['dropdown', 'reaction', 'convo'];
@@ -11,13 +11,12 @@ const FavoritesDrawer = ({ messages }) => {
   };
 
   return (
-    <MessagesListContainer
+    <MessagesList
       messages={messages}
       role="listitem"
       filterMenuItems={filterMenuItems}
-      style={style}
       isThreadHidden
-      isHoverable
+      style={style}
     />
   );
 };

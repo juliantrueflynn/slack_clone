@@ -81,7 +81,7 @@ class Dropdown extends React.Component {
       [`Dropdown--${menuPos}`]: menuPos,
       'Dropdown--left': !menuPos,
       [`Dropdown__${menuFor}`]: menuFor,
-      [`Dropdown__${menuFor}--${modifier}`]: menuFor && modifier,
+      [`Dropdown__${menuFor}--modifier`]: menuFor && modifier,
       'Dropdown--opened': isOpen,
       'Dropdown--closed': !isOpen,
     });

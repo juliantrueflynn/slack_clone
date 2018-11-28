@@ -22,31 +22,3 @@
   font-weight: normal;
   color: #636E72;
 }
-
-.SearchModalAside .Form__checkbox {
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-}
-
-.SearchModalAside__widget-channels {
-  margin-bottom: 7px;
-}
-
-.SearchModalAside__widget-people .SearchModalAside__filter-prefix {
-  width: 28px;
-}
-
-.SearchModalAside__widget-channels .SearchModalAside__filter-prefix {
-  width: 28px;
-}
-
-.SearchModalAside .Form__checkbox-label {
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-}
-
-.SearchModalAside input {
-  margin-left: auto;
-}

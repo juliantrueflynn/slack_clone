@@ -54,6 +54,10 @@
   padding: 6px 18px;
 }
 
+.Drawer__convo .Message:first-child .Btn__convo {
+  display: none;
+}
+
 .Drawer__convo .Message:nth-child(2):before {
   height: 1px;
   display: block;

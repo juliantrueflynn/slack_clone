@@ -28,10 +28,13 @@
   margin: 0 7px;
 }
 
+.SearchModalItem .Message--hover {
+  background-color: transparent;
+}
+
 .SearchModalItem__social {
   font-size: 13px;
   margin-top: 9px;
-  margin-left: 44px;
   display: flex;
   color: #636E72;
 }

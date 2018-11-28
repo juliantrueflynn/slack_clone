@@ -6,70 +6,58 @@ import {
   select,
   takeLatest,
 } from 'redux-saga/effects';
-import { createReaction, destroyReaction } from '../actions/reactionActions';
-import { REACTION, REACTION_TOGGLE } from '../actions/actionTypes';
-import { apiCreate, apiDestroy } from '../util/apiUtil';
-import { selectCurrentUser, selectMessagesMap } from '../reducers/selectors';
+import * as actions from '../actions/reactionActions';
+import { REACTION } from '../actions/actionTypes';
+import { apiCreate, apiDelete } from '../util/apiUtil';
+import { selectCurrentUser, selectEntities } from '../reducers/selectors';
 
-function* matchingReactionByUser({ id, reactions }, emoji) {
+function* reactionWithEmojiByUser({ messageId, emoji }) {
   const currUser = yield select(selectCurrentUser);
-  const matches = reactions.filter(reaction => (
+  const reactionsMap = yield select(selectEntities, 'reactions');
+  const reactions = Object.values(reactionsMap);
+
+  const messageEmojisByUser = reactions.filter(reaction => (
     reaction.userId === currUser.id
-    && reaction.messageId === id
+    && reaction.messageId === messageId
     && reaction.emoji === emoji
   ));
 
-  return matches[0];
+  return messageEmojisByUser[0];
 }
 
-function* loadToggleReaction({ reaction: { messageSlug, emoji } }) {
+function* fetchDeleteReaction({ id }) {
   try {
-    const messagesMap = yield select(selectMessagesMap);
-    const message = messagesMap[messageSlug];
-    const matchingReaction = yield matchingReactionByUser(message, emoji);
+    yield call(apiDelete, `reactions/${id}`);
+  } catch (error) {
+    yield put(actions.deleteReaction.failure(error));
+  }
+}
 
-    if (matchingReaction) {
-      yield put(destroyReaction.request(matchingReaction.id));
+function* fetchCreateReaction({ reaction }) {
+  try {
+    const reactionExists = yield reactionWithEmojiByUser(reaction);
+
+    if (reactionExists) {
+      const { id } = reactionExists;
+      yield fetchDeleteReaction({ id });
     } else {
-      const reactionProps = { messageId: message.id, emoji };
-      yield put(createReaction.request(reactionProps));
+      yield call(apiCreate, 'reactions', reaction);
     }
   } catch (error) {
-    yield put(createReaction.failure(error));
+    yield put(actions.createReaction.failure(error));
   }
-}
-
-function* loadDestroyReaction({ id }) {
-  try {
-    yield call(apiDestroy, `reactions/${id}`);
-  } catch (error) {
-    yield put(destroyReaction.failure(error));
-  }
-}
-
-function* loadCreateReaction({ reaction }) {
-  try {
-    yield call(apiCreate, 'reactions', reaction);
-  } catch (error) {
-    yield put(createReaction.failure(error));
-  }
-}
-
-function* watchToggleReaction() {
-  yield takeLatest(REACTION_TOGGLE, loadToggleReaction);
 }
 
 function* watchCreateReaction() {
-  yield takeLatest(REACTION.CREATE.REQUEST, loadCreateReaction);
+  yield takeLatest(REACTION.CREATE.REQUEST, fetchCreateReaction);
 }
 
 function* watchDeleteReaction() {
-  yield takeLatest(REACTION.DESTROY.REQUEST, loadDestroyReaction);
+  yield takeLatest(REACTION.DESTROY.REQUEST, fetchDeleteReaction);
 }
 
 export default function* reactionSaga() {
   yield all([
-    fork(watchToggleReaction),
     fork(watchCreateReaction),
     fork(watchDeleteReaction),
   ]);

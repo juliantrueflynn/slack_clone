@@ -7,15 +7,11 @@ class Pin < ApplicationRecord
   has_one :channel, through: :message
 
   def broadcast_name
-    "channel_#{channel_slug}"
+    "channel_#{channel.slug}"
   end
 
   def message_slug
     message.slug
-  end
-
-  def channel_slug
-    channel.slug
   end
 
   def user_slug

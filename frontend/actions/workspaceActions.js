@@ -18,6 +18,16 @@ export const createWorkspace = {
   failure: errors => actionCreator(WORKSPACE.CREATE.FAILURE, { errors }),
 };
 
+export const updateWorkspace = {
+  request: workspace => actionCreator(WORKSPACE.UPDATE.REQUEST, { workspace }),
+  failure: errors => actionCreator(WORKSPACE.UPDATE.FAILURE, { errors }),
+};
+
+export const deleteWorkspace = {
+  request: workspaceSlug => actionCreator(WORKSPACE.SHOW.REQUEST, { workspaceSlug }),
+  failure: errors => actionCreator(WORKSPACE.SHOW.FAILURE, { errors }),
+};
+
 export const createWorkspaceSub = {
   request: workspaceSub => actionCreator(WORKSPACE_SUB.CREATE.REQUEST, { workspaceSub }),
   failure: errors => actionCreator(WORKSPACE_SUB.CREATE.FAILURE, { errors }),

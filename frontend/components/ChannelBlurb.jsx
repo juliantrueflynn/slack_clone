@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
@@ -30,37 +30,51 @@ const ChannelBlurb = ({
     description = (
       <div className="ChannelBlurb__description">
         {'This is the beginning of your direct message conversation with '}
-        <Link className="ChannelBlurb__label" to={userPathUrl(dmUserSlug)}>{title}</Link>
+        <Link className="ChannelBlurb__label" to={userPathUrl(dmUserSlug)}>
+          <span className="ChannelBlurb__label-at">@</span>
+          {title}
+        </Link>
       </div>
     );
   } else {
-    let creator = (
-      <Link className="ChannelBlurb__label" to={userPathUrl(ownerSlug)}>{ownerName}</Link>
+    const editButton = (
+      <Button buttonFor="edit" onClick={openEditor} unStyled>
+        (
+        <span className="Btn__span">edit</span>
+        )
+      </Button>
+    );
+
+    let channelCreator = (
+      <Link className="ChannelBlurb__label" to={userPathUrl(ownerSlug)}>
+        <span className="ChannelBlurb__label-at">@</span>
+        {ownerName}
+      </Link>
     );
 
     if (currentUserSlug === ownerSlug) {
-      creator = 'You';
+      channelCreator = 'You';
     }
 
     const date = dateUtil(createdAt);
     const dateCreated = date.isToday() ? 'today' : `on ${date.monthName()} ${date.dayOrdinal()}`;
 
-    chatTitle = <span className="ChannelBlurb__title-text">{title}</span>;
-
+    chatTitle = (
+      <Fragment>
+        #
+        <span className="ChannelBlurb__title-text">
+          {title}
+        </span>
+      </Fragment>
+    );
     description = (
       <div className="ChannelBlurb__description">
-        {creator}
+        {channelCreator}
         {` created this channel ${dateCreated}. This is the beginning of the `}
         {chatTitle}
         {' channel. '}
         {topic && `Purpose: ${topic} `}
-        {topic && (
-          <span className="ChannelBlurb__parentheses">
-            <Button buttonFor="edit" onClick={openEditor} unStyled>
-              edit
-            </Button>
-          </span>
-        )}
+        {topic && editButton}
       </div>
     );
   }

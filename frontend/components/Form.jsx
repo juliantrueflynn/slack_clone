@@ -1,50 +1,48 @@
 import React from 'react';
 import classNames from 'classnames';
+import { camelize } from 'humps';
 import './Form.css';
 
 class Form extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { formErrors: [], formSuccess: null };
-    this.setFormSuccess = this.setFormSuccess.bind(this);
-    this.setFormErrors = this.setFormErrors.bind(this);
-  }
+  componentDidMount() {
+    const { destroySuccess, success } = this.props;
 
-  componentDidUpdate(prevProps) {
-    const { errors, success } = this.props;
-
-    if (!prevProps.success && success) {
-      this.setFormSuccess(success);
+    if (success) {
+      destroySuccess();
     }
-
-    if (!prevProps.errors.length && errors.length) {
-      this.setFormErrors(errors);
-    }
-  }
-
-  componentWillUnmount() {
-    this.setState({ formSuccess: null, formErrors: [] });
-  }
-
-  setFormSuccess(formSuccess) {
-    this.setState({ formSuccess });
-  }
-
-  setFormErrors(formErrors) {
-    this.setState({ formErrors });
   }
 
   render() {
-    const { formFor, render } = this.props;
-    const { formErrors, formSuccess } = this.state;
-
+    const {
+      formFor,
+      render,
+      success,
+      errors,
+    } = this.props;
+    const hasErrors = !!(errors && errors.length);
     const formClassNames = classNames('Form', {
       [`Form__${formFor}`]: formFor,
     });
 
     return (
       <div className={formClassNames}>
-        {render({ formErrors, formSuccess })}
+        {hasErrors && (
+          <div className="Form__alert Form__alert--errors">
+            <ul>
+              {errors.map(error => (
+                <li key={camelize(error)}>
+                  {error}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {success && (
+          <div className="Form__alert Form__alert--success">
+            {success}
+          </div>
+        )}
+        {render()}
       </div>
     );
   }

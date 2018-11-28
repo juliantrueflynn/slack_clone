@@ -1,7 +1,6 @@
 import React from 'react';
 import withForm from './withForm';
 import Button from './Button';
-import FormHandler from './FormHandler';
 
 class PasswordForm extends React.Component {
   constructor(props) {
@@ -13,11 +12,11 @@ class PasswordForm extends React.Component {
       passwordVerify: '',
     };
 
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.handleFieldValueChange = this.handleFieldValueChange.bind(this);
+    this.handleTextInputValue = this.handleTextInputValue.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleFormSubmit(e) {
+  handleSubmit(e) {
     e.preventDefault();
 
     const { formDispatchRequest } = this.props;
@@ -25,50 +24,61 @@ class PasswordForm extends React.Component {
     formDispatchRequest({ password, newPassword, passwordVerify });
   }
 
-  handleFieldValueChange(value, prop) {
-    this.setState({ [prop]: value });
+  handleTextInputValue(name) {
+    return event => this.setState({ [name]: event.target.value });
   }
 
   render() {
-    const { modalClose, form: { formSuccess, formErrors } } = this.props;
+    const { modalClose } = this.props;
     const { password, newPassword, passwordVerify } = this.state;
 
-    const fields = [
-      {
-        id: 'password',
-        type: 'password',
-        value: password,
-        label: 'Current password',
-      },
-      {
-        id: 'newPassword',
-        type: 'password',
-        value: newPassword,
-        label: 'New password',
-      },
-      {
-        id: 'passwordVerify',
-        type: 'password',
-        value: passwordVerify,
-        label: 'Verify password',
-      },
-    ];
-
     return (
-      <FormHandler
-        fields={fields}
-        setFieldValue={this.handleFieldValueChange}
-        submitForm={this.handleFormSubmit}
-        success={formSuccess}
-        errors={formErrors}
-      >
-        <Button type="submit" color="green" size="lg">
-          Save
-        </Button>
-        <Button onClick={() => modalClose()} size="lg">
-          Cancel
-        </Button>
-      </FormHandler>
+      <form onSubmit={this.handleSubmit}>
+        <div className="Form__group">
+          <label htmlFor="password">
+            Current password
+          </label>
+          <input
+            type="password"
+            className="Form__control"
+            name="user[password]"
+            value={password}
+            onChange={this.handleTextInputValue('password')}
+          />
+        </div>
+        <div className="Form__group">
+          <label htmlFor="new_password">
+            New password
+          </label>
+          <input
+            type="password"
+            className="Form__control"
+            name="user[new_password]"
+            value={newPassword}
+            onChange={this.handleTextInputValue('newPassword')}
+          />
+        </div>
+        <div className="Form__group">
+          <label htmlFor="password_verify">
+            Verify password
+          </label>
+          <input
+            type="password"
+            className="Form__control"
+            name="user[password_verify]"
+            value={passwordVerify}
+            onChange={this.handleTextInputValue('passwordVerify')}
+          />
+        </div>
+        <div className="Btn__group">
+          <Button type="submit" color="green" buttonFor="save-profile" size="lg">
+            Save
+          </Button>
+          <Button onClick={() => modalClose()} size="lg">
+            Cancel
+          </Button>
+        </div>
+      </form>
     );
   }
 }

@@ -1,11 +1,5 @@
 import { actionCreator } from '../util/actionsUtil';
-import { READ, CLEAR_UNREADS } from './actionTypes';
-
-export const fetchUnreads = {
-  request: workspaceSlug => actionCreator(READ.INDEX.REQUEST, { workspaceSlug }),
-  receive: messages => actionCreator(READ.INDEX.RECEIVE, { messages }),
-  failure: errors => actionCreator(READ.INDEX.FAILURE, { errors }),
-};
+import { READ } from './actionTypes';
 
 export const createRead = {
   request: read => actionCreator(READ.CREATE.REQUEST, { read }),
@@ -18,14 +12,3 @@ export const updateRead = {
   receive: read => actionCreator(READ.UPDATE.RECEIVE, { read }),
   failure: errors => actionCreator(READ.UPDATE.FAILURE, { errors }),
 };
-
-export const destroyRead = {
-  request: readId => actionCreator(READ.DESTROY.REQUEST, { readId }),
-  receive: read => actionCreator(READ.DESTROY.RECEIVE, { read }),
-  failure: errors => actionCreator(READ.DESTROY.FAILURE, { errors }),
-};
-
-export const clearUnreads = (channelSlug, lastRead) => actionCreator(
-  CLEAR_UNREADS,
-  { channelSlug, lastRead },
-);

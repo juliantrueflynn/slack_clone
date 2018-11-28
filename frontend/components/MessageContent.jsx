@@ -30,20 +30,20 @@ class MessageContent extends React.Component {
   }
 
   handleEditClose() {
-    const { closeEditor, content, slug } = this.props;
+    const { closeEditor, content } = this.props;
     const initialEditorState = mountEditorState(content);
     this.setState({ editorState: initialEditorState });
-    closeEditor(slug);
+    closeEditor(-1);
   }
 
   handleEditSubmit(e) {
     e.preventDefault();
 
-    const { slug, updateMessageRequest, closeEditor } = this.props;
+    const { messageSlug: slug, updateMessageRequest, closeEditor } = this.props;
     const { editorState } = this.state;
     const body = convertForSubmit(editorState);
     updateMessageRequest({ body, slug });
-    closeEditor(slug);
+    closeEditor();
   }
 
   render() {

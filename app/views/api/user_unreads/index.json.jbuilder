@@ -1,30 +1,12 @@
-all_messages = []
+json.array! @reads do |read|
+  channel = read.channel
+  parent_entry_messages = channel.messages.with_entry_type.without_children
+  messages = parent_entry_messages.includes(:author, :parent_message)
 
-json.messages do
-  json.array! @reads do |read|
-    channel = read.channel
-    parent_entry_messages = channel.messages.with_entry_type.with_parent
-    messages = parent_entry_messages.includes(:author, :parent_message)
-    unreads = messages.created_until(read.accessed_at)
-    all_messages << unreads
-
-    unreads.each do |message|
-      json.(message, *message.attributes.keys)
-      json.author_slug message.author.slug
-      json.parent_message_slug message.parent_message_slug
-      json.channel_slug channel.slug
-    end
+  messages.created_until(read.accessed_at).each do |message|
+    json.(message, *message.attributes.keys)
+    json.author_slug message.author.slug
+    json.parent_message_slug message.is_child? ? message.parent_message.slug : nil
+    json.channel_slug channel.slug
   end
-end
-
-flatten_messages = all_messages.flatten!
-
-json.reactions do
-  reactions = Reaction.by_message_id(flatten_messages)
-  json.array! reactions, :id, :user_id, :emoji, :message_id, :message_slug
-end
-
-json.favorites do
-  favorites = current_user.favorites.by_message_id(flatten_messages)
-  json.array! favorites, :id, :message_id, :message_slug
 end

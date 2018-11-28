@@ -1,59 +1,50 @@
 import React from 'react';
 import ReactionItem from './ReactionsItem';
+import './Reactions.css';
 
 class Reactions extends React.Component {
   constructor(props) {
     super(props);
-    this.handleToggleClick = this.handleToggleClick.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  handleToggleClick(emoji) {
-    const { messageSlug, toggleReaction } = this.props;
-    toggleReaction({ emoji, messageSlug });
+  handleClick(emoji) {
+    const { createReaction, messageId } = this.props;
+    createReaction({ emoji, messageId });
   }
 
   render() {
-    const { reactions, currentUserId } = this.props;
+    const { reactions, currUserId } = this.props;
 
-    if (!reactions || !reactions.length) {
-      return null;
-    }
-
-    const reactionCounts = reactions.reduce((acc, curr) => {
-      if (!acc[curr.emoji]) {
-        acc[curr.emoji] = { userIds: [] };
-      }
-
-      acc[curr.emoji].emoji = curr.emoji;
-      acc[curr.emoji].userIds.push(curr.userId);
-
-      return acc;
-    }, {});
-
-    const reactionItems = Object.values(reactionCounts);
-
-    const style = {
-      display: 'flex',
-      flexDirection: 'row',
-      margin: '6px 0 0',
-    };
-
-    const reactionEmojiStyle = {
+    const reactionStyle = {
       height: 17,
       width: 17,
       top: 0,
       display: 'block',
     };
 
+    const reactionCounts = reactions.reduce((acc, curr) => {
+      if (!acc[curr.emoji]) {
+        acc[curr.emoji] = { users: [] };
+      }
+
+      acc[curr.emoji].emoji = curr.emoji;
+      acc[curr.emoji].users.push(curr.userId);
+
+      return acc;
+    }, {});
+
+    const reactionItems = Object.values(reactionCounts);
+
     return (
-      <ul className="Reactions" style={style}>
+      <ul className="Reactions">
         {reactionItems.map(reaction => (
           <ReactionItem
             key={reaction.emoji}
-            reactionStyle={reactionEmojiStyle}
-            toggleClick={this.handleToggleClick}
-            currentUserId={currentUserId}
+            reactionStyle={reactionStyle}
+            createReaction={this.handleClick}
             reaction={reaction}
+            currUserId={currUserId}
           />
         ))}
       </ul>

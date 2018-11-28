@@ -2,7 +2,7 @@
   margin: 9px 14px;
 }
 
-.AllThreadsItem__body .Message .Message__container,
+.AllThreadsItem__body .Message,
 .AllThreadsItem__header {
   padding: 9px 13px;
 }
@@ -31,11 +31,11 @@
   background-color: #FFF;
 }
 
-.AllThreadsItem__body .Message .Message__container:first-child {
+.AllThreadsItem__body .Message:first-child {
   padding-top: 12px;
 }
 
-.AllThreadsItem__list .Message .Message__container:last-child {
+.AllThreadsItem__list .Message:last-child {
   padding-bottom: 12px;
 }
 

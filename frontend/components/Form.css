@@ -1,3 +1,19 @@
+.Form__alert {
+  padding: 15px 20px;
+  text-align: left;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  color: #FFF;
+}
+
+.Form__alert--errors {
+  background-color: #E17055;
+}
+
+.Form__alert--success {
+  background-color: #00B894;
+}
+
 .Form__group {
   margin-bottom: 20px;
 }
@@ -18,22 +34,6 @@
   border-width: 1px;
   border-radius: 5px;
   border-color: #636E72;
-}
-
-.Form__alert {
-  padding: 15px 20px;
-  text-align: left;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  color: #FFF;
-}
-
-.Form__alert--errors {
-  background-color: #E17055;
-}
-
-.Form__alert--success {
-  background-color: #00B894;
 }
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */

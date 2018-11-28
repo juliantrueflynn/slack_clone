@@ -295,10 +295,10 @@
   background-color: #FFF;
 }
 
-.Message--editing .Editor {
+.msg--editing .Editor {
   background-color: #FFF;
+  border: 1px solid #74B9FF;
   border-radius: 4px;
-  border-color: #0576b9;
 }
 
 .Editor__unlocked .DraftEditor-root {
@@ -314,6 +314,10 @@
   cursor: text;
 }
 
-.Channel .Form__message .Editor {
+.MessageForm__chat .Editor {
   border-width: 2px;
+}
+
+.Message--editing .Editor {
+  border-color: #0576b9;
 }

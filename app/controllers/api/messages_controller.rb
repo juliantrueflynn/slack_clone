@@ -1,5 +1,5 @@
 class Api::MessagesController < ApplicationController
-  before_action :set_message, only: [:show, :update, :destroy]
+  before_action :set_message, except: :create
 
   def index
     @channel = Channel.find_by(slug: params[:channel_slug])
@@ -41,6 +41,6 @@ class Api::MessagesController < ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:body, :channel_id, :parent_message_id)
+    params.require(:message).permit(:body, :channel_id, :parent_message_id, :parent_message_slug)
   end
 end
