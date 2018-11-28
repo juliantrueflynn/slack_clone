@@ -1,4 +1,4 @@
-.Message .MessageHoverMenu {
+.Menu__msg-hover {
   background-color: #FFF;
   border: 0.5px solid rgba(0,0,0,0.18);
   border-radius: 3px;
@@ -10,56 +10,53 @@
   display: none;
 }
 
-.Message--hover .MessageHoverMenu {
+.Message--hoverable.Message--hover:not(.Message--editing) .Menu__msg-hover,
+.Message--hoverable.Message:hover:not(.Message--editing) .Menu__msg-hover {
   display: flex;
 }
 
-.SearchModalItem .MessageHoverMenu {
-  display: none;
-}
-
-.Drawer .Message:first-child .MessageHoverMenu {
+.Drawer .Message:first-child .Menu__msg-hover {
   top: 10px;
   right: 18px;
 }
 
-.Drawer .Message:not(:first-child) .MessageHoverMenu {
+.Drawer .Message:not(:first-child) .Menu__msg-hover {
   top: -5px;
   right: 18px;
 }
 
-.MessageHoverMenu:hover {
+.Menu__msg-hover:hover {
   -webkit-box-shadow: 0px 0.5px 1px -0.5px rgba(0,0,0,0.33);
   -moz-box-shadow: 0px 0.5px 1px -0.5px rgba(0,0,0,0.33);
   box-shadow: 0px 0.5px 1px -0.5px rgba(0,0,0,0.33);
   border-color: rgba(0,0,0,0.28);
 }
 
-.MessageHoverMenu .Btn__dropdown:focus {
+.Menu__msg-hover .Btn__dropdown:focus {
   box-shadow: none;
 }
 
-.MessageHoverMenu .Btn__dropdown,
-.MessageHoverMenu .Menu--message > .MenuItem > .MenuItem__content {
+.Menu__msg-hover .Btn__dropdown,
+.Menu__msg-hover > .MenuItem > .MenuItem__content {
   padding: 3px 6px;
   font-size: 14px;
   color: rgba(0,0,0,0.7);
 }
 
-.MessageHoverMenu .Menu--message > .MenuItem {
+.Menu__msg-hover > .MenuItem {
   border-left: 0.5px solid rgba(0,0,0,0.18);
 }
 
-.MessageHoverMenu .Menu--message > .MenuItem:first-child {
+.Menu__msg-hover > .MenuItem:first-child {
   border-left: none;
 }
 
-.MessageHoverMenu .Btn__dropdown:hover,
-.MessageHoverMenu .Menu--message > .MenuItem > .MenuItem__content:hover {
+.Menu__msg-hover .Btn__dropdown:hover,
+.Menu__msg-hover > .MenuItem > .MenuItem__content:hover {
   color: #0576B9;
 }
 
-.MessageHoverMenu .MenuItem__favorite--solid .MenuItem__content:hover svg,
-.MessageHoverMenu .MenuItem__favorite--solid svg {
+.Menu__msg-hover .MenuItem__favorite--solid .MenuItem__content:hover svg,
+.Menu__msg-hover .MenuItem__favorite--solid svg {
   color: #FDCB6E;
 }

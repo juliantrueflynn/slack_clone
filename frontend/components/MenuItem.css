@@ -7,38 +7,10 @@
   border: 0;
 }
 
-.Menu__styled .MenuItem__content {
+.Menu--styled .MenuItem__content {
   display: block;
   font-size: 15px;
   line-height: 18px;
   padding: 4px 15px;
   position: relative;
-}
-
-.SidebarMenu .MenuItem__content > .Icon,
-.Menu--dmChats .StatusIcon {
-  margin-right: 8px;
-}
-
-.SidebarMenu .Menu--chats .MenuItem__content > .Icon,
-.SidebarMenu .Menu--quicklinks .MenuItem__content > .Icon {
-  color: rgba(255,255,255,0.4);
-}
-
-.SidebarMenu .MenuItem__content--btn:hover:not(.MenuItem__content--active),
-.SidebarMenu .MenuItem__content--link:hover:not(.MenuItem__content--active) {
-  background-color: rgba(223,230,233,.45);
-}
-
-.SidebarMenu .MenuItem__content--btn:hover:not(.MenuItem__content--active),
-.SidebarMenu .MenuItem__content--link:hover:not(.MenuItem__content--active) {
-  background-color: #3E2E3D;
-}
-
-.SidebarMenu .MenuItem__content--active {
-  background-color: #4C9689;
-}
-
-.SidebarMenu .MenuItem__content--btn:focus {
-  outline: none;
 }

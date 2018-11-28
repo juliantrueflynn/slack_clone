@@ -18,6 +18,10 @@
   width: 100%;
 }
 
+.SearchModal--new .Modal {
+  bottom: initial;
+}
+
 .SearchModal--new .Modal__inner-body {
   height: auto;
 }
@@ -34,7 +38,7 @@
   bottom: initial;
 }
 
-.SearchModal .ScrollBar .ScrollBar__container {
+.SearchModal .ScrollBar__container {
   position: relative;
   display: flex;
   flex: 1;

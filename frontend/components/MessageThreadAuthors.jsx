@@ -1,26 +1,40 @@
 import React from 'react';
-import './MessageThreadAuthors.css';
 
-const MessageThreadAuthors = ({ message, authors, currentUserSlug }) => {
-  const authorSlugs = message.thread.reduce((acc, curr) => {
-    if (currentUserSlug === curr.authorSlug || acc.includes(curr.authorSlug)) {
-      return acc;
-    }
-
-    acc.push(curr.authorSlug);
-    return acc;
-  }, [message.authorSlug]);
-
-  const authorsList = authorSlugs.map(slug => authors[slug].username);
-  const seperator = authorsList.length === 1 ? ' ' : ', ';
-
-  if (message.authorSlug !== currentUserSlug) {
-    authorsList.push(' and you');
+const MessageThreadAuthors = ({
+  parentAuthorSlug,
+  authors,
+  users,
+  currentUserSlug,
+}) => {
+  if (!authors) {
+    return null;
   }
 
+  const parentUsername = users[parentAuthorSlug] && users[parentAuthorSlug].username;
+  const authorsNames = authors.reduce((acc, curr) => {
+    if (curr !== currentUserSlug) {
+      acc.push(users[curr].username);
+    }
+
+    return acc;
+  }, [parentUsername]);
+
+  const seperator = authorsNames.length === 1 ? ' ' : ', ';
+
+  if (parentAuthorSlug !== currentUserSlug) {
+    authorsNames.push(' and you');
+  }
+
+  const style = {
+    display: 'flex',
+    fontSize: '13px',
+    color: '#636E72',
+    margin: '2px 0 4px',
+  };
+
   return (
-    <div className="MessageThreadAuthors">
-      {authorsList.join(seperator)}
+    <div className="MessageThreadAuthors" style={style}>
+      {authorsNames.join(seperator)}
     </div>
   );
 };

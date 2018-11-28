@@ -1,0 +1,48 @@
+.MessageHighlight {
+  display: flex;
+  align-items: center;
+  color: #636E72;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.MessageHighlight__gutter {
+  width: 36px;
+  text-align: right;
+  margin-right: 8px;
+  height: 14px;
+}
+
+.MessageHighlight svg {
+  height: 14px;
+}
+
+.MessageHighlight .fa-thumbtack {
+  color: #E17055;
+}
+
+.MessageHighlight .fa-star {
+  color: #FDCB6E;
+}
+
+.MessageHighlight__txt {
+  display: flex;
+  align-items: center;
+  height: 14px;
+  width: 100%;
+}
+
+.MessageHighlight__txt-item > a {
+  color: inherit;
+}
+
+.MessageHighlight__txt-item > a:hover {
+  text-decoration: underline;
+}
+
+.MessageHighlight--pin-fav .MessageHighlight__txt-item:last-child:before {
+  content: "\2022";
+  height: 14px;
+  padding: 0 5px;
+  color: rgba(99, 110, 114, 0.7);
+}

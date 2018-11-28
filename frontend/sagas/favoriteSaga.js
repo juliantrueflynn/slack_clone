@@ -3,13 +3,21 @@ import {
   call,
   fork,
   put,
-  takeLatest
+  takeLatest,
 } from 'redux-saga/effects';
-import { FAVORITE } from '../actions/actionTypes';
-import { fetchFavorites, createFavorite, deleteFavorite } from '../actions/favoriteActions';
-import { apiFetch, apiCreate, apiDelete } from '../util/apiUtil';
+import { FAVORITE, FAVORITE_TOGGLE } from '../actions/actionTypes';
+import { fetchFavorites, createFavorite, destroyFavorite } from '../actions/favoriteActions';
+import { apiFetch, apiCreate, apiDestroy } from '../util/apiUtil';
 
-function* fetchIndex({ workspaceSlug }) {
+function* loadToggleFavorite({ favorite }) {
+  if (favorite.id) {
+    yield put(destroyFavorite.request(favorite.id));
+  } else {
+    yield put(createFavorite.request(favorite));
+  }
+}
+
+function* loadIndexFavorite({ workspaceSlug }) {
   try {
     const favorites = yield call(apiFetch, `workspaces/${workspaceSlug}/favorites`);
     yield put(fetchFavorites.receive(favorites));
@@ -18,40 +26,45 @@ function* fetchIndex({ workspaceSlug }) {
   }
 }
 
-function* fetchCreate({ favorite }) {
+function* loadCreateFavorite({ favorite }) {
   try {
-    const newFavorite = yield call(apiCreate, 'favorites', favorite);
-    yield put(createFavorite.receive(newFavorite));
+    const response = yield call(apiCreate, 'favorites', favorite);
+    yield put(createFavorite.receive(response));
   } catch (error) {
     yield put(createFavorite.failure(error));
   }
 }
 
-function* fetchDestroy({ favoriteId }) {
+function* loadDestroyFavorite({ id }) {
   try {
-    const favorite = yield call(apiDelete, `favorites/${favoriteId}`);
-    yield put(deleteFavorite.receive(favorite));
+    const response = yield call(apiDestroy, `favorites/${id}`);
+    yield put(destroyFavorite.receive(response));
   } catch (error) {
-    yield put(deleteFavorite.failure(error));
+    yield put(destroyFavorite.failure(error));
   }
 }
 
-function* watchIndex() {
-  yield takeLatest(FAVORITE.INDEX.REQUEST, fetchIndex);
+function* watchFavoriteToggle() {
+  yield takeLatest(FAVORITE_TOGGLE, loadToggleFavorite);
 }
 
-function* watchCreate() {
-  yield takeLatest(FAVORITE.CREATE.REQUEST, fetchCreate);
+function* watchFavoriteIndex() {
+  yield takeLatest(FAVORITE.INDEX.REQUEST, loadIndexFavorite);
 }
 
-function* watchDestroy() {
-  yield takeLatest(FAVORITE.DESTROY.REQUEST, fetchDestroy);
+function* watchFavoriteCreate() {
+  yield takeLatest(FAVORITE.CREATE.REQUEST, loadCreateFavorite);
+}
+
+function* watchFavoriteDestroy() {
+  yield takeLatest(FAVORITE.DESTROY.REQUEST, loadDestroyFavorite);
 }
 
 export default function* favoriteSaga() {
   yield all([
-    fork(watchIndex),
-    fork(watchCreate),
-    fork(watchDestroy),
+    fork(watchFavoriteToggle),
+    fork(watchFavoriteIndex),
+    fork(watchFavoriteCreate),
+    fork(watchFavoriteDestroy),
   ]);
 }

@@ -1,8 +1,14 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import PinnedMessagesItem from './PinnedMessagesItem';
 import AccordionItemBody from './AccordionItemBody';
 
-const AccordionBodyPins = ({ messages, destroyPinRequest }) => {
+const AccordionBodyPins = ({
+  messages,
+  currentUserId,
+  destroyPinRequest,
+  match: { url },
+}) => {
   const isEmpty = !messages || !messages.length;
   const emptyText = 'No messages have been pinned yet!';
 
@@ -12,6 +18,8 @@ const AccordionBodyPins = ({ messages, destroyPinRequest }) => {
         <PinnedMessagesItem
           key={message.id}
           message={message}
+          currentUserId={currentUserId}
+          url={url}
           destroyPinRequest={destroyPinRequest}
         />
       ))}
@@ -19,4 +27,4 @@ const AccordionBodyPins = ({ messages, destroyPinRequest }) => {
   );
 };
 
-export default AccordionBodyPins;
+export default withRouter(AccordionBodyPins);

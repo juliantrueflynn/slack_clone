@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from './Menu';
 import Dropdown from './Dropdown';
 import WorkspaceModal from './WorkspaceModal';
@@ -42,53 +43,75 @@ class PublicView extends React.Component {
     } = this.props;
 
     const pagePath = pathname.length > 1 ? pathname.slice(1) : 'home';
+    const sessionMenuItems = [
+      {
+        key: 'signup',
+        label: 'Sign Up',
+        link: '/signup',
+        condition: !isLoggedIn,
+      },
+      {
+        key: 'signin',
+        label: 'Sign In',
+        link: '/signin',
+        condition: !isLoggedIn,
+      },
+      {
+        key: 'signout',
+        label: 'Sign Out',
+        onClick: () => signOutRequest(),
+        condition: isLoggedIn,
+      },
+    ];
+
     const workspaces = Object.values(workspacesMap);
-    const workspaceItems = subbedWorkspaces.map(({ slug, title }) => ({
+    const modifierClassName = subbedWorkspaces.length ? 'filled' : 'empty';
+    const workspaceMenuItems = subbedWorkspaces.map(({ slug, title }) => ({
       key: slug,
       link: slug,
       label: title,
     }));
-    const ddModifierClassName = subbedWorkspaces.length ? 'filled' : 'empty';
     const createWorkspaceItem = {
       key: 'createWorkspace',
       label: 'Create Workspace',
       onClick: () => modalOpen('MODAL_WORKSPACE')
     };
-    workspaceItems.push(createWorkspaceItem);
+    workspaceMenuItems.push(createWorkspaceItem);
 
-    let navItems = [
-      { key: 'signup', label: 'Sign Up', link: '/signup' },
-      { key: 'signin', label: 'Sign In', link: '/signin' },
-    ];
+    const desktopMenuItems = [].concat(sessionMenuItems);
+    desktopMenuItems.push({
+      key: 'workspace-dropdown',
+      menuFor: 'workspaces',
+      menuPos: 'right',
+      togglerText: 'Your Workspaces',
+      modifier: modifierClassName,
+      items: workspaceMenuItems,
+      condition: isLoggedIn && workspaces,
+    });
 
-    if (isLoggedIn) {
-      navItems = [{ key: 'signout', label: 'Sign Out', onClick: () => signOutRequest() }];
-    }
+    const mobileMenuItems = sessionMenuItems.concat(workspaceMenuItems);
 
     const pageClassNames = classNames('PublicView', {
       [`PublicView__${pagePath}`]: pagePath,
-      [`PublicView__${pagePath}--member`]: pagePath && isLoggedIn,
-      [`PublicView__${pagePath}--guest`]: pagePath && !isLoggedIn,
+      'PublicView--signed-in': isLoggedIn,
+      'PublicView--signed-out': !isLoggedIn,
     });
 
     return (
       <div className={pageClassNames}>
         <header className="PublicView__header">
           <div className="PublicView__container">
-            <nav className="navbar PublicView__navbar--public">
-              <Link className="PublicView__logo" to="/" rel="home">
-                Slack Clone
-              </Link>
-              <Menu menuFor="public" isRow items={navItems} />
-              {isLoggedIn && workspaces && (
-                <Dropdown
-                  menuFor="workspaces"
-                  menuPos="right"
-                  togglerText="Your Workspaces"
-                  modifier={ddModifierClassName}
-                  items={workspaceItems}
-                />
-              )}
+            <nav className="PublicView__navbar">
+              <Link className="PublicView__logo" to="/" rel="home">Slack Clone</Link>
+              <Menu menuFor="public" isRow items={desktopMenuItems} />
+              <Dropdown
+                menuFor="mobile-public"
+                items={mobileMenuItems}
+                menuPos="right"
+                modifier={modifierClassName}
+              >
+                <FontAwesomeIcon icon="bars" fixedWidth size="lg" />
+              </Dropdown>
             </nav>
           </div>
         </header>

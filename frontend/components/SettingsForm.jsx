@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from './Button';
 import withForm from './withForm';
+import FormHandler from './FormHandler';
 import './SettingsForm.css';
 
 class SettingsForm extends React.Component {
@@ -13,13 +14,13 @@ class SettingsForm extends React.Component {
       email: '',
     };
 
-    this.handleTextInputValue = this.handleTextInputValue.bind(this);
+    this.handleFieldValueChange = this.handleFieldValueChange.bind(this);
     this.handleFileChange = this.handleFileChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleTextInputValue(name) {
-    return event => this.setState({ [name]: event.target.value });
+  handleFieldValueChange(value, prop) {
+    this.setState({ [prop]: value });
   }
 
   handleFileChange(e) {
@@ -27,7 +28,7 @@ class SettingsForm extends React.Component {
     const reader = new FileReader();
 
     reader.onload = () => {
-      this.setState({ avatar, displayImage: reader.result });
+      this.setState({ avatar });
     };
 
     if (avatar) {
@@ -62,61 +63,61 @@ class SettingsForm extends React.Component {
   }
 
   render() {
-    const { modalClose, user } = this.props;
+    const {
+      modalClose,
+      user,
+      form: { formSuccess, formErrors },
+    } = this.props;
     const { username, email } = this.state;
 
+    const fields = [
+      {
+        id: 'username',
+        type: 'text',
+        name: 'user[username]',
+        value: username || user.username,
+        label: 'Username',
+      },
+      {
+        id: 'email',
+        type: 'text',
+        name: 'user[email]',
+        value: email || user.email,
+        label: 'Email',
+      },
+      {
+        id: 'avatar',
+        type: 'file',
+        name: 'user[avatar]',
+        className: null,
+        accept: 'image/*',
+        onChange: this.handleFileChange,
+        label: 'Upload avatar',
+      }
+    ];
+
     return (
-      <form className="SettingsForm" onSubmit={this.handleSubmit}>
+      <div className="SettingsForm" onSubmit={this.handleSubmit}>
         <div className="SettingsForm__col">
-          <div className="Form__group">
-            <label htmlFor="username">
-              Username
-            </label>
-            <input
-              type="text"
-              className="Form__control"
-              name="user[username]"
-              value={username || user.username}
-              onChange={this.handleTextInputValue('username')}
-            />
-          </div>
-          <div className="Form__group">
-            <label htmlFor="email">
-              Email
-            </label>
-            <input
-              type="text"
-              className="Form__control"
-              name="user[email]"
-              value={email || user.email}
-              onChange={this.handleTextInputValue('email')}
-            />
-          </div>
-          <div className="Form__group">
-            <label htmlFor="avatar">
-              Upload avatar
-            </label>
-            <input
-              type="file"
-              id="avatar"
-              name="user[avatar]"
-              accept="image/*"
-              onChange={this.handleFileChange}
-            />
-          </div>
-          <div className="Btn__group">
-            <Button type="submit" color="green" buttonFor="save-profile" size="lg">
+          <FormHandler
+            fields={fields}
+            submitForm={this.handleSubmit}
+            setFieldValue={this.handleFieldValueChange}
+            success={formSuccess}
+            errors={formErrors}
+          >
+            <Button type="submit" color="green" size="lg">
               Save
             </Button>
             <Button onClick={() => modalClose()} size="lg">
               Cancel
             </Button>
-          </div>
+          </FormHandler>
         </div>
         <div className="SettingsForm__col">
           <img src={user.avatarLarge} alt={`${user.username} banner`} />
         </div>
-      </form>
+      </div>
     );
   }
 }

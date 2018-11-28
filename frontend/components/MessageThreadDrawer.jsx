@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
-import MessageFormContainer from './MessageFormContainer';
-import MessagesList from './MessagesList';
+import MessagesListContainer from './MessagesListContainer';
+import MessageForm from './MessageForm';
 
-const MessageThreadDrawer = ({ messages, users }) => {
+const MessageThreadDrawer = ({ messages }) => {
   const parentMessage = messages[0];
+  const filterMenuItems = ['convo'];
 
   if (!parentMessage) {
     return null;
@@ -11,8 +12,15 @@ const MessageThreadDrawer = ({ messages, users }) => {
 
   return (
     <Fragment>
-      <MessagesList messages={messages} users={users} isThreadHidden />
-      <MessageFormContainer
+      <MessagesListContainer
+        messages={messages}
+        role="listitem"
+        filterMenuItems={filterMenuItems}
+        isThreadHidden
+        isEditable
+        isHoverable
+      />
+      <MessageForm
         channelId={parentMessage.channelId}
         parentMessageId={parentMessage.id}
         parentMessageSlug={parentMessage.slug}

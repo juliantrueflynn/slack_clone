@@ -6,9 +6,15 @@ import {
   select,
   takeLatest
 } from 'redux-saga/effects';
-import { USER, WORKSPACE, USER_APPEARANCE } from '../actions/actionTypes';
+import {
+  USER,
+  WORKSPACE,
+  USER_APPEARANCE,
+  PASSWORD,
+} from '../actions/actionTypes';
 import * as actions from '../actions/userActions';
 import * as api from '../util/apiUtil';
+import { createSuccess } from '../actions/uiActions';
 import { selectUIByDisplay, selectCurrentUser } from '../reducers/selectors';
 
 function* loadFetchMember({ userSlug }) {
@@ -26,8 +32,19 @@ function* loadUpdateMember({ user: body }) {
     const currUser = yield select(selectCurrentUser);
     const args = { method: 'PATCH', body };
     yield call(api.fetchPromise, `users/${currUser.slug}`, args);
+    yield put(createSuccess('user', 'Profile successfully updated'));
   } catch (error) {
     yield put(actions.updateUser.failure(error));
+  }
+}
+
+function* loadPasswordChange({ password }) {
+  try {
+    const update = yield call(api.apiUpdate, 'password', password);
+    yield put(actions.updatePassword.receive(update));
+    yield put(createSuccess('password', 'Password successfully updated'));
+  } catch (error) {
+    yield put(actions.updatePassword.failure(error));
   }
 }
 
@@ -55,6 +72,10 @@ function* watchUpdateUser() {
   yield takeLatest(USER.UPDATE.REQUEST, loadUpdateMember);
 }
 
+function* watchPasswordChange() {
+  yield takeLatest(PASSWORD.UPDATE.REQUEST, loadPasswordChange);
+}
+
 function* watchCreateAppearance() {
   yield takeLatest(USER_APPEARANCE.CREATE.REQUEST, fetchCreateAppearance);
 }
@@ -67,6 +88,7 @@ export default function* memberSaga() {
   yield all([
     fork(watchShowUser),
     fork(watchUpdateUser),
+    fork(watchPasswordChange),
     fork(watchCreateAppearance),
     fork(watchWorkspaceShow),
   ]);

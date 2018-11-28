@@ -5,7 +5,7 @@
 .AllUnreadsItem__body .Message__container,
 .Drawer__convo .Message__container,
 .Channel .Message__container {
-  padding: 5px 27px;
+  padding: 4px 24px;
 }
 
 .Message__row {
@@ -15,14 +15,15 @@
   padding: 2px 0;
 }
 
-.Message--has-avatar .Message__body {
-  margin-left: 8px;
+.ChannelDetailsDrawer .Message__body {
+  margin-left: 0;
 }
 
 .Message__body {
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-left: 8px;
 }
 
 .Message__meta {
@@ -43,7 +44,8 @@
   padding-right: 2px;
 }
 
-.Message--hover:not(.Message--editing):not(.Message--pinned) .Message__container {
+.Message--hoverable.Message--hover:not(.Message--highlighted) .Message__container,
+.Message--hoverable.Message:hover:not(.Message--highlighted) .Message__container {
   background-color: #F9F9F9;
 }
 
@@ -62,15 +64,15 @@
   font-size: .8em;
 }
 
-.Channel .Message--pinned,
+.Channel .Message--highlighted,
 .Message--editing {
-  background-color: rgba(255, 234, 167, 0.4);
+  background-color: rgba(255, 234, 167, 0.2);
 }
 
 .Message--editing .Reactions,
 .Message--editing .SingleMessageThread,
 .Message--editing .Message__meta {
-  display: none;
+  display: none !important;
 }
 
 .Message--editing .Message__content .Editor__unlocked {
@@ -80,3 +82,4 @@
 .Message--editing .Message__content .Btn__cancel {
   margin-right: 8px;
 }
+

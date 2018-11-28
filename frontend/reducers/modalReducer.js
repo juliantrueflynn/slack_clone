@@ -1,7 +1,6 @@
 import {
   MODAL_OPEN,
   MODAL_CLOSE,
-  REACTION,
   MESSAGE,
   WORKSPACE,
   SIGN_OUT,
@@ -21,8 +20,7 @@ const modalReducer = (state = _defaultState, action) => {
       return { modalType, modalProps };
     }
     case SIGN_OUT.RECEIVE:
-    case REACTION.CREATE.RECEIVE:
-    case MESSAGE.INDEX.RECEIVE:
+    case MESSAGE.INDEX.REQUEST:
     case WORKSPACE.SHOW.REQUEST:
     case MODAL_CLOSE:
       return _defaultState;

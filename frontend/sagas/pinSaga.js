@@ -7,7 +7,7 @@ import {
 } from 'redux-saga/effects';
 import { createPin, destroyPin } from '../actions/messageActions';
 import { PIN } from '../actions/actionTypes';
-import { apiCreate, apiDelete } from '../util/apiUtil';
+import { apiCreate, apiDestroy } from '../util/apiUtil';
 
 function* loadCreatePin({ pin }) {
   try {
@@ -19,7 +19,7 @@ function* loadCreatePin({ pin }) {
 
 function* loadDestroyPin({ id }) {
   try {
-    yield call(apiDelete, `pins/${id}`);
+    yield call(apiDestroy, `pins/${id}`);
   } catch (error) {
     yield put(destroyPin.failure(error));
   }

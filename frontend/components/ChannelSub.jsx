@@ -11,7 +11,7 @@ const ChannelSub = ({ sub }) => {
 
     let string = typeText;
     if (!isParent) {
-      string = `${entity.authorName} ${typeText}`;
+      string = `${entity.username} ${typeText}`;
     }
 
     if (isParent) {
@@ -30,7 +30,7 @@ const ChannelSub = ({ sub }) => {
 
     if (arr.length === 1 && parent) {
       if (parent.authorId !== arr[0].authorId) {
-        string = ` along with ${arr[0].authorName}.`;
+        string = ` along with ${arr[0].username}.`;
       }
     }
 

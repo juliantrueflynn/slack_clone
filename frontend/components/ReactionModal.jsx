@@ -10,20 +10,17 @@ class ReactionModal extends React.Component {
   }
 
   handleClick(_, emoji) {
-    const { modalProps: { messageId }, createReactionRequest } = this.props;
-    const reaction = { messageId, emoji: emoji.name };
-    createReactionRequest(reaction);
+    const { modalProps: { messageSlug }, toggleReaction, modalClose } = this.props;
+    const reaction = { messageSlug, emoji: emoji.name };
+    toggleReaction(reaction);
+    modalClose();
   }
 
   render() {
     const { modalProps, modalClose } = this.props;
 
-    if (!modalProps) {
-      return null;
-    }
-
     const { clickPosX, clickPosY } = modalProps;
-    const posX = clickPosX - 560;
+    const posX = clickPosX - 285;
 
     let posY = clickPosY - 333;
     if (posY - 50 < 0) {
@@ -32,7 +29,10 @@ class ReactionModal extends React.Component {
 
     const style = {
       top: `${posY}px`,
-      left: `${posX}px`
+      left: `${posX}px`,
+      zIndex: 999,
+      position: 'absolute',
+      boxShadow: '0px 3px 6px 0px rgba(0,0,0,0.15)',
     };
 
     return (

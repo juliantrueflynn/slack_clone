@@ -1,65 +1,40 @@
 const values = entities => Object.values(entities);
 
-export const selectCurrentUser = ({ session: { currentUser } }) => currentUser;
-
 export const selectSubbedWorkspaces = ({ entities: { workspaces } }) => (
   values(workspaces).filter(({ isSub, isMember }) => isSub && isMember).sort((a, b) => a.id - b.id)
 );
 
-export const messagesWithEntitiesMap = ({ messages, members, channels }, userSlug) => (
+export const selectMessagesMap = ({ entities: { messages, members, reactions } }) => (
   values(messages).reduce((acc, curr) => {
-    const message = messages[curr.slug];
+    const msg = { ...curr };
 
-    if (!message) {
-      return acc;
+    if (curr.thread && curr.thread.length) {
+      const threadLastSlug = curr.thread[curr.thread.length - 1];
+      const threadLastMsg = messages[threadLastSlug];
+      msg.lastMessageDate = threadLastMsg && threadLastMsg.createdAt;
     }
 
-    if (userSlug) {
-      message.isCurrentUser = userSlug === message.authorSlug;
+    if (reactions && curr.reactionIds) {
+      msg.reactions = curr.reactionIds.map(id => reactions[id]);
     }
 
-    if (message.thread && message.thread.length) {
-      const lastMsg = messages[message.thread.length - 1];
-      message.lastMessageDate = lastMsg && lastMsg.createdAt;
+    const author = members[curr.authorSlug];
+
+    if (author) {
+      msg.username = author.username;
+      msg.avatarThumb = author.avatarThumb;
     }
 
-    if (channels) {
-      const channel = channels[message.channelSlug];
-      message.channelTitle = channel && channel.title;
-    }
-
-    const author = members && members[curr.authorSlug];
-
-    acc[curr.slug] = {
-      authorName: author && author.username,
-      avatarThumb: author && author.avatarThumb,
-      ...message,
-    };
+    acc[curr.slug] = msg;
 
     return acc;
   }, {})
 );
 
-export const selectMessagesWithEntities = ({ entities, session: { currentUser } }) => (
-  values(messagesWithEntitiesMap(entities, currentUser.slug))
-);
+export const selectMessages = state => values(selectMessagesMap(state));
 
-export const selectSearchMessages = ({ entities, session: { currentUser } }) => {
-  const { channels } = entities;
-  const entries = messagesWithEntitiesMap(entities, currentUser.slug);
-
-  return values(entries).map((message) => {
-    const entry = Object.assign({}, message);
-    const channel = channels[message.channelSlug];
-    entry.thread = entry.thread && entry.thread.length;
-    entry.channelTitle = channel && channel.title;
-
-    return entry;
-  }).filter(message => message.isInSearch).sort((a, b) => b.id - a.id);
-};
-
-const selectMessageThreadBySlug = (entities, slug) => {
-  const entries = messagesWithEntitiesMap(entities);
+const selectConvoBySlug = ({ entities }, slug) => {
+  const entries = selectMessagesMap({ entities });
   const message = entries[slug];
 
   if (!message || !message.thread) {
@@ -72,21 +47,7 @@ const selectMessageThreadBySlug = (entities, slug) => {
   }, [message]);
 };
 
-const selectAllThreadMessages = (entities) => {
-  const entries = messagesWithEntitiesMap(entities);
-
-  return values(entries)
-    .filter(message => message.isInConvo)
-    .reduce((acc, curr) => {
-      const convo = Object.assign({}, curr);
-      convo.thread = selectMessageThreadBySlug(entities, curr.slug).slice(1);
-      acc.push(convo);
-      return acc;
-    }, [])
-    .sort((a, b) => new Date(b.lastActive) - new Date(a.lastActive));
-};
-
-const groupByEntityInIndex = (arr) => {
+const groupByMessageEntityType = (arr) => {
   const entries = [];
 
   for (let idx = 0; idx < arr.length; idx += 1) {
@@ -108,140 +69,82 @@ const groupByEntityInIndex = (arr) => {
 };
 
 const selectChannelMessagesBySlug = ({ entities }, slug) => {
-  const { channels } = entities;
-  const channel = channels[slug];
-
-  if (!channel) {
-    return [];
-  }
-
-  const entries = messagesWithEntitiesMap(entities);
-  const allMessages = values(entries).filter(msg => (
-    msg && msg.channelId && msg.channelId === channel.id && !msg.parentMessageId
-  ));
-  const messages = allMessages.filter(msg => msg.entityType === 'entry');
-  const subMessages = allMessages.filter(msg => msg.entityType !== 'entry').reduce((acc, curr) => {
-    const message = entries[curr.slug];
+  const channel = entities.channels[slug];
+  const messagesMap = selectMessagesMap({ entities });
+  const messages = channel.messages
+    .map(msgSlug => messagesMap[msgSlug])
+    .filter(msg => !msg.parentMessageId);
+  const entries = messages.filter(msg => msg.entityType === 'entry');
+  const subs = messages.filter(msg => msg.entityType !== 'entry').reduce((acc, curr) => {
+    const message = { ...curr };
     message.group = [];
     message.channelTitle = `#${channel.title}`;
     acc.push(message);
+
     return acc;
   }, []);
 
-  const items = [...subMessages, ...messages].sort((a, b) => a.id - b.id);
+  const items = [...subs, ...entries].sort((a, b) => a.id - b.id);
 
-  return groupByEntityInIndex(items);
+  return groupByMessageEntityType(items);
 };
 
-export const selectChatPageMessagesBySlug = ({ entities, session: { currentUser } }, slug) => {
+const selectAllThreadMessages = ({ entities }) => {
+  const messagesMap = selectMessagesMap({ entities });
+
+  return values(messagesMap)
+    .reduce((acc, curr) => {
+      if (!curr.isInConvo || !curr.thread) {
+        return acc;
+      }
+
+      const convo = { ...curr };
+      convo.thread = curr.thread && curr.thread.map(msgSlug => messagesMap[msgSlug]);
+
+      acc.push(convo);
+
+      return acc;
+    }, [])
+    .sort((a, b) => new Date(b.lastActive) - new Date(a.lastActive));
+};
+
+export const selectChatPageMessagesBySlug = ({ entities }, slug) => {
   if (slug === 'unreads') {
-    return messagesWithEntitiesMap(entities, currentUser.slug);
+    return selectMessagesMap({ entities });
   }
 
   if (slug === 'threads') {
-    return selectAllThreadMessages(entities);
+    return selectAllThreadMessages({ entities });
   }
 
   return selectChannelMessagesBySlug({ entities }, slug);
 };
 
-const selectMessagesFavorites = ({ favorites, ...entities }) => {
-  const entries = messagesWithEntitiesMap(entities);
-
-  return values(favorites)
-    .map(({ messageSlug }) => entries[messageSlug])
-    .filter(message => message.isInDrawer && message.entityType === 'entry');
-};
-
-const selectPinnedMessagesBySlug = (entities, chatSlug) => {
-  const messages = messagesWithEntitiesMap(entities);
-  return values(messages).filter(msg => msg.pinId && msg.channelSlug === chatSlug);
-};
-
-export const selectDrawerMessages = ({ entities, ui: { displayChannelSlug, drawer } }) => {
+export const selectDrawerMessages = ({ entities, ui: { drawer } }) => {
   const { drawerType, drawerSlug } = drawer;
 
-  if (drawerType === 'favorites') {
-    return selectMessagesFavorites(entities);
-  }
-
   if (drawerType === 'convo') {
-    return selectMessageThreadBySlug(entities, drawerSlug);
+    return selectConvoBySlug({ entities }, drawerSlug);
   }
 
-  if (drawerType === 'details') {
-    return selectPinnedMessagesBySlug(entities, displayChannelSlug);
-  }
-
-  return [];
+  return selectMessagesMap({ entities });
 };
 
-const selectDmWithUser = (channel, members, currUserSlug) => {
-  const dmWith = channel.members.filter(userSlug => userSlug !== currUserSlug);
-  return dmWith[0] && members[dmWith[0]];
-};
+export const selectChannelsMap = ({ entities, session: { currentUser } }, userSlug) => {
+  const { channels, members } = entities;
+  const currUserSlug = userSlug || currentUser.slug;
 
-export const selectDmChats = ({ entities: { channels, channelSubs, members }, session }) => {
-  const { currentUser } = session;
-  const currMember = members[currentUser.slug];
-
-  if (!currMember || !currMember.subs) {
-    return [];
-  }
-
-  return currMember.subs
-    .map(subId => channelSubs[subId])
-    .filter(sub => sub && channels[sub.channelSlug].hasDm && sub.inSidebar)
-    .map(({ channelSlug }) => {
-      const channel = Object.assign({}, channels[channelSlug]);
-      const dmUser = selectDmWithUser(channel, members, currMember.slug);
-      const subs = channel.subs.filter(id => channelSubs[id].userId === currMember.id);
-      const [subId] = subs;
-
-      if (dmUser) {
-        channel.title = dmUser.username;
-        channel.userStatus = dmUser.status;
-      }
-
-      if (subId) {
-        channel.userSubId = subId;
-      }
-
-      return channel;
-    });
-};
-
-const channelsWithEntitiesMap = ({ channels, members, channelSubs }, currUserSlug) => (
-  values(channels).reduce((acc, curr) => {
-    const channel = channels[curr.slug];
-
-    if (!channel) {
-      return acc;
-    }
-
-    if (!channel.isSub) {
-      channel.isSub = channel.members.includes(currUserSlug);
-    }
-
-    if (channelSubs) {
-      const userSubs = values(channelSubs).filter(sub => (
-        sub.channelId === channel.id && sub.userSlug === currUserSlug
-      ));
-
-      const [sub] = userSubs;
-      if (sub) {
-        channel.subId = sub.id;
-      } else {
-        channel.isSub = false;
-      }
-    }
+  return values(channels).reduce((acc, curr) => {
+    const channel = { ...curr };
+    channel.isSub = curr.members.includes(currUserSlug);
 
     if (channel.hasDm) {
-      const dmUser = selectDmWithUser(channel, members, currUserSlug);
+      const subsUserSlugs = channel.members.filter(slug => slug !== currUserSlug);
+      const subUser = subsUserSlugs[0] && members[subsUserSlugs[0]];
 
-      if (dmUser) {
-        channel.title = dmUser.username;
-        channel.dmUserSlug = dmUser.slug;
+      if (subUser) {
+        channel.title = subUser.username;
+        channel.dmUserSlug = subUser.slug;
       }
     } else {
       const owner = members[channel.ownerSlug];
@@ -251,76 +154,19 @@ const channelsWithEntitiesMap = ({ channels, members, channelSubs }, currUserSlu
     acc[curr.slug] = channel;
 
     return acc;
-  }, {})
-);
-
-export const selectChannelsWithEntitiesMap = ({ entities, session: { currentUser } }) => (
-  channelsWithEntitiesMap(entities, currentUser.slug)
-);
-
-export const selectChannelWithEntitiesBySlug = ({ entities, ...rest }, slug) => {
-  const { ui: { displayChannelSlug }, session: { currentUser } } = rest;
-  const chatSlug = slug || displayChannelSlug;
-  const channels = channelsWithEntitiesMap(entities, currentUser.slug);
-  return channels[chatSlug];
+  }, {});
 };
-
-const selectThreadChannels = channels => (
-  values(channels).filter(ch => !ch.hasDm).reduce((acc, curr) => {
-    acc[curr.slug] = channels[curr.slug];
-    return acc;
-  }, {})
-);
-
-export const selectChatPageChannelsBySlug = ({ entities, session: { currentUser } }, slug) => {
-  const { channels, members } = entities;
-
-  if (slug === 'unreads') {
-    return values(channels).filter(ch => ch.hasUnreads && !ch.hasDm);
-  }
-
-  if (slug === 'threads') {
-    return selectThreadChannels(channels);
-  }
-
-  return channelsWithEntitiesMap({ channels, members }, currentUser.slug);
-};
-
-export const selectEntities = ({ entities }, type) => entities[type];
-
-export const selectEntityBySlug = ({ entities }, type, slug) => slug && entities[type][slug];
 
 export const selectUIByDisplay = ({ ui }, display) => ui[display];
 
-const drawerEntitiesType = (drawerType) => {
-  switch (drawerType) {
-    case 'convo':
-      return 'messages';
-    case 'team':
-      return 'members';
-    case 'details':
-      return 'channels';
-    default:
-      return null;
-  }
-};
+export const selectEntities = ({ entities }, type) => entities[type];
 
-export const selectCurrentEntities = ({ entities, ui: { drawer } }, name) => {
-  let entityPath = name;
-
-  if (name === 'drawer') {
-    entityPath = drawerEntitiesType(drawer.drawerType);
+export const selectEntityBySlug = ({ entities }, entityType, slug) => {
+  if (!entities[entityType]) {
+    return {};
   }
 
-  if (!entityPath) {
-    return null;
-  }
-
-  return entities[entityPath];
+  return entities[entityType][slug] || {};
 };
 
-export const selectCurrentEntity = (state, name, slug) => {
-  const items = selectCurrentEntities(state, name);
-
-  return items ? items[slug] : null;
-};
+export const selectCurrentUser = ({ session: { currentUser } }) => currentUser;

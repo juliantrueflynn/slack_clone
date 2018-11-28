@@ -1,8 +1,8 @@
 import React from 'react';
-import classNames from 'classnames';
 import { convertForSubmit, clearEditor, createEmptyEditor } from '../util/editorUtil';
-import MessageEditor from './MessageEditor';
 import Button from './Button';
+import withForm from './withForm';
+import FormHandler from './FormHandler';
 import './MessageForm.css';
 
 class MessageForm extends React.Component {
@@ -27,7 +27,7 @@ class MessageForm extends React.Component {
       channelId,
       parentMessageId,
       parentMessageSlug,
-      createMessageRequest
+      formDispatchRequest,
     } = this.props;
 
     const message = {
@@ -37,7 +37,7 @@ class MessageForm extends React.Component {
       parentMessageSlug,
     };
 
-    createMessageRequest(message);
+    formDispatchRequest(message);
     this.setState({ editorState: clearEditor(editorState) });
   }
 
@@ -57,39 +57,29 @@ class MessageForm extends React.Component {
     const { editorState } = this.state;
     const containerId = parentMessageId || channelId;
     const editorPlaceholder = placeholder || 'Reply...';
-    const formClassNames = classNames('MessageForm', {
-      'MessageForm__has-submit': hasSubmitButton,
-      MessageForm__convo: parentMessageId,
-      MessageForm__chat: !parentMessageId,
-    });
+
+    const fields = [{
+      id: 'messageForm',
+      type: 'editor',
+      editorState,
+      containerId,
+      isNotConvoForm: !parentMessageId,
+      onChange: this.onChange,
+      placeholder: editorPlaceholder,
+    }];
 
     return (
-      <div className={formClassNames}>
-        <form
-          role="presentation"
-          onSubmit={this.handleSubmit}
-          onKeyDown={this.handleEnterSubmit}
-        >
-          <div className="Form__body">
-            <MessageEditor
-              editorState={editorState}
-              containerId={containerId}
-              isNotConvoForm={!parentMessageId}
-              onChange={this.onChange}
-              placeholder={editorPlaceholder}
-            />
-            {hasSubmitButton && (
-              <div className="Form__actions">
-                <Button type="submit" buttonFor="submit" size="sm">
-                  Send
-                </Button>
-              </div>
-            )}
-          </div>
-        </form>
-      </div>
+      <FormHandler
+        fields={fields}
+        role="presentation"
+        onKeyDown={this.handleEnterSubmit}
+      >
+        {hasSubmitButton && <Button type="submit" buttonFor="submit" size="sm">Send</Button>}
+      </FormHandler>
     );
   }
 }
 
-export default MessageForm;
+const formProps = { type: 'MESSAGE_CREATE_REQUEST', payloadName: 'message' };
+
+export default withForm(formProps)(MessageForm);

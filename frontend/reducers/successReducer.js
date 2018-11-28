@@ -5,8 +5,8 @@ import {
   USER,
   MODAL_CLOSE,
   MODAL_OPEN,
-  DESTROY_SUCCESS,
   CHANNEL,
+  CREATE_SUCCESS,
 } from '../actions/actionTypes';
 
 const _defaultState = {
@@ -20,19 +20,19 @@ const successReducer = (state = _defaultState, action) => {
 
   let nextState;
   switch (action.type) {
-    case CHANNEL.UPDATE.RECEIVE: {
+    case USER.UPDATE.RECEIVE: {
       nextState = Object.assign({}, state);
-      nextState.channel = 'Channel successfully updated.';
+      nextState.user = 'User successfully updated';
       return nextState;
     }
-    case PASSWORD.UPDATE.RECEIVE: {
-      const { success } = action;
+    case CREATE_SUCCESS: {
+      const { entity, message } = action;
+
       nextState = Object.assign({}, state);
-      nextState.password = success;
+      nextState[entity] = message;
       return nextState;
     }
-    case PASSWORD.UPDATE.REQUEST:
-    case DESTROY_SUCCESS: {
+    case PASSWORD.UPDATE.REQUEST: {
       const { entity } = action;
 
       if (!entity) {
@@ -44,7 +44,8 @@ const successReducer = (state = _defaultState, action) => {
       return nextState;
     }
     case WORKSPACE.SHOW.REQUEST:
-    case USER.SHOW.REQUEST:
+    case CHANNEL.UPDATE.REQUEST:
+    case USER.UPDATE.REQUEST:
     case MODAL_OPEN:
     case MODAL_CLOSE:
     case SIGN_OUT.RECEIVE:

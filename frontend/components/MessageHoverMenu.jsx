@@ -1,5 +1,4 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from './Menu';
 import './MessageHoverMenu.css';
@@ -13,14 +12,14 @@ class MessageHoverMenu extends React.Component {
   }
 
   handleReactionToggle(e) {
-    const { modalOpen, id: messageId } = this.props;
+    const { modalOpen, slug: messageSlug } = this.props;
 
-    const menuNode = e.currentTarget.parentNode;
+    const menuNode = e.currentTarget.parentElement.parentElement;
     const nodeBounds = menuNode.getBoundingClientRect();
     const modalProps = {
       clickPosY: nodeBounds.top,
       clickPosX: nodeBounds.right,
-      messageId,
+      messageSlug,
     };
 
     modalOpen('MODAL_REACTION', modalProps);
@@ -28,17 +27,12 @@ class MessageHoverMenu extends React.Component {
 
   handleFavToggle() {
     const {
-      id,
-      favoriteId,
-      createFavoriteRequest,
-      deleteFavoriteRequest,
+      id: messageId,
+      favoriteId: id,
+      toggleFavorite,
     } = this.props;
 
-    if (favoriteId) {
-      deleteFavoriteRequest(favoriteId);
-    } else {
-      createFavoriteRequest(id);
-    }
+    toggleFavorite({ id, messageId });
   }
 
   handleOverlayClick(e) {
@@ -48,89 +42,86 @@ class MessageHoverMenu extends React.Component {
 
   render() {
     const {
-      handleEditToggle,
+      toggleEditor,
       id,
       slug,
       favoriteId,
-      parentMessageId,
       entityType,
       authorId,
       pinId,
-      currentUser,
+      currentUserId,
       createPinRequest,
       destroyPinRequest,
       ddToggle,
       deleteMessageRequest,
       filterMenuItems,
-      match: { url },
+      matchUrl,
     } = this.props;
 
-    const isAuthor = currentUser.id === authorId;
     const isMessageType = entityType === 'entry';
-    const ddItems = [];
-
-    if (pinId) {
-      const onClick = () => destroyPinRequest(pinId);
-      ddItems.push({ label: 'Un-pin message', onClick });
-    } else {
-      const onClick = () => createPinRequest({ messageId: id });
-      ddItems.push({ label: 'Pin message', onClick });
-    }
-
-    if (isAuthor) {
-      ddItems.push({ label: 'Edit message', onClick: () => handleEditToggle(id) });
-      ddItems.push({ label: 'Delete message', onClick: () => deleteMessageRequest(slug) });
-    }
-
+    const byCurrUser = currentUserId === authorId;
     const favIcon = favoriteId ? ['fas', 'star'] : ['far', 'star'];
     const favClassName = favoriteId ? 'solid' : 'empty';
 
-    let menuItems = [{
-      key: 'reaction',
-      onClick: this.handleReactionToggle,
-      icon: <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />,
-    }];
-
-    if (isMessageType) {
-      if (!parentMessageId) {
-        menuItems.push({
-          key: 'convo',
-          link: `${url}/convo/${slug}`,
-          icon: <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />,
-        });
-      }
-
-      menuItems.push({
+    let menuItems = [
+      {
+        key: 'reaction',
+        onClick: this.handleReactionToggle,
+        icon: <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />,
+      },
+      {
+        key: 'convo',
+        link: `${matchUrl}/convo/${slug}`,
+        icon: <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />,
+        hasNoDrawer: true,
+        condition: isMessageType,
+      },
+      {
         key: 'favorite',
         icon: <FontAwesomeIcon icon={favIcon} fixedWidth />,
         onClick: this.handleFavToggle,
         modifierClassName: favClassName,
-      });
-
-
-      if (ddItems.length) {
-        menuItems.push({
-          key: 'dropdown',
-          icon: <FontAwesomeIcon icon="ellipsis-h" fixedWidth />,
-          items: ddItems,
-          menuPos: 'right',
-          shouldPos: true,
-          onOverlayClick: this.handleOverlayClick,
-          ddToggle,
-        });
+        condition: isMessageType,
+      },
+      {
+        key: 'dropdown',
+        icon: <FontAwesomeIcon icon="ellipsis-h" fixedWidth />,
+        menuPos: 'right',
+        shouldPos: true,
+        onOverlayClick: this.handleOverlayClick,
+        ddToggle,
+        condition: isMessageType && isMessageType,
+        items: [
+          {
+            label: 'Un-pin message',
+            onClick: () => destroyPinRequest(pinId),
+            condition: pinId,
+          },
+          {
+            label: 'Pin message',
+            onClick: () => createPinRequest({ messageId: id }),
+            condition: !pinId,
+          },
+          {
+            label: 'Edit message',
+            onClick: () => toggleEditor(slug),
+            condition: byCurrUser,
+          },
+          {
+            label: 'Delete message',
+            onClick: () => deleteMessageRequest(slug),
+            condition: byCurrUser,
+          }
+        ],
       }
-    }
+    ];
 
     if (filterMenuItems && filterMenuItems.length) {
       menuItems = menuItems.filter(item => !filterMenuItems.includes(item.key));
     }
 
-    return (
-      <div className="MessageHoverMenu">
-        <Menu menuFor="message" items={menuItems} isRow unStyled />
-      </div>
-    );
+    return <Menu menuFor="msg-hover" items={menuItems} isRow unStyled />;
   }
 }
 
-export default withRouter(MessageHoverMenu);
+export default MessageHoverMenu;

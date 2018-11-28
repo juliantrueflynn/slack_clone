@@ -1,22 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchWorkspace } from '../actions/workspaceActions';
-import { fetchUnreads } from '../actions/unreadActions';
+import { fetchUnreads } from '../actions/readActions';
 import { fetchUserThreads, fetchMessages, fetchMessage } from '../actions/messageActions';
 import { fetchChannel } from '../actions/channelActions';
 import { fetchFavorites } from '../actions/favoriteActions';
 import { fetchUser } from '../actions/userActions';
-import { selectCurrentEntity } from '../reducers/selectors';
+import { selectChannelsMap } from '../reducers/selectors';
 import EntityWrapper from './EntityWrapper';
 
-const withEntityWrapper = ({ entityName, pathName }) => (WrappedComponent) => {
+const withEntityWrapper = pathName => (WrappedComponent) => {
   const mapStateToProps = (state, { match: { params } }) => ({
-    entityName,
-    pathName,
+    [pathName]: params[pathName],
     entitySlug: params[pathName],
-    entity: selectCurrentEntity(state, entityName, params[pathName]),
     users: state.entities.members,
+    channelsMap: selectChannelsMap(state),
     currentUser: state.session.currentUser,
+    isLoading: state.isLoading,
   });
 
   const mapDispatchToProps = (dispatch, { match }) => ({
@@ -33,19 +33,19 @@ const withEntityWrapper = ({ entityName, pathName }) => (WrappedComponent) => {
 
       if (pathName === 'workspaceSlug') {
         slug = workspaceSlug;
-        fetchEntity = fetchWorkspace.request;
+        fetchEntity = fetchWorkspace;
       }
 
       if (pathName === 'chatPath') {
         slug = workspaceSlug;
 
         if (chatPath === 'unreads') {
-          fetchEntity = fetchUnreads.request;
+          fetchEntity = fetchUnreads;
         } else if (chatPath === 'threads') {
-          fetchEntity = fetchUserThreads.request;
+          fetchEntity = fetchUserThreads;
         } else {
           slug = chatPath;
-          fetchEntity = fetchMessages.request;
+          fetchEntity = fetchMessages;
         }
       }
 
@@ -53,16 +53,16 @@ const withEntityWrapper = ({ entityName, pathName }) => (WrappedComponent) => {
         slug = drawerSlug;
 
         if (drawerType === 'convo') {
-          fetchEntity = fetchMessage.request;
+          fetchEntity = fetchMessage;
         } else if (drawerType === 'team') {
-          fetchEntity = fetchUser.request;
+          fetchEntity = fetchUser;
         } else if (drawerType === 'favorites') {
           slug = workspaceSlug;
-          fetchEntity = fetchFavorites.request;
+          fetchEntity = fetchFavorites;
         } else if (drawerType === 'details' && drawerParent) {
           const splitPath = drawerParent.split('/');
           slug = splitPath[1];
-          fetchEntity = fetchChannel.request;
+          fetchEntity = fetchChannel;
         }
       }
 
@@ -70,12 +70,13 @@ const withEntityWrapper = ({ entityName, pathName }) => (WrappedComponent) => {
         return null;
       }
 
-      return dispatch(fetchEntity(slug));
+      return dispatch(fetchEntity.request(slug));
     },
   });
 
-  const WithEntityWrapper = props => (
+  const WithEntityWrapper = ({ entitySlug, ...props }) => (
     <EntityWrapper
+      entitySlug={entitySlug}
       {...props}
       render={entity => (
         <WrappedComponent entity={entity} {...props} />

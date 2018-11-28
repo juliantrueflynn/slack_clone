@@ -5,24 +5,23 @@ import Button from './Button';
 import './ReactionsItem.css';
 
 const ReactionItem = ({
-  reactionStyle,
   reaction,
-  createReaction,
-  currUserId,
+  reactionStyle,
+  currentUserId,
+  toggleClick,
 }) => {
-  const create = () => createReaction(reaction.emoji);
   const reactionClassNames = classNames('ReactionsItem', {
-    'ReactionsItem--has-user': reaction.users.includes(currUserId),
+    'ReactionsItem--has-user': reaction.userIds.includes(currentUserId),
   });
 
   return (
     <li className={reactionClassNames}>
-      <Button buttonFor="reaction" unStyled onClick={create}>
+      <Button buttonFor="reaction" unStyled onClick={() => toggleClick(reaction.emoji)}>
         <Emojify style={reactionStyle} className="ReactionItem__emoji">
           {`:${reaction.emoji}:`}
         </Emojify>
         <div className="ReactionItem__counter">
-          {reaction.users.length}
+          {reaction.userIds.length}
         </div>
       </Button>
     </li>

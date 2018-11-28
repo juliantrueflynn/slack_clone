@@ -20,6 +20,16 @@ const readReducer = (state = {}, action) => {
       nextState[read.id] = read;
       return nextState;
     }
+    case READ.DESTROY.RECEIVE: {
+      const { read: { id } } = action;
+      nextState = Object.assign({}, state);
+
+      if (nextState[id]) {
+        delete nextState[id];
+      }
+
+      return nextState;
+    }
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return {};

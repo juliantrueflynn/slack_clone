@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isDateOlderThanOther } from '../util/dateUtil';
 import Button from './Button';
-import MessagesList from './MessagesList';
+import MessagesListContainer from './MessagesListContainer';
 import './AllUnreadsItem.css';
 
 const AllUnreadsItem = ({ clearUnreads, channel, messages }) => {
@@ -39,7 +39,7 @@ const AllUnreadsItem = ({ clearUnreads, channel, messages }) => {
         </div>
       </header>
       <div className="AllUnreadsItem__body">
-        <MessagesList messages={unreadMessages} />
+        <MessagesListContainer messages={unreadMessages} isHoverable />
       </div>
     </div>
   );

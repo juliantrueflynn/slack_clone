@@ -1,10 +1,16 @@
-import { SIGN_UP, SIGN_IN, SIGN_OUT } from '../actions/actionTypes';
+import {
+  SIGN_UP,
+  SIGN_IN,
+  SIGN_OUT,
+  USER,
+} from '../actions/actionTypes';
 
 const _defaultState = { currentUser: null };
 
 const sessionReducer = (state = _defaultState, action) => {
   Object.freeze(state);
 
+  let nextState;
   switch (action.type) {
     case SIGN_IN.RECEIVE:
     case SIGN_UP.RECEIVE: {
@@ -13,6 +19,19 @@ const sessionReducer = (state = _defaultState, action) => {
     }
     case SIGN_OUT.RECEIVE:
       return _defaultState;
+    case USER.UPDATE.RECEIVE: {
+      const { user } = action;
+      nextState = Object.assign({}, state);
+
+      if (nextState.currentUser.id !== user.id) {
+        return state;
+      }
+
+      nextState.currentUser.username = user.username;
+      nextState.currentUser.email = user.email;
+
+      return nextState;
+    }
     default:
       return state;
   }

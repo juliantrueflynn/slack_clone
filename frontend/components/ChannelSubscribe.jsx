@@ -10,8 +10,8 @@ class ChannelSubscribe extends React.Component {
   }
 
   clickSubscribe() {
-    const { createChannelSubRequest, id: channelId } = this.props;
-    createChannelSubRequest({ channelId });
+    const { createChannelSubRequest, id: channelId, slug: channelSlug } = this.props;
+    createChannelSubRequest({ channelId, channelSlug });
   }
 
   render() {
@@ -21,6 +21,10 @@ class ChannelSubscribe extends React.Component {
       ownerName,
       matchUrl,
     } = this.props;
+
+    if (!title) {
+      return null;
+    }
 
     const chatTitle = ` #${title}`;
     const date = dateUtil(createdAt);
@@ -36,9 +40,7 @@ class ChannelSubscribe extends React.Component {
       <div className="ChannelSubscribe">
         <h3 className="ChannelSubscribe__title">
           You are viewing
-          <strong>
-            {chatTitle}
-          </strong>
+          <strong>{chatTitle}</strong>
         </h3>
         <div className="ChannelSubscribe__text">
           {`Created by ${ownerName} ${dateCreated}`}

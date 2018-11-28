@@ -58,6 +58,7 @@ class ChannelDetailsDrawer extends React.Component {
       isLoading,
       destroyPinRequest,
       modalOpen,
+      currentUserId,
     } = this.props;
     const { ...state } = this.state;
 
@@ -73,7 +74,7 @@ class ChannelDetailsDrawer extends React.Component {
         icon: 'info-circle',
         itemTitle: 'Channel Details',
         name: 'details',
-        body: <AccordionBodyInfo channel={channel} modalOpen={modalOpen} />,
+        body: <AccordionBodyInfo {...channel} modalOpen={modalOpen} />,
       });
       accordionItems.push({
         icon: 'users',
@@ -87,7 +88,13 @@ class ChannelDetailsDrawer extends React.Component {
       icon: 'thumbtack',
       itemTitle: 'Pinned Messages',
       name: 'pinned',
-      body: <AccordionBodyPins messages={messages} destroyPinRequest={destroyPinRequest} />,
+      body: (
+        <AccordionBodyPins
+          messages={messages}
+          currentUserId={currentUserId}
+          destroyPinRequest={destroyPinRequest}
+        />
+      ),
     });
 
     const user = users[channel.dmUserSlug];

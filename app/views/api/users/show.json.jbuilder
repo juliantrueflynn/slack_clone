@@ -8,13 +8,13 @@ workspace_sub = workspace.subs.find_by(user_id: @user.id)
 
 json.joined_at workspace_sub.created_at
 
-if @user.id != current_user.id
+unless @user.id === current_user.id
   json.channels do
-    channels = @user.channels.dm_chat_by_workspace_id(workspace.id)
-
+    channels = @user.channels.with_dm.by_workspace_id(workspace.id)
     json.array! channels.pluck(:slug)
   end
 
-  dm_chat = current_user.find_dm_chat_with_user(workspace.id, @user.id)
+  user_ids = [@user.id, current_user.id]
+  dm_chat = workspace.channels.with_dm.by_user_ids(user_ids)
   json.dm_chat dm_chat ? dm_chat.slug : nil
 end
