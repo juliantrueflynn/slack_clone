@@ -32,10 +32,10 @@ class Menu extends React.Component {
     } = this.props;
 
     const menuClassNames = classNames('Menu', {
-      [`Menu--${menuFor}`]: menuFor,
+      [`Menu__${menuFor}`]: menuFor,
       'Menu--row': isRow,
-      Menu__styled: !unStyled,
-      Menu__unstyled: unStyled,
+      'Menu--styled': !unStyled,
+      'Menu--unstyled': unStyled,
     });
 
     return (

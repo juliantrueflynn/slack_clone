@@ -23,29 +23,23 @@ export const updateChannel = {
   failure: errors => actionCreator(CHANNEL.UPDATE.FAILURE, { errors }),
 };
 
-export const deleteChannel = {
-  request: channelSlug => actionCreator(CHANNEL.DESTROY.REQUEST, { channelSlug }),
-  failure: errors => actionCreator(CHANNEL.DESTROY.FAILURE, { errors }),
-};
-
 export const createChannelSub = {
   request: channelSub => actionCreator(CHANNEL_SUB.CREATE.REQUEST, { channelSub }),
   failure: errors => actionCreator(CHANNEL_SUB.CREATE.FAILURE, { errors }),
 };
 
 export const updateChannelSub = {
-  request: id => actionCreator(CHANNEL_SUB.UPDATE.REQUEST, { id }),
+  request: channelSlug => actionCreator(CHANNEL_SUB.UPDATE.REQUEST, { channelSlug }),
   receive: channelSub => actionCreator(CHANNEL_SUB.UPDATE.RECEIVE, { channelSub }),
   failure: errors => actionCreator(CHANNEL_SUB.UPDATE.FAILURE, { errors }),
 };
 
 export const destroyChannelSub = {
-  request: id => actionCreator(CHANNEL_SUB.DESTROY.REQUEST, { id }),
+  request: channelSlug => actionCreator(CHANNEL_SUB.DESTROY.REQUEST, { channelSlug }),
   failure: errors => actionCreator(CHANNEL_SUB.DESTROY.FAILURE, { errors }),
 };
 
-export const switchChannel = (channelSlug, scrollLoc) => ({
-  type: CHANNEL_SWITCH,
-  channelSlug,
-  scrollLoc,
-});
+export const switchChannel = (channelSlug, scrollLoc) => actionCreator(
+  CHANNEL_SWITCH,
+  { channelSlug, scrollLoc }
+);

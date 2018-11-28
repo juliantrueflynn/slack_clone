@@ -10,6 +10,15 @@ class ChannelSub < ApplicationRecord
   has_one :workspace, through: :channel
   has_many :reads, through: :channel
 
+  def self.find_by_slug(channel_slug)
+    channel = Channel.find_by(slug: channel_slug)
+    find_by(channel_id: channel.id)
+  end
+
+  def self.shared_with_user_id(user_id)
+    where(channel_id: where(user_id: user_id).pluck(:channel_id))
+  end
+
   def broadcast_name
     "channel_#{channel.slug}"
   end
@@ -23,7 +32,6 @@ class ChannelSub < ApplicationRecord
   end
 
   after_create_commit :broadcast_create_sub, :generate_read, :generate_create_message
-  after_update_commit :broadcast_update
   after_destroy :generate_destroy_message, :destroy_read, :broadcast_destroy
 
   private
@@ -39,15 +47,12 @@ class ChannelSub < ApplicationRecord
   end
 
   def generate_create_message
-    channel.messages.create(
-      author_id: user_id,
-      entity_type: 'sub_create',
-      created_at: created_at,
-      updated_at: created_at
-    )
+    return if channel.has_dm?
+    channel.messages.create(author_id: user_id, entity_type: 'sub_create')
   end
 
   def destroy_read
+    return if channel.has_dm?
     read.destroy! if has_read?
   end
 

@@ -40,3 +40,14 @@ a.PublicWorkspaces__item-title:hover {
 .PublicWorkspaces__item .Btn__workspace-sub--sub:hover {
   color: #009B97;
 }
+
+@media screen and (max-width: 768px) {
+  .PublicWorkspaces__item {
+    font-size: 15px;
+    padding: 9px 18px;
+  }
+
+  .PublicWorkspaces__item .Btn {
+    font-size: 13px;
+  }
+}

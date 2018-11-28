@@ -5,9 +5,9 @@ class Api::PasswordsController < ApplicationController
     is_new_password = current_user.is_password?(params[:new_password])
 
     if is_password && is_new_password && current_user.save
-      render json: '"Your password has been updated."'
+      render json: '"success"'
     else
-      render json: ['incorrect password'], status: 422
+      render json: ['Password entered incorrectly'], status: 422
     end
   end
 end

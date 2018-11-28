@@ -36,4 +36,4 @@ export const apiCall = (method, url, props) => {
 export const apiFetch = (url, props = {}) => apiCall('GET', url, props);
 export const apiCreate = (url, props = {}) => apiCall('POST', url, props);
 export const apiUpdate = (url, props = {}) => apiCall('PATCH', url, props);
-export const apiDelete = url => fetchPromise(url, { method: 'DELETE' });
+export const apiDestroy = url => fetchPromise(url, { method: 'DELETE' });

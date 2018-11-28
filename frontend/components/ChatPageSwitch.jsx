@@ -1,16 +1,15 @@
 import React from 'react';
-import Layout from './Layout';
 import ChannelHeaderContainer from './ChannelHeaderContainer';
 import AllUnreads from './AllUnreads';
 import AllThreads from './AllThreads';
 import Channel from './Channel';
-import ReactionModal from './ReactionModal';
+import { PageRoutes } from '../util/routeUtil';
 import './ChatPageSwitch.css';
 
 class ChatPageSwitch extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { scrollLoc: 0 };
+    this.state = { scrollLoc: 0, isInitLoadingDone: false };
     this.handleScrollLoc = this.handleScrollLoc.bind(this);
   }
 
@@ -28,14 +27,15 @@ class ChatPageSwitch extends React.Component {
       drawerType,
       history,
       drawerClose,
-      entitySlug,
-      entity,
+      chatPath,
+      channel,
       switchChannel,
+      isLoading,
     } = this.props;
     const { scrollLoc } = this.state;
 
-    if (entity && drawerType && isExact && !prevProps.isExact) {
-      if (entitySlug === prevProps.entitySlug) {
+    if (channel && drawerType && isExact && !prevProps.isExact) {
+      if (chatPath === prevProps.chatPath) {
         drawerClose();
         return;
       }
@@ -45,8 +45,20 @@ class ChatPageSwitch extends React.Component {
       history.replace(this.selectRedirectUrl());
     }
 
-    if (prevProps.entity && entitySlug !== prevProps.entitySlug) {
-      switchChannel(prevProps.entitySlug, scrollLoc);
+    if (prevProps.channel && chatPath !== prevProps.chatPath) {
+      switchChannel(prevProps.chatPath, scrollLoc);
+    }
+
+    if (!isLoading.channel && prevProps.isLoading) {
+      this.updateLoadingState();
+    }
+  }
+
+  updateLoadingState() {
+    const { isInitLoadingDone } = this.state;
+
+    if (!isInitLoadingDone) {
+      this.setState({ isInitLoadingDone: true });
     }
   }
 
@@ -55,7 +67,7 @@ class ChatPageSwitch extends React.Component {
       match: { url, isExact },
       drawerType,
       drawerSlug,
-      entity: channel,
+      channel,
     } = this.props;
 
     if (isExact && drawerType === 'details' && !channel) {
@@ -79,47 +91,44 @@ class ChatPageSwitch extends React.Component {
 
   render() {
     const {
-      entitySlug: chatPath,
+      chatPath,
       routes,
       messages,
       users,
-      entity: channel,
-      modal: { modalType, modalProps },
-      modalClose,
-      channels,
+      channel,
+      channelsMap,
       currentUser,
       isLoading,
       clearUnreads,
       modalOpen,
-      createReactionRequest,
       fetchHistoryRequest,
       createChannelSubRequest,
+      workspaceSlug,
     } = this.props;
-
-    const user = users[currentUser.slug];
+    const { isInitLoadingDone } = this.state;
 
     let chatType = 'channel';
     if (chatPath === 'unreads' || chatPath === 'threads') {
       chatType = chatPath;
     }
 
+    const channels = Object.values(channelsMap);
+    const unreadChannels = channels.filter(ch => ch.hasUnreads);
+    const convoChannels = channels.filter(ch => !ch.hasDm).reduce((acc, curr) => {
+      acc[curr.slug] = channelsMap[curr.slug];
+      return acc;
+    }, {});
+
     return (
-      <div className="ChatPageSwitch">
+      <div className={`ChatPageSwitch ChatPageSwitch__${chatType}`}>
         <ChannelHeaderContainer />
-        <Layout layoutFor={chatType} routes={routes} isLoading={isLoading.channel} hasBodyWrapper>
-          {modalType === 'MODAL_REACTION' && (
-            <ReactionModal
-              createReactionRequest={createReactionRequest}
-              modalProps={modalProps}
-              modalClose={modalClose}
-            />
-          )}
+        <div className="ChatPageSwitch__body">
           {chatPath === 'unreads' && (
             <AllUnreads
               messages={messages}
               users={users}
               isLoading={isLoading.channel}
-              channels={channels}
+              channels={unreadChannels}
               clearUnreads={clearUnreads}
             />
           )}
@@ -128,24 +137,25 @@ class ChatPageSwitch extends React.Component {
               messages={messages}
               users={users}
               isLoading={isLoading.channel}
-              channels={channels}
-              currentUser={user}
+              channels={convoChannels}
+              currentUser={users[currentUser.slug]}
+              workspaceSlug={workspaceSlug}
             />
           )}
           {channel && (
             <Channel
-              chatPath={chatPath}
               messages={messages}
               isLoading={isLoading}
               channel={channel}
-              currentUser={user}
+              currentUserSlug={currentUser.slug}
               modalOpen={modalOpen}
               fetchHistoryRequest={fetchHistoryRequest}
               updateScrollLoc={this.handleScrollLoc}
               createChannelSubRequest={createChannelSubRequest}
             />
           )}
-        </Layout>
+          {isInitLoadingDone && <PageRoutes routes={routes} />}
+        </div>
       </div>
     );
   }

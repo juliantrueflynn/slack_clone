@@ -12,6 +12,12 @@ class Read < ApplicationRecord
   belongs_to :channel, foreign_key: :readable_id, optional: true
   belongs_to :message, foreign_key: :readable_id, optional: true
 
+  def slug
+    entity_obj = readable_type.constantize
+    entity_assoc = entity_obj.find_by(id: readable_id)
+    entity_assoc.slug if entity_assoc
+  end
+
   def self.by_type(readable_type)
     where(readable_type: readable_type)
   end

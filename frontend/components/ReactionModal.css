@@ -1,9 +1,3 @@
-.ReactionModal {
-  z-index: 999;
-  position: absolute;
-  box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.15);
-}
-
 .emoji-picker .emoji {
   padding: 15.1px;
 }

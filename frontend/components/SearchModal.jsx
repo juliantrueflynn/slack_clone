@@ -119,7 +119,9 @@ class SearchModal extends React.Component {
   render() {
     const {
       users,
+      currentUserId,
       messages,
+      channelsMap,
       destroySearch,
       modalClose,
       isSearchLoading,
@@ -164,13 +166,16 @@ class SearchModal extends React.Component {
             results={results}
             isLoading={isSearchLoading}
             users={users}
+            currentUserId={currentUserId}
+            channelsMap={channelsMap}
           />
           <SearchModalAside
             messages={messages}
+            channelsMap={channelsMap}
             users={users}
             peopleFilter={peopleFilter}
             channelFilter={channelFilter}
-            handleFilterToggle={this.handleFilterToggle}
+            toggleCheckbox={this.handleFilterToggle}
           />
         </ScrollBar>
       </Modal>

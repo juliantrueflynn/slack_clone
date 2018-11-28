@@ -1,5 +1,5 @@
 .PublicWorkspaces {
-  margin-top: -90px;
+  margin: -90px 0 15px;
   background-color: #FFF;
   border-radius: 5px;
   box-shadow: 0px 4px 45px 5px rgba(0,0,0,.07);
@@ -12,6 +12,7 @@
   text-align: center;
   width: 100%;
   color: #3D4456;
+  padding: 0 15px;
 }
 
 .PublicWorkspaces__title {
@@ -34,4 +35,14 @@
 
 .PublicWorkspaces .Btn__create-workspace:hover {
   color: #03466F;
+}
+
+@media screen and (max-width: 576px) {
+  .PublicWorkspaces__title {
+    font-size: 1.35em;
+  }
+
+  .PublicWorkspaces__subtitle {
+    font-size: 15px;
+  }
 }

@@ -7,14 +7,18 @@ class Reaction < ApplicationRecord
   belongs_to :message
   has_one :channel, through: :message
 
+  def self.by_message_id(message_ids)
+    includes(:message).where(message_id: message_ids)
+  end
+
   def broadcast_name
     "channel_#{channel.slug}"
   end
-  
-  def self.by_message_id(message_ids)
-    includes(:user, :message).where(message_id: message_ids)
-  end
 
+  def message_slug
+    message.slug
+  end
+  
   after_create_commit :broadcast_create
   after_destroy :broadcast_destroy
 end

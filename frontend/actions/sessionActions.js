@@ -1,9 +1,4 @@
-import {
-  SIGN_IN,
-  SIGN_UP,
-  SIGN_OUT,
-  PASSWORD,
-} from './actionTypes';
+import { SIGN_IN, SIGN_UP, SIGN_OUT } from './actionTypes';
 import { actionCreator } from '../util/actionsUtil';
 
 export const signIn = {
@@ -22,10 +17,4 @@ export const signOut = {
   request: () => actionCreator(SIGN_OUT.REQUEST),
   receive: () => actionCreator(SIGN_OUT.RECEIVE),
   failure: errors => actionCreator(SIGN_OUT.FAILURE, { errors }),
-};
-
-export const updatePassword = {
-  request: password => actionCreator(PASSWORD.UPDATE.REQUEST, { password }),
-  receive: success => actionCreator(PASSWORD.UPDATE.RECEIVE, { success }),
-  failure: errors => actionCreator(PASSWORD.UPDATE.FAILURE, errors),
 };

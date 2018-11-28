@@ -8,8 +8,9 @@ import {
 } from 'redux-saga/effects';
 import { MESSAGE, HISTORY } from '../actions/actionTypes';
 import * as actions from '../actions/messageActions';
+import { navigate } from '../actions/uiActions';
 import * as api from '../util/apiUtil';
-import { selectEntityBySlug } from '../reducers/selectors';
+import { selectUIByDisplay, selectEntityBySlug } from '../reducers/selectors';
 
 function* fetchIndex({ channelSlug }) {
   try {
@@ -61,9 +62,32 @@ function* fetchEditMessage({ message }) {
   }
 }
 
+function* closeDrawerIfOpen(slug) {
+  const drawer = yield select(selectUIByDisplay, 'drawer');
+  const { drawerType, drawerSlug } = drawer;
+
+  if (drawerType === 'convo' && drawerSlug === slug) {
+    const workspaceSlug = yield select(selectUIByDisplay, 'displayWorkspaceSlug');
+    const channelSlug = yield select(selectUIByDisplay, 'displayChannelSlug');
+
+    let chatPath = `messages/${channelSlug}`;
+    if (channelSlug === 'unreads') {
+      chatPath = 'unreads';
+    } else if (channelSlug === 'threads') {
+      chatPath = 'threads';
+    }
+
+    yield put(navigate(`/${workspaceSlug}/${chatPath}`));
+  }
+}
+
 function* fetchDeleteMessage({ messageSlug }) {
   try {
-    yield call(api.apiDelete, `messages/${messageSlug}`);
+    const message = yield call(api.apiDestroy, `messages/${messageSlug}`);
+
+    if (message && !message.parentMessageId) {
+      yield closeDrawerIfOpen(message.slug);
+    }
   } catch (error) {
     yield put(actions.deleteMessage.failure(error));
   }

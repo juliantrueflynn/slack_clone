@@ -1,5 +1,5 @@
 class Api::ChannelSubsController < ApplicationController
-  before_action :set_channel_sub
+  before_action :set_channel_sub, except: :create
 
   def create
     @channel_sub = current_user.channel_subs.build(channel_sub_params)
@@ -13,14 +13,14 @@ class Api::ChannelSubsController < ApplicationController
 
   def update
     if @channel_sub.update(in_sidebar: !@channel_sub.in_sidebar)
-      render json: ['success']
+      render 'api/channel_subs/show'
     else
       render json: @channel_sub.errors.full_messages, status: 422
     end
   end
 
   def destroy
-    if @channel_sub.destroy
+    if @channel_sub && @channel_sub.destroy
       render json: ['success']
     else
       render json: ['not found!'], status: 404
@@ -30,7 +30,8 @@ class Api::ChannelSubsController < ApplicationController
   private
 
   def set_channel_sub
-    @channel_sub = ChannelSub.find_by(id: params[:id])    
+    channel_slug = params[:channel_slug]
+    @channel_sub = current_user.channel_subs.find_by_slug(channel_slug)    
   end
 
   def channel_sub_params

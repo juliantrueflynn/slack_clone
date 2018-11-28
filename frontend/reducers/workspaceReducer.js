@@ -20,15 +20,16 @@ const workspaceReducer = (state = {}, action) => {
       });
 
       workspaceSubs.forEach((sub) => {
-        const hasSub = nextState[sub.workspaceSlug].members.includes(sub.userSlug);
-        if (!hasSub) {
-          nextState[sub.workspaceSlug].members.push(sub.userSlug);
+        const workspace = nextState[sub.workspaceSlug];
+
+        if (!workspace.members.includes(sub.userSlug)) {
+          workspace.members.push(sub.userSlug);
         }
 
-        nextState[sub.workspaceSlug].subs.push(sub.id);
-        nextState[sub.workspaceSlug].subId = sub.id;
-        nextState[sub.workspaceSlug].isSub = sub.isMember;
-        nextState[sub.workspaceSlug].isMember = sub.isMember;
+        workspace.subs.push(sub.id);
+        workspace.subId = sub.id;
+        workspace.isSub = sub.isMember;
+        workspace.isMember = sub.isMember;
       });
 
       return merge({}, state, nextState);
@@ -63,10 +64,6 @@ const workspaceReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case WORKSPACE.DESTROY.RECEIVE:
-      nextState = Object.assign({}, state);
-      delete nextState[action.workspaceSlug];
-      return nextState;
     case WORKSPACE_SUB.CREATE.REQUEST: {
       const { workspaceSub } = action;
       nextState = {};

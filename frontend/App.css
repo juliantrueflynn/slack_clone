@@ -5,10 +5,40 @@ body {
   font-size: 15px;
   margin: 0;
   color: #2D3436;
+  overflow-x: hidden;
+}
+
+html,
+body,
+div#root {
+  height: 100%;
+  width: 100%;
 }
 
 div#root {
-  min-height: 100vh;
+  display: flex;
+  flex-grow: 1;
+}
+
+.App {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.App--private {
+  overflow: hidden;
+}
+
+body.popover-open .App::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  content: "";
+  z-index: 700;
 }
 
 ul {
@@ -20,27 +50,4 @@ ul {
 a {
   text-decoration: none;
   color: rgba(5,118,185,1);
-}
-
-.App {
-  min-height: 100vh;
-  display: flex;
-  position: relative;
-}
-
-@media only screen and (min-width : 1250px) {
-  .content-container__boxed-width {
-    width: 920px;
-    margin: 0 auto;
-  }
-}
-
-body.popover-open .App::before {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  content: "";
-  z-index: 700;
 }

@@ -2,7 +2,8 @@ class Api::DmChatsController < ApplicationController
   before_action :ensure_unique_dm_chat
 
   def create
-    @channel = Channel.new(dm_chat_params)
+    workspace = Workspace.find_by_slug(params[:workspace_slug])
+    @channel = workspace.channels.build(dm_chat_params)
     @channel.member_ids = [current_user.id, params[:dm_chat][:member_id]]
 
     if @channel.save
@@ -14,17 +15,17 @@ class Api::DmChatsController < ApplicationController
 
   private
 
-  def is_duplicate_dm_chat?
-    workspace_id = params[:workspace_id]
-    dm_user_id = params[:dm_chat][:member_id]
-    !!current_user.find_dm_chat_with_user(workspace_id, dm_user_id)
+  def is_duplicate?
+    workspace = Workspace.find_by_slug(params[:workspace_slug])
+    user_ids = [current_user.id, params[:dm_chat][:member_id]]
+    workspace.channels.has_dm_with_user_ids?(user_ids)
   end
 
   def ensure_unique_dm_chat
-    render json: ['chat already exists'], status: 422 if is_duplicate_dm_chat?
+    render json: ['DM chat already exists'], status: 422 if is_duplicate?
   end
 
   def dm_chat_params
-    params.require(:dm_chat).permit(:workspace_id, :member_id, :has_dm)
+    params.require(:dm_chat).permit(:member_id, :has_dm)
   end
 end

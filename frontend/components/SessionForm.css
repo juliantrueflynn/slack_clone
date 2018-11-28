@@ -1,27 +1,27 @@
-.SessionForm {
+.Form__session {
   text-align: center;
-  -ms-flex-preferred-size: 0;
-  flex-basis: 0;
-  -webkit-box-flex: 1;
-  -ms-flex-positive: 1;
+  display: flex;
+  align-items: center;
   flex-grow: 1;
 }
 
-@media only screen and (max-width : 1200px) {
-  .SessionForm {
-    padding-top: 120px;
-  }
+.SessionForm {
+  width: 450px;
+  margin: 0 auto;
+  padding: 0 15px;
 }
 
-.Form__session {
-  width: 450px;
-  margin: 160px auto 0;
+@media screen and (max-width: 576px) {
+  .SessionForm {
+    width: 100%;
+  }
 }
 
 .PublicView__signin,
 .PublicView__signup {
   background-color: #6C5CE7;
-  min-height: 100vh;
+  height: 100%;
+  position: relative;
 }
 
 .PublicView__signin .Page__title,
@@ -46,7 +46,6 @@
 }
 
 .SessionForm .Btn__submit {
-  margin-top: 20px;
   padding: 15px 10px;
   background-color: #00b894;
   border-color: #00b894;
@@ -64,6 +63,12 @@
 .SessionForm .Btn__submit:hover {
   box-shadow: 0 1px 2px rgba(0,0,0,.2);
   background-color: #32c6a9;
+}
+
+.SessionForm .Btn__group,
+.SessionForm .Btn__group > .Btn {
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .SessionForm ::-webkit-input-placeholder { /* Chrome/Opera/Safari */

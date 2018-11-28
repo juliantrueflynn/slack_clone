@@ -1,7 +1,7 @@
 import {
   WORKSPACE,
   MESSAGE,
-  UNREAD,
+  READ,
   USER_THREAD,
   SIGN_OUT,
 } from '../actions/actionTypes';
@@ -14,7 +14,7 @@ const channelDisplayReducer = (state = null, action) => {
       const { channelSlug } = action;
       return channelSlug;
     }
-    case UNREAD.INDEX.REQUEST:
+    case READ.INDEX.REQUEST:
       return 'unreads';
     case USER_THREAD.INDEX.REQUEST:
       return 'threads';

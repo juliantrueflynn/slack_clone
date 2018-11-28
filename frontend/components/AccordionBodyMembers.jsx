@@ -20,7 +20,7 @@ const AccordionBodyMembers = ({ members, users, match: { params } }) => {
       {members.map(userSlug => (
         <Link key={userSlug} to={`${teamUrl}/${userSlug}`} className="AccordionItem__sub">
           <StatusIcon member={users[userSlug]} />
-          <Avatar avatarFor="details-drawer" author={users[userSlug]} size="22" />
+          <Avatar avatarFor="details-drawer" user={users[userSlug]} size="22" />
           {users[userSlug].username}
         </Link>
       ))}

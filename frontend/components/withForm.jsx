@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Form from './Form';
-import { destroySuccess } from '../actions/uiActions';
 
 const withForm = ({ type, payloadName }) => (WrappedComponent) => {
   const mapStateToProps = state => ({
@@ -19,28 +18,22 @@ const withForm = ({ type, payloadName }) => (WrappedComponent) => {
 
       return dispatch(payload);
     },
-    destroySuccess: () => dispatch(destroySuccess(payloadName)),
   });
 
-  const WithForm = ({
-    success,
-    errors,
-    destroySuccess: successDestroy,
-    ...props
-  }) => (
+  const WithForm = ({ success, errors, ...rest }) => (
     <Form
       formFor={payloadName}
       success={success}
       errors={errors}
-      destroySuccess={successDestroy}
-      render={form => (
-        <WrappedComponent
-          form={form}
-          {...props}
-        />
-      )}
+      render={form => <WrappedComponent form={form} {...rest} />}
     />
   );
+
+  const wrappedComponentName = WrappedComponent.displayName
+  || WrappedComponent.name
+  || 'Component';
+
+  WithForm.displayName = `withForm(${wrappedComponentName})`;
 
   return connect(mapStateToProps, mapDispatchToProps)(WithForm);
 };

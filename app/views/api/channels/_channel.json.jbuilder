@@ -1,4 +1,7 @@
-json.(channel, :owner_slug, *channel.attributes.keys)
+json.channel do
+  json.(channel, :id, :slug, :title, :owner_slug, :owner_id, :has_dm, :created_at)
+end
+
 json.workspace_slug channel.workspace.slug
 
 json.subs do
@@ -9,5 +12,4 @@ json.subs do
   end
 end
 
-members = channel.has_dm ? channel.members.pluck(:slug) : []
-json.members members
+json.members channel.has_dm ? channel.members.pluck(:slug) : []

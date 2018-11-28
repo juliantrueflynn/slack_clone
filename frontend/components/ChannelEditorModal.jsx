@@ -2,15 +2,14 @@ import React from 'react';
 import Button from './Button';
 import withForm from './withForm';
 import Modal from './Modal';
+import FormHandler from './FormHandler';
 
 class ChannelEditorModal extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = { title: '', topic: '' };
-
-    this.handleInputVal = this.handleInputVal.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.handleFieldValueChange = this.handleFieldValueChange.bind(this);
   }
 
   componentDidMount() {
@@ -28,7 +27,7 @@ class ChannelEditorModal extends React.Component {
     }
   }
 
-  handleSubmit(e) {
+  handleFormSubmit(e) {
     e.preventDefault();
 
     const { formDispatchRequest, channel: { slug } } = this.props;
@@ -36,49 +35,51 @@ class ChannelEditorModal extends React.Component {
     formDispatchRequest({ slug, title, topic });
   }
 
-  handleInputVal(prop) {
-    return e => this.setState({ [prop]: e.target.value });
+  handleFieldValueChange(value, prop) {
+    this.setState({ [prop]: value });
   }
 
   render() {
-    const { modalClose, currentUser, channel } = this.props;
+    const {
+      modalClose,
+      currentUserSlug,
+      channel,
+      form: { formSuccess, formErrors },
+    } = this.props;
     const { title, topic } = this.state;
 
-    const isOwner = currentUser.id === channel.ownerId;
+    const fields = [
+      {
+        id: 'title',
+        label: 'Title',
+        value: title,
+        type: 'text',
+      },
+      {
+        id: 'topic',
+        label: 'Topic',
+        value: topic,
+        placeholder: 'e.g. Discuss XYZ',
+        condition: currentUserSlug === channel.ownerSlug,
+      }
+    ];
 
     return (
       <Modal isOpen modalTitle="Update channel" modalFor="channel-edit" close={modalClose}>
-        <form onSubmit={this.handleSubmit}>
-          {isOwner && (
-            <div className="Form__group">
-              <label htmlFor="title">Title</label>
-              <input
-                type="text"
-                className="Form__control"
-                value={title}
-                onChange={this.handleInputVal('title')}
-              />
-            </div>
-          )}
-          <div className="Form__group">
-            <label htmlFor="topic">Topic</label>
-            <input
-              type="text"
-              className="Form__control"
-              placeholder="e.g. Discuss XYZ"
-              value={topic}
-              onChange={this.handleInputVal('topic')}
-            />
-          </div>
-          <div className="Btn__group">
-            <Button type="submit" color="green" buttonFor="save-profile" size="lg">
-              Update
-            </Button>
-            <Button onClick={() => modalClose()} size="lg">
-              Cancel
-            </Button>
-          </div>
-        </form>
+        <FormHandler
+          submitForm={this.handleFormSubmit}
+          setFieldValue={this.handleFieldValueChange}
+          fields={fields}
+          success={formSuccess}
+          errors={formErrors}
+        >
+          <Button type="submit" color="green" size="lg">
+            Update
+          </Button>
+          <Button onClick={() => modalClose()} size="lg">
+            Cancel
+          </Button>
+        </FormHandler>
       </Modal>
     );
   }

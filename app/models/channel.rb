@@ -1,6 +1,4 @@
 class Channel < ApplicationRecord
-  searchkick default_fields: [:title]
-
   attr_accessor :skip_broadcast, :member_id
   attr_reader :member_ids
 
@@ -24,50 +22,38 @@ class Channel < ApplicationRecord
     class_name: 'User',
     through: :subs,
     source: :user
-  has_many :recent_entries,
-    class_name: 'Message'
-  has_many :entries, class_name: 'Message'
   has_many :messages
-  has_many :parent_messages,
-    -> { Message.without_children },
-    class_name: 'Message'
-  has_many :favorites,
-    -> { joins(:message).select('favorites.*', 'messages.slug AS message_slug') },
-    through: :messages,
-    source: :favorites
-  has_many :reactions,
-    through: :messages,
-    source: :reactions
   has_many :pins, through: :messages
   has_many :reads, foreign_key: :readable_id do
     def find_or_initialize_by_user(user_id)
       find_or_initialize_by(user_id: user_id, readable_type: 'Channel')
     end
   end
-  has_one :unread,
-    -> { where(unreadable_type: 'Channel') },
-    foreign_key: :unreadable_id,
-    dependent: :delete
+  
+  scope :with_dm, -> { where(has_dm: true) }
+  scope :without_dm, -> { where(has_dm: false) }
 
   def self.by_workspace_id(workspace_id)
     where(workspace_id: workspace_id)
   end
 
-  def self.dm_chat_by_workspace_id(workspace_id)
-    where(has_dm: true).by_workspace_id(workspace_id)
+  def self.has_dm_with_user_ids?(user_ids)
+    !!with_dm.by_user_ids(user_ids)
   end
 
-  def self.find_dm_chat_by_workspace_and_users(workspace_id, users_ids)
+  def self.by_user_ids(users_ids)
     joins(:subs)
-      .dm_chat_by_workspace_id(workspace_id)
       .where(channel_subs: { user_id: users_ids })
       .group('channels.id')
       .having('COUNT(channels.id) > 1')
       .take
   end
 
-  def self.with_user_sub(user_id)
-    includes(:subs).where(channel_subs: { user_id: user_id })
+  def self.without_user_and_dm(user_id)
+    includes(:subs)
+      .where("channel_subs.user_id != ? OR channels.has_dm = 'f'", user_id)
+      .references(:channel_subs)
+      .order(:id)
   end
 
   def broadcast_name
@@ -78,21 +64,25 @@ class Channel < ApplicationRecord
     owner ? owner.slug : nil
   end
 
-  def recent_messages(start_date = nil)
-    return messages if messages.without_children.length < 12
-    after_date = start_date ? DateTime.parse(start_date) : DateTime.now
-    Message.created_recently(id, after_date)
+  def days_since_created(date)
+    start_date = date.midnight.to_date
+    days_between = (start_date - created_at.midnight.to_date).to_i
+    days_between > 0 ? days_between : 1
+  end
+
+  def recent_messages(start_date)
+    days_deep = days_since_created(start_date)
+    messages.created_recently(start_date, days_deep)
   end
 
   def previous_messages(end_date)
-    return messages if messages.without_children.length < 12
-    until_date = DateTime.parse(end_date).midnight
-    messages.created_until(until_date)
+    messages.created_until(end_date.midnight)
   end
 
   def history_messages(until_date = nil)
-    return previous_messages(until_date) unless until_date.nil?
-    recent_messages
+    return messages if messages.by_entry_parent.length <= 12
+    return recent_messages(DateTime.current) if until_date.nil?
+    previous_messages(until_date)
   end
 
   def member_ids=(member_ids)
@@ -103,19 +93,19 @@ class Channel < ApplicationRecord
     !!subs.find_by(channel_subs: { user_id: user_id })
   end
 
-  after_create :generate_chat_subs
-  after_create_commit :generate_unread, :broadcast_create
+  after_create_commit :sub_users_to_dm_chat, :sub_user_to_public_chat
   after_update_commit :broadcast_update_channel
-  after_destroy :broadcast_destroy
 
   private
 
   def sub_user_to_public_chat
+    return unless owner
     subs.create(user_id: owner.id, skip_broadcast: true)
+    broadcast_create
   end
 
   def sub_users_to_dm_chat
-    return unless self.member_ids
+    return unless has_dm? || member_ids
 
     self.member_ids.each_with_index do |dm_user_id, idx|
       in_sidebar = idx === 0 ? true : false
@@ -126,15 +116,8 @@ class Channel < ApplicationRecord
         skip_broadcast: true
       )
     end
-  end
 
-  def generate_chat_subs
-    sub_users_to_dm_chat if has_dm?
-    sub_user_to_public_chat if owner
-  end
-
-  def generate_unread
-    Unread.create(active_at: created_at, unreadable_id: id, unreadable_type: 'Channel')
+    broadcast_create
   end
 
   def broadcast_update_channel 

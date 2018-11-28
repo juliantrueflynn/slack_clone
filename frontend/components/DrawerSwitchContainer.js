@@ -1,31 +1,27 @@
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import withEntityWrapper from './withEntityWrapper';
 import { drawerClose, drawerOpen, modalOpen } from '../actions/uiActions';
 import { createChannel } from '../actions/channelActions';
 import { destroyPin } from '../actions/messageActions';
-import { selectDrawerMessages, selectChannelWithEntitiesBySlug } from '../reducers/selectors';
+import { selectDrawerMessages } from '../reducers/selectors';
 import DrawerSwitch from './DrawerSwitch';
 
 const mapStateToProps = (state, { match: { params } }) => ({
-  messages: selectDrawerMessages(state, params),
-  channel: selectChannelWithEntitiesBySlug(state),
+  messagesMap: selectDrawerMessages(state),
+  favorites: Object.values(state.entities.favorites),
+  chatPath: state.ui.displayChannelSlug,
   drawerType: params.drawerType,
   accordion: state.ui.accordion.details,
-  isLoading: state.isLoading.drawer,
 });
 
 const mapDispatchToProps = dispatch => ({
   openDrawer: drawer => dispatch(drawerOpen(drawer)),
   closeDrawer: () => dispatch(drawerClose()),
-  openProfileModal: () => dispatch(modalOpen('MODAL_PROFILE', null)),
+  modalOpen: (modalType, modalProps = {}) => dispatch(modalOpen(modalType, modalProps)),
   createChannelRequest: dmChat => dispatch(createChannel.request(dmChat)),
   destroyPinRequest: id => dispatch(destroyPin.request(id)),
-  modalOpen: (modalType, modalProps = {}) => dispatch(modalOpen(modalType, modalProps)),
 });
 
-const entityProps = { entityName: 'drawer', pathName: 'drawerSlug' };
-
-export default withRouter(
-  withEntityWrapper(entityProps)(connect(mapStateToProps, mapDispatchToProps)(DrawerSwitch))
+export default withEntityWrapper('drawerSlug')(
+  connect(mapStateToProps, mapDispatchToProps)(DrawerSwitch)
 );

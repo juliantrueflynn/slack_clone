@@ -1,117 +1,99 @@
 import React from 'react';
 import PerfectScrollBar from 'react-perfect-scrollbar';
-import { isDateOlderThanOther } from '../util/dateUtil';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import './ScrollBar.css';
 
 class ScrollBar extends React.Component {
   constructor(props) {
     super(props);
     this.scroller = React.createRef();
-    this.state = { isAtBottom: false, hasHistory: true };
-    this.handleIsAtTop = this.handleIsAtTop.bind(this);
+    this.state = { isAtBottom: false, clientHeight: 0 };
     this.handleIsAtBottom = this.handleIsAtBottom.bind(this);
-    this.handleScrollUp = this.handleScrollUp.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
   }
 
   componentDidMount() {
-    const { fetchHistory, messages, channel } = this.props;
-    const scrollNode = this.scroller.current;
+    const { fetchHistory, channelScrollLoc } = this.props;
 
-    if (channel) {
-      if (channel.scrollLoc || channel.scrollLoc === 0) {
-        scrollNode._container.scrollTop = channel.scrollLoc;
-        this.setState({ hasHistory: false });
-      } else {
-        this.scrollToBottom();
-      }
+    if (!fetchHistory) {
+      return;
     }
 
-    if (scrollNode && scrollNode._container.scrollTop === 0) {
-      this.setState({ hasHistory: false });
+    const scroller = this.scroller.current._container;
+
+    if (channelScrollLoc || channelScrollLoc === 0) {
+      scroller.scrollTop = channelScrollLoc;
+    } else {
+      this.scrollToBottom();
     }
 
-    if (fetchHistory) {
-      const parents = messages.filter(msg => !msg.parentMessageId);
-      const hasAllMessagesAlready = parents.length > 12;
-      this.setState({ hasHistory: hasAllMessagesAlready });
+    if (scroller.scrollTop === 0) {
+      fetchHistory();
     }
   }
 
-  componentDidUpdate(prevProps) {
-    const { shouldAutoScroll } = this.props;
+  componentDidUpdate(prevProps, prevState) {
+    const { shouldAutoScroll, isLoading } = this.props;
     const { isAtBottom } = this.state;
 
-    if (shouldAutoScroll) {
-      if (isAtBottom && prevProps.messages && this.hasNewMessage(prevProps.messages)) {
-        this.scrollToBottom();
+    if (shouldAutoScroll && (isAtBottom || this.hasNewMessage(isAtBottom, prevProps.lastMessage))) {
+      this.scrollToBottom();
+    }
+
+    if (isLoading || prevProps.isLoading) {
+      const scroller = this.scroller.current._container;
+      const container = scroller.children[0];
+      const { height } = container.getBoundingClientRect();
+
+      if (isLoading && !prevProps.isLoading) {
+        this.setClientHeight(height);
+      }
+
+      if (!isLoading && prevProps.isLoading) {
+        const clientHeight = height - prevState.clientHeight;
+        this.setClientHeight(clientHeight);
+        scroller.scrollTop = clientHeight;
       }
     }
   }
 
-  static getFirstMessageDate(messages) {
-    const chatEntries = messages.filter(entry => !entry.isInConvo);
-    return chatEntries[0] ? chatEntries[0].createdAt : null;
+  setClientHeight(clientHeight) {
+    this.setState({ clientHeight });
   }
 
-  hasNewMessage(prevMessages) {
-    const { messages } = this.props;
-    const lastEntry = messages[messages.length - 1];
-    const prevLastEntry = prevMessages[prevMessages.length - 1];
+  hasNewMessage(isAtBottom, prevLastMsg) {
+    const { lastMessage, currentUserSlug } = this.props;
+    const hasNewMsg = lastMessage && prevLastMsg && prevLastMsg.id !== lastMessage.id;
 
-    if (!lastEntry || !prevLastEntry) {
-      return false;
+    if (hasNewMsg && currentUserSlug === prevLastMsg.authorSlug) {
+      return true;
     }
 
-    return lastEntry.isCurrentUser && prevLastEntry.id !== lastEntry.id;
-  }
-
-  handleIsAtTop() {
-    const {
-      fetchHistory,
-      isLoadingHistory,
-      channel,
-      messages,
-    } = this.props;
-    const { hasHistory } = this.state;
-
-    if (hasHistory && fetchHistory && !isLoadingHistory && this.hasOldFetchedDate()) {
-      const startDate = ScrollBar.getFirstMessageDate(messages);
-      fetchHistory(channel.slug, startDate);
-    }
+    return isAtBottom && hasNewMsg;
   }
 
   handleIsAtBottom() {
-    const { shouldAutoScroll } = this.props;
     const { isAtBottom } = this.state;
 
-    if (shouldAutoScroll && !isAtBottom) {
+    if (!isAtBottom) {
       this.setState({ isAtBottom: true });
     }
   }
 
-  handleScrollUp() {
+  handleScroll(e) {
+    const { updateScrollLoc, fetchHistory } = this.props;
     const { isAtBottom } = this.state;
 
     if (isAtBottom) {
       this.setState({ isAtBottom: false });
     }
-  }
 
-  handleScroll(e) {
-    const { updateScrollLoc } = this.props;
-    const { isAtBottom } = this.props;
+    if (fetchHistory && e.scrollTop === 0) {
+      fetchHistory(e.scrollTop);
+    }
 
     if (updateScrollLoc && !isAtBottom) {
       updateScrollLoc(e.scrollTop);
     }
-  }
-
-  hasOldFetchedDate() {
-    const { channel, messages } = this.props;
-    const messageCreatedAt = ScrollBar.getFirstMessageDate(messages);
-    return isDateOlderThanOther(channel.lastFetched, messageCreatedAt);
   }
 
   scrollToBottom() {
@@ -119,39 +101,40 @@ class ScrollBar extends React.Component {
 
     if (scroller && scroller._container) {
       const { scrollHeight, clientHeight } = scroller._container;
-      const maxScrollTop = scrollHeight - clientHeight;
-      scroller._container.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+      scroller._container.scrollTop = scrollHeight - clientHeight;
     }
   }
 
   render() {
     const { children, shouldAutoScroll } = this.props;
-    const childrenContainer = (
-      <div className="ScrollBar__container">
-        {children}
-      </div>
-    );
+    const psScrollOptions = { suppressScrollX: true };
+
+    const style = {
+      position: 'relative',
+      height: '100%',
+      width: '100%',
+      overflow: 'hidden',
+    };
 
     if (shouldAutoScroll) {
       return (
-        <div className="ScrollBar">
+        <div className="ScrollBar" style={style}>
           <PerfectScrollBar
             ref={this.scroller}
-            onScrollUp={this.handleScrollUp}
-            onYReachStart={this.handleIsAtTop}
             onYReachEnd={this.handleIsAtBottom}
             onScrollY={this.handleScroll}
+            option={psScrollOptions}
           >
-            {childrenContainer}
+            <div className="ScrollBar__container">{children}</div>
           </PerfectScrollBar>
         </div>
       );
     }
 
     return (
-      <div className="ScrollBar">
-        <PerfectScrollBar>
-          {childrenContainer}
+      <div className="ScrollBar" style={style}>
+        <PerfectScrollBar option={psScrollOptions}>
+          <div className="ScrollBar__container">{children}</div>
         </PerfectScrollBar>
       </div>
     );

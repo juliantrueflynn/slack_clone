@@ -12,7 +12,7 @@ class DrawerSwitch extends React.Component {
   }
 
   componentDidMount() {
-    const { openDrawer, drawerType, entitySlug: drawerSlug } = this.props;
+    const { openDrawer, drawerType, drawerSlug } = this.props;
 
     openDrawer({ drawerType, drawerSlug });
   }
@@ -23,6 +23,24 @@ class DrawerSwitch extends React.Component {
     if (drawerType && drawerType !== prevProps.drawerType) {
       fetchEntityRequest();
     }
+  }
+
+  getMessages(type) {
+    const { messagesMap, chatPath, favorites } = this.props;
+
+    const messages = Object.values(messagesMap);
+
+    if (type === 'details') {
+      return messages.filter(msg => msg.pinId && msg.channelSlug === chatPath);
+    }
+
+    if (type === 'favorites') {
+      return favorites.sort((a, b) => (
+        new Date(b.createdAt) - new Date(a.createdAt)
+      )).map(msg => messagesMap[msg.messageSlug]);
+    }
+
+    return messagesMap;
   }
 
   handleClose() {
@@ -38,39 +56,43 @@ class DrawerSwitch extends React.Component {
 
   render() {
     const {
-      entitySlug: drawerSlug,
+      drawerSlug,
       drawerType,
-      messages,
       users,
-      channel,
+      channelsMap,
+      chatPath,
       isLoading,
       currentUser,
       accordion,
-      openProfileModal,
       createChannelRequest,
       destroyPinRequest,
       modalOpen,
     } = this.props;
 
+    const channel = channelsMap[chatPath];
+
     if (drawerType === 'details' && !channel) {
       return null;
     }
 
+    const messages = this.getMessages(drawerType);
+
     return (
       <Drawer
+        isLoading={isLoading.drawer}
         drawerType={drawerType}
         closeDrawer={this.handleClose}
         channel={channel}
         messages={messages}
-        isLoading={isLoading}
+        currentUserSlug={currentUser.slug}
       >
         {drawerType === 'team' && (
           <UserDrawer
             userSlug={drawerSlug}
             currentUser={currentUser}
             users={users}
-            openProfileModal={openProfileModal}
             createChannelRequest={createChannelRequest}
+            modalOpen={modalOpen}
           />
         )}
         {drawerType === 'favorites' && (
@@ -81,11 +103,12 @@ class DrawerSwitch extends React.Component {
         )}
         {(drawerType === 'details' && channel) && (
           <ChannelDetailsDrawer
-            users={users}
             messages={messages}
+            users={users}
+            currentUserId={currentUser.id}
             channel={channel}
             accordion={accordion}
-            isLoading={isLoading}
+            isLoading={isLoading.drawer}
             destroyPinRequest={destroyPinRequest}
             modalOpen={modalOpen}
           />

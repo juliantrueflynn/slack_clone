@@ -1,5 +1,8 @@
 json.user do
   json.(workspace_sub.user, :id, :slug, :email, :username)
+  json.avatar_banner workspace_sub.user.avatar.banner.url
+  json.avatar_thumb workspace_sub.user.avatar.thumb.url
+  json.avatar_large workspace_sub.user.avatar.large.url
 end
 
 json.workspace_sub do

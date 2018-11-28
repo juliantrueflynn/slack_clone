@@ -16,16 +16,18 @@ const userReducer = (state = {}, action) => {
   switch (action.type) {
     case WORKSPACE.INDEX.RECEIVE: {
       const { workspaceSubs } = action.workspaces;
-      nextState = Object.assign({}, state);
 
-      const currUser = workspaceSubs[0];
+      const [currUser] = workspaceSubs;
       if (!currUser) {
         return state;
       }
 
+      nextState = Object.assign({}, state);
       nextState[currUser.userSlug] = {
         id: currUser.userId,
         slug: currUser.userSlug,
+        subs: [],
+        status: 'online'
       };
 
       return merge({}, state, nextState);
@@ -68,19 +70,12 @@ const userReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
+    case USER.UPDATE.RECEIVE:
     case USER.SHOW.RECEIVE: {
-      const { user } = action;
+      const { id, slug, ...rest } = action.user;
       nextState = {};
-      nextState[user.slug] = user;
+      nextState[slug] = rest;
       return merge({}, state, nextState);
-    }
-    case USER.UPDATE.RECEIVE: {
-      const { user } = action;
-      nextState = Object.assign({}, state);
-      nextState[user.slug].avatarBanner = user.avatarBanner;
-      nextState[user.slug].avatarThumb = user.avatarThumb;
-      nextState[user.slug].avatarLarge = user.avatarLarge;
-      return nextState;
     }
     case CHANNEL_SUB.CREATE.RECEIVE: {
       const { channelSub: { id, userSlug } } = action;
@@ -91,7 +86,7 @@ const userReducer = (state = {}, action) => {
     case CHANNEL_SUB.DESTROY.RECEIVE: {
       const { channelSub: { id, userSlug } } = action;
       nextState = Object.assign({}, state);
-      nextState[userSlug].subs = nextState[userSlug].subs.filter(subId => id === subId);
+      nextState[userSlug].subs = nextState[userSlug].subs.filter(subId => id !== subId);
       return nextState;
     }
     case CHANNEL.CREATE.RECEIVE: {

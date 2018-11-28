@@ -2,13 +2,15 @@ import React from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 import { decamelizeKeys } from 'humps';
 import sampleWisdomQuote from '../util/wisdomQuotesUtil';
+import EmptyDisplay from './EmptyDisplay';
 import LeftSidebarContainer from './LeftSidebarContainer';
 import ProfileModal from './ProfileModal';
 import ChatModal from './ChatModal';
 import ChatsModal from './ChatsModal';
 import ChannelEditorModal from './ChannelEditorModal';
-import Layout from './Layout';
-import EmptyDisplay from './EmptyDisplay';
+import ReactionModal from './ReactionModal';
+import SearchModal from './SearchModal';
+import { PageRoutes } from '../util/routeUtil';
 import './Workspace.css';
 
 class Workspace extends React.Component {
@@ -29,7 +31,7 @@ class Workspace extends React.Component {
       fetchWorkspacesRequest,
     } = this.props;
 
-    const hasLoaded = !isLoading;
+    const hasLoaded = !isLoading.workspace;
     if (hasLoaded && prevProps.workspaces && prevProps.workspaces.length !== workspaces.length) {
       fetchWorkspacesRequest();
     }
@@ -41,11 +43,11 @@ class Workspace extends React.Component {
   }
 
   getDefaultChat() {
-    const { entity: workspace, channels } = this.props;
+    const { workspace, channelsMap } = this.props;
 
     if (workspace) {
       const firstChatSlug = workspace.channels[0];
-      return channels[firstChatSlug];
+      return channelsMap[firstChatSlug];
     }
 
     return null;
@@ -53,25 +55,30 @@ class Workspace extends React.Component {
 
   render() {
     const {
-      entity: workspace,
-      entitySlug: workspaceSlug,
+      workspace,
+      workspaceSlug,
       isLoading,
       routes,
-      modalType,
+      modal: { modalType, modalProps },
       modalClose,
-      channels: channelsMap,
-      currChatSlug,
+      channelsMap,
+      chatPath,
       users,
+      searchQuery,
+      fetchSearchRequest,
+      destroySearch,
       currentUser,
+      messages,
       fetchChannelsRequest,
+      toggleReaction,
       onReceived,
     } = this.props;
 
     const { quoteText, quoteBy } = sampleWisdomQuote;
 
-    if (isLoading) {
+    if (isLoading.workspace) {
       return (
-        <Layout layoutFor="workspace" isLoading>
+        <div className="Workspace Workspace--loading">
           <div className="LeftSidebar" />
           <EmptyDisplay topIcon="quote-left" hasLoadingIcon>
             <blockquote className="Workspace__quote">
@@ -79,21 +86,21 @@ class Workspace extends React.Component {
               <footer>{`— ${quoteBy}`}</footer>
             </blockquote>
           </EmptyDisplay>
-        </Layout>
+        </div>
       );
     }
 
     const user = users[currentUser.slug];
-    const channel = channelsMap[currChatSlug];
+    const channel = channelsMap[chatPath];
     const defaultChat = this.getDefaultChat();
     const channels = Object.values(channelsMap);
-    const cableChannels = channels.filter(ch => ch.isSub || ch.slug === currChatSlug).map(ch => (
+    const cableChannels = channels.filter(ch => ch.isSub || ch.slug === chatPath).map(ch => (
       { channel: 'ChatChannel', channelSlug: ch.slug }
     ));
-    const childRoutes = defaultChat && routes;
+    const searchMessages = messages.filter(msg => msg.isInSearch).sort((a, b) => b.id - a.id);
 
     return (
-      <Layout layoutFor="workspace" routes={childRoutes}>
+      <div className="Workspace">
         <ActionCable
           channel={decamelizeKeys({ channel: 'WorkspaceChannel', workspaceSlug })}
           onReceived={onReceived}
@@ -109,11 +116,11 @@ class Workspace extends React.Component {
             onReceived={onReceived}
           />
         ))}
-        {defaultChat && <LeftSidebarContainer />}
-        {workspace && modalType === 'MODAL_CHAT' && (
+        {workspace && defaultChat && <LeftSidebarContainer />}
+        {modalType === 'MODAL_CHAT' && (
           <ChatModal workspaceId={workspace.id} modalClose={modalClose} />
         )}
-        {defaultChat && modalType === 'MODAL_CHATS' && (
+        {modalType === 'MODAL_CHATS' && (
           <ChatsModal
             workspaceSlug={workspaceSlug}
             channels={channels}
@@ -121,13 +128,36 @@ class Workspace extends React.Component {
             modalClose={modalClose}
           />
         )}
-        {user && modalType === 'MODAL_PROFILE' && (
-          <ProfileModal {...user} modalClose={modalClose} />
+        {modalType === 'MODAL_PROFILE' && <ProfileModal {...user} modalClose={modalClose} />}
+        {modalType === 'MODAL_EDIT_CHANNEL' && (
+          <ChannelEditorModal
+            channel={channel}
+            currentUserSlug={currentUser.slug}
+            modalClose={modalClose}
+          />
         )}
-        {channel && modalType === 'MODAL_EDIT_CHANNEL' && (
-          <ChannelEditorModal channel={channel} currentUser={currentUser} modalClose={modalClose} />
+        {modalType === 'MODAL_REACTION' && (
+          <ReactionModal
+            toggleReaction={toggleReaction}
+            modalProps={modalProps}
+            modalClose={modalClose}
+          />
         )}
-      </Layout>
+        {modalType === 'MODAL_SEARCH' && (
+          <SearchModal
+            searchQuery={searchQuery}
+            messages={searchMessages}
+            users={users}
+            channelsMap={channelsMap}
+            currentUserId={currentUser.id}
+            fetchSearchRequest={fetchSearchRequest}
+            destroySearch={destroySearch}
+            isSearchLoading={isLoading.search}
+            modalClose={modalClose}
+          />
+        )}
+        {defaultChat && <PageRoutes routes={routes} />}
+      </div>
     );
   }
 }

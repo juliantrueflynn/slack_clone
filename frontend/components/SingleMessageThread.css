@@ -49,6 +49,10 @@
   margin-left: 0;
 }
 
+.SingleMessageThread .SingleMessageThread__counter {
+  margin-right: 2px;
+}
+
 .SingleMessageThread .SingleMessageThread__counter:hover {
   text-decoration: underline;
 }
