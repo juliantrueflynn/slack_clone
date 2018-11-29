@@ -122,38 +122,40 @@ class ChatPageSwitch extends React.Component {
     return (
       <div className={`ChatPageSwitch ChatPageSwitch__${chatType}`}>
         <ChannelHeaderContainer />
-        <div className="ChatPageSwitch__body">
-          {chatPath === 'unreads' && (
-            <AllUnreads
-              messages={messages}
-              users={users}
-              isLoading={isLoading.channel}
-              channels={unreadChannels}
-              clearUnreads={clearUnreads}
-            />
-          )}
-          {chatPath === 'threads' && (
-            <AllThreads
-              messages={messages}
-              users={users}
-              isLoading={isLoading.channel}
-              channels={convoChannels}
-              currentUser={users[currentUser.slug]}
-              workspaceSlug={workspaceSlug}
-            />
-          )}
-          {channel && (
-            <Channel
-              messages={messages}
-              isLoading={isLoading}
-              channel={channel}
-              currentUserSlug={currentUser.slug}
-              modalOpen={modalOpen}
-              fetchHistoryRequest={fetchHistoryRequest}
-              updateScrollLoc={this.handleScrollLoc}
-              createChannelSubRequest={createChannelSubRequest}
-            />
-          )}
+        <div className="ChatPageSwitch__row">
+          <div className="ChatPageSwitch__body">
+            {chatPath === 'unreads' && (
+              <AllUnreads
+                messages={messages}
+                users={users}
+                isLoading={isLoading.channel}
+                channels={unreadChannels}
+                clearUnreads={clearUnreads}
+              />
+            )}
+            {chatPath === 'threads' && (
+              <AllThreads
+                messages={messages}
+                users={users}
+                isLoading={isLoading.channel}
+                channels={convoChannels}
+                currentUser={users[currentUser.slug]}
+                workspaceSlug={workspaceSlug}
+              />
+            )}
+            {channel && (
+              <Channel
+                messages={messages}
+                isLoading={isLoading}
+                channel={channel}
+                currentUserSlug={currentUser.slug}
+                modalOpen={modalOpen}
+                fetchHistoryRequest={fetchHistoryRequest}
+                updateScrollLoc={this.handleScrollLoc}
+                createChannelSubRequest={createChannelSubRequest}
+              />
+            )}
+          </div>
           {isInitLoadingDone && <PageRoutes routes={routes} />}
         </div>
       </div>

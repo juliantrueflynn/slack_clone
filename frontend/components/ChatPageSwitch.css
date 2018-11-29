@@ -5,11 +5,15 @@
   flex-grow: 1;
 }
 
+.ChatPageSwitch__row {
+  display: flex;
+  flex-grow: 1;
+}
+
 .ChatPageSwitch .ChatPageSwitch__body {
   overflow: hidden;
   display: flex;
   flex: 1;
-  flex-direction: column;
   position: relative;
   flex-grow: 1;
 }
