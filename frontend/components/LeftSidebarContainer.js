@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { selectSubbedWorkspaces } from '../reducers/selectors';
-import { modalOpen } from '../actions/uiActions';
+import { modalOpen, modalClose } from '../actions/uiActions';
 import { updateChannelSub } from '../actions/channelActions';
 import LeftSidebar from './LeftSidebar';
 
@@ -15,10 +15,12 @@ const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   channelSubsMap: state.entities.channelSubs,
   chatPath: state.ui.displayChannelSlug,
   drawer: state.ui.drawer,
+  isModalOpen: state.ui.displayModal.modalType === 'MODAL_LEFT_SIDEBAR',
 });
 
 const mapDispatchToProps = dispatch => ({
   modalOpen: (modalType, modalProps) => dispatch(modalOpen(modalType, modalProps)),
+  modalClose: () => dispatch(modalClose()),
   updateChannelSubRequest: channelSub => dispatch(updateChannelSub.request(channelSub)),
 });
 

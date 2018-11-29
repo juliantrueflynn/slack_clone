@@ -19,7 +19,10 @@ class Modal extends React.Component {
   render() {
     const {
       modalFor,
+      modalPos,
       modalTitle,
+      darkOverlay,
+      lightOverlay,
       close,
       unStyled,
       children,
@@ -31,9 +34,14 @@ class Modal extends React.Component {
       'Modal__overlay--unstyled': unStyled,
       'Modal__overlay--styled': !unStyled,
       [`Modal__overlay--${modalFor}`]: modalFor,
+      [`Modal__overlay--pos-${modalPos}`]: modalPos,
+      'Modal__overlay--dark': darkOverlay,
+      'Modal__overlay--light': lightOverlay,
     });
     const modalClassNames = classNames('Modal', {
       [`Modal__${modalFor}`]: modalFor,
+      'Modal--has-pos': modalPos,
+      [`Modal__pos-${modalPos}`]: modalPos,
     });
 
     return (

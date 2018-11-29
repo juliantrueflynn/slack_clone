@@ -116,7 +116,9 @@ class Workspace extends React.Component {
             onReceived={onReceived}
           />
         ))}
-        {workspace && defaultChat && <LeftSidebarContainer />}
+        {workspace && defaultChat && (
+          <LeftSidebarContainer />
+        )}
         {modalType === 'MODAL_CHAT' && (
           <ChatModal workspaceId={workspace.id} modalClose={modalClose} />
         )}

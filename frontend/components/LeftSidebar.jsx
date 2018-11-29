@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Button from './Button';
+import Modal from './Modal';
 import ProfileDropdown from './ProfileDropdown';
+import Button from './Button';
 import StatusIcon from './StatusIcon';
 import Menu from './Menu';
+import LeftSidebarMenus from './LeftSidebarMenus';
 import './LeftSidebar.css';
 
 class LeftSidebar extends React.Component {
@@ -67,11 +69,17 @@ class LeftSidebar extends React.Component {
       workspace,
       workspaces,
       modalOpen,
+      modalClose,
+      isModalOpen,
       chatPath,
       match: { url },
     } = this.props;
 
     const user = users[currentUser.slug];
+
+    if (!user) {
+      return null;
+    }
 
     const channels = Object.values(channelsMap);
     const subbedChannels = channels.filter(ch => (
@@ -135,34 +143,56 @@ class LeftSidebar extends React.Component {
       ),
     }));
 
-    return (
-      <aside className="LeftSidebar">
-        {user && (
+    const sidebarMenuItems = [
+      {
+        key: 'profile-dropdown',
+        content: (
           <ProfileDropdown
             user={user}
             workspaceTitle={workspace.title}
             workspaces={workspaces}
             chatPath={chatPath}
           />
-        )}
-        <section className="LeftSidebar__widget">
-          <Menu menuFor="quicklinks" items={quickLinksList} />
-        </section>
-        <section className="LeftSidebar__widget">
-          <header className="LeftSidebar__widget-head">
+        ),
+      },
+      {
+        key: 'quicklinks',
+        content: <Menu menuFor="quicklinks" items={quickLinksList} />,
+      },
+      {
+        key: 'chats',
+        content: <Menu menuFor="chats" items={channelsItems} />,
+        title: (
+          <Fragment>
             <Button unStyled buttonFor="chats" onClick={() => modalOpen('MODAL_CHATS')}>
               Channels
             </Button>
             <Button unStyled buttonFor="widget" onClick={() => modalOpen('MODAL_CHAT')}>
               <FontAwesomeIcon icon={['fas', 'plus-circle']} />
             </Button>
-          </header>
-          <Menu menuFor="chats" items={channelsItems} />
-        </section>
-        <section className="LeftSidebar__widget">
-          <header className="LeftSidebar__widget-head">Direct Messages</header>
-          <Menu menuFor="dm-chats" items={dmChatsItems} />
-        </section>
+          </Fragment>
+        ),
+      },
+      {
+        key: 'dm-chats',
+        content: <Menu menuFor="dm-chats" items={dmChatsItems} />,
+        title: 'Direct Messages',
+      }
+    ];
+
+    return (
+      <aside className="LeftSidebar">
+        <LeftSidebarMenus menuGroups={sidebarMenuItems} />
+        <Modal
+          isOpen={isModalOpen}
+          modalFor="left-sidebar"
+          modalPos="left"
+          close={modalClose}
+          unStyled
+          lightOverlay
+        >
+          <LeftSidebarMenus menuGroups={sidebarMenuItems} />
+        </Modal>
       </aside>
     );
   }

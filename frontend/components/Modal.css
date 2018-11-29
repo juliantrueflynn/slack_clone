@@ -61,3 +61,20 @@
 .Modal__overlay--styled form .Btn__group:last-child {
   margin-top: 30px;
 }
+
+.Modal__pos-left {
+  width: 250px;
+}
+
+.Modal--has-pos > .Modal__body,
+.Modal--has-pos .Modal__inner-body {
+  height: 100%;
+}
+
+.Modal__overlay--dark {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.Modal__overlay--light {
+  background-color: rgba(255, 255, 255, 0.6);
+}
