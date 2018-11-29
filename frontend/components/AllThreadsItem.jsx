@@ -25,7 +25,7 @@ const AllThreadsItem = ({
   }, [parentMessage]);
 
   return (
-    <div className="AllThreadsItem">
+    <div className="AllThreadsItem" role="listitem">
       <header className="AllThreadsItem__header">
         <Link to={channelUrl} className="AllThreadsItem__title">
           <FontAwesomeIcon icon="hashtag" size="xs" className="AllThreadsItem__hashtag" />
