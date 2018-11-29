@@ -7,50 +7,23 @@ const Drawer = ({
   isLoading,
   drawerType,
   closeDrawer,
-  channel,
+  drawerTitle,
   messages,
   currentUserSlug,
   children,
 }) => {
   const isConvo = drawerType === 'convo';
-  const close = () => closeDrawer();
-
-  let title;
-  switch (drawerType) {
-    case 'favorites':
-      title = 'Starred items';
-      break;
-    case 'convo':
-      title = 'Thread';
-      break;
-    case 'team':
-      title = 'Workspace directory';
-      break;
-    case 'details': {
-      if (channel && !channel.hasDm) {
-        title = `About #${channel.title}`;
-      }
-
-      if (channel && channel.hasDm) {
-        title = 'About this conversation';
-      }
-
-      break;
-    }
-    default: break;
-  }
-
-  const drawerClassNames = `Drawer Drawer__${drawerType}`;
   const lastMessage = isConvo ? messages[messages.length - 1] : null;
+  const drawerClassNames = `Drawer Drawer__${drawerType}`;
 
   return (
     <div className={drawerClassNames}>
       <header className="Drawer__header">
-        <div className="Drawer__headings">
-          {title}
-        </div>
-        <Button unStyled buttonFor="close" onClick={close}>
-          &#10006;
+        <h3 className="Drawer__header-title">
+          {drawerTitle}
+        </h3>
+        <Button unStyled buttonFor="close" onClick={closeDrawer}>
+          <span role="img" aria-label="Close drawer">&times;</span>
         </Button>
       </header>
       <div className="Drawer__container">

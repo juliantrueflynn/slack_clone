@@ -43,6 +43,43 @@ class DrawerSwitch extends React.Component {
     return messagesMap;
   }
 
+  getChannel() {
+    const { channelsMap, chatPath } = this.props;
+    return channelsMap[chatPath];
+  }
+
+  getDrawerTitle() {
+    const { drawerType } = this.props;
+
+    let title;
+    switch (drawerType) {
+      case 'favorites':
+        title = 'Starred items';
+        break;
+      case 'convo':
+        title = 'Thread';
+        break;
+      case 'team':
+        title = 'Workspace directory';
+        break;
+      case 'details': {
+        const channel = this.getChannel();
+        if (channel && !channel.hasDm) {
+          title = `About #${channel.title}`;
+        }
+
+        if (channel && channel.hasDm) {
+          title = 'About this conversation';
+        }
+
+        break;
+      }
+      default: break;
+    }
+
+    return title;
+  }
+
   handleClose() {
     const {
       closeDrawer,
@@ -59,8 +96,6 @@ class DrawerSwitch extends React.Component {
       drawerSlug,
       drawerType,
       users,
-      channelsMap,
-      chatPath,
       isLoading,
       currentUser,
       accordion,
@@ -69,7 +104,7 @@ class DrawerSwitch extends React.Component {
       modalOpen,
     } = this.props;
 
-    const channel = channelsMap[chatPath];
+    const channel = this.getChannel();
 
     if (drawerType === 'details' && !channel) {
       return null;
@@ -81,8 +116,8 @@ class DrawerSwitch extends React.Component {
       <Drawer
         isLoading={isLoading.drawer}
         drawerType={drawerType}
+        drawerTitle={this.getDrawerTitle()}
         closeDrawer={this.handleClose}
-        channel={channel}
         messages={messages}
         currentUserSlug={currentUser.slug}
       >

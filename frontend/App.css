@@ -6,6 +6,9 @@ body {
   margin: 0;
   color: #2D3436;
   overflow-x: hidden;
+  font-variant-ligatures: common-ligatures;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
 }
 
 html,
