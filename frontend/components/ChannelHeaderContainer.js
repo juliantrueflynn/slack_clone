@@ -12,7 +12,7 @@ import ChannelHeader from './ChannelHeader';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   chatPath,
-  channels: selectChannelsMap(state),
+  channelsMap: selectChannelsMap(state),
   drawerType: state.ui.drawer.drawerType,
   messages: selectMessages(state),
   users: state.entities.members,
