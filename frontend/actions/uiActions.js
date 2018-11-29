@@ -35,7 +35,9 @@ export const accordionOpen = (accordionType, accordionItem) => actionCreator(
 );
 
 export const fetchSearch = {
-  request: query => actionCreator(SEARCH.INDEX.REQUEST, { query }),
+  request: (query, shouldNotSearch = false) => (
+    actionCreator(SEARCH.INDEX.REQUEST, { query, shouldNotSearch })
+  ),
   receive: messages => actionCreator(SEARCH.INDEX.RECEIVE, { messages }),
   failure: errors => actionCreator(SEARCH.INDEX.FAILURE, { errors }),
 };

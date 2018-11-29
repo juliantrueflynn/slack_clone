@@ -21,7 +21,9 @@ const mapDispatchToProps = dispatch => ({
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),
   toggleReaction: reaction => dispatch(toggleReaction(reaction)),
   fetchChannelsRequest: workspaceSlug => dispatch(fetchChannels.request(workspaceSlug)),
-  fetchSearchRequest: query => dispatch(fetchSearch.request(query)),
+  fetchSearchRequest: (query, shouldNotSearch = false) => (
+    dispatch(fetchSearch.request(query, shouldNotSearch))
+  ),
   destroySearch: () => dispatch(destroySearch()),
   modalClose: () => dispatch(modalClose()),
 });

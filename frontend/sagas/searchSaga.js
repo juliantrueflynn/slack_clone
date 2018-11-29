@@ -4,7 +4,11 @@ import { fetchSearch } from '../actions/uiActions';
 import { apiFetch } from '../util/apiUtil';
 import { selectUIByDisplay } from '../reducers/selectors';
 
-function* loadSearchResults({ query }) {
+function* loadSearchResults({ query, shouldNotSearch }) {
+  if (shouldNotSearch) {
+    return;
+  }
+
   try {
     const workspaceSlug = yield saga.select(selectUIByDisplay, 'displayWorkspaceSlug');
     const apiUrl = `workspaces/${workspaceSlug}/search/${query}`;

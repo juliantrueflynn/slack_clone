@@ -24,6 +24,7 @@ class SearchModal extends React.Component {
     this.setQuery = this.setQuery.bind(this);
     this.handleFilterToggle = this.handleFilterToggle.bind(this);
     this.handleSearchRequest = this.handleSearchRequest.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {
@@ -116,6 +117,17 @@ class SearchModal extends React.Component {
     this.setState({ [type]: newFilter, results });
   }
 
+  handleClose() {
+    const { modalClose, fetchSearchRequest, searchQuery } = this.props;
+    const { query } = this.state;
+
+    if (searchQuery !== query) {
+      fetchSearchRequest(query, true);
+    }
+
+    modalClose();
+  }
+
   render() {
     const {
       users,
@@ -123,7 +135,6 @@ class SearchModal extends React.Component {
       messages,
       channelsMap,
       destroySearch,
-      modalClose,
       isSearchLoading,
     } = this.props;
     const {
@@ -146,7 +157,7 @@ class SearchModal extends React.Component {
       <Modal
         isOpen
         modalFor="search"
-        close={modalClose}
+        close={this.handleClose}
         overlayClassName={overlayClassNames}
         unStyled
       >
@@ -157,7 +168,7 @@ class SearchModal extends React.Component {
             setQuery={this.setQuery}
             query={query}
           />
-          <Button onClick={modalClose} buttonFor="modal-close" unStyled>
+          <Button onClick={this.handleClose} buttonFor="modal-close" unStyled>
             <FontAwesomeIcon icon="times" />
           </Button>
         </div>
