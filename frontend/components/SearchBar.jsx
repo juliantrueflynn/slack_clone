@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from './Button';
 import './SearchBar.css';
@@ -10,10 +11,15 @@ class SearchBar extends React.Component {
     this.handleInputVal = this.handleInputVal.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClearClick = this.handleClearClick.bind(this);
+    this.handleModalOpen = this.handleModalOpen.bind(this);
   }
 
   componentDidMount() {
-    this.focus();
+    const { setQuery } = this.props;
+
+    if (setQuery) {
+      this.focus();
+    }
   }
 
   focus() {
@@ -24,7 +30,10 @@ class SearchBar extends React.Component {
     e.preventDefault();
 
     const { searchSubmit, query } = this.props;
-    searchSubmit(query);
+
+    if (searchSubmit) {
+      searchSubmit(query);
+    }
   }
 
   handleInputVal(e) {
@@ -36,29 +45,54 @@ class SearchBar extends React.Component {
     const { setQuery, destroySearch } = this.props;
 
     destroySearch();
-    setQuery('');
-    this.focus();
+
+    if (setQuery) {
+      setQuery('');
+      this.focus();
+    }
+  }
+
+  handleModalOpen(e) {
+    e.preventDefault();
+
+    const { modalOpen } = this.props;
+    modalOpen('MODAL_SEARCH');
   }
 
   render() {
-    const { query } = this.props;
+    const { query, hasClearIcon, modalOpen } = this.props;
+
+    const isDisabled = !!modalOpen;
+
+    const searchClassNames = classNames('SearchBar', {
+      'SearchBar--disabled': modalOpen,
+      'SearchBar--queried': query,
+      'SearchBar--empty': !query,
+    });
 
     return (
-      <form className="SearchBar" onSubmit={this.handleSubmit}>
-        <Button type="submit" buttonFor="searchbar" unStyled>
-          <FontAwesomeIcon icon="search" />
-        </Button>
-        <input
-          type="text"
-          ref={this.input}
-          className="SearchBar__input"
-          value={query}
-          onChange={this.handleInputVal}
-          placeholder="Search"
-        />
-        <Button onClick={this.handleClearClick} buttonFor="clear" unStyled>
-          Clear
-        </Button>
+      <form className={searchClassNames} onSubmit={this.handleSubmit}>
+        <div className="SearchBar__hoverable">
+          <div className="SearchBar__disabled-overlay" role="presentation" onClick={this.handleModalOpen} />
+          <Button type="submit" buttonFor="searchbar" unStyled disabled={isDisabled}>
+            <FontAwesomeIcon icon="search" />
+          </Button>
+          <input
+            type="text"
+            ref={this.input}
+            className="SearchBar__input"
+            value={query}
+            onChange={this.handleInputVal}
+            placeholder="Search"
+            disabled={isDisabled}
+          />
+        </div>
+        {query && (
+          <Button onClick={this.handleClearClick} buttonFor="clear" unStyled>
+            {hasClearIcon || 'Clear'}
+            {hasClearIcon && <span role="img" aria-label="Close drawer">&times;</span>}
+          </Button>
+        )}
       </form>
     );
   }

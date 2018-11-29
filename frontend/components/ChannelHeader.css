@@ -120,3 +120,68 @@
 .Menu__header-meta .MenuItem svg {
   margin-right: 4px;
 }
+
+.ChannelHeader .SearchBar {
+  margin: 0 7px;
+  border-radius: 4px;
+  border: 1px solid #B2BEC3;
+  position: relative;
+}
+
+.ChannelHeader .SearchBar .Btn__nav-search {
+  color: #B2BEC3;
+  text-align: left;
+}
+
+.ChannelHeader .SearchBar .Btn__clear {
+  position: absolute;
+  right: 6px;
+  font-size: 1.4em;
+  line-height: 18px;
+  height: 17px;
+}
+
+.ChannelHeader .SearchBar .Btn__searchbar {
+  margin: 7px 0 7px 7px;
+}
+
+.ChannelHeader .SearchBar .SearchBar__input {
+  padding: 7px;
+}
+
+.ChannelHeader .SearchBar__hoverable:hover .SearchBar__input,
+.ChannelHeader .SearchBar__hoverable:hover .Btn__searchbar {
+  color: #74B9FF;
+}
+
+.ChannelHeader .SearchBar ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #B2BEC3;
+}
+
+.ChannelHeader .SearchBar ::-moz-placeholder { /* Firefox 19+ */
+  color: #B2BEC3;
+}
+
+.ChannelHeader .SearchBar :-ms-input-placeholder { /* IE 10+ */
+  color: #B2BEC3;
+}
+
+.ChannelHeader .SearchBar :-moz-placeholder { /* Firefox 18- */
+  color: #B2BEC3;
+}
+
+.ChannelHeader .SearchBar__hoverable:hover ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #74B9FF;
+}
+
+.ChannelHeader .SearchBar__hoverable:hover ::-moz-placeholder { /* Firefox 19+ */
+  color: #74B9FF;
+}
+
+.ChannelHeader .SearchBar__hoverable:hover :-ms-input-placeholder { /* IE 10+ */
+  color: #74B9FF;
+}
+
+.ChannelHeader .SearchBar__hoverable:hover :-moz-placeholder { /* Firefox 18- */
+  color: #74B9FF;
+}

@@ -1,9 +1,9 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from './Menu';
-import ChannelHeaderSearch from './ChannelHeaderSearch';
 import StatusIcon from './StatusIcon';
 import './ChannelHeader.css';
+import SearchBar from './SearchBar';
 
 class ChannelHeader extends React.Component {
   getPageTitle() {
@@ -173,10 +173,11 @@ class ChannelHeader extends React.Component {
         </div>
         <nav className="ChannelHeader__navigate">
           {channel && <Menu items={channelMenuItems} menuFor="edit" isRow unStyled />}
-          <ChannelHeaderSearch
+          <SearchBar
             query={searchQuery}
             destroySearch={destroySearch}
             modalOpen={modalOpen}
+            hasClearIcon
           />
           <Menu menuFor="header-user" isRow items={userMenuItems} />
         </nav>

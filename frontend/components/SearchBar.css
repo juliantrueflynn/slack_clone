@@ -1,13 +1,17 @@
-.SearchBar {
+.SearchBar,
+.SearchBar__hoverable {
   display: flex;
   width: 100%;
 }
 
+.SearchBar {
+  position: relative;
+  align-items: center;
+}
+
 .SearchBar__input {
   cursor: auto;
-  line-height: 1.6;
-  font-size: 16px;
-  padding: 8px 4px;
+  font-size: inherit;
   width: 100%;
   border: none;
 }
@@ -16,19 +20,21 @@
   outline: none;
 }
 
-.Btn__searchbar {
-  color: #636E72;
-  padding: 0 10px;
-}
-
+.SearchBar .Btn__searchbar,
 .SearchBar .Btn__clear {
-  display: flex;
   color: #636E72;
-  padding-left: 10px;
 }
 
-.SearchBar .Btn__clear::after {
-  content: "|";
-  color: #DFE6E9;
-  padding-left: 10px;
+.SearchBar--disabled .SearchBar__disabled-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.SearchBar--disabled .Btn__clear {
+  z-index: 200;
 }

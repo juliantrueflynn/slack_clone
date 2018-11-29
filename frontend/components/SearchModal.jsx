@@ -157,7 +157,7 @@ class SearchModal extends React.Component {
             setQuery={this.setQuery}
             query={query}
           />
-          <Button onClick={() => modalClose()} buttonFor="modal-close" unStyled>
+          <Button onClick={modalClose} buttonFor="modal-close" unStyled>
             <FontAwesomeIcon icon="times" />
           </Button>
         </div>

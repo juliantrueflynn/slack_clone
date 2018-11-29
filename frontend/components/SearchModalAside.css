@@ -3,6 +3,7 @@
   padding: 0 15px;
 }
 
+.SearchModal--loading .SearchModalAside,
 .SearchModal--empty .SearchModalAside,
 .SearchModal--new .SearchModalAside {
   display: none;
