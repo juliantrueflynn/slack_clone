@@ -2,8 +2,9 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from './Menu';
 import StatusIcon from './StatusIcon';
-import './ChannelHeader.css';
 import SearchBar from './SearchBar';
+import './ChannelHeader.css';
+import Button from './Button';
 
 class ChannelHeader extends React.Component {
   getPageTitle() {
@@ -167,6 +168,9 @@ class ChannelHeader extends React.Component {
 
     return (
       <header className="ChannelHeader">
+        <Button buttonFor="leftsidebar-mobile" unStyled onClick={() => modalOpen('MODAL_LEFT_SIDEBAR')}>
+          <FontAwesomeIcon icon="bars" size="lg" />
+        </Button>
         <div className="ChannelHeader__info">
           <h1 className="ChannelHeader__title">{title}</h1>
           <Menu menuFor="header-meta" items={metaMenuItems} isRow unStyled />

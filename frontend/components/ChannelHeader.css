@@ -136,9 +136,9 @@
 .ChannelHeader .SearchBar .Btn__clear {
   position: absolute;
   right: 6px;
-  font-size: 1.4em;
-  line-height: 18px;
-  height: 17px;
+  font-size: 1.5em;
+  line-height: 19px;
+  height: 18px;
 }
 
 .ChannelHeader .SearchBar .Btn__searchbar {
@@ -184,4 +184,58 @@
 
 .ChannelHeader .SearchBar__hoverable:hover :-moz-placeholder { /* Firefox 18- */
   color: #74B9FF;
+}
+
+.Btn__leftsidebar-mobile {
+  margin: -5px 15px -5px -15px;
+  padding: 0 15px;
+  height: 45px;
+  background-color: #4D394B;
+  color: #FFF;
+}
+
+@media screen and (min-width: 769px) {
+  .Btn__leftsidebar-mobile {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .ChannelHeader__title {
+    font-size: 17px;
+  }
+
+  .ChannelHeader .SearchBar {
+    max-width: 165px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .ChannelHeader {
+    min-height: 45px;
+    padding: 5px 15px;
+  }
+
+  .ChannelHeader__title {
+    font-size: 15px;
+    margin: 0;
+  }
+
+  .ChannelHeader .Menu__edit,
+  .ChannelHeader .Menu__header-user,
+  .ChannelHeader .Menu__header-meta {
+    display: none;
+  }
+
+  .ChannelHeader .SearchBar {
+    border: none;
+  }
+
+  .ChannelHeader .SearchBar .Btn__searchbar {
+    margin: 5px;
+  }
+
+  .ChannelHeader .SearchBar .SearchBar__input {
+    display: none;
+  }
 }

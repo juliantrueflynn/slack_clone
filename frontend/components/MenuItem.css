@@ -9,7 +9,7 @@
 
 .Menu--styled .MenuItem__content {
   display: block;
-  font-size: 15px;
+  font-size: inherit;
   line-height: 18px;
   padding: 4px 15px;
   position: relative;
