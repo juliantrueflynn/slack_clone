@@ -42,6 +42,8 @@ class LeftSidebar extends React.Component {
       match: { url },
       drawer: { drawerType, drawerSlug },
       history,
+      isModalOpen,
+      modalClose,
     } = this.props;
 
     let menuUrl = `${url}/${linkUrl}`;
@@ -51,6 +53,10 @@ class LeftSidebar extends React.Component {
       if (drawerSlug) {
         menuUrl += `/${drawerSlug}`;
       }
+    }
+
+    if (isModalOpen) {
+      modalClose();
     }
 
     history.push(menuUrl);
