@@ -1,3 +1,7 @@
+.SearchModal {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
 .SearchModal .Modal {
   position: absolute;
   top: 9px;
@@ -80,4 +84,24 @@
   line-height: 1.6;
   font-size: 16px;
   padding: 8px 4px;
+}
+
+@media screen and (max-width: 768px) {
+  .SearchModal .Modal {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+  }
+
+  .SearchModal .Modal,
+  .SearchModal .Modal__inner-body {
+    border-radius: 0;
+  }
+
+  .SearchModal--new .Modal__inner-body {
+    height: 100%;
+  }
 }

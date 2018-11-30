@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
 import ReactModal from 'react-modal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from './Button';
 import './Modal.css';
 
@@ -34,9 +33,8 @@ class Modal extends React.Component {
       'Modal__overlay--unstyled': unStyled,
       'Modal__overlay--styled': !unStyled,
       [`Modal__overlay--${modalFor}`]: modalFor,
+      'Modal__overlay--pos': modalPos,
       [`Modal__overlay--pos-${modalPos}`]: modalPos,
-      'Modal__overlay--dark': darkOverlay,
-      'Modal__overlay--light': lightOverlay,
     });
     const modalClassNames = classNames('Modal', {
       [`Modal__${modalFor}`]: modalFor,
@@ -57,15 +55,15 @@ class Modal extends React.Component {
         <div className="Modal__body">
           {unStyled || (
             <Button buttonFor="close" unStyled onClick={this.handleClose}>
-              <FontAwesomeIcon icon="times" size="2x" />
+              <span role="img" aria-label="Close drawer">&times;</span>
             </Button>
           )}
           <div className="Modal__inner-body">
             {modalTitle && (
               <header className="Modal__header">
-                <h1 className="Modal__title">
+                <h2 className="Modal__title">
                   {modalTitle}
-                </h1>
+                </h2>
               </header>
             )}
             {children}

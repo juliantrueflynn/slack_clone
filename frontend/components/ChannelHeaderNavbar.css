@@ -86,10 +86,6 @@
   color: #B2BEC3;
 }
 
-.ChannelHeaderNavbar .SearchBar :-ms-input-placeholder { /* IE 10+ */
-  color: #B2BEC3;
-}
-
 .ChannelHeaderNavbar .SearchBar :-moz-placeholder { /* Firefox 18- */
   color: #B2BEC3;
 }
@@ -99,10 +95,6 @@
 }
 
 .ChannelHeaderNavbar .SearchBar__hoverable:hover ::-moz-placeholder { /* Firefox 19+ */
-  color: #74B9FF;
-}
-
-.ChannelHeaderNavbar .SearchBar__hoverable:hover :-ms-input-placeholder { /* IE 10+ */
   color: #74B9FF;
 }
 
