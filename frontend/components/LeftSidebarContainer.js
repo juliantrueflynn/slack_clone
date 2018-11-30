@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { selectSubbedWorkspaces } from '../reducers/selectors';
+import { selectSubbedWorkspaces, selectChannelsMap } from '../reducers/selectors';
 import { modalOpen, modalClose } from '../actions/uiActions';
 import { updateChannelSub } from '../actions/channelActions';
 import LeftSidebar from './LeftSidebar';
@@ -11,7 +11,7 @@ const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   users: state.entities.members,
   workspaces: selectSubbedWorkspaces(state),
   workspace: state.entities.workspaces[workspaceSlug] || {},
-  channelsMap: state.entities.channels,
+  channelsMap: selectChannelsMap(state),
   channelSubsMap: state.entities.channelSubs,
   chatPath: state.ui.displayChannelSlug,
   drawer: state.ui.drawer,

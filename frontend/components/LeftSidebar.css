@@ -14,117 +14,215 @@
   color: inherit;
 }
 
-.LeftSidebar__widget-head,
+.LeftSidebarMenus__group-head,
 .Dropdown__profile .Btn__dropdown,
-.LeftSidebar__widget .MenuItem__content {
+.LeftSidebarMenus__group .MenuItem__content {
   padding-left: 18px;
   padding-right: 18px;
   width: 100%;
 }
 
-.LeftSidebar__widget {
+.LeftSidebarMenus__group {
   margin-bottom: 20px;
 }
 
-.LeftSidebar__widget:last-child {
+.LeftSidebarMenus__group:last-child {
   margin-bottom: 0;
 }
 
-.LeftSidebar__widget .MenuItem__content {
+.LeftSidebarMenus__group .MenuItem__content {
   text-align: inherit;
 }
 
-.LeftSidebar__widget > .Menu > .MenuItem > .MenuItem__content {
+.LeftSidebarMenus__group > .Menu > .MenuItem > .MenuItem__content {
   color: rgba(255,255,255,0.75);
   display: flex;
   align-items: center;
 }
 
-.LeftSidebar__widget > .Menu > .MenuItem--unread > .MenuItem__content {
+.LeftSidebarMenus__group > .Menu > .MenuItem--unread > .MenuItem__content {
   color: #FFF;
   font-weight: bold;
 }
 
-.LeftSidebar__widget-head {
+.LeftSidebarMenus__group-head {
   margin-bottom: 5px;
   display: flex;
   flex-direction: row;
 }
 
-.LeftSidebar__widget-head > .Btn:hover {
+.LeftSidebarMenus__group-head > .Btn:hover {
   color: rgba(255,255,255,1);
 }
 
-.LeftSidebar__widget-head > .Btn {
+.LeftSidebarMenus__group-head > .Btn {
   display: block;
   margin-right: auto;
 }
 
-.LeftSidebar__widget-head .Btn:focus {
+.LeftSidebarMenus__group-head .Btn:focus {
   outline: none;
 }
 
-.LeftSidebar__widget .Menu__chats > .MenuItem > .MenuItem__content--active {
+.LeftSidebarMenus__group .Menu__chats > .MenuItem > .MenuItem__content--active {
   pointer-events: none;
 }
 
-.LeftSidebar__widget .Btn__chats {
+.LeftSidebarMenus__group .Btn__chats {
   padding: 0;
   margin: 0 auto 0 0;
   width: 100%;
   text-align: left;
 }
 
-.LeftSidebar__widget-head > .Btn__widget {
+.LeftSidebarMenus__group-head > .Btn__widget {
   color: rgba(255,255,255,0.4);
 }
 
-.LeftSidebar__widget-head > .Btn__widget:hover {
+.LeftSidebarMenus__group-head > .Btn__widget:hover {
   color: rgba(255,255,255,0.8);
 }
 
-.LeftSidebar__widget .Menu__chats .MenuItem__content > .MenuItem__icon,
-.LeftSidebar__widget .Menu__quicklinks .MenuItem__content > .MenuItem__icon {
+.LeftSidebarMenus__group .Menu__chats .MenuItem__content > .MenuItem__icon,
+.LeftSidebarMenus__group .Menu__quicklinks .MenuItem__content > .MenuItem__icon {
   color: rgba(255,255,255,0.4);
 }
 
-.LeftSidebar__widget .MenuItem__content--btn:hover:not(.MenuItem__content--active),
-.LeftSidebar__widget .MenuItem__content--link:hover:not(.MenuItem__content--active) {
+.LeftSidebarMenus__group .MenuItem__content--btn:hover:not(.MenuItem__content--active),
+.LeftSidebarMenus__group .MenuItem__content--link:hover:not(.MenuItem__content--active) {
   background-color: rgba(223,230,233,.45);
 }
 
-.LeftSidebar__widget .MenuItem__content--btn:hover:not(.MenuItem__content--active),
-.LeftSidebar__widget .MenuItem__content--link:hover:not(.MenuItem__content--active) {
+.LeftSidebarMenus__group .MenuItem__content--btn:hover:not(.MenuItem__content--active),
+.LeftSidebarMenus__group .MenuItem__content--link:hover:not(.MenuItem__content--active) {
   background-color: #3E2E3D;
 }
 
-.LeftSidebar__widget > .Menu > .MenuItem > .MenuItem__content--active {
+.LeftSidebarMenus__group > .Menu > .MenuItem > .MenuItem__content--active {
   background-color: #4C9689;
 }
 
-.LeftSidebar__widget > .Menu > .MenuItem > .MenuItem__content--btn:focus {
+.LeftSidebarMenus__group > .Menu > .MenuItem > .MenuItem__content--btn:focus {
   outline: none;
 }
 
-.LeftSidebar__widget .Menu__dm-chats .MenuItem__content .Btn {
+.LeftSidebarMenus__group .Menu__dm-chats .MenuItem__content .Btn {
   position: absolute;
   height: 15px;
   right: 16px;
   display: none;
 }
 
-.LeftSidebar__widget .Menu__dm-chats .MenuItem__content:hover .Btn {
+.LeftSidebarMenus__group .Menu__dm-chats .MenuItem__content:hover .Btn {
   display: block;
 }
 
-.LeftSidebar__widget .MenuItem__content > .MenuItem__icon {
+.LeftSidebarMenus__group .MenuItem__content > .MenuItem__icon {
   width: 23px;
   display: block;
 }
 
-.LeftSidebar__widget .Menu__quicklinks .MenuItem__icon svg,
-.LeftSidebar__widget .StatusIcon {
+.LeftSidebarMenus__group .Menu__quicklinks .MenuItem__icon svg,
+.LeftSidebarMenus__group .StatusIcon {
   width: 1.25em;
+}
+
+.Dropdown__profile,
+.Dropdown__profile > .Btn {
+  min-height: 60px;
+}
+
+.Dropdown__profile .LeftSidebar__workspace-subhead {
+  display: flex;
+  flex-direction: row;
+  font-size: .9em;
+  align-items: center;
+}
+
+.Dropdown__profile .Btn__dropdown {
+  text-align: left;
+}
+
+.Dropdown__profile.Dropdown--opened,
+.Dropdown__profile .Btn__dropdown:hover {
+  background-color: #3E2E3D;
+}
+
+.Dropdown__profile.Dropdown--opened .LeftSidebar__workspace-subhead,
+.Dropdown__profile .Btn__dropdown:hover .LeftSidebar__workspace-subhead {
+  color: #FFF;
+}
+
+.Dropdown__profile .StatusIcon {
+  padding-right: 6px;
+}
+
+.Dropdown__profile .MenuItem--text {
+  margin-top: 5px;
+  padding-bottom: 8px;
+}
+
+.Dropdown__profile .Menu__dropdown .MenuItem > .MenuItem__content:not(.MenuItem__content--active) {
+  background-color: #FFF;
+  transition: background-color ease-in-out .15s;
+}
+
+.Dropdown__profile .Menu__dropdown .MenuItem > .MenuItem__content:not(.MenuItem__content--active):not(.MenuItem__content--text):hover {
+  background-color: rgba(223,230,233,.45);
+}
+
+.Dropdown__profile .MenuItem__switch-workspace {
+  border-top: 1px solid #E9E9E9;
+  padding-top: 15px;
+}
+
+.Dropdown__profile .MenuItem__switch-workspace .MenuItem__content,
+.Dropdown__profile .UserPreview__username {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.Dropdown__profile .UserPreview__email {
+  color: #636E72;
+}
+
+.Avatar__greeting {
+  margin-right: 10px
+}
+
+.Dropdown__profile .Btn__dropdown:focus {
+  outline: 0;
+  box-shadow: none;
+}
+
+.Dropdown__profile .Menu__dropdown {
+  left: 10px;
+}
+
+.Dropdown__profile .MenuItem__content {
+  color: #333;
+}
+
+.Dropdown__profile .MenuItem__content {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  display: block;
+}
+
+.Dropdown__profile .MenuItem__content--active {
+  background-color: #4C9689;
+  color: #FFF;
+}
+
+.Dropdown__profile .LeftSidebar__username {
+  text-align: left;
+}
+
+.Dropdown__profile .LeftSidebar__workspace {
+  font-weight: bold;
+  color: #FFF;
+  margin-bottom: 3px;
+  font-size: 17px;
 }
 
 @media screen and (max-width: 991px) {
