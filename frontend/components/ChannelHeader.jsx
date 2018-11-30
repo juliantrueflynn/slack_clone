@@ -2,9 +2,9 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from './Menu';
 import StatusIcon from './StatusIcon';
-import SearchBar from './SearchBar';
-import './ChannelHeader.css';
 import Button from './Button';
+import ChannelHeaderNavbar from './ChannelHeaderNavbar';
+import './ChannelHeader.css';
 
 class ChannelHeader extends React.Component {
   getPageTitle() {
@@ -23,45 +23,23 @@ class ChannelHeader extends React.Component {
     return title;
   }
 
-  handleLinkToggle(pathName) {
-    const {
-      history,
-      drawerType,
-      drawerClose,
-      match: { url, isExact },
-    } = this.props;
-
-    if (drawerType !== pathName) {
-      history.push(`${url}/${pathName}`);
-      return;
-    }
-
-    if (!isExact && drawerType === pathName) {
-      drawerClose();
-      history.push(url);
-    }
-  }
-
   render() {
     const {
       messages,
       channelsMap,
       users,
       accordionOpen,
-      drawerType,
       modalOpen,
-      searchQuery,
-      destroySearch,
-      destroyChannelSubRequest,
       chatPath,
-      match: { url },
+      match,
+      location,
+      ...props
     } = this.props;
 
     const title = this.getPageTitle();
     const channel = channelsMap[chatPath];
+    const { url } = match;
     const { dmUserSlug } = channel || {};
-
-    const isDetailsOpen = drawerType === 'details';
 
     let metaMenuItems = [];
 
@@ -115,76 +93,25 @@ class ChannelHeader extends React.Component {
       ];
     }
 
-    const userMenuItems = [
-      {
-        key: 'favorites',
-        icon: <FontAwesomeIcon icon={['fas', 'star']} size="lg" />,
-        onClick: () => this.handleLinkToggle('favorites'),
-        isItemActive: drawerType === 'favorites',
-      },
-      {
-        key: 'profile',
-        icon: <FontAwesomeIcon icon="user-cog" size="lg" />,
-        onClick: () => modalOpen('MODAL_PROFILE'),
-      },
-    ];
-
-    const channelMenuItems = [
-      {
-        key: 'details',
-        icon: <FontAwesomeIcon icon="info-circle" size="lg" fixedWidth />,
-        onClick: () => this.handleLinkToggle('details'),
-        isItemActive: isDetailsOpen,
-      },
-      {
-        key: 'edit-dropdown',
-        icon: <FontAwesomeIcon icon="cog" size="lg" fixedWidth />,
-        menuFor: 'channel-edit',
-        items: [
-          {
-            label: 'View channel details',
-            link: `${url}/details`,
-            hasNoDrawer: true,
-          },
-          {
-            label: `View ${title}’s profile`,
-            link: `${url}/team/${dmUserSlug}`,
-            hasNoDrawer: true,
-            condition: channel && channel.hasDm,
-          },
-          {
-            label: 'Edit channel',
-            onClick: () => modalOpen('MODAL_EDIT_CHANNEL'),
-            condition: channel && !channel.hasDm,
-          },
-          {
-            label: `Leave ${title}`,
-            onClick: () => destroyChannelSubRequest(channel.slug),
-            condition: channel && !channel.hasDm,
-          }
-        ],
-      }
-    ];
-
     return (
       <header className="ChannelHeader">
-        <Button buttonFor="leftsidebar-mobile" unStyled onClick={() => modalOpen('MODAL_LEFT_SIDEBAR')}>
+        <Button buttonFor="left-sidebar-mobile" unStyled onClick={() => modalOpen('MODAL_LEFT_SIDEBAR')}>
           <FontAwesomeIcon icon="bars" size="lg" />
         </Button>
         <div className="ChannelHeader__info">
           <h1 className="ChannelHeader__title">{title}</h1>
           <Menu menuFor="header-meta" items={metaMenuItems} isRow unStyled />
         </div>
-        <nav className="ChannelHeader__navigate">
-          {channel && <Menu items={channelMenuItems} menuFor="edit" isRow unStyled />}
-          <SearchBar
-            query={searchQuery}
-            destroySearch={destroySearch}
-            modalOpen={modalOpen}
-            hasClearIcon
-          />
-          <Menu menuFor="header-user" isRow items={userMenuItems} />
-        </nav>
+        <ChannelHeaderNavbar
+          chatTitle={title}
+          modalOpen={modalOpen}
+          channel={channel}
+          match={match}
+          messages={messages}
+          users={users}
+          channelsMap={channelsMap}
+          {...props}
+        />
       </header>
     );
   }

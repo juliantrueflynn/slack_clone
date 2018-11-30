@@ -9,7 +9,6 @@ import ChatModal from './ChatModal';
 import ChatsModal from './ChatsModal';
 import ChannelEditorModal from './ChannelEditorModal';
 import ReactionModal from './ReactionModal';
-import SearchModal from './SearchModal';
 import { PageRoutes } from '../util/routeUtil';
 import './Workspace.css';
 
@@ -64,11 +63,7 @@ class Workspace extends React.Component {
       channelsMap,
       chatPath,
       users,
-      searchQuery,
-      fetchSearchRequest,
-      destroySearch,
       currentUser,
-      messages,
       fetchChannelsRequest,
       toggleReaction,
       onReceived,
@@ -97,7 +92,6 @@ class Workspace extends React.Component {
     const cableChannels = channels.filter(ch => ch.isSub || ch.slug === chatPath).map(ch => (
       { channel: 'ChatChannel', channelSlug: ch.slug }
     ));
-    const searchMessages = messages.filter(msg => msg.isInSearch).sort((a, b) => b.id - a.id);
 
     return (
       <div className="Workspace">
@@ -142,19 +136,6 @@ class Workspace extends React.Component {
           <ReactionModal
             toggleReaction={toggleReaction}
             modalProps={modalProps}
-            modalClose={modalClose}
-          />
-        )}
-        {modalType === 'MODAL_SEARCH' && (
-          <SearchModal
-            searchQuery={searchQuery}
-            messages={searchMessages}
-            users={users}
-            channelsMap={channelsMap}
-            currentUserId={currentUser.id}
-            fetchSearchRequest={fetchSearchRequest}
-            destroySearch={destroySearch}
-            isSearchLoading={isLoading.search}
             modalClose={modalClose}
           />
         )}

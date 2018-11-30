@@ -2,10 +2,10 @@ import { connect } from 'react-redux';
 import withActionCable from './withActionCable';
 import withEntityWrapper from './withEntityWrapper';
 import { fetchWorkspaces } from '../actions/workspaceActions';
-import { fetchSearch, destroySearch, modalClose } from '../actions/uiActions';
+import { modalClose } from '../actions/uiActions';
 import { toggleReaction } from '../actions/reactionActions';
 import { fetchChannels } from '../actions/channelActions';
-import { selectSubbedWorkspaces, selectMessages } from '../reducers/selectors';
+import { selectSubbedWorkspaces } from '../reducers/selectors';
 import Workspace from './Workspace';
 
 const mapStateToProps = (state, { workspaceSlug }) => ({
@@ -13,18 +13,12 @@ const mapStateToProps = (state, { workspaceSlug }) => ({
   chatPath: state.ui.displayChannelSlug,
   workspaces: selectSubbedWorkspaces(state),
   modal: state.ui.displayModal,
-  searchQuery: state.ui.searchQuery,
-  messages: selectMessages(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),
   toggleReaction: reaction => dispatch(toggleReaction(reaction)),
   fetchChannelsRequest: workspaceSlug => dispatch(fetchChannels.request(workspaceSlug)),
-  fetchSearchRequest: (query, shouldNotSearch = false) => (
-    dispatch(fetchSearch.request(query, shouldNotSearch))
-  ),
-  destroySearch: () => dispatch(destroySearch()),
   modalClose: () => dispatch(modalClose()),
 });
 

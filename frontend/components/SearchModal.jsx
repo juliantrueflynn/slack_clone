@@ -147,7 +147,7 @@ class SearchModal extends React.Component {
 
     const isEmpty = !results.length && !peopleFilter.length && !channelFilter.length;
 
-    const overlayClassNames = classNames('Modal__overlay SearchModal', {
+    const overlayClassNames = classNames('Modal__overlay Modal__overlay--dark SearchModal', {
       'SearchModal--empty': isEmpty && !isNewSearch && !isSearchLoading,
       'SearchModal--loading': isSearchLoading,
       'SearchModal--new': isNewSearch,
