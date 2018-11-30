@@ -1,5 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { itemDecorate } from '../util/menuUtil';
 import Modal from './Modal';
+import Menu from './Menu';
+import UserPreview from './UserPreview';
+import StatusIcon from './StatusIcon';
+import Dropdown from './Dropdown';
+import Button from './Button';
 import LeftSidebarMenus from './LeftSidebarMenus';
 import './LeftSidebar.css';
 
@@ -53,15 +60,16 @@ class LeftSidebar extends React.Component {
     const {
       channelsMap,
       channelSubsMap,
+      hasUnreadConvos,
       currentUser,
       users,
       workspace,
       modalClose,
       isModalOpen,
-      drawer,
-      history,
-      updateChannelSubRequest,
-      ...props
+      workspaces,
+      chatPath,
+      modalOpen,
+      match: { url },
     } = this.props;
 
     const user = users[currentUser.slug];
@@ -91,22 +99,106 @@ class LeftSidebar extends React.Component {
       return ch;
     });
 
-    const Menus = (
-      <LeftSidebarMenus
-        user={user}
-        hasUnreadChannels={hasUnreadChannels}
-        dmChannels={dmChannels}
-        subbedChannels={subbedChannels}
-        workspaceTitle={workspace.title}
-        pushHistory={this.handleHistoryPush}
-        unsubChannel={this.handleDmUnsubClick}
-        {...props}
-      />
-    );
+    const ddDefaults = [
+      { label: <UserPreview user={user} avatarSize="40" hasNoStatus alignCenter /> },
+      {
+        label: 'Home',
+        link: '/',
+        exact: true,
+        hasNoDrawer: true,
+      },
+      { label: 'Profile & Account', link: `${url}/team/${user.slug}`, hasNoDrawer: true },
+      { key: 'switch-workspace', label: 'Switch Workspace' },
+    ];
+
+    const userItems = ddDefaults.concat(workspaces.map(item => itemDecorate(item, {
+      hasNoDrawer: true,
+    })));
+
+    const quickLinksList = [
+      {
+        icon: <FontAwesomeIcon icon="align-left" fixedWidth />,
+        label: 'All Unreads',
+        onClick: () => this.handleHistoryPush('unreads'),
+        isItemActive: chatPath === 'unreads',
+        modifierClassName: hasUnreadChannels ? 'unread' : null,
+      },
+      {
+        icon: <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />,
+        label: 'All Threads',
+        onClick: () => this.handleHistoryPush('threads'),
+        isItemActive: chatPath === 'threads',
+        modifierClassName: hasUnreadConvos ? 'unread' : null,
+      },
+    ];
+
+    const channelsItems = subbedChannels.map(ch => itemDecorate(ch, {
+      icon: <FontAwesomeIcon icon="hashtag" size="sm" fixedWidth />,
+      urlPrefix: `${url}/messages/`,
+      modifierClassName: ch.hasUnreads ? 'unread' : null,
+      isActive: (match, location) => (
+        match && location.pathname.includes(`messages/${chatPath}`)
+      ),
+    }));
+
+    const dmChannelsItems = dmChannels.map(({ status, ...ch }) => itemDecorate(ch, {
+      icon: <StatusIcon member={{ status }} />,
+      urlPrefix: `${url}/messages/`,
+      modifierClassName: ch.hasUnreads ? 'unread' : null,
+      label: (
+        <Fragment>
+          {ch.title}
+          <Button id={ch.slug} unStyled onClick={this.handleDmUnsubClick}>
+            <FontAwesomeIcon icon="times-circle" />
+          </Button>
+        </Fragment>
+      ),
+    }));
+
+    const sidebarMenuItems = [
+      {
+        key: 'profile',
+        component: Dropdown,
+        items: userItems,
+        props: {
+          togglerText: (
+            <Fragment>
+              <div className="LeftSidebar__workspace">{workspace.title}</div>
+              <div className="LeftSidebar__workspace-subhead">
+                <StatusIcon member={user} size="sm" />
+                <div className="LeftSidebar__username">{user.username}</div>
+              </div>
+            </Fragment>
+          ),
+        },
+      },
+      { key: 'quicklinks', component: Menu, items: quickLinksList },
+      {
+        key: 'chats',
+        component: Menu,
+        items: channelsItems,
+        title: (
+          <Fragment>
+            <Button unStyled buttonFor="chats" onClick={() => modalOpen('MODAL_CHATS')}>
+              Channels
+            </Button>
+            <Button unStyled buttonFor="widget" onClick={() => modalOpen('MODAL_CHAT')}>
+              <FontAwesomeIcon icon={['fas', 'plus-circle']} />
+            </Button>
+          </Fragment>
+        ),
+      },
+      {
+        key: 'dm-chats',
+        component: Menu,
+        items: dmChannelsItems,
+        title: 'Direct Messages',
+      }
+    ];
 
     return (
       <aside className="LeftSidebar">
-        {Menus}
+        <LeftSidebarMenus menuGroups={sidebarMenuItems} />
         <Modal
           isOpen={isModalOpen}
           modalFor="left-sidebar"
@@ -115,7 +207,7 @@ class LeftSidebar extends React.Component {
           unStyled
           lightOverlay
         >
-          {Menus}
+          <LeftSidebarMenus menuGroups={sidebarMenuItems} />
         </Modal>
       </aside>
     );

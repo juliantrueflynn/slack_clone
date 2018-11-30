@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import Button from './Button';
 import LinkWithDrawer from '../util/linkUtil';
@@ -29,7 +29,6 @@ class MenuItem extends React.Component {
       icon,
       keyId,
       label,
-      altClassName,
       modifierClassName,
       onClick,
       toggleMenu,
@@ -58,16 +57,10 @@ class MenuItem extends React.Component {
       itemType = 'text';
     }
 
-    const iconAndLabelText = (
-      <Fragment>
-        {icon && <span className="MenuItem__icon">{icon}</span>}
-        {label}
-      </Fragment>
-    );
+    const itemIcon = icon && <span className="MenuItem__icon">{icon}</span>;
 
     const itemClassNames = classNames(className, {
       [`MenuItem--${itemType}`]: itemType,
-      [`MenuItem__${altClassName}`]: altClassName,
       [`MenuItem__${keyId}`]: keyId,
       [`MenuItem__${keyId}--${modifierClassName}`]: keyId && modifierClassName,
       [`MenuItem--${modifierClassName}`]: !keyId && modifierClassName,
@@ -88,20 +81,30 @@ class MenuItem extends React.Component {
             activeClassName="MenuItem__content--active"
             {...itemProps}
           >
-            {iconAndLabelText}
+            {itemIcon}
+            {label}
           </LinkWithDrawer>
         )}
 
         {itemType === 'dropdown' && (
-          <Dropdown items={items} {...itemProps}>{iconAndLabelText}</Dropdown>
+          <Dropdown items={items} {...itemProps}>
+            {itemIcon}
+            {label}
+          </Dropdown>
         )}
 
         {itemType === 'btn' && (
-          <Button className={contentClassNames} {...itemProps}>{iconAndLabelText}</Button>
+          <Button className={contentClassNames} {...itemProps}>
+            {itemIcon}
+            {label}
+          </Button>
         )}
 
         {itemType === 'text' && (
-          <span className={contentClassNames} {...itemProps}>{iconAndLabelText}</span>
+          <span className={contentClassNames} {...itemProps}>
+            {itemIcon}
+            {label}
+          </span>
         )}
       </li>
     );
