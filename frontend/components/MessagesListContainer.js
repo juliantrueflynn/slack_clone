@@ -13,7 +13,7 @@ import { modalOpen } from '../actions/uiActions';
 import MessagesList from './MessagesList';
 
 const mapStateToProps = (state, { match: { url } }) => ({
-  currentUserId: state.session.currentUser.id,
+  currentUserSlug: state.session.currentUser.slug,
   users: state.entities.members,
   pinsMap: state.entities.pins,
   url,

@@ -7,11 +7,11 @@ import './ReactionsItem.css';
 const ReactionItem = ({
   reaction,
   reactionStyle,
-  currentUserId,
+  currentUserSlug,
   toggleClick,
 }) => {
   const reactionClassNames = classNames('ReactionsItem', {
-    'ReactionsItem--has-user': reaction.userIds.includes(currentUserId),
+    'ReactionsItem--has-user': reaction.userSlugs.includes(currentUserSlug),
   });
 
   return (
@@ -21,7 +21,7 @@ const ReactionItem = ({
           {`:${reaction.emoji}:`}
         </Emojify>
         <div className="ReactionItem__counter">
-          {reaction.userIds.length}
+          {reaction.userSlugs.length}
         </div>
       </Button>
     </li>

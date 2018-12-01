@@ -21,11 +21,11 @@ class Reactions extends React.Component {
 
     const reactionCounts = reactions.reduce((acc, curr) => {
       if (!acc[curr.emoji]) {
-        acc[curr.emoji] = { userIds: [] };
+        acc[curr.emoji] = { userSlugs: [] };
       }
 
       acc[curr.emoji].emoji = curr.emoji;
-      acc[curr.emoji].userIds.push(curr.userId);
+      acc[curr.emoji].userSlugs.push(curr.userSlug);
 
       return acc;
     }, {});

@@ -8,6 +8,7 @@ const Drawer = ({
   drawerType,
   closeDrawer,
   drawerTitle,
+  users,
   messages,
   currentUserSlug,
   children,
@@ -15,6 +16,7 @@ const Drawer = ({
   const isConvo = drawerType === 'convo';
   const lastMessage = isConvo ? messages[messages.length - 1] : null;
   const drawerClassNames = `Drawer Drawer__${drawerType}`;
+  const drawerProps = { users, messages };
 
   return (
     <div className={drawerClassNames}>
@@ -34,14 +36,10 @@ const Drawer = ({
               currentUserSlug={currentUserSlug}
               shouldAutoScroll
             >
-              {children}
+              {children(drawerProps)}
             </ScrollBar>
           )}
-          {isConvo || (
-            <ScrollBar>
-              {children}
-            </ScrollBar>
-          )}
+          {isConvo || <ScrollBar>{children(drawerProps)}</ScrollBar>}
         </div>
       </div>
     </div>

@@ -25,22 +25,31 @@ class DrawerSwitch extends React.Component {
     }
   }
 
-  getMessages(type) {
-    const { messagesMap, chatPath, favorites } = this.props;
+  getMessages() {
+    const {
+      drawerType,
+      messagesMap,
+      chatPath,
+      favorites,
+    } = this.props;
 
     const messages = Object.values(messagesMap);
 
-    if (type === 'details') {
+    if (drawerType === 'details') {
       return messages.filter(msg => msg.pinId && msg.channelSlug === chatPath);
     }
 
-    if (type === 'favorites') {
+    if (drawerType === 'favorites') {
       return favorites.sort((a, b) => (
         new Date(b.createdAt) - new Date(a.createdAt)
       )).map(msg => messagesMap[msg.messageSlug]);
     }
 
-    return messagesMap;
+    if (drawerType === 'convo') {
+      return messagesMap;
+    }
+
+    return [];
   }
 
   getChannel() {
@@ -102,6 +111,8 @@ class DrawerSwitch extends React.Component {
       createChannelRequest,
       destroyPinRequest,
       modalOpen,
+      history,
+      match: { params: { workspaceSlug } },
     } = this.props;
 
     const channel = this.getChannel();
@@ -110,46 +121,47 @@ class DrawerSwitch extends React.Component {
       return null;
     }
 
-    const messages = this.getMessages(drawerType);
+    const currentUserSlug = currentUser.slug;
+    const drawers = [
+      {
+        component: UserDrawer,
+        path: 'team',
+        drawerSlug,
+        createChannelRequest,
+        history,
+        workspaceSlug,
+        currentUserSlug,
+        modalOpen,
+      },
+      { component: FavoritesDrawer, path: 'favorites' },
+      { component: MessageThreadDrawer, path: 'convo' },
+      {
+        component: ChannelDetailsDrawer,
+        path: 'details',
+        channel,
+        accordion,
+        isLoading: isLoading.drawer,
+        destroyPinRequest,
+        currentUserSlug,
+        modalOpen,
+      },
+    ];
 
-    return (
-      <Drawer
-        isLoading={isLoading.drawer}
-        drawerType={drawerType}
-        drawerTitle={this.getDrawerTitle()}
-        closeDrawer={this.handleClose}
-        messages={messages}
-        currentUserSlug={currentUser.slug}
-      >
-        {drawerType === 'team' && (
-          <UserDrawer
-            userSlug={drawerSlug}
-            currentUser={currentUser}
-            users={users}
-            createChannelRequest={createChannelRequest}
-            modalOpen={modalOpen}
-          />
-        )}
-        {drawerType === 'favorites' && (
-          <FavoritesDrawer messages={messages} users={users} />
-        )}
-        {drawerType === 'convo' && (
-          <MessageThreadDrawer messages={messages} users={users} />
-        )}
-        {(drawerType === 'details' && channel) && (
-          <ChannelDetailsDrawer
-            messages={messages}
-            users={users}
-            currentUserId={currentUser.id}
-            channel={channel}
-            accordion={accordion}
-            isLoading={isLoading.drawer}
-            destroyPinRequest={destroyPinRequest}
-            modalOpen={modalOpen}
-          />
-        )}
-      </Drawer>
-    );
+    return drawers.filter(drawer => drawer.path === drawerType)
+      .map(({ component: Component, path, ...props }) => (
+        <Drawer
+          key={path}
+          isLoading={isLoading.drawer}
+          users={users}
+          drawerType={drawerType}
+          drawerTitle={this.getDrawerTitle()}
+          modalOpen={modalOpen}
+          closeDrawer={this.handleClose}
+          messages={this.getMessages()}
+          currentUserSlug={currentUser.slug}
+          children={drawerProps => <Component {...props} {...drawerProps} />}
+        />
+      ));
   }
 }
 

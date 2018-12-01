@@ -50,7 +50,7 @@ class Message extends React.Component {
       users,
       pinsMap,
       reactions,
-      currentUserId,
+      currentUserSlug,
       url,
       messageDate,
       toggleEditor,
@@ -106,11 +106,11 @@ class Message extends React.Component {
               isFavorited={message.favoriteId}
               users={users}
               matchUrl={url}
-              currentUserId={currentUserId}
+              currentUserSlug={currentUserSlug}
             />
           )}
           <MessageHoverMenu
-            currentUserId={currentUserId}
+            currentUserSlug={currentUserSlug}
             ddToggle={this.handleDdToggle}
             toggleEditor={toggleEditor}
             matchUrl={url}
@@ -140,7 +140,7 @@ class Message extends React.Component {
                 <Reactions
                   toggleReaction={toggleReaction}
                   reactions={message.reactions}
-                  currentUserId={currentUserId}
+                  currentUserSlug={currentUserSlug}
                   messageSlug={message.slug}
                 />
               )}

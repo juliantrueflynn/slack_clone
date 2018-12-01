@@ -5,7 +5,7 @@ import AccordionItemBody from './AccordionItemBody';
 
 const AccordionBodyPins = ({
   messages,
-  currentUserId,
+  currentUserSlug,
   destroyPinRequest,
   match: { url },
 }) => {
@@ -18,7 +18,7 @@ const AccordionBodyPins = ({
         <PinnedMessagesItem
           key={message.id}
           message={message}
-          currentUserId={currentUserId}
+          currentUserSlug={currentUserSlug}
           url={url}
           destroyPinRequest={destroyPinRequest}
         />

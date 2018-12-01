@@ -9,7 +9,7 @@ const MessageHighlight = ({
   pinsMap,
   isFavorited,
   users,
-  currentUserId,
+  currentUserSlug,
   matchUrl,
 }) => {
   let pin;
@@ -22,7 +22,7 @@ const MessageHighlight = ({
     pin = pinsMap[pinId];
     user = Object.assign({}, users[pin.userSlug]);
 
-    if (currentUserId === user.id) {
+    if (currentUserSlug === user.slug) {
       user.username = 'you';
     }
 

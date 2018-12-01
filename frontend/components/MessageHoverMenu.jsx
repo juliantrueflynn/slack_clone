@@ -47,9 +47,9 @@ class MessageHoverMenu extends React.Component {
       slug,
       favoriteId,
       entityType,
-      authorId,
+      authorSlug,
       pinId,
-      currentUserId,
+      currentUserSlug,
       createPinRequest,
       destroyPinRequest,
       ddToggle,
@@ -59,7 +59,7 @@ class MessageHoverMenu extends React.Component {
     } = this.props;
 
     const isMessageType = entityType === 'entry';
-    const byCurrUser = currentUserId === authorId;
+    const byCurrUser = currentUserSlug === authorSlug;
     const favIcon = favoriteId ? ['fas', 'star'] : ['far', 'star'];
     const favClassName = favoriteId ? 'solid' : 'empty';
 

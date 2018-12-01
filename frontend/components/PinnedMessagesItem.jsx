@@ -7,7 +7,7 @@ import './PinnedMessagesItem.css';
 
 const PinnedMessagesItem = ({
   message,
-  currentUserId,
+  currentUserSlug,
   users,
   url,
   destroyPinRequest,
@@ -29,7 +29,7 @@ const PinnedMessagesItem = ({
           message={message}
           messageDate={messageDate}
           users={users}
-          currentUserId={currentUserId}
+          currentUserSlug={currentUserSlug}
           url={url}
           shouldHideEngagement
           shouldHideAvatar

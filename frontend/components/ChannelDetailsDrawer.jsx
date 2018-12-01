@@ -58,7 +58,7 @@ class ChannelDetailsDrawer extends React.Component {
       isLoading,
       destroyPinRequest,
       modalOpen,
-      currentUserId,
+      currentUserSlug,
     } = this.props;
     const { ...state } = this.state;
 
@@ -91,7 +91,7 @@ class ChannelDetailsDrawer extends React.Component {
       body: (
         <AccordionBodyPins
           messages={messages}
-          currentUserId={currentUserId}
+          currentUserSlug={currentUserSlug}
           destroyPinRequest={destroyPinRequest}
         />
       ),
