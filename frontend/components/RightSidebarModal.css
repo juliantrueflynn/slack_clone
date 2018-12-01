@@ -1,0 +1,37 @@
+.Modal__right-sidebar {
+  background-color: #F7FAFC;
+  -webkit-box-shadow: -2px 0px 6px 0px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: -2px 0px 6px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: -2px 0px 6px 0px rgba(0, 0, 0, 0.1);
+}
+
+.Modal__right-sidebar .MenuItem,
+.Modal__right-sidebar .MenuItem__content {
+  width: 100%;
+  text-align: left;
+}
+
+.Menu__right-sidebar {
+  margin: 10px 0;
+}
+
+.Menu__right-sidebar .MenuItem__content {
+  display: flex;
+  align-items: center;
+}
+
+.Menu__right-sidebar .MenuItem__content > span {
+  display: block;
+}
+
+.Menu__right-sidebar .MenuItem__icon {
+  color: #636E72;
+  padding: 10px 12px;
+}
+
+.RightSidebarModal__item-label {
+  padding: 10px 0;
+  margin-right: 12px;
+  border-bottom: 1px solid #dfe6e9;
+  width: 100%;
+}

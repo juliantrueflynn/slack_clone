@@ -159,6 +159,7 @@ class SearchModal extends React.Component {
         modalFor="search"
         close={this.handleClose}
         overlayClassName={overlayClassNames}
+        hasDarkOverlay
         unStyled
       >
         <div className="SearchModal__searchbar">

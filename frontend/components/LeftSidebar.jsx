@@ -210,6 +210,7 @@ class LeftSidebar extends React.Component {
           modalFor="left-sidebar"
           modalPos="left"
           close={modalClose}
+          hasDarkOverlay
           unStyled
         >
           <LeftSidebarMenus menuGroups={sidebarMenuItems} />

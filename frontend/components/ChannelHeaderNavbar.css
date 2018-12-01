@@ -23,7 +23,7 @@
 .ChannelHeaderNavbar .Dropdown__channel-edit,
 .ChannelHeaderNavbar .Menu__edit > .MenuItem > .MenuItem__content,
 .ChannelHeaderNavbar .Menu__header-user .MenuItem__content {
-  padding: 7px;
+  padding: 6px;
   border-radius: 4px;
 }
 
@@ -50,6 +50,10 @@
   border-radius: 4px;
   border: 1px solid #B2BEC3;
   position: relative;
+}
+
+.ChannelHeaderNavbar > .Menu .MenuItem__icon > svg {
+  font-size: 1.3em;
 }
 
 .ChannelHeaderNavbar .SearchBar .Btn__nav-search {

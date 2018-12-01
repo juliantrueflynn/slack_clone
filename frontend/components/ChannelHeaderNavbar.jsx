@@ -13,8 +13,14 @@ class ChannelHeaderNavbar extends React.Component {
       history,
       drawerType,
       drawerClose,
+      modalType,
+      modalClose,
       match: { url, isExact },
     } = this.props;
+
+    if (modalType) {
+      modalClose();
+    }
 
     if (drawerType !== pathName) {
       history.push(`${url}/${pathName}`);
@@ -54,13 +60,14 @@ class ChannelHeaderNavbar extends React.Component {
       channelMenuItems = [
         {
           key: 'details',
-          icon: <FontAwesomeIcon icon="info-circle" size="lg" fixedWidth />,
+          title: 'Channel Details',
+          icon: <FontAwesomeIcon icon="info-circle" fixedWidth />,
           onClick: () => this.handleLinkToggle('details'),
           isItemActive: drawerType === 'details',
         },
         {
           key: 'edit-dropdown',
-          icon: <FontAwesomeIcon icon="cog" size="lg" fixedWidth />,
+          icon: <FontAwesomeIcon icon="cog" fixedWidth />,
           menuFor: 'channel-edit',
           items: [
             {
@@ -92,16 +99,20 @@ class ChannelHeaderNavbar extends React.Component {
     const userMenuItems = [
       {
         key: 'favorites',
-        icon: <FontAwesomeIcon icon={['fas', 'star']} size="lg" />,
+        title: 'Starred Items',
+        icon: <FontAwesomeIcon icon="star" />,
         onClick: () => this.handleLinkToggle('favorites'),
         isItemActive: drawerType === 'favorites',
       },
       {
         key: 'profile',
-        icon: <FontAwesomeIcon icon="user-cog" size="lg" />,
+        title: 'Edit Profile',
+        icon: <FontAwesomeIcon icon="user-cog" />,
         onClick: () => modalOpen('MODAL_PROFILE'),
       },
     ];
+
+    const mobileMenuItems = userMenuItems.concat(channelMenuItems[0]);
 
     return (
       <nav className="ChannelHeaderNavbar">
@@ -129,7 +140,15 @@ class ChannelHeaderNavbar extends React.Component {
             modalClose={modalClose}
           />
         )}
-        {modalType === 'MODAL_RIGHT_SIDEBAR' && <RightSidebarModal modalClose={modalClose} />}
+        {modalType === 'MODAL_RIGHT_SIDEBAR' && (
+          <RightSidebarModal
+            menuItems={mobileMenuItems}
+            drawerType={drawerType}
+            toggleLink={this.handleLinkToggle}
+            modalOpen={modalOpen}
+            modalClose={modalClose}
+          />
+        )}
       </nav>
     );
   }

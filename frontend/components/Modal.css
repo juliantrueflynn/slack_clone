@@ -65,8 +65,8 @@
   right: 0;
 }
 
-.Modal__overlay--pos {
-  background-color: rgba(255, 255, 255, 0.6);
+.Modal__overlay--dark {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .Modal__overlay--styled .Modal__body > .Btn__close {
