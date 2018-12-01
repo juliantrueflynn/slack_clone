@@ -22,7 +22,7 @@ const Avatar = ({
     slug,
   } = user;
 
-  const userSlug = slug || authorSlug;
+  const userSlug = authorSlug || slug;
   const avatarLink = `${baseUrl}/team/${userSlug}`;
   const imgSize = size || 36;
 

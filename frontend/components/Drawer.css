@@ -77,3 +77,7 @@
 .Drawer__convo .Message:nth-child(2) {
   margin-top: 18px;
 }
+
+.Modal__overlay-drawer {
+  display: none;
+}

@@ -1,13 +1,38 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from './Modal';
 import Menu from './Menu';
 import './RightSidebarModal.css';
 
-const RightSidebarModal = ({ modalClose, menuItems }) => {
-  const items = menuItems.map(item => ({
-    label: <span className="RightSidebarModal__item-label">{item.title}</span>,
-    ...item
-  }));
+const RightSidebarModal = ({
+  modalClose,
+  modalOpen,
+  drawerType,
+  channel,
+  toggleLink,
+}) => {
+  const mobileMenuItems = [
+    {
+      key: 'details',
+      label: 'Channel Details',
+      icon: <FontAwesomeIcon icon="info-circle" fixedWidth />,
+      onClick: () => toggleLink('details', true),
+      isItemActive: channel && drawerType === 'details',
+    },
+    {
+      key: 'favorites',
+      label: 'Starred Items',
+      icon: <FontAwesomeIcon icon="star" />,
+      onClick: () => toggleLink('favorite', true),
+      isItemActive: drawerType === 'favorites',
+    },
+    {
+      key: 'profile',
+      label: 'Edit Profile',
+      icon: <FontAwesomeIcon icon="user-cog" />,
+      onClick: () => modalOpen('MODAL_PROFILE'),
+    }
+  ];
 
   return (
     <Modal
@@ -18,7 +43,7 @@ const RightSidebarModal = ({ modalClose, menuItems }) => {
       hasDarkOverlay
       unStyled
     >
-      <Menu items={items} menuFor="right-sidebar" unStyled />
+      <Menu items={mobileMenuItems} menuFor="right-sidebar" unStyled />
     </Modal>
   );
 };

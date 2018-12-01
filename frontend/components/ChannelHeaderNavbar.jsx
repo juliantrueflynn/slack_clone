@@ -8,18 +8,28 @@ import RightSidebarModal from './RightSidebarModal';
 import './ChannelHeaderNavbar.css';
 
 class ChannelHeaderNavbar extends React.Component {
-  handleLinkToggle(pathName) {
+  constructor(props) {
+    super(props);
+    this.handleLinkToggle = this.handleLinkToggle.bind(this);
+  }
+
+  handleLinkToggle(pathName, isMobile = false) {
     const {
       history,
       drawerType,
       drawerClose,
       modalType,
+      modalOpen,
       modalClose,
       match: { url, isExact },
     } = this.props;
 
-    if (modalType) {
+    if (modalType && !isMobile) {
       modalClose();
+    }
+
+    if (isMobile) {
+      modalOpen('MODAL_DRAWER_MOBILE');
     }
 
     if (drawerType !== pathName) {
@@ -60,7 +70,6 @@ class ChannelHeaderNavbar extends React.Component {
       channelMenuItems = [
         {
           key: 'details',
-          title: 'Channel Details',
           icon: <FontAwesomeIcon icon="info-circle" fixedWidth />,
           onClick: () => this.handleLinkToggle('details'),
           isItemActive: drawerType === 'details',
@@ -99,20 +108,16 @@ class ChannelHeaderNavbar extends React.Component {
     const userMenuItems = [
       {
         key: 'favorites',
-        title: 'Starred Items',
         icon: <FontAwesomeIcon icon="star" />,
         onClick: () => this.handleLinkToggle('favorites'),
         isItemActive: drawerType === 'favorites',
       },
       {
         key: 'profile',
-        title: 'Edit Profile',
         icon: <FontAwesomeIcon icon="user-cog" />,
         onClick: () => modalOpen('MODAL_PROFILE'),
       },
     ];
-
-    const mobileMenuItems = userMenuItems.concat(channelMenuItems[0]);
 
     return (
       <nav className="ChannelHeaderNavbar">
@@ -142,9 +147,9 @@ class ChannelHeaderNavbar extends React.Component {
         )}
         {modalType === 'MODAL_RIGHT_SIDEBAR' && (
           <RightSidebarModal
-            menuItems={mobileMenuItems}
             drawerType={drawerType}
             toggleLink={this.handleLinkToggle}
+            channel={channel}
             modalOpen={modalOpen}
             modalClose={modalClose}
           />

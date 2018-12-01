@@ -8,21 +8,41 @@ import ChannelDetailsDrawer from './ChannelDetailsDrawer';
 class DrawerSwitch extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { isMobile: false };
     this.handleClose = this.handleClose.bind(this);
+    this.handleModalClose = this.handleModalClose.bind(this);
+    this.handleResize = this.handleResize.bind(this);
   }
 
   componentDidMount() {
     const { openDrawer, drawerType, drawerSlug } = this.props;
 
     openDrawer({ drawerType, drawerSlug });
+
+    this.handleResize();
+    window.addEventListener('resize', this.handleResize);
   }
 
   componentDidUpdate(prevProps) {
-    const { drawerType, fetchEntityRequest } = this.props;
+    const {
+      drawerType,
+      fetchEntityRequest,
+      isModalOpen,
+      modalOpen,
+    } = this.props;
+    const { isMobile } = this.state;
 
     if (drawerType && drawerType !== prevProps.drawerType) {
       fetchEntityRequest();
     }
+
+    if (!prevProps.isModalOpen && !isModalOpen && isMobile) {
+      modalOpen('MODAL_DRAWER_MOBILE', null);
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
   }
 
   getMessages() {
@@ -89,6 +109,16 @@ class DrawerSwitch extends React.Component {
     return title;
   }
 
+  handleResize() {
+    const { isMobile } = this.state;
+    const { innerWidth } = window;
+    const nextState = innerWidth <= 768;
+
+    if (isMobile !== nextState) {
+      this.setState({ isMobile: nextState });
+    }
+  }
+
   handleClose() {
     const {
       closeDrawer,
@@ -98,6 +128,13 @@ class DrawerSwitch extends React.Component {
 
     closeDrawer();
     history.replace(`/${workspaceSlug}/${drawerParent}`);
+  }
+
+  handleModalClose() {
+    const { modalClose } = this.props;
+
+    modalClose();
+    this.handleClose();
   }
 
   render() {
@@ -110,11 +147,12 @@ class DrawerSwitch extends React.Component {
       accordion,
       createChannelRequest,
       destroyPinRequest,
+      isModalOpen,
       modalOpen,
       history,
       match: { params: { workspaceSlug } },
     } = this.props;
-
+    const { isMobile } = this.state;
     const channel = this.getChannel();
 
     if (drawerType === 'details' && !channel) {
@@ -147,19 +185,23 @@ class DrawerSwitch extends React.Component {
       },
     ];
 
-    return drawers.filter(drawer => drawer.path === drawerType)
+    return drawers
+      .filter(drawer => drawer.path === drawerType)
       .map(({ component: Component, path, ...props }) => (
         <Drawer
           key={path}
           isLoading={isLoading.drawer}
-          users={users}
           drawerType={drawerType}
           drawerTitle={this.getDrawerTitle()}
-          modalOpen={modalOpen}
           closeDrawer={this.handleClose}
           messages={this.getMessages()}
-          currentUserSlug={currentUser.slug}
-          children={drawerProps => <Component {...props} {...drawerProps} />}
+          currentUserSlug={currentUserSlug}
+          isMobile={isMobile}
+          isModalOpen={isModalOpen}
+          modalClose={this.handleModalClose}
+          children={drawerProps => (
+            <Component users={users} {...props} {...drawerProps} />
+          )}
         />
       ));
   }
