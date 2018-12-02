@@ -27,7 +27,7 @@ class DrawerSwitch extends React.Component {
     const {
       drawerType,
       fetchEntityRequest,
-      isModalOpen,
+      modalType,
       modalOpen,
     } = this.props;
     const { isMobile } = this.state;
@@ -36,7 +36,7 @@ class DrawerSwitch extends React.Component {
       fetchEntityRequest();
     }
 
-    if (!prevProps.isModalOpen && !isModalOpen && isMobile) {
+    if (!prevProps.modalType && !modalType && isMobile) {
       modalOpen('MODAL_DRAWER_MOBILE', null);
     }
   }
@@ -149,6 +149,7 @@ class DrawerSwitch extends React.Component {
       destroyPinRequest,
       isModalOpen,
       modalOpen,
+      modalType,
       history,
       match: { params: { workspaceSlug } },
     } = this.props;
@@ -198,6 +199,7 @@ class DrawerSwitch extends React.Component {
           currentUserSlug={currentUserSlug}
           isMobile={isMobile}
           isModalOpen={isModalOpen}
+          modalType={modalType}
           modalClose={this.handleModalClose}
           children={drawerProps => (
             <Component users={users} {...props} {...drawerProps} />

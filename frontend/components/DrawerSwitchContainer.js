@@ -16,7 +16,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
   favorites: Object.values(state.entities.favorites),
   chatPath: state.ui.displayChannelSlug,
   drawerType: params.drawerType,
-  isModalOpen: state.ui.displayModal.modalType === 'MODAL_DRAWER_MOBILE',
+  modalType: state.ui.displayModal.modalType,
   accordion: state.ui.accordion.details,
 });
 

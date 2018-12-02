@@ -12,7 +12,7 @@ const Drawer = ({
   messages,
   currentUserSlug,
   isMobile,
-  isModalOpen,
+  modalType,
   modalClose,
   children,
 }) => {
@@ -21,6 +21,8 @@ const Drawer = ({
   const drawerClassNames = `Drawer Drawer__${drawerType}`;
 
   if (isMobile) {
+    const isModalOpen = modalType === 'MODAL_DRAWER_MOBILE';
+
     return (
       <Modal
         modalFor="drawer"
