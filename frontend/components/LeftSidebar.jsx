@@ -205,16 +205,18 @@ class LeftSidebar extends React.Component {
     return (
       <aside className="LeftSidebar">
         <LeftSidebarMenus menuGroups={sidebarMenuItems} />
-        <Modal
-          isOpen={isModalOpen}
-          modalFor="left-sidebar"
-          modalPos="left"
-          close={modalClose}
-          hasDarkOverlay
-          unStyled
-        >
-          <LeftSidebarMenus menuGroups={sidebarMenuItems} />
-        </Modal>
+        {isModalOpen && (
+          <Modal
+            isOpen
+            modalFor="left-sidebar"
+            modalPos="left"
+            close={modalClose}
+            hasDarkOverlay
+            unStyled
+          >
+            <LeftSidebarMenus menuGroups={sidebarMenuItems} />
+          </Modal>
+        )}
       </aside>
     );
   }

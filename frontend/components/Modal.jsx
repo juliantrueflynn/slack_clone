@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import classNames from 'classnames';
 import ReactModal from 'react-modal';
 import Button from './Button';
@@ -29,8 +29,7 @@ class Modal extends React.Component {
     } = this.props;
 
     const style = { content: { border: 'none' } };
-    const overlayClassNames = classNames('Modal__overlay', {
-      'Modal__overlay--unstyled': unStyled,
+    const overlayClassName = classNames('Modal__overlay', {
       'Modal__overlay--styled': !unStyled,
       [`Modal__overlay--${modalFor}`]: modalFor,
       'Modal__overlay--pos': modalPos,
@@ -47,29 +46,29 @@ class Modal extends React.Component {
       <ReactModal
         style={style}
         className={modalClassNames}
-        overlayClassName={overlayClassNames}
+        overlayClassName={overlayClassName}
         contentLabel={modalTitle}
         onRequestClose={this.handleClose}
         shouldCloseOnOverlayClick
         {...props}
       >
-        <div className="Modal__body">
+        <Fragment>
           {unStyled || (
             <Button buttonFor="close" unStyled onClick={this.handleClose}>
               <span role="img" aria-label="Close drawer">&times;</span>
             </Button>
           )}
-          <div className="Modal__inner-body">
-            {modalTitle && (
-              <header className="Modal__header">
-                <h2 className="Modal__title">
-                  {modalTitle}
-                </h2>
-              </header>
-            )}
-            {children}
-          </div>
-        </div>
+          {modalTitle && (
+            <header className="Modal__header">
+              <h2 className="Modal__title">{modalTitle}</h2>
+
+              <Button buttonFor="close" unStyled onClick={this.handleClose}>
+                <span role="img" aria-label="Close drawer">&times;</span>
+              </Button>
+            </header>
+          )}
+          <div className="Modal__body">{children}</div>
+        </Fragment>
       </ReactModal>
     );
   }

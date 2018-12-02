@@ -1,4 +1,4 @@
-.Drawer {
+.ChatPageSwitch__row > .Drawer {
   max-width: 480px;
   border-left: 1px solid #E9E9E9;
   display: flex;
@@ -78,6 +78,6 @@
   margin-top: 18px;
 }
 
-.Modal__overlay-drawer {
-  display: none;
+.Modal__overlay--styled .Drawer form .Btn__group:last-child {
+  margin-top: 0;
 }

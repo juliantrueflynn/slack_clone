@@ -8,26 +8,22 @@
   height: initial;
 }
 
-.SearchModal .Modal__body,
-.SearchModal .Modal__inner-body {
+.SearchModal .Modal__body {
   height: 100%;
   width: 100%;
+  padding-top: 50px;
+  overflow: hidden;
+  border-radius: 6px;
+  background-color: #F7FAFC;
+  position: relative;
 }
 
 .SearchModal--new .Modal {
   bottom: initial;
 }
 
-.SearchModal--new .Modal__inner-body {
+.SearchModal--new .Modal__body {
   height: auto;
-}
-
-.SearchModal .Modal__inner-body {
-  padding-top: 50px;
-  overflow: hidden;
-  border-radius: 6px;
-  background-color: #F7FAFC;
-  position: relative;
 }
 
 .SearchModal--empty .Modal {
@@ -93,11 +89,11 @@
   }
 
   .SearchModal .Modal,
-  .SearchModal .Modal__inner-body {
+  .SearchModal .Modal__body {
     border-radius: 0;
   }
 
-  .SearchModal--new .Modal__inner-body {
+  .SearchModal--new .Modal__body {
     height: 100%;
   }
 }

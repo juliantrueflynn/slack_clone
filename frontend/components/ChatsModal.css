@@ -1,5 +1,10 @@
-.Modal__chats .Modal__inner-body {
+.Modal.Modal__chats {
+  max-width: 100%;
+}
+
+.Modal__chats .Modal__body {
   max-width: 600px;
+  margin: 0 auto;
 }
 
 .ChatsModal__subhead {

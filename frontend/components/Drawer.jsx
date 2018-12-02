@@ -28,7 +28,7 @@ const Drawer = ({
         close={modalClose}
         isOpen={isModalOpen}
       >
-        {children({ messages })}
+        <div className={drawerClassNames}>{children({ messages })}</div>
       </Modal>
     );
   }

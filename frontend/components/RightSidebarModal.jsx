@@ -23,7 +23,7 @@ const RightSidebarModal = ({
       key: 'favorites',
       label: 'Starred Items',
       icon: <FontAwesomeIcon icon="star" />,
-      onClick: () => toggleLink('favorite', true),
+      onClick: () => toggleLink('favorites', true),
       isItemActive: drawerType === 'favorites',
     },
     {
