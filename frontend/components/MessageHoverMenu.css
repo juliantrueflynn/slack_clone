@@ -8,6 +8,7 @@
   top: -8px;
   right: 16px;
   display: none;
+  z-index: 100;
 }
 
 .Message--hoverable.Message--hover:not(.Message--editing) .Menu__msg-hover,

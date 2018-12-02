@@ -81,3 +81,7 @@
 .Modal__overlay--styled .Drawer form .Btn__group:last-child {
   margin-top: 0;
 }
+
+.Modal__overlay--styled .Drawer {
+  margin-top: -20px;
+}

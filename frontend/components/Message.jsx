@@ -46,7 +46,6 @@ class Message extends React.Component {
     const {
       message,
       role,
-      style,
       users,
       pinsMap,
       reactions,
@@ -73,7 +72,7 @@ class Message extends React.Component {
       if (date.isToday()) {
         dateCreated = date.localTime();
       } else {
-        const month = date.monthName();
+        const month = date.monthName({ month: 'short' });
         const day = date.dayOrdinal();
         dateCreated = `${month} ${day}, ${time}`;
       }
@@ -97,7 +96,6 @@ class Message extends React.Component {
           onFocus={() => null}
           onMouseLeave={() => this.handleHover(false)}
           onMouseOver={() => !hasHover && this.handleHover(true)}
-          style={style}
         >
           {isHighlightable && (!!message.pinId || !!message.favoriteId) && (
             <MessageHighlight

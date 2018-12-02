@@ -171,6 +171,7 @@ class DrawerSwitch extends React.Component {
         workspaceSlug,
         currentUserSlug,
         modalOpen,
+        users,
       },
       { component: FavoritesDrawer, path: 'favorites' },
       { component: MessageThreadDrawer, path: 'convo' },
@@ -183,6 +184,7 @@ class DrawerSwitch extends React.Component {
         destroyPinRequest,
         currentUserSlug,
         modalOpen,
+        users,
       },
     ];
 
@@ -202,7 +204,7 @@ class DrawerSwitch extends React.Component {
           modalType={modalType}
           modalClose={this.handleModalClose}
           children={drawerProps => (
-            <Component users={users} {...props} {...drawerProps} />
+            <Component {...props} {...drawerProps} />
           )}
         />
       ));

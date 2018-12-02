@@ -51,7 +51,7 @@
 
 .Message__author {
   font-weight: bold;
-  padding-right: 4px;
+  padding-right: 6px;
   color: inherit;
 }
 
@@ -61,7 +61,7 @@
 
 .Message__time {
   color: rgba(0,0,0,0.5);
-  font-size: .8em;
+  font-size: .75em;
 }
 
 .Channel .Message--highlighted,
@@ -83,3 +83,10 @@
   margin-right: 8px;
 }
 
+@media screen and (max-width: 991px) {
+  .AllUnreadsItem__body .Message__container,
+  .Drawer__convo .Message__container,
+  .Channel .Message__container {
+    padding: 4px 18px;
+  }
+}

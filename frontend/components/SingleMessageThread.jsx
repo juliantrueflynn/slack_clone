@@ -16,7 +16,7 @@ const SingleMessageThread = ({
   }
 
   const date = dateUtil(lastMessageDate);
-  const month = date.monthName();
+  const month = date.monthName({ month: 'short' });
   const day = date.dayOrdinal();
   const lastDate = `Last reply ${month} ${day}`;
 

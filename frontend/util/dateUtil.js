@@ -37,9 +37,11 @@ const parseDateToOrdinalDay = (date) => {
   return getOrdinal(day);
 };
 
-const parseDateToMonthName = date => (
-  date.toLocaleString('en-US', { month: 'long' })
-);
+const parseDateToMonthName = (date, args) => {
+  const dateArgs = args || { month: 'long' };
+
+  return date.toLocaleString('en-US', dateArgs);
+};
 
 const parseToLocalTime = date => (
   date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
@@ -75,7 +77,7 @@ export const dateUtil = (dateString) => {
   return {
     localTime: () => parseToLocalTime(date),
     dayOrdinal: () => parseDateToOrdinalDay(date),
-    monthName: () => parseDateToMonthName(date),
+    monthName: args => parseDateToMonthName(date, args),
     monthDayYear: () => getMonthDayYear(date),
     isToday: () => isDateToday(date),
   };

@@ -1,0 +1,19 @@
+.Drawer__favorites .Message:first-child .Menu__msg-hover {
+  top: -5px;
+}
+
+.Drawer__favorites .Message__container {
+  padding: 3px 10px 12px;
+  margin: 10px 8px;
+  background-color: #FFF;
+  border-bottom: 1px solid #DFE6E9;
+}
+
+@media screen and (max-width: 768px) {
+  .Drawer__favorites .Message__container {
+    padding: 3px 8px 12px;
+    margin: 10px -8px;
+    background-color: #FFF;
+    border-bottom: 1px solid #DFE6E9;
+  }
+}

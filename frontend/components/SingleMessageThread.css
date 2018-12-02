@@ -39,7 +39,7 @@
   margin-right: 0;
 }
 
-.SingleMessageThread__items .SingleMessageThread__item {
+.SingleMessageThread__item {
   margin-left: 6px;
   display: flex;
   align-items: center;
@@ -59,4 +59,10 @@
 
 .SingleMessageThread__date {
   color: rgba(0,0,0,.5);
+}
+
+@media screen and (max-width: 768px) {
+  .SingleMessageThread__date {
+    display: none;
+  }
 }
