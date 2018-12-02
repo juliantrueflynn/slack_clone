@@ -78,6 +78,7 @@
   justify-content: center;
   line-height: 100%;
   border-radius: 50%;
+  color: #636e72;
 }
 
 .Modal__overlay--styled .Modal > .Btn__close {
@@ -93,8 +94,19 @@
   background-color: #E8E8E8;
 }
 
+.Modal__overlay--styled .Modal__header,
+.Modal__overlay--styled .Modal__header-inner {
+  display: flex;
+  align-items: center;
+}
+
+.Modal__overlay--styled .Modal__header-inner {
+  justify-content: center;
+  flex: 1;
+}
+
 @media screen and (min-width: 769px) {
-  .Modal__overlay--styled .Modal__header > .Btn__close {
+  .Modal__overlay--styled .Modal__header .Btn__close {
     display: none;
   }
 }
@@ -109,15 +121,13 @@
   }
 
   .Modal__overlay--styled .Modal__header {
-    display: flex;
-    align-items: center;
     padding: 10px 15px;
     margin-bottom: 40px;
     background-color: #F5F5F5;
     border-bottom: 1px solid #DFE6E9;
   }
 
-  .Modal__overlay--styled .Modal__header > .Btn__close {
+  .Modal__overlay--styled .Modal__header .Btn__close {
     position: static;
     font-size: 2em;
     height: 28px;
@@ -135,5 +145,20 @@
     text-align: left;
     padding-bottom: 0;
     font-size: 1.25em;
+  }
+}
+
+@media screen and (min-width: 576px) and (max-width: 768px) {
+  .Modal__overlay--styled .Modal__header-inner {
+    max-width: 536px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 15px;
+  }
+
+  .Modal__overlay--styled .Modal__body {
+    max-width: 536px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }

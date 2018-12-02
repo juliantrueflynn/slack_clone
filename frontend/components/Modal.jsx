@@ -60,11 +60,12 @@ class Modal extends React.Component {
           )}
           {modalTitle && (
             <header className="Modal__header">
-              <h2 className="Modal__title">{modalTitle}</h2>
-
-              <Button buttonFor="close" unStyled onClick={this.handleClose}>
-                <span role="img" aria-label="Close drawer">&times;</span>
-              </Button>
+              <div className="Modal__header-inner">
+                <h2 className="Modal__title">{modalTitle}</h2>
+                <Button buttonFor="close" unStyled onClick={this.handleClose}>
+                  <span role="img" aria-label="Close drawer">&times;</span>
+                </Button>
+              </div>
             </header>
           )}
           <div className="Modal__body">{children}</div>
