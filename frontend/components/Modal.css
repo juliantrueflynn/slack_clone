@@ -14,7 +14,8 @@
   background-color: #FFF;
 }
 
-.Modal__overlay .Modal {
+.Modal__overlay--pos .Modal,
+.Modal__overlay--styled .Modal {
   height: 100%;
 }
 
@@ -103,6 +104,10 @@
 .Modal__overlay--styled .Modal__header-inner {
   justify-content: center;
   flex: 1;
+}
+
+.Modal__overlay--pos {
+  z-index: 600;
 }
 
 @media screen and (min-width: 769px) {

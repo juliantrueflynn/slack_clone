@@ -1,6 +1,6 @@
 import React from 'react';
 import EmojiPicker from 'emoji-picker-react';
-import PopoverOverlayHandler from './PopoverOverlayHandler';
+import Modal from './Modal';
 import './ReactionModal.css';
 
 class ReactionModal extends React.Component {
@@ -28,19 +28,17 @@ class ReactionModal extends React.Component {
     }
 
     const style = {
-      top: `${posY}px`,
-      left: `${posX}px`,
-      zIndex: 999,
-      position: 'absolute',
-      boxShadow: '0px 3px 6px 0px rgba(0,0,0,0.15)',
+      content: {
+        top: `${posY}px`,
+        left: `${posX}px`,
+        position: 'absolute',
+      }
     };
 
     return (
-      <PopoverOverlayHandler onOverlayClick={modalClose}>
-        <div className="ReactionModal" style={style}>
-          <EmojiPicker onEmojiClick={this.handleClick} disableDiversityPicker />
-        </div>
-      </PopoverOverlayHandler>
+      <Modal isOpen close={modalClose} style={style} unStyled hasNoWrappers>
+        <EmojiPicker onEmojiClick={this.handleClick} disableDiversityPicker />
+      </Modal>
     );
   }
 }

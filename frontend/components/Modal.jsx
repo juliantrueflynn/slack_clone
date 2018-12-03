@@ -24,6 +24,7 @@ class Modal extends React.Component {
       hasDarkOverlay,
       close,
       unStyled,
+      hasNoWrappers,
       children,
       ...props
     } = this.props;
@@ -48,7 +49,7 @@ class Modal extends React.Component {
         className={modalClassNames}
         overlayClassName={overlayClassName}
         contentLabel={modalTitle}
-        onRequestClose={this.handleClose}
+        onRequestClose={close}
         shouldCloseOnOverlayClick
         {...props}
       >
@@ -68,7 +69,8 @@ class Modal extends React.Component {
               </div>
             </header>
           )}
-          <div className="Modal__body">{children}</div>
+          {hasNoWrappers && children}
+          {hasNoWrappers || <div className="Modal__body">{children}</div>}
         </Fragment>
       </ReactModal>
     );
