@@ -8,19 +8,14 @@ import ChannelDetailsDrawer from './ChannelDetailsDrawer';
 class DrawerSwitch extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isMobile: false };
     this.handleClose = this.handleClose.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
-    this.handleResize = this.handleResize.bind(this);
   }
 
   componentDidMount() {
     const { openDrawer, drawerType, drawerSlug } = this.props;
 
     openDrawer({ drawerType, drawerSlug });
-
-    this.handleResize();
-    window.addEventListener('resize', this.handleResize);
   }
 
   componentDidUpdate(prevProps) {
@@ -29,20 +24,16 @@ class DrawerSwitch extends React.Component {
       fetchEntityRequest,
       modalType,
       modalOpen,
+      isMobileSize,
     } = this.props;
-    const { isMobile } = this.state;
 
     if (drawerType && drawerType !== prevProps.drawerType) {
       fetchEntityRequest();
     }
 
-    if (!prevProps.modalType && !modalType && isMobile) {
+    if (!prevProps.modalType && !modalType && isMobileSize) {
       modalOpen('MODAL_DRAWER_MOBILE', null);
     }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
   }
 
   getMessages() {
@@ -109,16 +100,6 @@ class DrawerSwitch extends React.Component {
     return title;
   }
 
-  handleResize() {
-    const { isMobile } = this.state;
-    const { innerWidth } = window;
-    const nextState = innerWidth <= 768;
-
-    if (isMobile !== nextState) {
-      this.setState({ isMobile: nextState });
-    }
-  }
-
   handleClose() {
     const {
       closeDrawer,
@@ -153,7 +134,6 @@ class DrawerSwitch extends React.Component {
       history,
       match: { params: { workspaceSlug } },
     } = this.props;
-    const { isMobile } = this.state;
     const channel = this.getChannel();
 
     if (drawerType === 'details' && !channel) {
@@ -199,7 +179,6 @@ class DrawerSwitch extends React.Component {
           closeDrawer={this.handleClose}
           messages={this.getMessages()}
           currentUserSlug={currentUserSlug}
-          isMobile={isMobile}
           isModalOpen={isModalOpen}
           modalType={modalType}
           modalClose={this.handleModalClose}

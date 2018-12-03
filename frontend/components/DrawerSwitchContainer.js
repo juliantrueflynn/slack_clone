@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import withEntityWrapper from './withEntityWrapper';
 import {
   drawerOpen,
   drawerClose,
@@ -9,6 +8,8 @@ import {
 import { createChannel } from '../actions/channelActions';
 import { destroyPin } from '../actions/messageActions';
 import { selectDrawerMessages } from '../reducers/selectors';
+import withEntityWrapper from './withEntityWrapper';
+import withDetectMobileView from './withDetectMobileView';
 import DrawerSwitch from './DrawerSwitch';
 
 const mapStateToProps = (state, { match: { params } }) => ({
@@ -30,5 +31,5 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default withEntityWrapper('drawerSlug')(
-  connect(mapStateToProps, mapDispatchToProps)(DrawerSwitch)
+  withDetectMobileView(connect(mapStateToProps, mapDispatchToProps)(DrawerSwitch))
 );

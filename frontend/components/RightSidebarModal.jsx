@@ -16,14 +16,14 @@ const RightSidebarModal = ({
       key: 'details',
       label: 'Channel Details',
       icon: <FontAwesomeIcon icon="info-circle" fixedWidth />,
-      onClick: () => toggleLink('details', true),
+      onClick: () => toggleLink('details'),
       isItemActive: channel && drawerType === 'details',
     },
     {
       key: 'favorites',
       label: 'Starred Items',
       icon: <FontAwesomeIcon icon="star" />,
-      onClick: () => toggleLink('favorites', true),
+      onClick: () => toggleLink('favorites'),
       isItemActive: drawerType === 'favorites',
     },
     {

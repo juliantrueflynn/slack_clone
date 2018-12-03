@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { selectSubbedWorkspaces, selectChannelsMap } from '../reducers/selectors';
 import { modalOpen, modalClose } from '../actions/uiActions';
 import { updateChannelSub } from '../actions/channelActions';
+import withDetectMobileView from './withDetectMobileView';
 import LeftSidebar from './LeftSidebar';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
@@ -24,4 +25,6 @@ const mapDispatchToProps = dispatch => ({
   updateChannelSubRequest: channelSub => dispatch(updateChannelSub.request(channelSub)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LeftSidebar));
+export default withRouter(
+  withDetectMobileView(connect(mapStateToProps, mapDispatchToProps)(LeftSidebar))
+);

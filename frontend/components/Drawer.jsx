@@ -3,6 +3,7 @@ import ScrollBar from './ScrollBar';
 import Button from './Button';
 import Modal from './Modal';
 import './Drawer.css';
+import withDetectMobileView from './withDetectMobileView';
 
 const Drawer = ({
   isLoading,
@@ -11,7 +12,7 @@ const Drawer = ({
   drawerTitle,
   messages,
   currentUserSlug,
-  isMobile,
+  isMobileSize,
   modalType,
   modalClose,
   children,
@@ -20,7 +21,7 @@ const Drawer = ({
   const lastMsg = isConvo ? messages[messages.length - 1] : null;
   const drawerClassNames = `Drawer Drawer__${drawerType}`;
 
-  if (isMobile) {
+  if (isMobileSize) {
     const isModalOpen = modalType === 'MODAL_DRAWER_MOBILE';
 
     return (
@@ -57,4 +58,4 @@ const Drawer = ({
   );
 };
 
-export default Drawer;
+export default withDetectMobileView(Drawer);

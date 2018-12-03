@@ -75,6 +75,7 @@ class LeftSidebar extends React.Component {
       workspaces,
       chatPath,
       modalOpen,
+      isMobileSize,
       match: { url },
     } = this.props;
 
@@ -206,7 +207,7 @@ class LeftSidebar extends React.Component {
     return (
       <aside className="LeftSidebar">
         <LeftSidebarMenus menuGroups={sidebarMenuItems} />
-        {isModalOpen && (
+        {isModalOpen && isMobileSize && (
           <Modal
             isOpen
             modalFor="left-sidebar"
