@@ -85,6 +85,7 @@ class LeftSidebar extends React.Component {
     }
 
     const channels = Object.values(channelsMap);
+    const chatPathUrl = channelsMap[chatPath] ? `${url}/messages/${chatPath}` : `${url}/${chatPath}`;
     const subbedChannels = channels.filter(ch => ch.isSub && !ch.hasDm).sort((a, b) => (
       a.title.localeCompare(b.title)
     ));
@@ -113,7 +114,7 @@ class LeftSidebar extends React.Component {
         exact: true,
         hasNoDrawer: true,
       },
-      { label: 'Profile & Account', link: `${url}/team/${user.slug}`, hasNoDrawer: true },
+      { label: 'Profile & Account', link: `${chatPathUrl}/team/${user.slug}`, hasNoDrawer: true },
       { key: 'switch-workspace', label: 'Switch Workspace' },
     ];
 
