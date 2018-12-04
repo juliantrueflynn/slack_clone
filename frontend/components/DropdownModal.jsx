@@ -3,8 +3,13 @@ import Modal from './Modal';
 import Menu from './Menu';
 import './DropdownModal.css';
 
-const DropdownModal = ({ items, modalProps, close }) => {
-  const { clickPosY, clickPosX } = modalProps;
+const DropdownModal = ({
+  items,
+  dropdownProps,
+  menuProps,
+  ...modalProps
+}) => {
+  const { clickPosY, clickPosX } = dropdownProps;
 
   const style = {
     content: {
@@ -15,8 +20,8 @@ const DropdownModal = ({ items, modalProps, close }) => {
   };
 
   return (
-    <Modal isOpen close={close} modalFor="dropdown" style={style} unStyled hasNoWrappers>
-      <Menu menuFor="dropdown" items={items} />
+    <Modal isOpen modalFor="dropdown" style={style} unStyled hasNoWrappers {...modalProps}>
+      <Menu menuFor="dropdown" items={items} {...menuProps} />
     </Modal>
   );
 };

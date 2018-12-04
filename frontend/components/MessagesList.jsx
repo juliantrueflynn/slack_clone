@@ -13,18 +13,18 @@ class MessagesList extends React.Component {
   getDdMenuItems() {
     const {
       isDdOpen,
-      modalProps,
+      dropdownProps,
       deleteMessageRequest,
       createPinRequest,
       destroyPinRequest,
       currentUserSlug,
     } = this.props;
 
-    if (!isDdOpen || !modalProps.message) {
+    if (!isDdOpen || !dropdownProps.message) {
       return [];
     }
 
-    const { message } = modalProps;
+    const { message } = dropdownProps;
 
     return [
       {
@@ -51,13 +51,13 @@ class MessagesList extends React.Component {
   }
 
   handleOnMenuItemClick(itemFunc, itemArg) {
-    const { modalClose } = this.props;
+    const { closeDropdown } = this.props;
     itemFunc(itemArg);
-    modalClose();
+    closeDropdown();
   }
 
   handleEditToggle(messageSlug) {
-    const { isEditable, toggleMessageEditor, modalClose } = this.props;
+    const { isEditable, toggleMessageEditor, closeDropdown } = this.props;
     const { editMessageSlug } = this.state;
 
     if (!isEditable) {
@@ -75,7 +75,7 @@ class MessagesList extends React.Component {
     }
 
     toggleMessageEditor(messageSlug);
-    modalClose();
+    closeDropdown();
   }
 
   render() {
@@ -84,13 +84,13 @@ class MessagesList extends React.Component {
       history,
       location,
       isEditable,
-      modalClose,
+      closeDropdown,
       deleteMessageRequest,
       createPinRequest,
       destroyPinRequest,
       toggleMessageEditor,
       isDdOpen,
-      modalProps,
+      dropdownProps,
       ...props
     } = this.props;
     const { editMessageSlug } = this.state;
@@ -108,7 +108,11 @@ class MessagesList extends React.Component {
           />
         ))}
         {isDdOpen && (
-          <DropdownModal items={this.getDdMenuItems()} modalProps={modalProps} close={modalClose} />
+          <DropdownModal
+            items={this.getDdMenuItems()}
+            dropdownProps={dropdownProps}
+            close={closeDropdown}
+          />
         )}
       </Fragment>
     );

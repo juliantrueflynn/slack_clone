@@ -5,9 +5,9 @@ import Modal from './Modal';
 import Menu from './Menu';
 import UserPreview from './UserPreview';
 import StatusIcon from './StatusIcon';
-import Dropdown from './Dropdown';
 import Button from './Button';
 import LeftSidebarMenus from './LeftSidebarMenus';
+import DropdownModal from './DropdownModal';
 import './LeftSidebar.css';
 
 class LeftSidebar extends React.Component {
@@ -15,6 +15,13 @@ class LeftSidebar extends React.Component {
     super(props);
     this.handleDmUnsubClick = this.handleDmUnsubClick.bind(this);
     this.handleHistoryPush = this.handleHistoryPush.bind(this);
+    this.handleDropdownClick = this.handleDropdownClick.bind(this);
+  }
+
+  handleDropdownClick(e) {
+    const { openDropdown } = this.props;
+    const { bottom: clickPosY, right: clickPosX } = e.target.getBoundingClientRect();
+    openDropdown('DROPDOWN_PROFILE', { clickPosY, clickPosX });
   }
 
   handleDmUnsubClick(e) {
@@ -72,9 +79,12 @@ class LeftSidebar extends React.Component {
       workspace,
       modalClose,
       isModalOpen,
+      isDdOpen,
+      dropdownProps,
       workspaces,
       chatPath,
       modalOpen,
+      closeDropdown,
       isMobileSize,
       match: { url },
     } = this.props;
@@ -166,10 +176,12 @@ class LeftSidebar extends React.Component {
     const sidebarMenuItems = [
       {
         key: 'profile',
-        component: Dropdown,
-        items: userItems,
+        component: Button,
         props: {
-          togglerText: (
+          onClick: this.handleDropdownClick,
+          buttonFor: 'dropdown',
+          unStyled: true,
+          children: (
             <Fragment>
               <div className="LeftSidebar__workspace">{workspace.title}</div>
               <div className="LeftSidebar__workspace-subhead">
@@ -218,6 +230,13 @@ class LeftSidebar extends React.Component {
           >
             <LeftSidebarMenus menuGroups={sidebarMenuItems} />
           </Modal>
+        )}
+        {isDdOpen && (
+          <DropdownModal
+            dropdownProps={dropdownProps}
+            close={closeDropdown}
+            items={userItems}
+          />
         )}
       </aside>
     );

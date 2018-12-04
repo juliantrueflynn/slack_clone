@@ -15,7 +15,7 @@
 }
 
 .LeftSidebarMenus__group-head,
-.Dropdown__profile .Btn__dropdown,
+.LeftSidebarMenus__profile .Btn__dropdown,
 .LeftSidebarMenus__group .MenuItem__content {
   padding-left: 18px;
   padding-right: 18px;
@@ -127,62 +127,62 @@
   width: 1.25em;
 }
 
-.Dropdown__profile,
-.Dropdown__profile > .Btn {
+.LeftSidebarMenus__profile,
+.LeftSidebarMenus__profile > .Btn {
   min-height: 60px;
 }
 
-.Dropdown__profile .LeftSidebar__workspace-subhead {
+.LeftSidebarMenus__profile .LeftSidebar__workspace-subhead {
   display: flex;
   flex-direction: row;
   font-size: .9em;
   align-items: center;
 }
 
-.Dropdown__profile .Btn__dropdown {
+.LeftSidebarMenus__profile .Btn__dropdown {
   text-align: left;
 }
 
-.Dropdown__profile.Dropdown--opened,
-.Dropdown__profile .Btn__dropdown:hover {
+.LeftSidebarMenus__profile.Dropdown--opened,
+.LeftSidebarMenus__profile .Btn__dropdown:hover {
   background-color: #3E2E3D;
 }
 
-.Dropdown__profile.Dropdown--opened .LeftSidebar__workspace-subhead,
-.Dropdown__profile .Btn__dropdown:hover .LeftSidebar__workspace-subhead {
+.LeftSidebarMenus__profile.Dropdown--opened .LeftSidebar__workspace-subhead,
+.LeftSidebarMenus__profile .Btn__dropdown:hover .LeftSidebar__workspace-subhead {
   color: #FFF;
 }
 
-.Dropdown__profile .StatusIcon {
+.LeftSidebarMenus__profile .StatusIcon {
   padding-right: 6px;
 }
 
-.Dropdown__profile .MenuItem--text {
+.LeftSidebarMenus__profile .MenuItem--text {
   margin-top: 5px;
   padding-bottom: 8px;
 }
 
-.Dropdown__profile .Menu__dropdown .MenuItem > .MenuItem__content:not(.MenuItem__content--active) {
+.LeftSidebarMenus__profile .Menu__dropdown .MenuItem > .MenuItem__content:not(.MenuItem__content--active) {
   background-color: #FFF;
   transition: background-color ease-in-out .15s;
 }
 
-.Dropdown__profile .Menu__dropdown .MenuItem > .MenuItem__content:not(.MenuItem__content--active):not(.MenuItem__content--text):hover {
+.LeftSidebarMenus__profile .Menu__dropdown .MenuItem > .MenuItem__content:not(.MenuItem__content--active):not(.MenuItem__content--text):hover {
   background-color: rgba(223,230,233,.45);
 }
 
-.Dropdown__profile .MenuItem__switch-workspace {
+.LeftSidebarMenus__profile .MenuItem__switch-workspace {
   border-top: 1px solid #E9E9E9;
   padding-top: 15px;
 }
 
-.Dropdown__profile .MenuItem__switch-workspace .MenuItem__content,
-.Dropdown__profile .UserPreview__username {
+.LeftSidebarMenus__profile .MenuItem__switch-workspace .MenuItem__content,
+.LeftSidebarMenus__profile .UserPreview__username {
   font-size: 18px;
   font-weight: bold;
 }
 
-.Dropdown__profile .UserPreview__email {
+.LeftSidebarMenus__profile .UserPreview__email {
   color: #636E72;
 }
 
@@ -190,35 +190,35 @@
   margin-right: 10px
 }
 
-.Dropdown__profile .Btn__dropdown:focus {
+.LeftSidebarMenus__profile .Btn__dropdown:focus {
   outline: 0;
   box-shadow: none;
 }
 
-.Dropdown__profile .Menu__dropdown {
+.LeftSidebarMenus__profile .Menu__dropdown {
   left: 10px;
 }
 
-.Dropdown__profile .MenuItem__content {
+.LeftSidebarMenus__profile .MenuItem__content {
   color: #333;
 }
 
-.Dropdown__profile .MenuItem__content {
+.LeftSidebarMenus__profile .MenuItem__content {
   padding-top: 4px;
   padding-bottom: 4px;
   display: block;
 }
 
-.Dropdown__profile .MenuItem__content--active {
+.LeftSidebarMenus__profile .MenuItem__content--active {
   background-color: #4C9689;
   color: #FFF;
 }
 
-.Dropdown__profile .LeftSidebar__username {
+.LeftSidebarMenus__profile .LeftSidebar__username {
   text-align: left;
 }
 
-.Dropdown__profile .LeftSidebar__workspace {
+.LeftSidebarMenus__profile .LeftSidebar__workspace {
   font-weight: bold;
   color: #FFF;
   margin-bottom: 3px;

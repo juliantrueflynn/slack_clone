@@ -18,6 +18,7 @@ class Modal extends React.Component {
   render() {
     const {
       modalFor,
+      bemModifier,
       modalPos,
       modalTitle,
       darkOverlay,
@@ -33,12 +34,14 @@ class Modal extends React.Component {
     const overlayClassName = classNames('Modal__overlay', {
       'Modal__overlay--styled': !unStyled,
       [`Modal__overlay--${modalFor}`]: modalFor,
+      [`Modal__overlay--${modalFor}-${bemModifier}`]: modalFor && bemModifier,
       'Modal__overlay--pos': modalPos,
       [`Modal__overlay--pos-${modalPos}`]: modalPos,
       'Modal__overlay--dark': hasDarkOverlay,
     });
     const modalClassNames = classNames('Modal', {
       [`Modal__${modalFor}`]: modalFor,
+      [`Modal__${modalFor}--${bemModifier}`]: modalFor && bemModifier,
       'Modal--has-pos': modalPos,
       [`Modal__pos-${modalPos}`]: modalPos,
     });

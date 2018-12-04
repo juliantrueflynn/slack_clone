@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { signOut, signUp, signIn } from '../actions/sessionActions';
 import { fetchWorkspaces } from '../actions/workspaceActions';
-import { modalOpen, modalClose } from '../actions/uiActions';
+import { modalOpen, modalClose, updateDropdown } from '../actions/uiActions';
 import { selectSubbedWorkspaces } from '../reducers/selectors';
+import withDetectMobileView from './withDetectMobileView';
 import PublicView from './PublicView';
 
 const mapStateToProps = state => ({
@@ -12,13 +13,17 @@ const mapStateToProps = state => ({
   workspacesMap: state.entities.workspaces,
   subbedWorkspaces: selectSubbedWorkspaces(state),
   currentUser: state.session.currentUser,
-  isWorkspaceModalOpen: state.ui.displayModal.modalType,
+  isModalOpen: state.ui.displayModal.modalType === 'MODAL_WORKSPACE',
+  isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_PUBLIC',
+  dropdownProps: state.ui.dropdown.dropdownProps,
 });
 
 const mapDispatchToProps = (dispatch, { location }) => ({
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),
   modalOpen: (modalType, modalProps) => dispatch(modalOpen(modalType, modalProps)),
   modalClose: () => dispatch(modalClose()),
+  openDropdown: (ddType, ddProps) => dispatch(updateDropdown(ddType, ddProps)),
+  closeDropdown: () => dispatch(updateDropdown(null)),
   signOutRequest: () => dispatch(signOut.request()),
   sessionRequest: (user) => {
     if (location.pathname === '/signin') {
@@ -33,9 +38,7 @@ const withPublicView = (WrappedComponent) => {
   const WithPublicView = props => (
     <PublicView
       {...props}
-      render={content => (
-        <WrappedComponent content={content} {...props} />
-      )}
+      render={content => <WrappedComponent content={content} {...props} />}
     />
   );
 
@@ -45,7 +48,9 @@ const withPublicView = (WrappedComponent) => {
 
   WithPublicView.displayName = `withPublicView(${wrappedComponentName})`;
 
-  return withRouter(connect(mapStateToProps, mapDispatchToProps)(WithPublicView));
+  return withRouter(
+    withDetectMobileView(connect(mapStateToProps, mapDispatchToProps)(WithPublicView))
+  );
 };
 
 export default withPublicView;

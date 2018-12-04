@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { selectSubbedWorkspaces, selectChannelsMap } from '../reducers/selectors';
-import { modalOpen, modalClose } from '../actions/uiActions';
+import { modalOpen, modalClose, updateDropdown } from '../actions/uiActions';
 import { updateChannelSub } from '../actions/channelActions';
 import withDetectMobileView from './withDetectMobileView';
 import LeftSidebar from './LeftSidebar';
@@ -17,11 +17,15 @@ const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
   chatPath: state.ui.displayChannelSlug,
   drawer: state.ui.drawer,
   isModalOpen: state.ui.displayModal.modalType === 'MODAL_LEFT_SIDEBAR',
+  isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_PROFILE',
+  dropdownProps: state.ui.dropdown.dropdownProps,
 });
 
 const mapDispatchToProps = dispatch => ({
-  modalOpen: (modalType, modalProps) => dispatch(modalOpen(modalType, modalProps)),
+  modalOpen: (modalType, modalProps = {}) => dispatch(modalOpen(modalType, modalProps)),
   modalClose: () => dispatch(modalClose()),
+  openDropdown: (ddType, ddProps) => dispatch(updateDropdown(ddType, ddProps)),
+  closeDropdown: () => dispatch(updateDropdown(null)),
   updateChannelSubRequest: channelSub => dispatch(updateChannelSub.request(channelSub)),
 });
 

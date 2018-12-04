@@ -27,15 +27,16 @@ class Menu extends React.Component {
       shouldPos,
       toggleMenu,
       handleStyleFromHeight,
+      bemModifier,
       unStyled,
       ...props
     } = this.props;
 
     const menuClassNames = classNames('Menu', {
       [`Menu__${menuFor}`]: menuFor,
-      'Menu--row': isRow,
+      [`Menu__${menuFor}--${bemModifier}`]: menuFor && bemModifier,
       'Menu--styled': !unStyled,
-      'Menu--unstyled': unStyled,
+      'Menu--row': isRow,
     });
 
     return (

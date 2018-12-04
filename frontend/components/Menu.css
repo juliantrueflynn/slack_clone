@@ -9,16 +9,16 @@
   align-items: center;
 }
 
-.Menu--row:not(.Menu--unstyled) > .MenuItem {
+.Menu--styled.Menu--row > .MenuItem {
   margin-right: 20px;
 }
 
-.Menu--row:not(.Menu--unstyled) > .MenuItem:last-child {
+.Menu--styled.Menu--row > .MenuItem:last-child {
   margin-right: 0;
 }
 
 @media screen and (max-width: 576px) {
-  .Menu--row:not(.Menu--unstyled) > .MenuItem {
+  .Menu--styled.Menu--row > .MenuItem {
     margin-right: 10px;
   }
 }

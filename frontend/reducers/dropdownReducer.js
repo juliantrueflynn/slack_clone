@@ -1,6 +1,17 @@
-import { DROPDOWN_UPDATE } from '../actions/actionTypes';
+import {
+  DROPDOWN_UPDATE,
+  WORKSPACE,
+  USER_THREAD,
+  READ,
+  SIGN_OUT,
+  MESSAGE,
+  USER,
+} from '../actions/actionTypes';
 
-const _defaultState = { dropdownType: null, dropdownProps: {} };
+const _defaultState = {
+  dropdownType: null,
+  dropdownProps: {}
+};
 
 const dropdownReducer = (state = _defaultState, action) => {
   Object.freeze(state);
@@ -15,6 +26,13 @@ const dropdownReducer = (state = _defaultState, action) => {
 
       return { dropdownType, dropdownProps };
     }
+    case MESSAGE.INDEX.REQUEST:
+    case USER_THREAD.INDEX.REQUEST:
+    case READ.INDEX.REQUEST:
+    case USER.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
+    case WORKSPACE.SHOW.REQUEST:
+      return _defaultState;
     default:
       return state;
   }

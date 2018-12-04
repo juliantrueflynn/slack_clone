@@ -2,7 +2,6 @@ import React from 'react';
 import classNames from 'classnames';
 import Button from './Button';
 import LinkWithDrawer from '../util/linkUtil';
-import Dropdown from './Dropdown';
 import './MenuItem.css';
 
 class MenuItem extends React.Component {
@@ -80,13 +79,6 @@ class MenuItem extends React.Component {
             {itemIcon}
             {label}
           </LinkWithDrawer>
-        )}
-
-        {itemType === 'dropdown' && (
-          <Dropdown items={items} {...itemProps}>
-            {itemIcon}
-            {label}
-          </Dropdown>
         )}
 
         {itemType === 'btn' && (
