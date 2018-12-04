@@ -8,6 +8,7 @@ import {
   ACCORDION_OPEN,
   SEARCH,
   SEARCH_DESTROY,
+  DROPDOWN_UPDATE,
 } from './actionTypes';
 import { actionCreator } from '../util/actionsUtil';
 
@@ -43,3 +44,8 @@ export const fetchSearch = {
 };
 
 export const destroySearch = () => ({ type: SEARCH_DESTROY });
+
+export const updateDropdown = (dropdownType, dropdownProps) => actionCreator(
+  DROPDOWN_UPDATE,
+  { dropdownType, dropdownProps }
+);

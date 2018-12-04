@@ -5,6 +5,7 @@ import displayModal from './modalReducer';
 import accordion from './accordionReducer';
 import drawer from './drawerReducer';
 import searchQuery from './searchQueryReducer';
+import dropdown from './dropdownReducer';
 
 const uiReducer = combineReducers({
   displayWorkspaceSlug,
@@ -13,6 +14,7 @@ const uiReducer = combineReducers({
   accordion,
   drawer,
   searchQuery,
+  dropdown,
 });
 
 export default uiReducer;

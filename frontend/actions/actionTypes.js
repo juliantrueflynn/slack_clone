@@ -20,6 +20,7 @@ export const PASSWORD = apiActions('PASSWORD', ['UPDATE']);
 export const SEARCH = apiActions('SEARCH', ['INDEX']);
 export const SEARCH_DESTROY = 'SEARCH_DESTROY';
 
+export const DROPDOWN_UPDATE = 'DROPDOWN_UPDATE';
 export const REACTION_TOGGLE = 'REACTION_TOGGLE';
 export const FAVORITE_TOGGLE = 'FAVORITE_TOGGLE';
 export const MESSAGE_EDITOR_TOGGLE = 'MESSAGE_EDITOR_TOGGLE';
