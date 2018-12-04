@@ -1,9 +1,15 @@
 import React from 'react';
 import withPublicView from './withPublicView';
-import PublicWorkspacesContainer from './PublicWorkspacesContainer';
+import PublicWorkspaces from './PublicWorkspaces';
 import './PageHome.css';
 
-const PageHome = ({ content: { workspaces }, isLoggedIn, currentUser }) => (
+const PageHome = ({
+  content: { workspaces },
+  isLoggedIn,
+  currentUser,
+  createWorkspaceSubRequest,
+  updateWorkspaceSubRequest,
+}) => (
   <div className="PageHome">
     <div className="PageView__body">
       <div className="PageHome__hero">
@@ -25,10 +31,12 @@ const PageHome = ({ content: { workspaces }, isLoggedIn, currentUser }) => (
       </div>
       <div className="PageHome__description">
         <div className="PublicView__container">
-          <PublicWorkspacesContainer
+          <PublicWorkspaces
             isLoggedIn={isLoggedIn}
             workspaces={workspaces}
             currentUser={currentUser}
+            createWorkspaceSubRequest={createWorkspaceSubRequest}
+            updateWorkspaceSubRequest={updateWorkspaceSubRequest}
           />
         </div>
       </div>

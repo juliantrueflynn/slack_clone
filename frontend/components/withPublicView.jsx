@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { signOut, signUp, signIn } from '../actions/sessionActions';
-import { fetchWorkspaces } from '../actions/workspaceActions';
+import { fetchWorkspaces, updateWorkspaceSub, createWorkspaceSub } from '../actions/workspaceActions';
 import { updateDropdown, updateModal } from '../actions/uiActions';
 import { selectSubbedWorkspaces } from '../reducers/selectors';
 import withDetectMobileView from './withDetectMobileView';
@@ -24,6 +24,8 @@ const mapDispatchToProps = (dispatch, { location }) => ({
   closeModal: () => dispatch(updateModal(null)),
   openDropdown: (ddType, ddProps) => dispatch(updateDropdown(ddType, ddProps)),
   closeDropdown: () => dispatch(updateDropdown(null)),
+  createWorkspaceSubRequest: workspaceSub => dispatch(createWorkspaceSub.request(workspaceSub)),
+  updateWorkspaceSubRequest: workspaceSub => dispatch(updateWorkspaceSub.request(workspaceSub)),
   signOutRequest: () => dispatch(signOut.request()),
   sessionRequest: (user) => {
     if (location.pathname === '/signin') {
