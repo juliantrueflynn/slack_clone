@@ -2,13 +2,12 @@ import {
   NAVIGATE,
   MODAL_OPEN,
   MODAL_CLOSE,
-  DRAWER_OPEN,
-  DRAWER_CLOSE,
   CREATE_SUCCESS,
   ACCORDION_OPEN,
   SEARCH,
   SEARCH_DESTROY,
   DROPDOWN_UPDATE,
+  DRAWER_UPDATE,
 } from './actionTypes';
 import { actionCreator } from '../util/actionsUtil';
 
@@ -21,9 +20,10 @@ export const modalOpen = (modalType, modalProps) => actionCreator(
 
 export const modalClose = () => ({ type: MODAL_CLOSE });
 
-export const drawerOpen = drawer => actionCreator(DRAWER_OPEN, { drawer });
-
-export const drawerClose = () => ({ type: DRAWER_CLOSE });
+export const updateDrawer = (drawerType, drawerSlug = null) => actionCreator(
+  DRAWER_UPDATE,
+  { drawerType, drawerSlug }
+);
 
 export const createSuccess = (entity = null, message) => actionCreator(
   CREATE_SUCCESS,

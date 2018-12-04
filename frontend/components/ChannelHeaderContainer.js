@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {
   modalOpen,
-  drawerClose,
+  updateDrawer,
   accordionOpen,
   destroySearch,
   fetchSearch,
@@ -26,7 +26,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
 
 const mapDispatchToProps = dispatch => ({
   modalOpen: (modalType, modalProps = null) => dispatch(modalOpen(modalType, modalProps)),
-  drawerClose: () => dispatch(drawerClose()),
+  closeDrawer: () => dispatch(updateDrawer(null)),
   accordionOpen: accordionType => dispatch(accordionOpen('details', accordionType)),
   fetchSearchRequest: (query, shouldNotSearch = false) => (
     dispatch(fetchSearch.request(query, shouldNotSearch))

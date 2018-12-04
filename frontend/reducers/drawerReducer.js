@@ -1,26 +1,30 @@
 import {
-  DRAWER_OPEN,
-  DRAWER_CLOSE,
   WORKSPACE,
   SIGN_OUT,
   MESSAGE,
   USER,
   FAVORITE,
   CHANNEL,
+  DRAWER_UPDATE,
 } from '../actions/actionTypes';
 
-const _nullState = {
+const _defaultState = {
   drawerType: null,
   drawerSlug: null,
 };
 
-const rightSidebarReducer = (state = _nullState, action) => {
+const rightSidebarReducer = (state = _defaultState, action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case DRAWER_OPEN: {
-      const { drawer } = action;
-      return { ...drawer };
+    case DRAWER_UPDATE: {
+      const { drawerType, drawerSlug } = action;
+
+      if (!drawerType) {
+        return _defaultState;
+      }
+
+      return { drawerType, drawerSlug };
     }
     case MESSAGE.SHOW.REQUEST: {
       const { messageSlug: drawerSlug } = action;
@@ -34,10 +38,9 @@ const rightSidebarReducer = (state = _nullState, action) => {
       return { drawerType: 'favorites', drawerSlug: null };
     case CHANNEL.SHOW.REQUEST:
       return { drawerType: 'details', drawerSlug: null };
-    case DRAWER_CLOSE:
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
-      return _nullState;
+      return _defaultState;
     default:
       return state;
   }

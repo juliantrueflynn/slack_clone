@@ -26,7 +26,7 @@ class ChatPageSwitch extends React.Component {
       match: { isExact },
       drawerType,
       history,
-      drawerClose,
+      closeDrawer,
       chatPath,
       channel,
       switchChannel,
@@ -36,7 +36,7 @@ class ChatPageSwitch extends React.Component {
 
     if (channel && drawerType && isExact && !prevProps.isExact) {
       if (chatPath === prevProps.chatPath) {
-        drawerClose();
+        closeDrawer();
         return;
       }
     }

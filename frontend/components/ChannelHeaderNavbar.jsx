@@ -17,7 +17,7 @@ class ChannelHeaderNavbar extends React.Component {
     const {
       history,
       drawerType,
-      drawerClose,
+      closeDrawer,
       modalType,
       modalOpen,
       modalClose,
@@ -38,7 +38,7 @@ class ChannelHeaderNavbar extends React.Component {
     }
 
     if (!isExact && drawerType === pathName) {
-      drawerClose();
+      closeDrawer();
       history.push(url);
     }
   }
