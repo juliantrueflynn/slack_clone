@@ -1,0 +1,21 @@
+.Modal__dropdown {
+  border-top: 1px solid rgba(0,0,0,.1);
+  position: absolute;
+  background-color: #FFF;
+  width: 280px;
+  -webkit-box-shadow: 0px 2px 15px 0px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px 2px 15px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 2px 15px 0px rgba(0,0,0,0.2);
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-radius: 3px;
+}
+
+.Modal__dropdown .MenuItem__content {
+  color: rgba(0,0,0,.86);
+  width: 100%;
+}
+
+.Modal__dropdown .MenuItem__content--btn {
+  text-align: left;
+}

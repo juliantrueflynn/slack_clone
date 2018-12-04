@@ -4,18 +4,30 @@ import Menu from './Menu';
 import './MessageHoverMenu.css';
 
 class MessageHoverMenu extends React.Component {
+  static getModalBoundingClientRect(e) {
+    const menuNode = e.currentTarget.parentElement.parentElement;
+    return menuNode.getBoundingClientRect();
+  }
+
   constructor(props) {
     super(props);
     this.handleReactionToggle = this.handleReactionToggle.bind(this);
     this.handleFavToggle = this.handleFavToggle.bind(this);
-    this.handleOverlayClick = this.handleOverlayClick.bind(this);
+    this.handleDropdownModal = this.handleDropdownModal.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { hasHover, isDdOpen, handleHover } = this.props;
+
+    if (hasHover && !isDdOpen && prevProps.isDdOpen) {
+      handleHover(false);
+    }
   }
 
   handleReactionToggle(e) {
-    const { modalOpen, slug: messageSlug } = this.props;
+    const { modalOpen, message: { slug: messageSlug } } = this.props;
 
-    const menuNode = e.currentTarget.parentElement.parentElement;
-    const nodeBounds = menuNode.getBoundingClientRect();
+    const nodeBounds = MessageHoverMenu.getModalBoundingClientRect(e);
     const modalProps = {
       clickPosY: nodeBounds.top,
       clickPosX: nodeBounds.right,
@@ -26,42 +38,30 @@ class MessageHoverMenu extends React.Component {
   }
 
   handleFavToggle() {
-    const {
-      id: messageId,
-      favoriteId: id,
-      toggleFavorite,
-    } = this.props;
+    const { message: { id, favoriteId }, toggleFavorite } = this.props;
 
-    toggleFavorite({ id, messageId });
+    toggleFavorite({ id: favoriteId, messageId: id });
   }
 
-  handleOverlayClick(e) {
-    const { ddToggle } = this.props;
-    ddToggle(e.target, false);
+  handleDropdownModal(e) {
+    const { modalOpen, message } = this.props;
+
+    const nodeBounds = MessageHoverMenu.getModalBoundingClientRect(e);
+    const modalProps = {
+      clickPosY: nodeBounds.bottom,
+      clickPosX: nodeBounds.right,
+      message,
+    };
+
+    modalOpen('MODAL_DROPDOWN_MESSAGE', modalProps);
   }
 
   render() {
-    const {
-      toggleEditor,
-      id,
-      slug,
-      favoriteId,
-      entityType,
-      authorSlug,
-      pinId,
-      currentUserSlug,
-      createPinRequest,
-      destroyPinRequest,
-      ddToggle,
-      deleteMessageRequest,
-      filterMenuItems,
-      matchUrl,
-    } = this.props;
+    const { message, filterMenuItems, matchUrl } = this.props;
 
-    const isMessageType = entityType === 'entry';
-    const byCurrUser = currentUserSlug === authorSlug;
-    const favIcon = favoriteId ? ['fas', 'star'] : ['far', 'star'];
-    const favClassName = favoriteId ? 'solid' : 'empty';
+    const isMessageType = message.entityType === 'entry';
+    const favIcon = message.favoriteId ? ['fas', 'star'] : ['far', 'star'];
+    const favClassName = message.favoriteId ? 'solid' : 'empty';
 
     let menuItems = [
       {
@@ -71,7 +71,7 @@ class MessageHoverMenu extends React.Component {
       },
       {
         key: 'convo',
-        link: `${matchUrl}/convo/${slug}`,
+        link: `${matchUrl}/convo/${message.slug}`,
         icon: <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />,
         hasNoDrawer: true,
         condition: isMessageType,
@@ -86,33 +86,8 @@ class MessageHoverMenu extends React.Component {
       {
         key: 'dropdown',
         icon: <FontAwesomeIcon icon="ellipsis-h" fixedWidth />,
-        menuPos: 'right',
-        shouldPos: true,
-        onOverlayClick: this.handleOverlayClick,
-        ddToggle,
+        onClick: this.handleDropdownModal,
         condition: isMessageType && isMessageType,
-        items: [
-          {
-            label: 'Un-pin message',
-            onClick: () => destroyPinRequest(pinId),
-            condition: pinId,
-          },
-          {
-            label: 'Pin message',
-            onClick: () => createPinRequest({ messageId: id }),
-            condition: !pinId,
-          },
-          {
-            label: 'Edit message',
-            onClick: () => toggleEditor(slug),
-            condition: byCurrUser,
-          },
-          {
-            label: 'Delete message',
-            onClick: () => deleteMessageRequest(slug),
-            condition: byCurrUser,
-          }
-        ],
       }
     ];
 

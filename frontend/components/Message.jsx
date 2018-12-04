@@ -14,32 +14,20 @@ import './Message.css';
 class Message extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasHover: false, isDdOpen: false };
+    this.state = { hasHover: false };
     this.handleHover = this.handleHover.bind(this);
-    this.handleDdToggle = this.handleDdToggle.bind(this);
   }
 
-  handleHover(hoverValue) {
-    const { isHoverable } = this.props;
-    const { hasHover, isDdOpen } = this.state;
+  handleHover(hasHover) {
+    const { isHoverable, isDdOpen } = this.props;
 
     if (isDdOpen) {
       return;
     }
 
-    if (isHoverable && hoverValue !== hasHover) {
-      this.setState({ hasHover: hoverValue });
+    if (isHoverable) {
+      this.setState({ hasHover });
     }
-  }
-
-  handleDdToggle(eTarget, isDdOpen) {
-    const nextState = { isDdOpen };
-
-    if (eTarget) {
-      nextState.hasHover = false;
-    }
-
-    this.setState(nextState);
   }
 
   render() {
@@ -52,10 +40,11 @@ class Message extends React.Component {
       currentUserSlug,
       url,
       messageDate,
-      toggleEditor,
       toggleReaction,
+      toggleEditor,
       updateMessageRequest,
       editMessageSlug,
+      isDdOpen,
       isThreadHidden,
       isHoverable,
       isHighlightable,
@@ -63,7 +52,7 @@ class Message extends React.Component {
       shouldHideEngagement,
       ...props
     } = this.props;
-    const { hasHover, isDdOpen } = this.state;
+    const { hasHover } = this.state;
 
     const date = dateUtil(message.createdAt);
     const time = date.localTime();
@@ -85,7 +74,7 @@ class Message extends React.Component {
       'Message--hoverable': isHoverable,
       'Message--editing': isEditing,
       'Message--highlighted': isHighlightable && (message.favoriteId || message.pinId),
-      'Message--hover': isDdOpen || (hasHover && !isEditing && !message.pinId),
+      'Message--hover': hasHover && !isEditing && !message.pinId,
     });
 
     return (
@@ -108,11 +97,12 @@ class Message extends React.Component {
             />
           )}
           <MessageHoverMenu
-            currentUserSlug={currentUserSlug}
-            ddToggle={this.handleDdToggle}
-            toggleEditor={toggleEditor}
+            hasHover={hasHover}
+            isDdOpen={isDdOpen}
+            handleHover={this.handleHover}
+            toggleDd={this.handleDdToggle}
             matchUrl={url}
-            {...message}
+            message={message}
             {...props}
           />
           <div className="Message__row">
