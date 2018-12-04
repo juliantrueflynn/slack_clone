@@ -1,5 +1,4 @@
-.PageHome,
-.PageHome .PageView__body {
+.PageHome {
   display: flex;
   flex-direction: column;
   flex-grow: 1;

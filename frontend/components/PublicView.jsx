@@ -7,6 +7,7 @@ import WorkspaceModal from './WorkspaceModal';
 import DropdownModal from './DropdownModal';
 import Button from './Button';
 import './PublicView.css';
+import ScrollBar from './ScrollBar';
 
 class PublicView extends React.Component {
   constructor(props) {
@@ -115,35 +116,37 @@ class PublicView extends React.Component {
     });
 
     return (
-      <div className={pageClassNames}>
-        <header className="PublicView__header">
-          <div className="PublicView__container">
-            <nav className="PublicView__navbar">
-              <Link className="PublicView__logo" to="/" rel="home">Slack Clone</Link>
-              <Menu
-                menuFor="public"
-                isRow
-                items={desktopMenuItems}
-                bemModifier={menuModifier}
-              />
-              <Button buttonFor="mobile-public" onClick={this.handleDdClick}>
-                <FontAwesomeIcon icon="bars" fixedWidth size="lg" />
-              </Button>
-            </nav>
-          </div>
-        </header>
-        {render({ workspaces })}
-        {isModalOpen && <WorkspaceModal closeModal={closeModal} />}
-        {isDdOpen && (
-          <DropdownModal
-            bemModifier="public"
-            menuProps={{ bemModifier: menuModifier }}
-            dropdownProps={dropdownProps}
-            close={closeDropdown}
-            items={ddItems}
-          />
-        )}
-      </div>
+      <ScrollBar>
+        <div className={pageClassNames}>
+          <header className="PublicView__header">
+            <div className="PublicView__container">
+              <nav className="PublicView__navbar">
+                <Link className="PublicView__logo" to="/" rel="home">Slack Clone</Link>
+                <Menu
+                  menuFor="public"
+                  isRow
+                  items={desktopMenuItems}
+                  bemModifier={menuModifier}
+                />
+                <Button buttonFor="mobile-public" onClick={this.handleDdClick}>
+                  <FontAwesomeIcon icon="bars" fixedWidth size="lg" />
+                </Button>
+              </nav>
+            </div>
+          </header>
+          {render({ workspaces })}
+          {isModalOpen && <WorkspaceModal closeModal={closeModal} />}
+          {isDdOpen && (
+            <DropdownModal
+              bemModifier="public"
+              menuProps={{ bemModifier: menuModifier }}
+              dropdownProps={dropdownProps}
+              close={closeDropdown}
+              items={ddItems}
+            />
+          )}
+        </div>
+      </ScrollBar>
     );
   }
 }

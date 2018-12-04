@@ -3,6 +3,11 @@
   flex-direction: column;
   flex-grow: 1;
   background-color: #F7FAFC;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
 
 .PublicView__header {

@@ -28,9 +28,6 @@ div#root {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-}
-
-.App--private {
   overflow: hidden;
 }
 

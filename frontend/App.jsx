@@ -1,6 +1,5 @@
 import React from 'react';
 import 'sanitize.css';
-import classNames from 'classnames';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faEdit as farEdit,
@@ -81,14 +80,10 @@ class App extends React.Component {
   }
 
   render() {
-    const { isLoggedIn, onReceived, match: { isExact } } = this.props;
-
-    const appClassNames = classNames('App', {
-      'App--private': !isExact,
-    });
+    const { isLoggedIn, onReceived } = this.props;
 
     return (
-      <div id="appClient" className={appClassNames}>
+      <div className="App">
         {isLoggedIn && <ActionCable channel={{ channel: 'AppChannel' }} onReceived={onReceived} />}
         <PageRoutes routes={routesConfig} />
       </div>

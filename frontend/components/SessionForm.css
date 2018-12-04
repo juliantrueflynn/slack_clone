@@ -20,8 +20,6 @@
 .PublicView__signin,
 .PublicView__signup {
   background-color: #6C5CE7;
-  height: 100%;
-  position: relative;
 }
 
 .PublicView__signin .Page__title,
