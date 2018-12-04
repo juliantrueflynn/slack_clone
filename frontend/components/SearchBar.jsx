@@ -55,17 +55,17 @@ class SearchBar extends React.Component {
   handleModalOpen(e) {
     e.preventDefault();
 
-    const { modalOpen } = this.props;
-    modalOpen('MODAL_SEARCH');
+    const { openModal } = this.props;
+    openModal('MODAL_SEARCH');
   }
 
   render() {
-    const { query, hasClearIcon, modalOpen } = this.props;
+    const { query, hasClearIcon, openModal } = this.props;
 
-    const isDisabled = !!modalOpen;
+    const isDisabled = !!openModal;
 
     const searchClassNames = classNames('SearchBar', {
-      'SearchBar--disabled': modalOpen,
+      'SearchBar--disabled': openModal,
       'SearchBar--queried': query,
       'SearchBar--empty': !query,
     });

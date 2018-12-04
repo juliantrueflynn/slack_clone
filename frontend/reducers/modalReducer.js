@@ -1,6 +1,5 @@
 import {
-  MODAL_OPEN,
-  MODAL_CLOSE,
+  MODAL_UPDATE,
   MESSAGE,
   WORKSPACE,
   SIGN_OUT,
@@ -17,8 +16,13 @@ const modalReducer = (state = _defaultState, action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case MODAL_OPEN: {
+    case MODAL_UPDATE: {
       const { modalType, modalProps } = action;
+
+      if (!modalType) {
+        return _defaultState;
+      }
+
       return { modalType, modalProps };
     }
     case SIGN_OUT.RECEIVE:
@@ -26,7 +30,6 @@ const modalReducer = (state = _defaultState, action) => {
     case WORKSPACE.SHOW.REQUEST:
     case USER_THREAD.INDEX.REQUEST:
     case READ.INDEX.REQUEST:
-    case MODAL_CLOSE:
       return _defaultState;
     default:
       return state;

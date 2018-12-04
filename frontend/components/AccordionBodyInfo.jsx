@@ -8,11 +8,11 @@ const AccordionBodyInfo = ({
   topic,
   createdAt,
   ownerName,
-  modalOpen,
+  openModal,
 }) => {
   const dateCreated = dateUtil(createdAt).monthDayYear();
   const dateText = `${dateCreated} by ${ownerName}`;
-  const openChannelEditor = () => modalOpen('MODAL_EDIT_CHANNEL');
+  const openChannelEditor = () => openModal('MODAL_EDIT_CHANNEL');
 
   return (
     <AccordionItemBody>

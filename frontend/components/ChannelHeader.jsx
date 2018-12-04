@@ -29,7 +29,7 @@ class ChannelHeader extends React.Component {
       channelsMap,
       users,
       accordionOpen,
-      modalOpen,
+      openModal,
       chatPath,
       match,
       location,
@@ -88,14 +88,14 @@ class ChannelHeader extends React.Component {
           key: 'topic',
           icon: !!channel.topic || <FontAwesomeIcon icon="edit" size="sm" />,
           label: channel.topic || 'Add topic',
-          onClick: () => modalOpen('MODAL_EDIT_CHANNEL'),
+          onClick: () => openModal('MODAL_EDIT_CHANNEL'),
         }
       ];
     }
 
     return (
       <header className="ChannelHeader">
-        <Button buttonFor="left-sidebar-mobile" unStyled onClick={() => modalOpen('MODAL_LEFT_SIDEBAR')}>
+        <Button buttonFor="left-sidebar-mobile" unStyled onClick={() => openModal('MODAL_LEFT_SIDEBAR')}>
           <FontAwesomeIcon icon="bars" size="lg" />
         </Button>
         <div className="ChannelHeader__info">
@@ -104,7 +104,7 @@ class ChannelHeader extends React.Component {
         </div>
         <ChannelHeaderNavbar
           chatTitle={title}
-          modalOpen={modalOpen}
+          openModal={openModal}
           channel={channel}
           match={match}
           messages={messages}

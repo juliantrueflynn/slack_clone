@@ -59,7 +59,7 @@ class Workspace extends React.Component {
       isLoading,
       routes,
       modal: { modalType, modalProps },
-      modalClose,
+      closeModal,
       channelsMap,
       chatPath,
       users,
@@ -112,29 +112,29 @@ class Workspace extends React.Component {
         ))}
         {workspace && defaultChat && <LeftSidebarContainer />}
         {modalType === 'MODAL_CHAT' && (
-          <ChatModal workspaceId={workspace.id} modalClose={modalClose} />
+          <ChatModal workspaceId={workspace.id} closeModal={closeModal} />
         )}
         {modalType === 'MODAL_CHATS' && (
           <ChatsModal
             workspaceSlug={workspaceSlug}
             channels={channels}
             fetchChannelsRequest={fetchChannelsRequest}
-            modalClose={modalClose}
+            closeModal={closeModal}
           />
         )}
-        {modalType === 'MODAL_PROFILE' && <ProfileModal {...user} modalClose={modalClose} />}
+        {modalType === 'MODAL_PROFILE' && <ProfileModal {...user} closeModal={closeModal} />}
         {modalType === 'MODAL_EDIT_CHANNEL' && (
           <ChannelEditorModal
             channel={channel}
             currentUserSlug={currentUser.slug}
-            modalClose={modalClose}
+            closeModal={closeModal}
           />
         )}
         {modalType === 'MODAL_REACTION' && (
           <ReactionModal
             toggleReaction={toggleReaction}
             modalProps={modalProps}
-            modalClose={modalClose}
+            closeModal={closeModal}
           />
         )}
         {defaultChat && <PageRoutes routes={routes} />}

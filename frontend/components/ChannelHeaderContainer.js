@@ -1,12 +1,11 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {
-  modalOpen,
+  updateModal,
   updateDrawer,
   accordionOpen,
   destroySearch,
   fetchSearch,
-  modalClose,
 } from '../actions/uiActions';
 import { destroyChannelSub } from '../actions/channelActions';
 import { selectMessages, selectChannelsMap } from '../reducers/selectors';
@@ -25,7 +24,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  modalOpen: (modalType, modalProps = null) => dispatch(modalOpen(modalType, modalProps)),
+  openModal: (modalType, modalProps = null) => dispatch(updateModal(modalType, modalProps)),
   closeDrawer: () => dispatch(updateDrawer(null)),
   accordionOpen: accordionType => dispatch(accordionOpen('details', accordionType)),
   fetchSearchRequest: (query, shouldNotSearch = false) => (
@@ -33,7 +32,7 @@ const mapDispatchToProps = dispatch => ({
   ),
   destroySearch: () => dispatch(destroySearch()),
   destroyChannelSubRequest: channelSlug => dispatch(destroyChannelSub.request(channelSlug)),
-  modalClose: () => dispatch(modalClose()),
+  closeModal: () => dispatch(updateModal(null)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChannelHeader));

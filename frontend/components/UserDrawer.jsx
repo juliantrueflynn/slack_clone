@@ -22,7 +22,7 @@ class UserDrawer extends React.Component {
   }
 
   render() {
-    const { currentUserSlug, modalOpen } = this.props;
+    const { currentUserSlug, openModal } = this.props;
     const user = this.getUser();
 
     if (!user) {
@@ -68,7 +68,7 @@ class UserDrawer extends React.Component {
             <Button buttonFor="dm" onClick={this.handleButtonClick}>Message</Button>
           )}
           {isNotCurrUser || (
-            <Button buttonFor="edit-user" onClick={() => modalOpen('MODAL_PROFILE', null)}>
+            <Button buttonFor="edit-user" onClick={() => openModal('MODAL_PROFILE', null)}>
               Edit Profile
             </Button>
           )}

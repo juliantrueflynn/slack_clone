@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import withActionCable from './withActionCable';
 import withEntityWrapper from './withEntityWrapper';
 import { fetchWorkspaces } from '../actions/workspaceActions';
-import { modalClose } from '../actions/uiActions';
+import { updateModal } from '../actions/uiActions';
 import { toggleReaction } from '../actions/reactionActions';
 import { fetchChannels } from '../actions/channelActions';
 import { selectSubbedWorkspaces } from '../reducers/selectors';
@@ -19,7 +19,7 @@ const mapDispatchToProps = dispatch => ({
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),
   toggleReaction: reaction => dispatch(toggleReaction(reaction)),
   fetchChannelsRequest: workspaceSlug => dispatch(fetchChannels.request(workspaceSlug)),
-  modalClose: () => dispatch(modalClose()),
+  closeModal: () => dispatch(updateModal(null)),
 });
 
 export default withActionCable(

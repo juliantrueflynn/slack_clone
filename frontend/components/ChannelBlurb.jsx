@@ -9,7 +9,7 @@ import './ChannelBlurb.css';
 const ChannelBlurb = ({
   channel,
   currentUserSlug,
-  modalOpen,
+  openModal,
   matchUrl,
 }) => {
   const {
@@ -21,7 +21,7 @@ const ChannelBlurb = ({
     topic,
     title,
   } = channel;
-  const openEditor = () => modalOpen('MODAL_EDIT_CHANNEL');
+  const openEditor = () => openModal('MODAL_EDIT_CHANNEL');
   const userPathUrl = userSlug => `${matchUrl}/team/${userSlug}`;
   let chatTitle = title;
   let description;

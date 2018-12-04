@@ -50,7 +50,7 @@ class LeftSidebar extends React.Component {
       drawer: { drawerType, drawerSlug },
       history,
       isModalOpen,
-      modalClose,
+      closeModal,
     } = this.props;
 
     let menuUrl = `${url}/${linkUrl}`;
@@ -63,7 +63,7 @@ class LeftSidebar extends React.Component {
     }
 
     if (isModalOpen) {
-      modalClose();
+      closeModal();
     }
 
     history.push(menuUrl);
@@ -77,13 +77,13 @@ class LeftSidebar extends React.Component {
       currentUser,
       users,
       workspace,
-      modalClose,
+      closeModal,
       isModalOpen,
       isDdOpen,
       dropdownProps,
       workspaces,
       chatPath,
-      modalOpen,
+      openModal,
       closeDropdown,
       isMobileSize,
       match: { url },
@@ -199,10 +199,10 @@ class LeftSidebar extends React.Component {
         items: channelsItems,
         title: (
           <Fragment>
-            <Button unStyled buttonFor="chats" onClick={() => modalOpen('MODAL_CHATS')}>
+            <Button unStyled buttonFor="chats" onClick={() => openModal('MODAL_CHATS')}>
               Channels
             </Button>
-            <Button unStyled buttonFor="widget" onClick={() => modalOpen('MODAL_CHAT')}>
+            <Button unStyled buttonFor="widget" onClick={() => openModal('MODAL_CHAT')}>
               <FontAwesomeIcon icon={['fas', 'plus-circle']} />
             </Button>
           </Fragment>
@@ -224,7 +224,7 @@ class LeftSidebar extends React.Component {
             isOpen
             modalFor="left-sidebar"
             modalPos="left"
-            close={modalClose}
+            close={closeModal}
             hasDarkOverlay
             unStyled
           >

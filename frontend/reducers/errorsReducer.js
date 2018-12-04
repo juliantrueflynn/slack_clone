@@ -1,7 +1,7 @@
 import {
   CHANNEL,
   MESSAGE,
-  MODAL_CLOSE,
+  MODAL_UPDATE,
   SIGN_OUT,
   SIGN_IN,
   SIGN_UP,
@@ -52,7 +52,7 @@ const errorsReducer = (state = _defaultState, action) => {
     case CHANNEL.CREATE.REQUEST:
     case CHANNEL.UPDATE.REQUEST:
     case PASSWORD.UPDATE.REQUEST:
-    case MODAL_CLOSE:
+    case MODAL_UPDATE:
       return _defaultState;
     default:
       return state;

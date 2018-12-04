@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { updateDrawer, modalOpen } from '../actions/uiActions';
+import { updateDrawer, updateModal } from '../actions/uiActions';
 import { createChannel } from '../actions/channelActions';
 import { destroyPin } from '../actions/messageActions';
 import { selectDrawerMessages } from '../reducers/selectors';
@@ -18,7 +18,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
 const mapDispatchToProps = dispatch => ({
   openDrawer: drawer => dispatch(updateDrawer(drawer)),
   closeDrawer: () => dispatch(updateDrawer(null)),
-  modalOpen: (modalType, modalProps = {}) => dispatch(modalOpen(modalType, modalProps)),
+  openModal: (modalType, modalProps = {}) => dispatch(updateModal(modalType, modalProps)),
   createChannelRequest: dmChat => dispatch(createChannel.request(dmChat)),
   destroyPinRequest: id => dispatch(destroyPin.request(id)),
 });

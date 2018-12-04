@@ -1,24 +1,21 @@
 import {
   NAVIGATE,
-  MODAL_OPEN,
-  MODAL_CLOSE,
   CREATE_SUCCESS,
   ACCORDION_OPEN,
   SEARCH,
   SEARCH_DESTROY,
   DROPDOWN_UPDATE,
   DRAWER_UPDATE,
+  MODAL_UPDATE,
 } from './actionTypes';
 import { actionCreator } from '../util/actionsUtil';
 
 export const navigate = (path, push) => actionCreator(NAVIGATE, { path, push });
 
-export const modalOpen = (modalType, modalProps) => actionCreator(
-  MODAL_OPEN,
+export const updateModal = (modalType, modalProps = null) => actionCreator(
+  MODAL_UPDATE,
   { modalType, modalProps }
 );
-
-export const modalClose = () => ({ type: MODAL_CLOSE });
 
 export const updateDrawer = (drawerType, drawerSlug = null) => actionCreator(
   DRAWER_UPDATE,

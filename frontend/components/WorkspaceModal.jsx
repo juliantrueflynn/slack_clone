@@ -26,7 +26,7 @@ class WorkspaceModal extends React.Component {
   }
 
   render() {
-    const { modalClose, form: { formErrors } } = this.props;
+    const { closeModal, form: { formErrors } } = this.props;
     const { title, slug } = this.state;
 
     const fields = [
@@ -46,7 +46,7 @@ class WorkspaceModal extends React.Component {
     ];
 
     return (
-      <Modal modalFor="workspace" isOpen modalTitle="Create a Workspace" close={modalClose}>
+      <Modal modalFor="workspace" isOpen modalTitle="Create a Workspace" close={closeModal}>
         <FormHandler
           fields={fields}
           setFieldValue={this.handleFieldValueChange}
@@ -56,7 +56,7 @@ class WorkspaceModal extends React.Component {
           <Button type="submit" color="green" size="lg">
             Create workspace
           </Button>
-          <Button onClick={() => modalClose()} size="lg">
+          <Button onClick={() => closeModal()} size="lg">
             Cancel
           </Button>
         </FormHandler>

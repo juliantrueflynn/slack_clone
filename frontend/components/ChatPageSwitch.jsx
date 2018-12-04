@@ -100,7 +100,7 @@ class ChatPageSwitch extends React.Component {
       currentUser,
       isLoading,
       clearUnreads,
-      modalOpen,
+      openModal,
       fetchHistoryRequest,
       createChannelSubRequest,
       workspaceSlug,
@@ -149,7 +149,7 @@ class ChatPageSwitch extends React.Component {
                 isLoading={isLoading}
                 channel={channel}
                 currentUserSlug={currentUser.slug}
-                modalOpen={modalOpen}
+                openModal={openModal}
                 fetchHistoryRequest={fetchHistoryRequest}
                 updateScrollLoc={this.handleScrollLoc}
                 createChannelSubRequest={createChannelSubRequest}

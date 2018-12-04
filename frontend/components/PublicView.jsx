@@ -49,8 +49,8 @@ class PublicView extends React.Component {
       signOutRequest,
       workspacesMap,
       subbedWorkspaces,
-      modalOpen,
-      modalClose,
+      openModal,
+      closeModal,
       dropdownProps,
       closeDropdown,
       isDdOpen,
@@ -93,7 +93,7 @@ class PublicView extends React.Component {
     const createWorkspaceItem = {
       key: 'createWorkspace',
       label: 'Create Workspace',
-      onClick: () => modalOpen('MODAL_WORKSPACE'),
+      onClick: () => openModal('MODAL_WORKSPACE'),
     };
     workspaceMenuItems.push(createWorkspaceItem);
 
@@ -133,7 +133,7 @@ class PublicView extends React.Component {
           </div>
         </header>
         {render({ workspaces })}
-        {isModalOpen && <WorkspaceModal modalClose={modalClose} />}
+        {isModalOpen && <WorkspaceModal closeModal={closeModal} />}
         {isDdOpen && (
           <DropdownModal
             bemModifier="public"

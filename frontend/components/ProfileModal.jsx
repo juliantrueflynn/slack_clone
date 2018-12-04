@@ -17,7 +17,7 @@ class ProfileModal extends React.Component {
   }
 
   render() {
-    const { modalClose, ...props } = this.props;
+    const { closeModal, ...props } = this.props;
     const { tabOpen } = this.state;
     const { avatarLarge, username, email } = props;
     const user = { avatarLarge, username, email };
@@ -25,7 +25,7 @@ class ProfileModal extends React.Component {
     const tabTitle = tabOpen === 'user' ? 'Edit Settings' : 'Change Password';
 
     return (
-      <Modal isOpen modalTitle="Edit your profile" modalFor="profile" close={modalClose}>
+      <Modal isOpen modalTitle="Edit your profile" modalFor="profile" close={closeModal}>
         <div className={classNames}>
           <div className="ProfileModal__tabs">
             <Button buttonFor="user-tab" onClick={this.handleTabClick('user')}>
@@ -40,10 +40,10 @@ class ProfileModal extends React.Component {
               {tabTitle}
             </h2>
             {tabOpen === 'user' && (
-              <SettingsForm modalClose={modalClose} user={user} />
+              <SettingsForm closeModal={closeModal} user={user} />
             )}
             {tabOpen === 'password' && (
-              <PasswordForm modalClose={modalClose} />
+              <PasswordForm closeModal={closeModal} />
             )}
           </div>
         </div>

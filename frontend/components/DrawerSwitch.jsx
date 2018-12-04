@@ -139,7 +139,7 @@ class DrawerSwitch extends React.Component {
       accordion,
       createChannelRequest,
       destroyPinRequest,
-      modalOpen,
+      openModal,
       history,
       match: { params: { workspaceSlug } },
     } = this.props;
@@ -160,7 +160,7 @@ class DrawerSwitch extends React.Component {
         history,
         workspaceSlug,
         currentUserSlug,
-        modalOpen,
+        openModal,
         users,
       },
       { component: FavoritesDrawer, path: 'favorites' },
@@ -173,7 +173,7 @@ class DrawerSwitch extends React.Component {
         isLoading: isLoading.drawer,
         destroyPinRequest,
         currentUserSlug,
-        modalOpen,
+        openModal,
         users,
       },
     ];

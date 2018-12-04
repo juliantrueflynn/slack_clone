@@ -5,8 +5,8 @@ import Menu from './Menu';
 import './RightSidebarModal.css';
 
 const RightSidebarModal = ({
-  modalClose,
-  modalOpen,
+  closeModal,
+  openModal,
   drawerType,
   channel,
   toggleLink,
@@ -30,7 +30,7 @@ const RightSidebarModal = ({
       key: 'profile',
       label: 'Edit Profile',
       icon: <FontAwesomeIcon icon="user-cog" />,
-      onClick: () => modalOpen('MODAL_PROFILE'),
+      onClick: () => openModal('MODAL_PROFILE'),
     }
   ];
 
@@ -39,7 +39,7 @@ const RightSidebarModal = ({
       isOpen
       modalFor="right-sidebar"
       modalPos="right"
-      close={modalClose}
+      close={closeModal}
       hasDarkOverlay
       unStyled
     >

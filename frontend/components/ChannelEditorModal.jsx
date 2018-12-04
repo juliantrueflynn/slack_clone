@@ -41,7 +41,7 @@ class ChannelEditorModal extends React.Component {
 
   render() {
     const {
-      modalClose,
+      closeModal,
       currentUserSlug,
       channel,
       form: { formSuccess, formErrors },
@@ -65,7 +65,7 @@ class ChannelEditorModal extends React.Component {
     ];
 
     return (
-      <Modal isOpen modalTitle="Update channel" modalFor="channel-edit" close={modalClose}>
+      <Modal isOpen modalTitle="Update channel" modalFor="channel-edit" close={closeModal}>
         <FormHandler
           submitForm={this.handleFormSubmit}
           setFieldValue={this.handleFieldValueChange}
@@ -76,7 +76,7 @@ class ChannelEditorModal extends React.Component {
           <Button type="submit" color="green" size="lg">
             Update
           </Button>
-          <Button onClick={() => modalClose()} size="lg">
+          <Button onClick={() => closeModal()} size="lg">
             Cancel
           </Button>
         </FormHandler>

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { selectSubbedWorkspaces, selectChannelsMap } from '../reducers/selectors';
-import { modalOpen, modalClose, updateDropdown } from '../actions/uiActions';
+import { updateModal, updateDropdown } from '../actions/uiActions';
 import { updateChannelSub } from '../actions/channelActions';
 import withDetectMobileView from './withDetectMobileView';
 import LeftSidebar from './LeftSidebar';
@@ -22,8 +22,8 @@ const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  modalOpen: (modalType, modalProps = {}) => dispatch(modalOpen(modalType, modalProps)),
-  modalClose: () => dispatch(modalClose()),
+  openModal: (modalType, modalProps = {}) => dispatch(updateModal(modalType, modalProps)),
+  closeModal: () => dispatch(updateModal(null)),
   openDropdown: (ddType, ddProps) => dispatch(updateDropdown(ddType, ddProps)),
   closeDropdown: () => dispatch(updateDropdown(null)),
   updateChannelSubRequest: channelSub => dispatch(updateChannelSub.request(channelSub)),

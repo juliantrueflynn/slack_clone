@@ -64,7 +64,7 @@ class SettingsForm extends React.Component {
 
   render() {
     const {
-      modalClose,
+      closeModal,
       user,
       form: { formSuccess, formErrors },
     } = this.props;
@@ -109,7 +109,7 @@ class SettingsForm extends React.Component {
             <Button type="submit" color="green" size="lg">
               Save
             </Button>
-            <Button onClick={() => modalClose()} size="lg">
+            <Button onClick={() => closeModal()} size="lg">
               Cancel
             </Button>
           </FormHandler>

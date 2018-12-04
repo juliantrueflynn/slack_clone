@@ -1,12 +1,11 @@
 import {
+  CREATE_SUCCESS,
   PASSWORD,
   WORKSPACE,
   SIGN_OUT,
   USER,
-  MODAL_CLOSE,
-  MODAL_OPEN,
   CHANNEL,
-  CREATE_SUCCESS,
+  MODAL_UPDATE,
 } from '../actions/actionTypes';
 
 const _defaultState = {
@@ -46,8 +45,7 @@ const successReducer = (state = _defaultState, action) => {
     case WORKSPACE.SHOW.REQUEST:
     case CHANNEL.UPDATE.REQUEST:
     case USER.UPDATE.REQUEST:
-    case MODAL_OPEN:
-    case MODAL_CLOSE:
+    case MODAL_UPDATE:
     case SIGN_OUT.RECEIVE:
       return _defaultState;
     default:

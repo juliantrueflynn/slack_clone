@@ -118,14 +118,14 @@ class SearchModal extends React.Component {
   }
 
   handleClose() {
-    const { modalClose, fetchSearchRequest, searchQuery } = this.props;
+    const { closeModal, fetchSearchRequest, searchQuery } = this.props;
     const { query } = this.state;
 
     if (searchQuery !== query) {
       fetchSearchRequest(query, true);
     }
 
-    modalClose();
+    closeModal();
   }
 
   render() {

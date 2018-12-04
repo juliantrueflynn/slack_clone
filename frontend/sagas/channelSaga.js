@@ -9,7 +9,7 @@ import {
 import * as action from '../actions/channelActions';
 import { CHANNEL } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiUpdate } from '../util/apiUtil';
-import { navigate, modalClose, createSuccess } from '../actions/uiActions';
+import { navigate, closeModal, createSuccess } from '../actions/uiActions';
 import { selectCurrentUser } from '../reducers/selectors';
 
 function* fetchIndex({ workspaceSlug }) {
@@ -51,7 +51,7 @@ function* loadNavigateCreated({ channel: { channel, subs, workspaceSlug } }) {
 
   if (isOwner) {
     if (!hasDm) {
-      yield put(modalClose('CHAT_MODAL'));
+      yield put(closeModal('CHAT_MODAL'));
     }
 
     yield put(navigate(`/${workspaceSlug}/messages/${slug}`));

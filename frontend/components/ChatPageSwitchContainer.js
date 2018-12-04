@@ -4,7 +4,7 @@ import { selectChatPageMessagesBySlug, selectChannelsMap } from '../reducers/sel
 import { fetchHistory } from '../actions/messageActions';
 import { createChannelSub, switchChannel } from '../actions/channelActions';
 import { clearUnreads } from '../actions/readActions';
-import { updateDrawer, modalOpen } from '../actions/uiActions';
+import { updateDrawer, updateModal } from '../actions/uiActions';
 import ChatPageSwitch from './ChatPageSwitch';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
@@ -20,7 +20,7 @@ const mapDispatchToProps = dispatch => ({
   switchChannel: (channelSlug, scrollLoc) => dispatch(switchChannel(channelSlug, scrollLoc)),
   clearUnreads: (channelSlug, lastRead) => dispatch(clearUnreads(channelSlug, lastRead)),
   closeDrawer: () => dispatch(updateDrawer(null)),
-  modalOpen: modalType => dispatch(modalOpen(modalType, null)),
+  openModal: modalType => dispatch(updateModal(modalType, null)),
 });
 
 export default withEntityWrapper('chatPath')(

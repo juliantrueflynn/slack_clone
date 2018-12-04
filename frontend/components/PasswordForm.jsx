@@ -30,7 +30,7 @@ class PasswordForm extends React.Component {
   }
 
   render() {
-    const { modalClose, form: { formSuccess, formErrors } } = this.props;
+    const { closeModal, form: { formSuccess, formErrors } } = this.props;
     const { password, newPassword, passwordVerify } = this.state;
 
     const fields = [
@@ -65,7 +65,7 @@ class PasswordForm extends React.Component {
         <Button type="submit" color="green" size="lg">
           Save
         </Button>
-        <Button onClick={() => modalClose()} size="lg">
+        <Button onClick={() => closeModal()} size="lg">
           Cancel
         </Button>
       </FormHandler>

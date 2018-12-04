@@ -121,7 +121,7 @@ class Channel extends React.Component {
       messages,
       createChannelSubRequest,
       currentUserSlug,
-      modalOpen,
+      openModal,
       updateScrollLoc,
       match: { url },
     } = this.props;
@@ -153,7 +153,7 @@ class Channel extends React.Component {
               <ChannelBlurb
                 channel={channel}
                 currentUserSlug={currentUserSlug}
-                modalOpen={modalOpen}
+                openModal={openModal}
                 matchUrl={url}
               />
               <div className="Channel__history-loader">

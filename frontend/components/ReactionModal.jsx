@@ -10,14 +10,14 @@ class ReactionModal extends React.Component {
   }
 
   handleClick(_, emoji) {
-    const { modalProps: { messageSlug }, toggleReaction, modalClose } = this.props;
+    const { modalProps: { messageSlug }, toggleReaction, closeModal } = this.props;
     const reaction = { messageSlug, emoji: emoji.name };
     toggleReaction(reaction);
-    modalClose();
+    closeModal();
   }
 
   render() {
-    const { modalProps, modalClose } = this.props;
+    const { modalProps, closeModal } = this.props;
 
     const { clickPosX, clickPosY } = modalProps;
     const posX = clickPosX - 285;
@@ -36,7 +36,7 @@ class ReactionModal extends React.Component {
     };
 
     return (
-      <Modal isOpen close={modalClose} style={style} unStyled hasNoWrappers>
+      <Modal isOpen close={closeModal} style={style} unStyled hasNoWrappers>
         <EmojiPicker onEmojiClick={this.handleClick} disableDiversityPicker />
       </Modal>
     );

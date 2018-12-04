@@ -9,7 +9,7 @@ const PublicWorkspaces = ({
   createWorkspaceSubRequest,
   updateWorkspaceSubRequest,
   currentUser,
-  modalOpen,
+  openModal,
 }) => {
   if (!workspaces || !isLoggedIn) return null;
 
@@ -22,7 +22,7 @@ const PublicWorkspaces = ({
         <div className="PublicWorkspaces__subtitle">
           You can also&nbsp;
           <Button
-            onClick={() => modalOpen('MODAL_WORKSPACE')}
+            onClick={() => openModal('MODAL_WORKSPACE')}
             buttonFor="create-workspace"
             unStyled
           >

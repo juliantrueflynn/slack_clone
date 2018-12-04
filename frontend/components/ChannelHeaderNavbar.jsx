@@ -19,17 +19,17 @@ class ChannelHeaderNavbar extends React.Component {
       drawerType,
       closeDrawer,
       modalType,
-      modalOpen,
-      modalClose,
+      openModal,
+      closeModal,
       match: { url, isExact },
     } = this.props;
 
     if (modalType && !isMobile) {
-      modalClose();
+      closeModal();
     }
 
     if (isMobile) {
-      modalOpen('MODAL_DRAWER_MOBILE');
+      openModal('MODAL_DRAWER_MOBILE');
     }
 
     if (drawerType !== pathName) {
@@ -53,8 +53,8 @@ class ChannelHeaderNavbar extends React.Component {
       chatTitle,
       drawerType,
       modalType,
-      modalOpen,
-      modalClose,
+      openModal,
+      closeModal,
       isLoading,
       searchQuery,
       destroyChannelSubRequest,
@@ -92,7 +92,7 @@ class ChannelHeaderNavbar extends React.Component {
             },
             {
               label: 'Edit channel',
-              onClick: () => modalOpen('MODAL_EDIT_CHANNEL'),
+              onClick: () => openModal('MODAL_EDIT_CHANNEL'),
               condition: !channel.hasDm,
             },
             {
@@ -115,7 +115,7 @@ class ChannelHeaderNavbar extends React.Component {
       {
         key: 'profile',
         icon: <FontAwesomeIcon icon="user-cog" />,
-        onClick: () => modalOpen('MODAL_PROFILE'),
+        onClick: () => openModal('MODAL_PROFILE'),
       },
     ];
 
@@ -125,11 +125,11 @@ class ChannelHeaderNavbar extends React.Component {
         <SearchBar
           query={searchQuery}
           destroySearch={destroySearch}
-          modalOpen={modalOpen}
+          openModal={openModal}
           hasClearIcon
         />
         <Menu menuFor="header-user" isRow items={userMenuItems} />
-        <Button buttonFor="right-sidebar-mobile" unStyled onClick={() => modalOpen('MODAL_RIGHT_SIDEBAR')}>
+        <Button buttonFor="right-sidebar-mobile" unStyled onClick={() => openModal('MODAL_RIGHT_SIDEBAR')}>
           <FontAwesomeIcon icon="ellipsis-v" />
         </Button>
         {modalType === 'MODAL_SEARCH' && (
@@ -142,7 +142,7 @@ class ChannelHeaderNavbar extends React.Component {
             fetchSearchRequest={fetchSearchRequest}
             destroySearch={destroySearch}
             isSearchLoading={isLoading}
-            modalClose={modalClose}
+            closeModal={closeModal}
           />
         )}
         {modalType === 'MODAL_RIGHT_SIDEBAR' && (
@@ -150,8 +150,8 @@ class ChannelHeaderNavbar extends React.Component {
             drawerType={drawerType}
             toggleLink={this.handleLinkToggle}
             channel={channel}
-            modalOpen={modalOpen}
-            modalClose={modalClose}
+            openModal={openModal}
+            closeModal={closeModal}
           />
         )}
       </nav>

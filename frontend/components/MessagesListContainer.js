@@ -9,7 +9,7 @@ import {
 } from '../actions/messageActions';
 import { toggleReaction } from '../actions/reactionActions';
 import { toggleFavorite } from '../actions/favoriteActions';
-import { modalOpen, updateDropdown } from '../actions/uiActions';
+import { updateModal, updateDropdown } from '../actions/uiActions';
 import MessagesList from './MessagesList';
 
 const mapStateToProps = (state, { match: { url } }) => ({
@@ -29,7 +29,7 @@ const mapDispatchToProps = dispatch => ({
   toggleMessageEditor: slug => dispatch(toggleMessageEditor(slug)),
   createPinRequest: pin => dispatch(createPin.request(pin)),
   destroyPinRequest: id => dispatch(destroyPin.request(id)),
-  modalOpen: (modalType, modalProps) => dispatch(modalOpen(modalType, modalProps)),
+  openModal: (modalType, modalProps) => dispatch(updateModal(modalType, modalProps)),
   openDropdown: (ddType, ddProps) => dispatch(updateDropdown(ddType, ddProps)),
   closeDropdown: () => dispatch(updateDropdown(null)),
 });

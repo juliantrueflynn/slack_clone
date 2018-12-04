@@ -20,6 +20,8 @@ export const PASSWORD = apiActions('PASSWORD', ['UPDATE']);
 export const SEARCH = apiActions('SEARCH', ['INDEX']);
 export const SEARCH_DESTROY = 'SEARCH_DESTROY';
 
+export const MODAL_UPDATE = 'MODAL_UPDATE';
+export const DRAWER_UPDATE = 'DRAWER_UPDATE';
 export const DROPDOWN_UPDATE = 'DROPDOWN_UPDATE';
 export const REACTION_TOGGLE = 'REACTION_TOGGLE';
 export const FAVORITE_TOGGLE = 'FAVORITE_TOGGLE';
@@ -27,8 +29,5 @@ export const MESSAGE_EDITOR_TOGGLE = 'MESSAGE_EDITOR_TOGGLE';
 export const CREATE_SUCCESS = 'CREATE_SUCCESS';
 export const CHANNEL_SWITCH = 'CHANNEL_SWITCH';
 export const CLEAR_UNREADS = 'CLEAR_UNREADS';
-export const DRAWER_UPDATE = 'DRAWER_UPDATE';
 export const NAVIGATE = 'NAVIGATE';
-export const MODAL_OPEN = 'MODAL_OPEN';
-export const MODAL_CLOSE = 'MODAL_CLOSE';
 export const ACCORDION_OPEN = 'ACCORDION_OPEN';

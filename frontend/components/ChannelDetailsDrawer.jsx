@@ -57,7 +57,7 @@ class ChannelDetailsDrawer extends React.Component {
       users,
       isLoading,
       destroyPinRequest,
-      modalOpen,
+      openModal,
       currentUserSlug,
     } = this.props;
     const { ...state } = this.state;
@@ -74,7 +74,7 @@ class ChannelDetailsDrawer extends React.Component {
         icon: 'info-circle',
         itemTitle: 'Channel Details',
         name: 'details',
-        body: <AccordionBodyInfo {...channel} modalOpen={modalOpen} />,
+        body: <AccordionBodyInfo {...channel} openModal={openModal} />,
       });
       accordionItems.push({
         icon: 'users',

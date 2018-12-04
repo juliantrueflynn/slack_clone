@@ -10,11 +10,11 @@ class ChatsModal extends React.Component {
   }
 
   render() {
-    const { channels, workspaceSlug, modalClose } = this.props;
+    const { channels, workspaceSlug, closeModal } = this.props;
     const unsubbedChannels = channels.filter(ch => !ch.isSub && !ch.hasDm);
 
     return (
-      <Modal isOpen modalFor="chats" modalTitle="Browse channels" close={modalClose}>
+      <Modal isOpen modalFor="chats" modalTitle="Browse channels" close={closeModal}>
         <div className="ChatsModal">
           <div className="ChatsModal__subhead">
             Channels you can join

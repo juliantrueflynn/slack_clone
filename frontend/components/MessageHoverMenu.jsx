@@ -25,7 +25,7 @@ class MessageHoverMenu extends React.Component {
   }
 
   handleReactionToggle(e) {
-    const { modalOpen, message: { slug: messageSlug } } = this.props;
+    const { openModal, message: { slug: messageSlug } } = this.props;
 
     const nodeBounds = MessageHoverMenu.getModalBoundingClientRect(e);
     const modalProps = {
@@ -34,7 +34,7 @@ class MessageHoverMenu extends React.Component {
       messageSlug,
     };
 
-    modalOpen('MODAL_REACTION', modalProps);
+    openModal('MODAL_REACTION', modalProps);
   }
 
   handleFavToggle() {
