@@ -27,10 +27,10 @@ class MessageHoverMenu extends React.Component {
   handleReactionToggle(e) {
     const { openModal, message: { slug: messageSlug } } = this.props;
 
-    const nodeBounds = MessageHoverMenu.getModalBoundingClientRect(e);
+    const client = MessageHoverMenu.getModalBoundingClientRect(e);
     const modalProps = {
-      clickPosY: nodeBounds.top,
-      clickPosX: nodeBounds.right,
+      clickPosY: client.top,
+      clickPosX: client.right,
       messageSlug,
     };
 
@@ -46,10 +46,10 @@ class MessageHoverMenu extends React.Component {
   handleDropdownModal(e) {
     const { openDropdown, message } = this.props;
 
-    const nodeBounds = MessageHoverMenu.getModalBoundingClientRect(e);
+    const client = MessageHoverMenu.getModalBoundingClientRect(e);
     const dropdownProps = {
-      clickPosY: nodeBounds.bottom,
-      clickPosX: nodeBounds.right,
+      bottom: client.bottom,
+      right: client.right,
       message,
     };
 

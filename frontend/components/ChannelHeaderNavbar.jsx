@@ -5,15 +5,18 @@ import Menu from './Menu';
 import Button from './Button';
 import SearchModal from './SearchModal';
 import RightSidebarModal from './RightSidebarModal';
+import DropdownModal from './DropdownModal';
+import withWindowResize from './withWindowResize';
 import './ChannelHeaderNavbar.css';
 
 class ChannelHeaderNavbar extends React.Component {
   constructor(props) {
     super(props);
     this.handleLinkToggle = this.handleLinkToggle.bind(this);
+    this.handleDdButtonClick = this.handleDdButtonClick.bind(this);
   }
 
-  handleLinkToggle(pathName, isMobile = false) {
+  handleLinkToggle(pathName) {
     const {
       history,
       drawerType,
@@ -21,14 +24,15 @@ class ChannelHeaderNavbar extends React.Component {
       modalType,
       openModal,
       closeModal,
+      isMobileSize,
       match: { url, isExact },
     } = this.props;
 
-    if (modalType && !isMobile) {
+    if (modalType && !isMobileSize) {
       closeModal();
     }
 
-    if (isMobile) {
+    if (isMobileSize) {
       openModal('MODAL_DRAWER_MOBILE');
     }
 
@@ -41,6 +45,13 @@ class ChannelHeaderNavbar extends React.Component {
       closeDrawer();
       history.push(url);
     }
+  }
+
+  handleDdButtonClick(e) {
+    const { openDropdown } = this.props;
+    const { bottom, left } = e.currentTarget;
+
+    openDropdown('DROPDOWN_CHANNEL_EDIT', { bottom, left });
   }
 
   render() {
@@ -60,10 +71,13 @@ class ChannelHeaderNavbar extends React.Component {
       destroyChannelSubRequest,
       destroySearch,
       fetchSearchRequest,
+      isDdOpen,
+      dropdownProps,
       match: { url },
     } = this.props;
 
     let channelMenuItems = [];
+    let ddMenuItems = [];
     const searchMessages = messages.filter(msg => msg.isInSearch).sort((a, b) => b.id - a.id);
 
     if (channel) {
@@ -77,30 +91,31 @@ class ChannelHeaderNavbar extends React.Component {
         {
           key: 'edit-dropdown',
           icon: <FontAwesomeIcon icon="cog" fixedWidth />,
-          menuFor: 'channel-edit',
-          items: [
-            {
-              label: 'View channel details',
-              link: `${url}/details`,
-              hasNoDrawer: true,
-            },
-            {
-              label: `View ${chatTitle}’s profile`,
-              link: `${url}/team/${channel.dmUserSlug}`,
-              hasNoDrawer: true,
-              condition: channel.hasDm,
-            },
-            {
-              label: 'Edit channel',
-              onClick: () => openModal('MODAL_EDIT_CHANNEL'),
-              condition: !channel.hasDm,
-            },
-            {
-              label: `Leave ${chatTitle}`,
-              onClick: () => destroyChannelSubRequest(channel.slug),
-              condition: !channel.hasDm,
-            }
-          ],
+          onClick: this.handleDdButtonClick,
+        }
+      ];
+
+      ddMenuItems = [
+        {
+          label: 'View channel details',
+          link: `${url}/details`,
+          hasNoDrawer: true,
+        },
+        {
+          label: `View ${chatTitle}’s profile`,
+          link: `${url}/team/${channel.dmUserSlug}`,
+          hasNoDrawer: true,
+          condition: channel.hasDm,
+        },
+        {
+          label: 'Edit channel',
+          onClick: () => openModal('MODAL_EDIT_CHANNEL'),
+          condition: !channel.hasDm,
+        },
+        {
+          label: `Leave ${chatTitle}`,
+          onClick: () => destroyChannelSubRequest(channel.slug),
+          condition: !channel.hasDm,
         }
       ];
     }
@@ -154,9 +169,10 @@ class ChannelHeaderNavbar extends React.Component {
             closeModal={closeModal}
           />
         )}
+        {isDdOpen && <DropdownModal items={ddMenuItems} dropdownProps={dropdownProps} />}
       </nav>
     );
   }
 }
 
-export default ChannelHeaderNavbar;
+export default withWindowResize(ChannelHeaderNavbar);

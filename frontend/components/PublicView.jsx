@@ -6,8 +6,8 @@ import Menu from './Menu';
 import WorkspaceModal from './WorkspaceModal';
 import DropdownModal from './DropdownModal';
 import Button from './Button';
-import './PublicView.css';
 import ScrollBar from './ScrollBar';
+import './PublicView.css';
 
 class PublicView extends React.Component {
   constructor(props) {
@@ -38,9 +38,9 @@ class PublicView extends React.Component {
 
   handleDdClick(e) {
     const { openDropdown } = this.props;
-    const { bottom: clickPosY, right: clickPosX } = e.target.getBoundingClientRect();
+    const { bottom, right } = e.target.getBoundingClientRect();
 
-    openDropdown('DROPDOWN_PUBLIC', { clickPosY, clickPosX });
+    openDropdown('DROPDOWN_PUBLIC', { bottom, right });
   }
 
   render() {

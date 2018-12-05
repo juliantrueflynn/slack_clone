@@ -110,8 +110,8 @@ class MessagesList extends React.Component {
         {isDdOpen && (
           <DropdownModal
             items={this.getDdMenuItems()}
-            dropdownProps={dropdownProps}
             close={closeDropdown}
+            dropdownProps={dropdownProps}
           />
         )}
       </Fragment>

@@ -30,7 +30,6 @@ class MenuItem extends React.Component {
       isItemActive,
       isActive,
       condition,
-      items,
       ...props
     } = this.props;
 
@@ -44,9 +43,7 @@ class MenuItem extends React.Component {
     itemProps.onClick = this.handleOnClick;
 
     let itemType = 'link';
-    if (items) {
-      itemType = 'dropdown';
-    } else if (!link && onClick) {
+    if (!link && onClick) {
       itemType = 'btn';
     } else if (!link && !onClick) {
       itemType = 'text';
