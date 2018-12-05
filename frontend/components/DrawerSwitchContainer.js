@@ -4,7 +4,7 @@ import { createChannel } from '../actions/channelActions';
 import { destroyPin } from '../actions/messageActions';
 import { selectDrawerMessages } from '../reducers/selectors';
 import withEntityWrapper from './withEntityWrapper';
-import withDetectMobileView from './withDetectMobileView';
+import withWindowResize from './withWindowResize';
 import DrawerSwitch from './DrawerSwitch';
 
 const mapStateToProps = (state, { match: { params } }) => ({
@@ -24,5 +24,5 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default withEntityWrapper('drawerSlug')(
-  withDetectMobileView(connect(mapStateToProps, mapDispatchToProps)(DrawerSwitch))
+  withWindowResize(connect(mapStateToProps, mapDispatchToProps)(DrawerSwitch))
 );

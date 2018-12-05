@@ -1,10 +1,14 @@
 import React from 'react';
 
-const withDetectMobileView = WrappedComponent => (
+const withWindowResize = WrappedComponent => (
   class WithDetectMobileView extends React.Component {
     constructor(props) {
       super(props);
-      this.state = { isMobileSize: false };
+      this.state = {
+        isMobileSize: false,
+        windowHeight: 0,
+        windowWidth: 0,
+      };
       this.handleResize = this.handleResize.bind(this);
     }
 
@@ -18,13 +22,10 @@ const withDetectMobileView = WrappedComponent => (
     }
 
     handleResize() {
-      const { isMobileSize } = this.state;
-      const { innerWidth } = window;
-      const nextState = innerWidth <= 768;
+      const { innerWidth: windowWidth, innerHeight: windowHeight } = window;
+      const isMobileSize = windowWidth <= 768;
 
-      if (isMobileSize !== nextState) {
-        this.setState({ isMobileSize: nextState });
-      }
+      this.setState({ isMobileSize, windowWidth, windowHeight });
     }
 
     render() {
@@ -33,4 +34,4 @@ const withDetectMobileView = WrappedComponent => (
   }
 );
 
-export default withDetectMobileView;
+export default withWindowResize;

@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { selectSubbedWorkspaces, selectChannelsMap } from '../reducers/selectors';
 import { updateModal, updateDropdown } from '../actions/uiActions';
 import { updateChannelSub } from '../actions/channelActions';
-import withDetectMobileView from './withDetectMobileView';
+import withWindowResize from './withWindowResize';
 import LeftSidebar from './LeftSidebar';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => ({
@@ -30,5 +30,5 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default withRouter(
-  withDetectMobileView(connect(mapStateToProps, mapDispatchToProps)(LeftSidebar))
+  withWindowResize(connect(mapStateToProps, mapDispatchToProps)(LeftSidebar))
 );
