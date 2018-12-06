@@ -8,7 +8,6 @@ import {
   READ,
   FAVORITE,
   WORKSPACE,
-  DRAWER_CLOSE,
   HISTORY,
   SEARCH,
   SEARCH_DESTROY,
@@ -159,7 +158,6 @@ const messageReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case DRAWER_CLOSE:
     case MESSAGE.SHOW.REQUEST: {
       const { messageSlug } = action;
 
@@ -314,9 +312,15 @@ const messageReducer = (state = {}, action) => {
     }
     case MESSAGE_EDITOR_TOGGLE: {
       const { messageSlug } = action;
-      nextState = Object.assign({}, state);
-      nextState[messageSlug].isEditing = !nextState[messageSlug].isEditing;
-      return nextState;
+
+      nextState = {};
+      Object.values(state).forEach((msg) => {
+        nextState[msg.slug] = { isEditing: false };
+      });
+
+      nextState[messageSlug].isEditing = !state[messageSlug].isEditing;
+
+      return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:

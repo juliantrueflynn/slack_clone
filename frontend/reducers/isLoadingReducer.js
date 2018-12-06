@@ -4,7 +4,6 @@ import {
   MESSAGE,
   READ,
   USER_THREAD,
-  DRAWER_CLOSE,
   FAVORITE,
   USER,
   SIGN_OUT,
@@ -38,7 +37,6 @@ const isLoadingReducer = (state = _defaultState, action) => {
     case FAVORITE.INDEX.REQUEST:
     case USER.SHOW.REQUEST:
     case CHANNEL.SHOW.REQUEST:
-    case DRAWER_CLOSE:
       nextState.drawer = true;
       return nextState;
     case SEARCH.INDEX.REQUEST:

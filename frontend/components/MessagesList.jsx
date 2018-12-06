@@ -7,8 +7,6 @@ import DropdownModal from './DropdownModal';
 class MessagesList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { editMessageSlug: null };
-    this.handleEditToggle = this.handleEditToggle.bind(this);
     this.handleEmojiClick = this.handleEmojiClick.bind(this);
   }
 
@@ -19,6 +17,7 @@ class MessagesList extends React.Component {
       deleteMessageRequest,
       createPinRequest,
       destroyPinRequest,
+      toggleMessageEditor,
       currentUserSlug,
     } = this.props;
 
@@ -41,7 +40,7 @@ class MessagesList extends React.Component {
       },
       {
         label: 'Edit message',
-        onClick: () => this.handleEditToggle(message.slug),
+        onClick: () => toggleMessageEditor(message.slug),
         condition: message.authorSlug === currentUserSlug,
       },
       {
@@ -58,27 +57,6 @@ class MessagesList extends React.Component {
     closeDropdown();
   }
 
-  handleEditToggle(messageSlug) {
-    const { isEditable, toggleMessageEditor } = this.props;
-    const { editMessageSlug } = this.state;
-
-    if (!isEditable) {
-      return;
-    }
-
-    if (editMessageSlug !== messageSlug) {
-      this.setState({ editMessageSlug: messageSlug });
-
-      if (editMessageSlug) {
-        toggleMessageEditor(editMessageSlug);
-      }
-    } else {
-      this.setState({ editMessageSlug: null });
-    }
-
-    toggleMessageEditor(messageSlug);
-  }
-
   render() {
     const {
       messages,
@@ -89,13 +67,11 @@ class MessagesList extends React.Component {
       deleteMessageRequest,
       createPinRequest,
       destroyPinRequest,
-      toggleMessageEditor,
       dropdownType,
       dropdownProps,
       toggleReaction,
       ...props
     } = this.props;
-    const { editMessageSlug } = this.state;
 
     return (
       <Fragment>
@@ -104,8 +80,6 @@ class MessagesList extends React.Component {
             key={message.id}
             message={message}
             isDdOpen={!!dropdownType}
-            toggleEditor={this.handleEditToggle}
-            editMessageSlug={editMessageSlug}
             toggleReaction={toggleReaction}
             {...props}
           />
