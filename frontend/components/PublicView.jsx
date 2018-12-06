@@ -137,13 +137,9 @@ class PublicView extends React.Component {
           {render({ workspaces })}
           {isModalOpen && <WorkspaceModal closeModal={closeModal} />}
           {isDdOpen && (
-            <DropdownModal
-              bemModifier="public"
-              menuProps={{ bemModifier: menuModifier }}
-              dropdownProps={dropdownProps}
-              close={closeDropdown}
-              items={ddItems}
-            />
+            <DropdownModal bemModifier="public" coordinates={dropdownProps} close={closeDropdown}>
+              <Menu menuFor="dropdown" items={ddItems} bemModifier={menuModifier} />
+            </DropdownModal>
           )}
         </div>
       </ScrollBar>

@@ -9,7 +9,7 @@ class Reactions extends React.Component {
 
   handleToggleClick(emoji) {
     const { messageSlug, toggleReaction } = this.props;
-    toggleReaction({ emoji, messageSlug });
+    toggleReaction({ messageSlug, emoji });
   }
 
   render() {

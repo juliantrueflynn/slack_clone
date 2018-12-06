@@ -2,20 +2,27 @@
   border-top: 1px solid rgba(0,0,0,.1);
   position: absolute;
   background-color: #FFF;
-  width: 280px;
   -webkit-box-shadow: 0px 2px 15px 0px rgba(0,0,0,0.2);
   -moz-box-shadow: 0px 2px 15px 0px rgba(0,0,0,0.2);
   box-shadow: 0px 2px 15px 0px rgba(0,0,0,0.2);
-  padding-top: 18px;
-  padding-bottom: 18px;
-  border-radius: 5px;
+  border-radius: 6px;
 }
 
-.Modal__dropdown .MenuItem__content {
+.Modal__dropdown > .Menu {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.Modal__dropdown > .Menu > .MenuItem > .MenuItem__content {
   color: rgba(0,0,0,.86);
   width: 100%;
 }
 
-.Modal__dropdown .MenuItem__content--btn {
+.Modal__dropdown  > .Menu > .MenuItem > .MenuItem__content--btn {
   text-align: left;
+  width: 270px;
+}
+
+.Modal__dropdown .emoji-picker .emoji {
+  padding: 15.1px;
 }

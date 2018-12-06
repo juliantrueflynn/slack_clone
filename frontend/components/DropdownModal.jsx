@@ -1,6 +1,5 @@
 import React from 'react';
 import Modal from './Modal';
-import Menu from './Menu';
 import withWindowResize from './withWindowResize';
 import './DropdownModal.css';
 
@@ -11,25 +10,18 @@ class DropdownModal extends React.Component {
     this.handleAfterModalOpen = this.handleAfterModalOpen.bind(this);
   }
 
-  isHeightFixed() {
-    const { windowHeight, dropdownProps: { bottom } } = this.props;
-    const { clientHeight } = this.contentRef;
-
-    return (bottom + clientHeight) > (windowHeight - 10);
-  }
-
   handleAfterModalOpen() {
     const {
       windowWidth,
       windowHeight,
-      dropdownProps: { right, bottom },
+      coordinates: { posX, posY }
     } = this.props;
     const { clientWidth, clientHeight } = this.contentRef;
 
-    const left = windowWidth - right + clientWidth;
-    let top = windowHeight - bottom;
+    const left = windowWidth - posX + clientWidth;
+    let top = windowHeight - posY;
 
-    if ((bottom + clientHeight) > (windowHeight - 10)) {
+    if ((posY + clientHeight) > (windowHeight - 10)) {
       top = clientHeight + 20;
     }
 
@@ -39,11 +31,11 @@ class DropdownModal extends React.Component {
   render() {
     const {
       items,
-      dropdownProps,
+      coordinates,
       fixedLeftPos,
-      menuProps,
       windowWidth,
       windowHeight,
+      children,
       ...modalProps
     } = this.props;
     const { top, left } = this.state;
@@ -67,7 +59,7 @@ class DropdownModal extends React.Component {
         onAfterOpen={this.handleAfterModalOpen}
         {...modalProps}
       >
-        <Menu menuFor="dropdown" items={items} {...menuProps} />
+        {children}
       </Modal>
     );
   }

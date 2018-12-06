@@ -6,7 +6,7 @@ import './MessageHoverMenu.css';
 class MessageHoverMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.handleReactionToggle = this.handleReactionToggle.bind(this);
+    this.handleReactionModal = this.handleReactionModal.bind(this);
     this.handleFavToggle = this.handleFavToggle.bind(this);
     this.handleDropdownModal = this.handleDropdownModal.bind(this);
   }
@@ -19,17 +19,17 @@ class MessageHoverMenu extends React.Component {
     }
   }
 
-  handleReactionToggle(e) {
-    const { openModal, message: { slug: messageSlug } } = this.props;
+  handleReactionModal(e) {
+    const { openDropdown, message: { slug: messageSlug } } = this.props;
 
     const client = e.currentTarget.parentElement.parentElement.getBoundingClientRect();
-    const modalProps = {
-      clickPosY: client.top,
-      clickPosX: client.right,
+    const ddProps = {
+      posY: client.bottom,
+      posX: client.right,
       messageSlug,
     };
 
-    openModal('MODAL_REACTION', modalProps);
+    openDropdown('DROPDOWN_REACTION', ddProps);
   }
 
   handleFavToggle() {
@@ -42,13 +42,13 @@ class MessageHoverMenu extends React.Component {
     const { openDropdown, message } = this.props;
 
     const client = e.currentTarget.parentElement.getBoundingClientRect();
-    const dropdownProps = {
-      bottom: client.bottom,
-      right: client.right,
+    const ddProps = {
+      posY: client.bottom,
+      posX: client.right,
       message,
     };
 
-    openDropdown('DROPDOWN_MESSAGE', dropdownProps);
+    openDropdown('DROPDOWN_MESSAGE', ddProps);
   }
 
   render() {
@@ -61,7 +61,7 @@ class MessageHoverMenu extends React.Component {
     let menuItems = [
       {
         key: 'reaction',
-        onClick: this.handleReactionToggle,
+        onClick: this.handleReactionModal,
         icon: <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />,
       },
       {

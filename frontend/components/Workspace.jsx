@@ -8,7 +8,6 @@ import ProfileModal from './ProfileModal';
 import ChatModal from './ChatModal';
 import ChatsModal from './ChatsModal';
 import ChannelEditorModal from './ChannelEditorModal';
-import ReactionModal from './ReactionModal';
 import { PageRoutes } from '../util/routeUtil';
 import './Workspace.css';
 
@@ -58,14 +57,13 @@ class Workspace extends React.Component {
       workspaceSlug,
       isLoading,
       routes,
-      modal: { modalType, modalProps },
+      modalType,
       closeModal,
       channelsMap,
       chatPath,
       users,
       currentUser,
       fetchChannelsRequest,
-      toggleReaction,
       onReceived,
     } = this.props;
 
@@ -127,13 +125,6 @@ class Workspace extends React.Component {
           <ChannelEditorModal
             channel={channel}
             currentUserSlug={currentUser.slug}
-            closeModal={closeModal}
-          />
-        )}
-        {modalType === 'MODAL_REACTION' && (
-          <ReactionModal
-            toggleReaction={toggleReaction}
-            modalProps={modalProps}
             closeModal={closeModal}
           />
         )}

@@ -1,4 +1,6 @@
 import React, { Fragment } from 'react';
+import EmojiPicker from 'emoji-picker-react';
+import Menu from './Menu';
 import Message from './Message';
 import DropdownModal from './DropdownModal';
 
@@ -7,11 +9,12 @@ class MessagesList extends React.Component {
     super(props);
     this.state = { editMessageSlug: null };
     this.handleEditToggle = this.handleEditToggle.bind(this);
+    this.handleEmojiClick = this.handleEmojiClick.bind(this);
   }
 
   getDdMenuItems() {
     const {
-      isDdOpen,
+      dropdownType,
       dropdownProps,
       deleteMessageRequest,
       createPinRequest,
@@ -19,7 +22,7 @@ class MessagesList extends React.Component {
       currentUserSlug,
     } = this.props;
 
-    if (!isDdOpen || !dropdownProps.message) {
+    if (dropdownType !== 'DROPDOWN_MESSAGE') {
       return [];
     }
 
@@ -47,6 +50,12 @@ class MessagesList extends React.Component {
         condition: message.authorSlug === currentUserSlug,
       }
     ];
+  }
+
+  handleEmojiClick(_, emoji) {
+    const { dropdownProps: { messageSlug }, toggleReaction, closeDropdown } = this.props;
+    toggleReaction({ messageSlug, emoji: emoji.name });
+    closeDropdown();
   }
 
   handleEditToggle(messageSlug) {
@@ -81,8 +90,9 @@ class MessagesList extends React.Component {
       createPinRequest,
       destroyPinRequest,
       toggleMessageEditor,
-      isDdOpen,
+      dropdownType,
       dropdownProps,
+      toggleReaction,
       ...props
     } = this.props;
     const { editMessageSlug } = this.state;
@@ -93,18 +103,22 @@ class MessagesList extends React.Component {
           <Message
             key={message.id}
             message={message}
-            isDdOpen={isDdOpen}
+            isDdOpen={!!dropdownType}
             toggleEditor={this.handleEditToggle}
             editMessageSlug={editMessageSlug}
+            toggleReaction={toggleReaction}
             {...props}
           />
         ))}
-        {isDdOpen && (
-          <DropdownModal
-            items={this.getDdMenuItems()}
-            close={closeDropdown}
-            dropdownProps={dropdownProps}
-          />
+        {dropdownType === 'DROPDOWN_MESSAGE' && (
+          <DropdownModal close={closeDropdown} coordinates={dropdownProps}>
+            <Menu items={this.getDdMenuItems()} />
+          </DropdownModal>
+        )}
+        {dropdownType === 'DROPDOWN_REACTION' && (
+          <DropdownModal close={closeDropdown} coordinates={dropdownProps}>
+            <EmojiPicker onEmojiClick={this.handleEmojiClick} disableDiversityPicker />
+          </DropdownModal>
         )}
       </Fragment>
     );

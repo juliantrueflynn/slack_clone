@@ -49,9 +49,9 @@ class ChannelHeaderNavbar extends React.Component {
 
   handleDdButtonClick(e) {
     const { openDropdown } = this.props;
-    const { bottom, right } = e.currentTarget.getBoundingClientRect();
+    const { bottom: posY, right: posX } = e.currentTarget.getBoundingClientRect();
 
-    openDropdown('DROPDOWN_CHANNEL_EDIT', { bottom, right });
+    openDropdown('DROPDOWN_CHANNEL_EDIT', { posY, posX });
   }
 
   render() {
@@ -171,11 +171,9 @@ class ChannelHeaderNavbar extends React.Component {
           />
         )}
         {isDdOpen && (
-          <DropdownModal
-            items={ddMenuItems}
-            dropdownProps={dropdownProps}
-            close={closeDropdown}
-          />
+          <DropdownModal coordinates={dropdownProps} close={closeDropdown}>
+            <Menu items={ddMenuItems} />
+          </DropdownModal>
         )}
       </nav>
     );
