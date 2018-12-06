@@ -12,7 +12,6 @@ import {
   SEARCH,
   SEARCH_DESTROY,
   PIN,
-  MESSAGE_EDITOR_TOGGLE,
   SIGN_OUT,
 } from '../actions/actionTypes';
 
@@ -309,18 +308,6 @@ const messageReducer = (state = {}, action) => {
       }
 
       return nextState;
-    }
-    case MESSAGE_EDITOR_TOGGLE: {
-      const { messageSlug } = action;
-
-      nextState = {};
-      Object.values(state).forEach((msg) => {
-        nextState[msg.slug] = { isEditing: false };
-      });
-
-      nextState[messageSlug].isEditing = !state[messageSlug].isEditing;
-
-      return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:

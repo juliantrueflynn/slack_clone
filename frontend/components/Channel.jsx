@@ -165,7 +165,6 @@ class Channel extends React.Component {
                 isDm={channel.hasDm}
                 isHighlightable
                 isHoverable
-                isEditable
               />
             </ScrollBar>
           )}

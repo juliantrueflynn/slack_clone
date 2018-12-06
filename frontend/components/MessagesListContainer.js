@@ -19,6 +19,7 @@ const mapStateToProps = (state, { match: { url } }) => ({
   dropdownType: state.ui.dropdown.dropdownType,
   dropdownProps: state.ui.dropdown.dropdownProps,
   isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_MESSAGE',
+  editMessageSlug: state.ui.isEditingMessage,
   url,
 });
 

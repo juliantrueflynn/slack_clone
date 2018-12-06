@@ -42,6 +42,7 @@ class Message extends React.Component {
       messageDate,
       toggleReaction,
       toggleEditor,
+      editMessageSlug,
       toggleMessageEditor,
       updateMessageRequest,
       isDdOpen,
@@ -67,13 +68,14 @@ class Message extends React.Component {
       }
     }
 
+    const isEditing = editMessageSlug === message.slug;
     const authorUrl = `${url}/team/${message.authorSlug}`;
 
     const entryClassNames = classNames('Message', {
       'Message--hoverable': isHoverable,
-      'Message--editing': message.isEditing,
+      'Message--editing': isEditing,
       'Message--highlighted': isHighlightable && (message.favoriteId || message.pinId),
-      'Message--hover': hasHover && !message.isEditing && !message.pinId,
+      'Message--hover': hasHover && !isEditing && !message.pinId,
     });
 
     return (
@@ -114,7 +116,7 @@ class Message extends React.Component {
                 </div>
                 {message.entityType === 'entry' && (
                   <MessageContent
-                    isEditing={message.isEditing}
+                    isEditing={isEditing}
                     content={message.body}
                     updateMessageRequest={updateMessageRequest}
                     closeEditor={toggleMessageEditor}

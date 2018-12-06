@@ -6,6 +6,7 @@ import accordion from './accordionReducer';
 import drawer from './drawerReducer';
 import searchQuery from './searchQueryReducer';
 import dropdown from './dropdownReducer';
+import isEditingMessage from './isEditingMessageReducer';
 
 const uiReducer = combineReducers({
   displayWorkspaceSlug,
@@ -15,6 +16,7 @@ const uiReducer = combineReducers({
   drawer,
   searchQuery,
   dropdown,
+  isEditingMessage,
 });
 
 export default uiReducer;

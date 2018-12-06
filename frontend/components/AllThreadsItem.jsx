@@ -47,7 +47,6 @@ const AllThreadsItem = ({
             role="listitem"
             isThreadHidden
             isHoverable
-            isEditable
           />
         </div>
         <MessageForm

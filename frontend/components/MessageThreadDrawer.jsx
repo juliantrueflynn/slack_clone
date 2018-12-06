@@ -17,7 +17,6 @@ const MessageThreadDrawer = ({ messages }) => {
         role="listitem"
         filterMenuItems={filterMenuItems}
         isThreadHidden
-        isEditable
         isHoverable
       />
       <MessageForm

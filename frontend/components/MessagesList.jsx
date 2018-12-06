@@ -62,7 +62,6 @@ class MessagesList extends React.Component {
       messages,
       history,
       location,
-      isEditable,
       closeDropdown,
       deleteMessageRequest,
       createPinRequest,
