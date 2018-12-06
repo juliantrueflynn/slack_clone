@@ -4,11 +4,6 @@ import Menu from './Menu';
 import './MessageHoverMenu.css';
 
 class MessageHoverMenu extends React.Component {
-  static getModalBoundingClientRect(e) {
-    const menuNode = e.currentTarget.parentElement.parentElement;
-    return menuNode.getBoundingClientRect();
-  }
-
   constructor(props) {
     super(props);
     this.handleReactionToggle = this.handleReactionToggle.bind(this);
@@ -27,7 +22,7 @@ class MessageHoverMenu extends React.Component {
   handleReactionToggle(e) {
     const { openModal, message: { slug: messageSlug } } = this.props;
 
-    const client = MessageHoverMenu.getModalBoundingClientRect(e);
+    const client = e.currentTarget.parentElement.parentElement.getBoundingClientRect();
     const modalProps = {
       clickPosY: client.top,
       clickPosX: client.right,

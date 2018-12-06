@@ -6,6 +6,8 @@ import {
   SIGN_OUT,
   MESSAGE,
   USER,
+  PIN,
+  MESSAGE_EDITOR_TOGGLE,
 } from '../actions/actionTypes';
 
 const _defaultState = {
@@ -30,6 +32,10 @@ const dropdownReducer = (state = _defaultState, action) => {
     case USER_THREAD.INDEX.REQUEST:
     case READ.INDEX.REQUEST:
     case USER.SHOW.REQUEST:
+    case MESSAGE_EDITOR_TOGGLE:
+    case MESSAGE.DESTROY.RECEIVE:
+    case PIN.CREATE.REQUEST:
+    case PIN.DESTROY.REQUEST:
     case SIGN_OUT.RECEIVE:
     case WORKSPACE.SHOW.REQUEST:
       return _defaultState;

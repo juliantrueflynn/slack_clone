@@ -7,7 +7,6 @@ class MessagesList extends React.Component {
     super(props);
     this.state = { editMessageSlug: null };
     this.handleEditToggle = this.handleEditToggle.bind(this);
-    this.handleOnMenuItemClick = this.handleOnMenuItemClick.bind(this);
   }
 
   getDdMenuItems() {
@@ -29,12 +28,12 @@ class MessagesList extends React.Component {
     return [
       {
         label: 'Un-pin message',
-        onClick: () => this.handleOnMenuItemClick(destroyPinRequest, message.pinId),
+        onClick: () => destroyPinRequest(message.pinId),
         condition: !!message.pinId,
       },
       {
         label: 'Pin message',
-        onClick: () => this.handleOnMenuItemClick(createPinRequest, { messageId: message.id }),
+        onClick: () => createPinRequest({ messageId: message.id }),
         condition: !message.pinId,
       },
       {
@@ -44,20 +43,14 @@ class MessagesList extends React.Component {
       },
       {
         label: 'Delete message',
-        onClick: () => this.handleOnMenuItemClick(deleteMessageRequest, message.slug),
+        onClick: () => deleteMessageRequest(message.slug),
         condition: message.authorSlug === currentUserSlug,
       }
     ];
   }
 
-  handleOnMenuItemClick(itemFunc, itemArg) {
-    const { closeDropdown } = this.props;
-    itemFunc(itemArg);
-    closeDropdown();
-  }
-
   handleEditToggle(messageSlug) {
-    const { isEditable, toggleMessageEditor, closeDropdown } = this.props;
+    const { isEditable, toggleMessageEditor } = this.props;
     const { editMessageSlug } = this.state;
 
     if (!isEditable) {
@@ -75,7 +68,6 @@ class MessagesList extends React.Component {
     }
 
     toggleMessageEditor(messageSlug);
-    closeDropdown();
   }
 
   render() {
