@@ -30,6 +30,7 @@ const mapDispatchToProps = dispatch => ({
   openModal: (modalType, modalProps = null) => dispatch(updateModal(modalType, modalProps)),
   closeDrawer: () => dispatch(updateDrawer(null)),
   openDropdown: (ddType, ddProps) => dispatch(updateDropdown(ddType, ddProps)),
+  closeDropdown: () => dispatch(updateDropdown(null)),
   accordionOpen: accordionType => dispatch(accordionOpen('details', accordionType)),
   fetchSearchRequest: (query, shouldNotSearch = false) => (
     dispatch(fetchSearch.request(query, shouldNotSearch))

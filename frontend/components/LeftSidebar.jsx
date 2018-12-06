@@ -20,9 +20,9 @@ class LeftSidebar extends React.Component {
 
   handleDropdownClick(e) {
     const { openDropdown } = this.props;
-    const { bottom, right } = e.target.getBoundingClientRect();
+    const { bottom } = e.currentTarget.getBoundingClientRect();
 
-    openDropdown('DROPDOWN_PROFILE', { bottom, right });
+    openDropdown('DROPDOWN_PROFILE', { bottom, left: '10px' });
   }
 
   handleDmUnsubClick(e) {
@@ -236,6 +236,7 @@ class LeftSidebar extends React.Component {
           <DropdownModal
             close={closeDropdown}
             items={userItems}
+            fixedLeftPos="10px"
             dropdownProps={dropdownProps}
           />
         )}

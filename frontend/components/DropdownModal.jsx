@@ -7,39 +7,51 @@ import './DropdownModal.css';
 class DropdownModal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { initRightPos: 0, initTopPos: 0 };
+    this.state = { left: 0, top: 0 };
     this.handleAfterModalOpen = this.handleAfterModalOpen.bind(this);
   }
 
+  isHeightFixed() {
+    const { windowHeight, dropdownProps: { bottom } } = this.props;
+    const { clientHeight } = this.contentRef;
+
+    return (bottom + clientHeight) > (windowHeight - 10);
+  }
+
   handleAfterModalOpen() {
-    const { dropdownProps: { right, bottom } } = this.props;
-    const { innerWidth, innerHeight } = window;
-    const { clientWidth } = this.contentRef;
+    const {
+      windowWidth,
+      windowHeight,
+      dropdownProps: { right, bottom },
+    } = this.props;
+    const { clientWidth, clientHeight } = this.contentRef;
 
-    const initRightPos = innerWidth - right + clientWidth;
-    const initTopPos = innerHeight - bottom;
+    const left = windowWidth - right + clientWidth;
+    let top = windowHeight - bottom;
 
-    this.setState({ initRightPos, initTopPos });
+    if ((bottom + clientHeight) > (windowHeight - 10)) {
+      top = clientHeight + 20;
+    }
+
+    this.setState({ left, top });
   }
 
   render() {
     const {
       items,
       dropdownProps,
+      fixedLeftPos,
       menuProps,
       windowWidth,
       windowHeight,
       ...modalProps
     } = this.props;
-    const { initRightPos, initTopPos } = this.state;
-
-    const leftPos = windowWidth - initRightPos;
-    const topPos = windowHeight - initTopPos;
+    const { top, left } = this.state;
 
     const style = {
       content: {
-        top: `${topPos}px`,
-        left: `${leftPos}px`,
+        top: `${windowHeight - top}px`,
+        left: fixedLeftPos || `${windowWidth - left}px`,
         position: 'absolute',
       }
     };

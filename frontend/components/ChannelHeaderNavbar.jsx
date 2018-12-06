@@ -49,9 +49,9 @@ class ChannelHeaderNavbar extends React.Component {
 
   handleDdButtonClick(e) {
     const { openDropdown } = this.props;
-    const { bottom, left } = e.currentTarget;
+    const { bottom, right } = e.currentTarget.getBoundingClientRect();
 
-    openDropdown('DROPDOWN_CHANNEL_EDIT', { bottom, left });
+    openDropdown('DROPDOWN_CHANNEL_EDIT', { bottom, right });
   }
 
   render() {
@@ -73,6 +73,7 @@ class ChannelHeaderNavbar extends React.Component {
       fetchSearchRequest,
       isDdOpen,
       dropdownProps,
+      closeDropdown,
       match: { url },
     } = this.props;
 
@@ -169,7 +170,13 @@ class ChannelHeaderNavbar extends React.Component {
             closeModal={closeModal}
           />
         )}
-        {isDdOpen && <DropdownModal items={ddMenuItems} dropdownProps={dropdownProps} />}
+        {isDdOpen && (
+          <DropdownModal
+            items={ddMenuItems}
+            dropdownProps={dropdownProps}
+            close={closeDropdown}
+          />
+        )}
       </nav>
     );
   }

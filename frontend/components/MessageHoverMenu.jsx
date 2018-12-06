@@ -46,7 +46,7 @@ class MessageHoverMenu extends React.Component {
   handleDropdownModal(e) {
     const { openDropdown, message } = this.props;
 
-    const client = MessageHoverMenu.getModalBoundingClientRect(e);
+    const client = e.currentTarget.parentElement.getBoundingClientRect();
     const dropdownProps = {
       bottom: client.bottom,
       right: client.right,
