@@ -1,3 +1,4 @@
+import merge from 'lodash.merge';
 import { WORKSPACE, READ, SIGN_OUT } from '../actions/actionTypes';
 
 const readReducer = (state = {}, action) => {
@@ -16,13 +17,13 @@ const readReducer = (state = {}, action) => {
     case READ.UPDATE.RECEIVE:
     case READ.CREATE.RECEIVE: {
       const { read } = action;
-      nextState = Object.assign({}, state);
+      nextState = merge({}, state);
       nextState[read.id] = read;
       return nextState;
     }
     case READ.DESTROY.RECEIVE: {
       const { read: { id } } = action;
-      nextState = Object.assign({}, state);
+      nextState = merge({}, state);
 
       if (nextState[id]) {
         delete nextState[id];
