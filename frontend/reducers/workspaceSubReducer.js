@@ -26,13 +26,13 @@ const workspaceSubReducer = (state = {}, action) => {
     }
     case WORKSPACE_SUB.CREATE.RECEIVE: {
       const { workspaceSub } = action.workspaceSub;
-      nextState = Object.assign({}, state);
+      nextState = {};
       nextState[workspaceSub.id] = workspaceSub;
-      return nextState;
+      return merge({}, state, nextState);
     }
     case WORKSPACE_SUB.UPDATE.REQUEST: {
       const { workspaceSub } = action;
-      nextState = Object.assign({}, state);
+      nextState = {};
       nextState[workspaceSub.id] = workspaceSub;
       return merge({}, state, nextState);
     }
