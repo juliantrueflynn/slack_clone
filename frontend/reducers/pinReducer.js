@@ -34,13 +34,13 @@ const pinReducer = (state = {}, action) => {
     }
     case PIN.CREATE.RECEIVE: {
       const { pin } = action;
-      nextState = Object.assign({}, state);
+      nextState = {};
       nextState[pin.id] = pin;
-      return nextState;
+      return merge({}, state, nextState);
     }
     case PIN.DESTROY.RECEIVE: {
       const { pin } = action;
-      nextState = Object.assign({}, state);
+      nextState = merge({}, state);
       delete nextState[pin.id];
       return nextState;
     }

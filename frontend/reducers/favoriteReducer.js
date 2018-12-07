@@ -23,13 +23,13 @@ const favoriteReducer = (state = {}, action) => {
     }
     case FAVORITE.CREATE.RECEIVE: {
       const { favorite } = action;
-      nextState = Object.assign({}, state, nextState);
+      nextState = {};
       nextState[favorite.id] = favorite;
-      return nextState;
+      return merge({}, state, nextState);
     }
     case FAVORITE.DESTROY.RECEIVE: {
       const { favorite } = action;
-      nextState = Object.assign({}, state);
+      nextState = merge({}, state);
       delete nextState[favorite.id];
       return nextState;
     }
