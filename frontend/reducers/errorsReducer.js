@@ -7,6 +7,7 @@ import {
   SIGN_UP,
   WORKSPACE,
   PASSWORD,
+  USER,
 } from '../actions/actionTypes';
 
 const _defaultState = {
@@ -35,12 +36,15 @@ const errorsReducer = (state = _defaultState, action) => {
     case SIGN_UP.FAILURE:
       nextState.session = [...action.errors];
       return nextState;
-    case CHANNEL.CREATE.FAILURE:
-    case CHANNEL.UPDATE.FAILURE:
-      nextState.channel = [...action.errors];
+    case USER.UPDATE.FAILURE:
+      nextState.user = [...action.errors];
       return nextState;
     case PASSWORD.UPDATE.FAILURE:
       nextState.password = [...action.errors];
+      return nextState;
+    case CHANNEL.CREATE.FAILURE:
+    case CHANNEL.UPDATE.FAILURE:
+      nextState.channel = [...action.errors];
       return nextState;
     case WORKSPACE.SHOW.REQUEST:
     case WORKSPACE.CREATE.REQUEST:
@@ -49,9 +53,10 @@ const errorsReducer = (state = _defaultState, action) => {
     case SIGN_IN.REQUEST:
     case SIGN_UP.REQUEST:
     case SIGN_OUT.RECEIVE:
+    case USER.UPDATE.REQUEST:
+    case PASSWORD.UPDATE.REQUEST:
     case CHANNEL.CREATE.REQUEST:
     case CHANNEL.UPDATE.REQUEST:
-    case PASSWORD.UPDATE.REQUEST:
     case MODAL_UPDATE:
       return _defaultState;
     default:

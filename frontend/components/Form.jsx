@@ -17,8 +17,16 @@ class Form extends React.Component {
       this.setFormSuccess(success);
     }
 
+    if (prevProps.success && !success) {
+      this.setFormSuccess(null);
+    }
+
     if (!prevProps.errors.length && errors.length) {
       this.setFormErrors(errors);
+    }
+
+    if (prevProps.errors.length && !errors.length) {
+      this.setFormErrors([]);
     }
   }
 

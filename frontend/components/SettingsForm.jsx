@@ -19,6 +19,15 @@ class SettingsForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount() {
+    const { user } = this.props;
+
+    this.setState({
+      username: user.username,
+      email: user.email,
+    });
+  }
+
   handleFieldValueChange(value, prop) {
     this.setState({ [prop]: value });
   }
@@ -50,12 +59,12 @@ class SettingsForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const { formDispatchRequest, user } = this.props;
+    const { formDispatchRequest } = this.props;
     const { ...state } = this.state;
 
     const formData = new FormData();
     Object.keys(state).forEach((key) => {
-      formData.append(`user[${key}]`, state[key] || user[key]);
+      formData.append(`user[${key}]`, state[key]);
     });
 
     formDispatchRequest(formData);
@@ -70,19 +79,21 @@ class SettingsForm extends React.Component {
     } = this.props;
     const { username, email } = this.state;
 
+    console.log(formErrors);
+
     const fields = [
       {
         id: 'username',
         type: 'text',
         name: 'user[username]',
-        value: username || user.username,
+        value: username,
         label: 'Username',
       },
       {
         id: 'email',
         type: 'text',
         name: 'user[email]',
-        value: email || user.email,
+        value: email,
         label: 'Email',
       },
       {
