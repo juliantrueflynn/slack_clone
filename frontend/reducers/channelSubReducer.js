@@ -1,3 +1,4 @@
+import merge from 'lodash.merge';
 import {
   CHANNEL_SUB,
   WORKSPACE,
@@ -21,41 +22,41 @@ const channelSubReducer = (state = {}, action) => {
     }
     case CHANNEL_SUB.CREATE.RECEIVE: {
       const { channelSub } = action;
-      nextState = Object.assign({}, state);
+      nextState = {};
       nextState[channelSub.id] = channelSub;
-      return nextState;
+      return merge({}, state, nextState);
     }
     case CHANNEL_SUB.UPDATE.RECEIVE: {
       const { id, inSidebar } = action.channelSub;
-      nextState = Object.assign({}, state);
-      nextState[id].inSidebar = inSidebar;
-      return nextState;
+      nextState = {};
+      nextState[id] = { inSidebar };
+      return merge({}, state, nextState);
     }
     case CHANNEL_SUB.DESTROY.RECEIVE: {
       const { channelSub } = action;
-      nextState = Object.assign({}, state);
+      nextState = merge({}, state);
       delete nextState[channelSub.id];
       return nextState;
     }
     case WORKSPACE_SUB.CREATE.RECEIVE: {
       const { channelSubs } = action.workspaceSub;
 
-      nextState = Object.assign({}, state);
+      nextState = {};
       channelSubs.forEach((sub) => {
         nextState[sub.id] = sub;
       });
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case CHANNEL.CREATE.RECEIVE: {
       const { subs } = action.channel;
 
-      nextState = Object.assign({}, state);
+      nextState = {};
       subs.forEach((sub) => {
         nextState[sub.id] = sub;
       });
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
