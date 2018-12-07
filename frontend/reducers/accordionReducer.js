@@ -9,9 +9,9 @@ const accordionReducer = (state = _defaultState, action) => {
   switch (action.type) {
     case ACCORDION_OPEN: {
       const { accordionType, accordionItem } = action;
-      nextState = Object.assign({}, state);
+      nextState = { ...state };
+      nextState[accordionType] = { ...state[accordionItem] };
       nextState[accordionType][accordionItem] = true;
-
       return nextState;
     }
     case SIGN_OUT.RECEIVE:

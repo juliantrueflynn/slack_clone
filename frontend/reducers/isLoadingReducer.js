@@ -21,8 +21,8 @@ const _defaultState = {
 
 const isLoadingReducer = (state = _defaultState, action) => {
   Object.freeze(state);
+  const nextState = { ...state };
 
-  const nextState = Object.assign({}, state);
   switch (action.type) {
     case WORKSPACE.SHOW.REQUEST:
       nextState.workspace = true;

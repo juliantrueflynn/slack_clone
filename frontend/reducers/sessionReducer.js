@@ -27,7 +27,7 @@ const sessionReducer = (state = _defaultState, action) => {
         return state;
       }
 
-      nextState = {};
+      nextState = { currentUser: {} };
       nextState.currentUser.username = user.username;
       nextState.currentUser.email = user.email;
 

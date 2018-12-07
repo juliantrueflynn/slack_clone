@@ -21,7 +21,7 @@ const _defaultState = {
 const errorsReducer = (state = _defaultState, action) => {
   Object.freeze(state);
 
-  const nextState = Object.assign({}, state);
+  const nextState = { ...state };
 
   switch (action.type) {
     case WORKSPACE.CREATE.FAILURE:
