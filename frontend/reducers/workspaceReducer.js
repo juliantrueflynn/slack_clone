@@ -42,12 +42,12 @@ const workspaceReducer = (state = {}, action) => {
         workspaceSubs,
       } = action.workspace;
 
-      nextState = Object.assign({}, state);
+      nextState = {};
       nextState[workspace.slug] = {
+        ...workspace,
         members: members.map(user => user.slug),
         channels: channels.map(ch => ch.slug),
         subs: workspaceSubs.map(sub => sub.id),
-        ...workspace,
       };
 
       return merge({}, state, nextState);
@@ -78,23 +78,27 @@ const workspaceReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case WORKSPACE_SUB.CREATE.RECEIVE: {
-      const { user, workspaceSub } = action.workspaceSub;
-      nextState = Object.assign({}, state);
-      nextState[workspaceSub.workspaceSlug].members.push(user.slug);
+      const { user, workspaceSub: { workspaceSlug } } = action.workspaceSub;
+      nextState = merge({}, state);
+      nextState[workspaceSlug].members.push(user.slug);
       return nextState;
     }
     case WORKSPACE_SUB.UPDATE.REQUEST: {
-      const { workspaceSub } = action;
-      nextState = Object.assign({}, state);
-      nextState[workspaceSub.workspaceSlug].isSub = workspaceSub.isMember;
-      nextState[workspaceSub.workspaceSlug].isMember = workspaceSub.isMember;
+      const { workspaceSlug, isMember } = action.workspaceSub;
+      nextState = merge({}, state);
+      nextState[workspaceSlug].isSub = isMember;
+      nextState[workspaceSlug].isMember = isMember;
       return nextState;
     }
     case WORKSPACE_SUB.UPDATE.RECEIVE: {
-      const { workspaceSub } = action.workspaceSub;
-      nextState = {};
-      nextState[workspaceSub.workspaceSlug] = { subs: [workspaceSub.id] };
-      return merge({}, state, nextState);
+      const { id, workspaceSlug } = action.workspaceSub.workspaceSub;
+      nextState = merge({}, state);
+
+      if (!state[workspaceSlug].includes(id)) {
+        nextState[workspaceSlug].subs.push(id);
+      }
+
+      return nextState;
     }
     case SIGN_OUT.RECEIVE:
       return {};
