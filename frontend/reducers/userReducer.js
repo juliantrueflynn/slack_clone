@@ -22,7 +22,7 @@ const userReducer = (state = {}, action) => {
         return state;
       }
 
-      nextState = Object.assign({}, state);
+      nextState = {};
       nextState[currUser.userSlug] = {
         id: currUser.userId,
         slug: currUser.userSlug,
@@ -58,7 +58,7 @@ const userReducer = (state = {}, action) => {
     case WORKSPACE_SUB.CREATE.RECEIVE: {
       const { user, channelSubs } = action.workspaceSub;
 
-      nextState = Object.assign({}, state);
+      nextState = {};
       nextState[user.slug] = {
         subs: [],
         ...user,
@@ -79,15 +79,15 @@ const userReducer = (state = {}, action) => {
     }
     case CHANNEL_SUB.CREATE.RECEIVE: {
       const { channelSub: { id, userSlug } } = action;
-      nextState = Object.assign({}, state);
+      nextState = merge({}, state);
       nextState[userSlug].subs.push(id);
       return nextState;
     }
     case CHANNEL_SUB.DESTROY.RECEIVE: {
       const { channelSub: { id, userSlug } } = action;
-      nextState = Object.assign({}, state);
-      nextState[userSlug].subs = nextState[userSlug].subs.filter(subId => id !== subId);
-      return nextState;
+      nextState = {};
+      nextState[userSlug] = { subs: state[userSlug].subs.filter(subId => id !== subId) };
+      return merge({}, state, nextState);
     }
     case CHANNEL.CREATE.RECEIVE: {
       const { subs } = action.channel;
@@ -102,9 +102,9 @@ const userReducer = (state = {}, action) => {
     case USER_APPEARANCE.CREATE.RECEIVE:
     case USER_APPEARANCE.DESTROY.RECEIVE: {
       const { userSlug, status } = action.userAppearance;
-      nextState = Object.assign({}, state);
-      nextState[userSlug].status = status;
-      return nextState;
+      nextState = {};
+      nextState[userSlug] = { status };
+      return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:

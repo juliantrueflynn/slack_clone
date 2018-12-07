@@ -1,3 +1,4 @@
+import merge from 'lodash.merge';
 import {
   SIGN_UP,
   SIGN_IN,
@@ -21,16 +22,16 @@ const sessionReducer = (state = _defaultState, action) => {
       return _defaultState;
     case USER.UPDATE.RECEIVE: {
       const { user } = action;
-      nextState = Object.assign({}, state);
 
-      if (nextState.currentUser.id !== user.id) {
+      if (state.currentUser.id !== user.id) {
         return state;
       }
 
+      nextState = {};
       nextState.currentUser.username = user.username;
       nextState.currentUser.email = user.email;
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     default:
       return state;
