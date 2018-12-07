@@ -1,8 +1,7 @@
 json.channel do
   json.(channel, :id, :slug, :title, :owner_slug, :owner_id, :has_dm, :created_at)
+  json.workspace_slug channel.workspace.slug
 end
-
-json.workspace_slug channel.workspace.slug
 
 json.subs do
   json.array! channel.subs do |chat_sub|

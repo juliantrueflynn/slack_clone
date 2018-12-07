@@ -13,7 +13,6 @@ import {
   PIN,
   SIGN_OUT,
 } from '../actions/actionTypes';
-import { filterPop } from '../util/reducerUtil';
 
 const channelReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -40,25 +39,20 @@ const channelReducer = (state = {}, action) => {
     }
     case CHANNEL.SHOW.RECEIVE: {
       const { channel, pins } = action.channel;
-      nextState = Object.assign({}, state);
-      nextState[channel.slug].pins = pins.map(pin => pin.id);
-      return nextState;
+      nextState = {};
+      nextState[channel.slug] = { pins: pins.map(pin => pin.id) };
+
+      return merge({}, state, nextState);
     }
     case CHANNEL.CREATE.RECEIVE: {
-      const {
-        subs,
-        channel,
-        workspaceSlug,
-        members,
-      } = action.channel;
+      const { subs, channel, members } = action.channel;
 
-      nextState = Object.assign({}, state);
+      nextState = {};
       nextState[channel.slug] = {
         lastRead: channel.createdAt,
         subs: subs.map(sub => sub.id),
         messages: [],
         pins: [],
-        workspaceSlug,
         members,
         ...channel,
       };
@@ -67,13 +61,16 @@ const channelReducer = (state = {}, action) => {
         nextState[channel.slug].members.push(channel.ownerSlug);
       }
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case CHANNEL.UPDATE.RECEIVE:
-      nextState = Object.assign({}, state);
-      nextState[action.channel.slug].title = action.channel.title;
-      nextState[action.channel.slug].topic = action.channel.topic || null;
-      return nextState;
+      nextState = {};
+      nextState[action.channel.slug] = {
+        title: action.channel.title,
+        topic: action.channel.topic || null,
+      };
+
+      return merge({}, state, nextState);
     case WORKSPACE.SHOW.RECEIVE: {
       const {
         workspace,
@@ -123,7 +120,7 @@ const channelReducer = (state = {}, action) => {
         channelSubs,
       } = action.workspace;
 
-      nextState = Object.assign({}, state);
+      nextState = {};
       channels.forEach((ch) => {
         nextState[ch.slug] = {
           workspaceSlug: workspace.slug,
@@ -162,21 +159,22 @@ const channelReducer = (state = {}, action) => {
         pins,
       } = action.messages;
 
-      nextState = Object.assign({}, state);
-      nextState[channel.slug].messages = messages.map(msg => msg.slug);
-      nextState[channel.slug].pins = pins.map(pin => pin.id);
-      nextState[channel.slug].members = members;
-      nextState[channel.slug].isOpen = true;
-      nextState[channel.slug].createdAt = channel.createdAt;
-      nextState[channel.slug].ownerSlug = channel.ownerSlug || null;
-      nextState[channel.slug].topic = channel.topic || null;
+      nextState = {};
+      nextState[channel.slug] = {
+        ...channel,
+        ...state[channel.slug],
+        messages: messages.map(msg => msg.slug),
+        pins: pins.map(pin => pin.id),
+        members,
+        isOpen: true,
+      };
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case MESSAGE.CREATE.RECEIVE: {
       const { channelSlug, ...msg } = action.message;
 
-      nextState = Object.assign({}, state);
+      nextState = merge({}, state);
       nextState[channelSlug].messages.push(msg.slug);
 
       if (msg.parentMessageId) {
@@ -194,9 +192,9 @@ const channelReducer = (state = {}, action) => {
     }
     case MESSAGE.DESTROY.RECEIVE: {
       const { slug, channelSlug: chSlug } = action.message;
-      nextState = Object.assign({}, state);
-      nextState[chSlug].messages = filterPop(nextState[chSlug].messages, slug);
-      return nextState;
+      nextState = {};
+      nextState[chSlug] = { messages: state[chSlug].messages.filter(val => val !== slug) };
+      return merge({}, state, nextState);
     }
     case CHANNEL_SWITCH: {
       const { channelSlug, scrollLoc } = action;
@@ -205,60 +203,67 @@ const channelReducer = (state = {}, action) => {
         return state;
       }
 
-      nextState = Object.assign({}, state);
-      nextState[channelSlug].scrollLoc = scrollLoc;
-      nextState[channelSlug].isOpen = false;
-      return nextState;
+      nextState = {};
+      nextState[channelSlug] = { scrollLoc, isOpen: false };
+      return merge({}, state, nextState);
     }
     case HISTORY.INDEX.REQUEST:
-      nextState = Object.assign({}, state);
-      nextState[action.channelSlug].lastFetched = action.startDate;
-      return nextState;
+      nextState = {};
+      nextState[action.channelSlug] = { lastFetched: action.startDate };
+      return merge({}, state, nextState);
     case HISTORY.INDEX.RECEIVE: {
       const { messages, channel } = action.messages;
 
-      nextState = Object.assign({}, state);
-      messages.forEach((message) => {
-        nextState[channel.slug].messages.push(message.slug);
+      nextState = merge({}, state);
+      messages.forEach(({ slug }) => {
+        nextState[channel.slug].messages.push(slug);
       });
 
       return nextState;
     }
     case CHANNEL_SUB.CREATE.RECEIVE: {
       const { id, channelSlug, userSlug } = action.channelSub;
-      nextState = Object.assign({}, state);
-      nextState[channelSlug].subs.push(id);
-      nextState[channelSlug].members.push(userSlug);
+
+      nextState = { ...state };
+      nextState[channelSlug] = {
+        ...state[channelSlug],
+        subs: [...state[channelSlug].subs, id],
+        members: [...state[channelSlug].members, userSlug],
+      };
+
       return nextState;
     }
     case CHANNEL_SUB.DESTROY.RECEIVE: {
-      const { channelSlug: chSlug, id, userSlug } = action.channelSub;
-      nextState = Object.assign({}, state);
-      nextState[chSlug].subs = filterPop(nextState[chSlug].subs, id);
-      nextState[chSlug].members = filterPop(nextState[chSlug].members, userSlug);
+      const { channelSlug, id, userSlug } = action.channelSub;
+
+      nextState = { ...state };
+      nextState[channelSlug] = {
+        ...state[channelSlug],
+        subs: state[channelSlug].subs.filter(val => val !== id),
+        members: state[channelSlug].members.filter(val => val !== userSlug),
+      };
+
       return nextState;
     }
     case READ.CREATE.RECEIVE:
-    case READ.UPDATE.RECEIVE: {
-      const { read } = action;
-
-      if (read.readableType !== 'Channel') {
+    case READ.UPDATE.RECEIVE:
+      if (action.read.readableType !== 'Channel') {
         return state;
       }
 
-      nextState = Object.assign({}, state);
-      nextState[read.slug].readId = read.id;
-      nextState[read.slug].lastRead = read.accessedAt;
-      nextState[read.slug].hasUnreads = false;
+      nextState = {};
+      nextState[action.read.slug] = {
+        readId: action.read.id,
+        lastRead: action.read.accessedAt,
+      };
 
-      return nextState;
-    }
+      return merge({}, state, nextState);
     case READ.INDEX.RECEIVE: {
       const { messages } = action.messages;
 
-      nextState = Object.assign({}, state);
-      Object.values(nextState).forEach((channel) => {
-        nextState[channel.slug].unreadsLength = 0;
+      nextState = merge({}, state);
+      Object.keys(state).forEach((slug) => {
+        nextState[slug].unreadsLength = 0;
       });
 
       messages.forEach(({ channelSlug, slug }) => {
@@ -272,19 +277,22 @@ const channelReducer = (state = {}, action) => {
       return nextState;
     }
     case CLEAR_UNREADS:
-      nextState = Object.assign({}, state);
-      nextState[action.channelSlug].hasUnreads = false;
-      nextState[action.channelSlug].unreadsLength = 0;
-      nextState[action.channelSlug].lastRead = action.lastRead;
-      return nextState;
+      nextState = {};
+      nextState[action.channelSlug] = {
+        hasUnreads: false,
+        unreadsLength: 0,
+        lastRead: action.lastRead,
+      };
+
+      return merge({}, state, nextState);
     case PIN.CREATE.RECEIVE:
-      nextState = Object.assign({}, state);
+      nextState = merge({}, state);
       nextState[action.pin.channelSlug].pins.push(action.pin.id);
       return nextState;
     case PIN.DESTROY.RECEIVE: {
       const { id, channelSlug: chSlug } = action.pin;
-      nextState = Object.assign({}, state);
-      nextState[chSlug].pins = filterPop(nextState[chSlug].pins, id);
+      nextState = merge({}, state);
+      nextState[chSlug].pins = state[chSlug].pins.filter(val => val !== id);
       return nextState;
     }
     case SIGN_OUT.RECEIVE:
