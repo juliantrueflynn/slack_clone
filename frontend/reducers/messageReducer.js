@@ -1,6 +1,5 @@
 import merge from 'lodash.merge';
 import { isDateOlderThanOther } from '../util/dateUtil';
-import { pushReduce, filterPop } from '../util/reducerUtil';
 import {
   MESSAGE,
   USER_THREAD,
@@ -17,15 +16,15 @@ import {
 
 const messageReducer = (state = {}, action) => {
   Object.freeze(state);
-
   let nextState;
+
   switch (action.type) {
     case WORKSPACE.SHOW.RECEIVE: {
       const { messages, reads } = action.workspace;
 
       nextState = {};
       messages.forEach((msg) => {
-        nextState[msg.slug] = msg;
+        nextState[msg.slug] = { ...msg };
 
         if (msg.parentMessageId) {
           nextState[msg.parentMessageSlug] = {
@@ -39,9 +38,12 @@ const messageReducer = (state = {}, action) => {
       });
 
       reads.filter(read => read.readableType === 'Message').forEach((read) => {
-        nextState[read.slug] = { slug: read.slug, ...nextState[read.slug] };
-        nextState[read.slug].readId = read.id;
-        nextState[read.slug].lastRead = read.accessedAt;
+        nextState[read.slug] = {
+          slug: read.slug,
+          readId: read.id,
+          lastRead: read.accessedAt,
+          ...nextState[read.slug]
+        };
       });
 
       Object.values(nextState).forEach((msg) => {
@@ -79,7 +81,7 @@ const messageReducer = (state = {}, action) => {
           ...msg
         };
 
-        if (action.type === MESSAGE.SHOW.RECEIVE || action.type === FAVORITE.INDEX.RECEIVE) {
+        if (FAVORITE.INDEX.RECEIVE) {
           nextState[msg.slug].isOpen = true;
         }
 
@@ -92,7 +94,15 @@ const messageReducer = (state = {}, action) => {
       messages.filter(msg => msg.parentMessageId).forEach((msg) => {
         const parent = nextState[msg.parentMessageSlug];
 
-        if (!parent) {
+        if (parent) {
+          if (!parent.thread.includes(msg.slug)) {
+            parent.thread.push(msg.slug);
+          }
+
+          if (!parent.authors.includes(msg.authorSlug)) {
+            parent.authors.push(msg.authorSlug);
+          }
+        } else {
           nextState[msg.parentMessageSlug] = {
             slug: msg.parentMessageSlug,
             id: msg.parentMessageId,
@@ -101,14 +111,6 @@ const messageReducer = (state = {}, action) => {
             thread: [msg.slug],
             authors: [msg.authorSlug],
           };
-        } else {
-          if (!parent.thread.includes(msg.slug)) {
-            parent.thread.push(msg.slug);
-          }
-
-          if (!parent.authors.includes(msg.authorSlug)) {
-            parent.authors.push(msg.authorSlug);
-          }
         }
       });
 
@@ -130,12 +132,12 @@ const messageReducer = (state = {}, action) => {
     }
     case SEARCH_DESTROY:
     case SEARCH.INDEX.REQUEST: {
-      nextState = Object.assign({}, state);
-      Object.values(nextState).forEach((msg) => {
-        nextState[msg.slug].isInSearch = false;
+      nextState = {};
+      Object.values(state).forEach((msg) => {
+        nextState[msg.slug] = { isInSearch: false };
       });
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case SEARCH.INDEX.RECEIVE: {
       const { messages, reactions } = action.messages;
@@ -146,7 +148,7 @@ const messageReducer = (state = {}, action) => {
           isInSearch: true,
           reactionIds: [],
           thread: msg.parentMessageId ? null : [],
-          authors: [msg.authorSlug],
+          authors: [],
           ...msg
         };
       });
@@ -157,20 +159,15 @@ const messageReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case MESSAGE.SHOW.REQUEST: {
-      const { messageSlug } = action;
-
-      nextState = Object.assign({}, state);
-      Object.values(state).filter(msg => msg.isOpen).forEach((msg) => {
-        nextState[msg.slug].isOpen = false;
+    case MESSAGE.SHOW.REQUEST:
+      nextState = {};
+      Object.keys(state).forEach((slug) => {
+        nextState[slug] = { isOpen: false };
       });
 
-      if (nextState[messageSlug]) {
-        nextState[messageSlug].isOpen = true;
-      }
+      nextState[action.messageSlug] = { isOpen: true };
 
-      return nextState;
-    }
+      return merge({}, state, nextState);
     case MESSAGE.CREATE.REQUEST: {
       const { parentMessageSlug } = action.message;
 
@@ -178,83 +175,59 @@ const messageReducer = (state = {}, action) => {
         return state;
       }
 
-      nextState = Object.assign({}, state);
-      nextState[parentMessageSlug].isInConvo = true;
+      nextState = {};
+      nextState[parentMessageSlug] = { isInConvo: true };
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case MESSAGE.CREATE.RECEIVE: {
       const { message } = action;
-      nextState = Object.assign({}, state);
-      nextState[message.slug] = {
-        authors: [message.authorSlug],
+      const { slug, authorSlug, parentMessageSlug: parentSlug } = message;
+
+      nextState = {};
+      nextState[slug] = {
+        authors: [authorSlug],
+        reactionIds: [],
         ...message
       };
 
-      if (message.parentMessageSlug) {
-        const parent = {
-          id: message.parentMessageId,
-          slug: message.parentMessageSlug,
+      if (parentSlug && state[parentSlug]) {
+        nextState[parentSlug] = {
+          ...state[parentSlug],
           channelSlug: message.channelSlug,
-          thread: [],
-          reactionIds: [],
-          authors: [],
-          ...nextState[message.parentMessageSlug],
+          lastActive: message.createdAt,
+          thread: [...state[parentSlug].thread, slug],
         };
 
-        parent.lastActive = message.createdAt;
-        parent.authors = parent.authors.reduce((acc, curr) => (
-          pushReduce(acc, curr)
-        ), [message.authorSlug]);
-        parent.thread.push(message.slug);
-
-        if (!parent.isOpen) {
-          parent.hasUnreads = isDateOlderThanOther(parent.lastRead, message.createdAt);
-          nextState[message.slug].isUnread = true;
+        if (!nextState[parentSlug].authors.includes(authorSlug)) {
+          nextState[parentSlug].authors = [...state[parentSlug].authors, authorSlug];
         }
 
-        nextState[message.parentMessageSlug] = parent;
+        if (!nextState[parentSlug].isOpen) {
+          nextState[parentSlug].hasUnreads = isDateOlderThanOther(
+            nextState[parentSlug].lastRead,
+            message.createdAt
+          );
+
+          nextState[slug].isUnread = true;
+        }
       }
 
-      return nextState;
+      return merge({}, state, nextState);
     }
-    case MESSAGE.UPDATE.RECEIVE: {
-      const { message } = action;
-      nextState = Object.assign({}, state);
-      nextState[message.slug].body = message.body;
-      return nextState;
-    }
+    case MESSAGE.UPDATE.RECEIVE:
+      nextState = {};
+      nextState[action.message.slug] = { body: action.message.body };
+      return merge({}, state, nextState);
     case MESSAGE.DESTROY.RECEIVE: {
-      const { slug, parentMessageSlug } = action.message;
-      nextState = Object.assign({}, state);
+      const { slug, parentMessageSlug: parentSlug } = action.message;
+      nextState = merge({}, state);
 
-      if (parentMessageSlug) {
-        const parent = nextState[parentMessageSlug];
-        parent.thread = filterPop(parent.thread, slug);
+      if (parentSlug && state[parentSlug]) {
+        nextState[parentSlug].thread = state[parentSlug].thread.filter(val => val !== slug);
       }
 
       delete nextState[slug];
-      return nextState;
-    }
-    case REACTION.CREATE.RECEIVE: {
-      const { id, messageSlug } = action.reaction;
-
-      nextState = Object.assign({}, state);
-      if (nextState[messageSlug]) {
-        nextState[messageSlug].reactionIds.push(id);
-      }
-
-      return nextState;
-    }
-    case REACTION.DESTROY.RECEIVE: {
-      const { id, messageSlug: slug } = action.reaction;
-
-      nextState = Object.assign({}, state);
-
-      if (nextState[slug]) {
-        nextState[slug].reactionIds = filterPop(nextState[slug].reactionIds, id);
-      }
-
       return nextState;
     }
     case READ.CREATE.RECEIVE:
@@ -265,17 +238,19 @@ const messageReducer = (state = {}, action) => {
         return state;
       }
 
-      nextState = Object.assign({}, state);
-      nextState[read.slug].readId = read.id;
-      nextState[read.slug].lastRead = read.accessedAt;
-      nextState[read.slug].hasUnreads = false;
+      nextState = {};
+      nextState[read.slug] = {
+        readId: read.id,
+        lastRead: read.accessedAt,
+        hasUnreads: false,
+      };
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case READ.DESTROY.RECEIVE:
-      nextState = Object.assign({}, state);
-      nextState[action.read.slug].readId = null;
-      return nextState;
+      nextState = {};
+      nextState[action.read.slug] = { readId: null };
+      return merge({}, state, nextState);
     case READ.INDEX.RECEIVE:
       nextState = action.messages.messages.reduce((acc, curr) => {
         acc[curr.slug] = curr;
@@ -283,32 +258,44 @@ const messageReducer = (state = {}, action) => {
       }, {});
 
       return merge({}, state, nextState);
+    case REACTION.CREATE.RECEIVE: {
+      const { id, messageSlug: slug } = action.reaction;
+
+      if (!state[slug]) {
+        return state;
+      }
+
+      nextState = merge({}, state);
+      nextState[slug].reactionIds = [...state[slug].reactionIds, id];
+      return nextState;
+    }
+    case REACTION.DESTROY.RECEIVE: {
+      const { id, messageSlug: slug } = action.reaction;
+
+      if (!state[slug]) {
+        return state;
+      }
+
+      nextState = merge({}, state);
+      nextState[slug].reactionIds = state[slug].reactionIds.filter(val => val !== id);
+      return nextState;
+    }
     case FAVORITE.CREATE.RECEIVE:
-      nextState = Object.assign({}, state);
-      nextState[action.favorite.messageSlug].favoriteId = action.favorite.id;
-      return nextState;
+      nextState = {};
+      nextState[action.favorite.messageSlug] = { favoriteId: action.favorite.id };
+      return merge({}, state, nextState);
     case FAVORITE.DESTROY.RECEIVE:
-      nextState = Object.assign({}, state);
-      nextState[action.favorite.messageSlug].favoriteId = null;
-      return nextState;
-    case PIN.CREATE.RECEIVE: {
-      nextState = Object.assign({}, state);
-
-      if (nextState[action.pin.messageSlug]) {
-        nextState[action.pin.messageSlug].pinId = action.pin.id;
-      }
-
-      return nextState;
-    }
-    case PIN.DESTROY.RECEIVE: {
-      nextState = Object.assign({}, state);
-
-      if (nextState[action.pin.messageSlug]) {
-        nextState[action.pin.messageSlug].pinId = null;
-      }
-
-      return nextState;
-    }
+      nextState = {};
+      nextState[action.favorite.messageSlug] = { favoriteId: null };
+      return merge({}, state, nextState);
+    case PIN.CREATE.RECEIVE:
+      nextState = {};
+      nextState[action.pin.messageSlug] = { pinId: action.pin.id };
+      return merge({}, state, nextState);
+    case PIN.DESTROY.RECEIVE:
+      nextState = {};
+      nextState[action.pin.messageSlug] = { pinId: null };
+      return merge({}, state, nextState);
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return {};
