@@ -1,3 +1,4 @@
+import merge from 'lodash.merge';
 import {
   REACTION,
   MESSAGE,
@@ -17,13 +18,13 @@ const reactionReducer = (state = {}, action) => {
   switch (action.type) {
     case REACTION.CREATE.RECEIVE: {
       const { reaction } = action;
-      nextState = Object.assign({}, state);
+      nextState = {};
       nextState[reaction.id] = reaction;
-      return nextState;
+      return merge({}, state, nextState);
     }
     case REACTION.DESTROY.RECEIVE: {
       const { reaction } = action;
-      nextState = Object.assign({}, state);
+      nextState = merge({}, state);
       delete nextState[reaction.id];
       return nextState;
     }
@@ -36,12 +37,12 @@ const reactionReducer = (state = {}, action) => {
     case MESSAGE.SHOW.RECEIVE: {
       const { reactions } = action.messages;
 
-      nextState = Object.assign({}, state);
+      nextState = {};
       reactions.forEach((reaction) => {
         nextState[reaction.id] = reaction;
       });
 
-      return nextState;
+      return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
