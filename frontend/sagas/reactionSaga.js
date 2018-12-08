@@ -9,7 +9,7 @@ import {
 import { createReaction, destroyReaction } from '../actions/reactionActions';
 import { REACTION, REACTION_TOGGLE } from '../actions/actionTypes';
 import { apiCreate, apiDestroy } from '../util/apiUtil';
-import { selectCurrentUser, selectMessagesMap } from '../reducers/selectors';
+import { selectCurrentUser, getMessagesMap } from '../reducers/selectors';
 
 function* matchingReactionByUser({ id, reactions }, emoji) {
   const currUser = yield select(selectCurrentUser);
@@ -24,7 +24,7 @@ function* matchingReactionByUser({ id, reactions }, emoji) {
 
 function* loadToggleReaction({ reaction: { messageSlug, emoji } }) {
   try {
-    const messagesMap = yield select(selectMessagesMap);
+    const messagesMap = yield select(getMessagesMap);
     const message = messagesMap[messageSlug];
     const matchingReaction = yield matchingReactionByUser(message, emoji);
 

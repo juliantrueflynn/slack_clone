@@ -58,7 +58,7 @@ class ChannelHeaderNavbar extends React.Component {
     const {
       currentUser,
       users,
-      messages,
+      searchMessages,
       channelsMap,
       channel,
       chatTitle,
@@ -79,7 +79,6 @@ class ChannelHeaderNavbar extends React.Component {
 
     let channelMenuItems = [];
     let ddMenuItems = [];
-    const searchMessages = messages.filter(msg => msg.isInSearch).sort((a, b) => b.id - a.id);
 
     if (channel) {
       channelMenuItems = [

@@ -1,51 +1,45 @@
+import { createSelector } from 'reselect';
+
 const values = entities => Object.values(entities);
 
 export const selectSubbedWorkspaces = ({ entities: { workspaces } }) => (
   values(workspaces).filter(({ isSub, isMember }) => isSub && isMember).sort((a, b) => a.id - b.id)
 );
 
-export const selectMessagesMap = ({ entities: { messages, members, reactions } }) => (
-  values(messages).reduce((acc, curr) => {
-    const msg = { ...curr };
+const getAllUsers = state => state.entities.members;
+const getAllMessages = state => state.entities.messages;
+const getAllReactions = state => state.entities.reactions;
+const getAllChannels = state => state.entities.channels;
 
-    if (curr.thread && curr.thread.length) {
-      const threadLastSlug = curr.thread[curr.thread.length - 1];
-      const threadLastMsg = messages[threadLastSlug];
-      msg.lastMessageDate = threadLastMsg && threadLastMsg.createdAt;
-    }
+export const getMessagesMap = createSelector(
+  [getAllMessages, getAllUsers, getAllReactions],
+  (messages, users, reactions) => (
+    values(messages).reduce((acc, curr) => {
+      const msg = { ...curr };
 
-    if (reactions && curr.reactionIds) {
-      msg.reactions = curr.reactionIds.map(id => reactions[id]);
-    }
+      if (curr.thread && curr.thread.length) {
+        const threadLastSlug = curr.thread[curr.thread.length - 1];
+        const threadLastMsg = messages[threadLastSlug];
+        msg.lastMessageDate = threadLastMsg && threadLastMsg.createdAt;
+      }
 
-    const author = members[curr.authorSlug];
+      if (reactions && curr.reactionIds) {
+        msg.reactions = curr.reactionIds.map(id => reactions[id]);
+      }
 
-    if (author) {
-      msg.username = author.username;
-      msg.avatarThumb = author.avatarThumb;
-    }
+      const author = users[curr.authorSlug];
 
-    acc[curr.slug] = msg;
+      if (author) {
+        msg.username = author.username;
+        msg.avatarThumb = author.avatarThumb;
+      }
 
-    return acc;
-  }, {})
+      acc[curr.slug] = msg;
+
+      return acc;
+    }, {})
+  )
 );
-
-export const selectMessages = state => values(selectMessagesMap(state));
-
-const selectConvoBySlug = ({ entities }, slug) => {
-  const entries = selectMessagesMap({ entities });
-  const message = entries[slug];
-
-  if (!message || !message.thread) {
-    return [];
-  }
-
-  return message.thread.reduce((acc, curr) => {
-    acc.push(entries[curr]);
-    return acc;
-  }, [message]);
-};
 
 const groupByMessageEntityType = (arr) => {
   const entries = [];
@@ -68,20 +62,14 @@ const groupByMessageEntityType = (arr) => {
   return entries;
 };
 
-const selectChannelMessagesBySlug = ({ entities }, slug) => {
-  const channel = entities.channels[slug];
-  const messagesMap = selectMessagesMap({ entities });
-  const messages = channel.messages
-    .map(msgSlug => messagesMap[msgSlug])
-    .filter(msg => !msg.parentMessageId);
-  const entries = messages.filter(msg => msg.entityType === 'entry');
-  const subs = messages.filter(msg => msg.entityType !== 'entry').reduce((acc, curr) => {
-    const message = { ...curr };
-    message.group = [];
-    message.channelTitle = `#${channel.title}`;
-    acc.push(message);
+const getChatPath = state => state.ui.displayChannelSlug;
 
-    return acc;
+const selectChannelMessagesBySlug = (msgsMap, msgsSlugs, title) => {
+  const msgs = msgsSlugs.map(msgSlug => msgsMap[msgSlug]).filter(msg => !msg.parentMessageId);
+  const entries = msgs.filter(msg => msg.entityType === 'entry');
+  const subs = msgs.filter(msg => msg.entityType !== 'entry').reduce((acc, curr) => {
+    const msg = { ...curr, group: [], channelTitle: `#${title}` };
+    return [...acc, msg];
   }, []);
 
   const items = [...subs, ...entries].sort((a, b) => a.id - b.id);
@@ -89,46 +77,64 @@ const selectChannelMessagesBySlug = ({ entities }, slug) => {
   return groupByMessageEntityType(items);
 };
 
-const selectAllThreadMessages = ({ entities }) => {
-  const messagesMap = selectMessagesMap({ entities });
-
-  return values(messagesMap)
-    .reduce((acc, curr) => {
-      if (!curr.isInConvo || !curr.thread) {
-        return acc;
-      }
-
-      const convo = { ...curr };
-      convo.thread = curr.thread && curr.thread.map(msgSlug => messagesMap[msgSlug]);
-
-      acc.push(convo);
-
+const selectAllThreadMessages = msgsMap => (
+  values(msgsMap).reduce((acc, curr) => {
+    if (!curr.isInConvo || !curr.thread) {
       return acc;
-    }, [])
-    .sort((a, b) => new Date(b.lastActive) - new Date(a.lastActive));
-};
+    }
 
-export const selectChatPageMessagesBySlug = ({ entities }, slug) => {
-  if (slug === 'unreads') {
-    return selectMessagesMap({ entities });
+    const convo = {
+      ...curr,
+      thread: curr.thread.map(msgSlug => msgsMap[msgSlug]),
+    };
+
+    return [...acc, convo];
+  }, []).sort((a, b) => new Date(b.lastActive) - new Date(a.lastActive))
+);
+
+export const getChatPageMessages = createSelector(
+  [getMessagesMap, getAllChannels, getChatPath],
+  (messagesMap, channelsMap, chatPath) => {
+    if (chatPath === 'unreads') {
+      return messagesMap;
+    }
+
+    if (chatPath === 'threads') {
+      return selectAllThreadMessages(messagesMap);
+    }
+
+    const channel = channelsMap[chatPath];
+    if (channel) {
+      const { messages, title } = channel;
+      return selectChannelMessagesBySlug(messagesMap, messages, title);
+    }
+
+    return [];
+  }
+);
+
+const getDrawer = state => state.ui.drawer;
+
+const getConvosByDrawerSlug = (msgsMap, drawerSlug) => {
+  const msg = msgsMap[drawerSlug];
+
+  if (!msg || !msg.thread) {
+    return [];
   }
 
-  if (slug === 'threads') {
-    return selectAllThreadMessages({ entities });
-  }
-
-  return selectChannelMessagesBySlug({ entities }, slug);
+  return msg.thread.reduce((acc, curr) => [...acc, msgsMap[curr]], [msg]);
 };
 
-export const selectDrawerMessages = ({ entities, ui: { drawer } }) => {
-  const { drawerType, drawerSlug } = drawer;
+export const getDrawerMessages = createSelector(
+  [getDrawer, getMessagesMap],
+  (drawer, messagesMap) => {
+    if (drawer.drawerType === 'convo') {
+      return getConvosByDrawerSlug(messagesMap, drawer.drawerSlug);
+    }
 
-  if (drawerType === 'convo') {
-    return selectConvoBySlug({ entities }, drawerSlug);
+    return messagesMap;
   }
-
-  return selectMessagesMap({ entities });
-};
+);
 
 export const selectChannelsMap = ({ entities, session: { currentUser } }, userSlug) => {
   const { channels, members } = entities;

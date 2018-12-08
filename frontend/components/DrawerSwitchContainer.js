@@ -2,13 +2,13 @@ import { connect } from 'react-redux';
 import { updateDrawer, updateModal } from '../actions/uiActions';
 import { createChannel } from '../actions/channelActions';
 import { destroyPin } from '../actions/messageActions';
-import { selectDrawerMessages } from '../reducers/selectors';
+import { getDrawerMessages } from '../reducers/selectors';
 import withEntityWrapper from './withEntityWrapper';
 import withWindowResize from './withWindowResize';
 import DrawerSwitch from './DrawerSwitch';
 
 const mapStateToProps = (state, { match: { params } }) => ({
-  messagesMap: selectDrawerMessages(state),
+  messagesMap: getDrawerMessages(state),
   favorites: Object.values(state.entities.favorites),
   chatPath: state.ui.displayChannelSlug,
   drawerType: params.drawerType,

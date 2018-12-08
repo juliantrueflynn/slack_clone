@@ -8,8 +8,7 @@ import './ChannelHeader.css';
 
 class ChannelHeader extends React.Component {
   getPageTitle() {
-    const { channelsMap, chatPath } = this.props;
-    const channel = channelsMap[chatPath];
+    const { channel, chatPath } = this.props;
 
     let title;
     if (chatPath === 'unreads') {
@@ -25,8 +24,10 @@ class ChannelHeader extends React.Component {
 
   render() {
     const {
+      channel,
       messages,
-      channelsMap,
+      channelUnreadsLen,
+      convoUnreadsLen,
       users,
       accordionOpen,
       openModal,
@@ -37,26 +38,16 @@ class ChannelHeader extends React.Component {
     } = this.props;
 
     const title = this.getPageTitle();
-    const channel = channelsMap[chatPath];
     const { url } = match;
     const { dmUserSlug } = channel || {};
 
     let metaMenuItems = [];
 
     if (chatPath === 'unreads') {
-      const channels = Object.values(channelsMap);
-      const unreadsLen = channels.reduce((acc, curr) => {
-        let total = acc;
-        total += curr.unreadsLength;
-        return total;
-      }, 0);
-      const label = unreadsLen ? `${unreadsLen} unreads` : 'No new messages';
-
+      const label = channelUnreadsLen ? `${channelUnreadsLen} unreads` : 'No new messages';
       metaMenuItems = [{ key: 'unreads', label }];
     } else if (chatPath === 'threads') {
-      const unreadsLen = messages.filter(convo => convo.hasUnreads).length;
-      const label = unreadsLen ? `${unreadsLen} updated convos` : 'No new replies';
-
+      const label = convoUnreadsLen ? `${convoUnreadsLen} updated convos` : 'No new replies';
       metaMenuItems = [{ key: 'unreads', label }];
     } else if (channel && channel.hasDm) {
       const user = users[dmUserSlug];
@@ -109,7 +100,6 @@ class ChannelHeader extends React.Component {
           match={match}
           messages={messages}
           users={users}
-          channelsMap={channelsMap}
           {...props}
         />
       </header>
