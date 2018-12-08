@@ -189,17 +189,16 @@ export const getChannelsMap = createSelector(
 );
 
 export const getDMChannels = createSelector(
-  [getChannelsMap, getAllUsers, getCurrentUser, getAllChannelSubs],
-  (channelsMap, users, currentUser, subsMap) => {
-    const user = users[currentUser.slug];
+  [getAllChannels, getAllUsers, getCurrentUser, getAllChannelSubs],
+  (channelsMap, usersMap, currentUser, subsMap) => {
+    const user = usersMap[currentUser.slug];
 
-    user.subs.map(subId => subsMap[subId]).filter(sub => (
+    return user.subs.map(subId => subsMap[subId]).filter(sub => (
       channelsMap[sub.channelSlug].hasDm && sub.inSidebar
     )).map((sub) => {
       const ch = { ...channelsMap[sub.channelSlug] };
-
       const subsUserSlugs = ch.members.filter(userSlug => userSlug !== user.slug);
-      const subUser = subsUserSlugs[0] && users[subsUserSlugs[0]];
+      const subUser = subsUserSlugs[0] && usersMap[subsUserSlugs[0]];
 
       if (subUser) {
         ch.title = subUser.username;

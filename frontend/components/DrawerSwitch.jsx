@@ -124,12 +124,12 @@ class DrawerSwitch extends React.Component {
       {
         component: UserDrawer,
         path: 'team',
-        drawerSlug,
         createChannelRequest,
         history,
         workspaceSlug,
         currentUserSlug,
         openModal,
+        user: users[drawerSlug],
         users,
       },
       { component: FavoritesDrawer, path: 'favorites' },

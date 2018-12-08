@@ -5,14 +5,19 @@ import { dateUtil } from '../util/dateUtil';
 import './UserDrawer.css';
 
 class UserDrawer extends React.Component {
-  getUser() {
-    const { users, drawerSlug } = this.props;
-    return users[drawerSlug];
+  constructor(props) {
+    super(props);
+    this.handleButtonClick = this.handleButtonClick.bind(this);
   }
 
   handleButtonClick() {
-    const { history, createChannelRequest, workspaceSlug } = this.props;
-    const { dmChat, id: memberId } = this.getUser();
+    const {
+      history,
+      createChannelRequest,
+      workspaceSlug,
+      user,
+    } = this.props;
+    const { dmChat, id: memberId } = user;
 
     if (dmChat) {
       history.replace(`/${workspaceSlug}/messages/${dmChat}`);
@@ -22,8 +27,7 @@ class UserDrawer extends React.Component {
   }
 
   render() {
-    const { currentUserSlug, openModal } = this.props;
-    const user = this.getUser();
+    const { currentUserSlug, openModal, user } = this.props;
 
     if (!user) {
       return null;
