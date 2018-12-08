@@ -72,11 +72,12 @@ class LeftSidebar extends React.Component {
 
   render() {
     const {
-      channelsMap,
-      channelSubsMap,
+      dmChannels,
+      subbedChannels,
+      hasUnreadChannels,
       hasUnreadConvos,
-      currentUser,
-      users,
+      chatPathUrl,
+      user,
       workspace,
       closeModal,
       isModalOpen,
@@ -89,34 +90,6 @@ class LeftSidebar extends React.Component {
       isMobileSize,
       match: { url },
     } = this.props;
-
-    const user = users[currentUser.slug];
-
-    if (!user) {
-      return null;
-    }
-
-    const channels = Object.values(channelsMap);
-    const chatPathUrl = channelsMap[chatPath] ? `${url}/messages/${chatPath}` : `${url}/${chatPath}`;
-    const subbedChannels = channels.filter(ch => ch.isSub && !ch.hasDm).sort((a, b) => (
-      a.title.localeCompare(b.title)
-    ));
-    const hasUnreadChannels = channels.some(ch => ch.hasUnreads);
-    const dmChannels = user.subs.map(subId => channelSubsMap[subId]).filter(sub => (
-      channelsMap[sub.channelSlug].hasDm && sub.inSidebar
-    )).map((sub) => {
-      const ch = { ...channelsMap[sub.channelSlug] };
-
-      const subsUserSlugs = ch.members.filter(userSlug => userSlug !== user.slug);
-      const subUser = subsUserSlugs[0] && users[subsUserSlugs[0]];
-
-      if (subUser) {
-        ch.title = subUser.username;
-        ch.status = subUser.status;
-      }
-
-      return ch;
-    });
 
     const ddDefaults = [
       { label: <UserPreview user={user} avatarSize="40" hasNoStatus alignCenter /> },
@@ -200,9 +173,7 @@ class LeftSidebar extends React.Component {
         items: channelsItems,
         title: (
           <Fragment>
-            <Button unStyled buttonFor="chats" onClick={() => openModal('MODAL_CHATS')}>
-              Channels
-            </Button>
+            <Button unStyled buttonFor="chats" onClick={() => openModal('MODAL_CHATS')}>Channels</Button>
             <Button unStyled buttonFor="widget" onClick={() => openModal('MODAL_CHAT')}>
               <FontAwesomeIcon icon={['fas', 'plus-circle']} />
             </Button>
@@ -233,11 +204,7 @@ class LeftSidebar extends React.Component {
           </Modal>
         )}
         {isDdOpen && (
-          <DropdownModal
-            close={closeDropdown}
-            fixedLeftPos="10px"
-            coordinates={dropdownProps}
-          >
+          <DropdownModal close={closeDropdown} fixedLeftPos="10px" coordinates={dropdownProps}>
             <Menu items={userItems} />
           </DropdownModal>
         )}

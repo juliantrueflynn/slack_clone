@@ -6,10 +6,17 @@ export const selectSubbedWorkspaces = ({ entities: { workspaces } }) => (
   values(workspaces).filter(({ isSub, isMember }) => isSub && isMember).sort((a, b) => a.id - b.id)
 );
 
+export const getCurrentUser = state => state.session.currentUser;
+
 const getAllUsers = state => state.entities.members;
 const getAllMessages = state => state.entities.messages;
 const getAllReactions = state => state.entities.reactions;
 const getAllChannels = state => state.entities.channels;
+const getAllChannelSubs = state => state.entities.channelSubs;
+const getAllFavorites = state => state.entities.favorites;
+
+const getChatPath = state => state.ui.displayChannelSlug;
+const getDrawer = state => state.ui.drawer;
 
 export const getMessagesMap = createSelector(
   [getAllMessages, getAllUsers, getAllReactions],
@@ -62,8 +69,6 @@ const groupByMessageEntityType = (arr) => {
   return entries;
 };
 
-const getChatPath = state => state.ui.displayChannelSlug;
-
 const selectChannelMessagesBySlug = (msgsMap, msgsSlugs, title) => {
   const msgs = msgsSlugs.map(msgSlug => msgsMap[msgSlug]).filter(msg => !msg.parentMessageId);
   const entries = msgs.filter(msg => msg.entityType === 'entry');
@@ -113,8 +118,6 @@ export const getChatPageMessages = createSelector(
   }
 );
 
-const getDrawer = state => state.ui.drawer;
-
 const getConvosByDrawerSlug = (msgsMap, drawerSlug) => {
   const msg = msgsMap[drawerSlug];
 
@@ -124,8 +127,6 @@ const getConvosByDrawerSlug = (msgsMap, drawerSlug) => {
 
   return msg.thread.reduce((acc, curr) => [...acc, msgsMap[curr]], [msg]);
 };
-
-const getAllFavorites = state => state.entities.favorites;
 
 const getFavoritesDrawer = (msgsMap, favs) => (
   values(favs).sort((a, b) => (
@@ -156,8 +157,6 @@ export const getDrawerMessages = createSelector(
   }
 );
 
-export const getCurrentUser = state => state.session.currentUser;
-
 export const getChannelsMap = createSelector(
   [getAllChannels, getCurrentUser, getAllUsers],
   (channelsMap, currUser, users) => (
@@ -182,6 +181,29 @@ export const getChannelsMap = createSelector(
       return acc;
     }, {})
   )
+);
+
+export const getDMChannels = createSelector(
+  [getChannelsMap, getAllUsers, getCurrentUser, getAllChannelSubs],
+  (channelsMap, users, currentUser, subsMap) => {
+    const user = users[currentUser.slug];
+
+    user.subs.map(subId => subsMap[subId]).filter(sub => (
+      channelsMap[sub.channelSlug].hasDm && sub.inSidebar
+    )).map((sub) => {
+      const ch = { ...channelsMap[sub.channelSlug] };
+
+      const subsUserSlugs = ch.members.filter(userSlug => userSlug !== user.slug);
+      const subUser = subsUserSlugs[0] && users[subsUserSlugs[0]];
+
+      if (subUser) {
+        ch.title = subUser.username;
+        ch.status = subUser.status;
+      }
+
+      return ch;
+    });
+  }
 );
 
 export const selectUIByDisplay = ({ ui }, display) => ui[display];
