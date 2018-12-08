@@ -2,12 +2,9 @@ import { createSelector } from 'reselect';
 
 const values = entities => Object.values(entities);
 
-export const selectSubbedWorkspaces = ({ entities: { workspaces } }) => (
-  values(workspaces).filter(({ isSub, isMember }) => isSub && isMember).sort((a, b) => a.id - b.id)
-);
-
 export const getCurrentUser = state => state.session.currentUser;
 
+const getAllWorkspaces = state => state.entities.workspaces;
 const getAllUsers = state => state.entities.members;
 const getAllMessages = state => state.entities.messages;
 const getAllReactions = state => state.entities.reactions;
@@ -17,6 +14,14 @@ const getAllFavorites = state => state.entities.favorites;
 
 const getChatPath = state => state.ui.displayChannelSlug;
 const getDrawer = state => state.ui.drawer;
+
+export const getSubbedWorkspaces = createSelector(
+  [getAllWorkspaces], workspacesMap => (
+    values(workspacesMap)
+      .filter(({ isSub, isMember }) => isSub && isMember)
+      .sort((a, b) => a.id - b.id)
+  )
+);
 
 export const getMessagesMap = createSelector(
   [getAllMessages, getAllUsers, getAllReactions],

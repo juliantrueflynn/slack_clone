@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { selectSubbedWorkspaces, getChannelsMap, getDMChannels } from '../reducers/selectors';
+import { getSubbedWorkspaces, getChannelsMap, getDMChannels } from '../reducers/selectors';
 import { updateModal, updateDropdown } from '../actions/uiActions';
 import { updateChannelSub } from '../actions/channelActions';
 import withWindowResize from './withWindowResize';
@@ -22,7 +22,7 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
     hasUnreadConvos,
     hasUnreadChannels,
     user: state.entities.members[currUserSlug],
-    workspaces: selectSubbedWorkspaces(state),
+    workspaces: getSubbedWorkspaces(state),
     workspace: state.entities.workspaces[workspaceSlug],
     subbedChannels,
     dmChannels: getDMChannels(state),

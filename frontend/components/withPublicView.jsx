@@ -4,14 +4,14 @@ import { withRouter } from 'react-router-dom';
 import { signOut, signUp, signIn } from '../actions/sessionActions';
 import { fetchWorkspaces, updateWorkspaceSub, createWorkspaceSub } from '../actions/workspaceActions';
 import { updateDropdown, updateModal } from '../actions/uiActions';
-import { selectSubbedWorkspaces } from '../reducers/selectors';
+import { getSubbedWorkspaces } from '../reducers/selectors';
 import withWindowResize from './withWindowResize';
 import PublicView from './PublicView';
 
 const mapStateToProps = state => ({
   isLoggedIn: !!state.session.currentUser,
   workspacesMap: state.entities.workspaces,
-  subbedWorkspaces: selectSubbedWorkspaces(state),
+  subbedWorkspaces: getSubbedWorkspaces(state),
   currentUser: state.session.currentUser,
   isModalOpen: state.ui.displayModal.modalType === 'MODAL_WORKSPACE',
   isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_PUBLIC',
