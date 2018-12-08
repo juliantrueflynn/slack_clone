@@ -1,13 +1,12 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { itemDecorate } from '../util/menuUtil';
 import Modal from './Modal';
 import Menu from './Menu';
-import UserPreview from './UserPreview';
 import StatusIcon from './StatusIcon';
 import Button from './Button';
 import LeftSidebarMenus from './LeftSidebarMenus';
-import DropdownModal from './DropdownModal';
+import InlineSuffixButton from './InlineSuffixButton';
+import ProfileDropdown from './ProfileDropdown';
 import './LeftSidebar.css';
 
 class LeftSidebar extends React.Component {
@@ -15,34 +14,14 @@ class LeftSidebar extends React.Component {
     super(props);
     this.handleDmUnsubClick = this.handleDmUnsubClick.bind(this);
     this.handleHistoryPush = this.handleHistoryPush.bind(this);
-    this.handleDropdownClick = this.handleDropdownClick.bind(this);
-  }
-
-  handleDropdownClick(e) {
-    const { openDropdown } = this.props;
-    const { bottom: posY } = e.currentTarget.getBoundingClientRect();
-
-    openDropdown('DROPDOWN_PROFILE', { posY });
   }
 
   handleDmUnsubClick(e) {
     e.preventDefault();
 
-    const {
-      updateChannelSubRequest,
-      chatPath,
-      history,
-      workspace: { slug, channels },
-    } = this.props;
+    const { updateChannelSubRequest } = this.props;
     const dmChannelSlug = e.target.id;
-    const isCurrChannel = chatPath === dmChannelSlug;
-
     updateChannelSubRequest(dmChannelSlug);
-
-    if (isCurrChannel) {
-      const defaultChannelSlug = channels[0];
-      history.push(`/${slug}/messages/${defaultChannelSlug}`);
-    }
   }
 
   handleHistoryPush(linkUrl) {
@@ -76,47 +55,31 @@ class LeftSidebar extends React.Component {
       subbedChannels,
       hasUnreadChannels,
       hasUnreadConvos,
-      chatPathUrl,
       user,
       workspace,
       closeModal,
       isModalOpen,
       isDdOpen,
+      openDropdown,
+      closeDropdown,
       dropdownProps,
       workspaces,
       chatPath,
       openModal,
-      closeDropdown,
       isMobileSize,
       match: { url },
     } = this.props;
 
-    const ddDefaults = [
-      { label: <UserPreview user={user} avatarSize="40" hasNoStatus alignCenter /> },
-      {
-        label: 'Home',
-        link: '/',
-        exact: true,
-        hasNoDrawer: true,
-      },
-      { label: 'Profile & Account', link: `${chatPathUrl}/team/${user.slug}`, hasNoDrawer: true },
-      { key: 'switch-workspace', label: 'Switch Workspace' },
-    ];
-
-    const userItems = ddDefaults.concat(workspaces.map(item => itemDecorate(item, {
-      hasNoDrawer: true,
-    })));
-
     const quickLinksList = [
       {
-        icon: <FontAwesomeIcon icon="align-left" fixedWidth />,
+        icon: <FontAwesomeIcon icon="align-left" />,
         label: 'All Unreads',
         onClick: () => this.handleHistoryPush('unreads'),
         isItemActive: chatPath === 'unreads',
         modifierClassName: hasUnreadChannels ? 'unread' : null,
       },
       {
-        icon: <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />,
+        icon: <FontAwesomeIcon icon={['far', 'comment']} />,
         label: 'All Threads',
         onClick: () => this.handleHistoryPush('threads'),
         isItemActive: chatPath === 'threads',
@@ -124,46 +87,39 @@ class LeftSidebar extends React.Component {
       },
     ];
 
-    const channelsItems = subbedChannels.map(ch => itemDecorate(ch, {
-      icon: <FontAwesomeIcon icon="hashtag" size="sm" fixedWidth />,
-      urlPrefix: `${url}/messages/`,
-      modifierClassName: ch.hasUnreads ? 'unread' : null,
-      isActive: (match, location) => (
-        match && location.pathname.includes(`messages/${chatPath}`)
-      ),
+    const channelsItems = subbedChannels.map(ch => ({
+      ...ch,
+      icon: <FontAwesomeIcon icon="hashtag" size="sm" />,
     }));
 
-    const dmChannelsItems = dmChannels.map(({ status, ...ch }) => itemDecorate(ch, {
+    const dmChannelsItems = dmChannels.map(({ status, ...ch }) => ({
+      ...ch,
       icon: <StatusIcon member={{ status }} />,
-      urlPrefix: `${url}/messages/`,
-      modifierClassName: ch.hasUnreads ? 'unread' : null,
       label: (
-        <Fragment>
-          {ch.title}
-          <Button id={ch.slug} unStyled onClick={this.handleDmUnsubClick}>
-            <FontAwesomeIcon icon="times-circle" />
-          </Button>
-        </Fragment>
+        <InlineSuffixButton
+          id={ch.slug}
+          icon="times-circle"
+          onClick={this.handleDmUnsubClick}
+        >
+          {ch.label}
+        </InlineSuffixButton>
       ),
     }));
 
     const sidebarMenuItems = [
       {
         key: 'profile',
-        component: Button,
+        component: ProfileDropdown,
         props: {
-          onClick: this.handleDropdownClick,
-          buttonFor: 'dropdown',
-          unStyled: true,
-          children: (
-            <Fragment>
-              <div className="LeftSidebar__workspace">{workspace.title}</div>
-              <div className="LeftSidebar__workspace-subhead">
-                <StatusIcon member={user} size="sm" />
-                <div className="LeftSidebar__username">{user.username}</div>
-              </div>
-            </Fragment>
-          ),
+          chatPath,
+          url,
+          workspace,
+          workspaces,
+          user,
+          isDdOpen,
+          dropdownProps,
+          openDropdown,
+          closeDropdown,
         },
       },
       { key: 'quicklinks', component: Menu, items: quickLinksList },
@@ -172,12 +128,11 @@ class LeftSidebar extends React.Component {
         component: Menu,
         items: channelsItems,
         title: (
-          <Fragment>
-            <Button unStyled buttonFor="chats" onClick={() => openModal('MODAL_CHATS')}>Channels</Button>
-            <Button unStyled buttonFor="widget" onClick={() => openModal('MODAL_CHAT')}>
-              <FontAwesomeIcon icon={['fas', 'plus-circle']} />
+          <InlineSuffixButton icon="plus-circle" onClick={() => openModal('MODAL_CHAT')}>
+            <Button unStyled buttonFor="chats" onClick={() => openModal('MODAL_CHATS')}>
+              Channels
             </Button>
-          </Fragment>
+          </InlineSuffixButton>
         ),
       },
       {
@@ -202,11 +157,6 @@ class LeftSidebar extends React.Component {
           >
             <LeftSidebarMenus menuGroups={sidebarMenuItems} />
           </Modal>
-        )}
-        {isDdOpen && (
-          <DropdownModal close={closeDropdown} fixedLeftPos="10px" coordinates={dropdownProps}>
-            <Menu items={userItems} />
-          </DropdownModal>
         )}
       </aside>
     );

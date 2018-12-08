@@ -11,6 +11,7 @@
 .Modal__dropdown > .Menu {
   padding-top: 15px;
   padding-bottom: 15px;
+  width: 270px;
 }
 
 .Modal__dropdown > .Menu > .MenuItem > .MenuItem__content {
@@ -20,7 +21,6 @@
 
 .Modal__dropdown  > .Menu > .MenuItem > .MenuItem__content--btn {
   text-align: left;
-  width: 270px;
 }
 
 .Modal__dropdown .emoji-picker .emoji {

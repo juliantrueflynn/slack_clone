@@ -1,0 +1,91 @@
+.ProfileDropdown,
+.ProfileDropdown > .Btn {
+  min-height: 60px;
+}
+
+.ProfileDropdown .LeftSidebar__workspace-subhead {
+  display: flex;
+  flex-direction: row;
+  font-size: .9em;
+  align-items: center;
+}
+
+.ProfileDropdown .Btn__dropdown {
+  text-align: left;
+}
+
+.ProfileDropdown .Btn__dropdown:hover {
+  background-color: #3E2E3D;
+}
+
+.ProfileDropdown .Btn__dropdown:hover .LeftSidebar__workspace-subhead {
+  color: #FFF;
+}
+
+.ProfileDropdown .StatusIcon {
+  padding-right: 6px;
+}
+
+.ProfileDropdown .MenuItem--text {
+  margin-top: 5px;
+  padding-bottom: 8px;
+}
+
+.ProfileDropdown .Menu__dropdown .MenuItem > .MenuItem__content:not(.MenuItem__content--active) {
+  background-color: #FFF;
+  transition: background-color ease-in-out .15s;
+}
+
+.ProfileDropdown .Menu__dropdown .MenuItem > .MenuItem__content:not(.MenuItem__content--active):not(.MenuItem__content--text):hover {
+  background-color: rgba(223,230,233,.45);
+}
+
+.ProfileDropdown .MenuItem__switch-workspace {
+  border-top: 1px solid #E9E9E9;
+  padding-top: 15px;
+}
+
+.ProfileDropdown .MenuItem__switch-workspace .MenuItem__content,
+.ProfileDropdown .UserPreview__username {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.ProfileDropdown .UserPreview__email {
+  color: #636E72;
+}
+
+.ProfileDropdown .Btn__dropdown:focus {
+  outline: 0;
+  box-shadow: none;
+}
+
+.ProfileDropdown .Menu__dropdown {
+  left: 10px;
+}
+
+.ProfileDropdown .MenuItem__content {
+  color: #333;
+}
+
+.ProfileDropdown .MenuItem__content {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  display: block;
+}
+
+.ProfileDropdown .MenuItem__content--active {
+  background-color: #4C9689;
+  color: #FFF;
+}
+
+.ProfileDropdown .LeftSidebar__username {
+  text-align: left;
+}
+
+.ProfileDropdown .LeftSidebar__workspace {
+  font-weight: bold;
+  color: #FFF;
+  margin-bottom: 3px;
+  font-size: 17px;
+}

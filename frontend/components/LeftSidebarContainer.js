@@ -12,11 +12,20 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
   const channels = Object.values(channelsMap);
   const hasUnreadChannels = channels.some(ch => ch.hasUnreads);
   const hasUnreadConvos = Object.values(state.entities.messages).some(convo => convo.hasUnreads);
+  const chatPath = state.ui.displayChannelSlug;
+
+  const channelItemDecorate = ch => ({
+    slug: ch.slug,
+    status: ch.status || null,
+    label: ch.title,
+    link: `${url}/${ch.slug}`,
+    modifierClassName: ch.hasUnreads ? 'unreads' : null,
+    isActive: (match, { pathname }) => match && pathname.includes(`messages/${chatPath}`),
+  });
+  const dmChannels = getDMChannels(state).map(ch => channelItemDecorate(ch));
   const subbedChannels = channels.filter(ch => ch.isSub && !ch.hasDm).sort((a, b) => (
     a.title.localeCompare(b.title)
-  ));
-  const chatPath = state.ui.displayChannelSlug;
-  const chatPathUrl = channelsMap[chatPath] ? `${url}/messages/${chatPath}` : `${url}/${chatPath}`;
+  )).map(ch => channelItemDecorate(ch));
 
   return {
     hasUnreadConvos,
@@ -25,8 +34,7 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
     workspaces: getSubbedWorkspaces(state),
     workspace: state.entities.workspaces[workspaceSlug],
     subbedChannels,
-    dmChannels: getDMChannels(state),
-    chatPathUrl,
+    dmChannels,
     chatPath,
     drawer: state.ui.drawer,
     isModalOpen: state.ui.displayModal.modalType === 'MODAL_LEFT_SIDEBAR',

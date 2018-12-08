@@ -106,14 +106,14 @@
   outline: none;
 }
 
-.LeftSidebarMenus__group .Menu__dm-chats .MenuItem__content .Btn {
+.LeftSidebarMenus__dm-chats .MenuItem__content .Btn__suffix {
   position: absolute;
   height: 15px;
   right: 16px;
   display: none;
 }
 
-.LeftSidebarMenus__group .Menu__dm-chats .MenuItem__content:hover .Btn {
+.LeftSidebarMenus__dm-chats .MenuItem__content:hover .Btn__suffix {
   display: block;
 }
 
@@ -125,104 +125,6 @@
 .LeftSidebarMenus__group .Menu__quicklinks .MenuItem__icon svg,
 .LeftSidebarMenus__group .StatusIcon {
   width: 1.25em;
-}
-
-.LeftSidebarMenus__profile,
-.LeftSidebarMenus__profile > .Btn {
-  min-height: 60px;
-}
-
-.LeftSidebarMenus__profile .LeftSidebar__workspace-subhead {
-  display: flex;
-  flex-direction: row;
-  font-size: .9em;
-  align-items: center;
-}
-
-.LeftSidebarMenus__profile .Btn__dropdown {
-  text-align: left;
-}
-
-.LeftSidebarMenus__profile.Dropdown--opened,
-.LeftSidebarMenus__profile .Btn__dropdown:hover {
-  background-color: #3E2E3D;
-}
-
-.LeftSidebarMenus__profile.Dropdown--opened .LeftSidebar__workspace-subhead,
-.LeftSidebarMenus__profile .Btn__dropdown:hover .LeftSidebar__workspace-subhead {
-  color: #FFF;
-}
-
-.LeftSidebarMenus__profile .StatusIcon {
-  padding-right: 6px;
-}
-
-.LeftSidebarMenus__profile .MenuItem--text {
-  margin-top: 5px;
-  padding-bottom: 8px;
-}
-
-.LeftSidebarMenus__profile .Menu__dropdown .MenuItem > .MenuItem__content:not(.MenuItem__content--active) {
-  background-color: #FFF;
-  transition: background-color ease-in-out .15s;
-}
-
-.LeftSidebarMenus__profile .Menu__dropdown .MenuItem > .MenuItem__content:not(.MenuItem__content--active):not(.MenuItem__content--text):hover {
-  background-color: rgba(223,230,233,.45);
-}
-
-.LeftSidebarMenus__profile .MenuItem__switch-workspace {
-  border-top: 1px solid #E9E9E9;
-  padding-top: 15px;
-}
-
-.LeftSidebarMenus__profile .MenuItem__switch-workspace .MenuItem__content,
-.LeftSidebarMenus__profile .UserPreview__username {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.LeftSidebarMenus__profile .UserPreview__email {
-  color: #636E72;
-}
-
-.Avatar__greeting {
-  margin-right: 10px
-}
-
-.LeftSidebarMenus__profile .Btn__dropdown:focus {
-  outline: 0;
-  box-shadow: none;
-}
-
-.LeftSidebarMenus__profile .Menu__dropdown {
-  left: 10px;
-}
-
-.LeftSidebarMenus__profile .MenuItem__content {
-  color: #333;
-}
-
-.LeftSidebarMenus__profile .MenuItem__content {
-  padding-top: 4px;
-  padding-bottom: 4px;
-  display: block;
-}
-
-.LeftSidebarMenus__profile .MenuItem__content--active {
-  background-color: #4C9689;
-  color: #FFF;
-}
-
-.LeftSidebarMenus__profile .LeftSidebar__username {
-  text-align: left;
-}
-
-.LeftSidebarMenus__profile .LeftSidebar__workspace {
-  font-weight: bold;
-  color: #FFF;
-  margin-bottom: 3px;
-  font-size: 17px;
 }
 
 .Modal__overlay--left-sidebar {

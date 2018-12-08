@@ -189,7 +189,7 @@ export const getChannelsMap = createSelector(
 );
 
 export const getDMChannels = createSelector(
-  [getAllChannels, getAllUsers, getCurrentUser, getAllChannelSubs],
+  [getChannelsMap, getAllUsers, getCurrentUser, getAllChannelSubs],
   (channelsMap, usersMap, currentUser, subsMap) => {
     const user = usersMap[currentUser.slug];
 
