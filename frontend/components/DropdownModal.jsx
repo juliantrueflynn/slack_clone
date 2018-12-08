@@ -55,6 +55,7 @@ class DropdownModal extends React.Component {
         style={style}
         unStyled
         hasNoWrappers
+        shouldReturnFocusAfterClose={false}
         contentRef={(node) => { this.contentRef = node; }}
         onAfterOpen={this.handleAfterModalOpen}
         {...modalProps}

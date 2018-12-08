@@ -45,12 +45,18 @@ class Modal extends React.Component {
       'Modal--has-pos': modalPos,
       [`Modal__pos-${modalPos}`]: modalPos,
     });
+    const bodyOpenClassName = classNames('Modal__wrapper', {
+      'ReactModal__Body--open': true,
+      [`Modal__wrapper--${modalFor}`]: modalFor,
+      [`Modal__wrapper--${modalFor}-${bemModifier}`]: modalFor && bemModifier,
+    });
 
     return (
       <ReactModal
         style={style}
         className={modalClassNames}
         overlayClassName={overlayClassName}
+        bodyOpenClassName={bodyOpenClassName}
         contentLabel={modalTitle}
         onRequestClose={close}
         shouldCloseOnOverlayClick

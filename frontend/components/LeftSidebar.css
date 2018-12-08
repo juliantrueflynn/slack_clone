@@ -127,6 +127,16 @@
   width: 1.25em;
 }
 
+.LeftSidebarMenus__quicklinks .MenuItem__icon,
+.LeftSidebarMenus__chats .MenuItem__icon,
+.LeftSidebar .MenuItem .StatusIcon__offline {
+  color: rgba(255,255,255,0.4);
+}
+
+.LeftSidebar .StatusIcon__online {
+  color: rgba(85,239,196,.5);
+}
+
 .Modal__overlay--left-sidebar {
   background-color: rgba(255, 255, 255, 0.6);
 }

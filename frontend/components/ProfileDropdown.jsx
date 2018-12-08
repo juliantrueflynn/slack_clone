@@ -55,14 +55,19 @@ class ProfileDropdown extends React.Component {
     return (
       <div className="ProfileDropdown">
         <Button buttonFor="dropdown" unStyled onClick={this.handleDropdownClick}>
-          <div className="LeftSidebar__workspace">{workspace.title}</div>
-          <div className="LeftSidebar__workspace-subhead">
+          <div className="ProfileDropdown__workspace">{workspace.title}</div>
+          <div className="ProfileDropdown__user">
             <StatusIcon member={user} size="sm" />
-            <div className="LeftSidebar__username">{user.username}</div>
+            <div className="ProfileDropdown__username">{user.username}</div>
           </div>
         </Button>
         {isDdOpen && (
-          <DropdownModal close={closeDropdown} fixedLeftPos="10px" coordinates={dropdownProps}>
+          <DropdownModal
+            coordinates={dropdownProps}
+            fixedLeftPos="10px"
+            bemModifier="profile"
+            close={closeDropdown}
+          >
             <Menu items={userItems} />
           </DropdownModal>
         )}
