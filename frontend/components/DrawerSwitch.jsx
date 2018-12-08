@@ -45,38 +45,6 @@ class DrawerSwitch extends React.Component {
     }
   }
 
-  getMessages() {
-    const {
-      drawerType,
-      messagesMap,
-      chatPath,
-      favorites,
-    } = this.props;
-
-    const messages = Object.values(messagesMap);
-
-    if (drawerType === 'details') {
-      return messages.filter(msg => msg.pinId && msg.channelSlug === chatPath);
-    }
-
-    if (drawerType === 'favorites') {
-      return favorites.sort((a, b) => (
-        new Date(b.createdAt) - new Date(a.createdAt)
-      )).map(msg => messagesMap[msg.messageSlug]);
-    }
-
-    if (drawerType === 'convo') {
-      return messagesMap;
-    }
-
-    return [];
-  }
-
-  getChannel() {
-    const { channelsMap, chatPath } = this.props;
-    return channelsMap[chatPath];
-  }
-
   getDrawerTitle() {
     const { drawerType } = this.props;
 
@@ -92,7 +60,7 @@ class DrawerSwitch extends React.Component {
         title = 'Workspace directory';
         break;
       case 'details': {
-        const channel = this.getChannel();
+        const { channel } = this.props;
         if (channel && !channel.hasDm) {
           title = `About #${channel.title}`;
         }
@@ -133,6 +101,8 @@ class DrawerSwitch extends React.Component {
     const {
       drawerSlug,
       drawerType,
+      channel,
+      messages,
       users,
       isLoading,
       currentUser,
@@ -144,7 +114,6 @@ class DrawerSwitch extends React.Component {
       match: { params: { workspaceSlug } },
     } = this.props;
     const { isModalOpen } = this.state;
-    const channel = this.getChannel();
 
     if (drawerType === 'details' && !channel) {
       return null;
@@ -187,7 +156,7 @@ class DrawerSwitch extends React.Component {
           drawerType={drawerType}
           drawerTitle={this.getDrawerTitle()}
           closeDrawer={this.handleClose}
-          messages={this.getMessages()}
+          messages={messages}
           currentUserSlug={currentUserSlug}
           isModalOpen={isModalOpen}
           children={drawerProps => (

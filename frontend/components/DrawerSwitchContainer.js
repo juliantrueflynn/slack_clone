@@ -7,13 +7,17 @@ import withEntityWrapper from './withEntityWrapper';
 import withWindowResize from './withWindowResize';
 import DrawerSwitch from './DrawerSwitch';
 
-const mapStateToProps = (state, { match: { params } }) => ({
-  messagesMap: getDrawerMessages(state),
-  favorites: Object.values(state.entities.favorites),
-  chatPath: state.ui.displayChannelSlug,
-  drawerType: params.drawerType,
-  accordion: state.ui.accordion.details,
-});
+const mapStateToProps = (state, { channelsMap, match: { params } }) => {
+  const chatPath = state.ui.displayChannelSlug;
+
+  return {
+    messages: getDrawerMessages(state),
+    channel: channelsMap[chatPath],
+    chatPath,
+    drawerType: params.drawerType,
+    accordion: state.ui.accordion.details,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   openDrawer: drawer => dispatch(updateDrawer(drawer)),

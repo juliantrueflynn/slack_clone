@@ -125,14 +125,34 @@ const getConvosByDrawerSlug = (msgsMap, drawerSlug) => {
   return msg.thread.reduce((acc, curr) => [...acc, msgsMap[curr]], [msg]);
 };
 
+const getAllFavorites = state => state.entities.favorites;
+
+const getFavoritesDrawer = (msgsMap, favs) => (
+  values(favs).sort((a, b) => (
+    new Date(b.createdAt) - new Date(a.createdAt)
+  )).map(msg => msgsMap[msg.messageSlug])
+);
+
+const getChannelDetailsDrawer = (msgs, chatPath) => (
+  msgs.filter(msg => msg.pinId && msg.channelSlug === chatPath)
+);
+
 export const getDrawerMessages = createSelector(
-  [getDrawer, getMessagesMap],
-  (drawer, messagesMap) => {
+  [getDrawer, getChatPath, getMessagesMap, getAllFavorites],
+  (drawer, chatPath, messagesMap, favorites) => {
     if (drawer.drawerType === 'convo') {
       return getConvosByDrawerSlug(messagesMap, drawer.drawerSlug);
     }
 
-    return messagesMap;
+    if (drawer.drawerType === 'favorites') {
+      return getFavoritesDrawer(messagesMap, values(favorites));
+    }
+
+    if (drawer.drawerType === 'details') {
+      return getChannelDetailsDrawer(values(messagesMap), chatPath);
+    }
+
+    return [];
   }
 );
 
@@ -157,7 +177,9 @@ export const getChannelsMap = createSelector(
         channel.ownerName = owner && owner.username;
       }
 
-      return { ...acc, [curr.slug]: channel };
+      acc[curr.slug] = channel;
+
+      return acc;
     }, {})
   )
 );
