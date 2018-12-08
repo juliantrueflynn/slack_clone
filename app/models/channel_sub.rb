@@ -57,6 +57,7 @@ class ChannelSub < ApplicationRecord
   end
 
   def generate_destroy_message
+    return if channel.has_dm?
     channel.messages.create(author_id: user_id, entity_type: 'sub_destroy')
   end
 end
