@@ -9,7 +9,7 @@ import {
 import { CHANNEL_SUB, MESSAGE } from '../actions/actionTypes';
 import { createChannelSub, updateChannelSub, destroyChannelSub } from '../actions/channelActions';
 import { apiCreate, apiDestroy, apiUpdate } from '../util/apiUtil';
-import { selectEntities, selectCurrentUser, selectEntityBySlug } from '../reducers/selectors';
+import { selectEntities, getCurrentUser, selectEntityBySlug } from '../reducers/selectors';
 
 function* fetchCreate({ channelSub }) {
   try {
@@ -40,7 +40,7 @@ function* updateDmSubBySlug(channelSlug) {
   const channel = yield select(selectEntityBySlug, 'channels', channelSlug);
 
   if (channel.hasDm) {
-    const user = yield select(selectCurrentUser);
+    const user = yield select(getCurrentUser);
     const subsMap = yield select(selectEntities, 'channelSubs');
     const userSub = channel.subs.map(id => subsMap[id]).filter(sub => sub.userId === user.id)[0];
 

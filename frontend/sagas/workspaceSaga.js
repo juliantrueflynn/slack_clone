@@ -10,7 +10,7 @@ import * as actions from '../actions/workspaceActions';
 import { WORKSPACE } from '../actions/actionTypes';
 import { navigate } from '../actions/uiActions';
 import { apiFetch, apiCreate } from '../util/apiUtil';
-import { selectCurrentUser } from '../reducers/selectors';
+import { getCurrentUser } from '../reducers/selectors';
 
 function* addNewWorkspace({ workspace }) {
   try {
@@ -21,7 +21,7 @@ function* addNewWorkspace({ workspace }) {
 }
 
 function* redirectOwner({ workspace: { workspace, owner } }) {
-  const currUser = yield select(selectCurrentUser);
+  const currUser = yield select(getCurrentUser);
 
   if (currUser.id === owner.id) {
     yield put(navigate(`/${workspace.slug}`, true));

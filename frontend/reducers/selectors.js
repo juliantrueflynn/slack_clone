@@ -136,32 +136,31 @@ export const getDrawerMessages = createSelector(
   }
 );
 
-export const selectChannelsMap = ({ entities, session: { currentUser } }, userSlug) => {
-  const { channels, members } = entities;
-  const currUserSlug = userSlug || currentUser.slug;
+export const getCurrentUser = state => state.session.currentUser;
 
-  return values(channels).reduce((acc, curr) => {
-    const channel = { ...curr };
-    channel.isSub = curr.members.includes(currUserSlug);
+export const getChannelsMap = createSelector(
+  [getAllChannels, getCurrentUser, getAllUsers],
+  (channelsMap, currUser, users) => (
+    values(channelsMap).reduce((acc, curr) => {
+      const channel = { ...curr, isSub: curr.members.includes(currUser.slug) };
 
-    if (channel.hasDm) {
-      const subsUserSlugs = channel.members.filter(slug => slug !== currUserSlug);
-      const subUser = subsUserSlugs[0] && members[subsUserSlugs[0]];
+      if (channel.hasDm) {
+        const subsUserSlugs = channel.members.filter(slug => slug !== currUser.slug);
+        const subUser = subsUserSlugs[0] && users[subsUserSlugs[0]];
 
-      if (subUser) {
-        channel.title = subUser.username;
-        channel.dmUserSlug = subUser.slug;
+        if (subUser) {
+          channel.title = subUser.username;
+          channel.dmUserSlug = subUser.slug;
+        }
+      } else {
+        const owner = users[channel.ownerSlug];
+        channel.ownerName = owner && owner.username;
       }
-    } else {
-      const owner = members[channel.ownerSlug];
-      channel.ownerName = owner && owner.username;
-    }
 
-    acc[curr.slug] = channel;
-
-    return acc;
-  }, {});
-};
+      return { ...acc, [curr.slug]: channel };
+    }, {})
+  )
+);
 
 export const selectUIByDisplay = ({ ui }, display) => ui[display];
 
@@ -174,5 +173,3 @@ export const selectEntityBySlug = ({ entities }, entityType, slug) => {
 
   return entities[entityType][slug] || {};
 };
-
-export const selectCurrentUser = ({ session: { currentUser } }) => currentUser;

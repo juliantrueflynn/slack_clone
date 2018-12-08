@@ -6,7 +6,7 @@ import { fetchUserThreads, fetchMessages, fetchMessage } from '../actions/messag
 import { fetchChannel } from '../actions/channelActions';
 import { fetchFavorites } from '../actions/favoriteActions';
 import { fetchUser } from '../actions/userActions';
-import { selectChannelsMap } from '../reducers/selectors';
+import { getChannelsMap } from '../reducers/selectors';
 import EntityWrapper from './EntityWrapper';
 
 const withEntityWrapper = pathName => (WrappedComponent) => {
@@ -14,7 +14,7 @@ const withEntityWrapper = pathName => (WrappedComponent) => {
     [pathName]: params[pathName],
     entitySlug: params[pathName],
     users: state.entities.members,
-    channelsMap: selectChannelsMap(state),
+    channelsMap: getChannelsMap(state),
     currentUser: state.session.currentUser,
     isLoading: state.isLoading,
   });

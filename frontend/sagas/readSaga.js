@@ -9,7 +9,7 @@ import {
 import { READ, MESSAGE } from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiDestroy } from '../util/apiUtil';
 import * as actions from '../actions/readActions';
-import { selectUIByDisplay, selectEntityBySlug, selectCurrentUser } from '../reducers/selectors';
+import { selectUIByDisplay, selectEntityBySlug, getCurrentUser } from '../reducers/selectors';
 
 function* fetchCreate({ read }) {
   try {
@@ -107,7 +107,7 @@ function* loadMessageRead({ message: { parentMessageSlug, channelSlug } }) {
       }
     }
   } else if (readableType === 'Channel' && !read.id) {
-    const currUser = yield select(selectCurrentUser);
+    const currUser = yield select(getCurrentUser);
 
     if (!readEntity.members.includes(currUser.slug)) {
       return;

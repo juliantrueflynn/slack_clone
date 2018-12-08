@@ -10,7 +10,7 @@ import * as action from '../actions/channelActions';
 import { CHANNEL } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiUpdate } from '../util/apiUtil';
 import { navigate, createSuccess, updateModal } from '../actions/uiActions';
-import { selectCurrentUser } from '../reducers/selectors';
+import { getCurrentUser } from '../reducers/selectors';
 
 function* fetchIndex({ workspaceSlug }) {
   try {
@@ -40,7 +40,7 @@ function* fetchCreateChannel({ channel }) {
 
 function* loadNavigateCreated({ channel: { channel, subs, workspaceSlug } }) {
   const { slug, ownerSlug, hasDm } = channel;
-  const currUser = yield select(selectCurrentUser);
+  const currUser = yield select(getCurrentUser);
   let isOwner = ownerSlug === currUser.slug;
 
   if (hasDm) {

@@ -9,10 +9,10 @@ import {
 import { createReaction, destroyReaction } from '../actions/reactionActions';
 import { REACTION, REACTION_TOGGLE } from '../actions/actionTypes';
 import { apiCreate, apiDestroy } from '../util/apiUtil';
-import { selectCurrentUser, getMessagesMap } from '../reducers/selectors';
+import { getCurrentUser, getMessagesMap } from '../reducers/selectors';
 
 function* matchingReactionByUser({ id, reactions }, emoji) {
-  const currUser = yield select(selectCurrentUser);
+  const currUser = yield select(getCurrentUser);
   const matches = reactions.filter(reaction => (
     reaction.userId === currUser.id
     && reaction.messageId === id

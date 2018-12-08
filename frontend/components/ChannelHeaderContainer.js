@@ -9,18 +9,18 @@ import {
   updateDropdown,
 } from '../actions/uiActions';
 import { destroyChannelSub } from '../actions/channelActions';
-import { selectChannelsMap, getMessagesMap } from '../reducers/selectors';
+import { getChannelsMap, getMessagesMap } from '../reducers/selectors';
 import ChannelHeader from './ChannelHeader';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
-  const channelsMap = selectChannelsMap(state);
+  const channelsMap = getChannelsMap(state);
+  const channel = channelsMap[chatPath];
   const channels = Object.values(channelsMap);
   const channelUnreadsLen = channels.reduce((acc, curr) => {
     let total = acc;
     total += curr.unreadsLength;
     return total;
   }, 0);
-  const channel = channelsMap[chatPath];
 
   const messages = Object.values(getMessagesMap(state));
   const convoUnreadsLen = messages.filter(convo => convo.hasUnreads).length;

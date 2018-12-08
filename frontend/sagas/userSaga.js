@@ -15,7 +15,7 @@ import {
 import * as actions from '../actions/userActions';
 import * as api from '../util/apiUtil';
 import { createSuccess } from '../actions/uiActions';
-import { selectUIByDisplay, selectCurrentUser } from '../reducers/selectors';
+import { selectUIByDisplay, getCurrentUser } from '../reducers/selectors';
 
 function* loadFetchMember({ userSlug }) {
   try {
@@ -29,7 +29,7 @@ function* loadFetchMember({ userSlug }) {
 
 function* loadUpdateMember({ user: body }) {
   try {
-    const currUser = yield select(selectCurrentUser);
+    const currUser = yield select(getCurrentUser);
     const args = { method: 'PATCH', body };
     yield call(api.fetchPromise, `users/${currUser.slug}`, args);
     yield put(createSuccess('user', 'Profile successfully updated'));
