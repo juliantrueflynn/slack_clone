@@ -6,15 +6,17 @@ import './SingleMessageThread.css';
 
 const SingleMessageThread = ({
   thread,
+  slug,
   authors,
   lastMessageDate,
   users,
-  convoUrl,
+  url,
 }) => {
   if (!thread || !thread.length) {
     return null;
   }
 
+  const convoUrl = `${url}/convo/${slug}`;
   const date = dateUtil(lastMessageDate);
   const month = date.monthName({ month: 'short' });
   const day = date.dayOrdinal();
@@ -37,9 +39,7 @@ const SingleMessageThread = ({
             {threadLength}
           </li>
           <li className="SingleMessageThread__item SingleMessageThread__date">
-            <time className="SingleMessage__date-text">
-              {lastDate}
-            </time>
+            <time className="SingleMessage__date-text">{lastDate}</time>
           </li>
         </ul>
       </Link>

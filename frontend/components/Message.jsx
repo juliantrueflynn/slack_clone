@@ -134,13 +134,7 @@ class Message extends React.Component {
                 />
               )}
               {isThreadHidden || shouldHideEngagement || (
-                <SingleMessageThread
-                  thread={message.thread}
-                  convoUrl={`${url}/convo/${message.slug}`}
-                  users={users}
-                  authors={message.authors}
-                  lastMessageDate={message.lastMessageDate}
-                />
+                <SingleMessageThread url={url} users={users} {...message} />
               )}
             </div>
           </div>

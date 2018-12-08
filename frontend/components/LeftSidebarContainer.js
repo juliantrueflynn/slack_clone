@@ -18,7 +18,7 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
     slug: ch.slug,
     status: ch.status || null,
     label: ch.title,
-    link: `${url}/${ch.slug}`,
+    link: `${url}/messages/${ch.slug}`,
     modifierClassName: ch.hasUnreads ? 'unreads' : null,
     isActive: (match, { pathname }) => match && pathname.includes(`messages/${chatPath}`),
   });
