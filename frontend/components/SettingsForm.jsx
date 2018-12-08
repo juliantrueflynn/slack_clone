@@ -79,8 +79,6 @@ class SettingsForm extends React.Component {
     } = this.props;
     const { username, email } = this.state;
 
-    console.log(formErrors);
-
     const fields = [
       {
         id: 'username',
@@ -108,7 +106,7 @@ class SettingsForm extends React.Component {
     ];
 
     return (
-      <div className="SettingsForm" onSubmit={this.handleSubmit}>
+      <div className="SettingsForm">
         <div className="SettingsForm__col">
           <FormHandler
             fields={fields}
