@@ -81,10 +81,6 @@ const messageReducer = (state = {}, action) => {
           ...msg
         };
 
-        if (FAVORITE.INDEX.RECEIVE) {
-          nextState[msg.slug].isOpen = true;
-        }
-
         if (action.type === USER_THREAD.INDEX.RECEIVE) {
           nextState[msg.slug].isInConvo = true;
           nextState[msg.slug].hasUnreads = false;
@@ -159,15 +155,6 @@ const messageReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case MESSAGE.SHOW.REQUEST:
-      nextState = {};
-      Object.keys(state).forEach((slug) => {
-        nextState[slug] = { isOpen: false };
-      });
-
-      nextState[action.messageSlug] = { isOpen: true };
-
-      return merge({}, state, nextState);
     case MESSAGE.CREATE.REQUEST: {
       const { parentMessageSlug } = action.message;
 
@@ -201,15 +188,6 @@ const messageReducer = (state = {}, action) => {
 
         if (!nextState[parentSlug].authors.includes(authorSlug)) {
           nextState[parentSlug].authors = [...state[parentSlug].authors, authorSlug];
-        }
-
-        if (!nextState[parentSlug].isOpen) {
-          nextState[parentSlug].hasUnreads = isDateOlderThanOther(
-            nextState[parentSlug].lastRead,
-            message.createdAt
-          );
-
-          nextState[slug].isUnread = true;
         }
       }
 
