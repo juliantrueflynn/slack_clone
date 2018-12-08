@@ -5,11 +5,10 @@ import {
   deleteMessage,
   createPin,
   destroyPin,
-  toggleMessageEditor,
 } from '../actions/messageActions';
 import { toggleReaction } from '../actions/reactionActions';
 import { toggleFavorite } from '../actions/favoriteActions';
-import { updateDropdown } from '../actions/uiActions';
+import { toggleMessageEditor, updateDropdown } from '../actions/uiActions';
 import MessagesList from './MessagesList';
 
 const mapStateToProps = (state, { match: { url } }) => ({
@@ -19,7 +18,6 @@ const mapStateToProps = (state, { match: { url } }) => ({
   dropdownType: state.ui.dropdown.dropdownType,
   dropdownProps: state.ui.dropdown.dropdownProps,
   isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_MESSAGE',
-  editMessageSlug: state.ui.isEditingMessage,
   url,
 });
 

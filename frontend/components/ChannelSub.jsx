@@ -64,8 +64,10 @@ const ChannelSub = ({ sub }) => {
     bodyText += childrenSingleOrMultiText(subsByType2[0], childSubsType2);
   }
 
+  const style = { color: '#636E72' };
+
   return (
-    <div className="ChannelSub">
+    <div className="ChannelSub" style={style}>
       {bodyText}
     </div>
   );

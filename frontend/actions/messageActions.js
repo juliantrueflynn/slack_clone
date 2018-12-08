@@ -4,7 +4,6 @@ import {
   USER_THREAD,
   HISTORY,
   PIN,
-  MESSAGE_EDITOR_TOGGLE,
 } from './actionTypes';
 
 export const fetchMessages = {
@@ -41,11 +40,6 @@ export const deleteMessage = {
   request: messageSlug => actionCreator(MESSAGE.DESTROY.REQUEST, { messageSlug }),
   failure: errors => actionCreator(MESSAGE.DESTROY.FAILURE, { errors }),
 };
-
-export const toggleMessageEditor = messageSlug => actionCreator(
-  MESSAGE_EDITOR_TOGGLE,
-  { messageSlug }
-);
 
 export const fetchUserThreads = {
   request: workspaceSlug => actionCreator(USER_THREAD.INDEX.REQUEST, { workspaceSlug }),

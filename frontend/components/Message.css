@@ -36,16 +36,12 @@
   margin-bottom: 4px;
 }
 
-.Message .ChannelSub {
-  color: #636e72;
-}
-
 .Message__content {
   padding-right: 2px;
 }
 
-.Message--hoverable.Message--hover:not(.Message--highlighted) .Message__container,
-.Message--hoverable.Message:hover:not(.Message--highlighted) .Message__container {
+.Message--hoverable.Message--hover:not(.Message--highlighted),
+.Message--hoverable:not(.Message--highlighted):not(.Message--editing):hover {
   background-color: #F9F9F9;
 }
 

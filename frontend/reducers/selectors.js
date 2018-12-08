@@ -12,6 +12,7 @@ const getAllChannels = state => state.entities.channels;
 const getAllChannelSubs = state => state.entities.channelSubs;
 const getAllFavorites = state => state.entities.favorites;
 
+const getIsEditingMessage = state => state.ui.isEditingMessage;
 const getChatPath = state => state.ui.displayChannelSlug;
 const getDrawer = state => state.ui.drawer;
 
@@ -24,10 +25,10 @@ export const getSubbedWorkspaces = createSelector(
 );
 
 export const getMessagesMap = createSelector(
-  [getAllMessages, getAllUsers, getAllReactions],
-  (messages, users, reactions) => (
+  [getAllMessages, getAllUsers, getAllReactions, getIsEditingMessage],
+  (messages, users, reactions, isEditingMsgSlug) => (
     values(messages).reduce((acc, curr) => {
-      const msg = { ...curr };
+      const msg = { ...curr, isEditing: curr.slug === isEditingMsgSlug };
 
       if (curr.thread && curr.thread.length) {
         const threadLastSlug = curr.thread[curr.thread.length - 1];

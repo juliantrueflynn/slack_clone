@@ -7,6 +7,7 @@ import {
   DROPDOWN_UPDATE,
   DRAWER_UPDATE,
   MODAL_UPDATE,
+  MESSAGE_EDITOR_TOGGLE,
 } from './actionTypes';
 import { actionCreator } from '../util/actionsUtil';
 
@@ -45,4 +46,9 @@ export const destroySearch = () => ({ type: SEARCH_DESTROY });
 export const updateDropdown = (dropdownType, dropdownProps) => actionCreator(
   DROPDOWN_UPDATE,
   { dropdownType, dropdownProps }
+);
+
+export const toggleMessageEditor = (messageSlug = null) => actionCreator(
+  MESSAGE_EDITOR_TOGGLE,
+  { messageSlug }
 );
