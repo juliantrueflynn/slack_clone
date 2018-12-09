@@ -11,6 +11,7 @@ const getAllReactions = state => state.entities.reactions;
 const getAllChannels = state => state.entities.channels;
 const getAllChannelSubs = state => state.entities.channelSubs;
 const getAllFavorites = state => state.entities.favorites;
+const getAllUnreads = state => state.entities.unreads;
 
 const getIsEditingMessage = state => state.ui.isEditingMessage;
 const getChatPath = state => state.ui.displayChannelSlug;
@@ -88,7 +89,7 @@ const selectChannelMessagesBySlug = (msgsMap, msgsSlugs, title) => {
   return groupByMessageEntityType(items);
 };
 
-const selectAllThreadMessages = msgsMap => (
+const selectAllThreadMessages = (msgsMap, unreadsMap) => (
   values(msgsMap).reduce((acc, curr) => {
     if (!curr.isInConvo || !curr.thread) {
       return acc;
@@ -100,18 +101,20 @@ const selectAllThreadMessages = msgsMap => (
     };
 
     return [...acc, convo];
-  }, []).sort((a, b) => new Date(b.lastActive) - new Date(a.lastActive))
+  }, []).sort((a, b) => (
+    new Date(unreadsMap[b.slug].lastActive) - new Date(unreadsMap[a.slug].lastActive)
+  ))
 );
 
 export const getChatPageMessages = createSelector(
-  [getMessagesMap, getAllChannels, getChatPath],
-  (messagesMap, channelsMap, chatPath) => {
+  [getMessagesMap, getAllChannels, getAllUnreads, getChatPath],
+  (messagesMap, channelsMap, unreadsMap, chatPath) => {
     if (chatPath === 'unreads') {
       return messagesMap;
     }
 
     if (chatPath === 'threads') {
-      return selectAllThreadMessages(messagesMap);
+      return selectAllThreadMessages(messagesMap, unreadsMap);
     }
 
     const channel = channelsMap[chatPath];
@@ -220,5 +223,5 @@ export const selectEntityBySlug = ({ entities }, entityType, slug) => {
     return {};
   }
 
-  return entities[entityType][slug] || {};
+  return entities[entityType][slug] || null;
 };

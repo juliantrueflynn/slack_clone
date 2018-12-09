@@ -14,20 +14,20 @@ export const createRead = {
 };
 
 export const updateRead = {
-  request: readId => actionCreator(READ.UPDATE.REQUEST, { readId }),
+  request: read => actionCreator(READ.UPDATE.REQUEST, { read }),
   receive: read => actionCreator(READ.UPDATE.RECEIVE, { read }),
   failure: errors => actionCreator(READ.UPDATE.FAILURE, { errors }),
 };
 
 export const destroyRead = {
-  request: readId => actionCreator(READ.DESTROY.REQUEST, { readId }),
+  request: read => actionCreator(READ.DESTROY.REQUEST, { read }),
   receive: read => actionCreator(READ.DESTROY.RECEIVE, { read }),
   failure: errors => actionCreator(READ.DESTROY.FAILURE, { errors }),
 };
 
-export const createUnread = (unreadType, unreadProps) => actionCreator(
+export const createUnread = (unreadType, entityProps) => actionCreator(
   CREATE_UNREAD,
-  { unreadType, unreadProps }
+  { unreadType, entityProps }
 );
 
 export const clearUnreads = (channelSlug, lastRead) => actionCreator(

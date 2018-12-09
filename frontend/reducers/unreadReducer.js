@@ -5,7 +5,6 @@ import {
   WORKSPACE,
   READ,
   USER_THREAD,
-  MESSAGE,
 } from '../actions/actionTypes';
 
 const unreadReducer = (state = {}, action) => {
@@ -20,6 +19,7 @@ const unreadReducer = (state = {}, action) => {
       messages.filter(msg => msg.parentMessageId).forEach((msg) => {
         nextState[msg.parentMessageSlug] = {
           lastActive: msg.createdAt,
+          readableId: msg.parentMessageId,
           readableType: 'Message',
         };
       });
@@ -27,6 +27,7 @@ const unreadReducer = (state = {}, action) => {
       messages.filter(msg => !msg.parentMessageId).forEach((msg) => {
         nextState[msg.channelSlug] = {
           lastActive: msg.createdAt,
+          readableId: msg.channelId,
           readableType: 'Channel',
         };
       });
@@ -34,7 +35,7 @@ const unreadReducer = (state = {}, action) => {
       reads.forEach((read) => {
         nextState[read.slug] = {
           ...nextState[read.slug],
-          slug: read.slug,
+          readableId: read.readableId,
           readableType: read.readableType,
           lastRead: read.accessedAt,
         };
@@ -43,6 +44,7 @@ const unreadReducer = (state = {}, action) => {
       Object.values(nextState).forEach((unread) => {
         nextState[unread.slug] = {
           ...nextState[unread.slug],
+          slug: unread.slug,
           hasUnreads: isDateOlderThanOther(unread.lastRead, unread.lastActive),
         };
       });
@@ -59,28 +61,18 @@ const unreadReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case MESSAGE.CREATE.RECEIVE: {
-      const { createdAt: lastActive, parentMessageSlug } = action.message;
-
-      if (!parentMessageSlug) {
-        return state;
-      }
-
-      nextState = {};
-      nextState[parentMessageSlug] = { lastActive };
-
-      return merge({}, state, nextState);
-    }
     case READ.CREATE.RECEIVE:
     case READ.UPDATE.RECEIVE: {
       const { read } = action;
 
-      if (read.readableType !== 'Message') {
-        return state;
-      }
-
       nextState = {};
-      nextState[read.slug] = { lastRead: read.accessedAt, hasUnreads: false };
+      nextState[read.slug] = {
+        slug: read.slug,
+        lastRead: read.accessedAt,
+        readableType: read.readableType,
+        readableId: read.readableId,
+        hasUnreads: false,
+      };
 
       return merge({}, state, nextState);
     }
@@ -91,7 +83,11 @@ const unreadReducer = (state = {}, action) => {
     case CREATE_UNREAD: {
       const { unreadType: readableType, entityProps } = action;
       nextState = {};
-      nextState[entityProps.slug] = { readableType, ...entityProps };
+      nextState[entityProps.slug] = {
+        readableType,
+        hasUnreads: isDateOlderThanOther(entityProps.lastRead, entityProps.lastActive),
+        ...entityProps
+      };
 
       return merge({}, state, nextState);
     }

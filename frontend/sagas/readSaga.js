@@ -9,44 +9,47 @@ import {
 import { READ, MESSAGE } from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiDestroy } from '../util/apiUtil';
 import * as actions from '../actions/readActions';
-import { selectUIByDisplay, selectEntityBySlug, getCurrentUser } from '../reducers/selectors';
+import { selectUIByDisplay, selectEntityBySlug } from '../reducers/selectors';
 
-function* fetchCreate({ read }) {
+function* fetchCreate({ slug, ...read }) {
   try {
-    const created = yield call(apiCreate, 'reads', read);
+    const created = yield call(apiCreate, 'read', read);
     yield put(actions.createRead.receive(created));
   } catch (error) {
     yield put(actions.createRead.failure(error));
   }
 }
 
-function* fetchUpdate({ readId }) {
+function* fetchUpdate({ read }) {
   try {
-    const updated = yield call(apiUpdate, `reads/${readId}`);
+    const updated = yield call(apiUpdate, 'read', read);
     yield put(actions.updateRead.receive(updated));
   } catch (error) {
     yield put(actions.updateRead.failure(error));
   }
 }
 
-function* fetchDestroy({ readId }) {
+function* fetchDestroy({ read }) {
   try {
-    const destroyed = yield call(apiDestroy, `reads/${readId}`);
+    const destroyed = yield call(apiDestroy, 'read', read);
     yield put(actions.destroyRead.receive(destroyed));
   } catch (error) {
     yield put(actions.destroyRead.failure(error));
   }
 }
 
-const entitiesByType = type => `${type.toLowerCase()}s`;
-
-function* createOrUpdateRead(read) {
+function* createOrUpdateRead(read, slug) {
+  const unread = yield select(selectEntityBySlug, 'unreads', slug);
   let actionType;
 
+  if (unread && unread.lastRead && !unread.hasUnreads) {
+    return;
+  }
+
   try {
-    if (read.id) {
+    if (unread) {
       actionType = 'update';
-      yield put(actions.updateRead.request(read.id));
+      yield put(actions.updateRead.request(read));
     } else {
       actionType = 'create';
       yield put(actions.createRead.request(read));
@@ -56,70 +59,53 @@ function* createOrUpdateRead(read) {
   }
 }
 
-function* loadReadAction(readableType, slug) {
-  const entity = yield select(selectEntityBySlug, entitiesByType(readableType), slug);
+function* fetchMessageThread({ messages: { messages } }) {
+  const [message] = messages;
+  const convoId = message.parentMessageId || message.id;
+  const convoSlug = message.parentMessageSlug || message.slug;
+  const read = { readableType: 'Message', readableId: convoId };
 
-  if (!entity.hasUnreads) {
+  if (messages.length === 1) {
     return;
   }
 
-  const { readId: id, id: readableId } = entity;
-  const read = { readableType, readableId, id };
-  yield createOrUpdateRead(read);
-}
-
-function* fetchMessageThread({ messages: { messages } }) {
-  const [message] = messages;
-  const convoSlug = message.parentMessageSlug || message.slug;
-  yield loadReadAction('Message', convoSlug);
+  yield createOrUpdateRead(read, convoSlug);
 }
 
 function* fetchChannelPage({ messages: { channel } }) {
-  yield loadReadAction('Channel', channel.slug);
+  const read = { readableType: 'Channel', readableId: channel.id };
+  yield createOrUpdateRead(read, channel.slug);
 }
 
-function* loadMessageRead({ message }) {
-  const { parentMessageSlug, channelSlug, createdAt } = message;
-  const readableType = parentMessageSlug ? 'Message' : 'Channel';
-  const readSlug = parentMessageSlug || channelSlug;
-  const readEntity = yield select(selectEntityBySlug, entitiesByType(readableType), readSlug);
+function* loadMessageRead({ message: msg }) {
+  const slug = msg.parentMessageSlug || msg.channelSlug;
   const read = {
-    readableType,
-    readableId: readEntity.id,
-    id: readEntity.readId || null,
+    readableType: msg.parentMessageSlug ? 'Message' : 'Channel',
+    readableId: msg.parentMessageId || msg.channelId,
   };
 
-  let currSlug = yield select(selectUIByDisplay, 'displayChannelSlug');
-  let isCurrPage = currSlug === readSlug;
+  let currPageSlug = yield select(selectUIByDisplay, 'displayChannelSlug');
+  let isCurrPage = currPageSlug === slug;
 
-  if (readableType === 'Message') {
-    if (!readEntity.isInConvo) {
-      return;
-    }
-
-    if (currSlug === 'threads') {
+  if (read.readableType === 'Message') {
+    if (currPageSlug === 'threads') {
       isCurrPage = true;
     } else {
       const drawer = yield select(selectUIByDisplay, 'drawer');
 
       if (drawer.drawerType === 'convo') {
-        currSlug = drawer.drawerSlug;
-        isCurrPage = currSlug === readSlug;
+        currPageSlug = drawer.drawerSlug;
+        isCurrPage = currPageSlug === slug;
       }
-    }
-  } else if (readableType === 'Channel' && !read.id) {
-    const currUser = yield select(getCurrentUser);
-
-    if (!readEntity.members.includes(currUser.slug)) {
-      return;
     }
   }
 
   if (isCurrPage) {
-    yield createOrUpdateRead(read);
+    yield createOrUpdateRead(read, slug);
   } else {
-    const { lastRead, lastActive, slug } = readEntity;
-    yield put(actions.createUnread(readableType, { lastRead, lastActive, slug }));
+    const { lastRead } = yield select(selectEntityBySlug, 'unreads', slug);
+    const unreadProps = { slug, lastRead, lastActive: msg.createdAt };
+    yield put(actions.createUnread(read.readableType, unreadProps));
   }
 }
 
@@ -130,12 +116,13 @@ function* setMessageDestroy({ message }) {
     }
 
     const parent = yield select(selectEntityBySlug, 'messages', message.parentMessageSlug);
-    if (!parent.readId || parent.thread.length) {
+    if (parent.thread.length) {
       return;
     }
 
     if (!parent.thread.length) {
-      yield put(actions.destroyRead.request(parent.readId));
+      const read = { readableType: 'Message', readableId: message.parentMessageId };
+      yield put(actions.destroyRead.request(read));
     }
   } catch (error) {
     yield put(actions.destroyRead.failure(error));

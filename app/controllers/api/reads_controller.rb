@@ -30,7 +30,10 @@ class Api::ReadsController < ApplicationController
   private
 
   def set_read
-    @read = Read.find_by(id: params[:id])
+    @read = current_user.reads.find_by(
+      readable_id: params[:readable_id],
+      readable_type: params[:readable_type]
+    )
   end
 
   def read_params

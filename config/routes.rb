@@ -4,7 +4,8 @@ Rails.application.routes.draw do
     resource :user, only: :create
     resources :users, only: :update, param: :slug
     resource :password, only: :update
-    resources :reads, only: [:create, :update, :destroy]
+    resource :user_appearance, only: :create
+    resource :read, only: [:create, :update, :destroy]
 
     resources :workspaces, only: [:index, :show, :create], param: :slug do
       resources :users, only: :show, param: :slug
@@ -17,8 +18,6 @@ Rails.application.routes.draw do
       get '/search(/:query)', to: 'search#index'
     end
 
-    resources :pins, only: [:create, :destroy]
-    resource :user_appearance, only: :create
     resources :workspace_subs, only: [:create, :update]
 
     resources :channels, only: [:show, :create, :update], param: :slug do
@@ -31,6 +30,7 @@ Rails.application.routes.draw do
     resources :messages, only: [:create, :update, :destroy, :show], param: :slug
     resources :favorites, only: [:create, :destroy]
     resources :reactions, only: [:create, :destroy]
+    resources :pins, only: [:create, :destroy]
   end
 
   mount ActionCable.server => '/cable'

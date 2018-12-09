@@ -1,5 +1,5 @@
 json.channel do
-  json.(@channel, :slug, :owner_id, :owner_slug, :topic, :has_dm, :created_at)
+  json.(@channel, :id, :slug, :owner_id, :owner_slug, :topic, :has_dm, :created_at)
 end
 
 until_date = params[:until_date] ? DateTime.parse(params[:until_date]) : nil
