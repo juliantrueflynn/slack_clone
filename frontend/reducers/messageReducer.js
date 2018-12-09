@@ -1,5 +1,4 @@
 import merge from 'lodash.merge';
-import { isDateOlderThanOther } from '../util/dateUtil';
 import {
   MESSAGE,
   USER_THREAD,
@@ -12,7 +11,6 @@ import {
   SEARCH_DESTROY,
   PIN,
   SIGN_OUT,
-  CREATE_UNREAD,
 } from '../actions/actionTypes';
 
 const messageReducer = (state = {}, action) => {
@@ -29,11 +27,11 @@ const messageReducer = (state = {}, action) => {
 
         if (msg.parentMessageId) {
           nextState[msg.parentMessageSlug] = {
-            slug: msg.parentMessageSlug,
             id: msg.parentMessageId,
-            lastActive: msg.createdAt,
+            slug: msg.parentMessageSlug,
             channelSlug: msg.channelSlug,
             isInConvo: true,
+            thread: null,
           };
         }
       });
@@ -41,15 +39,12 @@ const messageReducer = (state = {}, action) => {
       reads.filter(read => read.readableType === 'Message').forEach((read) => {
         nextState[read.slug] = {
           slug: read.slug,
-          readId: read.id,
-          lastRead: read.accessedAt,
           ...nextState[read.slug]
         };
       });
 
       Object.values(nextState).forEach((msg) => {
         nextState[msg.slug] = {
-          hasUnreads: isDateOlderThanOther(msg.lastRead, msg.lastActive),
           authors: [],
           thread: [],
           reactionIds: [],
@@ -84,7 +79,6 @@ const messageReducer = (state = {}, action) => {
 
         if (action.type === USER_THREAD.INDEX.RECEIVE) {
           nextState[msg.slug].isInConvo = true;
-          nextState[msg.slug].hasUnreads = false;
         }
       });
 
@@ -183,7 +177,6 @@ const messageReducer = (state = {}, action) => {
         nextState[parentSlug] = {
           ...state[parentSlug],
           channelSlug: message.channelSlug,
-          lastActive: message.createdAt,
           thread: [...state[parentSlug].thread, slug],
         };
 
@@ -209,27 +202,6 @@ const messageReducer = (state = {}, action) => {
       delete nextState[slug];
       return nextState;
     }
-    case READ.CREATE.RECEIVE:
-    case READ.UPDATE.RECEIVE: {
-      const { read } = action;
-
-      if (read.readableType !== 'Message') {
-        return state;
-      }
-
-      nextState = {};
-      nextState[read.slug] = {
-        readId: read.id,
-        lastRead: read.accessedAt,
-        hasUnreads: false,
-      };
-
-      return merge({}, state, nextState);
-    }
-    case READ.DESTROY.RECEIVE:
-      nextState = {};
-      nextState[action.read.slug] = { readId: null };
-      return merge({}, state, nextState);
     case READ.INDEX.RECEIVE:
       nextState = action.messages.messages.reduce((acc, curr) => {
         acc[curr.slug] = curr;
@@ -237,22 +209,6 @@ const messageReducer = (state = {}, action) => {
       }, {});
 
       return merge({}, state, nextState);
-    case CREATE_UNREAD: {
-      const { unreadProps } = action;
-      const msg = unreadProps.slug && state[unreadProps.slug];
-
-      if (!msg) {
-        return state;
-      }
-
-      nextState = merge({}, state);
-      nextState[unreadProps.slug].hasUnreads = isDateOlderThanOther(
-        unreadProps.lastRead,
-        unreadProps.lastActive
-      );
-
-      return nextState;
-    }
     case REACTION.CREATE.RECEIVE: {
       const { id, messageSlug: slug } = action.reaction;
 
