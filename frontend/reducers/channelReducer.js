@@ -1,5 +1,4 @@
 import merge from 'lodash.merge';
-import { isDateOlderThanOther } from '../util/dateUtil';
 import {
   WORKSPACE,
   CHANNEL,
@@ -7,7 +6,6 @@ import {
   MESSAGE,
   CHANNEL_SUB,
   WORKSPACE_SUB,
-  CLEAR_UNREADS,
   HISTORY,
   CHANNEL_SWITCH,
   PIN,
@@ -49,7 +47,6 @@ const channelReducer = (state = {}, action) => {
 
       nextState = {};
       nextState[channel.slug] = {
-        lastRead: channel.createdAt,
         subs: subs.map(sub => sub.id),
         messages: [],
         pins: [],
@@ -72,13 +69,7 @@ const channelReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     case WORKSPACE.SHOW.RECEIVE: {
-      const {
-        workspace,
-        channels,
-        channelSubs,
-        reads,
-        messages,
-      } = action.workspace;
+      const { workspace, channels, channelSubs } = action.workspace;
 
       nextState = {};
       channels.forEach((channel) => {
@@ -95,19 +86,6 @@ const channelReducer = (state = {}, action) => {
       channelSubs.forEach((sub) => {
         nextState[sub.channelSlug].subs.push(sub.id);
         nextState[sub.channelSlug].members.push(sub.userSlug);
-      });
-
-      reads.filter(read => read.readableType === 'Channel').forEach((read) => {
-        nextState[read.slug].lastRead = read.accessedAt;
-        nextState[read.slug].readId = read.id;
-      });
-
-      messages.filter(msg => !msg.parentMessageId).forEach((msg) => {
-        nextState[msg.channelSlug].lastActive = msg.createdAt;
-      });
-
-      Object.values(nextState).forEach(({ slug, lastActive, lastRead }) => {
-        nextState[slug].hasUnreads = isDateOlderThanOther(lastRead, lastActive);
       });
 
       return nextState;
@@ -166,7 +144,6 @@ const channelReducer = (state = {}, action) => {
         messages: messages.map(msg => msg.slug),
         pins: pins.map(pin => pin.id),
         members,
-        isOpen: true,
       };
 
       return merge({}, state, nextState);
@@ -176,17 +153,6 @@ const channelReducer = (state = {}, action) => {
 
       nextState = merge({}, state);
       nextState[channelSlug].messages.push(msg.slug);
-
-      if (msg.parentMessageId) {
-        return nextState;
-      }
-
-      nextState[channelSlug].lastActive = msg.createdAt;
-      const { lastRead, isOpen } = nextState[channelSlug];
-
-      if (!isOpen || msg.entityType !== 'entry') {
-        nextState[channelSlug].hasUnreads = isDateOlderThanOther(lastRead, msg.createdAt);
-      }
 
       return nextState;
     }
@@ -204,7 +170,7 @@ const channelReducer = (state = {}, action) => {
       }
 
       nextState = {};
-      nextState[channelSlug] = { scrollLoc, isOpen: false };
+      nextState[channelSlug] = { scrollLoc };
       return merge({}, state, nextState);
     }
     case HISTORY.INDEX.REQUEST:
@@ -245,30 +211,11 @@ const channelReducer = (state = {}, action) => {
 
       return nextState;
     }
-    case READ.CREATE.RECEIVE:
-    case READ.UPDATE.RECEIVE:
-      if (action.read.readableType !== 'Channel') {
-        return state;
-      }
-
-      nextState = {};
-      nextState[action.read.slug] = {
-        readId: action.read.id,
-        lastRead: action.read.accessedAt,
-      };
-
-      return merge({}, state, nextState);
     case READ.INDEX.RECEIVE: {
       const { messages } = action.messages;
 
       nextState = merge({}, state);
-      Object.keys(state).forEach((slug) => {
-        nextState[slug].unreadsLength = 0;
-      });
-
       messages.forEach(({ channelSlug, slug }) => {
-        nextState[channelSlug].unreadsLength += 1;
-
         if (!nextState[channelSlug].messages.includes(slug)) {
           nextState[channelSlug].messages.push(slug);
         }
@@ -276,15 +223,6 @@ const channelReducer = (state = {}, action) => {
 
       return nextState;
     }
-    case CLEAR_UNREADS:
-      nextState = {};
-      nextState[action.channelSlug] = {
-        hasUnreads: false,
-        unreadsLength: 0,
-        lastRead: action.lastRead,
-      };
-
-      return merge({}, state, nextState);
     case PIN.CREATE.RECEIVE:
       nextState = merge({}, state);
       nextState[action.pin.channelSlug].pins.push(action.pin.id);
