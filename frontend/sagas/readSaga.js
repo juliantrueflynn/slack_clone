@@ -78,7 +78,8 @@ function* fetchChannelPage({ messages: { channel } }) {
   yield loadReadAction('Channel', channel.slug);
 }
 
-function* loadMessageRead({ message: { parentMessageSlug, channelSlug } }) {
+function* loadMessageRead({ message }) {
+  const { parentMessageSlug, channelSlug, createdAt } = message;
   const readableType = parentMessageSlug ? 'Message' : 'Channel';
   const readSlug = parentMessageSlug || channelSlug;
   const readEntity = yield select(selectEntityBySlug, entitiesByType(readableType), readSlug);
@@ -116,6 +117,9 @@ function* loadMessageRead({ message: { parentMessageSlug, channelSlug } }) {
 
   if (isCurrPage) {
     yield createOrUpdateRead(read);
+  } else {
+    const { lastRead, lastActive, slug } = readEntity;
+    yield put(actions.createUnread(readableType, { lastRead, lastActive, slug }));
   }
 }
 

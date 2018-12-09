@@ -31,3 +31,4 @@ export const CHANNEL_SWITCH = 'CHANNEL_SWITCH';
 export const CLEAR_UNREADS = 'CLEAR_UNREADS';
 export const NAVIGATE = 'NAVIGATE';
 export const ACCORDION_OPEN = 'ACCORDION_OPEN';
+export const CREATE_UNREAD = 'CREATE_UNREAD';

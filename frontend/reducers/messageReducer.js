@@ -12,6 +12,7 @@ import {
   SEARCH_DESTROY,
   PIN,
   SIGN_OUT,
+  CREATE_UNREAD,
 } from '../actions/actionTypes';
 
 const messageReducer = (state = {}, action) => {
@@ -236,6 +237,22 @@ const messageReducer = (state = {}, action) => {
       }, {});
 
       return merge({}, state, nextState);
+    case CREATE_UNREAD: {
+      const { unreadProps } = action;
+      const msg = unreadProps.slug && state[unreadProps.slug];
+
+      if (!msg) {
+        return state;
+      }
+
+      nextState = merge({}, state);
+      nextState[unreadProps.slug].hasUnreads = isDateOlderThanOther(
+        unreadProps.lastRead,
+        unreadProps.lastActive
+      );
+
+      return nextState;
+    }
     case REACTION.CREATE.RECEIVE: {
       const { id, messageSlug: slug } = action.reaction;
 
