@@ -10,16 +10,19 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
   const currUserSlug = state.session.currentUser.slug;
   const channelsMap = getChannelsMap(state);
   const channels = Object.values(channelsMap);
-  const hasUnreadChannels = channels.some(ch => ch.hasUnreads);
-  const hasUnreadConvos = Object.values(state.entities.messages).some(convo => convo.hasUnreads);
   const chatPath = state.ui.displayChannelSlug;
+
+  const unreadsMap = state.entities.unreads;
+  const unreads = Object.values(unreadsMap).filter(unread => unread.hasUnreads);
+  const hasUnreadChannels = unreads.some(unread => unread.readableType === 'Channel');
+  const hasUnreadConvos = unreads.some(unread => unread.readableType === 'Message');
 
   const channelItemDecorate = ch => ({
     slug: ch.slug,
     status: ch.status || null,
     label: ch.title,
     link: `${url}/messages/${ch.slug}`,
-    modifierClassName: ch.hasUnreads ? 'unreads' : null,
+    modifierClassName: unreadsMap[ch.slug].hasUnreads ? 'unreads' : null,
     isActive: (match, { pathname }) => match && pathname.includes(`messages/${chatPath}`),
   });
   const dmChannels = getDMChannels(state).map(ch => channelItemDecorate(ch));
