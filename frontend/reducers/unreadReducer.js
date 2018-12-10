@@ -18,6 +18,7 @@ const unreadReducer = (state = {}, action) => {
       nextState = {};
       messages.filter(msg => msg.parentMessageId).forEach((msg) => {
         nextState[msg.parentMessageSlug] = {
+          slug: msg.slug,
           lastActive: msg.createdAt,
           readableId: msg.parentMessageId,
           readableType: 'Message',
@@ -26,6 +27,7 @@ const unreadReducer = (state = {}, action) => {
 
       messages.filter(msg => !msg.parentMessageId).forEach((msg) => {
         nextState[msg.channelSlug] = {
+          slug: msg.channelSlug,
           lastActive: msg.createdAt,
           readableId: msg.channelId,
           readableType: 'Channel',
@@ -35,6 +37,7 @@ const unreadReducer = (state = {}, action) => {
       reads.forEach((read) => {
         nextState[read.slug] = {
           ...nextState[read.slug],
+          slug: read.slug,
           readableId: read.readableId,
           readableType: read.readableType,
           lastRead: read.accessedAt,
@@ -47,6 +50,7 @@ const unreadReducer = (state = {}, action) => {
           slug: unread.slug,
           hasUnreads: isDateOlderThanOther(unread.lastRead, unread.lastActive),
         };
+        console.log(nextState[unread.slug]);
       });
 
       return nextState;

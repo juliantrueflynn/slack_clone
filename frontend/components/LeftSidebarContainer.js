@@ -22,7 +22,7 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
     status: ch.status || null,
     label: ch.title,
     link: `${url}/messages/${ch.slug}`,
-    modifierClassName: unreadsMap[ch.slug].hasUnreads ? 'unreads' : null,
+    modifierClassName: unreadsMap[ch.slug].hasUnreads ? 'unread' : null,
     isActive: (match, { pathname }) => match && pathname.includes(`messages/${chatPath}`),
   });
   const dmChannels = getDMChannels(state).map(ch => channelItemDecorate(ch));
