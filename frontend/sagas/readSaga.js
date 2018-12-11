@@ -38,43 +38,39 @@ function* fetchDestroy({ read }) {
   }
 }
 
-function* createOrUpdateRead(read, slug) {
-  const unread = yield select(selectEntityBySlug, 'unreads', slug);
-  let actionType;
-
-  if (unread && unread.lastRead && !unread.hasUnreads) {
-    return;
-  }
+function* createOrUpdateRead(read, unread) {
+  const actionType = unread && unread.lastRead ? 'update' : 'create';
 
   try {
-    if (unread) {
-      actionType = 'update';
-      yield put(actions.updateRead.request(read));
-    } else {
-      actionType = 'create';
-      yield put(actions.createRead.request(read));
-    }
+    yield put(actions[`${actionType}Read`].request(read));
   } catch (error) {
     yield put(actions[`${actionType}Read`].failure(error));
   }
 }
 
+function* readViewedEntity(read, slug) {
+  const unread = yield select(selectEntityBySlug, 'unreads', slug);
+
+  if (unread && unread.hasUnreads) {
+    yield createOrUpdateRead(read, unread);
+  }
+}
+
 function* fetchMessageThread({ messages: { messages } }) {
+  if (messages.length <= 1) {
+    return;
+  }
+
   const [message] = messages;
   const convoId = message.parentMessageId || message.id;
   const convoSlug = message.parentMessageSlug || message.slug;
   const read = { readableType: 'Message', readableId: convoId };
-
-  if (messages.length === 1) {
-    return;
-  }
-
-  yield createOrUpdateRead(read, convoSlug);
+  yield readViewedEntity(read, convoSlug);
 }
 
 function* fetchChannelPage({ messages: { channel } }) {
   const read = { readableType: 'Channel', readableId: channel.id };
-  yield createOrUpdateRead(read, channel.slug);
+  yield readViewedEntity(read, channel.slug);
 }
 
 function* loadMessageRead({ message: msg }) {
@@ -100,10 +96,12 @@ function* loadMessageRead({ message: msg }) {
     }
   }
 
+  const unread = yield select(selectEntityBySlug, 'unreads', slug);
+
   if (isCurrPage) {
-    yield createOrUpdateRead(read, slug);
+    yield createOrUpdateRead(read, unread);
   } else {
-    const { lastRead } = yield select(selectEntityBySlug, 'unreads', slug);
+    const lastRead = unread && unread.lastRead;
     const unreadProps = { slug, lastRead, lastActive: msg.createdAt };
     yield put(actions.createUnread(read.readableType, unreadProps));
   }

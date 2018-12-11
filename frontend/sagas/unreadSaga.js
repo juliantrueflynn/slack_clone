@@ -9,7 +9,7 @@ import {
 import { READ, CLEAR_UNREADS, USER_THREAD } from '../actions/actionTypes';
 import { apiFetch, apiUpdate, apiCreate } from '../util/apiUtil';
 import { fetchUnreads } from '../actions/readActions';
-import { selectEntityBySlug, selectEntities } from '../reducers/selectors';
+import { getAllUnreads } from '../reducers/selectors';
 
 function* fetchIndex({ workspaceSlug }) {
   try {
@@ -21,25 +21,22 @@ function* fetchIndex({ workspaceSlug }) {
 }
 
 function* fetchUserThreadIndexPage() {
-  const messages = yield select(selectEntities, 'messages');
-  const unreadMessages = Object.values(messages).filter(message => message.hasUnreads);
+  const unreadsMap = yield select(getAllUnreads);
+  const unreads = Object.values(unreadsMap);
+  const msgs = unreads.filter(unread => unread.hasUnreads && unread.readableType === 'Message');
 
-  yield all(unreadMessages.map((parent) => {
-    const { readId, id: readableId } = parent;
+  yield all(msgs.map((unread) => {
+    const apiCall = unread.lastRead ? apiUpdate : apiCreate;
+    const read = { readableId: unread.readableId, readableType: 'Message' };
 
-    if (readId) {
-      return call(apiUpdate, `reads/${parent.readId}`);
-    }
-
-    const read = { readableId, readableType: 'Message' };
-    return call(apiCreate, 'reads', read);
+    return call(apiCall, 'reads', read);
   }));
 }
 
 function* fetchClearUnreads({ channelSlug }) {
-  const currChannel = yield select(selectEntityBySlug, 'channels', channelSlug);
-  const { readId } = currChannel;
-  yield call(apiUpdate, `reads/${readId}`);
+  const unreadsMap = yield select(getAllUnreads);
+  const { readableId, readableType } = unreadsMap[channelSlug];
+  yield call(apiUpdate, 'read', { readableId, readableType });
 }
 
 function* watchIndex() {

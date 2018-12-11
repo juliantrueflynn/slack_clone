@@ -11,7 +11,7 @@ const getAllReactions = state => state.entities.reactions;
 const getAllChannels = state => state.entities.channels;
 const getAllChannelSubs = state => state.entities.channelSubs;
 const getAllFavorites = state => state.entities.favorites;
-const getAllUnreads = state => state.entities.unreads;
+export const getAllUnreads = state => state.entities.unreads;
 
 const getIsEditingMessage = state => state.ui.isEditingMessage;
 const getChatPath = state => state.ui.displayChannelSlug;

@@ -31,7 +31,7 @@ const messageReducer = (state = {}, action) => {
             slug: msg.parentMessageSlug,
             channelSlug: msg.channelSlug,
             isInConvo: true,
-            thread: null,
+            thread: [],
           };
         }
       });
@@ -45,10 +45,9 @@ const messageReducer = (state = {}, action) => {
 
       Object.values(nextState).forEach((msg) => {
         nextState[msg.slug] = {
-          authors: [],
-          thread: [],
-          reactionIds: [],
           ...msg,
+          authors: [],
+          reactionIds: [],
         };
       });
 

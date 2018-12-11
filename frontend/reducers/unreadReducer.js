@@ -18,7 +18,7 @@ const unreadReducer = (state = {}, action) => {
       nextState = {};
       messages.filter(msg => msg.parentMessageId).forEach((msg) => {
         nextState[msg.parentMessageSlug] = {
-          slug: msg.slug,
+          slug: msg.parentMessageSlug,
           lastActive: msg.createdAt,
           readableId: msg.parentMessageId,
           readableType: 'Message',
@@ -47,10 +47,8 @@ const unreadReducer = (state = {}, action) => {
       Object.values(nextState).forEach((unread) => {
         nextState[unread.slug] = {
           ...nextState[unread.slug],
-          slug: unread.slug,
           hasUnreads: isDateOlderThanOther(unread.lastRead, unread.lastActive),
         };
-        console.log(nextState[unread.slug]);
       });
 
       return nextState;
