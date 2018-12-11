@@ -4,7 +4,6 @@ import displayChannelSlug from './channelDisplayReducer';
 import displayModal from './modalReducer';
 import accordion from './accordionReducer';
 import drawer from './drawerReducer';
-import searchQuery from './searchQueryReducer';
 import dropdown from './dropdownReducer';
 import isEditingMessage from './isEditingMessageReducer';
 
@@ -14,7 +13,6 @@ const uiReducer = combineReducers({
   displayModal,
   accordion,
   drawer,
-  searchQuery,
   dropdown,
   isEditingMessage,
 });

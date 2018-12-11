@@ -22,9 +22,11 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
     return total;
   }, 0);
 
-  const messages = Object.values(getMessagesMap(state));
+  const msgsMap = getMessagesMap(state);
+  const messages = Object.values(msgsMap);
+  const searchSlugs = state.search.messagesBySearch;
   const convoUnreadsLen = messages.filter(convo => convo.hasUnreads).length;
-  const searchMessages = messages.filter(msg => msg.isInSearch).sort((a, b) => b.id - a.id);
+  const searchMessages = searchSlugs.map(msgSlug => msgsMap[msgSlug]).sort((a, b) => b.id - a.id);
 
   return {
     chatPath,
@@ -38,7 +40,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
     currentUser: state.session.currentUser,
     modalType: state.ui.displayModal.modalType,
     drawerType: state.ui.drawer.drawerType,
-    searchQuery: state.ui.searchQuery,
+    searchQuery: state.search.searchQuery,
     isLoading: state.isLoading.search,
     dropdownProps: state.ui.dropdown.dropdownProps,
     isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_CHANNEL_EDIT',

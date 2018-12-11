@@ -56,6 +56,7 @@ const messageReducer = (state = {}, action) => {
     case MESSAGE.INDEX.RECEIVE:
     case HISTORY.INDEX.RECEIVE:
     case USER_THREAD.INDEX.RECEIVE:
+    case SEARCH.INDEX.RECEIVE:
     case FAVORITE.INDEX.RECEIVE: {
       const {
         messages,
@@ -99,48 +100,21 @@ const messageReducer = (state = {}, action) => {
         }
       });
 
+      reactions.forEach((reaction) => {
+        nextState[reaction.messageSlug].reactionIds.push(reaction.id);
+      });
+
       if (pins) {
         pins.forEach((pin) => {
           nextState[pin.messageSlug].pinId = pin.id;
         });
       }
 
-      reactions.forEach((reaction) => {
-        nextState[reaction.messageSlug].reactionIds.push(reaction.id);
-      });
-
-      favorites.forEach((fav) => {
-        nextState[fav.messageSlug].favoriteId = fav.id;
-      });
-
-      return merge({}, state, nextState);
-    }
-    case SEARCH_DESTROY:
-    case SEARCH.INDEX.REQUEST: {
-      nextState = {};
-      Object.values(state).forEach((msg) => {
-        nextState[msg.slug] = { isInSearch: false };
-      });
-
-      return merge({}, state, nextState);
-    }
-    case SEARCH.INDEX.RECEIVE: {
-      const { messages, reactions } = action.messages;
-
-      nextState = {};
-      messages.forEach((msg) => {
-        nextState[msg.slug] = {
-          isInSearch: true,
-          reactionIds: [],
-          thread: msg.parentMessageId ? null : [],
-          authors: [],
-          ...msg
-        };
-      });
-
-      reactions.forEach((reaction) => {
-        nextState[reaction.messageSlug].reactionIds.push(reaction.id);
-      });
+      if (favorites) {
+        favorites.forEach((fav) => {
+          nextState[fav.messageSlug].favoriteId = fav.id;
+        });
+      }
 
       return merge({}, state, nextState);
     }

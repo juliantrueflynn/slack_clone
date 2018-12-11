@@ -5,6 +5,7 @@ import success from './successReducer';
 import entities from './entitiesReducer';
 import ui from './uiReducer';
 import isLoading from './isLoadingReducer';
+import search from './searchReducer';
 
 const rootReducer = combineReducers({
   session,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   errors,
   success,
   isLoading,
+  search,
 });
 
 export default rootReducer;
