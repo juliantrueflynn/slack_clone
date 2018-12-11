@@ -30,7 +30,6 @@ const messageReducer = (state = {}, action) => {
             id: msg.parentMessageId,
             slug: msg.parentMessageSlug,
             channelSlug: msg.channelSlug,
-            isInConvo: true,
             thread: [],
           };
         }
@@ -75,10 +74,6 @@ const messageReducer = (state = {}, action) => {
           authors: msg.parentMessageId ? null : [],
           ...msg
         };
-
-        if (action.type === USER_THREAD.INDEX.RECEIVE) {
-          nextState[msg.slug].isInConvo = true;
-        }
       });
 
       messages.filter(msg => msg.parentMessageId).forEach((msg) => {
@@ -146,18 +141,6 @@ const messageReducer = (state = {}, action) => {
       reactions.forEach((reaction) => {
         nextState[reaction.messageSlug].reactionIds.push(reaction.id);
       });
-
-      return merge({}, state, nextState);
-    }
-    case MESSAGE.CREATE.REQUEST: {
-      const { parentMessageSlug } = action.message;
-
-      if (!parentMessageSlug) {
-        return state;
-      }
-
-      nextState = {};
-      nextState[parentMessageSlug] = { isInConvo: true };
 
       return merge({}, state, nextState);
     }
