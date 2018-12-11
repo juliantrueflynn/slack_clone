@@ -76,7 +76,7 @@ const groupByMessageEntityType = (arr) => {
   return entries;
 };
 
-const selectChannelMessagesBySlug = (msgsMap, msgsSlugs, title) => {
+const getChannelViewMessages = (msgsMap, msgsSlugs, title) => {
   const msgs = msgsSlugs.map(msgSlug => msgsMap[msgSlug]).filter(msg => !msg.parentMessageId);
   const entries = msgs.filter(msg => msg.entityType === 'entry');
   const subs = msgs.filter(msg => msg.entityType !== 'entry').reduce((acc, curr) => {
@@ -89,9 +89,9 @@ const selectChannelMessagesBySlug = (msgsMap, msgsSlugs, title) => {
   return groupByMessageEntityType(items);
 };
 
-const selectAllThreadMessages = (msgsMap, unreadsMap) => (
+const getAllThreadViewMessages = (msgsMap, unreadsMap) => (
   values(msgsMap).reduce((acc, curr) => {
-    if (!curr.isInConvo || !curr.thread) {
+    if (!curr.thread) {
       return acc;
     }
 
@@ -114,13 +114,13 @@ export const getChatPageMessages = createSelector(
     }
 
     if (chatPath === 'threads') {
-      return selectAllThreadMessages(messagesMap, unreadsMap);
+      return getAllThreadViewMessages(messagesMap, unreadsMap);
     }
 
     const channel = channelsMap[chatPath];
     if (channel) {
       const { messages, title } = channel;
-      return selectChannelMessagesBySlug(messagesMap, messages, title);
+      return getChannelViewMessages(messagesMap, messages, title);
     }
 
     return [];
@@ -190,6 +190,24 @@ export const getChannelsMap = createSelector(
       return acc;
     }, {})
   )
+);
+
+export const getChatViewChannels = createSelector(
+  [getChatPath, getAllChannels, getAllUnreads],
+  (chatPath, channelsMap, unreadsMap) => {
+    if (chatPath === 'unreads') {
+      return values(channelsMap).filter(ch => !ch.hasDm && unreadsMap[ch.slug].hasUnreads);
+    }
+
+    if (chatPath === 'threads') {
+      values(channelsMap).filter(ch => !ch.hasDm).reduce((acc, curr) => {
+        acc[curr.slug] = channelsMap[curr.slug];
+        return acc;
+      }, {});
+    }
+
+    return [];
+  }
 );
 
 export const getDMChannels = createSelector(

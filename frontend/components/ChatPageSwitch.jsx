@@ -96,7 +96,8 @@ class ChatPageSwitch extends React.Component {
       messages,
       users,
       channel,
-      channelsMap,
+      channels,
+      unreadsMap,
       currentUser,
       isLoading,
       clearUnreads,
@@ -112,13 +113,6 @@ class ChatPageSwitch extends React.Component {
       chatType = chatPath;
     }
 
-    const channels = Object.values(channelsMap);
-    const unreadChannels = channels.filter(ch => ch.hasUnreads);
-    const convoChannels = channels.filter(ch => !ch.hasDm).reduce((acc, curr) => {
-      acc[curr.slug] = channelsMap[curr.slug];
-      return acc;
-    }, {});
-
     return (
       <div className={`ChatPageSwitch ChatPageSwitch__${chatType}`}>
         <ChannelHeaderContainer />
@@ -127,9 +121,10 @@ class ChatPageSwitch extends React.Component {
             {chatPath === 'unreads' && (
               <AllUnreads
                 messages={messages}
+                unreadsMap={unreadsMap}
                 users={users}
                 isLoading={isLoading.channel}
-                channels={unreadChannels}
+                channels={channels}
                 clearUnreads={clearUnreads}
               />
             )}
@@ -138,7 +133,7 @@ class ChatPageSwitch extends React.Component {
                 messages={messages}
                 users={users}
                 isLoading={isLoading.channel}
-                channels={convoChannels}
+                channels={channels}
                 currentUser={users[currentUser.slug]}
                 workspaceSlug={workspaceSlug}
               />

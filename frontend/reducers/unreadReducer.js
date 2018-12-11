@@ -5,6 +5,7 @@ import {
   WORKSPACE,
   READ,
   USER_THREAD,
+  CLEAR_UNREADS,
 } from '../actions/actionTypes';
 
 const unreadReducer = (state = {}, action) => {
@@ -93,6 +94,10 @@ const unreadReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
+    case CLEAR_UNREADS:
+      nextState = {};
+      nextState[action.channelSlug] = { hasUnreads: false, lastActive: action.lastRead };
+      return merge({}, state, nextState);
     default:
       return state;
   }

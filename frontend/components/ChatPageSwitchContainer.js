@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import withEntityWrapper from './withEntityWrapper';
-import { getChannelsMap, getChatPageMessages } from '../reducers/selectors';
+import { getChannelsMap, getChatPageMessages, getChatViewChannels } from '../reducers/selectors';
 import { fetchHistory } from '../actions/messageActions';
 import { createChannelSub, switchChannel } from '../actions/channelActions';
 import { clearUnreads } from '../actions/readActions';
@@ -12,6 +12,8 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
   drawerSlug: state.ui.drawer.drawerSlug,
   channel: getChannelsMap(state)[chatPath],
   messages: getChatPageMessages(state),
+  unreadsMap: state.entities.unreads,
+  channels: getChatViewChannels(state),
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -2,16 +2,18 @@ import { connect } from 'react-redux';
 import { updateDrawer, updateModal } from '../actions/uiActions';
 import { createChannel } from '../actions/channelActions';
 import { destroyPin } from '../actions/messageActions';
-import { getDrawerMessages } from '../reducers/selectors';
+import { getDrawerMessages, getChannelsMap } from '../reducers/selectors';
 import withEntityWrapper from './withEntityWrapper';
 import withWindowResize from './withWindowResize';
 import DrawerSwitch from './DrawerSwitch';
 
-const mapStateToProps = (state, { channelsMap, match: { params } }) => {
+const mapStateToProps = (state, { match: { params } }) => {
   const chatPath = state.ui.displayChannelSlug;
+  const channelsMap = getChannelsMap(state);
 
   return {
     messages: getDrawerMessages(state),
+    channelsMap,
     channel: channelsMap[chatPath],
     chatPath,
     drawerType: params.drawerType,

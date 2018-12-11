@@ -5,35 +5,30 @@ import Button from './Button';
 import MessagesListContainer from './MessagesListContainer';
 import './AllUnreadsItem.css';
 
-const AllUnreadsItem = ({ clearUnreads, channel, messages }) => {
-  const clear = () => {
-    const messageSlug = channel.messages[channel.messages.length - 1];
-    const lastMessage = messages[messageSlug];
-    clearUnreads(channel.slug, lastMessage.createdAt);
-  };
-
+const AllUnreadsItem = ({
+  channel,
+  messages,
+  unreadsMap,
+  clearChannelUnreads,
+}) => {
   const unreadMessages = channel.messages.reduce((acc, curr) => {
     acc.push(messages[curr]);
     return acc;
-  }, []).filter(message => (
-    isDateOlderThanOther(channel.lastRead, message.createdAt)
-    && message.entityType === 'entry'
+  }, []).filter(msg => (
+    isDateOlderThanOther(unreadsMap[channel.slug].lastRead, msg.createdAt)
+      && msg.entityType === 'entry'
   ));
 
-  const messagesLengthText = `${unreadMessages.length} messages`;
+  const msgsLenTxt = `${unreadMessages.length} messages`;
 
   return (
     <div className="AllUnreadsItem" role="listitem">
       <header className="AllUnreadsItem__header">
         <FontAwesomeIcon className="AllUnreadsItem__title-hashtag" icon="hashtag" size="sm" />
-        <h3 className="AllUnreadsItem__title">
-          {channel.title}
-        </h3>
+        <h3 className="AllUnreadsItem__title">{channel.title}</h3>
         <div className="AllUnreadsItem__meta">
-          <div className="AllUnreadsItem__length">
-            {messagesLengthText}
-          </div>
-          <Button buttonFor="unread" size="sm" onClick={() => clear()}>
+          <div className="AllUnreadsItem__length">{msgsLenTxt}</div>
+          <Button buttonFor="unread" size="sm" onClick={() => clearChannelUnreads(channel)}>
             Mark as Read
           </Button>
         </div>
