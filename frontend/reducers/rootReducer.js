@@ -1,18 +1,18 @@
 import { combineReducers } from 'redux';
-import sessionReducer from './sessionReducer';
-import errorsReducer from './errorsReducer';
-import successReducer from './successReducer';
-import entitiesReducer from './entitiesReducer';
-import uiReducer from './uiReducer';
-import isLoadingReducer from './isLoadingReducer';
+import session from './sessionReducer';
+import errors from './errorsReducer';
+import success from './successReducer';
+import entities from './entitiesReducer';
+import ui from './uiReducer';
+import isLoading from './isLoadingReducer';
 
 const rootReducer = combineReducers({
-  session: sessionReducer,
-  entities: entitiesReducer,
-  ui: uiReducer,
-  errors: errorsReducer,
-  success: successReducer,
-  isLoading: isLoadingReducer,
+  session,
+  entities,
+  ui,
+  errors,
+  success,
+  isLoading,
 });
 
 export default rootReducer;

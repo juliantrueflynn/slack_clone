@@ -134,7 +134,7 @@ class ChatPageSwitch extends React.Component {
                 users={users}
                 isLoading={isLoading.channel}
                 channels={channels}
-                currentUser={users[currentUser.slug]}
+                currentUser={currentUser.slug}
                 workspaceSlug={workspaceSlug}
               />
             )}

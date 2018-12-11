@@ -30,7 +30,7 @@ const AllThreadsItem = ({
         <Link to={channelUrl} className="AllThreadsItem__title">
           <FontAwesomeIcon icon="hashtag" size="xs" className="AllThreadsItem__hashtag" />
           <div className="AllThreadsItem__title-text">
-            {channel.title}
+            {channel && channel.title}
           </div>
         </Link>
         <MessageThreadAuthors

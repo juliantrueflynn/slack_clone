@@ -3,18 +3,9 @@ import EmptyDisplay from './EmptyDisplay';
 import ScrollBar from './ScrollBar';
 import AllThreadsItem from './AllThreadsItem';
 
-const AllThreads = ({
-  messages,
-  users,
-  channels,
-  currentUser,
-  isLoading,
-  workspaceSlug,
-}) => {
+const AllThreads = ({ messages, isLoading, ...props }) => {
   if (isLoading) {
-    return (
-      <EmptyDisplay hasLoadingIcon />
-    );
+    return <EmptyDisplay hasLoadingIcon />;
   }
 
   if (!messages.length) {
@@ -28,14 +19,7 @@ const AllThreads = ({
   return (
     <ScrollBar>
       {messages.map(convo => (
-        <AllThreadsItem
-          key={convo.slug}
-          currentUserSlug={currentUser.slug}
-          channels={channels}
-          parentMessage={convo}
-          users={users}
-          workspaceSlug={workspaceSlug}
-        />
+        <AllThreadsItem key={convo.slug} parentMessage={convo} {...props} />
       ))}
     </ScrollBar>
   );

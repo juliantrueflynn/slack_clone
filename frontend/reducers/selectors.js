@@ -90,20 +90,25 @@ const getChannelViewMessages = (msgsMap, msgsSlugs, title) => {
 };
 
 const getAllThreadViewMessages = (msgsMap, unreadsMap) => (
-  values(msgsMap).reduce((acc, curr) => {
-    if (!curr.thread) {
-      return acc;
-    }
+  values(unreadsMap)
+    .filter(unread => unread && unread.readableType === 'Message')
+    .reduce((acc, curr) => {
+      const msg = msgsMap[curr.slug];
 
-    const convo = {
-      ...curr,
-      thread: curr.thread.map(msgSlug => msgsMap[msgSlug]),
-    };
+      if (!msg.thread) {
+        return acc;
+      }
 
-    return [...acc, convo];
-  }, []).sort((a, b) => (
-    new Date(unreadsMap[b.slug].lastActive) - new Date(unreadsMap[a.slug].lastActive)
-  ))
+      const convo = {
+        ...msg,
+        thread: msg.thread.map(msgSlug => msgsMap[msgSlug]),
+      };
+
+      return [...acc, convo];
+    }, [])
+    .sort((a, b) => (
+      new Date(unreadsMap[b.slug].lastActive) - new Date(unreadsMap[a.slug].lastActive)
+    ))
 );
 
 export const getChatPageMessages = createSelector(
@@ -200,7 +205,7 @@ export const getChatViewChannels = createSelector(
     }
 
     if (chatPath === 'threads') {
-      values(channelsMap).filter(ch => !ch.hasDm).reduce((acc, curr) => {
+      return values(channelsMap).filter(ch => !ch.hasDm).reduce((acc, curr) => {
         acc[curr.slug] = channelsMap[curr.slug];
         return acc;
       }, {});
