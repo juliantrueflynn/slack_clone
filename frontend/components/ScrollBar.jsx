@@ -91,7 +91,7 @@ class ScrollBar extends React.Component {
       fetchHistory(e.scrollTop);
     }
 
-    if (updateScrollLoc && !isAtBottom) {
+    if (updateScrollLoc) {
       updateScrollLoc(e.scrollTop);
     }
   }
