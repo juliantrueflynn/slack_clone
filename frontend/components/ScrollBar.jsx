@@ -5,8 +5,12 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 class ScrollBar extends React.Component {
   constructor(props) {
     super(props);
+
     this.scroller = React.createRef();
+
     this.state = { isAtBottom: false, clientHeight: 0 };
+
+    this.channelSlug = null;
     this.handleIsAtBottom = this.handleIsAtBottom.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
   }
@@ -56,6 +60,15 @@ class ScrollBar extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    const { updateScrollTop } = this.props;
+
+    if (updateScrollTop) {
+      const scroller = this.scroller.current._container;
+      updateScrollTop(scroller.scrollTop);
+    }
+  }
+
   setClientHeight(clientHeight) {
     this.setState({ clientHeight });
   }
@@ -63,12 +76,9 @@ class ScrollBar extends React.Component {
   hasNewMessage(isAtBottom, prevLastMsg) {
     const { lastMessage, currentUserSlug } = this.props;
     const hasNewMsg = lastMessage && prevLastMsg && prevLastMsg.id !== lastMessage.id;
+    const lastMsgByCurrUser = prevLastMsg && currentUserSlug === prevLastMsg.authorSlug;
 
-    if (hasNewMsg && currentUserSlug === prevLastMsg.authorSlug) {
-      return true;
-    }
-
-    return isAtBottom && hasNewMsg;
+    return (hasNewMsg && lastMsgByCurrUser) || (isAtBottom && hasNewMsg);
   }
 
   handleIsAtBottom() {
@@ -80,7 +90,7 @@ class ScrollBar extends React.Component {
   }
 
   handleScroll(e) {
-    const { updateScrollLoc, fetchHistory } = this.props;
+    const { fetchHistory } = this.props;
     const { isAtBottom } = this.state;
 
     if (isAtBottom) {
@@ -89,10 +99,6 @@ class ScrollBar extends React.Component {
 
     if (fetchHistory && e.scrollTop === 0) {
       fetchHistory(e.scrollTop);
-    }
-
-    if (updateScrollLoc) {
-      updateScrollLoc(e.scrollTop);
     }
   }
 

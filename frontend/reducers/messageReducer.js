@@ -8,7 +8,6 @@ import {
   WORKSPACE,
   HISTORY,
   SEARCH,
-  SEARCH_DESTROY,
   PIN,
   SIGN_OUT,
 } from '../actions/actionTypes';
@@ -23,7 +22,7 @@ const messageReducer = (state = {}, action) => {
 
       nextState = {};
       messages.forEach((msg) => {
-        nextState[msg.slug] = { ...msg };
+        nextState[msg.slug] = msg;
 
         if (msg.parentMessageId) {
           nextState[msg.parentMessageSlug] = {
@@ -35,11 +34,8 @@ const messageReducer = (state = {}, action) => {
         }
       });
 
-      reads.filter(read => read.readableType === 'Message').forEach((read) => {
-        nextState[read.slug] = {
-          slug: read.slug,
-          ...nextState[read.slug]
-        };
+      reads.filter(read => read.readableType === 'Message').forEach(({ slug }) => {
+        nextState[slug] = { slug, ...nextState[slug] };
       });
 
       Object.values(nextState).forEach((msg) => {

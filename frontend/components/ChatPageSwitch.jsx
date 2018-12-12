@@ -9,8 +9,16 @@ import './ChatPageSwitch.css';
 class ChatPageSwitch extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { scrollLoc: 0, isInitLoadingDone: false };
-    this.handleScrollLoc = this.handleScrollLoc.bind(this);
+
+    this.state = {
+      scrollTop: null,
+      hasSwitchedView: false,
+      prevChannelSlug: null,
+      isInitLoadingDone: false,
+    };
+
+    this.handleScrollTopSwitch = this.handleScrollTopSwitch.bind(this);
+    this.updatePreviousChannelSlug = this.updatePreviousChannelSlug.bind(this);
   }
 
   componentDidMount() {
@@ -29,10 +37,9 @@ class ChatPageSwitch extends React.Component {
       closeDrawer,
       chatPath,
       channel,
-      switchChannel,
       isLoading,
     } = this.props;
-    const { scrollLoc } = this.state;
+    const { hasSwitchedView } = this.state;
 
     if (channel && drawerType && isExact && !prevProps.isExact) {
       if (chatPath === prevProps.chatPath) {
@@ -41,12 +48,16 @@ class ChatPageSwitch extends React.Component {
       }
     }
 
-    if (this.selectRedirectUrl()) {
-      history.replace(this.selectRedirectUrl());
+    if (prevProps.channel && prevProps.chatPath !== chatPath) {
+      this.updatePreviousChannelSlug(prevProps.chatPath);
     }
 
-    if (prevProps.channel && chatPath !== prevProps.chatPath) {
-      switchChannel(prevProps.chatPath, scrollLoc);
+    if (hasSwitchedView) {
+      this.handleChannelSwitch();
+    }
+
+    if (this.selectRedirectUrl()) {
+      history.replace(this.selectRedirectUrl());
     }
 
     if (!isLoading.channel && prevProps.isLoading) {
@@ -60,6 +71,10 @@ class ChatPageSwitch extends React.Component {
     if (!isInitLoadingDone) {
       this.setState({ isInitLoadingDone: true });
     }
+  }
+
+  updatePreviousChannelSlug(prevChannelSlug) {
+    this.setState({ prevChannelSlug });
   }
 
   selectRedirectUrl() {
@@ -85,8 +100,16 @@ class ChatPageSwitch extends React.Component {
     return null;
   }
 
-  handleScrollLoc(scrollLoc) {
-    this.setState({ scrollLoc });
+  handleChannelSwitch() {
+    const { switchChannel } = this.props;
+    const { prevChannelSlug, scrollTop } = this.state;
+
+    switchChannel(prevChannelSlug, scrollTop);
+    this.setState({ hasSwitchedView: false });
+  }
+
+  handleScrollTopSwitch(scrollTop) {
+    this.setState({ scrollTop, hasSwitchedView: true });
   }
 
   render() {
@@ -102,6 +125,7 @@ class ChatPageSwitch extends React.Component {
       isLoading,
       clearUnreads,
       openModal,
+      switchChannel,
       fetchHistoryRequest,
       createChannelSubRequest,
       workspaceSlug,
@@ -146,8 +170,9 @@ class ChatPageSwitch extends React.Component {
                 currentUserSlug={currentUser.slug}
                 openModal={openModal}
                 fetchHistoryRequest={fetchHistoryRequest}
-                updateScrollLoc={this.handleScrollLoc}
                 createChannelSubRequest={createChannelSubRequest}
+                switchChannel={switchChannel}
+                updateScrollTop={this.handleScrollTopSwitch}
               />
             )}
           </div>

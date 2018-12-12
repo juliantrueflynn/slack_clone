@@ -12,13 +12,16 @@ import './Channel.css';
 class Channel extends React.Component {
   constructor(props) {
     super(props);
+
     this.container = React.createRef();
+
     this.state = {
       height: 0,
       width: 0,
       hasHistory: false,
       isInitLoadingDone: false,
     };
+
     this.handleWindowResizeStyles = this.handleWindowResizeStyles.bind(this);
     this.handleFetchHistory = this.handleFetchHistory.bind(this);
   }
@@ -59,7 +62,6 @@ class Channel extends React.Component {
 
   setHistoryAndLoadingState() {
     const { messages, channel } = this.props;
-    const { hasHistory, isInitLoadingDone } = this.state;
 
     const firstMsgDate = messages[0] && messages[0].createdAt;
     const parents = messages.filter(msg => !msg.parentMessageId || msg.entityType === 'entry');
@@ -68,33 +70,23 @@ class Channel extends React.Component {
 
     if (!messages[0] || parents.length < 13) {
       nextState.hasHistory = false;
-    } else if (isNotEarliestMsgDate !== hasHistory) {
+    } else {
       nextState.hasHistory = isNotEarliestMsgDate;
     }
 
-    if (!isInitLoadingDone) {
-      nextState.isInitLoadingDone = true;
-    }
+    nextState.isInitLoadingDone = true;
 
     this.setState(nextState);
   }
 
   resetHasHistory() {
-    const { hasHistory } = this.state;
-
-    if (hasHistory) {
-      this.setState({ hasHistory: false });
-    }
+    this.setState({ hasHistory: false });
   }
 
   handleWindowResizeStyles() {
     const pageNode = this.container && this.container.current;
 
-    if (!pageNode) {
-      return;
-    }
-
-    if (pageNode.children[1]) {
+    if (pageNode && pageNode.children[1]) {
       const { clientHeight: bottomElHeight } = pageNode.children[1];
       const { height: channelHeight, width } = pageNode.getBoundingClientRect();
       const height = channelHeight - bottomElHeight;
@@ -120,9 +112,9 @@ class Channel extends React.Component {
       channel,
       messages,
       createChannelSubRequest,
+      updateScrollTop,
       currentUserSlug,
       openModal,
-      updateScrollLoc,
       match: { url },
     } = this.props;
     const { height, hasHistory, isInitLoadingDone } = this.state;
@@ -138,16 +130,17 @@ class Channel extends React.Component {
     });
 
     return (
-      <div className={channelClassNames} ref={this.container}>
+      <div className={channelClassNames} data-channel-slug={channel.slug} ref={this.container}>
         <div className="Channel__body" style={style}>
           {isInitLoadingDone && !isLoading.channel && (
             <ScrollBar
               fetchHistory={this.handleFetchHistory}
               isLoading={isLoading.history}
               channelScrollLoc={channel.scrollLoc}
-              updateScrollLoc={updateScrollLoc}
               currentUserSlug={currentUserSlug}
               lastMessage={lastMessage}
+              updateScrollTop={updateScrollTop}
+              channel={channel}
               shouldAutoScroll
             >
               <ChannelBlurb
@@ -156,9 +149,7 @@ class Channel extends React.Component {
                 openModal={openModal}
                 matchUrl={url}
               />
-              <div className="Channel__history-loader">
-                Loading...
-              </div>
+              <div className="Channel__history-loader">Loading...</div>
               <MessagesListContainer
                 role="listitem"
                 messages={messages}
