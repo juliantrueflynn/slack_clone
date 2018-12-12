@@ -149,7 +149,11 @@ class Channel extends React.Component {
                 openModal={openModal}
                 matchUrl={url}
               />
-              <div className="Channel__history-loader">Loading...</div>
+              <div className="Channel__history-loader">
+                <span className="Channel__history-loader-txt">
+                  Loading...
+                </span>
+              </div>
               <MessagesListContainer
                 role="listitem"
                 messages={messages}
