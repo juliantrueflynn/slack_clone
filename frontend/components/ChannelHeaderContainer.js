@@ -15,17 +15,19 @@ import ChannelHeader from './ChannelHeader';
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
   const channelsMap = getChannelsMap(state);
   const channel = channelsMap[chatPath];
-  const channels = Object.values(channelsMap);
-  const channelUnreadsLen = channels.reduce((acc, curr) => {
+  const { unreadsByChannel } = state;
+  const channelUnreadsLen = Object.values(unreadsByChannel).reduce((acc, curr) => {
     let total = acc;
-    total += curr.unreadsLength;
+    total += curr.length;
     return total;
   }, 0);
 
   const msgsMap = getMessagesMap(state);
   const messages = Object.values(msgsMap);
   const searchSlugs = state.search.messagesBySearch;
-  const convoUnreadsLen = messages.filter(convo => convo.hasUnreads).length;
+  const unreadsMap = state.entities.unreads;
+  const unreads = Object.values(unreadsMap).filter(unread => unread.hasUnreads);
+  const convoUnreadsLen = unreads.filter(unread => unread.readableType === 'Message').length;
   const searchMessages = searchSlugs.map(msgSlug => msgsMap[msgSlug]).sort((a, b) => b.id - a.id);
 
   return {

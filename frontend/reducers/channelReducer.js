@@ -2,7 +2,6 @@ import merge from 'lodash.merge';
 import {
   WORKSPACE,
   CHANNEL,
-  READ,
   MESSAGE,
   CHANNEL_SUB,
   WORKSPACE_SUB,
@@ -208,18 +207,6 @@ const channelReducer = (state = {}, action) => {
         subs: state[channelSlug].subs.filter(val => val !== id),
         members: state[channelSlug].members.filter(val => val !== userSlug),
       };
-
-      return nextState;
-    }
-    case READ.INDEX.RECEIVE: {
-      const { messages } = action.messages;
-
-      nextState = merge({}, state);
-      messages.forEach(({ channelSlug, slug }) => {
-        if (!nextState[channelSlug].messages.includes(slug)) {
-          nextState[channelSlug].messages.push(slug);
-        }
-      });
 
       return nextState;
     }

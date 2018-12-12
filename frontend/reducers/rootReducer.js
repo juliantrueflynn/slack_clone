@@ -6,6 +6,7 @@ import entities from './entitiesReducer';
 import ui from './uiReducer';
 import isLoading from './isLoadingReducer';
 import search from './searchReducer';
+import unreadsByChannel from './unreadsByChannelReducer';
 
 const rootReducer = combineReducers({
   session,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   success,
   isLoading,
   search,
+  unreadsByChannel,
 });
 
 export default rootReducer;

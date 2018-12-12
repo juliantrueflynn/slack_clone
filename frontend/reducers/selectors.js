@@ -11,6 +11,7 @@ const getAllReactions = state => state.entities.reactions;
 const getAllChannels = state => state.entities.channels;
 const getAllChannelSubs = state => state.entities.channelSubs;
 const getAllFavorites = state => state.entities.favorites;
+const getAllUnreadsByChannel = state => state.unreadsByChannel;
 export const getAllUnreads = state => state.entities.unreads;
 
 const getIsEditingMessage = state => state.ui.isEditingMessage;
@@ -111,6 +112,20 @@ const getAllThreadViewMessages = (msgsMap, unreadsMap) => (
     ))
 );
 
+// const getAllUnreadsViewMessages = (msgsMap, unreadChannelSlugs) => {
+//   const unreadMsgSlugs = values(unreadChannelSlugs).reduce((acc, curr) => (
+//     acc.concat(curr)
+//   ), []);
+
+//   return unreadMsgSlugs.reduce((acc, curr) => {
+//     if (msgsMap[curr]) {
+//       acc[curr] = msgsMap[curr];
+//     }
+
+//     return acc;
+//   }, {});
+// };
+
 export const getChatPageMessages = createSelector(
   [getMessagesMap, getAllChannels, getAllUnreads, getChatPath],
   (messagesMap, channelsMap, unreadsMap, chatPath) => {
@@ -197,11 +212,26 @@ export const getChannelsMap = createSelector(
   )
 );
 
+const getAllUnreadsViewChannels = (channelsMap, unreadsMap, unreadChMsgs) => {
+  const unreadChannelsMap = values(channelsMap).reduce((acc, curr) => {
+    acc[curr.slug] = { ...curr, unreadMessages: [] };
+    return acc;
+  }, {});
+
+  return values(unreadsMap)
+    .filter(unread => unread.readableType === 'Channel' && unread.hasUnreads)
+    .map(unread => ({
+      ...unreadChannelsMap[unread.slug],
+      unreadMessages: unreadChMsgs[unread.slug] || [],
+      lastActive: unread.lastActive,
+    }));
+};
+
 export const getChatViewChannels = createSelector(
-  [getChatPath, getAllChannels, getAllUnreads],
-  (chatPath, channelsMap, unreadsMap) => {
+  [getChatPath, getAllChannels, getAllUnreads, getAllUnreadsByChannel],
+  (chatPath, channelsMap, unreadsMap, unreadChannelMessages) => {
     if (chatPath === 'unreads') {
-      return values(channelsMap).filter(ch => !ch.hasDm && unreadsMap[ch.slug].hasUnreads);
+      return getAllUnreadsViewChannels(channelsMap, unreadsMap, unreadChannelMessages);
     }
 
     if (chatPath === 'threads') {

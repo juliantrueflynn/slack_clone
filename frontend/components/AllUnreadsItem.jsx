@@ -1,25 +1,16 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isDateOlderThanOther } from '../util/dateUtil';
 import Button from './Button';
 import MessagesListContainer from './MessagesListContainer';
 import './AllUnreadsItem.css';
 
 const AllUnreadsItem = ({
   channel,
-  messages,
-  unreadsMap,
   clearChannelUnreads,
+  messagesMap,
 }) => {
-  const unreadMessages = channel.messages.reduce((acc, curr) => {
-    acc.push(messages[curr]);
-    return acc;
-  }, []).filter(msg => (
-    isDateOlderThanOther(unreadsMap[channel.slug].lastRead, msg.createdAt)
-      && msg.entityType === 'entry'
-  ));
-
-  const msgsLenTxt = `${unreadMessages.length} messages`;
+  const msgsLenTxt = `${channel.unreadMessages && channel.unreadMessages.length} messages`;
+  const messages = channel.unreadMessages.map(msgSlug => messagesMap[msgSlug]);
 
   return (
     <div className="AllUnreadsItem" role="listitem">
@@ -34,7 +25,7 @@ const AllUnreadsItem = ({
         </div>
       </header>
       <div className="AllUnreadsItem__body">
-        <MessagesListContainer messages={unreadMessages} isHoverable />
+        <MessagesListContainer messages={messages} isHoverable />
       </div>
     </div>
   );

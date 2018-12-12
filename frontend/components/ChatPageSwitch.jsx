@@ -120,7 +120,6 @@ class ChatPageSwitch extends React.Component {
       users,
       channel,
       channels,
-      unreadsMap,
       currentUser,
       isLoading,
       clearUnreads,
@@ -144,8 +143,7 @@ class ChatPageSwitch extends React.Component {
           <div className="ChatPageSwitch__body">
             {chatPath === 'unreads' && (
               <AllUnreads
-                messages={messages}
-                unreadsMap={unreadsMap}
+                messagesMap={messages}
                 users={users}
                 isLoading={isLoading.channel}
                 channels={channels}

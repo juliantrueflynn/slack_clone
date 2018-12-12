@@ -10,11 +10,9 @@ class AllUnreads extends React.Component {
   }
 
   handleClearUnreadsClick(channel) {
-    const { messages, clearUnreads } = this.props;
-    const messageSlug = channel.messages[channel.messages.length - 1];
-    const lastMessage = messages[messageSlug];
+    const { clearUnreads } = this.props;
 
-    clearUnreads(channel.slug, lastMessage.createdAt);
+    clearUnreads(channel.slug, channel.lastActive);
   }
 
   render() {
@@ -32,7 +30,7 @@ class AllUnreads extends React.Component {
       <ScrollBar>
         {channels.map(channel => (
           <AllUnreadsItem
-            key={channel.id}
+            key={channel.slug}
             channel={channel}
             clearChannelUnreads={this.handleClearUnreadsClick}
             {...props}

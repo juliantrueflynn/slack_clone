@@ -51,6 +51,7 @@ const messageReducer = (state = {}, action) => {
     case MESSAGE.SHOW.RECEIVE:
     case MESSAGE.INDEX.RECEIVE:
     case HISTORY.INDEX.RECEIVE:
+    case READ.INDEX.RECEIVE:
     case USER_THREAD.INDEX.RECEIVE:
     case SEARCH.INDEX.RECEIVE:
     case FAVORITE.INDEX.RECEIVE: {
@@ -154,13 +155,6 @@ const messageReducer = (state = {}, action) => {
       delete nextState[slug];
       return nextState;
     }
-    case READ.INDEX.RECEIVE:
-      nextState = action.messages.messages.reduce((acc, curr) => {
-        acc[curr.slug] = curr;
-        return acc;
-      }, {});
-
-      return merge({}, state, nextState);
     case REACTION.CREATE.RECEIVE: {
       const { id, messageSlug: slug } = action.reaction;
 

@@ -25,9 +25,9 @@ export const destroyRead = {
   failure: errors => actionCreator(READ.DESTROY.FAILURE, { errors }),
 };
 
-export const createUnread = (unreadType, entityProps) => actionCreator(
+export const createUnread = (unreadType, entityProps, messageSlug) => actionCreator(
   CREATE_UNREAD,
-  { unreadType, entityProps }
+  { unreadType, entityProps, messageSlug }
 );
 
 export const clearUnreads = (channelSlug, lastRead) => actionCreator(
