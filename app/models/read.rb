@@ -33,9 +33,7 @@ class Read < ApplicationRecord
   private
 
   def ensure_workspace_id
-    return if workspace_id?
-    self.workspace = message.workspace if readable_type === 'Message'
-    self.workspace = channel.workspace if readable_type === 'Channel'
+    self.workspace_id ||= channel.workspace.id if readable_type === 'Channel'
   end
 
   def generate_accessed_at

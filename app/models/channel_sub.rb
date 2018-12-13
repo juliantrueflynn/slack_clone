@@ -23,24 +23,10 @@ class ChannelSub < ApplicationRecord
     "channel_#{channel.slug}"
   end
 
-  def read
-    reads.find_by(user_id: user_id)
-  end
-  
-  def has_read?
-    !!read
-  end
-
-  after_create_commit :broadcast_create_sub, :generate_read, :generate_create_message
-  after_destroy :generate_destroy_message, :destroy_read, :broadcast_destroy
+  after_create_commit :broadcast_create_sub, :generate_create_message
+  after_destroy :generate_destroy_message, :broadcast_destroy
 
   private
-
-  def generate_read
-    return if channel.has_dm
-    read = channel.reads.find_or_initialize_by_user(user.id)
-    read.save!
-  end
 
   def broadcast_create_sub
     broadcast_create if workspace.channels.length > 2
@@ -49,11 +35,6 @@ class ChannelSub < ApplicationRecord
   def generate_create_message
     return if channel.has_dm?
     channel.messages.create(author_id: user_id, entity_type: 'sub_create')
-  end
-
-  def destroy_read
-    return if channel.has_dm?
-    read.destroy! if has_read?
   end
 
   def generate_destroy_message

@@ -9,7 +9,7 @@ import {
 import { READ, MESSAGE } from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiDestroy } from '../util/apiUtil';
 import * as actions from '../actions/readActions';
-import { selectUIByDisplay, selectEntityBySlug } from '../reducers/selectors';
+import { selectUIByDisplay, selectEntityBySlug, getChannelsMap } from '../reducers/selectors';
 
 function* fetchCreate({ slug, ...read }) {
   try {
@@ -29,9 +29,10 @@ function* fetchUpdate({ read }) {
   }
 }
 
-function* fetchDestroy({ read }) {
+function* fetchDestroy({ read: { readableId, readableType } }) {
   try {
-    const destroyed = yield call(apiDestroy, 'read', read);
+    const apiForType = readableType.toLowerCase();
+    const destroyed = yield call(apiDestroy, `${apiForType}_reads/${readableId}`);
     yield put(actions.destroyRead.receive(destroyed));
   } catch (error) {
     yield put(actions.destroyRead.failure(error));
@@ -69,11 +70,20 @@ function* fetchMessageThread({ messages: { messages } }) {
 }
 
 function* fetchChannelPage({ messages: { channel } }) {
-  const read = { readableType: 'Channel', readableId: channel.id };
-  yield readViewedEntity(read, channel.slug);
+  const channelsMap = yield select(getChannelsMap);
+  const ch = channelsMap[channel.slug];
+
+  if (ch.isSub) {
+    const read = { readableType: 'Channel', readableId: ch.id };
+    yield readViewedEntity(read, channel.slug);
+  }
 }
 
 function* loadMessageRead({ message: msg }) {
+  if (msg.entityType !== 'entry') {
+    return;
+  }
+
   const slug = msg.parentMessageSlug || msg.channelSlug;
   const read = {
     readableType: msg.parentMessageSlug ? 'Message' : 'Channel',

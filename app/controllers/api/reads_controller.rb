@@ -1,5 +1,5 @@
 class Api::ReadsController < ApplicationController
-  before_action :set_read, except: :create
+  before_action :set_read, only: :update
 
   def create
     @read = current_user.reads.build(read_params)
@@ -16,14 +16,6 @@ class Api::ReadsController < ApplicationController
       render 'api/reads/show'
     else
       render json: @read.errors.full_messages, status: 422
-    end
-  end
-
-  def destroy
-    if @read && @read.destroy
-      render 'api/reads/show'
-    else
-      render json: ['not found']
     end
   end
 

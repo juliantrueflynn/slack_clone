@@ -251,7 +251,7 @@ export const getDMChannels = createSelector(
     const user = usersMap[currentUser.slug];
 
     return user.subs.map(subId => subsMap[subId]).filter(sub => (
-      channelsMap[sub.channelSlug].hasDm && sub.inSidebar
+      sub && channelsMap[sub.channelSlug].hasDm && sub.inSidebar
     )).map((sub) => {
       const ch = { ...channelsMap[sub.channelSlug] };
       const subsUserSlugs = ch.members.filter(userSlug => userSlug !== user.slug);
