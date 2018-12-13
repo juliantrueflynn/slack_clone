@@ -5,12 +5,8 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 class ScrollBar extends React.Component {
   constructor(props) {
     super(props);
-
     this.scroller = React.createRef();
-
     this.state = { isAtBottom: false, clientHeight: 0 };
-
-    this.channelSlug = null;
     this.handleIsAtBottom = this.handleIsAtBottom.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
   }
@@ -30,7 +26,7 @@ class ScrollBar extends React.Component {
       this.scrollToBottom();
     }
 
-    if (scroller.scrollTop === 0) {
+    if ((window.innerHeight + 100) > scroller.scrollHeight) {
       fetchHistory();
     }
   }

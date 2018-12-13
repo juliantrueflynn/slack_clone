@@ -1,13 +1,19 @@
-.Channel__history-loader {
-  display: none;
+.ChannelScrollBar {
+  position: relative;
+}
+
+.ChannelScrollBar__loader {
   text-align: center;
+  display: none;
   position: absolute;
   top: 12px;
   right: 0;
   left: 0;
+  z-index: 999;
 }
 
-.Channel__history-loader-txt {
+.ChannelScrollBar__loader-txt {
+  margin: 0 auto;
   padding: 5px 15px;
   border-radius: 5px;
   background-color: #00CEC9;
@@ -19,6 +25,6 @@
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.15);
 }
 
-.Channel--loading-history .Channel__history-loader {
+.ChannelScrollBar--loading .ChannelScrollBar__loader {
   display: block;
 }

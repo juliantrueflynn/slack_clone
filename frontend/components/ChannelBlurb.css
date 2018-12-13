@@ -60,7 +60,3 @@
 .ChannelBlurb .Btn__edit {
   color: #0984E3;
 }
-
-.Channel--has-history .ChannelBlurb {
-  display: none;
-}

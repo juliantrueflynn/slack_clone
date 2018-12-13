@@ -1,13 +1,7 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-import classNames from 'classnames';
-import { isOnSameDay } from '../util/dateUtil';
-import ScrollBar from './ScrollBar';
 import ChannelSubscribe from './ChannelSubscribe';
-import ChannelBlurb from './ChannelBlurb';
-import MessagesListContainer from './MessagesListContainer';
 import MessageForm from './MessageForm';
-import './Channel.css';
+import ChannelScrollBar from './ChannelScrollBar';
 
 class Channel extends React.Component {
   constructor(props) {
@@ -18,12 +12,10 @@ class Channel extends React.Component {
     this.state = {
       height: 0,
       width: 0,
-      hasHistory: false,
-      isInitLoadingDone: false,
+      didInitMessagesLoad: false
     };
 
     this.handleWindowResizeStyles = this.handleWindowResizeStyles.bind(this);
-    this.handleFetchHistory = this.handleFetchHistory.bind(this);
   }
 
   componentDidMount() {
@@ -32,7 +24,7 @@ class Channel extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { isLoading, channel } = this.props;
+    const { channel, isLoading } = this.props;
     const { channel: { slug: prevSlug, isSub: prevIsSub } } = prevProps;
     const { height, width } = this.state;
     const { height: prevHeight, width: prevWidth } = prevState;
@@ -43,16 +35,12 @@ class Channel extends React.Component {
       this.handleWindowResizeStyles();
     }
 
+    if (!isLoading.channel && prevProps.isLoading.channel && !isLoading.history) {
+      this.updateInitMessagesLoad(true);
+    }
+
     if (channel.slug !== prevSlug) {
-      this.resetHasHistory();
-    }
-
-    if (!isLoading.channel && prevProps.isLoading.channel) {
-      this.setHistoryAndLoadingState();
-    }
-
-    if (!isLoading.history && prevProps.isLoading.history) {
-      this.setHistoryAndLoadingState();
+      this.updateInitMessagesLoad(false);
     }
   }
 
@@ -60,27 +48,12 @@ class Channel extends React.Component {
     window.removeEventListener('resize', this.handleWindowResizeStyles);
   }
 
-  setHistoryAndLoadingState() {
-    const { messages, channel } = this.props;
+  updateInitMessagesLoad(newState) {
+    const { didInitMessagesLoad } = this.state;
 
-    const firstMsgDate = messages[0] && messages[0].createdAt;
-    const parents = messages.filter(msg => !msg.parentMessageId || msg.entityType === 'entry');
-    const isNotEarliestMsgDate = !isOnSameDay(firstMsgDate, channel.createdAt);
-    const nextState = {};
-
-    if (!messages[0] || parents.length < 13) {
-      nextState.hasHistory = false;
-    } else {
-      nextState.hasHistory = isNotEarliestMsgDate;
+    if (didInitMessagesLoad !== newState) {
+      this.setState({ didInitMessagesLoad: newState });
     }
-
-    nextState.isInitLoadingDone = true;
-
-    this.setState(nextState);
-  }
-
-  resetHasHistory() {
-    this.setState({ hasHistory: false });
   }
 
   handleWindowResizeStyles() {
@@ -88,21 +61,10 @@ class Channel extends React.Component {
 
     if (pageNode && pageNode.children[1]) {
       const { clientHeight: bottomElHeight } = pageNode.children[1];
-      const { height: channelHeight, width } = pageNode.getBoundingClientRect();
+      const { height: channelHeight } = pageNode.getBoundingClientRect();
       const height = channelHeight - bottomElHeight;
 
-      this.setState({ height, width });
-    }
-  }
-
-  handleFetchHistory() {
-    const { channel, fetchHistoryRequest, messages } = this.props;
-    const { hasHistory } = this.state;
-    const parents = messages.filter(msg => !msg.parentMessageId);
-    const startDate = parents[0] && parents[0].createdAt;
-
-    if (hasHistory && startDate) {
-      fetchHistoryRequest(channel.slug, startDate);
+      this.setState({ height });
     }
   }
 
@@ -115,60 +77,36 @@ class Channel extends React.Component {
       updateScrollTop,
       currentUserSlug,
       openModal,
-      match: { url },
+      fetchHistoryRequest,
+      matchUrl,
     } = this.props;
-    const { height, hasHistory, isInitLoadingDone } = this.state;
+    const { height, didInitMessagesLoad } = this.state;
 
-    const lastMessage = messages[messages.length - 1];
     const placeholder = channel.hasDm ? `@${channel.title}` : `#${channel.title}`;
     const formPlaceholder = placeholder && `Message ${placeholder}`;
-    const style = { height };
-
-    const channelClassNames = classNames('Channel', {
-      'Channel--loading-history': isLoading.history,
-      'Channel--has-history': hasHistory,
-    });
 
     return (
-      <div className={channelClassNames} data-channel-slug={channel.slug} ref={this.container}>
-        <div className="Channel__body" style={style}>
-          {isInitLoadingDone && !isLoading.channel && (
-            <ScrollBar
-              fetchHistory={this.handleFetchHistory}
-              isLoading={isLoading.history}
-              channelScrollLoc={channel.scrollLoc}
-              currentUserSlug={currentUserSlug}
-              lastMessage={lastMessage}
-              updateScrollTop={updateScrollTop}
+      <div className="Channel" ref={this.container}>
+        <div className="Channel__body">
+          {!isLoading.channel && didInitMessagesLoad && (
+            <ChannelScrollBar
               channel={channel}
-              shouldAutoScroll
-            >
-              <ChannelBlurb
-                channel={channel}
-                currentUserSlug={currentUserSlug}
-                openModal={openModal}
-                matchUrl={url}
-              />
-              <div className="Channel__history-loader">
-                <span className="Channel__history-loader-txt">
-                  Loading...
-                </span>
-              </div>
-              <MessagesListContainer
-                role="listitem"
-                messages={messages}
-                isDm={channel.hasDm}
-                isHighlightable
-                isHoverable
-              />
-            </ScrollBar>
+              messages={messages}
+              openModal={openModal}
+              currentUserSlug={currentUserSlug}
+              isLoading={isLoading}
+              height={height}
+              matchUrl={matchUrl}
+              updateScrollTop={updateScrollTop}
+              fetchHistoryRequest={fetchHistoryRequest}
+            />
           )}
         </div>
         {channel.isSub && <MessageForm channelId={channel.id} placeholder={formPlaceholder} />}
         {channel.isSub || channel.hasDm || (
           <ChannelSubscribe
             createChannelSubRequest={createChannelSubRequest}
-            matchUrl={url}
+            matchUrl={matchUrl}
             {...channel}
           />
         )}
@@ -177,4 +115,4 @@ class Channel extends React.Component {
   }
 }
 
-export default withRouter(Channel);
+export default Channel;

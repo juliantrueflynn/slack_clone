@@ -128,6 +128,7 @@ class ChatPageSwitch extends React.Component {
       fetchHistoryRequest,
       createChannelSubRequest,
       workspaceSlug,
+      match: { url },
     } = this.props;
     const { isInitLoadingDone } = this.state;
 
@@ -171,6 +172,7 @@ class ChatPageSwitch extends React.Component {
                 createChannelSubRequest={createChannelSubRequest}
                 switchChannel={switchChannel}
                 updateScrollTop={this.handleScrollTopSwitch}
+                matchUrl={url}
               />
             )}
           </div>
