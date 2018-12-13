@@ -9,7 +9,7 @@ import './ChannelScrollBar.css';
 class ChannelScrollBar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasHistory: false, lastMessageIndex: 0 };
+    this.state = { hasHistory: true, lastMessageIndex: 0 };
     this.handleFetchHistory = this.handleFetchHistory.bind(this);
   }
 
@@ -44,11 +44,17 @@ class ChannelScrollBar extends React.Component {
   }
 
   handleFetchHistory() {
-    const { channel, fetchHistoryRequest, messages } = this.props;
+    const {
+      channel,
+      fetchHistoryRequest,
+      messages,
+      isLoading,
+    } = this.props;
+
     const parents = messages.filter(msg => !msg.parentMessageId);
     const startDate = parents[0] && parents[0].createdAt;
 
-    if (this.shouldFetchHistory() && startDate) {
+    if (!isLoading.history && this.shouldFetchHistory() && startDate) {
       fetchHistoryRequest(channel.slug, startDate);
     }
   }
@@ -84,23 +90,23 @@ class ChannelScrollBar extends React.Component {
     const { hasHistory } = this.state;
 
     const style = { height };
-
-    const channelScrollBarClasses = classNames('ChannelScrollBar', {
+    const classes = classNames('ChannelScrollBar', {
       'ChannelScrollBar--loading': isLoading.history,
+      'ChannelScrollBar--no-history': !isLoading.history && !hasHistory,
     });
 
     return (
-      <div className={channelScrollBarClasses} style={style}>
+      <div className={classes} style={style}>
         <ScrollBar
-          fetchHistory={this.handleFetchHistory}
           isLoading={isLoading.history}
           channelScrollLoc={channel.scrollLoc}
           currentUserSlug={currentUserSlug}
           lastMessage={this.getLastMessage()}
+          atTopCallback={this.handleFetchHistory}
           updateScrollTop={updateScrollTop}
           shouldAutoScroll
         >
-          {hasHistory || (
+          {!isLoading.history && !hasHistory && (
             <ChannelBlurb
               channel={channel}
               currentUserSlug={currentUserSlug}

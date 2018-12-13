@@ -9,25 +9,24 @@ class ScrollBar extends React.Component {
     this.state = { isAtBottom: false, clientHeight: 0 };
     this.handleIsAtBottom = this.handleIsAtBottom.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
+    this.handleIsAtTop = this.handleIsAtTop.bind(this);
   }
 
   componentDidMount() {
-    const { fetchHistory, channelScrollLoc } = this.props;
+    const { channelScrollLoc } = this.props;
 
-    if (!fetchHistory) {
-      return;
+    const scroller = this.scroller.current;
+
+    if (channelScrollLoc) {
+      if (channelScrollLoc || channelScrollLoc === 0) {
+        scroller._container.scrollTop = channelScrollLoc;
+      } else {
+        this.scrollToBottom();
+      }
     }
 
-    const scroller = this.scroller.current._container;
-
-    if (channelScrollLoc || channelScrollLoc === 0) {
-      scroller.scrollTop = channelScrollLoc;
-    } else {
-      this.scrollToBottom();
-    }
-
-    if ((window.innerHeight + 100) > scroller.scrollHeight) {
-      fetchHistory();
+    if (scroller && scroller._container.scrollTop === 0) {
+      this.handleIsAtTop(scroller);
     }
   }
 
@@ -35,7 +34,11 @@ class ScrollBar extends React.Component {
     const { shouldAutoScroll, isLoading } = this.props;
     const { isAtBottom } = this.state;
 
-    if (shouldAutoScroll && (isAtBottom || this.hasNewMessage(isAtBottom, prevProps.lastMessage))) {
+    if (!shouldAutoScroll) {
+      return;
+    }
+
+    if (isAtBottom || this.hasNewMessage(isAtBottom, prevProps.lastMessage)) {
       this.scrollToBottom();
     }
 
@@ -77,6 +80,14 @@ class ScrollBar extends React.Component {
     return (hasNewMsg && lastMsgByCurrUser) || (isAtBottom && hasNewMsg);
   }
 
+  handleIsAtTop(e) {
+    const { atTopCallback } = this.props;
+
+    if (atTopCallback) {
+      atTopCallback(e);
+    }
+  }
+
   handleIsAtBottom() {
     const { isAtBottom } = this.state;
 
@@ -86,15 +97,14 @@ class ScrollBar extends React.Component {
   }
 
   handleScroll(e) {
-    const { fetchHistory } = this.props;
     const { isAtBottom } = this.state;
 
     if (isAtBottom) {
       this.setState({ isAtBottom: false });
     }
 
-    if (fetchHistory && e.scrollTop === 0) {
-      fetchHistory(e.scrollTop);
+    if (e.scrollTop === 0) {
+      this.handleIsAtTop(e);
     }
   }
 

@@ -2,6 +2,11 @@
   padding: 45px 27px 45px 18px;
   margin-bottom: 30px;
   border-bottom: 1px solid #E9E9E9;
+  display: none;
+}
+
+.ChannelScrollBar--no-history .ChannelBlurb {
+  display: block;
 }
 
 .ChannelBlurb__title {
