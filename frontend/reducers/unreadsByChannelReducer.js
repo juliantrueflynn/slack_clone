@@ -31,15 +31,10 @@ const unreadsByChannelReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case CLEAR_UNREADS: {
-      nextState = Object.keys(state).reduce((acc, curr) => {
-        acc[curr] = [];
-
-        return acc;
-      }, {});
-
-      return merge({}, state, nextState);
-    }
+    case CLEAR_UNREADS:
+      nextState = merge({}, state, nextState);
+      nextState[action.channelSlug] = [];
+      return nextState;
     default:
       return state;
   }
