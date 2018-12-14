@@ -26,8 +26,8 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
   const messages = Object.values(msgsMap);
   const searchSlugs = state.search.messagesBySearch;
   const unreadsMap = state.entities.unreads;
-  const unreads = Object.values(unreadsMap).filter(unread => unread.hasUnreads);
-  const convoUnreadsLen = unreads.filter(unread => unread.readableType === 'Message').length;
+  const unreads = Object.values(unreadsMap).filter(unread => unread && unread.hasUnreads);
+  const convoUnreadsLen = unreads.filter(unread => unread && unread.readableType === 'Message').length;
   const searchMessages = searchSlugs.map(msgSlug => msgsMap[msgSlug]).sort((a, b) => b.id - a.id);
 
   return {

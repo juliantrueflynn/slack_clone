@@ -90,27 +90,45 @@ const getChannelViewMessages = (msgsMap, msgsSlugs, title) => {
   return groupByMessageEntityType(items);
 };
 
-const getAllThreadViewMessages = (msgsMap, unreadsMap) => (
-  values(unreadsMap)
+// const getAllThreadViewMessages = createSelector(
+//   [getMessagesMap, getAllUnreads],
+//   (msgsMap, unreadsMap) => (
+//     values(unreadsMap)
+//       .filter(unread => unread && unread.readableType === 'Message')
+//       .reduce((acc, curr) => {
+//         acc[curr.slug] = {
+//           ...msgsMap[curr.slug],
+//           thread: msgsMap[curr.slug].thread.map(msgSlug => msgsMap[msgSlug]),
+//         };
+
+//         return acc;
+//       }, [])
+//       .sort((a, b) => (
+//         new Date(unreadsMap[b.slug].lastActive) - new Date(unreadsMap[a.slug].lastActive)
+//       ))
+//   )
+// );
+
+const getAllThreadViewMessages = (msgsMap, unreadsMap) => {
+  return values(unreadsMap)
     .filter(unread => unread && unread.readableType === 'Message')
     .reduce((acc, curr) => {
-      const msg = msgsMap[curr.slug];
+      const replies = msgsMap[curr.slug].thread.map(msgSlug => msgsMap[msgSlug]);
 
-      if (!msg.thread) {
-        return acc;
-      }
-
-      const convo = {
-        ...msg,
-        thread: msg.thread.map(msgSlug => msgsMap[msgSlug]),
+      acc[curr.slug] = {
+        slug: curr.slug,
+        channelSlug: msgsMap[curr.slug].channelSlug,
+        messages: [msgsMap[curr.slug], ...replies],
       };
 
-      return [...acc, convo];
+      acc.push(acc[curr.slug]);
+
+      return acc;
     }, [])
     .sort((a, b) => (
-      new Date(unreadsMap[b.slug].lastActive) - new Date(unreadsMap[a.slug].lastActive)
-    ))
-);
+      new Date(unreadsMap[b[0].slug].lastActive) - new Date(unreadsMap[a[0].slug].lastActive)
+    ));
+};
 
 // const getAllUnreadsViewMessages = (msgsMap, unreadChannelSlugs) => {
 //   const unreadMsgSlugs = values(unreadChannelSlugs).reduce((acc, curr) => (
@@ -219,7 +237,7 @@ const getAllUnreadsViewChannels = (channelsMap, unreadsMap, unreadChMsgs) => {
   }, {});
 
   return values(unreadsMap)
-    .filter(unread => unread.readableType === 'Channel' && unread.hasUnreads)
+    .filter(unread => unread && unread.readableType === 'Channel' && unread.hasUnreads)
     .map(unread => ({
       ...unreadChannelsMap[unread.slug],
       unreadMessages: unreadChMsgs[unread.slug] || [],

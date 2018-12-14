@@ -23,7 +23,9 @@ function* fetchIndex({ workspaceSlug }) {
 function* fetchUserThreadIndexPage() {
   const unreadsMap = yield select(getAllUnreads);
   const unreads = Object.values(unreadsMap);
-  const msgs = unreads.filter(unread => unread.hasUnreads && unread.readableType === 'Message');
+  const msgs = unreads.filter(unread => (
+    unread && unread.hasUnreads && unread.readableType === 'Message'
+  ));
 
   yield all(msgs.map((unread) => {
     const apiCall = unread.lastRead ? apiUpdate : apiCreate;
@@ -44,7 +46,7 @@ function* watchIndex() {
 }
 
 function* watchUserThreadIndex() {
-  yield takeLatest(USER_THREAD.INDEX.REQUEST, fetchUserThreadIndexPage);
+  yield takeLatest(USER_THREAD.INDEX.RECEIVE, fetchUserThreadIndexPage);
 }
 
 function* watchClearUnreads() {

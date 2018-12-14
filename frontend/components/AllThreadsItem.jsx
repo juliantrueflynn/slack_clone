@@ -13,16 +13,8 @@ const AllThreadsItem = ({
   currentUserSlug,
   workspaceSlug,
 }) => {
-  if (!parentMessage.thread) {
-    return null;
-  }
-
   const channel = channels[parentMessage.channelSlug];
   const channelUrl = `/${workspaceSlug}/${parentMessage.channelSlug}`;
-  const threadMessages = parentMessage.thread.reduce((acc, curr) => {
-    acc.push(curr);
-    return acc;
-  }, [parentMessage]);
 
   return (
     <div className="AllThreadsItem" role="listitem">
@@ -43,7 +35,7 @@ const AllThreadsItem = ({
       <div className="AllThreadsItem__body">
         <div className="AllThreadsItem__list" role="list">
           <MessagesListContainer
-            messages={threadMessages}
+            messages={parentMessage.messages}
             role="listitem"
             isThreadHidden
             isHoverable
