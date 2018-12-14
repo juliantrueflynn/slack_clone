@@ -90,43 +90,23 @@ const getChannelViewMessages = (msgsMap, msgsSlugs, title) => {
   return groupByMessageEntityType(items);
 };
 
-// const getAllThreadViewMessages = createSelector(
-//   [getMessagesMap, getAllUnreads],
-//   (msgsMap, unreadsMap) => (
-//     values(unreadsMap)
-//       .filter(unread => unread && unread.readableType === 'Message')
-//       .reduce((acc, curr) => {
-//         acc[curr.slug] = {
-//           ...msgsMap[curr.slug],
-//           thread: msgsMap[curr.slug].thread.map(msgSlug => msgsMap[msgSlug]),
-//         };
-
-//         return acc;
-//       }, [])
-//       .sort((a, b) => (
-//         new Date(unreadsMap[b.slug].lastActive) - new Date(unreadsMap[a.slug].lastActive)
-//       ))
-//   )
-// );
-
 const getAllThreadViewMessages = (msgsMap, unreadsMap) => {
   return values(unreadsMap)
     .filter(unread => unread && unread.readableType === 'Message')
     .reduce((acc, curr) => {
       const replies = msgsMap[curr.slug].thread.map(msgSlug => msgsMap[msgSlug]);
 
-      acc[curr.slug] = {
+      const parentMsg = {
+        ...msgsMap[curr.slug],
         slug: curr.slug,
         channelSlug: msgsMap[curr.slug].channelSlug,
         messages: [msgsMap[curr.slug], ...replies],
       };
 
-      acc.push(acc[curr.slug]);
-
-      return acc;
+      return [...acc, parentMsg];
     }, [])
     .sort((a, b) => (
-      new Date(unreadsMap[b[0].slug].lastActive) - new Date(unreadsMap[a[0].slug].lastActive)
+      new Date(unreadsMap[b.slug].lastActive) - new Date(unreadsMap[a.slug].lastActive)
     ));
 };
 
