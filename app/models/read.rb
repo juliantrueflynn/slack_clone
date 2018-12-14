@@ -12,12 +12,6 @@ class Read < ApplicationRecord
   belongs_to :channel, foreign_key: :readable_id, optional: true
   belongs_to :message, foreign_key: :readable_id, optional: true
 
-  def slug
-    entity_obj = readable_type.constantize
-    entity_assoc = entity_obj.find_by(id: readable_id)
-    entity_assoc.slug if entity_assoc
-  end
-
   def self.by_type(readable_type)
     where(readable_type: readable_type)
   end
@@ -30,10 +24,19 @@ class Read < ApplicationRecord
     find_by(user_id: user_id)
   end
 
+  def slug
+    associated_entity.slug if associated_entity
+  end
+
   private
 
+  def associated_entity
+    entity_obj = readable_type.constantize
+    entity_obj.find_by(id: readable_id)
+  end
+
   def ensure_workspace_id
-    self.workspace_id ||= channel.workspace.id if readable_type === 'Channel'
+    self.workspace_id ||= associated_entity.workspace.id if associated_entity
   end
 
   def generate_accessed_at

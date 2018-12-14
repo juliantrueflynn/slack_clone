@@ -29,6 +29,6 @@ class Api::ReadsController < ApplicationController
   end
 
   def read_params
-    params.require(:read).permit(:readable_id, :readable_type)
+    params.require(:read).permit(:readable_id, :readable_type, :workspace_id)
   end
 end
