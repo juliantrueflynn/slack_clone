@@ -55,6 +55,19 @@ def seed_chats(user)
   )
 end
 
+def update_entity_reads(entity)
+  read = entity.reads.find_or_initialize_by_user(1)
+  read.save!
+end
+
+def generate_message_interaction(chat)
+  user = chat.members.sample
+  message = chat.messages.with_entry_type.sample
+  return unless message
+  user.favorites.create(message_id: message.id) if rand < 0.3
+  user.reactions.create(message_id: message.id, emoji: REACTIONS.sample)
+end
+
 User.create!(email: "jtf@gmail.com", username: "jtf", password: "123456")
 
 3.times do
@@ -79,6 +92,8 @@ User.create!(email: "jtf@gmail.com", username: "jtf", password: "123456")
   end
 
   User.first.created_channels.create(default_channels)
+  
+  workspace.channels.first(2).each { |ch| update_entity_reads(ch) }
 
   3.times do
     chat = User.first.created_channels.create(
@@ -88,6 +103,8 @@ User.create!(email: "jtf@gmail.com", username: "jtf", password: "123456")
       created_at: created_at,
       updated_at: created_at
     )
+
+    update_entity_reads(chat)
   end
 end
 
@@ -101,7 +118,6 @@ end
 
 30.times do
   user = User.where.not(id: 1).sample
-
   seed_sub_and_members(user)
   seed_chats(user) if rand < 0.3
 end
@@ -129,7 +145,7 @@ User.first.workspaces.each do |workspace|
   end
 end
 
-60.times do
+50.times do
   user = User.all.sample
   chat = user.channels.sample
 
@@ -163,22 +179,7 @@ end
     )
   end
 
-  if rand < 0.7
-    message = chat.messages.with_entry_type.sample
-    next unless message
-
-    user.favorites.create(message_id: message.id) if rand < 0.5
-    user.reactions.create(message_id: message.id, emoji: REACTIONS.sample)
-  end
-end
-
-User.first.channels.shuffle.each do |chat|
-  messages = chat.messages.with_parent.with_entry_type
-  next if messages.empty?
-  next if rand < 0.4
-
-  read = chat.reads.find_or_initialize_by_user(1)
-  read.save!
+  generate_message_interaction(chat) if rand < 0.7
 end
 
 Channel.all.each do |chat|
@@ -203,4 +204,32 @@ Workspace.all.each do |workspace|
   end
 
   User.first.reads.create(reads)
+end
+
+20.times do
+  user = User.all.except(1).sample
+  chat = user.channels.sample
+
+  next unless chat
+
+  loop do
+    user.messages.create(body: random_message_body, channel_id: chat.id)
+    break if rand < 0.4
+  end
+
+  parent_entries = chat.messages.by_entry_parent
+
+  loop do
+    break if parent_entries.empty?
+    break if rand < 0.75
+
+    parent = parent_entries.sample
+    user.messages.create(
+      body: random_message_body,
+      channel_id: chat.id,
+      parent_message_id: parent.id
+    )
+  end
+
+  generate_message_interaction(chat) if rand < 0.7
 end
