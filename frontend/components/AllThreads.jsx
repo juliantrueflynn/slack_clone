@@ -18,9 +18,7 @@ const AllThreads = ({ messages, isLoading, ...props }) => {
 
   return (
     <ScrollBar>
-      {messages.map(convo => (
-        <AllThreadsItem key={convo.slug} parentMessage={convo} {...props} />
-      ))}
+      {messages.map(convo => <AllThreadsItem key={convo.slug} convo={convo} {...props} />)}
     </ScrollBar>
   );
 };

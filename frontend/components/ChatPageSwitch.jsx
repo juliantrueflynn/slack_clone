@@ -124,11 +124,9 @@ class ChatPageSwitch extends React.Component {
       isLoading,
       clearUnreads,
       openModal,
-      switchChannel,
       fetchHistoryRequest,
       createChannelSubRequest,
-      workspaceSlug,
-      match: { url },
+      match: { url, params: { workspaceSlug } },
     } = this.props;
     const { isInitLoadingDone } = this.state;
 
@@ -156,7 +154,6 @@ class ChatPageSwitch extends React.Component {
                 messages={messages}
                 users={users}
                 isLoading={isLoading.channel}
-                channels={channels}
                 currentUser={currentUser.slug}
                 workspaceSlug={workspaceSlug}
               />
@@ -170,7 +167,6 @@ class ChatPageSwitch extends React.Component {
                 openModal={openModal}
                 fetchHistoryRequest={fetchHistoryRequest}
                 createChannelSubRequest={createChannelSubRequest}
-                switchChannel={switchChannel}
                 updateScrollTop={this.handleScrollTopSwitch}
                 matchUrl={url}
               />

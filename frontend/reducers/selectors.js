@@ -90,39 +90,26 @@ const getChannelViewMessages = (msgsMap, msgsSlugs, title) => {
   return groupByMessageEntityType(items);
 };
 
-const getAllThreadViewMessages = (msgsMap, unreadsMap) => {
-  return values(unreadsMap)
+const getAllThreadViewMessages = (msgsMap, unreadsMap, channelsMap) => (
+  values(unreadsMap)
     .filter(unread => unread && unread.readableType === 'Message')
     .reduce((acc, curr) => {
-      const replies = msgsMap[curr.slug].thread.map(msgSlug => msgsMap[msgSlug]);
-
+      const msg = msgsMap[curr.slug];
+      const replies = msg.thread.map(msgSlug => msgsMap[msgSlug]);
       const parentMsg = {
         ...msgsMap[curr.slug],
         slug: curr.slug,
-        channelSlug: msgsMap[curr.slug].channelSlug,
-        messages: [msgsMap[curr.slug], ...replies],
+        channelSlug: msg.channelSlug,
+        channelTitle: channelsMap[msg.channelSlug].title,
+        messages: [msg, ...replies],
       };
 
       return [...acc, parentMsg];
     }, [])
     .sort((a, b) => (
       new Date(unreadsMap[b.slug].lastActive) - new Date(unreadsMap[a.slug].lastActive)
-    ));
-};
-
-// const getAllUnreadsViewMessages = (msgsMap, unreadChannelSlugs) => {
-//   const unreadMsgSlugs = values(unreadChannelSlugs).reduce((acc, curr) => (
-//     acc.concat(curr)
-//   ), []);
-
-//   return unreadMsgSlugs.reduce((acc, curr) => {
-//     if (msgsMap[curr]) {
-//       acc[curr] = msgsMap[curr];
-//     }
-
-//     return acc;
-//   }, {});
-// };
+    ))
+);
 
 export const getChatPageMessages = createSelector(
   [getMessagesMap, getAllChannels, getAllUnreads, getChatPath],
@@ -132,7 +119,7 @@ export const getChatPageMessages = createSelector(
     }
 
     if (chatPath === 'threads') {
-      return getAllThreadViewMessages(messagesMap, unreadsMap);
+      return getAllThreadViewMessages(messagesMap, unreadsMap, channelsMap);
     }
 
     const channel = channelsMap[chatPath];
