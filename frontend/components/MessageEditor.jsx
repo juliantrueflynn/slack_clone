@@ -21,6 +21,10 @@ class MessageEditor extends React.Component {
     if (!readOnly && isNotConvoForm) {
       setTimeout(() => this.focus(), 1);
     }
+
+    if (!readOnly && !isNotConvoForm) {
+      setTimeout(() => this.focus(), 1);
+    }
   }
 
   componentDidUpdate(prevProps) {

@@ -8,14 +8,36 @@ import './MessageForm.css';
 class MessageForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { editorState: createEmptyEditor() };
+    this.formRef = React.createRef();
+    this.state = { isActive: false, editorState: createEmptyEditor() };
     this.onChange = this.onChange.bind(this);
+    this.handleActiveClick = this.handleActiveClick.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleEnterSubmit = this.handleEnterSubmit.bind(this);
   }
 
+  componentDidMount() {
+    const { parentMessageId } = this.props;
+
+    if (!parentMessageId) {
+      this.setState({ isActive: true });
+    }
+  }
+
+  componentDidUpdate(_, prevState) {
+    const { isActive } = this.state;
+
+    if (!prevState.isActive && isActive) {
+      this.formRef.current.children[0].children[0].children[0].focus();
+    }
+  }
+
   onChange(editorState) {
     this.setState({ editorState });
+  }
+
+  handleActiveClick() {
+    this.setState({ isActive: true });
   }
 
   handleSubmit(e) {
@@ -54,9 +76,23 @@ class MessageForm extends React.Component {
       parentMessageId,
       channelId,
     } = this.props;
-    const { editorState } = this.state;
-    const containerId = parentMessageId || channelId;
+    const { isActive, editorState } = this.state;
     const editorPlaceholder = placeholder || 'Reply...';
+
+    if (!isActive) {
+      return (
+        <div className="MessageForm MessageForm--inactive">
+          <Button buttonFor="inactive-editor" onClick={this.handleActiveClick} unStyled>
+            {editorPlaceholder}
+          </Button>
+          <div className="emojiSelect">
+            <Button onClick={this.handleActiveClick} buttonFor="emoji" unStyled>☺</Button>
+          </div>
+        </div>
+      );
+    }
+
+    const containerId = parentMessageId || channelId;
 
     const fields = [{
       id: 'messageForm',
@@ -66,16 +102,19 @@ class MessageForm extends React.Component {
       isNotConvoForm: !parentMessageId,
       onChange: this.onChange,
       placeholder: editorPlaceholder,
+      isActive,
     }];
 
     return (
-      <FormHandler
-        fields={fields}
-        role="presentation"
-        onKeyDown={this.handleEnterSubmit}
-      >
-        {hasSubmitButton && <Button type="submit" buttonFor="submit" size="sm">Send</Button>}
-      </FormHandler>
+      <div className="MessageForm" ref={this.formRef}>
+        <FormHandler
+          fields={fields}
+          role="presentation"
+          onKeyDown={this.handleEnterSubmit}
+        >
+          {hasSubmitButton && <Button type="submit" buttonFor="submit" size="sm">Send</Button>}
+        </FormHandler>
+      </div>
     );
   }
 }

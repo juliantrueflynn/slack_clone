@@ -39,6 +39,7 @@
   padding-bottom: 12px;
 }
 
+.AllThreadsItem .MessageForm--inactive,
 .AllThreadsItem .Editor__unlocked {
   border-color: #E9E9E9;
   border-top-left-radius: 0;
@@ -48,6 +49,7 @@
   border-left: 0;
 }
 
+.AllThreadsItem .MessageForm .Btn__inactive-editor,
 .AllThreadsItem .Editor__unlocked .DraftEditor-root {
   padding: 10px 13px;
 }
@@ -60,4 +62,10 @@
   height: 37px;
   line-height: 37px;
   font-size: 2em;
+}
+
+.AllThreadsItem .MessageForm--inactive {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  color: #9197a3;
 }

@@ -29,3 +29,40 @@
   margin-left: auto;
   display: block;
 }
+
+.MessageForm--inactive {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  border: 1px solid rgba(113, 114, 116, 0.8);
+  border-radius: 5px;
+  transition: border ease-in-out .15s;
+}
+
+.MessageForm .Btn__inactive-editor {
+  text-align: left;
+  padding: 12px 8px;
+  width: 100%;
+}
+
+.MessageForm--inactive .Btn__emoji {
+  display: block;
+}
+
+.MessageForm--inactive:hover {
+  border: 1px solid rgba(113, 114, 116, 0.8);
+}
+
+.MessageForm--inactive:hover .Btn {
+  color: #757D8B;
+}
+
+.MessageForm--inactive .Btn {
+  color: #9197A3;
+  transition: color ease-in-out .15s;
+}
+
+.MessageForm--inactive .Btn:focus {
+  outline: none;
+}
