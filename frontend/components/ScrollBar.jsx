@@ -1,6 +1,7 @@
 import React from 'react';
 import PerfectScrollBar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
+import './ScrollBar.css';
 
 class ScrollBar extends React.Component {
   constructor(props) {
@@ -119,16 +120,9 @@ class ScrollBar extends React.Component {
     const { children, shouldAutoScroll } = this.props;
     const psScrollOptions = { suppressScrollX: true };
 
-    const style = {
-      position: 'relative',
-      height: '100%',
-      width: '100%',
-      overflow: 'hidden',
-    };
-
     if (shouldAutoScroll) {
       return (
-        <div className="ScrollBar" style={style}>
+        <div className="ScrollBar">
           <PerfectScrollBar
             ref={this.scroller}
             onYReachEnd={this.handleIsAtBottom}
@@ -142,7 +136,7 @@ class ScrollBar extends React.Component {
     }
 
     return (
-      <div className="ScrollBar" style={style}>
+      <div className="ScrollBar">
         <PerfectScrollBar option={psScrollOptions}>
           <div className="ScrollBar__container">{children}</div>
         </PerfectScrollBar>
