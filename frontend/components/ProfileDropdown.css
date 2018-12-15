@@ -20,6 +20,9 @@
   color: #FFF;
   margin-bottom: 3px;
   font-size: 17px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ProfileDropdown .ProfileDropdown__user {
@@ -74,6 +77,9 @@
 
 .Modal__dropdown--profile .MenuItem__content {
   color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .Modal__dropdown--profile .MenuItem__content {

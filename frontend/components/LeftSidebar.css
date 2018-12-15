@@ -36,8 +36,7 @@
 
 .LeftSidebarMenus__group > .Menu > .MenuItem > .MenuItem__content {
   color: rgba(255,255,255,0.75);
-  display: flex;
-  align-items: center;
+  display: block;
 }
 
 .LeftSidebarMenus__group > .Menu > .MenuItem--unread > .MenuItem__content {
@@ -119,7 +118,13 @@
 
 .LeftSidebarMenus__group .MenuItem__content > .MenuItem__icon {
   width: 23px;
-  display: block;
+  display: inline-block;
+}
+
+.LeftSidebarMenus__group .MenuItem__content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .LeftSidebarMenus__group .Menu__quicklinks .MenuItem__icon svg,
