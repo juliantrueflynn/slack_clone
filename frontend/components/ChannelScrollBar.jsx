@@ -98,13 +98,14 @@ class ChannelScrollBar extends React.Component {
     return (
       <div className={classes} style={style}>
         <ScrollBar
-          isLoading={isLoading.history}
+          isFetching={isLoading.history}
           channelScrollLoc={channel.scrollLoc}
           currentUserSlug={currentUserSlug}
           lastMessage={this.getLastMessage()}
           atTopCallback={this.handleFetchHistory}
           updateScrollTop={updateScrollTop}
           shouldAutoScroll
+          shouldMountAtBottom
         >
           {!isLoading.history && !hasHistory && (
             <ChannelBlurb

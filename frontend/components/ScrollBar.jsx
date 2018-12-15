@@ -9,49 +9,46 @@ class ScrollBar extends React.Component {
     this.state = { isAtBottom: false, clientHeight: 0 };
     this.handleIsAtBottom = this.handleIsAtBottom.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
-    this.handleIsAtTop = this.handleIsAtTop.bind(this);
   }
 
   componentDidMount() {
-    const { channelScrollLoc } = this.props;
+    const { shouldMountAtBottom, channelScrollLoc } = this.props;
+
+    if (!shouldMountAtBottom) {
+      return;
+    }
 
     const scroller = this.scroller.current;
 
-    if (channelScrollLoc) {
-      if (channelScrollLoc || channelScrollLoc === 0) {
-        scroller._container.scrollTop = channelScrollLoc;
-      } else {
-        this.scrollToBottom();
-      }
+    if (channelScrollLoc || channelScrollLoc === 0) {
+      scroller._container.scrollTop = channelScrollLoc;
+    } else {
+      this.scrollToBottom();
     }
 
-    if (scroller && scroller._container.scrollTop === 0) {
+    if (scroller._container.scrollTop === 0) {
       this.handleIsAtTop(scroller);
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { shouldAutoScroll, isLoading } = this.props;
+    const { shouldAutoScroll, isFetching } = this.props;
     const { isAtBottom } = this.state;
 
-    if (!shouldAutoScroll) {
-      return;
-    }
-
-    if (isAtBottom || this.hasNewMessage(isAtBottom, prevProps.lastMessage)) {
+    if (shouldAutoScroll && (isAtBottom || this.hasNewMessage(isAtBottom, prevProps.lastMessage))) {
       this.scrollToBottom();
     }
 
-    if (isLoading || prevProps.isLoading) {
+    if (isFetching || prevProps.isFetching) {
       const scroller = this.scroller.current._container;
       const container = scroller.children[0];
       const { height } = container.getBoundingClientRect();
 
-      if (isLoading && !prevProps.isLoading) {
+      if (isFetching && !prevProps.isFetching) {
         this.setClientHeight(height);
       }
 
-      if (!isLoading && prevProps.isLoading) {
+      if (!isFetching && prevProps.isFetching) {
         const clientHeight = height - prevState.clientHeight;
         this.setClientHeight(clientHeight);
         scroller.scrollTop = clientHeight;
@@ -89,9 +86,10 @@ class ScrollBar extends React.Component {
   }
 
   handleIsAtBottom() {
+    const { shouldAutoScroll } = this.props;
     const { isAtBottom } = this.state;
 
-    if (!isAtBottom) {
+    if (shouldAutoScroll && !isAtBottom) {
       this.setState({ isAtBottom: true });
     }
   }

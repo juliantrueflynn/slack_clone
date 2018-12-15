@@ -39,8 +39,8 @@ const AllThreadsItem = ({
         </div>
         <MessageForm
           channelId={convo.channelId}
-          convoId={convo.id}
-          convoSlug={convo.slug}
+          parentMessageId={convo.id}
+          parentMessageSlug={convo.slug}
         />
       </div>
     </div>

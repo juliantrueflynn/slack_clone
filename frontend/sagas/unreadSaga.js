@@ -46,7 +46,7 @@ function* watchIndex() {
 }
 
 function* watchUserThreadIndex() {
-  yield takeLatest(USER_THREAD.INDEX.RECEIVE, fetchUserThreadIndexPage);
+  yield takeLatest(USER_THREAD.INDEX.REQUEST, fetchUserThreadIndexPage);
 }
 
 function* watchClearUnreads() {
