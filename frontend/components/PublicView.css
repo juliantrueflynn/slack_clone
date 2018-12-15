@@ -8,6 +8,7 @@
   bottom: 0;
   right: 0;
   left: 0;
+  overflow: hidden;
 }
 
 .PublicView__container {

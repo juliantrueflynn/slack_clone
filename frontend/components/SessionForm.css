@@ -22,6 +22,12 @@
   background-color: #6C5CE7;
 }
 
+.Form__session,
+.PublicView__signin .ScrollBar__container,
+.PublicView__signup .ScrollBar__container {
+  height: 100%;
+}
+
 .PublicView__signin .Page__title,
 .PublicView__signup .Page__title {
   margin-top: 0;
