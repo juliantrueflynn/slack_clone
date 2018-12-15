@@ -1,12 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Menu from './Menu';
 import WorkspaceModal from './WorkspaceModal';
-import DropdownModal from './DropdownModal';
-import Button from './Button';
 import ScrollBar from './ScrollBar';
+import PublicViewNavBar from './PublicViewNavBar';
 import './PublicView.css';
 
 class PublicView extends React.Component {
@@ -38,15 +34,14 @@ class PublicView extends React.Component {
 
   handleDdClick(e) {
     const { openDropdown } = this.props;
-    const { bottom, right } = e.target.getBoundingClientRect();
+    const { bottom: posY, right: posX } = e.target.getBoundingClientRect();
 
-    openDropdown('DROPDOWN_PUBLIC', { bottom, right });
+    openDropdown('DROPDOWN_PUBLIC', { posY, posX });
   }
 
   render() {
     const {
       isLoggedIn,
-      isMobileSize,
       signOutRequest,
       workspacesMap,
       subbedWorkspaces,
@@ -61,53 +56,7 @@ class PublicView extends React.Component {
     } = this.props;
 
     const pagePath = pathname.length > 1 ? pathname.slice(1) : 'home';
-    const sessionMenuItems = [
-      {
-        key: 'signup',
-        label: 'Sign Up',
-        link: '/signup',
-        onClick: closeDropdown,
-        condition: !isLoggedIn,
-      },
-      {
-        key: 'signin',
-        label: 'Sign In',
-        link: '/signin',
-        onClick: closeDropdown,
-        condition: !isLoggedIn,
-      },
-      {
-        key: 'signout',
-        label: 'Sign Out',
-        onClick: () => signOutRequest(),
-        condition: isLoggedIn,
-      },
-    ];
-
     const workspaces = Object.values(workspacesMap);
-    const menuModifier = subbedWorkspaces.length ? 'filled' : 'empty';
-    const workspaceMenuItems = subbedWorkspaces.map(({ slug, title }) => ({
-      key: slug,
-      link: slug,
-      label: title,
-    }));
-    const createWorkspaceItem = {
-      key: 'createWorkspace',
-      label: 'Create Workspace',
-      onClick: () => openModal('MODAL_WORKSPACE'),
-    };
-    workspaceMenuItems.push(createWorkspaceItem);
-
-    const desktopMenuItems = [].concat(sessionMenuItems);
-    desktopMenuItems.push({
-      key: 'dropdown',
-      label: 'Your Workspaces',
-      onClick: this.handleDdClick,
-      condition: isLoggedIn && workspaces,
-    });
-
-    const mobileMenuItems = sessionMenuItems.concat(workspaceMenuItems);
-    const ddItems = isMobileSize ? mobileMenuItems : workspaceMenuItems;
 
     const pageClassNames = classNames('PublicView', {
       [`PublicView__${pagePath}`]: pagePath,
@@ -116,33 +65,22 @@ class PublicView extends React.Component {
     });
 
     return (
-      <ScrollBar>
-        <div className={pageClassNames}>
-          <header className="PublicView__header">
-            <div className="PublicView__container">
-              <nav className="PublicView__navbar">
-                <Link className="PublicView__logo" to="/" rel="home">Slack Clone</Link>
-                <Menu
-                  menuFor="public"
-                  isRow
-                  items={desktopMenuItems}
-                  bemModifier={menuModifier}
-                />
-                <Button buttonFor="mobile-public" onClick={this.handleDdClick}>
-                  <FontAwesomeIcon icon="bars" fixedWidth size="lg" />
-                </Button>
-              </nav>
-            </div>
-          </header>
+      <div className={pageClassNames}>
+        <ScrollBar>
+          <PublicViewNavBar
+            isDdOpen={isDdOpen}
+            dropdownProps={dropdownProps}
+            openDropdown={this.handleDdClick}
+            closeDropdown={closeDropdown}
+            subbedWorkspaces={subbedWorkspaces}
+            openModal={openModal}
+            isLoggedIn={isLoggedIn}
+            signOutRequest={signOutRequest}
+          />
           {render({ workspaces })}
-          {isModalOpen && <WorkspaceModal closeModal={closeModal} />}
-          {isDdOpen && (
-            <DropdownModal bemModifier="public" coordinates={dropdownProps} close={closeDropdown}>
-              <Menu menuFor="dropdown" items={ddItems} bemModifier={menuModifier} />
-            </DropdownModal>
-          )}
-        </div>
-      </ScrollBar>
+        </ScrollBar>
+        {isModalOpen && <WorkspaceModal closeModal={closeModal} />}
+      </div>
     );
   }
 }

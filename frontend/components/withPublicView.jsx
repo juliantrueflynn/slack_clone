@@ -5,7 +5,6 @@ import { signOut, signUp, signIn } from '../actions/sessionActions';
 import { fetchWorkspaces, updateWorkspaceSub, createWorkspaceSub } from '../actions/workspaceActions';
 import { updateDropdown, updateModal } from '../actions/uiActions';
 import { getSubbedWorkspaces } from '../reducers/selectors';
-import withWindowResize from './withWindowResize';
 import PublicView from './PublicView';
 
 const mapStateToProps = state => ({
@@ -50,9 +49,7 @@ const withPublicView = (WrappedComponent) => {
 
   WithPublicView.displayName = `withPublicView(${wrappedComponentName})`;
 
-  return withRouter(
-    withWindowResize(connect(mapStateToProps, mapDispatchToProps)(WithPublicView))
-  );
+  return withRouter(connect(mapStateToProps, mapDispatchToProps)(WithPublicView));
 };
 
 export default withPublicView;
