@@ -38,8 +38,13 @@ function* fetchCreateChannel({ channel }) {
   }
 }
 
-function* loadNavigateCreated({ channel: { channel, subs, workspaceSlug } }) {
-  const { slug, ownerSlug, hasDm } = channel;
+function* loadNavigateCreated({ channel: { channel, subs } }) {
+  const {
+    slug,
+    workspaceSlug,
+    ownerSlug,
+    hasDm,
+  } = channel;
   const currUser = yield select(getCurrentUser);
   let isOwner = ownerSlug === currUser.slug;
 
