@@ -10,13 +10,13 @@ const SingleMessageThread = ({
   authors,
   lastMessageDate,
   users,
-  url,
+  chatPathUrl,
 }) => {
   if (!thread || !thread.length) {
     return null;
   }
 
-  const convoUrl = `${url}/convo/${slug}`;
+  const convoUrl = `${chatPathUrl}/convo/${slug}`;
   const date = dateUtil(lastMessageDate);
   const month = date.monthName({ month: 'short' });
   const day = date.dayOrdinal();

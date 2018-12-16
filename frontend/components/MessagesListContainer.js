@@ -9,16 +9,17 @@ import {
 import { toggleReaction } from '../actions/reactionActions';
 import { toggleFavorite } from '../actions/favoriteActions';
 import { toggleMessageEditor, updateDropdown } from '../actions/uiActions';
+import { getChatPathUrl } from '../reducers/selectors';
 import MessagesList from './MessagesList';
 
-const mapStateToProps = (state, { match: { url } }) => ({
+const mapStateToProps = state => ({
   currentUserSlug: state.session.currentUser.slug,
   users: state.entities.members,
   pinsMap: state.entities.pins,
   dropdownType: state.ui.dropdown.dropdownType,
   dropdownProps: state.ui.dropdown.dropdownProps,
   isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_MESSAGE',
-  url,
+  chatPathUrl: getChatPathUrl(state),
 });
 
 const mapDispatchToProps = dispatch => ({

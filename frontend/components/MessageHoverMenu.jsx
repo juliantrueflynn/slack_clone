@@ -52,7 +52,7 @@ class MessageHoverMenu extends React.Component {
   }
 
   render() {
-    const { message, filterMenuItems, matchUrl } = this.props;
+    const { message, filterMenuItems, chatPathUrl } = this.props;
 
     const isMessageType = message.entityType === 'entry';
     const favIcon = message.favoriteId ? ['fas', 'star'] : ['far', 'star'];
@@ -66,7 +66,7 @@ class MessageHoverMenu extends React.Component {
       },
       {
         key: 'convo',
-        link: `${matchUrl}/convo/${message.slug}`,
+        link: `${chatPathUrl}/convo/${message.slug}`,
         icon: <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />,
         hasNoDrawer: true,
         condition: isMessageType,

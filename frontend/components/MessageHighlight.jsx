@@ -10,7 +10,7 @@ const MessageHighlight = ({
   isFavorited,
   users,
   currentUserSlug,
-  matchUrl,
+  chatPathUrl,
 }) => {
   let pin;
   let user;
@@ -52,7 +52,7 @@ const MessageHighlight = ({
         </div>
         {isFavorited && (
           <div className="MessageHighlight__txt-item">
-            <Link to={`${matchUrl}/favorites`}>
+            <Link to={`${chatPathUrl}/favorites`}>
               {favText}
             </Link>
           </div>

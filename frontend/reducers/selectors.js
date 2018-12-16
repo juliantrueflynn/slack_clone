@@ -263,3 +263,13 @@ export const selectEntityBySlug = ({ entities }, entityType, slug) => {
 
   return entities[entityType][slug] || null;
 };
+
+export const getChatPathUrl = ({ ui }) => {
+  const { displayWorkspaceSlug: workspaceSlug, displayChannelSlug: chatPath } = ui;
+
+  if (chatPath !== 'unreads' || chatPath !== 'threads') {
+    return `/${workspaceSlug}/messages/${chatPath}`;
+  }
+
+  return `/${workspaceSlug}/${chatPath}`;
+};

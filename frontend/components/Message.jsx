@@ -36,9 +36,8 @@ class Message extends React.Component {
       role,
       users,
       pinsMap,
-      reactions,
       currentUserSlug,
-      url,
+      chatPathUrl,
       messageDate,
       toggleReaction,
       toggleEditor,
@@ -67,7 +66,7 @@ class Message extends React.Component {
       }
     }
 
-    const authorUrl = `${url}/team/${message.authorSlug}`;
+    const authorUrl = `${chatPathUrl}/team/${message.authorSlug}`;
 
     const msgClassNames = classNames('Message', {
       'Message--hoverable': isHoverable,
@@ -91,7 +90,7 @@ class Message extends React.Component {
               pinsMap={pinsMap}
               isFavorited={message.favoriteId}
               users={users}
-              matchUrl={url}
+              chatPathUrl={chatPathUrl}
               currentUserSlug={currentUserSlug}
             />
           )}
@@ -100,12 +99,12 @@ class Message extends React.Component {
             isDdOpen={isDdOpen}
             handleHover={this.handleHover}
             toggleDd={this.handleDdToggle}
-            matchUrl={url}
+            chatPathUrl={chatPathUrl}
             message={message}
             {...props}
           />
           <div className="Message__row">
-            {shouldHideAvatar || <Avatar baseUrl={url} user={message} />}
+            {shouldHideAvatar || <Avatar baseUrl={chatPathUrl} user={message} />}
             <div className="Message__body">
               <div className="Message__content">
                 <div className="Message__meta">
@@ -132,7 +131,7 @@ class Message extends React.Component {
                 />
               )}
               {isThreadHidden || shouldHideEngagement || (
-                <SingleMessageThread url={url} users={users} {...message} />
+                <SingleMessageThread chatPathUrl={chatPathUrl} users={users} {...message} />
               )}
             </div>
           </div>
