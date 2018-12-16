@@ -14,3 +14,7 @@
 .ps__rail-y.ps--clicking .ps__thumb-y {
   width: 6px;
 }
+
+.ScrollBar .ScrollBar__container > [role="listitem"]:last-child {
+  margin-bottom: 21px;
+}

@@ -46,7 +46,3 @@
   right: 0;
   bottom: 0;
 }
-
-.ChatPageSwitch__body .ScrollBar__container > [role="listitem"]:last-child {
-  margin-bottom: 21px;
-}
