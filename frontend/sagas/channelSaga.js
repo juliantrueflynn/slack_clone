@@ -11,6 +11,7 @@ import { CHANNEL } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiUpdate } from '../util/apiUtil';
 import { navigate, createSuccess, updateModal } from '../actions/uiActions';
 import { getCurrentUser } from '../reducers/selectors';
+import { createRead } from '../actions/readActions';
 
 function* fetchIndex({ workspaceSlug }) {
   try {
@@ -32,7 +33,8 @@ function* fetchCreateChannel({ channel }) {
       channelProps = { dmChat };
     }
 
-    yield call(apiCreate, apiUrl, channelProps);
+    const response = yield call(apiCreate, apiUrl, channelProps);
+    yield put(createRead.request({ readableId: response.id, readableType: 'Channel' }));
   } catch (error) {
     yield put(action.createChannel.failure(error));
   }

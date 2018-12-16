@@ -17,12 +17,12 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
   const hasUnreadChannels = unreads.some(unread => unread.readableType === 'Channel');
   const hasUnreadConvos = unreads.some(unread => unread.readableType === 'Message');
 
-  const channelItemDecorate = ch => ({
-    slug: ch.slug,
-    status: ch.status || null,
-    label: ch.title,
-    link: `${url}/messages/${ch.slug}`,
-    modifierClassName: unreadsMap[ch.slug] && unreadsMap[ch.slug].hasUnreads ? 'unread' : null,
+  const channelItemDecorate = ({ title: label, slug, status }) => ({
+    slug,
+    status,
+    label,
+    link: `${url}/messages/${slug}`,
+    modifierClassName: unreadsMap[slug] && unreadsMap[slug].hasUnreads ? 'unread' : null,
     isActive: (match, { pathname }) => match && pathname.includes(`messages/${chatPath}`),
   });
   const dmChannels = getDMChannels(state).map(ch => channelItemDecorate(ch));
