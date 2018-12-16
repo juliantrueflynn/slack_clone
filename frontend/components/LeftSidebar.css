@@ -106,7 +106,6 @@
 }
 
 .LeftSidebarMenus__dm-chats .MenuItem__content .Btn__suffix {
-  position: absolute;
   height: 15px;
   right: 16px;
   display: none;
@@ -114,6 +113,7 @@
 
 .LeftSidebarMenus__dm-chats .MenuItem__content:hover .Btn__suffix {
   display: block;
+  float: right;
 }
 
 .LeftSidebarMenus__group .MenuItem__content > .MenuItem__icon {
