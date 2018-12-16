@@ -52,8 +52,8 @@ class MessagesList extends React.Component {
   }
 
   handleEmojiClick(_, emoji) {
-    const { dropdownProps: { messageSlug }, toggleReaction, closeDropdown } = this.props;
-    toggleReaction({ messageSlug, emoji: emoji.name });
+    const { dropdownProps: { message }, toggleReaction, closeDropdown } = this.props;
+    toggleReaction({ messageSlug: message.slug, emoji: emoji.name });
     closeDropdown();
   }
 

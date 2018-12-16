@@ -6,8 +6,6 @@ import './MessageHoverMenu.css';
 class MessageHoverMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.handleReactionModal = this.handleReactionModal.bind(this);
-    this.handleFavToggle = this.handleFavToggle.bind(this);
     this.handleDropdownModal = this.handleDropdownModal.bind(this);
   }
 
@@ -19,70 +17,57 @@ class MessageHoverMenu extends React.Component {
     }
   }
 
-  handleReactionModal(e) {
-    const { openDropdown, message: { slug: messageSlug } } = this.props;
-
-    const client = e.currentTarget.parentElement.parentElement.getBoundingClientRect();
-    const ddProps = {
-      posY: client.bottom,
-      posX: client.right,
-      messageSlug,
-    };
-
-    openDropdown('DROPDOWN_REACTION', ddProps);
-  }
-
-  handleFavToggle() {
-    const { message: { id, favoriteId }, toggleFavorite } = this.props;
-
-    toggleFavorite({ id: favoriteId, messageId: id });
-  }
-
   handleDropdownModal(e) {
     const { openDropdown, message } = this.props;
 
-    const client = e.currentTarget.parentElement.getBoundingClientRect();
-    const ddProps = {
-      posY: client.bottom,
-      posX: client.right,
-      message,
-    };
+    const btn = e.currentTarget;
+    const ddType = btn.getAttribute('data-ddtype');
+    const client = btn.parentElement.parentElement.getBoundingClientRect();
+    const ddProps = { posY: client.bottom, posX: client.right, message };
 
-    openDropdown('DROPDOWN_MESSAGE', ddProps);
+    openDropdown(`DROPDOWN_${ddType}`, ddProps);
   }
 
   render() {
-    const { message, filterMenuItems, chatPathUrl } = this.props;
+    const {
+      message,
+      filterMenuItems,
+      chatPathUrl,
+      toggleFavorite,
+    } = this.props;
 
-    const isMessageType = message.entityType === 'entry';
-    const favIcon = message.favoriteId ? ['fas', 'star'] : ['far', 'star'];
-    const favClassName = message.favoriteId ? 'solid' : 'empty';
+    const { id: messageId, slug, favoriteId } = message;
+    const isEntryType = message.entityType === 'entry';
+    const favIcon = favoriteId ? ['fas', 'star'] : ['far', 'star'];
+    const favClassName = favoriteId ? 'solid' : 'empty';
 
     let menuItems = [
       {
         key: 'reaction',
-        onClick: this.handleReactionModal,
+        'data-ddtype': 'REACTION',
+        onClick: this.handleDropdownModal,
         icon: <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />,
       },
       {
         key: 'convo',
-        link: `${chatPathUrl}/convo/${message.slug}`,
+        link: `${chatPathUrl}/convo/${slug}`,
         icon: <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />,
         hasNoDrawer: true,
-        condition: isMessageType,
+        condition: isEntryType,
       },
       {
         key: 'favorite',
         icon: <FontAwesomeIcon icon={favIcon} fixedWidth />,
-        onClick: this.handleFavToggle,
+        onClick: () => toggleFavorite({ id: favoriteId, messageId }),
         modifierClassName: favClassName,
-        condition: isMessageType,
+        condition: isEntryType,
       },
       {
         key: 'dropdown',
+        'data-ddtype': 'MESSAGE',
         icon: <FontAwesomeIcon icon="ellipsis-h" fixedWidth />,
         onClick: this.handleDropdownModal,
-        condition: isMessageType && isMessageType,
+        condition: isEntryType,
       }
     ];
 
