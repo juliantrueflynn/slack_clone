@@ -31,7 +31,7 @@ function* fetchUserThreadIndexPage() {
     const apiCall = unread.lastRead ? apiUpdate : apiCreate;
     const read = { readableId: unread.readableId, readableType: 'Message' };
 
-    return call(apiCall, 'reads', read);
+    return call(apiCall, 'read', read);
   }));
 }
 
