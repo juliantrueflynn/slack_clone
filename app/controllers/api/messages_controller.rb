@@ -5,9 +5,6 @@ class Api::MessagesController < ApplicationController
     @channel = Channel.find_by(slug: params[:channel_slug])
   end
 
-  def show
-  end
-
   def create
     @message = current_user.messages.build(message_params)
 
@@ -27,8 +24,8 @@ class Api::MessagesController < ApplicationController
   end
 
   def destroy
-    if @message.destroy
-      render partial: 'api/messages/message', locals: { message: @message }
+    if @message && @message.destroy
+      render 'api/messages/show'
     else
       render json: ['error no message found'], status: 404
     end

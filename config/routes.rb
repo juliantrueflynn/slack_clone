@@ -29,7 +29,8 @@ Rails.application.routes.draw do
     end
 
     resources :channel_subs, only: :create
-    resources :messages, only: [:create, :update, :destroy, :show], param: :slug
+    resources :messages, only: [:create, :update, :destroy], param: :slug
+    resources :message_convos, only: :show, param: :slug
     resources :favorites, only: [:create, :destroy]
     resources :reactions, only: [:create, :destroy]
     resources :pins, only: [:create, :destroy]

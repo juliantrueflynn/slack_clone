@@ -132,14 +132,14 @@ export const getChatPageMessages = createSelector(
   }
 );
 
-const getConvosByDrawerSlug = (msgsMap, drawerSlug) => {
-  const msg = msgsMap[drawerSlug];
+export const getConvoBySlug = ({ entities: { messages } }, slug) => {
+  const msg = messages[slug];
 
   if (!msg || !msg.thread) {
     return [];
   }
 
-  return msg.thread.reduce((acc, curr) => [...acc, msgsMap[curr]], [msg]);
+  return msg.thread.reduce((acc, curr) => [...acc, messages[curr]], [msg]);
 };
 
 const getFavoritesDrawer = (msgsMap, favs) => (
@@ -154,17 +154,17 @@ const getChannelDetailsDrawer = (msgs, chatPath) => (
 
 export const getDrawerMessages = createSelector(
   [getDrawer, getChatPath, getMessagesMap, getAllFavorites],
-  (drawer, chatPath, messagesMap, favorites) => {
+  (drawer, chatPath, messages, favorites) => {
     if (drawer.drawerType === 'convo') {
-      return getConvosByDrawerSlug(messagesMap, drawer.drawerSlug);
+      return getConvoBySlug({ entities: { messages } }, drawer.drawerSlug);
     }
 
     if (drawer.drawerType === 'favorites') {
-      return getFavoritesDrawer(messagesMap, values(favorites));
+      return getFavoritesDrawer(messages, values(favorites));
     }
 
     if (drawer.drawerType === 'details') {
-      return getChannelDetailsDrawer(values(messagesMap), chatPath);
+      return getChannelDetailsDrawer(values(messages), chatPath);
     }
 
     return [];

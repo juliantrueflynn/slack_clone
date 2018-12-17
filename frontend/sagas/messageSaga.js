@@ -9,9 +9,14 @@ import {
 import { MESSAGE, HISTORY } from '../actions/actionTypes';
 import * as actions from '../actions/messageActions';
 import { navigate } from '../actions/uiActions';
-import * as api from '../util/apiUtil';
-import { selectUIByDisplay, selectEntityBySlug, selectEntities } from '../reducers/selectors';
 import { destroyRead } from '../actions/readActions';
+import * as api from '../util/apiUtil';
+import {
+  selectUIByDisplay,
+  selectEntityBySlug,
+  getConvoBySlug,
+  getChatPathUrl,
+} from '../reducers/selectors';
 
 function* fetchIndex({ channelSlug }) {
   try {
@@ -38,16 +43,16 @@ function* fetchHistoryIndex({ channelSlug, startDate }) {
   }
 }
 
-function* loadMessage({ messageSlug }) {
+function* fetchMessageShow({ messageSlug }) {
   try {
-    const message = yield call(api.apiFetch, `messages/${messageSlug}`);
+    const message = yield call(api.apiFetch, `message_convos/${messageSlug}`);
     yield put(actions.fetchMessage.receive(message));
   } catch (error) {
     yield put(actions.fetchMessage.failure(error));
   }
 }
 
-function* fetchNewMessage({ message }) {
+function* fetchMessageCreate({ message }) {
   try {
     yield call(api.apiCreate, 'messages', message);
   } catch (error) {
@@ -55,7 +60,7 @@ function* fetchNewMessage({ message }) {
   }
 }
 
-function* fetchEditMessage({ message }) {
+function* fetchMessageUpdate({ message }) {
   try {
     yield call(api.apiUpdate, `messages/${message.slug}`, message);
   } catch (error) {
@@ -68,49 +73,30 @@ function* closeDrawerIfOpen(slug) {
   const { drawerType, drawerSlug } = drawer;
 
   if (drawerType === 'convo' && drawerSlug === slug) {
-    const workspaceSlug = yield select(selectUIByDisplay, 'displayWorkspaceSlug');
-    const channelSlug = yield select(selectUIByDisplay, 'displayChannelSlug');
-
-    let chatPath = `messages/${channelSlug}`;
-    if (channelSlug === 'unreads') {
-      chatPath = 'unreads';
-    } else if (channelSlug === 'threads') {
-      chatPath = 'threads';
-    }
-
-    yield put(navigate(`/${workspaceSlug}/${chatPath}`));
+    const chatPathUrl = yield select(getChatPathUrl);
+    yield put(navigate(chatPathUrl));
   }
 }
 
-function* isUsersLastMessageInConvo({ parentMessageSlug, authorSlug }) {
-  const msgsMap = yield select(selectEntities, 'messages');
-  const parent = msgsMap[parentMessageSlug];
-  const replies = parent.thread.map(slug => msgsMap[slug]);
-  const countCurrUser = replies.filter(msg => msg.authorSlug === authorSlug);
+function* destroyConvoRead(reply) {
+  const convo = yield select(getConvoBySlug, reply.parentMessageSlug);
+  const countCurrUser = convo.slice(1).filter(msg => msg.authorSlug === reply.authorSlug);
 
-  return countCurrUser.length < 1;
+  if (countCurrUser.length < 1) {
+    const { parentMessageId: readableId, parentMessageSlug: slug } = reply;
+    const read = { readableType: 'Message', readableId, slug };
+    yield put(destroyRead.request(read));
+  }
 }
 
-function* fetchDeleteMessage({ messageSlug }) {
+function* fetchMessageDestroy({ messageSlug }) {
   try {
     const message = yield call(api.apiDestroy, `messages/${messageSlug}`);
 
-    if (message && !message.parentMessageId) {
-      yield closeDrawerIfOpen(message.slug);
-    }
-
     if (message.parentMessageId) {
-      const isUsersLastMsgInConvo = yield isUsersLastMessageInConvo(message);
-
-      if (isUsersLastMsgInConvo) {
-        const read = {
-          readableType: 'Message',
-          readableId: message.parentMessageId,
-          slug: message.parentMessageSlug
-        };
-
-        yield put(destroyRead.request(read));
-      }
+      yield destroyConvoRead(message);
+    } else {
+      yield closeDrawerIfOpen(message.slug);
     }
   } catch (error) {
     yield put(actions.deleteMessage.failure(error));
@@ -126,19 +112,19 @@ function* watchHistoryIndex() {
 }
 
 function* watchRequestMessage() {
-  yield takeLatest(MESSAGE.SHOW.REQUEST, loadMessage);
+  yield takeLatest(MESSAGE.SHOW.REQUEST, fetchMessageShow);
 }
 
 function* watchCreateMessage() {
-  yield takeLatest(MESSAGE.CREATE.REQUEST, fetchNewMessage);
+  yield takeLatest(MESSAGE.CREATE.REQUEST, fetchMessageCreate);
 }
 
 function* watchEditMessage() {
-  yield takeLatest(MESSAGE.UPDATE.REQUEST, fetchEditMessage);
+  yield takeLatest(MESSAGE.UPDATE.REQUEST, fetchMessageUpdate);
 }
 
 function* watchDeleteMessage() {
-  yield takeLatest(MESSAGE.DESTROY.REQUEST, fetchDeleteMessage);
+  yield takeLatest(MESSAGE.DESTROY.REQUEST, fetchMessageDestroy);
 }
 
 export default function* messageSaga() {

@@ -114,16 +114,12 @@ class Message < ApplicationRecord
 
   after_create_commit :broadcast_create
   after_update_commit :broadcast_update
-  after_destroy :destroy_replies, :broadcast_destroy_message
+  after_destroy :destroy_replies, :broadcast_destroy
 
   private
 
   def destroy_replies
     return if parent_message_id?
     Message.where(parent_message_id: id).delete_all
-  end
-
-  def broadcast_destroy_message
-    broadcast_destroy partial: 'api/messages/destroy'
   end
 end
