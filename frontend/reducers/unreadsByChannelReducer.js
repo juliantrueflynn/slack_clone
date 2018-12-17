@@ -1,11 +1,22 @@
 import merge from 'lodash.merge';
-import { READ, CREATE_UNREAD, CLEAR_UNREADS } from '../actions/actionTypes';
+import {
+  READ,
+  WORKSPACE,
+  CREATE_UNREAD,
+  CLEAR_UNREADS,
+  SIGN_OUT,
+} from '../actions/actionTypes';
 
 const unreadsByChannelReducer = (state = {}, action) => {
   Object.freeze(state);
   let nextState;
 
   switch (action.type) {
+    case WORKSPACE.SHOW.RECEIVE:
+      return action.workspace.channels.reduce((acc, curr) => {
+        acc[curr.slug] = [];
+        return acc;
+      }, {});
     case READ.INDEX.RECEIVE: {
       const { messages } = action.messages;
 
@@ -35,6 +46,9 @@ const unreadsByChannelReducer = (state = {}, action) => {
       nextState = merge({}, state, nextState);
       nextState[action.channelSlug] = [];
       return nextState;
+    case WORKSPACE.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
+      return {};
     default:
       return state;
   }
