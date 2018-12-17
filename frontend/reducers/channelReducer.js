@@ -140,7 +140,7 @@ const channelReducer = (state = {}, action) => {
       nextState[channel.slug] = {
         ...channel,
         ...state[channel.slug],
-        messages: messages.map(msg => msg.slug),
+        messages: messages.filter(msg => !msg.parentMessageId).map(msg => msg.slug),
         pins: pins.map(pin => pin.id),
         members,
       };
@@ -148,7 +148,11 @@ const channelReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case MESSAGE.CREATE.RECEIVE: {
-      const { channelSlug, ...msg } = action.message;
+      const { channelSlug, parentMessageId, ...msg } = action.message;
+
+      if (parentMessageId) {
+        return state;
+      }
 
       nextState = merge({}, state);
       nextState[channelSlug].messages.push(msg.slug);
@@ -156,7 +160,12 @@ const channelReducer = (state = {}, action) => {
       return nextState;
     }
     case MESSAGE.DESTROY.RECEIVE: {
-      const { slug, channelSlug: chSlug } = action.message;
+      const { slug, parentMessageId, channelSlug: chSlug } = action.message;
+
+      if (parentMessageId) {
+        return state;
+      }
+
       nextState = {};
       nextState[chSlug] = { messages: state[chSlug].messages.filter(val => val !== slug) };
       return merge({}, state, nextState);
@@ -180,7 +189,7 @@ const channelReducer = (state = {}, action) => {
       const { messages, channel } = action.messages;
 
       nextState = merge({}, state);
-      messages.forEach(({ slug }) => {
+      messages.filter(msg => !msg.parentMessageId).forEach(({ slug }) => {
         nextState[channel.slug].messages.push(slug);
       });
 

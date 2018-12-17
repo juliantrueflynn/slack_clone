@@ -78,9 +78,9 @@ const groupByMessageEntityType = (arr) => {
 };
 
 const getChannelViewMessages = (msgsMap, msgsSlugs, title) => {
-  const msgs = msgsSlugs.map(msgSlug => msgsMap[msgSlug]).filter(msg => !msg.parentMessageId);
-  const entries = msgs.filter(msg => msg.entityType === 'entry');
-  const subs = msgs.filter(msg => msg.entityType !== 'entry').reduce((acc, curr) => {
+  const msgs = msgsSlugs.map(msgSlug => msgsMap[msgSlug]);
+  const entries = msgs.filter(msg => msg && msg.entityType === 'entry');
+  const subs = msgs.filter(msg => msg && msg.entityType !== 'entry').reduce((acc, curr) => {
     const msg = { ...curr, group: [], channelTitle: `#${title}` };
     return [...acc, msg];
   }, []);

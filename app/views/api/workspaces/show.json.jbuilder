@@ -62,12 +62,10 @@ json.reads do
   read_convos = reads.where(readable_type: 'Message')
 
   json.array! read_chats.includes(:channel) do |read|
-    json.(read, :id, :accessed_at, :readable_id, :readable_type)
-    json.slug read.channel.slug
+    json.(read, :id, :slug, :accessed_at, :readable_id, :readable_type)
   end
 
   json.array! read_convos.includes(message: [:author, :channel]) do |read|
-    json.(read, :id, :accessed_at, :readable_id, :readable_type)
-    json.slug read.message.slug
+    json.(read, :id, :slug, :accessed_at, :readable_id, :readable_type)
   end
 end

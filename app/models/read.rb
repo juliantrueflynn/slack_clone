@@ -24,16 +24,16 @@ class Read < ApplicationRecord
     find_by(user_id: user_id)
   end
 
+  def associated_entity
+    entity_obj = readable_type.constantize
+    entity_obj.find_by(id: readable_id)
+  end
+
   def slug
     associated_entity.slug if associated_entity
   end
 
   private
-
-  def associated_entity
-    entity_obj = readable_type.constantize
-    entity_obj.find_by(id: readable_id)
-  end
 
   def ensure_workspace_id
     self.workspace_id ||= associated_entity.workspace.id if associated_entity

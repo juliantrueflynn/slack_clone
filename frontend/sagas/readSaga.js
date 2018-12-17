@@ -29,11 +29,11 @@ function* fetchUpdate({ read }) {
   }
 }
 
-function* fetchDestroy({ read: { readableId, readableType } }) {
+function* fetchDestroy({ read: { readableId, readableType, slug } }) {
   try {
     const apiForType = readableType.toLowerCase();
-    const destroyed = yield call(apiDestroy, `${apiForType}_reads/${readableId}`);
-    yield put(actions.destroyRead.receive(destroyed));
+    yield call(apiDestroy, `${apiForType}_reads/${readableId}`);
+    yield put(actions.destroyRead.receive({ readableId, readableType, slug }));
   } catch (error) {
     yield put(actions.destroyRead.failure(error));
   }
@@ -117,21 +117,13 @@ function* loadMessageRead({ message: msg }) {
   }
 }
 
-function* setMessageDestroy({ message }) {
+function* loadDestroyConvoRead({ message: { id: readableId, parentMessageId, slug } }) {
   try {
-    if (!message.parentMessageId) {
+    if (parentMessageId) {
       return;
     }
 
-    const parent = yield select(selectEntityBySlug, 'messages', message.parentMessageSlug);
-    if (parent.thread.length) {
-      return;
-    }
-
-    if (!parent.thread.length) {
-      const read = { readableType: 'Message', readableId: message.parentMessageId };
-      yield put(actions.destroyRead.request(read));
-    }
+    yield put(actions.destroyRead.request({ readableType: 'Message', readableId, slug }));
   } catch (error) {
     yield put(actions.destroyRead.failure(error));
   }
@@ -162,7 +154,7 @@ function* watchMessageCreate() {
 }
 
 function* watchMessageDestroy() {
-  yield takeLatest(MESSAGE.DESTROY.RECEIVE, setMessageDestroy);
+  yield takeLatest(MESSAGE.DESTROY.RECEIVE, loadDestroyConvoRead);
 }
 
 export default function* readSaga() {

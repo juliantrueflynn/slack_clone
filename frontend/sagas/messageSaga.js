@@ -10,7 +10,8 @@ import { MESSAGE, HISTORY } from '../actions/actionTypes';
 import * as actions from '../actions/messageActions';
 import { navigate } from '../actions/uiActions';
 import * as api from '../util/apiUtil';
-import { selectUIByDisplay, selectEntityBySlug } from '../reducers/selectors';
+import { selectUIByDisplay, selectEntityBySlug, selectEntities } from '../reducers/selectors';
+import { destroyRead } from '../actions/readActions';
 
 function* fetchIndex({ channelSlug }) {
   try {
@@ -81,12 +82,35 @@ function* closeDrawerIfOpen(slug) {
   }
 }
 
+function* isUsersLastMessageInConvo({ parentMessageSlug, authorSlug }) {
+  const msgsMap = yield select(selectEntities, 'messages');
+  const parent = msgsMap[parentMessageSlug];
+  const replies = parent.thread.map(slug => msgsMap[slug]);
+  const countCurrUser = replies.filter(msg => msg.authorSlug === authorSlug);
+
+  return countCurrUser.length < 1;
+}
+
 function* fetchDeleteMessage({ messageSlug }) {
   try {
     const message = yield call(api.apiDestroy, `messages/${messageSlug}`);
 
     if (message && !message.parentMessageId) {
       yield closeDrawerIfOpen(message.slug);
+    }
+
+    if (message.parentMessageId) {
+      const isUsersLastMsgInConvo = yield isUsersLastMessageInConvo(message);
+
+      if (isUsersLastMsgInConvo) {
+        const read = {
+          readableType: 'Message',
+          readableId: message.parentMessageId,
+          slug: message.parentMessageSlug
+        };
+
+        yield put(destroyRead.request(read));
+      }
     }
   } catch (error) {
     yield put(actions.deleteMessage.failure(error));

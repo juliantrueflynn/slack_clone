@@ -28,7 +28,7 @@ class Api::MessagesController < ApplicationController
 
   def destroy
     if @message.destroy
-      render json: @message
+      render partial: 'api/messages/message', locals: { message: @message }
     else
       render json: ['error no message found'], status: 404
     end
