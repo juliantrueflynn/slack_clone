@@ -94,7 +94,7 @@ const workspaceReducer = (state = {}, action) => {
       const { id, workspaceSlug } = action.workspaceSub.workspaceSub;
       nextState = merge({}, state);
 
-      if (!state[workspaceSlug].includes(id)) {
+      if (!state[workspaceSlug].subs.includes(id)) {
         nextState[workspaceSlug].subs.push(id);
       }
 

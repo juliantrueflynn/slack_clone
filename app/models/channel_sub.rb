@@ -15,12 +15,24 @@ class ChannelSub < ApplicationRecord
     find_by(channel_id: channel.id)
   end
 
+  def self.by_workspace_id(workspace_id)
+    includes(:channel).where(channels: { workspace_id: workspace_id })
+  end
+
   def self.shared_with_user_id(user_id)
     where(channel_id: where(user_id: user_id).pluck(:channel_id))
   end
 
   def broadcast_name
     "channel_#{channel.slug}"
+  end
+
+  def channel_slug
+    channel ? channel.slug : nil
+  end
+
+  def workspace_slug
+    workspace ? workspace.slug : nil
   end
 
   after_create_commit :broadcast_create_sub, :generate_create_message

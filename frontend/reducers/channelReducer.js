@@ -116,13 +116,10 @@ const channelReducer = (state = {}, action) => {
       nextState = {};
       channelSubs.forEach((sub) => {
         nextState[sub.channelSlug] = {
+          ...state[sub.channelSlug],
           workspaceSlug: workspaceSub.workspaceSlug,
-          id: sub.channelId,
-          slug: sub.channelSlug,
-          members: [user.slug],
-          subs: [sub.id],
-          messages: [],
-          pins: [],
+          members: [...state[sub.channelSlug].members, user.slug],
+          subs: [...state[sub.channelSlug].subs, sub.id],
         };
       });
 

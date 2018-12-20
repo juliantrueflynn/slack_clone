@@ -11,6 +11,10 @@
     "workspace_#{workspace.slug}"
   end
 
+  def workspace_slug
+    workspace ? workspace.slug : nil
+  end
+
   after_create_commit :broadcast_create_sub
   after_update_commit :broadcast_update, :generate_channel_sub_messages
 

@@ -6,13 +6,13 @@ json.user do
 end
 
 json.workspace_sub do
-  json.(workspace_sub, :id, :workspace_id, :is_member)
-  json.workspace_slug workspace_sub.workspace.slug
+  json.(workspace_sub, :id, :workspace_id, :is_member, :workspace_slug)
 end
 
 json.channel_subs do
-  json.array! workspace_sub.user.channel_subs do |channel_sub|
-    json.(channel_sub, :id, :channel_id, :created_at)
-    json.channel_slug channel_sub.channel.slug
-  end
+  user = workspace_sub.user
+  workspace_id = workspace_sub.workspace_id
+  channel_subs = user.channel_subs.by_workspace_id(workspace_id)
+
+  json.array! channel_subs, :id, :channel_id, :channel_slug, :created_at
 end
