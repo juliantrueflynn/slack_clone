@@ -22,54 +22,47 @@ class Workspace extends React.Component {
 
   componentDidUpdate(prevProps) {
     const {
-      match: { isExact, url },
+      match,
       history,
       workspaces,
       isLoading,
       fetchWorkspacesRequest,
+      chatPath,
+      channel,
+      workspace,
     } = this.props;
 
     const hasLoaded = !isLoading.workspace;
+
     if (hasLoaded && prevProps.workspaces && prevProps.workspaces.length !== workspaces.length) {
       fetchWorkspacesRequest();
     }
 
-    const defaultChat = this.getDefaultChat();
-    if (isExact && defaultChat) {
-      history.replace(`${url}/messages/${defaultChat.slug}`);
+    if (match.isExact && channel && channel.workspaceSlug === workspace.slug) {
+      history.replace(`/${workspace.slug}/messages/${chatPath}`);
     }
-  }
-
-  getDefaultChat() {
-    const { workspace, channelsMap } = this.props;
-
-    if (workspace) {
-      const firstChatSlug = workspace.channels[0];
-      return channelsMap[firstChatSlug];
-    }
-
-    return null;
   }
 
   render() {
     const {
+      isLoading,
       workspace,
       workspaceSlug,
-      isLoading,
       routes,
       modalType,
       closeModal,
-      channelsMap,
+      channels,
+      channel,
       chatPath,
       users,
       currentUser,
       fetchChannelsRequest,
       onReceived,
     } = this.props;
-
     const { quoteText, quoteBy } = sampleWisdomQuote;
+    const hasLoaded = !isLoading.workspace && channel;
 
-    if (isLoading.workspace) {
+    if (!hasLoaded) {
       return (
         <div className="Workspace Workspace--loading">
           <div className="LeftSidebar" />
@@ -84,9 +77,6 @@ class Workspace extends React.Component {
     }
 
     const user = users[currentUser.slug];
-    const channel = channelsMap[chatPath];
-    const defaultChat = this.getDefaultChat();
-    const channels = Object.values(channelsMap);
     const cableChannels = channels.filter(ch => ch.isSub || ch.slug === chatPath).map(ch => (
       { channel: 'ChatChannel', channelSlug: ch.slug }
     ));
@@ -108,7 +98,7 @@ class Workspace extends React.Component {
             onReceived={onReceived}
           />
         ))}
-        {workspace && defaultChat && <LeftSidebarContainer />}
+        {hasLoaded && <LeftSidebarContainer />}
         {modalType === 'MODAL_CHAT' && (
           <ChatModal workspaceId={workspace.id} closeModal={closeModal} />
         )}
@@ -128,7 +118,7 @@ class Workspace extends React.Component {
             closeModal={closeModal}
           />
         )}
-        {defaultChat && <PageRoutes routes={routes} />}
+        {hasLoaded && <PageRoutes routes={routes} />}
       </div>
     );
   }

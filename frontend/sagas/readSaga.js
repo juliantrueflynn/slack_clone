@@ -90,7 +90,7 @@ function* loadMessageRead({ message: msg }) {
     readableId: msg.parentMessageId || msg.channelId,
   };
 
-  let currPageSlug = yield select(selectUIByDisplay, 'displayChannelSlug');
+  let currPageSlug = yield select(selectUIByDisplay, 'displayChatPath');
   let isCurrPage = currPageSlug === slug;
 
   if (read.readableType === 'Message') {

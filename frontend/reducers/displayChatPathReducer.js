@@ -6,10 +6,16 @@ import {
   SIGN_OUT,
 } from '../actions/actionTypes';
 
-const channelDisplayReducer = (state = null, action) => {
+const displayChatPathReducer = (state = null, action) => {
   Object.freeze(state);
 
   switch (action.type) {
+    case WORKSPACE.SHOW.RECEIVE: {
+      const { channels } = action.workspace;
+      const firstChannel = channels.sort((a, b) => a.id - b.id)[0];
+
+      return firstChannel.slug;
+    }
     case MESSAGE.INDEX.REQUEST: {
       const { channelSlug } = action;
       return channelSlug;
@@ -26,4 +32,4 @@ const channelDisplayReducer = (state = null, action) => {
   }
 };
 
-export default channelDisplayReducer;
+export default displayChatPathReducer;

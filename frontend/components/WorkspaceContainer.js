@@ -7,13 +7,20 @@ import { fetchChannels } from '../actions/channelActions';
 import { getSubbedWorkspaces, getChannelsMap } from '../reducers/selectors';
 import Workspace from './Workspace';
 
-const mapStateToProps = (state, { workspaceSlug }) => ({
-  workspace: state.entities.workspaces[workspaceSlug],
-  chatPath: state.ui.displayChannelSlug,
-  workspaces: getSubbedWorkspaces(state),
-  channelsMap: getChannelsMap(state),
-  modalType: state.ui.displayModal.modalType,
-});
+const mapStateToProps = (state, { workspaceSlug }) => {
+  const channelsMap = getChannelsMap(state);
+  const chatPath = state.ui.displayChatPath;
+
+  return {
+    workspace: state.entities.workspaces[workspaceSlug],
+    workspaces: getSubbedWorkspaces(state),
+    chatPath,
+    channel: channelsMap[chatPath],
+    channelsMap,
+    channels: Object.values(channelsMap),
+    modalType: state.ui.displayModal.modalType,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import displayWorkspaceSlug from './workspaceDisplayReducer';
-import displayChannelSlug from './channelDisplayReducer';
+import displayChatPath from './displayChatPathReducer';
 import displayModal from './modalReducer';
 import accordion from './accordionReducer';
 import drawer from './drawerReducer';
@@ -9,7 +9,7 @@ import isEditingMessage from './isEditingMessageReducer';
 
 const uiReducer = combineReducers({
   displayWorkspaceSlug,
-  displayChannelSlug,
+  displayChatPath,
   displayModal,
   accordion,
   drawer,

@@ -21,7 +21,8 @@ import {
 function* fetchIndex({ channelSlug }) {
   try {
     const channel = yield select(selectEntityBySlug, 'channels', channelSlug);
-    let apiUrl = `channels/${channel.slug}/messages`;
+    let apiUrl = `channels/${channelSlug}/messages`;
+
     if (channel.lastFetched) {
       apiUrl += `/${channel.lastFetched}`;
     }

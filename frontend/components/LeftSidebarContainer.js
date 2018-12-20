@@ -10,7 +10,7 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
   const currUserSlug = state.session.currentUser.slug;
   const channelsMap = getChannelsMap(state);
   const channels = Object.values(channelsMap);
-  const chatPath = state.ui.displayChannelSlug;
+  const chatPath = state.ui.displayChatPath;
 
   const unreadsMap = state.entities.unreads;
   const unreads = Object.values(unreadsMap).filter(unread => unread && unread.hasUnreads);

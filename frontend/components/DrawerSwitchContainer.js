@@ -8,7 +8,7 @@ import withWindowResize from './withWindowResize';
 import DrawerSwitch from './DrawerSwitch';
 
 const mapStateToProps = (state, { match: { params } }) => {
-  const chatPath = state.ui.displayChannelSlug;
+  const chatPath = state.ui.displayChatPath;
   const channelsMap = getChannelsMap(state);
 
   return {

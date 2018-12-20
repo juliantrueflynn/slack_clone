@@ -14,7 +14,6 @@ const workspaceReducer = (state = {}, action) => {
         nextState[workspace.slug] = {
           members: [workspace.ownerSlug],
           subs: [],
-          channels: [],
           ...workspace
         };
       });
@@ -34,30 +33,23 @@ const workspaceReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.RECEIVE: {
-      const {
-        workspace,
-        members,
-        channels,
-        workspaceSubs,
-      } = action.workspace;
+      const { workspace, members, workspaceSubs } = action.workspace;
 
       nextState = {};
       nextState[workspace.slug] = {
         ...workspace,
         members: members.map(user => user.slug),
-        channels: channels.map(ch => ch.slug),
         subs: workspaceSubs.map(sub => sub.id),
       };
 
       return merge({}, state, nextState);
     }
     case WORKSPACE.CREATE.RECEIVE: {
-      const { owner, workspace, channels } = action.workspace;
+      const { owner, workspace } = action.workspace;
       nextState = {};
       nextState[workspace.slug] = {
         ownerId: owner.id,
         members: [owner.slug],
-        channels: channels.map(ch => ch.slug),
         ...workspace,
       };
 
@@ -72,7 +64,6 @@ const workspaceReducer = (state = {}, action) => {
         slug: workspaceSub.workspaceSlug,
         isMember: true,
         subs: [workspaceSub.userSlug],
-        channels: [],
       };
 
       return merge({}, state, nextState);
