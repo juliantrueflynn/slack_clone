@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       get '/search(/:query)', to: 'search#index'
     end
 
-    resources :workspace_subs, only: [:create, :update]
+    resource :workspace_sub, only: [:create, :update]
 
     resources :channels, only: [:show, :create, :update], param: :slug do
       get '/recent_messages(/:start_date)', to: 'recent_messages#index'

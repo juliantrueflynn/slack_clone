@@ -20,10 +20,16 @@ export const createWorkspace = {
 
 export const createWorkspaceSub = {
   request: workspaceSub => actionCreator(WORKSPACE_SUB.CREATE.REQUEST, { workspaceSub }),
+  receive: (workspaceSub, isByCurrentUser = false) => (
+    actionCreator(WORKSPACE_SUB.CREATE.RECEIVE, { workspaceSub, isByCurrentUser })
+  ),
   failure: errors => actionCreator(WORKSPACE_SUB.CREATE.FAILURE, { errors }),
 };
 
 export const updateWorkspaceSub = {
   request: workspaceSub => actionCreator(WORKSPACE_SUB.UPDATE.REQUEST, { workspaceSub }),
+  receive: (workspaceSub, isByCurrentUser = false) => (
+    actionCreator(WORKSPACE_SUB.UPDATE.RECEIVE, { workspaceSub, isByCurrentUser })
+  ),
   failure: errors => actionCreator(WORKSPACE_SUB.UPDATE.FAILURE, { errors }),
 };

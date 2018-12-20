@@ -21,7 +21,7 @@ const getDrawer = state => state.ui.drawer;
 export const getSubbedWorkspaces = createSelector(
   [getAllWorkspaces], workspacesMap => (
     values(workspacesMap)
-      .filter(({ isSub, isMember }) => isSub && isMember)
+      .filter(({ isMember }) => isMember)
       .sort((a, b) => a.id - b.id)
   )
 );

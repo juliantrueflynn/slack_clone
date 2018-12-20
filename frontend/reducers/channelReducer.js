@@ -115,6 +115,10 @@ const channelReducer = (state = {}, action) => {
 
       nextState = {};
       channelSubs.forEach((sub) => {
+        if (!state[sub.channelSlug]) {
+          return;
+        }
+
         nextState[sub.channelSlug] = {
           ...state[sub.channelSlug],
           workspaceSlug: workspaceSub.workspaceSlug,

@@ -30,12 +30,7 @@ const workspaceSubReducer = (state = {}, action) => {
       nextState[workspaceSub.id] = workspaceSub;
       return merge({}, state, nextState);
     }
-    case WORKSPACE_SUB.UPDATE.REQUEST: {
-      const { workspaceSub } = action;
-      nextState = {};
-      nextState[workspaceSub.id] = workspaceSub;
-      return merge({}, state, nextState);
-    }
+    case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return {};
     default:

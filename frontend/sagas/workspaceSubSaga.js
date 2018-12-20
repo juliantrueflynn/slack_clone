@@ -11,15 +11,17 @@ import { apiCreate, apiUpdate } from '../util/apiUtil';
 
 function* loadCreateSub({ workspaceSub: { workspaceId } }) {
   try {
-    yield call(apiCreate, 'workspace_subs', { workspaceId });
+    const response = yield call(apiCreate, 'workspace_sub', { workspaceId });
+    yield put(actions.createWorkspaceSub.receive(response, true));
   } catch (error) {
     yield put(actions.createWorkspaceSub.failure(error));
   }
 }
 
-function* loadUpdateSub({ workspaceSub: { id } }) {
+function* loadUpdateSub({ workspaceSub: { workspaceId } }) {
   try {
-    yield call(apiUpdate, `workspace_subs/${id}`, { id });
+    const response = yield call(apiUpdate, 'workspace_sub', { workspaceId });
+    yield put(actions.updateWorkspaceSub.receive(response, true));
   } catch (error) {
     yield put(actions.updateWorkspaceSub.failure(error));
   }

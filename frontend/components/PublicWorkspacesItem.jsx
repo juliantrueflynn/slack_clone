@@ -33,21 +33,21 @@ class PublicWorkspacesItem extends React.Component {
     const { workspace } = this.props;
     const {
       id,
-      isSub,
+      isMember,
       slug,
       title
     } = workspace;
-    const buttonText = isSub ? 'Unsubscribe' : 'Subscribe';
-    const buttonModifier = isSub ? 'unsub' : 'sub';
+    const buttonText = isMember ? 'Unsubscribe' : 'Subscribe';
+    const buttonModifier = isMember ? 'unsub' : 'sub';
 
     return (
       <div key={id} className="PublicWorkspaces__item" role="listitem">
-        {isSub && (
+        {isMember && (
           <Link to={slug} className="PublicWorkspaces__item-title">
             {title}
           </Link>
         )}
-        {isSub || (
+        {isMember || (
           <div to={slug} className="PublicWorkspaces__item-title">
             {title}
           </div>

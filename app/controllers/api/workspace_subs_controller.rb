@@ -3,17 +3,17 @@ class Api::WorkspaceSubsController < ApplicationController
     @workspace_sub = current_user.workspace_subs.build(workspace_sub_params)
 
     if @workspace_sub.save
-      render json: ['success']
+      render 'api/workspace_subs/show'      
     else
       render json: @workspace_sub.errors.full_messages, status: 422
     end
   end
 
   def update
-    @workspace_sub = WorkspaceSub.find_by(id: params[:id])
+    @workspace_sub = current_user.workspace_subs.find_by(workspace_sub_params)
 
     if @workspace_sub.update(is_member: !@workspace_sub.is_member)
-      render json: ['success']
+      render 'api/workspace_subs/show'
     else
       render json: @workspace_sub.errors.full_messages, status: 422
     end

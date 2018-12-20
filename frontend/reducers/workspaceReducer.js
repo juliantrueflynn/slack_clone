@@ -28,7 +28,6 @@ const workspaceReducer = (state = {}, action) => {
 
         workspace.subs.push(sub.id);
         workspace.subId = sub.id;
-        workspace.isSub = sub.isMember;
         workspace.isMember = sub.isMember;
       });
 
@@ -66,36 +65,50 @@ const workspaceReducer = (state = {}, action) => {
     }
     case WORKSPACE_SUB.CREATE.REQUEST: {
       const { workspaceSub } = action;
+
       nextState = {};
       nextState[workspaceSub.workspaceSlug] = {
         id: workspaceSub.workspaceId,
         slug: workspaceSub.workspaceSlug,
         isMember: true,
-        isSub: true,
         subs: [workspaceSub.userSlug],
-        channels: []
+        channels: [],
       };
+
       return merge({}, state, nextState);
     }
     case WORKSPACE_SUB.CREATE.RECEIVE: {
-      const { user, workspaceSub: { workspaceSlug } } = action.workspaceSub;
+      const { workspaceSub: { user, workspaceSub }, isByCurrentUser } = action;
       nextState = merge({}, state);
-      nextState[workspaceSlug].members.push(user.slug);
+      nextState[workspaceSub.workspaceSlug].members.push(user.slug);
+
+      if (isByCurrentUser) {
+        nextState[workspaceSub.workspaceSlug].subId = workspaceSub.id;
+      }
+
       return nextState;
     }
     case WORKSPACE_SUB.UPDATE.REQUEST: {
       const { workspaceSlug, isMember } = action.workspaceSub;
-      nextState = merge({}, state);
-      nextState[workspaceSlug].isSub = isMember;
-      nextState[workspaceSlug].isMember = isMember;
-      return nextState;
+
+      nextState = {};
+      nextState[workspaceSlug] = {
+        isMember,
+        subs: [],
+      };
+
+      return merge({}, state, nextState);
     }
     case WORKSPACE_SUB.UPDATE.RECEIVE: {
-      const { id, workspaceSlug } = action.workspaceSub.workspaceSub;
+      const { workspaceSub: { workspaceSub }, isByCurrentUser } = action;
       nextState = merge({}, state);
 
-      if (!state[workspaceSlug].subs.includes(id)) {
-        nextState[workspaceSlug].subs.push(id);
+      if (!state[workspaceSub.workspaceSlug].subs.includes(workspaceSub.id)) {
+        nextState[workspaceSub.workspaceSlug].subs.push(workspaceSub.id);
+      }
+
+      if (isByCurrentUser) {
+        nextState[workspaceSub.workspaceSlug].subId = workspaceSub.id;
       }
 
       return nextState;
