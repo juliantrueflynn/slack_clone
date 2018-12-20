@@ -12,7 +12,7 @@ const AccordionBodyInfo = ({
 }) => {
   const dateCreated = dateUtil(createdAt).monthDayYear();
   const dateText = `${dateCreated} by ${ownerName}`;
-  const openChannelEditor = () => openModal('MODAL_EDIT_CHANNEL');
+  const openChannelEditor = () => openModal('MODAL_FORM_CHANNEL');
 
   return (
     <AccordionItemBody>

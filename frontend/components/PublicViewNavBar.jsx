@@ -49,7 +49,7 @@ const PublicViewNavBar = ({
   const createWorkspaceItem = {
     key: 'createWorkspace',
     label: 'Create Workspace',
-    onClick: () => openModal('MODAL_WORKSPACE'),
+    onClick: () => openModal('MODAL_FORM_WORKSPACE'),
   };
   workspaceMenuItems.push(createWorkspaceItem);
 

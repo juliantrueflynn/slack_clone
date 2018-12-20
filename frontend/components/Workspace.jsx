@@ -7,7 +7,7 @@ import LeftSidebarContainer from './LeftSidebarContainer';
 import ProfileModal from './ProfileModal';
 import ChatModal from './ChatModal';
 import ChatsModal from './ChatsModal';
-import ChannelEditorModal from './ChannelEditorModal';
+import ChannelFormModal from './ChannelFormModal';
 import { PageRoutes } from '../util/routeUtil';
 import './Workspace.css';
 
@@ -111,8 +111,8 @@ class Workspace extends React.Component {
           />
         )}
         {modalType === 'MODAL_PROFILE' && <ProfileModal {...user} closeModal={closeModal} />}
-        {modalType === 'MODAL_EDIT_CHANNEL' && (
-          <ChannelEditorModal
+        {modalType === 'MODAL_FORM_CHANNEL' && (
+          <ChannelFormModal
             channel={channel}
             currentUserSlug={currentUser.slug}
             closeModal={closeModal}

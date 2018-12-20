@@ -109,7 +109,7 @@ class ChannelHeaderNavbar extends React.Component {
         },
         {
           label: 'Edit channel',
-          onClick: () => openModal('MODAL_EDIT_CHANNEL'),
+          onClick: () => openModal('MODAL_FORM_CHANNEL'),
           condition: !channel.hasDm,
         },
         {

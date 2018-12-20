@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import WorkspaceModal from './WorkspaceModal';
+import WorkspaceFormModal from './WorkspaceFormModal';
 import ScrollBar from './ScrollBar';
 import PublicViewNavBar from './PublicViewNavBar';
 import './PublicView.css';
@@ -79,7 +79,7 @@ class PublicView extends React.Component {
           />
           {render({ workspaces })}
         </ScrollBar>
-        {isModalOpen && <WorkspaceModal closeModal={closeModal} />}
+        {isModalOpen && <WorkspaceFormModal closeModal={closeModal} />}
       </div>
     );
   }

@@ -79,7 +79,7 @@ class ChannelHeader extends React.Component {
           key: 'topic',
           icon: !!channel.topic || <FontAwesomeIcon icon="edit" size="sm" />,
           label: channel.topic || 'Add topic',
-          onClick: () => openModal('MODAL_EDIT_CHANNEL'),
+          onClick: () => openModal('MODAL_FORM_CHANNEL'),
         }
       ];
     }

@@ -4,7 +4,7 @@ import withForm from './withForm';
 import Modal from './Modal';
 import FormHandler from './FormHandler';
 
-class WorkspaceModal extends React.Component {
+class WorkspaceFormModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = { title: '', slug: '' };
@@ -67,4 +67,4 @@ class WorkspaceModal extends React.Component {
 
 const formProps = { type: 'WORKSPACE_CREATE_REQUEST', payloadName: 'workspace' };
 
-export default withForm(formProps)(WorkspaceModal);
+export default withForm(formProps)(WorkspaceFormModal);

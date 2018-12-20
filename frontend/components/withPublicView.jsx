@@ -12,7 +12,7 @@ const mapStateToProps = state => ({
   workspacesMap: state.entities.workspaces,
   subbedWorkspaces: getSubbedWorkspaces(state),
   currentUser: state.session.currentUser,
-  isModalOpen: state.ui.displayModal.modalType === 'MODAL_WORKSPACE',
+  isModalOpen: state.ui.displayModal.modalType === 'MODAL_FORM_WORKSPACE',
   isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_PUBLIC',
   dropdownProps: state.ui.dropdown.dropdownProps,
 });

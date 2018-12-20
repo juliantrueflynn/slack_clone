@@ -22,7 +22,7 @@ const PublicWorkspaces = ({
         <div className="PublicWorkspaces__subtitle">
           You can also&nbsp;
           <Button
-            onClick={() => openModal('MODAL_WORKSPACE')}
+            onClick={() => openModal('MODAL_FORM_WORKSPACE')}
             buttonFor="create-workspace"
             unStyled
           >

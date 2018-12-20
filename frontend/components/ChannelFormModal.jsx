@@ -4,7 +4,7 @@ import withForm from './withForm';
 import Modal from './Modal';
 import FormHandler from './FormHandler';
 
-class ChannelEditorModal extends React.Component {
+class ChannelFormModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = { title: '', topic: '' };
@@ -87,4 +87,4 @@ class ChannelEditorModal extends React.Component {
 
 const formProps = { type: 'CHANNEL_UPDATE_REQUEST', payloadName: 'channel' };
 
-export default withForm(formProps)(ChannelEditorModal);
+export default withForm(formProps)(ChannelFormModal);
