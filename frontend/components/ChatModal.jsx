@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Button from './Button';
 import withForm from './withForm';
-import Modal from './Modal';
 import FormHandler from './FormHandler';
 
 class ChatModal extends React.Component {
@@ -25,7 +24,7 @@ class ChatModal extends React.Component {
   }
 
   render() {
-    const { closeModal, form: { formErrors } } = this.props;
+    const { close, form: { formErrors } } = this.props;
     const { title } = this.state;
 
     const fields = [
@@ -38,7 +37,7 @@ class ChatModal extends React.Component {
     ];
 
     return (
-      <Modal isOpen modalTitle="Create a Channel" modalFor="chat" close={closeModal}>
+      <Fragment>
         <p className="Form__text">
           Channels are where your members communicate.
           They&#39;re best when organized around a topic — #leads, for example.
@@ -50,13 +49,13 @@ class ChatModal extends React.Component {
           errors={formErrors}
         >
           <Button type="submit" size="lg" color="green">
-            Create Channel
+            Create channel
           </Button>
-          <Button buttonFor="modal" size="lg" onClick={() => closeModal()}>
+          <Button buttonFor="modal" size="lg" onClick={close}>
             Close
           </Button>
         </FormHandler>
-      </Modal>
+      </Fragment>
     );
   }
 }

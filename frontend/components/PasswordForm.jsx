@@ -62,12 +62,8 @@ class PasswordForm extends React.Component {
         success={formSuccess}
         errors={formErrors}
       >
-        <Button type="submit" color="green" size="lg">
-          Save
-        </Button>
-        <Button onClick={() => closeModal()} size="lg">
-          Cancel
-        </Button>
+        <Button type="submit" color="green" size="lg">Save</Button>
+        <Button onClick={closeModal} size="lg">Cancel</Button>
       </FormHandler>
     );
   }

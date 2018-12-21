@@ -6,7 +6,7 @@ import './RightSidebarModal.css';
 
 const RightSidebarModal = ({
   closeModal,
-  openModal,
+  openProfileModal,
   drawerType,
   channel,
   toggleLink,
@@ -30,7 +30,7 @@ const RightSidebarModal = ({
       key: 'profile',
       label: 'Edit Profile',
       icon: <FontAwesomeIcon icon="user-cog" />,
-      onClick: () => openModal('MODAL_PROFILE'),
+      onClick: openProfileModal,
     }
   ];
 

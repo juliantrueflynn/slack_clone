@@ -5,7 +5,6 @@ import {
   updateDrawer,
   accordionOpen,
   destroySearch,
-  fetchSearch,
   updateDropdown,
 } from '../actions/uiActions';
 import { destroyChannelSub } from '../actions/channelActions';
@@ -24,43 +23,38 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
 
   const msgsMap = getMessagesMap(state);
   const messages = Object.values(msgsMap);
-  const searchSlugs = state.search.messagesBySearch;
   const unreadsMap = state.entities.unreads;
   const unreads = Object.values(unreadsMap).filter(unread => unread && unread.hasUnreads);
   const convoUnreadsLen = unreads.filter(unread => unread && unread.readableType === 'Message').length;
-  const searchMessages = searchSlugs.map(msgSlug => msgsMap[msgSlug]).sort((a, b) => b.id - a.id);
+  const users = state.entities.members;
+  const currentUserSlug = state.session.currentUser.slug;
 
   return {
     chatPath,
     channelsMap,
     channel,
     messages,
-    searchMessages,
     convoUnreadsLen,
     channelUnreadsLen,
-    users: state.entities.members,
-    currentUser: state.session.currentUser,
+    users,
+    user: users[currentUserSlug],
+    currentUserSlug,
     modalType: state.ui.displayModal.modalType,
     drawerType: state.ui.drawer.drawerType,
     searchQuery: state.search.searchQuery,
-    isLoading: state.isLoading.search,
     dropdownProps: state.ui.dropdown.dropdownProps,
     isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_CHANNEL_EDIT',
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  openModal: (modalType, modalProps = null) => dispatch(updateModal(modalType, modalProps)),
+const mapDispatchToProps = (dispatch, { match: { params: { chatPath } } }) => ({
+  openModal: (modalType, modalProps) => dispatch(updateModal(modalType, modalProps)),
   closeDrawer: () => dispatch(updateDrawer(null)),
   openDropdown: (ddType, ddProps) => dispatch(updateDropdown(ddType, ddProps)),
   closeDropdown: () => dispatch(updateDropdown(null)),
   accordionOpen: accordionType => dispatch(accordionOpen('details', accordionType)),
-  fetchSearchRequest: (query, shouldNotSearch = false) => (
-    dispatch(fetchSearch.request(query, shouldNotSearch))
-  ),
   destroySearch: () => dispatch(destroySearch()),
-  destroyChannelSubRequest: channelSlug => dispatch(destroyChannelSub.request(channelSlug)),
-  closeModal: () => dispatch(updateModal(null)),
+  destroyChannelSubRequest: () => dispatch(destroyChannelSub.request(chatPath)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChannelHeader));

@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { dateUtil } from '../util/dateUtil';
-import './ChatsModalItem.css';
+import './ChannelsListModalItem.css';
 
-const ChatsModalItem = ({ channel, workspaceSlug }) => {
+const ChannelsListModalItem = ({ channel, workspaceSlug }) => {
   const {
     slug,
     createdAt,
@@ -16,13 +16,13 @@ const ChatsModalItem = ({ channel, workspaceSlug }) => {
   const dateCreated = dateUtil(createdAt).monthDayYear();
 
   return (
-    <Link role="listitem" className="ChatsModalItem" to={channelUrl}>
-      <h3 className="ChatsModalItem__title">
-        <FontAwesomeIcon icon="hashtag" className="ChatsModalItem__hashtag" size="xs" />
+    <Link role="listitem" className="ChannelsListModalItem" to={channelUrl}>
+      <h3 className="ChannelsListModalItem__title">
+        <FontAwesomeIcon icon="hashtag" className="ChannelsListModalItem__hashtag" size="xs" />
         {title}
       </h3>
-      <div className="ChatsModalItem__body">
-        <div className="ChatsModalItem__byline">
+      <div className="ChannelsListModalItem__body">
+        <div className="ChannelsListModalItem__byline">
           {'Created by '}
           <strong>
             {ownerName}
@@ -34,4 +34,4 @@ const ChatsModalItem = ({ channel, workspaceSlug }) => {
   );
 };
 
-export default ChatsModalItem;
+export default ChannelsListModalItem;

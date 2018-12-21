@@ -6,7 +6,6 @@ import Button from './Button';
 import ScrollBar from './ScrollBar';
 import SearchModalResults from './SearchModalResults';
 import SearchModalAside from './SearchModalAside';
-import Modal from './Modal';
 import './SearchModal.css';
 
 class SearchModal extends React.Component {
@@ -118,24 +117,23 @@ class SearchModal extends React.Component {
   }
 
   handleClose() {
-    const { closeModal, fetchSearchRequest, searchQuery } = this.props;
+    const { close, fetchSearchRequest, searchQuery } = this.props;
     const { query } = this.state;
 
     if (searchQuery !== query) {
       fetchSearchRequest(query, true);
     }
 
-    closeModal();
+    close();
   }
 
   render() {
     const {
       users,
-      currentUserId,
       messages,
       channelsMap,
       destroySearch,
-      isSearchLoading,
+      isLoading,
     } = this.props;
     const {
       query,
@@ -148,19 +146,13 @@ class SearchModal extends React.Component {
     const isEmpty = !results.length && !peopleFilter.length && !channelFilter.length;
 
     const overlayClassName = classNames('SearchModal', 'Modal__overlay', 'Modal__overlay--dark', {
-      'SearchModal--empty': isEmpty && !isNewSearch && !isSearchLoading,
-      'SearchModal--loading': isSearchLoading,
+      'SearchModal--empty': isEmpty && !isNewSearch && !isLoading,
+      'SearchModal--loading': isLoading,
       'SearchModal--new': isNewSearch,
     });
 
     return (
-      <Modal
-        isOpen
-        modalFor="search"
-        close={this.handleClose}
-        overlayClassName={overlayClassName}
-        unStyled
-      >
+      <div className={overlayClassName}>
         <div className="SearchModal__searchbar">
           <SearchBar
             searchSubmit={this.handleSearchRequest}
@@ -175,9 +167,8 @@ class SearchModal extends React.Component {
         <ScrollBar>
           <SearchModalResults
             results={results}
-            isLoading={isSearchLoading}
+            isLoading={isLoading}
             users={users}
-            currentUserId={currentUserId}
             channelsMap={channelsMap}
           />
           <SearchModalAside
@@ -189,7 +180,7 @@ class SearchModal extends React.Component {
             toggleCheckbox={this.handleFilterToggle}
           />
         </ScrollBar>
-      </Modal>
+      </div>
     );
   }
 }

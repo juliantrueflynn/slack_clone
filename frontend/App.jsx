@@ -35,10 +35,10 @@ import {
   faBars,
   faStar as fasStar,
 } from '@fortawesome/free-solid-svg-icons';
-import ReactModal from 'react-modal';
 import { ActionCable } from 'react-actioncable-provider';
 import withActionCable from './components/withActionCable';
 import { routesConfig, PageRoutes } from './util/routeUtil';
+import ModalControllerContainer from './components/ModalControllerContainer.';
 import './App.css';
 
 library.add(
@@ -74,21 +74,12 @@ library.add(
   faBars,
 );
 
-class App extends React.Component {
-  componentDidMount() {
-    ReactModal.setAppElement('#root');
-  }
-
-  render() {
-    const { isLoggedIn, onReceived } = this.props;
-
-    return (
-      <div className="App">
-        {isLoggedIn && <ActionCable channel={{ channel: 'AppChannel' }} onReceived={onReceived} />}
-        <PageRoutes routes={routesConfig} />
-      </div>
-    );
-  }
-}
+const App = ({ isLoggedIn, onReceived }) => (
+  <div className="App">
+    {isLoggedIn && <ActionCable channel={{ channel: 'AppChannel' }} onReceived={onReceived} />}
+    <PageRoutes routes={routesConfig} />
+    <ModalControllerContainer />
+  </div>
+);
 
 export default withActionCable(App);

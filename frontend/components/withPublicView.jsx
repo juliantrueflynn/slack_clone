@@ -12,7 +12,6 @@ const mapStateToProps = state => ({
   workspacesMap: state.entities.workspaces,
   subbedWorkspaces: getSubbedWorkspaces(state),
   currentUser: state.session.currentUser,
-  isModalOpen: state.ui.displayModal.modalType === 'MODAL_FORM_WORKSPACE',
   isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_PUBLIC',
   dropdownProps: state.ui.dropdown.dropdownProps,
 });
@@ -20,7 +19,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch, { location }) => ({
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),
   openModal: (modalType, modalProps) => dispatch(updateModal(modalType, modalProps)),
-  closeModal: () => dispatch(updateModal(null)),
   openDropdown: (ddType, ddProps) => dispatch(updateDropdown(ddType, ddProps)),
   closeDropdown: () => dispatch(updateDropdown(null)),
   createWorkspaceSubRequest: workspaceSub => dispatch(createWorkspaceSub.request(workspaceSub)),

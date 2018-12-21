@@ -4,10 +4,6 @@ import { decamelizeKeys } from 'humps';
 import sampleWisdomQuote from '../util/wisdomQuotesUtil';
 import EmptyDisplay from './EmptyDisplay';
 import LeftSidebarContainer from './LeftSidebarContainer';
-import ProfileModal from './ProfileModal';
-import ChatModal from './ChatModal';
-import ChatsModal from './ChatsModal';
-import ChannelFormModal from './ChannelFormModal';
 import { PageRoutes } from '../util/routeUtil';
 import './Workspace.css';
 
@@ -46,17 +42,11 @@ class Workspace extends React.Component {
   render() {
     const {
       isLoading,
-      workspace,
       workspaceSlug,
       routes,
-      modalType,
-      closeModal,
       channels,
       channel,
       chatPath,
-      users,
-      currentUser,
-      fetchChannelsRequest,
       onReceived,
     } = this.props;
     const { quoteText, quoteBy } = sampleWisdomQuote;
@@ -76,7 +66,6 @@ class Workspace extends React.Component {
       );
     }
 
-    const user = users[currentUser.slug];
     const cableChannels = channels.filter(ch => ch.isSub || ch.slug === chatPath).map(ch => (
       { channel: 'ChatChannel', channelSlug: ch.slug }
     ));
@@ -99,25 +88,6 @@ class Workspace extends React.Component {
           />
         ))}
         {hasLoaded && <LeftSidebarContainer />}
-        {modalType === 'MODAL_CHAT' && (
-          <ChatModal workspaceId={workspace.id} closeModal={closeModal} />
-        )}
-        {modalType === 'MODAL_CHATS' && (
-          <ChatsModal
-            workspaceSlug={workspaceSlug}
-            channels={channels}
-            fetchChannelsRequest={fetchChannelsRequest}
-            closeModal={closeModal}
-          />
-        )}
-        {modalType === 'MODAL_PROFILE' && <ProfileModal {...user} closeModal={closeModal} />}
-        {modalType === 'MODAL_FORM_CHANNEL' && (
-          <ChannelFormModal
-            channel={channel}
-            currentUserSlug={currentUser.slug}
-            closeModal={closeModal}
-          />
-        )}
         {hasLoaded && <PageRoutes routes={routes} />}
       </div>
     );

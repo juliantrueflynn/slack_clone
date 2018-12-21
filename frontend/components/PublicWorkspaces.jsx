@@ -11,7 +11,9 @@ const PublicWorkspaces = ({
   currentUser,
   openModal,
 }) => {
-  if (!workspaces || !isLoggedIn) return null;
+  if (!workspaces || !isLoggedIn) {
+    return null;
+  }
 
   return (
     <section className="PublicWorkspaces">

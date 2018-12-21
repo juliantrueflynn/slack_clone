@@ -70,6 +70,9 @@ class LeftSidebar extends React.Component {
       match: { url },
     } = this.props;
 
+    const openChatModal = () => openModal('MODAL_CHAT', { workspaceId: workspace.id });
+    const openChatsModal = () => openModal('MODAL_CHATS', { workspaceSlug: workspace.slug });
+
     const quickLinksList = [
       {
         icon: <FontAwesomeIcon icon="align-left" />,
@@ -128,10 +131,8 @@ class LeftSidebar extends React.Component {
         component: Menu,
         items: channelsItems,
         title: (
-          <InlineSuffixButton icon="plus-circle" onClick={() => openModal('MODAL_CHAT')}>
-            <Button unStyled buttonFor="chats" onClick={() => openModal('MODAL_CHATS')}>
-              Channels
-            </Button>
+          <InlineSuffixButton icon="plus-circle" onClick={openChatModal}>
+            <Button unStyled buttonFor="chats" onClick={openChatsModal}>Channels</Button>
           </InlineSuffixButton>
         ),
       },

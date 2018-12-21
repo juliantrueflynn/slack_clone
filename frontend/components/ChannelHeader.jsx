@@ -26,6 +26,7 @@ class ChannelHeader extends React.Component {
     const {
       channel,
       messages,
+      currentUserSlug,
       channelUnreadsLen,
       convoUnreadsLen,
       users,
@@ -40,6 +41,7 @@ class ChannelHeader extends React.Component {
     const title = this.getPageTitle();
     const { url } = match;
     const { dmUserSlug } = channel || {};
+    const openChatEditModal = () => openModal('MODAL_FORM_CHANNEL', { channel, currentUserSlug });
 
     let metaMenuItems = [];
 
@@ -79,7 +81,7 @@ class ChannelHeader extends React.Component {
           key: 'topic',
           icon: !!channel.topic || <FontAwesomeIcon icon="edit" size="sm" />,
           label: channel.topic || 'Add topic',
-          onClick: () => openModal('MODAL_FORM_CHANNEL'),
+          onClick: openChatEditModal,
         }
       ];
     }
@@ -96,6 +98,7 @@ class ChannelHeader extends React.Component {
         <ChannelHeaderNavbar
           chatTitle={title}
           openModal={openModal}
+          openChatEditModal={openChatEditModal}
           channel={channel}
           match={match}
           messages={messages}

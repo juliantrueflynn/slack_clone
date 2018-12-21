@@ -1,15 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import SettingsForm from './SettingsForm';
 import PasswordForm from './PasswordForm';
 import Button from './Button';
-import Modal from './Modal';
 import './ProfileModal.css';
 
 class ProfileModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = { tabOpen: 'user' };
-    this.handleTabClick = this.handleTabClick.bind(this);
   }
 
   handleTabClick(tabOpen) {
@@ -17,15 +15,13 @@ class ProfileModal extends React.Component {
   }
 
   render() {
-    const { closeModal, ...props } = this.props;
+    const { close, user } = this.props;
     const { tabOpen } = this.state;
-    const { avatarLarge, username, email } = props;
-    const user = { avatarLarge, username, email };
     const classNames = `ProfileModal ProfileModal__${tabOpen}`;
     const tabTitle = tabOpen === 'user' ? 'Edit Settings' : 'Change Password';
 
     return (
-      <Modal isOpen modalTitle="Edit your profile" modalFor="profile" close={closeModal}>
+      <Fragment>
         <div className={classNames}>
           <div className="ProfileModal__tabs">
             <Button buttonFor="user-tab" onClick={this.handleTabClick('user')}>
@@ -36,18 +32,12 @@ class ProfileModal extends React.Component {
             </Button>
           </div>
           <div className="ProfileModal__body">
-            <h2 className="ProfileModal__title">
-              {tabTitle}
-            </h2>
-            {tabOpen === 'user' && (
-              <SettingsForm closeModal={closeModal} user={user} />
-            )}
-            {tabOpen === 'password' && (
-              <PasswordForm closeModal={closeModal} />
-            )}
+            <h2 className="ProfileModal__title">{tabTitle}</h2>
+            {tabOpen === 'user' && <SettingsForm closeModal={close} user={user} />}
+            {tabOpen === 'password' && <PasswordForm closeModal={close} />}
           </div>
         </div>
-      </Modal>
+      </Fragment>
     );
   }
 }

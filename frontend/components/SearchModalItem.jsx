@@ -6,7 +6,6 @@ import './SearchModalItem.css';
 
 const SearchModalItem = ({
   message,
-  currentUserId,
   users,
   channelsMap,
   url,
@@ -43,7 +42,6 @@ const SearchModalItem = ({
       <Message
         message={message}
         users={users}
-        currentUserId={currentUserId}
         url={url}
         shouldHideEngagement
       />

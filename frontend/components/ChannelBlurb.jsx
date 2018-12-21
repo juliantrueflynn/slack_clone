@@ -21,7 +21,7 @@ const ChannelBlurb = ({
     topic,
     title,
   } = channel;
-  const openEditor = () => openModal('MODAL_FORM_CHANNEL');
+  const openEditor = () => openModal('MODAL_FORM_CHANNEL', { channel, currentUserSlug });
   const userPathUrl = userSlug => `${matchUrl}/team/${userSlug}`;
   let chatTitle = title;
   let description;

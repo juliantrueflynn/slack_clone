@@ -1,7 +1,6 @@
 import React from 'react';
 import Button from './Button';
 import withForm from './withForm';
-import Modal from './Modal';
 import FormHandler from './FormHandler';
 
 class ChannelFormModal extends React.Component {
@@ -41,7 +40,7 @@ class ChannelFormModal extends React.Component {
 
   render() {
     const {
-      closeModal,
+      close,
       currentUserSlug,
       channel,
       form: { formSuccess, formErrors },
@@ -65,22 +64,20 @@ class ChannelFormModal extends React.Component {
     ];
 
     return (
-      <Modal isOpen modalTitle="Update channel" modalFor="channel-edit" close={closeModal}>
-        <FormHandler
-          submitForm={this.handleFormSubmit}
-          setFieldValue={this.handleFieldValueChange}
-          fields={fields}
-          success={formSuccess}
-          errors={formErrors}
-        >
-          <Button type="submit" color="green" size="lg">
-            Update
-          </Button>
-          <Button onClick={() => closeModal()} size="lg">
-            Cancel
-          </Button>
-        </FormHandler>
-      </Modal>
+      <FormHandler
+        submitForm={this.handleFormSubmit}
+        setFieldValue={this.handleFieldValueChange}
+        fields={fields}
+        success={formSuccess}
+        errors={formErrors}
+      >
+        <Button type="submit" color="green" size="lg">
+          Update
+        </Button>
+        <Button onClick={close} size="lg">
+          Cancel
+        </Button>
+      </FormHandler>
     );
   }
 }

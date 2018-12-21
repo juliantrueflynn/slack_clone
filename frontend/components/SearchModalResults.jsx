@@ -7,7 +7,6 @@ const SearchModalResults = ({
   results,
   isLoading,
   users,
-  currentUserId,
   channelsMap,
   match: { url },
 }) => {
@@ -23,10 +22,9 @@ const SearchModalResults = ({
       <h4 className="SearchModalResults__count-txt">{resultsText}</h4>
       {isLoading || results.map(message => (
         <SearchModalItem
-          key={message.id}
+          key={message.slug}
           message={message}
           users={users}
-          currentUserId={currentUserId}
           channelsMap={channelsMap}
           url={url}
         />

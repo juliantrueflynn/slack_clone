@@ -74,7 +74,13 @@ class ChannelDetailsDrawer extends React.Component {
         icon: 'info-circle',
         itemTitle: 'Channel Details',
         name: 'details',
-        body: <AccordionBodyInfo {...channel} openModal={openModal} />,
+        body: (
+          <AccordionBodyInfo
+            channel={channel}
+            currentUserSlug={currentUserSlug}
+            openModal={openModal}
+          />
+        ),
       });
       accordionItems.push({
         icon: 'users',

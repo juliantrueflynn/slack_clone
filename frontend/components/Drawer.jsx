@@ -21,10 +21,10 @@ const Drawer = ({
   if (isModalOpen) {
     return (
       <Modal
+        isOpen
         modalFor="drawer"
         modalTitle={drawerTitle}
         close={closeDrawer}
-        isOpen
       >
         <div className={drawerClassNames}>{children({ messages })}</div>
       </Modal>

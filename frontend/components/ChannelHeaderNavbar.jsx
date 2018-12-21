@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBar from './SearchBar';
 import Menu from './Menu';
 import Button from './Button';
-import SearchModal from './SearchModal';
 import RightSidebarModal from './RightSidebarModal';
 import DropdownModal from './DropdownModal';
 import withWindowResize from './withWindowResize';
@@ -12,8 +11,10 @@ import './ChannelHeaderNavbar.css';
 class ChannelHeaderNavbar extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { isSidebarModalOpen: false };
     this.handleLinkToggle = this.handleLinkToggle.bind(this);
     this.handleDdButtonClick = this.handleDdButtonClick.bind(this);
+    this.handleSidebarModalToggle = this.handleSidebarModalToggle.bind(this);
   }
 
   handleLinkToggle(pathName) {
@@ -47,6 +48,12 @@ class ChannelHeaderNavbar extends React.Component {
     }
   }
 
+  handleSidebarModalToggle() {
+    const { isSidebarModalOpen } = this.state;
+
+    this.setState({ isSidebarModalOpen: !isSidebarModalOpen });
+  }
+
   handleDdButtonClick(e) {
     const { openDropdown } = this.props;
     const { bottom: posY, right: posX } = e.currentTarget.getBoundingClientRect();
@@ -56,27 +63,23 @@ class ChannelHeaderNavbar extends React.Component {
 
   render() {
     const {
-      currentUser,
-      users,
-      searchMessages,
-      channelsMap,
+      user,
       channel,
+      openChatEditModal,
       chatTitle,
       drawerType,
-      modalType,
       openModal,
-      closeModal,
-      isLoading,
       searchQuery,
       destroyChannelSubRequest,
       destroySearch,
-      fetchSearchRequest,
       isDdOpen,
       dropdownProps,
       closeDropdown,
       match: { url },
     } = this.props;
+    const { isSidebarModalOpen } = this.state;
 
+    const openProfileModal = () => openModal('MODAL_PROFILE', { user });
     let channelMenuItems = [];
     let ddMenuItems = [];
 
@@ -109,12 +112,12 @@ class ChannelHeaderNavbar extends React.Component {
         },
         {
           label: 'Edit channel',
-          onClick: () => openModal('MODAL_FORM_CHANNEL'),
+          onClick: openChatEditModal,
           condition: !channel.hasDm,
         },
         {
           label: `Leave ${chatTitle}`,
-          onClick: () => destroyChannelSubRequest(channel.slug),
+          onClick: destroyChannelSubRequest,
           condition: !channel.hasDm,
         }
       ];
@@ -130,7 +133,7 @@ class ChannelHeaderNavbar extends React.Component {
       {
         key: 'profile',
         icon: <FontAwesomeIcon icon="user-cog" />,
-        onClick: () => openModal('MODAL_PROFILE'),
+        onClick: openProfileModal,
       },
     ];
 
@@ -144,29 +147,16 @@ class ChannelHeaderNavbar extends React.Component {
           hasClearIcon
         />
         <Menu menuFor="header-user" isRow items={userMenuItems} />
-        <Button buttonFor="right-sidebar-mobile" unStyled onClick={() => openModal('MODAL_RIGHT_SIDEBAR')}>
+        <Button buttonFor="right-sidebar-mobile" unStyled onClick={this.handleSidebarModalToggle}>
           <FontAwesomeIcon icon="ellipsis-v" />
         </Button>
-        {modalType === 'MODAL_SEARCH' && (
-          <SearchModal
-            searchQuery={searchQuery}
-            messages={searchMessages}
-            users={users}
-            channelsMap={channelsMap}
-            currentUserId={currentUser.id}
-            fetchSearchRequest={fetchSearchRequest}
-            destroySearch={destroySearch}
-            isSearchLoading={isLoading}
-            closeModal={closeModal}
-          />
-        )}
-        {modalType === 'MODAL_RIGHT_SIDEBAR' && (
+        {isSidebarModalOpen && (
           <RightSidebarModal
             drawerType={drawerType}
             toggleLink={this.handleLinkToggle}
             channel={channel}
-            openModal={openModal}
-            closeModal={closeModal}
+            openProfileModal={openProfileModal}
+            closeModal={this.handleSidebarModalToggle}
           />
         )}
         {isDdOpen && (
