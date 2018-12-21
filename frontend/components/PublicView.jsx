@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-import WorkspaceFormModal from './WorkspaceFormModal';
 import ScrollBar from './ScrollBar';
 import PublicViewNavBar from './PublicViewNavBar';
 import './PublicView.css';
@@ -46,11 +45,9 @@ class PublicView extends React.Component {
       workspacesMap,
       subbedWorkspaces,
       openModal,
-      closeModal,
       dropdownProps,
       closeDropdown,
       isDdOpen,
-      isModalOpen,
       location: { pathname },
       render,
     } = this.props;
@@ -77,9 +74,8 @@ class PublicView extends React.Component {
             isLoggedIn={isLoggedIn}
             signOutRequest={signOutRequest}
           />
-          {render({ workspaces })}
+          {render({ workspaces, openModal })}
         </ScrollBar>
-        {isModalOpen && <WorkspaceFormModal closeModal={closeModal} />}
       </div>
     );
   }
