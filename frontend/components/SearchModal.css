@@ -1,38 +1,40 @@
-.SearchModal .Modal {
-  position: absolute;
-  top: 9px;
-  right: 109px;
-  left: 109px;
-  bottom: 9px;
-  border-radius: 6px;
-  height: initial;
-}
-
-.SearchModal .Modal__body {
+/* .SearchModal {
+  background-color: #F7FAFC;
+  overflow: hidden;
   height: 100%;
   width: 100%;
-  padding-top: 50px;
-  overflow: hidden;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  position: relative;
+}
+
+.SearchModal--new {
+  height: auto;
+} */
+
+.Modal__overlay--search {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.Modal__search {
+  margin: 9px 109px 9px;
   border-radius: 6px;
   background-color: #F7FAFC;
   position: relative;
 }
 
-.SearchModal--new .Modal {
-  bottom: initial;
-}
-
-.SearchModal--new .Modal__body {
-  height: auto;
-}
-
-.SearchModal--empty .Modal {
-  bottom: initial;
+.SearchModal {
+  position: aboslute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  overflow: hidden;
 }
 
 .SearchModal .ScrollBar__container {
-  position: relative;
   display: flex;
+  position: relative;
   flex: 1;
   padding: 15px;
 }
@@ -41,10 +43,6 @@
   display: flex;
   padding: 4px 20px;
   border-bottom: 1px solid #DFE6E9;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
   z-index: 99;
   background-color: #FFF;
   border-top-left-radius: 6px;

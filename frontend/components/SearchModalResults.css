@@ -3,6 +3,10 @@
   padding: 0 15px;
 }
 
+.SearchModalResults .SearchModalItem:last-child {
+  margin-bottom: 70px;
+}
+
 .SearchModalResults__empty-txt,
 .SearchModal--new .SearchModalResults__count-txt,
 .SearchModal--loading .SearchModalResults__empty-txt,

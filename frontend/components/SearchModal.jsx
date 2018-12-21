@@ -6,6 +6,7 @@ import Button from './Button';
 import ScrollBar from './ScrollBar';
 import SearchModalResults from './SearchModalResults';
 import SearchModalAside from './SearchModalAside';
+import withWindowResize from './withWindowResize';
 import './SearchModal.css';
 
 class SearchModal extends React.Component {
@@ -18,6 +19,7 @@ class SearchModal extends React.Component {
       results: [],
       channelFilter: [],
       peopleFilter: [],
+      height: 0,
     };
 
     this.setQuery = this.setQuery.bind(this);
@@ -36,7 +38,7 @@ class SearchModal extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { messages, searchQuery } = this.props;
+    const { messages, searchQuery, windowHeight } = this.props;
     const {
       query,
       isNewSearch,
@@ -66,6 +68,20 @@ class SearchModal extends React.Component {
       if (lastMsg && prevLastMsg && lastMsg.id !== prevLastMsg.id) {
         this.setResults(messages);
       }
+    }
+
+    if (results.length) {
+      this.setHeight(windowHeight - 18);
+    } else {
+      this.setHeight('inherit');
+    }
+  }
+
+  setHeight(nextHeight) {
+    const { height } = this.state;
+
+    if (height !== nextHeight) {
+      this.setState({ height: nextHeight });
     }
   }
 
@@ -141,18 +157,19 @@ class SearchModal extends React.Component {
       channelFilter,
       peopleFilter,
       isNewSearch,
+      height,
     } = this.state;
 
     const isEmpty = !results.length && !peopleFilter.length && !channelFilter.length;
 
-    const overlayClassName = classNames('SearchModal', 'Modal__overlay', 'Modal__overlay--dark', {
+    const overlayClassName = classNames('SearchModal', {
       'SearchModal--empty': isEmpty && !isNewSearch && !isLoading,
       'SearchModal--loading': isLoading,
       'SearchModal--new': isNewSearch,
     });
 
     return (
-      <div className={overlayClassName}>
+      <div className={overlayClassName} style={{ height }}>
         <div className="SearchModal__searchbar">
           <SearchBar
             searchSubmit={this.handleSearchRequest}
@@ -185,4 +202,4 @@ class SearchModal extends React.Component {
   }
 }
 
-export default SearchModal;
+export default withWindowResize(SearchModal);
