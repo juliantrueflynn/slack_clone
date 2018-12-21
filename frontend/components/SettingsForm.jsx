@@ -10,6 +10,7 @@ class SettingsForm extends React.Component {
 
     this.state = {
       avatar: null,
+      displayAvatar: null,
       username: '',
       email: '',
     };
@@ -25,6 +26,7 @@ class SettingsForm extends React.Component {
     this.setState({
       username: user.username,
       email: user.email,
+      displayAvatar: user.avatarLarge,
     });
   }
 
@@ -42,6 +44,7 @@ class SettingsForm extends React.Component {
 
     if (avatar) {
       reader.readAsDataURL(avatar);
+      this.setState({ displayAvatar: reader.result });
     }
   }
 
@@ -73,11 +76,11 @@ class SettingsForm extends React.Component {
 
   render() {
     const {
-      closeModal,
+      close,
       user,
       form: { formSuccess, formErrors },
     } = this.props;
-    const { username, email } = this.state;
+    const { username, email, displayAvatar } = this.state;
 
     const fields = [
       {
@@ -115,16 +118,18 @@ class SettingsForm extends React.Component {
             success={formSuccess}
             errors={formErrors}
           >
-            <Button type="submit" color="green" size="lg">
-              Save
-            </Button>
-            <Button onClick={() => closeModal()} size="lg">
-              Cancel
-            </Button>
+            <Button type="submit" color="green" size="lg">Save</Button>
+            <Button onClick={close} size="lg">Cancel</Button>
           </FormHandler>
         </div>
         <div className="SettingsForm__col">
-          <img src={user.avatarLarge} alt={`${user.username} banner`} />
+          <img
+            src={displayAvatar}
+            className="SettingsForm__avatar"
+            alt={`${user.username} banner`}
+            width="250"
+            height="250"
+          />
         </div>
       </div>
     );
