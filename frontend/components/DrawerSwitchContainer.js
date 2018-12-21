@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { updateDrawer, updateModal } from '../actions/uiActions';
 import { createChannel } from '../actions/channelActions';
-import { destroyPin } from '../actions/messageActions';
+import { destroyPin, createMessage } from '../actions/messageActions';
 import { getDrawerMessages, getChannelsMap } from '../reducers/selectors';
 import withEntityWrapper from './withEntityWrapper';
 import withWindowResize from './withWindowResize';
@@ -27,6 +27,7 @@ const mapDispatchToProps = dispatch => ({
   openModal: (modalType, modalProps = {}) => dispatch(updateModal(modalType, modalProps)),
   createChannelRequest: dmChat => dispatch(createChannel.request(dmChat)),
   destroyPinRequest: id => dispatch(destroyPin.request(id)),
+  createMessageRequest: message => dispatch(createMessage.request(message)),
 });
 
 export default withEntityWrapper('drawerSlug')(

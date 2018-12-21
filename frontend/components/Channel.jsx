@@ -73,12 +73,13 @@ class Channel extends React.Component {
       isLoading,
       channel,
       messages,
-      createChannelSubRequest,
-      updateScrollTop,
       currentUserSlug,
       openModal,
-      fetchHistoryRequest,
       matchUrl,
+      updateScrollTop,
+      createChannelSubRequest,
+      fetchHistoryRequest,
+      createMessageRequest,
     } = this.props;
     const { height, didInitMessagesLoad } = this.state;
 
@@ -102,7 +103,13 @@ class Channel extends React.Component {
             />
           )}
         </div>
-        {channel.isSub && <MessageForm channelId={channel.id} placeholder={formPlaceholder} />}
+        {channel.isSub && (
+          <MessageForm
+            channelId={channel.id}
+            placeholder={formPlaceholder}
+            createMessageRequest={createMessageRequest}
+          />
+        )}
         {channel.isSub || channel.hasDm || (
           <ChannelSubscribe
             createChannelSubRequest={createChannelSubRequest}

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import MessagesListContainer from './MessagesListContainer';
 import MessageForm from './MessageForm';
 
-const MessageThreadDrawer = ({ messages }) => {
+const MessageThreadDrawer = ({ messages, createMessageRequest }) => {
   const parentMessage = messages[0];
   const filterMenuItems = ['convo'];
 
@@ -23,6 +23,7 @@ const MessageThreadDrawer = ({ messages }) => {
         channelId={parentMessage.channelId}
         parentMessageId={parentMessage.id}
         parentMessageSlug={parentMessage.slug}
+        createMessageRequest={createMessageRequest}
         hasSubmitButton
       />
     </Fragment>

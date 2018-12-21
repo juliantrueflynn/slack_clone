@@ -10,6 +10,7 @@ const AllThreadsItem = ({
   convo,
   users,
   currentUserSlug,
+  createMessageRequest,
   workspaceSlug,
 }) => {
   const channelUrl = `/${workspaceSlug}/messages/${convo.channelSlug}`;
@@ -41,6 +42,7 @@ const AllThreadsItem = ({
           channelId={convo.channelId}
           parentMessageId={convo.id}
           parentMessageSlug={convo.slug}
+          createMessageRequest={createMessageRequest}
         />
       </div>
     </div>

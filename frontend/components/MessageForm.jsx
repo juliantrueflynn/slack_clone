@@ -1,7 +1,6 @@
 import React from 'react';
 import { convertForSubmit, clearEditor, createEmptyEditor } from '../util/editorUtil';
 import Button from './Button';
-import withForm from './withForm';
 import FormHandler from './FormHandler';
 import './MessageForm.css';
 
@@ -49,7 +48,7 @@ class MessageForm extends React.Component {
       channelId,
       parentMessageId,
       parentMessageSlug,
-      formDispatchRequest,
+      createMessageRequest,
     } = this.props;
 
     const message = {
@@ -59,7 +58,7 @@ class MessageForm extends React.Component {
       parentMessageSlug,
     };
 
-    formDispatchRequest(message);
+    createMessageRequest(message);
     this.setState({ editorState: clearEditor(editorState) });
   }
 
@@ -119,6 +118,4 @@ class MessageForm extends React.Component {
   }
 }
 
-const formProps = { type: 'MESSAGE_CREATE_REQUEST', payloadName: 'message' };
-
-export default withForm(formProps)(MessageForm);
+export default MessageForm;

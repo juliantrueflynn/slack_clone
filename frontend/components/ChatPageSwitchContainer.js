@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import withEntityWrapper from './withEntityWrapper';
 import { getChannelsMap, getChatPageMessages, getChatViewChannels } from '../reducers/selectors';
-import { fetchHistory } from '../actions/messageActions';
+import { fetchHistory, createMessage } from '../actions/messageActions';
 import { createChannelSub, switchChannel } from '../actions/channelActions';
 import { clearUnreads } from '../actions/readActions';
 import { updateDrawer, updateModal } from '../actions/uiActions';
@@ -23,6 +23,7 @@ const mapDispatchToProps = dispatch => ({
   clearUnreads: (channelSlug, lastRead) => dispatch(clearUnreads(channelSlug, lastRead)),
   closeDrawer: () => dispatch(updateDrawer(null)),
   openModal: modalType => dispatch(updateModal(modalType, null)),
+  createMessageRequest: message => dispatch(createMessage.request(message)),
 });
 
 export default withEntityWrapper('chatPath')(

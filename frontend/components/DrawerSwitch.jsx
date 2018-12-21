@@ -107,10 +107,11 @@ class DrawerSwitch extends React.Component {
       isLoading,
       currentUser,
       accordion,
-      createChannelRequest,
-      destroyPinRequest,
       openModal,
       history,
+      createChannelRequest,
+      destroyPinRequest,
+      createMessageRequest,
       match: { params: { workspaceSlug } },
     } = this.props;
     const { isModalOpen } = this.state;
@@ -133,7 +134,7 @@ class DrawerSwitch extends React.Component {
         users,
       },
       { component: FavoritesDrawer, path: 'favorites' },
-      { component: MessageThreadDrawer, path: 'convo' },
+      { component: MessageThreadDrawer, path: 'convo', createMessageRequest },
       {
         component: ChannelDetailsDrawer,
         path: 'details',

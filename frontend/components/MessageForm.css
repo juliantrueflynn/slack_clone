@@ -1,4 +1,4 @@
-.Channel .Form__message {
+.Channel .MessageForm {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -7,31 +7,11 @@
   background-color: #FFF;
 }
 
-.Channel .Form__message {
+.Channel .MessageForm {
   padding: 0 18px 20px;
 }
 
-.Drawer .Form__message {
-  padding: 15px 16px;
-}
-
-.Drawer .Form__message .Editor {
-  border-width: 1px;
-}
-
-.Drawer .Form__message .Form__actions {
-  display: flex;
-  flex: 1;
-  margin-top: 10px;
-}
-
-.Drawer .Form__message .Btn__submit {
-  margin-left: auto;
-  display: block;
-}
-
 .MessageForm--inactive {
-  width: 100%;
   display: flex;
   align-items: center;
   position: relative;
