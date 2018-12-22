@@ -13,11 +13,8 @@ class Reactions extends React.Component {
   }
 
   render() {
-    const { reactions, currentUserId } = this.props;
-
-    if (!reactions || !reactions.length) {
-      return null;
-    }
+    const { reactionIds, reactionsMap, currentUserId } = this.props;
+    const reactions = reactionIds.map(id => reactionsMap[id]);
 
     const reactionCounts = reactions.reduce((acc, curr) => {
       if (!acc[curr.emoji]) {

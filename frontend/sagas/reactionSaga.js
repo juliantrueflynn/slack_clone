@@ -9,13 +9,15 @@ import {
 import { createReaction, destroyReaction } from '../actions/reactionActions';
 import { REACTION, REACTION_TOGGLE } from '../actions/actionTypes';
 import { apiCreate, apiDestroy } from '../util/apiUtil';
-import { getCurrentUser, getMessagesMap } from '../reducers/selectors';
+import { getCurrentUser, getMessagesMap, selectEntities } from '../reducers/selectors';
 
-function* matchingReactionByUser({ id, reactions }, emoji) {
+function* matchingReactionByUser({ id: msgId, reactionIds }, emoji) {
   const currUser = yield select(getCurrentUser);
-  const matches = reactions.filter(reaction => (
+  const reactionsMap = yield select(selectEntities, 'reactions');
+
+  const matches = reactionIds.map(id => reactionsMap[id]).filter(reaction => (
     reaction.userId === currUser.id
-    && reaction.messageId === id
+    && reaction.messageId === msgId
     && reaction.emoji === emoji
   ));
 
@@ -24,14 +26,14 @@ function* matchingReactionByUser({ id, reactions }, emoji) {
 
 function* loadToggleReaction({ reaction: { messageSlug, emoji } }) {
   try {
-    const messagesMap = yield select(getMessagesMap);
-    const message = messagesMap[messageSlug];
-    const matchingReaction = yield matchingReactionByUser(message, emoji);
+    const msgsMap = yield select(getMessagesMap);
+    const msg = msgsMap[messageSlug];
+    const matchingReaction = yield matchingReactionByUser(msg, emoji);
 
     if (matchingReaction) {
       yield put(destroyReaction.request(matchingReaction.id));
     } else {
-      const reactionProps = { messageId: message.id, emoji };
+      const reactionProps = { messageId: msg.id, emoji };
       yield put(createReaction.request(reactionProps));
     }
   } catch (error) {

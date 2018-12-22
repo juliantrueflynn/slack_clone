@@ -34,6 +34,7 @@ class Message extends React.Component {
       message,
       role,
       users,
+      reactionsMap,
       pinsMap,
       currentUserSlug,
       chatPathUrl,
@@ -50,6 +51,7 @@ class Message extends React.Component {
     } = this.props;
     const { hasHover } = this.state;
     const authorUrl = `${chatPathUrl}/team/${message.authorSlug}`;
+    const hasReactions = !!(reactionsMap && message.reactionIds && message.reactionIds.length);
 
     const msgClassNames = classNames('Message', {
       'Message--hoverable': isHoverable,
@@ -105,10 +107,11 @@ class Message extends React.Component {
                 )}
                 {message.entityType !== 'entry' && <ChannelSub sub={message} />}
               </div>
-              {shouldHideEngagement || (
+              {hasReactions && !shouldHideEngagement && (
                 <Reactions
                   toggleReaction={toggleReaction}
-                  reactions={message.reactions}
+                  reactionIds={message.reactionIds}
+                  reactionsMap={reactionsMap}
                   currentUserSlug={currentUserSlug}
                   messageSlug={message.slug}
                 />

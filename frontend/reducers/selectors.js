@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { dateUtil } from '../util/dateUtil';
 
 const values = entities => Object.values(entities);
 
@@ -7,7 +8,6 @@ export const getCurrentUser = state => state.session.currentUser;
 const getAllWorkspaces = state => state.entities.workspaces;
 const getAllUsers = state => state.entities.members;
 const getAllMessages = state => state.entities.messages;
-const getAllReactions = state => state.entities.reactions;
 const getAllChannels = state => state.entities.channels;
 const getAllChannelSubs = state => state.entities.channelSubs;
 const getAllFavorites = state => state.entities.favorites;
@@ -27,19 +27,15 @@ export const getSubbedWorkspaces = createSelector(
 );
 
 export const getMessagesMap = createSelector(
-  [getAllMessages, getAllUsers, getAllReactions, getIsEditingMessage],
-  (messages, users, reactions, isEditingMsgSlug) => (
+  [getAllMessages, getAllUsers, getIsEditingMessage],
+  (messages, users, isEditingMsgSlug) => (
     values(messages).reduce((acc, curr) => {
-      const msg = { ...curr, isEditing: curr.slug === isEditingMsgSlug };
+      const msg = {};
 
       if (curr.thread && curr.thread.length) {
         const threadLastSlug = curr.thread[curr.thread.length - 1];
         const threadLastMsg = messages[threadLastSlug];
         msg.lastMessageDate = threadLastMsg && threadLastMsg.createdAt;
-      }
-
-      if (reactions && curr.reactionIds) {
-        msg.reactions = curr.reactionIds.map(id => reactions[id]);
       }
 
       const author = users[curr.authorSlug];
@@ -49,7 +45,23 @@ export const getMessagesMap = createSelector(
         msg.avatarThumb = author.avatarThumb;
       }
 
-      acc[curr.slug] = msg;
+      const date = dateUtil(curr.createdAt);
+      const time = date.localTime();
+      let dateCreated;
+      if (date.isToday()) {
+        dateCreated = date.localTime();
+      } else {
+        const month = date.monthName({ month: 'short' });
+        const day = date.dayOrdinal();
+        dateCreated = `${month} ${day}, ${time}`;
+      }
+
+      acc[curr.slug] = {
+        ...curr,
+        ...msg,
+        isEditing: curr.slug === isEditingMsgSlug,
+        dateCreated,
+      };
 
       return acc;
     }, {})

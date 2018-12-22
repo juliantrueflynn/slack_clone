@@ -15,6 +15,7 @@ import MessagesList from './MessagesList';
 const mapStateToProps = state => ({
   currentUserSlug: state.session.currentUser.slug,
   users: state.entities.members,
+  reactionsMap: state.entities.reactions,
   pinsMap: state.entities.pins,
   dropdownType: state.ui.dropdown.dropdownType,
   dropdownProps: state.ui.dropdown.dropdownProps,
