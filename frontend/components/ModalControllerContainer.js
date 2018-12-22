@@ -25,11 +25,13 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  openModal: (modalType, modalProps) => dispatch(updateModal(modalType, modalProps)),
   closeModal: () => dispatch(updateModal(null)),
   fetchChannelsRequest: workspaceSlug => dispatch(fetchChannels.request(workspaceSlug)),
-  createChannelRequest: channel => dispatch(createChannel.request(channel)),
-  updateChannelRequest: channel => dispatch(updateChannel.request(channel)),
+  channelFormRequest: (channel) => {
+    const actionCall = channel.slug ? updateChannel : createChannel;
+
+    return dispatch(actionCall.request(channel));
+  },
   updateUserRequest: user => dispatch(updateUser.request(user)),
   updatePasswordRequest: password => dispatch(updatePassword.request(password)),
   createWorkspaceRequest: workspace => dispatch(createWorkspace.request(workspace)),

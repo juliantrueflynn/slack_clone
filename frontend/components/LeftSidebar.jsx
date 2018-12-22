@@ -70,7 +70,7 @@ class LeftSidebar extends React.Component {
       match: { url },
     } = this.props;
 
-    const openChatModal = () => openModal('MODAL_CHAT', { workspaceId: workspace.id });
+    const openChatModal = () => openModal('MODAL_FORM_CHANNEL', { workspaceId: workspace.id });
     const openChatsModal = () => openModal('MODAL_CHATS', { workspaceSlug: workspace.slug });
 
     const quickLinksList = [

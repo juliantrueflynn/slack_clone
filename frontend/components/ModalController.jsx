@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
-import ChannelFormModal from './ChannelFormModal';
 import Modal from './Modal';
-import ChatModal from './ChatModal';
+import ModalChannelForm from './ModalChannelForm';
 import ProfileModal from './ProfileModal';
 import ChannelsListModal from './ChannelsListModal';
 import WorkspaceFormModal from './WorkspaceFormModal';
@@ -25,8 +24,7 @@ class ModalController extends React.Component {
       searchQuery,
       isLoading,
       fetchChannelsRequest,
-      createChannelRequest,
-      updateChannelRequest,
+      channelFormRequest,
       updateUserRequest,
       updatePasswordRequest,
       createWorkspaceRequest,
@@ -34,18 +32,14 @@ class ModalController extends React.Component {
       destroySearch,
     } = this.props;
 
+    const props = modalProps || {};
+
     const modals = [
       {
         type: 'MODAL_FORM_CHANNEL',
-        component: ChannelFormModal,
-        modalTitle: 'Update channel',
-        updateChannelRequest,
-      },
-      {
-        type: 'MODAL_CHAT',
-        component: ChatModal,
-        modalTitle: 'Create a channel',
-        createChannelRequest,
+        component: ModalChannelForm,
+        modalTitle: props.channel ? 'Update channel' : 'Create a channel',
+        channelFormRequest,
       },
       {
         type: 'MODAL_CHATS',
@@ -82,9 +76,9 @@ class ModalController extends React.Component {
     ];
 
     return modals.filter(modal => modal.type === currModalOpen)
-      .map(({ component: Component, props, ...modal }) => (
-        <Modal key={modal.type} isOpen close={closeModal} {...modal} {...modalProps}>
-          <Component {...modal} close={closeModal} {...modalProps} />
+      .map(({ component: Component, ...modal }) => (
+        <Modal key={modal.type} isOpen close={closeModal} {...modal} {...props}>
+          <Component {...modal} close={closeModal} {...props} />
         </Modal>
       ));
   }

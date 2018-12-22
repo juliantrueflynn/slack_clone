@@ -38,7 +38,7 @@ import {
 import { ActionCable } from 'react-actioncable-provider';
 import withActionCable from './components/withActionCable';
 import { routesConfig, PageRoutes } from './util/routeUtil';
-import ModalControllerContainer from './components/ModalControllerContainer.';
+import ModalControllerContainer from './components/ModalControllerContainer';
 import './App.css';
 
 library.add(

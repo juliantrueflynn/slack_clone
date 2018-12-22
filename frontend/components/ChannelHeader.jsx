@@ -41,7 +41,10 @@ class ChannelHeader extends React.Component {
     const title = this.getPageTitle();
     const { url } = match;
     const { dmUserSlug } = channel || {};
-    const openChatEditModal = () => openModal('MODAL_FORM_CHANNEL', { channel, currentUserSlug });
+    const openChatEditModal = () => openModal(
+      'MODAL_FORM_CHANNEL',
+      { channel, currentUserSlug }
+    );
 
     let metaMenuItems = [];
 
