@@ -21,3 +21,7 @@
 .PinnedMessagesItem:hover .Btn__destroy {
   display: block;
 }
+
+.PinnedMessagesItem .Avatar {
+  display: none;
+}

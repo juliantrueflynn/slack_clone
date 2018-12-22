@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import { dateUtil } from '../util/dateUtil';
 import MessageHoverMenu from './MessageHoverMenu';
 import Reactions from './Reactions';
 import Avatar from './Avatar';
@@ -38,7 +37,6 @@ class Message extends React.Component {
       pinsMap,
       currentUserSlug,
       chatPathUrl,
-      messageDate,
       toggleReaction,
       toggleEditor,
       toggleMessageEditor,
@@ -47,25 +45,10 @@ class Message extends React.Component {
       isThreadHidden,
       isHoverable,
       isHighlightable,
-      shouldHideAvatar,
       shouldHideEngagement,
       ...props
     } = this.props;
     const { hasHover } = this.state;
-
-    const date = dateUtil(message.createdAt);
-    const time = date.localTime();
-    let dateCreated = messageDate;
-    if (!messageDate) {
-      if (date.isToday()) {
-        dateCreated = date.localTime();
-      } else {
-        const month = date.monthName({ month: 'short' });
-        const day = date.dayOrdinal();
-        dateCreated = `${month} ${day}, ${time}`;
-      }
-    }
-
     const authorUrl = `${chatPathUrl}/team/${message.authorSlug}`;
 
     const msgClassNames = classNames('Message', {
@@ -104,12 +87,12 @@ class Message extends React.Component {
             {...props}
           />
           <div className="Message__row">
-            {shouldHideAvatar || <Avatar baseUrl={chatPathUrl} user={message} />}
+            <Avatar baseUrl={chatPathUrl} user={message} />
             <div className="Message__body">
               <div className="Message__content">
                 <div className="Message__meta">
                   <Link to={authorUrl} className="Message__author">{message.username}</Link>
-                  <time className="Message__time">{dateCreated}</time>
+                  <time className="Message__time">{message.dateCreated}</time>
                 </div>
                 {message.entityType === 'entry' && (
                   <MessageContent
