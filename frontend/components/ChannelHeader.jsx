@@ -7,6 +7,11 @@ import ChannelHeaderNavbar from './ChannelHeaderNavbar';
 import './ChannelHeader.css';
 
 class ChannelHeader extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleDdCloseClick = this.handleDdCloseClick.bind(this);
+  }
+
   getPageTitle() {
     const { channel, chatPath } = this.props;
 
@@ -22,29 +27,37 @@ class ChannelHeader extends React.Component {
     return title;
   }
 
+  handleDdCloseClick(onClickCallback) {
+    const { isDdOpen, closeDropdown } = this.props;
+
+    onClickCallback();
+
+    if (isDdOpen) {
+      closeDropdown();
+    }
+  }
+
   render() {
     const {
       channel,
-      messages,
       currentUserSlug,
+      messages,
       channelUnreadsLen,
       convoUnreadsLen,
       users,
       accordionOpen,
       openModal,
       chatPath,
-      match,
-      location,
+      closeDropdown,
+      match: { url },
       ...props
     } = this.props;
 
-    const title = this.getPageTitle();
-    const { url } = match;
-    const { dmUserSlug } = channel || {};
-    const openChatEditModal = () => openModal(
+    const openChannelEditModal = () => openModal(
       'MODAL_FORM_CHANNEL',
       { channel, currentUserSlug }
     );
+    const { dmUserSlug } = channel || {};
 
     let metaMenuItems = [];
 
@@ -84,7 +97,7 @@ class ChannelHeader extends React.Component {
           key: 'topic',
           icon: !!channel.topic || <FontAwesomeIcon icon="edit" size="sm" />,
           label: channel.topic || 'Add topic',
-          onClick: openChatEditModal,
+          onClick: openChannelEditModal,
         }
       ];
     }
@@ -95,15 +108,15 @@ class ChannelHeader extends React.Component {
           <FontAwesomeIcon icon="bars" size="lg" />
         </Button>
         <div className="ChannelHeader__info">
-          <h1 className="ChannelHeader__title">{title}</h1>
+          <h1 className="ChannelHeader__title">{this.getPageTitle()}</h1>
           <Menu menuFor="header-meta" items={metaMenuItems} isRow unStyled />
         </div>
         <ChannelHeaderNavbar
-          chatTitle={title}
+          chatTitle={this.getPageTitle()}
           openModal={openModal}
-          openChatEditModal={openChatEditModal}
+          closeDropdown={this.handleDdCloseClick}
+          openChannelEditModal={openChannelEditModal}
           channel={channel}
-          match={match}
           messages={messages}
           users={users}
           {...props}

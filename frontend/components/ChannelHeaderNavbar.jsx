@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBar from './SearchBar';
 import Menu from './Menu';
@@ -17,9 +18,14 @@ class ChannelHeaderNavbar extends React.Component {
     this.handleSidebarModalToggle = this.handleSidebarModalToggle.bind(this);
   }
 
+  handleHistoryPush(linkUrl) {
+    const { history, closeDropdown } = this.props;
+    history.push(linkUrl);
+    closeDropdown();
+  }
+
   handleLinkToggle(pathName) {
     const {
-      history,
       drawerType,
       closeDrawer,
       modalType,
@@ -38,13 +44,13 @@ class ChannelHeaderNavbar extends React.Component {
     }
 
     if (drawerType !== pathName) {
-      history.push(`${url}/${pathName}`);
+      this.handleHistoryPush(`${url}/${pathName}`);
       return;
     }
 
     if (!isExact && drawerType === pathName) {
       closeDrawer();
-      history.push(url);
+      this.handleHistoryPush(url);
     }
   }
 
@@ -65,7 +71,7 @@ class ChannelHeaderNavbar extends React.Component {
     const {
       user,
       channel,
-      openChatEditModal,
+      openChannelEditModal,
       chatTitle,
       drawerType,
       openModal,
@@ -75,6 +81,7 @@ class ChannelHeaderNavbar extends React.Component {
       isDdOpen,
       dropdownProps,
       closeDropdown,
+      location: { pathname },
       match: { url },
     } = this.props;
     const { isSidebarModalOpen } = this.state;
@@ -101,23 +108,23 @@ class ChannelHeaderNavbar extends React.Component {
       ddMenuItems = [
         {
           label: 'View channel details',
-          link: `${url}/details`,
-          hasNoDrawer: true,
+          onClick: () => this.handleHistoryPush(`${url}/details`),
+          isItemActive: pathname === `${url}/details`,
         },
         {
           label: `View ${chatTitle}’s profile`,
-          link: `${url}/team/${channel.dmUserSlug}`,
-          hasNoDrawer: true,
+          onClick: () => this.handleHistoryPush(`${url}/team/${channel.dmUserSlug}`),
+          isItemActive: pathname === `${url}/team/${channel.dmUserSlug}`,
           condition: channel.hasDm,
         },
         {
           label: 'Edit channel',
-          onClick: openChatEditModal,
+          onClick: () => closeDropdown(openChannelEditModal),
           condition: !channel.hasDm,
         },
         {
           label: `Leave ${chatTitle}`,
-          onClick: destroyChannelSubRequest,
+          onClick: () => closeDropdown(destroyChannelSubRequest),
           condition: !channel.hasDm,
         }
       ];
@@ -169,4 +176,4 @@ class ChannelHeaderNavbar extends React.Component {
   }
 }
 
-export default withWindowResize(ChannelHeaderNavbar);
+export default withRouter(withWindowResize(ChannelHeaderNavbar));
