@@ -1,11 +1,11 @@
-.Form__session {
+.SessionForm {
   text-align: center;
   display: flex;
   align-items: center;
   flex-grow: 1;
 }
 
-.SessionForm {
+.SessionForm__body {
   width: 450px;
   margin: 0 auto;
   padding: 0 15px;
@@ -22,7 +22,7 @@
   background-color: #6C5CE7;
 }
 
-.Form__session,
+.SessionForm,
 .PublicView__signin .ScrollBar__container,
 .PublicView__signup .ScrollBar__container {
   height: 100%;

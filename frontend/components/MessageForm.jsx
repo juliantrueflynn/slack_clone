@@ -1,7 +1,7 @@
 import React from 'react';
 import { convertForSubmit, clearEditor, createEmptyEditor } from '../util/editorUtil';
+import FormContainer from './FormContainer';
 import Button from './Button';
-import FormHandler from './FormHandler';
 import './MessageForm.css';
 
 class MessageForm extends React.Component {
@@ -106,13 +106,13 @@ class MessageForm extends React.Component {
 
     return (
       <div className="MessageForm" ref={this.formRef}>
-        <FormHandler
+        <FormContainer
           fields={fields}
           role="presentation"
           onKeyDown={this.handleEnterSubmit}
         >
           {hasSubmitButton && <Button type="submit" buttonFor="submit" size="sm">Send</Button>}
-        </FormHandler>
+        </FormContainer>
       </div>
     );
   }

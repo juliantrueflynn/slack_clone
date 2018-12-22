@@ -1,7 +1,6 @@
 import React from 'react';
 import Button from './Button';
-import withForm from './withForm';
-import FormHandler from './FormHandler';
+import FormContainer from './FormContainer';
 
 class ChannelFormModal extends React.Component {
   constructor(props) {
@@ -29,9 +28,10 @@ class ChannelFormModal extends React.Component {
   handleFormSubmit(e) {
     e.preventDefault();
 
-    const { formDispatchRequest, channel: { slug } } = this.props;
+    const { updateChannelRequest, channel: { slug } } = this.props;
     const { title, topic } = this.state;
-    formDispatchRequest({ slug, title, topic });
+
+    updateChannelRequest({ slug, title, topic });
   }
 
   handleFieldValueChange(value, prop) {
@@ -39,12 +39,7 @@ class ChannelFormModal extends React.Component {
   }
 
   render() {
-    const {
-      close,
-      currentUserSlug,
-      channel,
-      form: { formSuccess, formErrors },
-    } = this.props;
+    const { close, currentUserSlug, channel } = this.props;
     const { title, topic } = this.state;
 
     const fields = [
@@ -64,24 +59,17 @@ class ChannelFormModal extends React.Component {
     ];
 
     return (
-      <FormHandler
+      <FormContainer
+        formFor="channel"
         submitForm={this.handleFormSubmit}
         setFieldValue={this.handleFieldValueChange}
         fields={fields}
-        success={formSuccess}
-        errors={formErrors}
       >
-        <Button type="submit" color="green" size="lg">
-          Update
-        </Button>
-        <Button onClick={close} size="lg">
-          Cancel
-        </Button>
-      </FormHandler>
+        <Button type="submit" color="green" size="lg">Update</Button>
+        <Button onClick={close} size="lg">Cancel</Button>
+      </FormContainer>
     );
   }
 }
 
-const formProps = { type: 'CHANNEL_UPDATE_REQUEST', payloadName: 'channel' };
-
-export default withForm(formProps)(ChannelFormModal);
+export default ChannelFormModal;

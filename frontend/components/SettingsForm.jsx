@@ -1,7 +1,6 @@
 import React from 'react';
 import Button from './Button';
-import withForm from './withForm';
-import FormHandler from './FormHandler';
+import FormContainer from './FormContainer';
 import './SettingsForm.css';
 
 class SettingsForm extends React.Component {
@@ -39,12 +38,11 @@ class SettingsForm extends React.Component {
     const reader = new FileReader();
 
     reader.onload = () => {
-      this.setState({ avatar });
+      this.setState({ avatar, displayAvatar: reader.result });
     };
 
     if (avatar) {
       reader.readAsDataURL(avatar);
-      this.setState({ displayAvatar: reader.result });
     }
   }
 
@@ -62,7 +60,7 @@ class SettingsForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const { formDispatchRequest } = this.props;
+    const { updateUserRequest } = this.props;
     const { ...state } = this.state;
 
     const formData = new FormData();
@@ -70,16 +68,12 @@ class SettingsForm extends React.Component {
       formData.append(`user[${key}]`, state[key]);
     });
 
-    formDispatchRequest(formData);
+    updateUserRequest(formData);
     this.resetForm(formData, e.target);
   }
 
   render() {
-    const {
-      close,
-      user,
-      form: { formSuccess, formErrors },
-    } = this.props;
+    const { close, user } = this.props;
     const { username, email, displayAvatar } = this.state;
 
     const fields = [
@@ -111,31 +105,28 @@ class SettingsForm extends React.Component {
     return (
       <div className="SettingsForm">
         <div className="SettingsForm__col">
-          <FormHandler
+          <FormContainer
+            formFor="user"
             fields={fields}
             submitForm={this.handleSubmit}
             setFieldValue={this.handleFieldValueChange}
-            success={formSuccess}
-            errors={formErrors}
           >
             <Button type="submit" color="green" size="lg">Save</Button>
             <Button onClick={close} size="lg">Cancel</Button>
-          </FormHandler>
+          </FormContainer>
         </div>
         <div className="SettingsForm__col">
-          <img
-            src={displayAvatar}
-            className="SettingsForm__avatar"
-            alt={`${user.username} banner`}
-            width="250"
-            height="250"
-          />
+          <div className="SettingsForm__avatar">
+            <img
+              src={displayAvatar}
+              alt={`${user.username} banner`}
+              height="250"
+            />
+          </div>
         </div>
       </div>
     );
   }
 }
 
-const formProps = { type: 'USER_UPDATE_REQUEST', payloadName: 'user' };
-
-export default withForm(formProps)(SettingsForm);
+export default SettingsForm;

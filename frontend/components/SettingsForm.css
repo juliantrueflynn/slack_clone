@@ -14,7 +14,15 @@
   padding-right: 15px;
 }
 
+.SettingsForm__avatar {
+  width: 250px;
+  height: 250px;
+  overflow: hidden;
+}
+
 .SettingsForm__avatar > img {
   object-fit: cover;
   object-position: center;
+  width: 250px;
+  height: 250px;
 }

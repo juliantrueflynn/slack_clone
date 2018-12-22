@@ -1,7 +1,6 @@
 import React from 'react';
 import Button from './Button';
-import withForm from './withForm';
-import FormHandler from './FormHandler';
+import FormContainer from './FormContainer';
 
 class WorkspaceFormModal extends React.Component {
   constructor(props) {
@@ -18,14 +17,14 @@ class WorkspaceFormModal extends React.Component {
   handleFormSubmit(e) {
     e.preventDefault();
 
-    const { formDispatchRequest } = this.props;
+    const { createWorkspaceRequest } = this.props;
     const { title, slug } = this.state;
     const workspace = { title, slug };
-    formDispatchRequest({ workspace });
+    createWorkspaceRequest(workspace);
   }
 
   render() {
-    const { close, form: { formErrors } } = this.props;
+    const { close } = this.props;
     const { title, slug } = this.state;
 
     const fields = [
@@ -45,19 +44,17 @@ class WorkspaceFormModal extends React.Component {
     ];
 
     return (
-      <FormHandler
+      <FormContainer
+        formFor="workspace"
         fields={fields}
         setFieldValue={this.handleFieldValueChange}
         submitForm={this.handleFormSubmit}
-        errors={formErrors}
       >
         <Button type="submit" color="green" size="lg">Create workspace</Button>
         <Button onClick={close} size="lg">Cancel</Button>
-      </FormHandler>
+      </FormContainer>
     );
   }
 }
 
-const formProps = { type: 'WORKSPACE_CREATE_REQUEST', payloadName: 'workspace' };
-
-export default withForm(formProps)(WorkspaceFormModal);
+export default WorkspaceFormModal;

@@ -1,7 +1,9 @@
 import { connect } from 'react-redux';
-import { updateModal, fetchSearch, destroySearch } from '../actions/uiActions';
-import { fetchChannels } from '../actions/channelActions';
 import { getChannelsMap, getMessagesMap } from '../reducers/selectors';
+import { updateModal, fetchSearch, destroySearch } from '../actions/uiActions';
+import { fetchChannels, createChannel, updateChannel } from '../actions/channelActions';
+import { updateUser, updatePassword } from '../actions/userActions';
+import { createWorkspace } from '../actions/workspaceActions';
 import ModalController from './ModalController';
 
 const mapStateToProps = (state) => {
@@ -26,6 +28,11 @@ const mapDispatchToProps = dispatch => ({
   openModal: (modalType, modalProps) => dispatch(updateModal(modalType, modalProps)),
   closeModal: () => dispatch(updateModal(null)),
   fetchChannelsRequest: workspaceSlug => dispatch(fetchChannels.request(workspaceSlug)),
+  createChannelRequest: channel => dispatch(createChannel.request(channel)),
+  updateChannelRequest: channel => dispatch(updateChannel.request(channel)),
+  updateUserRequest: user => dispatch(updateUser.request(user)),
+  updatePasswordRequest: password => dispatch(updatePassword.request(password)),
+  createWorkspaceRequest: workspace => dispatch(createWorkspace.request(workspace)),
   fetchSearchRequest: (query, shouldNotSearch = false) => (
     dispatch(fetchSearch.request(query, shouldNotSearch))
   ),

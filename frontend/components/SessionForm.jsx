@@ -1,8 +1,7 @@
 import React from 'react';
 import Button from './Button';
 import withPublicView from './withPublicView';
-import withForm from './withForm';
-import FormHandler from './FormHandler';
+import FormContainer from './FormContainer';
 import './SessionForm.css';
 
 class SessionForm extends React.Component {
@@ -33,7 +32,7 @@ class SessionForm extends React.Component {
   }
 
   render() {
-    const { location: { pathname }, form: { formErrors } } = this.props;
+    const { location: { pathname } } = this.props;
     const { username, email, password } = this.state;
     const isSignInPage = pathname === '/signin';
 
@@ -64,22 +63,20 @@ class SessionForm extends React.Component {
           <h1 className="Page__title">
             {isSignInPage ? 'Sign in' : 'Sign up'}
           </h1>
-          <FormHandler
+          <FormContainer
             fields={fields}
+            formFor="session"
             setFieldValue={this.handleFieldValueChange}
             submitForm={this.handleFormSubmit}
-            errors={formErrors}
           >
             <Button type="submit" buttonFor="submit" fullWidth>
               {isSignInPage ? 'Sign in' : 'Sign Up'}
             </Button>
-          </FormHandler>
+          </FormContainer>
         </div>
       </div>
     );
   }
 }
 
-const formProps = { payloadName: 'session' };
-
-export default withPublicView(withForm(formProps)(SessionForm));
+export default withPublicView(SessionForm);

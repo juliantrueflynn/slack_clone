@@ -25,6 +25,11 @@ class ModalController extends React.Component {
       searchQuery,
       isLoading,
       fetchChannelsRequest,
+      createChannelRequest,
+      updateChannelRequest,
+      updateUserRequest,
+      updatePasswordRequest,
+      createWorkspaceRequest,
       fetchSearchRequest,
       destroySearch,
     } = this.props;
@@ -34,11 +39,13 @@ class ModalController extends React.Component {
         type: 'MODAL_FORM_CHANNEL',
         component: ChannelFormModal,
         modalTitle: 'Update channel',
+        updateChannelRequest,
       },
       {
         type: 'MODAL_CHAT',
         component: ChatModal,
         modalTitle: 'Create a channel',
+        createChannelRequest,
       },
       {
         type: 'MODAL_CHATS',
@@ -52,11 +59,14 @@ class ModalController extends React.Component {
         type: 'MODAL_PROFILE',
         component: ProfileModal,
         modalTitle: 'Edit your profile',
+        updateUserRequest,
+        updatePasswordRequest,
       },
       {
         type: 'MODAL_FORM_WORKSPACE',
         component: WorkspaceFormModal,
         modalTitle: 'Create a workspace',
+        createWorkspaceRequest,
       },
       {
         type: 'MODAL_SEARCH',

@@ -15,7 +15,12 @@ class ProfileModal extends React.Component {
   }
 
   render() {
-    const { close, user } = this.props;
+    const {
+      close,
+      user,
+      updateUserRequest,
+      updatePasswordRequest,
+    } = this.props;
     const { tabOpen } = this.state;
     const classNames = `ProfileModal ProfileModal__${tabOpen}`;
     const tabTitle = tabOpen === 'user' ? 'Edit Settings' : 'Change Password';
@@ -33,8 +38,12 @@ class ProfileModal extends React.Component {
           </div>
           <div className="ProfileModal__body">
             <h2 className="ProfileModal__title">{tabTitle}</h2>
-            {tabOpen === 'user' && <SettingsForm closeModal={close} user={user} />}
-            {tabOpen === 'password' && <PasswordForm closeModal={close} />}
+            {tabOpen === 'user' && (
+              <SettingsForm close={close} user={user} updateUserRequest={updateUserRequest} />
+            )}
+            {tabOpen === 'password' && (
+              <PasswordForm close={close} updatePasswordRequest={updatePasswordRequest} />
+            )}
           </div>
         </div>
       </Fragment>

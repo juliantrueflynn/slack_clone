@@ -1,59 +1,63 @@
 import React from 'react';
 import classNames from 'classnames';
+import FormField from './FormField';
 import './Form.css';
 
 class Form extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { formErrors: [], formSuccess: null };
-    this.setFormSuccess = this.setFormSuccess.bind(this);
-    this.setFormErrors = this.setFormErrors.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidUpdate(prevProps) {
-    const { errors, success } = this.props;
+  handleSubmit(e) {
+    const { submitForm } = this.props;
 
-    if (!prevProps.success && success) {
-      this.setFormSuccess(success);
+    if (submitForm) {
+      submitForm(e);
     }
-
-    if (prevProps.success && !success) {
-      this.setFormSuccess(null);
-    }
-
-    if (!prevProps.errors.length && errors.length) {
-      this.setFormErrors(errors);
-    }
-
-    if (prevProps.errors.length && !errors.length) {
-      this.setFormErrors([]);
-    }
-  }
-
-  componentWillUnmount() {
-    this.setState({ formSuccess: null, formErrors: [] });
-  }
-
-  setFormSuccess(formSuccess) {
-    this.setState({ formSuccess });
-  }
-
-  setFormErrors(formErrors) {
-    this.setState({ formErrors });
   }
 
   render() {
-    const { formFor, render } = this.props;
-    const { formErrors, formSuccess } = this.state;
+    const {
+      formFor,
+      formSuccess,
+      formErrors,
+      children,
+      setFieldValue,
+      fields,
+      submitForm,
+      dispatch,
+      ...props
+    } = this.props;
 
+    const hasErrors = !!(formErrors && formErrors.length);
     const formClassNames = classNames('Form', {
       [`Form__${formFor}`]: formFor,
     });
 
     return (
-      <div className={formClassNames}>
-        {render({ formErrors, formSuccess })}
-      </div>
+      <form className={formClassNames} onSubmit={this.handleSubmit} {...props}>
+        {hasErrors && (
+          <div className="Form__alert Form__alert--errors">
+            <ul>
+              {formErrors.map(err => <li key={err}>{err}</li>)}
+            </ul>
+          </div>
+        )}
+        {formSuccess && (
+          <div className="Form__alert Form__alert--success">
+            {formSuccess}
+          </div>
+        )}
+        {fields.map(field => (
+          <FormField key={field.id} setFieldValue={setFieldValue} {...field} />
+        ))}
+        {!!children && (
+          <div className="Form__submit Btn__group">
+            {children}
+          </div>
+        )}
+      </form>
     );
   }
 }

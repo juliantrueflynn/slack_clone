@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import Button from './Button';
-import withForm from './withForm';
-import FormHandler from './FormHandler';
+import FormContainer from './FormContainer';
 
 class ChatModal extends React.Component {
   constructor(props) {
@@ -18,13 +17,14 @@ class ChatModal extends React.Component {
   handleFormSubmit(e) {
     e.preventDefault();
 
-    const { workspaceId, formDispatchRequest } = this.props;
+    const { workspaceId, createChannelRequest } = this.props;
     const { title } = this.state;
-    formDispatchRequest({ title, workspaceId });
+
+    createChannelRequest({ title, workspaceId });
   }
 
   render() {
-    const { close, form: { formErrors } } = this.props;
+    const { close } = this.props;
     const { title } = this.state;
 
     const fields = [
@@ -42,24 +42,18 @@ class ChatModal extends React.Component {
           Channels are where your members communicate.
           They&#39;re best when organized around a topic — #leads, for example.
         </p>
-        <FormHandler
+        <FormContainer
+          formFor="channel"
           fields={fields}
           setFieldValue={this.handleFieldValueChange}
           submitForm={this.handleFormSubmit}
-          errors={formErrors}
         >
-          <Button type="submit" size="lg" color="green">
-            Create channel
-          </Button>
-          <Button buttonFor="modal" size="lg" onClick={close}>
-            Close
-          </Button>
-        </FormHandler>
+          <Button type="submit" size="lg" color="green">Create channel</Button>
+          <Button buttonFor="modal" size="lg" onClick={close}>Close</Button>
+        </FormContainer>
       </Fragment>
     );
   }
 }
 
-const formProps = { type: 'CHANNEL_CREATE_REQUEST', payloadName: 'channel' };
-
-export default withForm(formProps)(ChatModal);
+export default ChatModal;

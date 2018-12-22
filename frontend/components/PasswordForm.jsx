@@ -1,7 +1,6 @@
 import React from 'react';
-import withForm from './withForm';
 import Button from './Button';
-import FormHandler from './FormHandler';
+import FormContainer from './FormContainer';
 
 class PasswordForm extends React.Component {
   constructor(props) {
@@ -20,9 +19,10 @@ class PasswordForm extends React.Component {
   handleFormSubmit(e) {
     e.preventDefault();
 
-    const { formDispatchRequest } = this.props;
+    const { updatePasswordRequest } = this.props;
     const { password, newPassword, passwordVerify } = this.state;
-    formDispatchRequest({ password, newPassword, passwordVerify });
+
+    updatePasswordRequest({ password, newPassword, passwordVerify });
   }
 
   handleFieldValueChange(value, prop) {
@@ -30,7 +30,7 @@ class PasswordForm extends React.Component {
   }
 
   render() {
-    const { closeModal, form: { formSuccess, formErrors } } = this.props;
+    const { close } = this.props;
     const { password, newPassword, passwordVerify } = this.state;
 
     const fields = [
@@ -55,20 +55,17 @@ class PasswordForm extends React.Component {
     ];
 
     return (
-      <FormHandler
+      <FormContainer
+        formFor="password"
         fields={fields}
         setFieldValue={this.handleFieldValueChange}
         submitForm={this.handleFormSubmit}
-        success={formSuccess}
-        errors={formErrors}
       >
         <Button type="submit" color="green" size="lg">Save</Button>
-        <Button onClick={closeModal} size="lg">Cancel</Button>
-      </FormHandler>
+        <Button onClick={close} size="lg">Cancel</Button>
+      </FormContainer>
     );
   }
 }
 
-const formProps = { type: 'PASSWORD_UPDATE_REQUEST', payloadName: 'password' };
-
-export default withForm(formProps)(PasswordForm);
+export default PasswordForm;
