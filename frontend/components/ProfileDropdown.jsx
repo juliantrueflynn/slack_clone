@@ -1,6 +1,7 @@
 import React from 'react';
-import UserPreview from './UserPreview';
+import { withRouter } from 'react-router-dom';
 import DropdownModal from './DropdownModal';
+import UserPreview from './UserPreview';
 import Menu from './Menu';
 import Button from './Button';
 import StatusIcon from './StatusIcon';
@@ -10,6 +11,11 @@ class ProfileDropdown extends React.Component {
   constructor(props) {
     super(props);
     this.handleDropdownClick = this.handleDropdownClick.bind(this);
+  }
+
+  handleHomeHistoryPush() {
+    const { history } = this.props;
+    history.push('/');
   }
 
   handleDropdownClick(e) {
@@ -22,40 +28,27 @@ class ProfileDropdown extends React.Component {
   render() {
     const {
       user,
-      workspace,
-      workspaces,
-      chatPath,
+      workspaceTitle,
       closeDropdown,
       dropdownProps,
+      workspaces,
       isDdOpen,
-      url,
+      profileUrl,
     } = this.props;
-
-    const isChannel = chatPath !== 'unreads' && chatPath;
-    const chatPathUrl = isChannel ? `${url}/messages/${chatPath}` : `${url}/${chatPath}`;
 
     const ddDefaults = [
       { label: <UserPreview user={user} avatarSize="40" hasNoStatus alignCenter /> },
-      {
-        label: 'Home',
-        link: '/',
-        exact: true,
-        hasNoDrawer: true,
-      },
-      { label: 'Profile & Account', link: `${chatPathUrl}/team/${user.slug}`, hasNoDrawer: true },
+      { label: 'Home', onClick: this.handleHomeHistoryPush },
+      { label: 'Profile & Account', link: profileUrl, hasNoDrawer: true },
       { key: 'switch-workspace', label: 'Switch Workspace' },
     ];
 
-    const userItems = ddDefaults.concat(workspaces.map(item => ({
-      link: `/${item.slug}`,
-      label: item.title,
-      hasNoDrawer: true,
-    })));
+    const ddMenuItems = ddDefaults.concat(workspaces);
 
     return (
       <div className="ProfileDropdown">
         <Button buttonFor="dropdown" unStyled onClick={this.handleDropdownClick}>
-          <div className="ProfileDropdown__workspace">{workspace.title}</div>
+          <div className="ProfileDropdown__workspace">{workspaceTitle}</div>
           <div className="ProfileDropdown__user">
             <StatusIcon member={user} size="sm" />
             <div className="ProfileDropdown__username">{user.username}</div>
@@ -68,7 +61,7 @@ class ProfileDropdown extends React.Component {
             bemModifier="profile"
             close={closeDropdown}
           >
-            <Menu items={userItems} />
+            <Menu items={ddMenuItems} />
           </DropdownModal>
         )}
       </div>
@@ -76,4 +69,4 @@ class ProfileDropdown extends React.Component {
   }
 }
 
-export default ProfileDropdown;
+export default withRouter(ProfileDropdown);

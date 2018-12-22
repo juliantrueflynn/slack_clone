@@ -8,14 +8,25 @@ import LeftSidebar from './LeftSidebar';
 
 const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) => {
   const currUserSlug = state.session.currentUser.slug;
+  const user = state.entities.members[currUserSlug];
+
   const channelsMap = getChannelsMap(state);
   const channels = Object.values(channelsMap);
   const chatPath = state.ui.displayChatPath;
+
+  const chatPathUrl = channelsMap[chatPath] ? `${url}/messages/${chatPath}` : `${url}/${chatPath}`;
+  const profileUrl = `${chatPathUrl}/team/${user.slug}`;
 
   const unreadsMap = state.entities.unreads;
   const unreads = Object.values(unreadsMap).filter(unread => unread && unread.hasUnreads);
   const hasUnreadChannels = unreads.some(unread => unread.readableType === 'Channel');
   const hasUnreadConvos = unreads.some(unread => unread.readableType === 'Message');
+
+  const workspaces = getSubbedWorkspaces(state).map(({ slug, title: label }) => ({
+    link: `/${slug}`,
+    label,
+    hasNoDrawer: true,
+  }));
 
   const channelItemDecorate = ({ title: label, slug, status }) => ({
     slug,
@@ -33,12 +44,13 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
   return {
     hasUnreadConvos,
     hasUnreadChannels,
-    user: state.entities.members[currUserSlug],
-    workspaces: getSubbedWorkspaces(state),
+    user,
+    workspaces,
     workspace: state.entities.workspaces[workspaceSlug],
     subbedChannels,
     dmChannels,
     chatPath,
+    profileUrl,
     drawer: state.ui.drawer,
     isModalOpen: state.ui.displayModal.modalType === 'MODAL_LEFT_SIDEBAR',
     isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_PROFILE',
@@ -46,8 +58,9 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  openModal: (modalType, modalProps = {}) => dispatch(updateModal(modalType, modalProps)),
+const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug } } }) => ({
+  openChannelsListModal: () => dispatch(updateModal('MODAL_CHATS', { workspaceSlug })),
+  openChannelFormModal: workspaceId => dispatch(updateModal('MODAL_FORM_CHANNEL', { workspaceId })),
   closeModal: () => dispatch(updateModal(null)),
   openDropdown: (ddType, ddProps) => dispatch(updateDropdown(ddType, ddProps)),
   closeDropdown: () => dispatch(updateDropdown(null)),

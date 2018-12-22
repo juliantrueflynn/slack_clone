@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from './Button';
 
-const InlineSuffixButton = ({
+const SuffixButton = ({
   children,
   icon,
   onClick,
@@ -16,4 +16,4 @@ const InlineSuffixButton = ({
   </Fragment>
 );
 
-export default InlineSuffixButton;
+export default SuffixButton;

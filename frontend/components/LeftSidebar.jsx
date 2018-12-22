@@ -1,12 +1,12 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Modal from './Modal';
-import Menu from './Menu';
 import StatusIcon from './StatusIcon';
 import Button from './Button';
-import LeftSidebarMenus from './LeftSidebarMenus';
-import InlineSuffixButton from './InlineSuffixButton';
+import LeftSidebarWidgets from './LeftSidebarWidgets';
+import SuffixButton from './SuffixButton';
 import ProfileDropdown from './ProfileDropdown';
+import Menu from './Menu';
+import Modal from './Modal';
 import './LeftSidebar.css';
 
 class LeftSidebar extends React.Component {
@@ -16,12 +16,11 @@ class LeftSidebar extends React.Component {
     this.handleHistoryPush = this.handleHistoryPush.bind(this);
   }
 
-  handleDmUnsubClick(e) {
+  handleDmUnsubClick(e, channelSlug) {
     e.preventDefault();
 
     const { updateChannelSubRequest } = this.props;
-    const dmChannelSlug = e.target.id;
-    updateChannelSubRequest(dmChannelSlug);
+    updateChannelSubRequest(channelSlug);
   }
 
   handleHistoryPush(linkUrl) {
@@ -65,15 +64,13 @@ class LeftSidebar extends React.Component {
       dropdownProps,
       workspaces,
       chatPath,
-      openModal,
+      profileUrl,
+      openChannelsListModal,
+      openChannelFormModal,
       isMobileSize,
-      match: { url },
     } = this.props;
 
-    const openChatModal = () => openModal('MODAL_FORM_CHANNEL', { workspaceId: workspace.id });
-    const openChatsModal = () => openModal('MODAL_CHATS', { workspaceSlug: workspace.slug });
-
-    const quickLinksList = [
+    const quicklistMenuItems = [
       {
         icon: <FontAwesomeIcon icon="align-left" />,
         label: 'All Unreads',
@@ -90,22 +87,18 @@ class LeftSidebar extends React.Component {
       },
     ];
 
-    const channelsItems = subbedChannels.map(ch => ({
+    const channelsMenuItems = subbedChannels.map(ch => ({
       ...ch,
       icon: <FontAwesomeIcon icon="hashtag" size="sm" />,
     }));
 
-    const dmChannelsItems = dmChannels.map(({ status, ...ch }) => ({
+    const dmChannelsMenuItems = dmChannels.map(({ status, ...ch }) => ({
       ...ch,
       icon: <StatusIcon member={{ status }} />,
       label: (
-        <InlineSuffixButton
-          id={ch.slug}
-          icon="times-circle"
-          onClick={this.handleDmUnsubClick}
-        >
+        <SuffixButton icon="times-circle" onClick={e => this.handleDmUnsubClick(e, ch.slug)}>
           {ch.label}
-        </InlineSuffixButton>
+        </SuffixButton>
       ),
     }));
 
@@ -113,40 +106,37 @@ class LeftSidebar extends React.Component {
       {
         key: 'profile',
         component: ProfileDropdown,
-        props: {
-          chatPath,
-          url,
-          workspace,
-          workspaces,
-          user,
-          isDdOpen,
-          dropdownProps,
-          openDropdown,
-          closeDropdown,
-        },
+        workspaces,
+        profileUrl,
+        user,
+        workspaceTitle: workspace.title,
+        isDdOpen,
+        dropdownProps,
+        openDropdown,
+        closeDropdown,
       },
-      { key: 'quicklinks', component: Menu, items: quickLinksList },
+      { key: 'quicklinks', component: Menu, items: quicklistMenuItems },
       {
         key: 'chats',
         component: Menu,
-        items: channelsItems,
+        items: channelsMenuItems,
         title: (
-          <InlineSuffixButton icon="plus-circle" onClick={openChatModal}>
-            <Button unStyled buttonFor="chats" onClick={openChatsModal}>Channels</Button>
-          </InlineSuffixButton>
+          <SuffixButton icon="plus-circle" onClick={() => openChannelFormModal(workspace.id)}>
+            <Button unStyled buttonFor="chats" onClick={openChannelsListModal}>Channels</Button>
+          </SuffixButton>
         ),
       },
       {
         key: 'dm-chats',
         component: Menu,
-        items: dmChannelsItems,
+        items: dmChannelsMenuItems,
         title: 'Direct Messages',
       }
     ];
 
     return (
       <aside className="LeftSidebar">
-        <LeftSidebarMenus menuGroups={sidebarMenuItems} />
+        <LeftSidebarWidgets menuGroups={sidebarMenuItems} />
         {isModalOpen && isMobileSize && (
           <Modal
             isOpen
@@ -156,7 +146,7 @@ class LeftSidebar extends React.Component {
             hasDarkOverlay
             unStyled
           >
-            <LeftSidebarMenus menuGroups={sidebarMenuItems} />
+            <LeftSidebarWidgets menuGroups={sidebarMenuItems} />
           </Modal>
         )}
       </aside>
