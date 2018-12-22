@@ -64,6 +64,11 @@ class Channel < ApplicationRecord
     owner ? owner.slug : nil
   end
 
+  def last_message_created_at
+    last_message = messages.with_parent.last
+    last_message.created_at.to_datetime if last_message
+  end
+
   def days_since_created(date)
     start_date = date.midnight.to_date
     days_between = (start_date - created_at.midnight.to_date).to_i
@@ -81,7 +86,7 @@ class Channel < ApplicationRecord
 
   def history_messages(until_date = nil)
     return messages if messages.by_entry_parent.length <= 12
-    return recent_messages(DateTime.current) if until_date.nil?
+    return recent_messages(last_message_created_at) if until_date.nil?
     previous_messages(until_date)
   end
 

@@ -41,6 +41,6 @@ class Read < ApplicationRecord
 
   def generate_accessed_at
     return if skip_callbacks
-    self.accessed_at = DateTime.now
+    self.accessed_at = DateTime.current
   end
 end

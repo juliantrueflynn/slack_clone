@@ -31,7 +31,7 @@
   end
 
   def default_sub_message_params
-    date = DateTime.now
+    date = DateTime.current
     { author_id: user_id, created_at: date, updated_at: date }
   end
 

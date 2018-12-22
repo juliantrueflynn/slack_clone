@@ -37,7 +37,7 @@ class Workspace < ApplicationRecord
 
   def user_convos(user_id)
     messages.convos_with_author_id(user_id)
-      .includes(:channel, :author, :parent_message)
+      .includes(:channel, :author)
   end
 
   def channels_last_read_by_user(user_id)

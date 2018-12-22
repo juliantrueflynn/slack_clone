@@ -25,10 +25,10 @@ end
 json.channel_subs do
   channel_subs = @workspace.chat_subs.shared_with_user_id(user_id)
 
-  json.array! channel_subs do |chat_sub|
+  json.array! channel_subs.includes(:channel) do |chat_sub|
     json.(chat_sub, :id, :user_id, :in_sidebar, :channel_id, :created_at)
     json.user_slug chat_sub.user_slug
-    json.channel_slug chat_sub.channel_slug
+    json.channel_slug chat_sub.channel.slug
   end
 end
 
@@ -62,10 +62,12 @@ json.reads do
   read_convos = reads.where(readable_type: 'Message')
 
   json.array! read_chats.includes(:channel) do |read|
-    json.(read, :id, :slug, :accessed_at, :readable_id, :readable_type)
+    json.(read, :id, :accessed_at, :readable_id, :readable_type)
+    json.slug read.channel.slug
   end
 
-  json.array! read_convos.includes(message: [:author, :channel]) do |read|
-    json.(read, :id, :slug, :accessed_at, :readable_id, :readable_type)
+  json.array! read_convos.includes(:message) do |read|
+    json.(read, :id, :accessed_at, :readable_id, :readable_type)
+    json.slug read.message.slug
   end
 end
