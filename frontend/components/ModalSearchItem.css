@@ -1,4 +1,4 @@
-.SearchModalItem {
+.ModalSearchItem {
   padding: 10px;
   border-radius: 6px;
   background-color: #FFF;
@@ -6,29 +6,29 @@
   margin-bottom: 10px;
 }
 
-.SearchModalItem:hover {
+.ModalSearchItem:hover {
   box-shadow: 0px 1px 2px 0px rgba(178, 190, 195, 0.2)
 }
 
-.SearchModalItem__meta {
+.ModalSearchItem__meta {
   color: #636E72;
   margin-bottom: 9px;
   font-size: 13px;
 }
 
-.SearchModalItem:hover .SearchModalItem__meta {
+.ModalSearchItem:hover .ModalSearchItem__meta {
   color: #74B9FF;
 }
 
-.SearchModalItem__meta-hashtag {
+.ModalSearchItem__meta-hashtag {
   margin-right: 3px;
 }
 
-.SearchModalItem__meta-sep {
+.ModalSearchItem__meta-sep {
   margin: 0 7px;
 }
 
-.SearchModalItem__social {
+.ModalSearchItem__social {
   font-size: 13px;
   margin-top: 9px;
   margin-left: 44px;
@@ -36,11 +36,11 @@
   color: #636E72;
 }
 
-.SearchModalItem__threads {
+.ModalSearchItem__threads {
   margin-right: 20px;
 }
 
-.SearchModalItem__reactions svg,
-.SearchModalItem__threads svg {
+.ModalSearchItem__reactions svg,
+.ModalSearchItem__threads svg {
   margin-right: 4px;
 }

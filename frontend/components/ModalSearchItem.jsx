@@ -2,9 +2,9 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { dateUtil } from '../util/dateUtil';
 import Message from './Message';
-import './SearchModalItem.css';
+import './ModalSearchItem.css';
 
-const SearchModalItem = ({
+const ModalSearchItem = ({
   message,
   users,
   channelsMap,
@@ -28,14 +28,14 @@ const SearchModalItem = ({
   }
 
   return (
-    <div className="SearchModalItem" role="listitem">
-      <div className="SearchModalItem__meta">
-        <span className="SearchModalItem__meta-channel">
-          <span className="SearchModalItem__meta-hashtag">#</span>
+    <div className="ModalSearchItem" role="listitem">
+      <div className="ModalSearchItem__meta">
+        <span className="ModalSearchItem__meta-channel">
+          <span className="ModalSearchItem__meta-hashtag">#</span>
           <strong>{channelsMap[message.channelSlug].title}</strong>
         </span>
-        <span className="SearchModalItem__meta-sep">–</span>
-        <span className="SearchModalItem__meta-date">
+        <span className="ModalSearchItem__meta-sep">–</span>
+        <span className="ModalSearchItem__meta-date">
           {dateCreated}
         </span>
       </div>
@@ -46,15 +46,15 @@ const SearchModalItem = ({
         shouldHideEngagement
       />
       {(hasThread || hasReactions) && (
-        <div className="SearchModalItem__social">
+        <div className="ModalSearchItem__social">
           {hasThread && (
-            <div className="SearchModalItem__threads">
+            <div className="ModalSearchItem__threads">
               <FontAwesomeIcon icon={['far', 'comment']} />
               {threadCount}
             </div>
           )}
           {hasReactions && (
-            <div className="SearchModalItem__reactions">
+            <div className="ModalSearchItem__reactions">
               <FontAwesomeIcon icon={['far', 'smile']} />
               {reactionCount}
             </div>
@@ -65,4 +65,4 @@ const SearchModalItem = ({
   );
 };
 
-export default SearchModalItem;
+export default ModalSearchItem;

@@ -79,7 +79,7 @@ class ChannelHeaderNavbar extends React.Component {
     } = this.props;
     const { isSidebarModalOpen } = this.state;
 
-    const openProfileModal = () => openModal('MODAL_PROFILE', { user });
+    const openModalProfile = () => openModal('MODAL_PROFILE', { user });
     let channelMenuItems = [];
     let ddMenuItems = [];
 
@@ -133,7 +133,7 @@ class ChannelHeaderNavbar extends React.Component {
       {
         key: 'profile',
         icon: <FontAwesomeIcon icon="user-cog" />,
-        onClick: openProfileModal,
+        onClick: openModalProfile,
       },
     ];
 
@@ -155,7 +155,7 @@ class ChannelHeaderNavbar extends React.Component {
             drawerType={drawerType}
             toggleLink={this.handleLinkToggle}
             channel={channel}
-            openProfileModal={openProfileModal}
+            openModalProfile={openModalProfile}
             closeModal={this.handleSidebarModalToggle}
           />
         )}

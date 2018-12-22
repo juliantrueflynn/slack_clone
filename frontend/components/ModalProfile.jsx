@@ -2,9 +2,9 @@ import React, { Fragment } from 'react';
 import SettingsForm from './SettingsForm';
 import PasswordForm from './PasswordForm';
 import Button from './Button';
-import './ProfileModal.css';
+import './ModalProfile.css';
 
-class ProfileModal extends React.Component {
+class ModalProfile extends React.Component {
   constructor(props) {
     super(props);
     this.state = { tabOpen: 'user' };
@@ -22,13 +22,13 @@ class ProfileModal extends React.Component {
       updatePasswordRequest,
     } = this.props;
     const { tabOpen } = this.state;
-    const classNames = `ProfileModal ProfileModal__${tabOpen}`;
+    const classNames = `ModalProfile ModalProfile__${tabOpen}`;
     const tabTitle = tabOpen === 'user' ? 'Edit Settings' : 'Change Password';
 
     return (
       <Fragment>
         <div className={classNames}>
-          <div className="ProfileModal__tabs">
+          <div className="ModalProfile__tabs">
             <Button buttonFor="user-tab" onClick={this.handleTabClick('user')}>
               Edit Settings
             </Button>
@@ -36,8 +36,8 @@ class ProfileModal extends React.Component {
               Change Password
             </Button>
           </div>
-          <div className="ProfileModal__body">
-            <h2 className="ProfileModal__title">{tabTitle}</h2>
+          <div className="ModalProfile__body">
+            <h2 className="ModalProfile__title">{tabTitle}</h2>
             {tabOpen === 'user' && (
               <SettingsForm close={close} user={user} updateUserRequest={updateUserRequest} />
             )}
@@ -51,4 +51,4 @@ class ProfileModal extends React.Component {
   }
 }
 
-export default ProfileModal;
+export default ModalProfile;

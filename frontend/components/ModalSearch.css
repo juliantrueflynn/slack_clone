@@ -1,4 +1,4 @@
-/* .SearchModal {
+/* .ModalSearch {
   background-color: #F7FAFC;
   overflow: hidden;
   height: 100%;
@@ -8,7 +8,7 @@
   position: relative;
 }
 
-.SearchModal--new {
+.ModalSearch--new {
   height: auto;
 } */
 
@@ -23,7 +23,7 @@
   position: relative;
 }
 
-.SearchModal {
+.ModalSearch {
   position: aboslute;
   top: 0;
   right: 0;
@@ -32,14 +32,14 @@
   overflow: hidden;
 }
 
-.SearchModal .ScrollBar__container {
+.ModalSearch .ScrollBar__container {
   display: flex;
   position: relative;
   flex: 1;
   padding: 15px;
 }
 
-.SearchModal__searchbar {
+.ModalSearch__searchbar {
   display: flex;
   padding: 4px 20px;
   border-bottom: 1px solid #DFE6E9;
@@ -49,35 +49,35 @@
   border-top-right-radius: 6px;
 }
 
-.SearchModal .Btn__modal-close {
+.ModalSearch .Btn__modal-close {
   display: flex;
   color: #636E72;
   padding: 0 10px;
 }
 
-.SearchModal .SearchBar .Btn__clear::after {
+.ModalSearch .SearchBar .Btn__clear::after {
   content: "|";
   color: #DFE6E9;
   padding-left: 10px;
 }
 
-.SearchModal .SearchBar .Btn__searchbar {
+.ModalSearch .SearchBar .Btn__searchbar {
   padding: 0 10px;
 }
 
-.SearchModal .SearchBar .Btn__clear {
+.ModalSearch .SearchBar .Btn__clear {
   display: flex;
   padding-left: 10px;
 }
 
-.SearchModal .SearchBar .SearchBar__input {
+.ModalSearch .SearchBar .SearchBar__input {
   line-height: 1.6;
   font-size: 16px;
   padding: 8px 4px;
 }
 
 @media screen and (max-width: 768px) {
-  .SearchModal .Modal {
+  .ModalSearch .Modal {
     position: absolute;
     top: 0;
     right: 0;
@@ -86,12 +86,12 @@
     height: 100%;
   }
 
-  .SearchModal .Modal,
-  .SearchModal .Modal__body {
+  .ModalSearch .Modal,
+  .ModalSearch .Modal__body {
     border-radius: 0;
   }
 
-  .SearchModal--new .Modal__body {
+  .ModalSearch--new .Modal__body {
     height: 100%;
   }
 }

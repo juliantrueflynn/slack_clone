@@ -2,10 +2,10 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import Modal from './Modal';
 import ModalChannelForm from './ModalChannelForm';
-import ProfileModal from './ProfileModal';
-import ChannelsListModal from './ChannelsListModal';
-import WorkspaceFormModal from './WorkspaceFormModal';
-import SearchModal from './SearchModal';
+import ModalProfile from './ModalProfile';
+import ModalChannelsList from './ModalChannelsList';
+import ModalWorkspaceForm from './ModalWorkspaceForm';
+import ModalSearch from './ModalSearch';
 
 class ModalController extends React.Component {
   componentDidMount() {
@@ -43,7 +43,7 @@ class ModalController extends React.Component {
       },
       {
         type: 'MODAL_CHATS',
-        component: ChannelsListModal,
+        component: ModalChannelsList,
         modalTitle: 'Browse channels',
         modalFor: 'chats',
         fetchChannelsRequest,
@@ -51,20 +51,20 @@ class ModalController extends React.Component {
       },
       {
         type: 'MODAL_PROFILE',
-        component: ProfileModal,
+        component: ModalProfile,
         modalTitle: 'Edit your profile',
         updateUserRequest,
         updatePasswordRequest,
       },
       {
         type: 'MODAL_FORM_WORKSPACE',
-        component: WorkspaceFormModal,
+        component: ModalWorkspaceForm,
         modalTitle: 'Create a workspace',
         createWorkspaceRequest,
       },
       {
         type: 'MODAL_SEARCH',
-        component: SearchModal,
+        component: ModalSearch,
         isLoading,
         searchQuery,
         channelsMap,

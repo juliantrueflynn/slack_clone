@@ -2,9 +2,9 @@ import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Avatar from './Avatar';
 import FormField from './FormField';
-import './SearchModalAside.css';
+import './ModalSearchAside.css';
 
-const SearchModalAside = ({
+const ModalSearchAside = ({
   messages,
   channelsMap,
   users,
@@ -34,7 +34,7 @@ const SearchModalAside = ({
     type: 'checkbox',
     label: (
       <Fragment>
-        <div className="SearchModalAside__filter-prefix">{prefix}</div>
+        <div className="ModalSearchAside__filter-prefix">{prefix}</div>
         {label}
       </Fragment>
     ),
@@ -52,19 +52,19 @@ const SearchModalAside = ({
   ));
 
   const widget = (title, arr) => (
-    <div className={`SearchModalAside__widget SearchModalAside__widget-${title.toLowerCase()}`}>
-      <h4 className="SearchModalAside__widget-title">{title}</h4>
+    <div className={`ModalSearchAside__widget ModalSearchAside__widget-${title.toLowerCase()}`}>
+      <h4 className="ModalSearchAside__widget-title">{title}</h4>
       {arr.map(item => <FormField key={item.id} {...item} />)}
     </div>
   );
 
   return (
-    <aside className="SearchModalAside">
-      <h3 className="SearchModalAside__title">Filter by</h3>
+    <aside className="ModalSearchAside">
+      <h3 className="ModalSearchAside__title">Filter by</h3>
       {widget('People', people)}
       {widget('Channels', channels)}
     </aside>
   );
 };
 
-export default SearchModalAside;
+export default ModalSearchAside;

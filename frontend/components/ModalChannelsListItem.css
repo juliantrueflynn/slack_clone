@@ -1,24 +1,24 @@
-.ChannelsListModalItem {
+.ModalChannelsListItem {
   display: block;
   color: #2D3436;
   padding: 18px 12px;
   border-top: 1px solid #DFE6E9;
 }
 
-.ChannelsListModalItem:hover {
+.ModalChannelsListItem:hover {
   background-color: rgba(116, 185, 255, 0.1);
 }
 
-.ChannelsListModalItem__title {
+.ModalChannelsListItem__title {
   margin: 0 0 5px;
 }
 
-.ChannelsListModalItem__hashtag {
+.ModalChannelsListItem__hashtag {
   margin-right: 6px;
   opacity: .6;
 }
 
-.ChannelsListModalItem__byline {
+.ModalChannelsListItem__byline {
   font-size: 14px;
   color: #636E72;
 }

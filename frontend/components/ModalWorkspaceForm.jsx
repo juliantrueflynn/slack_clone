@@ -2,7 +2,7 @@ import React from 'react';
 import Button from './Button';
 import FormContainer from './FormContainer';
 
-class WorkspaceFormModal extends React.Component {
+class ModalWorkspaceForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = { title: '', slug: '' };
@@ -57,4 +57,4 @@ class WorkspaceFormModal extends React.Component {
   }
 }
 
-export default WorkspaceFormModal;
+export default ModalWorkspaceForm;

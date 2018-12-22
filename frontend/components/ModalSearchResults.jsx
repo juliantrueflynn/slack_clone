@@ -1,9 +1,9 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import SearchModalItem from './SearchModalItem';
-import './SearchModalResults.css';
+import ModalSearchItem from './ModalSearchItem';
+import './ModalSearchResults.css';
 
-const SearchModalResults = ({
+const ModalSearchResults = ({
   results,
   isLoading,
   users,
@@ -16,12 +16,12 @@ const SearchModalResults = ({
   }
 
   return (
-    <div className="SearchModalResults">
-      <span className="SearchModalResults__loading-txt">Loading</span>
-      <span className="SearchModalResults__empty-txt">Type and hit enter to search</span>
-      <h4 className="SearchModalResults__count-txt">{resultsText}</h4>
+    <div className="ModalSearchResults">
+      <span className="ModalSearchResults__loading-txt">Loading</span>
+      <span className="ModalSearchResults__empty-txt">Type and hit enter to search</span>
+      <h4 className="ModalSearchResults__count-txt">{resultsText}</h4>
       {isLoading || results.map(message => (
-        <SearchModalItem
+        <ModalSearchItem
           key={message.slug}
           message={message}
           users={users}
@@ -33,4 +33,4 @@ const SearchModalResults = ({
   );
 };
 
-export default withRouter(SearchModalResults);
+export default withRouter(ModalSearchResults);

@@ -4,12 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBar from './SearchBar';
 import Button from './Button';
 import ScrollBar from './ScrollBar';
-import SearchModalResults from './SearchModalResults';
-import SearchModalAside from './SearchModalAside';
+import ModalSearchResults from './ModalSearchResults';
+import ModalSearchAside from './ModalSearchAside';
 import withWindowResize from './withWindowResize';
-import './SearchModal.css';
+import './ModalSearch.css';
 
-class SearchModal extends React.Component {
+class ModalSearch extends React.Component {
   constructor(props) {
     super(props);
 
@@ -162,15 +162,15 @@ class SearchModal extends React.Component {
 
     const isEmpty = !results.length && !peopleFilter.length && !channelFilter.length;
 
-    const overlayClassName = classNames('SearchModal', {
-      'SearchModal--empty': isEmpty && !isNewSearch && !isLoading,
-      'SearchModal--loading': isLoading,
-      'SearchModal--new': isNewSearch,
+    const overlayClassName = classNames('ModalSearch', {
+      'ModalSearch--empty': isEmpty && !isNewSearch && !isLoading,
+      'ModalSearch--loading': isLoading,
+      'ModalSearch--new': isNewSearch,
     });
 
     return (
       <div className={overlayClassName} style={{ height }}>
-        <div className="SearchModal__searchbar">
+        <div className="ModalSearch__searchbar">
           <SearchBar
             searchSubmit={this.handleSearchRequest}
             destroySearch={destroySearch}
@@ -182,13 +182,13 @@ class SearchModal extends React.Component {
           </Button>
         </div>
         <ScrollBar>
-          <SearchModalResults
+          <ModalSearchResults
             results={results}
             isLoading={isLoading}
             users={users}
             channelsMap={channelsMap}
           />
-          <SearchModalAside
+          <ModalSearchAside
             messages={messages}
             channelsMap={channelsMap}
             users={users}
@@ -202,4 +202,4 @@ class SearchModal extends React.Component {
   }
 }
 
-export default withWindowResize(SearchModal);
+export default withWindowResize(ModalSearch);
