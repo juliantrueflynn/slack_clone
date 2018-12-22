@@ -6,6 +6,7 @@ import accordion from './accordionReducer';
 import drawer from './drawerReducer';
 import dropdown from './dropdownReducer';
 import isEditingMessage from './isEditingMessageReducer';
+import defaultChannel from './defaultChannelReducer';
 
 const uiReducer = combineReducers({
   displayWorkspaceSlug,
@@ -15,6 +16,7 @@ const uiReducer = combineReducers({
   drawer,
   dropdown,
   isEditingMessage,
+  defaultChannel,
 });
 
 export default uiReducer;
