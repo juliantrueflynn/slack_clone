@@ -8,11 +8,18 @@ import {
 import * as actions from '../actions/workspaceActions';
 import { WORKSPACE_SUB } from '../actions/actionTypes';
 import { apiCreate, apiUpdate } from '../util/apiUtil';
+import { createRead } from '../actions/readActions';
 
 function* loadCreateSub({ workspaceSub: { workspaceId } }) {
   try {
     const response = yield call(apiCreate, 'workspace_sub', { workspaceId });
     yield put(actions.createWorkspaceSub.receive(response, true));
+
+    if (response && response.channelSubs) {
+      yield all(response.channelSubs.map(sub => (
+        put(createRead.request({ readableId: sub.channelId, readableType: 'Channel' }))
+      )));
+    }
   } catch (error) {
     yield put(actions.createWorkspaceSub.failure(error));
   }
