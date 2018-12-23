@@ -11,6 +11,7 @@ class ProfileDropdown extends React.Component {
   constructor(props) {
     super(props);
     this.handleDropdownClick = this.handleDropdownClick.bind(this);
+    this.handleHomeHistoryPush = this.handleHomeHistoryPush.bind(this);
   }
 
   handleHomeHistoryPush() {
