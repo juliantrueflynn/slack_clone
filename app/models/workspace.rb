@@ -36,21 +36,13 @@ class Workspace < ApplicationRecord
   end
 
   def user_convos(user_id)
-    messages.convos_with_author_id(user_id)
-      .includes(:channel, :author)
+    messages.convos_with_author_id(user_id).includes(:channel, :author)
   end
 
-  def channels_unreads(user_id)
-    Message.where(id: Message.find_by_sql(["SELECT messages.*
-      FROM messages, channels, reads
-      WHERE reads.readable_id = channels.id 
-        AND messages.channel_id = channels.id
-        AND channels.workspace_id = ?
-        AND reads.user_id = ?
-        AND messages.entity_type = 'entry'
-        AND messages.parent_message_id IS NULL
-        AND messages.created_at > reads.accessed_at", self.id, user_id])
-    )
+  def user_unreads(user_id)
+    messages.channel_unreads_with_user_id(user_id)
+      .includes(:author)
+      .order(id: :desc)
   end
   
   def latest_entries(user_id)
