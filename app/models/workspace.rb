@@ -40,13 +40,19 @@ class Workspace < ApplicationRecord
       .includes(:channel, :author)
   end
 
-  def channels_last_read_by_user(user_id)
-    reads.channels_with_user(user_id)
-      .left_outer_joins(channel: :messages)
-      .where.not(messages: { channel_id: nil })
-      .distinct
+  def channels_unreads(user_id)
+    Message.where(id: Message.find_by_sql(["SELECT messages.*
+      FROM messages, channels, reads
+      WHERE reads.readable_id = channels.id 
+        AND messages.channel_id = channels.id
+        AND channels.workspace_id = ?
+        AND reads.user_id = ?
+        AND messages.entity_type = 'entry'
+        AND messages.parent_message_id IS NULL
+        AND messages.created_at > reads.accessed_at", self.id, user_id])
+    )
   end
-
+  
   def latest_entries(user_id)
     channel_entries_ids = messages.channel_last_entry_id(user_id).values
     convos_entries_ids = messages.convos_last_entry_id(user_id).values
