@@ -1,7 +1,7 @@
 all_messages = []
 
 json.messages do
-  @reads.each do |read|
+  json.array! @reads do |read|
     channel = read.channel
     parent_entry_messages = channel.messages.with_entry_type.with_parent
     messages = parent_entry_messages.includes(:author, :parent_message)
