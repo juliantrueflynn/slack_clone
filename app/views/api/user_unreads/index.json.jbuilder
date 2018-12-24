@@ -1,24 +1,8 @@
 json.messages do
-<<<<<<< HEAD
-  json.array! @reads do |read|
-    channel = read.channel
-    parent_entry_messages = channel.messages.with_entry_type.with_parent
-    messages = parent_entry_messages.includes(:author, :parent_message)
-    unreads = messages.created_until(read.accessed_at)
-    all_messages << unreads
-
-    json.array! unreads do |message|
-      json.(message, *message.attributes.keys)
-      json.author_slug message.author.slug
-      json.parent_message_slug message.parent_message_slug
-      json.channel_slug channel.slug
-    end
-=======
   json.array! @unreads.includes(:channel, :author) do |message|
     json.(message, *message.attributes.keys)
     json.author_slug message.author.slug
     json.channel_slug message.channel.slug
->>>>>>> fix__unreads
   end
 end
 
