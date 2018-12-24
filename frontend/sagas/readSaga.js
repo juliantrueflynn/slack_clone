@@ -113,7 +113,7 @@ function* loadMessageRead({ message: msg }) {
   } else {
     const lastRead = unread && unread.lastRead;
     const unreadProps = { slug, lastRead, lastActive: msg.createdAt };
-    yield put(actions.createUnread(read.readableType, unreadProps, msg.slug));
+    yield put(actions.createUnread({ ...read, ...unreadProps }));
   }
 }
 

@@ -32,16 +32,16 @@ const unreadsByChannelReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case CREATE_UNREAD: {
-      const { unreadType: readableType, entityProps, messageSlug } = action;
+      const { readableType, slug, messageSlug } = action.unread;
 
       if (readableType !== 'Channel') {
         return state;
       }
 
       nextState = merge({}, state);
-      nextState[entityProps.slug].push(messageSlug);
+      nextState[slug].push(messageSlug);
 
-      return merge({}, state, nextState);
+      return nextState;
     }
     case CLEAR_UNREADS:
       nextState = merge({}, state, nextState);
