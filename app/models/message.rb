@@ -39,6 +39,12 @@ class Message < ApplicationRecord
       .where(author_id: author_id)
   end
 
+  def self.channel_unreads_with_user_id(user_id)
+    by_entry_parent.joins(channel: :reads)
+      .where(reads: { user_id: user_id })
+      .where('messages.created_at > reads.accessed_at')
+  end
+
   def self.convo_author_child_of(author_id)
     joins(:replies).where(replies_messages: { author_id: author_id })
   end

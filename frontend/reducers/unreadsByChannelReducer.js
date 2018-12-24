@@ -20,27 +20,28 @@ const unreadsByChannelReducer = (state = {}, action) => {
     case READ.INDEX.RECEIVE: {
       const { messages } = action.messages;
 
-      nextState = messages.reduce((acc, curr) => {
-        acc[curr.channelSlug] = [];
-        return acc;
-      }, {});
+      nextState = {};
+      Object.keys(state).forEach((chSlug) => {
+        nextState[chSlug] = [];
+      });
 
-      return messages.reduce((acc, curr) => {
-        acc[curr.channelSlug].push(curr.slug);
-        return acc;
-      }, nextState);
+      messages.forEach((msg) => {
+        nextState[msg.channelSlug].push(msg.slug);
+      });
+
+      return merge({}, state, nextState);
     }
     case CREATE_UNREAD: {
-      const { unreadType: readableType, entityProps, messageSlug } = action;
+      const { readableType, slug, messageSlug } = action.unread;
 
       if (readableType !== 'Channel') {
         return state;
       }
 
       nextState = merge({}, state);
-      nextState[entityProps.slug].push(messageSlug);
+      nextState[slug].push(messageSlug);
 
-      return merge({}, state, nextState);
+      return nextState;
     }
     case CLEAR_UNREADS:
       nextState = merge({}, state, nextState);

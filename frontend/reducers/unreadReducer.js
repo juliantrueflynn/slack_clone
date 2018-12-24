@@ -84,12 +84,12 @@ const unreadReducer = (state = {}, action) => {
       delete nextState[action.read.slug];
       return nextState;
     case CREATE_UNREAD: {
-      const { unreadType: readableType, entityProps } = action;
+      const { unread } = action;
+
       nextState = {};
-      nextState[entityProps.slug] = {
-        readableType,
-        hasUnreads: isDateOlderThanOther(entityProps.lastRead, entityProps.lastActive),
-        ...entityProps
+      nextState[unread.slug] = {
+        ...unread,
+        hasUnreads: isDateOlderThanOther(unread.lastRead, unread.lastActive),
       };
 
       return merge({}, state, nextState);

@@ -107,6 +107,11 @@ const getAllThreadViewMessages = (msgsMap, unreadsMap, channelsMap) => (
     .filter(unread => unread && unread.readableType === 'Message')
     .reduce((acc, curr) => {
       const msg = msgsMap[curr.slug];
+
+      if (!msg || !msg.thread) {
+        return acc;
+      }
+
       const replies = msg.thread.map(msgSlug => msgsMap[msgSlug]);
       const parentMsg = {
         ...msgsMap[curr.slug],

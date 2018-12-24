@@ -29,7 +29,6 @@ const messageReducer = (state = {}, action) => {
             id: msg.parentMessageId,
             slug: msg.parentMessageSlug,
             channelSlug: msg.channelSlug,
-            thread: [],
           };
         }
       });
@@ -39,11 +38,12 @@ const messageReducer = (state = {}, action) => {
       });
 
       Object.values(nextState).forEach((msg) => {
-        nextState[msg.slug] = {
-          ...msg,
-          authors: [],
-          reactionIds: [],
-        };
+        nextState[msg.slug] = { ...msg, reactionIds: [] };
+
+        if (!msg.parentMessageId) {
+          nextState[msg.slug].thread = [];
+          nextState[msg.slug].authors = [];
+        }
       });
 
       return nextState;
@@ -68,14 +68,15 @@ const messageReducer = (state = {}, action) => {
         nextState[msg.slug] = {
           channelSlug: channel && channel.slug,
           reactionIds: [],
-          thread: msg.parentMessageId ? null : [],
-          authors: msg.parentMessageId ? null : [],
+          thread: [],
+          authors: [],
           ...msg
         };
       });
 
       messages.filter(msg => msg.parentMessageId).forEach((msg) => {
         const parent = nextState[msg.parentMessageSlug];
+        nextState[msg.slug].thread = null;
 
         if (parent) {
           if (!parent.thread.includes(msg.slug)) {
@@ -121,19 +122,29 @@ const messageReducer = (state = {}, action) => {
 
       nextState = {};
       nextState[slug] = {
-        authors: [authorSlug],
+        authors: [],
         reactionIds: [],
-        ...message
+        thread: [],
+        ...message,
       };
 
-      if (parentSlug && state[parentSlug]) {
+      if (parentSlug) {
+        nextState[slug] = { ...nextState[slug], thread: null, authors: null };
+        nextState[parentSlug] = {
+          id: message.parentMessageId,
+          channelSlug: message.channelSlug,
+          thread: [slug],
+          authors: [authorSlug],
+        };
+      }
+
+      if (state[parentSlug]) {
         nextState[parentSlug] = {
           ...state[parentSlug],
-          channelSlug: message.channelSlug,
           thread: [...state[parentSlug].thread, slug],
         };
 
-        if (!nextState[parentSlug].authors.includes(authorSlug)) {
+        if (!state[parentSlug].authors.includes(authorSlug)) {
           nextState[parentSlug].authors = [...state[parentSlug].authors, authorSlug];
         }
       }

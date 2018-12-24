@@ -76,7 +76,7 @@ class MessagesList extends React.Component {
       <Fragment>
         {messages && messages.map(message => (
           <Message
-            key={message.id}
+            key={message.slug}
             message={message}
             isDdOpen={!!dropdownType}
             toggleReaction={toggleReaction}

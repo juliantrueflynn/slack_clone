@@ -65,7 +65,7 @@ class Channel < ApplicationRecord
   end
 
   def last_message_created_at
-    last_message = messages.with_parent.last
+    last_message = messages.last
     last_message.created_at.to_datetime if last_message
   end
 

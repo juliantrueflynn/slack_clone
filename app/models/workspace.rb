@@ -36,17 +36,15 @@ class Workspace < ApplicationRecord
   end
 
   def user_convos(user_id)
-    messages.convos_with_author_id(user_id)
-      .includes(:channel, :author)
+    messages.convos_with_author_id(user_id).includes(:channel, :author)
   end
 
-  def channels_last_read_by_user(user_id)
-    reads.channels_with_user(user_id)
-      .left_outer_joins(channel: :messages)
-      .where.not(messages: { channel_id: nil })
-      .distinct
+  def user_unreads(user_id)
+    messages.channel_unreads_with_user_id(user_id)
+      .includes(:author)
+      .order(id: :desc)
   end
-
+  
   def latest_entries(user_id)
     channel_entries_ids = messages.channel_last_entry_id(user_id).values
     convos_entries_ids = messages.convos_last_entry_id(user_id).values

@@ -1,6 +1,4 @@
 class Read < ApplicationRecord
-  attr_accessor :skip_callbacks
-
   before_validation :ensure_workspace_id
   before_validation :generate_accessed_at
 
@@ -40,7 +38,6 @@ class Read < ApplicationRecord
   end
 
   def generate_accessed_at
-    return if skip_callbacks
     self.accessed_at = DateTime.current
   end
 end
