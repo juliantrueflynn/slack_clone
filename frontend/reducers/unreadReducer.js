@@ -57,10 +57,11 @@ const unreadReducer = (state = {}, action) => {
     case USER_THREAD.INDEX.RECEIVE: {
       const { messages } = action.messages;
 
-      nextState = messages.reduce((acc, curr) => {
-        acc[curr.slug] = { hasUnreads: false };
-        return acc;
-      });
+      nextState = {};
+      messages.filter(msg => state[msg.slug] && state[msg.slug].readableType === 'Message')
+        .forEach((msg) => {
+          nextState[msg.slug] = { hasUnreads: false };
+        });
 
       return merge({}, state, nextState);
     }
