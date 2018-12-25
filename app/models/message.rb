@@ -22,6 +22,7 @@ class Message < ApplicationRecord
     -> { includes(:author, :parent_message) },
     class_name: 'Message',
     foreign_key: :parent_message_id
+  has_many :children, class_name: 'Message', foreign_key: :parent_message_id
   has_many :favorites
   has_many :reads, foreign_key: :readable_id
   has_many :pins

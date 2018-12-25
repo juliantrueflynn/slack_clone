@@ -6,6 +6,7 @@ import {
   READ,
   USER_THREAD,
   CLEAR_UNREADS,
+  MESSAGE,
 } from '../actions/actionTypes';
 
 const unreadReducer = (state = {}, action) => {
@@ -73,6 +74,7 @@ const unreadReducer = (state = {}, action) => {
       nextState[read.slug] = {
         slug: read.slug,
         lastRead: read.accessedAt,
+        lastActive: read.lastActive,
         readableType: read.readableType,
         readableId: read.readableId,
         hasUnreads: false,
