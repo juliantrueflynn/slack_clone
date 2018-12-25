@@ -122,19 +122,11 @@ const messageReducer = (state = {}, action) => {
 
       nextState = {};
       nextState[slug] = {
-        authors: [],
         reactionIds: [],
-        thread: [],
+        authors: parentSlug ? null : [],
+        thread: parentSlug ? null : [],
         ...message,
       };
-
-      if (parentSlug) {
-        nextState[slug] = { ...nextState[slug], thread: null, authors: null };
-        nextState[parentSlug] = {
-          thread: [slug],
-          authors: [authorSlug],
-        };
-      }
 
       if (state[parentSlug]) {
         nextState[parentSlug] = {
