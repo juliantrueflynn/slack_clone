@@ -55,6 +55,17 @@ const unreadReducer = (state = {}, action) => {
 
       return nextState;
     }
+    case MESSAGE.CREATE.RECEIVE: {
+      const { channelSlug, createdAt, parentMessageId } = action.message;
+
+      if (parentMessageId) {
+        return state;
+      }
+
+      nextState = {};
+      nextState[channelSlug] = { lastActive: createdAt };
+      return merge({}, state, nextState);
+    }
     case USER_THREAD.INDEX.RECEIVE: {
       const { messages } = action.messages;
 
@@ -74,11 +85,14 @@ const unreadReducer = (state = {}, action) => {
       nextState[read.slug] = {
         slug: read.slug,
         lastRead: read.accessedAt,
-        lastActive: read.lastActive,
         readableType: read.readableType,
         readableId: read.readableId,
         hasUnreads: false,
       };
+
+      if (read.lastActive) {
+        nextState[read.slug].lastActive = read.lastActive;
+      }
 
       return merge({}, state, nextState);
     }
