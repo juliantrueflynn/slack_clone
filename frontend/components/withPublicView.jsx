@@ -12,8 +12,6 @@ const mapStateToProps = state => ({
   workspacesMap: state.entities.workspaces,
   subbedWorkspaces: getSubbedWorkspaces(state),
   currentUser: state.session.currentUser,
-  isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_PUBLIC',
-  dropdownProps: state.ui.dropdown.dropdownProps,
 });
 
 const mapDispatchToProps = (dispatch, { location }) => ({

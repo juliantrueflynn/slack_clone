@@ -1,10 +1,10 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import DropdownModal from './DropdownModal';
 import UserPreview from './UserPreview';
 import Menu from './Menu';
 import Button from './Button';
 import StatusIcon from './StatusIcon';
+import DropdownModalContainer from './DropdownModalContainer';
 import './ProfileDropdown.css';
 
 class ProfileDropdown extends React.Component {
@@ -30,10 +30,7 @@ class ProfileDropdown extends React.Component {
     const {
       user,
       workspaceTitle,
-      closeDropdown,
-      dropdownProps,
       workspaces,
-      isDdOpen,
       profileUrl,
     } = this.props;
 
@@ -55,16 +52,13 @@ class ProfileDropdown extends React.Component {
             <div className="ProfileDropdown__username">{user.username}</div>
           </div>
         </Button>
-        {isDdOpen && (
-          <DropdownModal
-            coordinates={dropdownProps}
-            fixedLeftPos="10px"
-            bemModifier="profile"
-            close={closeDropdown}
-          >
-            <Menu items={ddMenuItems} />
-          </DropdownModal>
-        )}
+        <DropdownModalContainer
+          dropdownType="DROPDOWN_PROFILE"
+          fixedLeftPos="10px"
+          bemModifier="profile"
+        >
+          <Menu items={ddMenuItems} />
+        </DropdownModalContainer>
       </div>
     );
   }

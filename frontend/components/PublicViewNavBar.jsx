@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import withWindowResize from './withWindowResize';
-import DropdownModal from './DropdownModal';
 import Menu from './Menu';
 import Button from './Button';
 import './PublicViewNavBar.css';
+import DropdownModalContainer from './DropdownModalContainer';
 
 const PublicViewNavBar = ({
   isMobileSize,
@@ -15,8 +15,6 @@ const PublicViewNavBar = ({
   openModal,
   openDropdown,
   closeDropdown,
-  isDdOpen,
-  dropdownProps,
 }) => {
   const menuModifier = subbedWorkspaces.length ? 'filled' : 'empty';
   const sessionMenuItems = [
@@ -80,11 +78,9 @@ const PublicViewNavBar = ({
           </Button>
         </nav>
       </div>
-      {isDdOpen && (
-        <DropdownModal bemModifier="public" coordinates={dropdownProps} close={closeDropdown}>
-          <Menu menuFor="dropdown" items={ddItems} bemModifier={menuModifier} />
-        </DropdownModal>
-      )}
+      <DropdownModalContainer dropdownType="DROPDOWN_PUBLIC" bemModifier="public">
+        <Menu menuFor="dropdown" items={ddItems} bemModifier={menuModifier} />
+      </DropdownModalContainer>
     </header>
   );
 };

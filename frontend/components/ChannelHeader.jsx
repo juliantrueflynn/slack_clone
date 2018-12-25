@@ -7,11 +7,6 @@ import ChannelHeaderNavbar from './ChannelHeaderNavbar';
 import './ChannelHeader.css';
 
 class ChannelHeader extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleDdCloseClick = this.handleDdCloseClick.bind(this);
-  }
-
   getPageTitle() {
     const { channel, chatPath } = this.props;
 
@@ -25,18 +20,6 @@ class ChannelHeader extends React.Component {
     }
 
     return title;
-  }
-
-  handleDdCloseClick(onClickCallback) {
-    const { isDdOpen, closeDropdown } = this.props;
-
-    if (onClickCallback) {
-      onClickCallback();
-    }
-
-    if (isDdOpen) {
-      closeDropdown();
-    }
   }
 
   render() {
@@ -116,7 +99,7 @@ class ChannelHeader extends React.Component {
         <ChannelHeaderNavbar
           chatTitle={this.getPageTitle()}
           openModal={openModal}
-          closeDropdown={this.handleDdCloseClick}
+          closeDropdown={closeDropdown}
           openChannelEditModal={openChannelEditModal}
           channel={channel}
           messages={messages}

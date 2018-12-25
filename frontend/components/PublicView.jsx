@@ -45,9 +45,7 @@ class PublicView extends React.Component {
       workspacesMap,
       subbedWorkspaces,
       openModal,
-      dropdownProps,
       closeDropdown,
-      isDdOpen,
       location: { pathname },
       render,
     } = this.props;
@@ -65,8 +63,6 @@ class PublicView extends React.Component {
       <div className={pageClassNames}>
         <ScrollBar>
           <PublicViewNavBar
-            isDdOpen={isDdOpen}
-            dropdownProps={dropdownProps}
             openDropdown={this.handleDdClick}
             closeDropdown={closeDropdown}
             subbedWorkspaces={subbedWorkspaces}

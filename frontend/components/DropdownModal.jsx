@@ -30,7 +30,7 @@ class DropdownModal extends React.Component {
 
   render() {
     const {
-      items,
+      isDdOpen,
       coordinates,
       fixedLeftPos,
       windowWidth,
@@ -39,6 +39,10 @@ class DropdownModal extends React.Component {
       ...modalProps
     } = this.props;
     const { top, left } = this.state;
+
+    if (!isDdOpen) {
+      return null;
+    }
 
     const style = {
       content: {
@@ -50,7 +54,7 @@ class DropdownModal extends React.Component {
 
     return (
       <Modal
-        isOpen
+        isOpen={isDdOpen}
         modalFor="dropdown"
         style={style}
         unStyled
