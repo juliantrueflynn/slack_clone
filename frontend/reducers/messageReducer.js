@@ -131,8 +131,6 @@ const messageReducer = (state = {}, action) => {
       if (parentSlug) {
         nextState[slug] = { ...nextState[slug], thread: null, authors: null };
         nextState[parentSlug] = {
-          id: message.parentMessageId,
-          channelSlug: message.channelSlug,
           thread: [slug],
           authors: [authorSlug],
         };

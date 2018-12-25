@@ -1,7 +1,15 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
-import { USER_THREAD } from '../actions/actionTypes';
-import { fetchUserThreads } from '../actions/messageActions';
+import {
+  all,
+  fork,
+  takeLatest,
+  call,
+  put,
+  select,
+} from 'redux-saga/effects';
+import { USER_THREAD, MESSAGE } from '../actions/actionTypes';
+import { fetchUserThreads, fetchMessage } from '../actions/messageActions';
 import { apiFetch } from '../util/apiUtil';
+import { selectEntityBySlug, selectUIByDisplay } from '../reducers/selectors';
 
 function* fetchUserThreadIndex({ workspaceSlug }) {
   try {
@@ -12,6 +20,33 @@ function* fetchUserThreadIndex({ workspaceSlug }) {
   }
 }
 
-export default function* userThreadSaga() {
+function* fetchNewMessageConvo({ message }) {
+  if (!message.parentMessageId) {
+    return;
+  }
+
+  const currView = yield select(selectUIByDisplay, 'displayChatPath');
+
+  if (currView === 'threads') {
+    const parent = yield select(selectEntityBySlug, 'messages', message.parentMessageSlug);
+
+    if (!parent || !parent.slug) {
+      yield put(fetchMessage.request(message.parentMessageSlug));
+    }
+  }
+}
+
+function* watchUserThreadIndex() {
   yield takeLatest(USER_THREAD.INDEX.REQUEST, fetchUserThreadIndex);
+}
+
+function* watchCreateMessage() {
+  yield takeLatest(MESSAGE.CREATE.RECEIVE, fetchNewMessageConvo);
+}
+
+export default function* userThreadSaga() {
+  yield all([
+    fork(watchUserThreadIndex),
+    fork(watchCreateMessage),
+  ]);
 }
