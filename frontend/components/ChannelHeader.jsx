@@ -30,7 +30,9 @@ class ChannelHeader extends React.Component {
   handleDdCloseClick(onClickCallback) {
     const { isDdOpen, closeDropdown } = this.props;
 
-    onClickCallback();
+    if (onClickCallback) {
+      onClickCallback();
+    }
 
     if (isDdOpen) {
       closeDropdown();
