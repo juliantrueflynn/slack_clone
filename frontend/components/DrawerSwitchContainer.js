@@ -22,7 +22,7 @@ const mapStateToProps = (state, { match: { params } }) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  openDrawer: drawer => dispatch(updateDrawer(drawer)),
+  openDrawer: (drawerType, drawerSlug) => dispatch(updateDrawer(drawerType, drawerSlug)),
   closeDrawer: () => dispatch(updateDrawer(null)),
   openModal: (modalType, modalProps = {}) => dispatch(updateModal(modalType, modalProps)),
   createChannelRequest: dmChat => dispatch(createChannel.request(dmChat)),

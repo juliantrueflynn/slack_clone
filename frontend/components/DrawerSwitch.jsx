@@ -21,7 +21,7 @@ class DrawerSwitch extends React.Component {
       isMobileSize,
     } = this.props;
 
-    openDrawer({ drawerType, drawerSlug });
+    openDrawer(drawerType, drawerSlug);
 
     if (isMobileSize) {
       this.handleMobileModalToggle(true);
