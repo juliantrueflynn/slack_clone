@@ -14,14 +14,9 @@ class DrawerSwitch extends React.Component {
   }
 
   componentDidMount() {
-    const {
-      openDrawer,
-      drawerType,
-      drawerSlug,
-      isMobileSize,
-    } = this.props;
+    const { openDrawer, isMobileSize } = this.props;
 
-    openDrawer(drawerType, drawerSlug);
+    openDrawer();
 
     if (isMobileSize) {
       this.handleMobileModalToggle(true);
@@ -29,11 +24,16 @@ class DrawerSwitch extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { drawerType, fetchEntityRequest, isMobileSize } = this.props;
+    const {
+      drawerType,
+      drawerSlug,
+      openDrawer,
+      isMobileSize
+    } = this.props;
     const { isModalOpen } = this.state;
 
-    if (drawerType && drawerType !== prevProps.drawerType) {
-      fetchEntityRequest();
+    if (drawerType !== prevProps.drawerType || drawerSlug !== prevProps.drawerSlug) {
+      openDrawer();
     }
 
     if (!isModalOpen && isMobileSize) {
@@ -140,7 +140,7 @@ class DrawerSwitch extends React.Component {
         path: 'details',
         channel,
         accordion,
-        isLoading: isLoading.drawer,
+        isLoading,
         destroyPinRequest,
         currentUserSlug,
         openModal,
@@ -153,7 +153,7 @@ class DrawerSwitch extends React.Component {
       .map(({ component: Component, path, ...props }) => (
         <Drawer
           key={path}
-          isLoading={isLoading.drawer}
+          isLoading={isLoading}
           drawerType={drawerType}
           drawerTitle={this.getDrawerTitle()}
           closeDrawer={this.handleClose}

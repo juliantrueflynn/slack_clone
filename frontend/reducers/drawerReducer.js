@@ -1,12 +1,4 @@
-import {
-  WORKSPACE,
-  SIGN_OUT,
-  MESSAGE,
-  USER,
-  FAVORITE,
-  CHANNEL,
-  DRAWER_UPDATE,
-} from '../actions/actionTypes';
+import { DRAWER_UPDATE, WORKSPACE, SIGN_OUT } from '../actions/actionTypes';
 
 const _defaultState = {
   drawerType: null,
@@ -26,18 +18,6 @@ const rightSidebarReducer = (state = _defaultState, action) => {
 
       return { drawerType, drawerSlug };
     }
-    case MESSAGE.SHOW.REQUEST: {
-      const { messageSlug: drawerSlug } = action;
-      return { drawerType: 'convo', drawerSlug };
-    }
-    case USER.SHOW.REQUEST: {
-      const { userSlug: drawerSlug } = action;
-      return { drawerType: 'team', drawerSlug };
-    }
-    case FAVORITE.INDEX.REQUEST:
-      return { drawerType: 'favorites', drawerSlug: null };
-    case CHANNEL.SHOW.REQUEST:
-      return { drawerType: 'details', drawerSlug: null };
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return _defaultState;

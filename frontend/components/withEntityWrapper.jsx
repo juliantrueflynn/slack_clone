@@ -2,10 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fetchWorkspace } from '../actions/workspaceActions';
 import { fetchUnreads } from '../actions/readActions';
-import { fetchUserThreads, fetchMessages, fetchMessage } from '../actions/messageActions';
-import { fetchChannel } from '../actions/channelActions';
-import { fetchFavorites } from '../actions/favoriteActions';
-import { fetchUser } from '../actions/userActions';
+import { fetchUserThreads, fetchMessages } from '../actions/messageActions';
 import EntityWrapper from './EntityWrapper';
 
 const withEntityWrapper = pathName => (WrappedComponent) => {
@@ -19,13 +16,7 @@ const withEntityWrapper = pathName => (WrappedComponent) => {
 
   const mapDispatchToProps = (dispatch, { match }) => ({
     fetchEntityRequest: () => {
-      const {
-        workspaceSlug,
-        chatPath,
-        0: drawerParent,
-        drawerType,
-        drawerSlug,
-      } = match.params;
+      const { workspaceSlug, chatPath } = match.params;
       let slug;
       let fetchEntity;
 
@@ -44,23 +35,6 @@ const withEntityWrapper = pathName => (WrappedComponent) => {
         } else {
           slug = chatPath;
           fetchEntity = fetchMessages;
-        }
-      }
-
-      if (pathName === 'drawerSlug') {
-        slug = drawerSlug;
-
-        if (drawerType === 'convo') {
-          fetchEntity = fetchMessage;
-        } else if (drawerType === 'team') {
-          fetchEntity = fetchUser;
-        } else if (drawerType === 'favorites') {
-          slug = workspaceSlug;
-          fetchEntity = fetchFavorites;
-        } else if (drawerType === 'details' && drawerParent) {
-          const splitPath = drawerParent.split('/');
-          slug = splitPath[1];
-          fetchEntity = fetchChannel;
         }
       }
 
