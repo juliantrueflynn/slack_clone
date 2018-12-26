@@ -34,8 +34,13 @@ class ScrollBar extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { shouldAutoScroll } = this.props;
+    const { isAtBottom } = this.state;
 
     if (shouldAutoScroll && this.hasNewMessage(prevProps.lastMessage)) {
+      this.scrollToBottom();
+    }
+
+    if (shouldAutoScroll && isAtBottom) {
       this.scrollToBottom();
     }
   }
