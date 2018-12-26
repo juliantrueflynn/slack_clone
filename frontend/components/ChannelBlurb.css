@@ -11,16 +11,11 @@
 
 .ChannelBlurb__title {
   margin: 0 0 10px;
-  font-weight: 400;
-  font-size: 1.85em
-}
-
-.ChannelBlurb__dm .ChannelBlurb__title,
-.ChannelBlurb__title-text {
   font-weight: bold;
+  font-size: 1.85em;
 }
 
-.ChannelBlurb .ChannelBlurb__title-text::before {
+.ChannelBlurb__channel .ChannelBlurb__title::before {
   content: "\0023";
   font-weight: normal;
   margin-right: 4px;
