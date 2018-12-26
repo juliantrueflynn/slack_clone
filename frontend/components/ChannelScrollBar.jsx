@@ -10,14 +10,29 @@ class ChannelScrollBar extends React.Component {
   constructor(props) {
     super(props);
     this.scrollbar = React.createRef();
-    this.state = { hasHistory: true, scrollerHeight: 0 };
-    this.handleFetchHistory = this.handleFetchHistory.bind(this);
+    this.state = { scrollerHeight: 0 };
     this.container = this.scrollbar.current;
+    this.handleFetchHistory = this.handleFetchHistory.bind(this);
   }
 
   componentDidMount() {
-    this.handleHistory();
+    const { channel: { scrollLoc } } = this.props;
     this.container = this.scrollbar.current.scroller.current._container;
+
+    if (this.container) {
+      let scrollTop;
+      if (scrollLoc || scrollLoc === 0) {
+        scrollTop = scrollLoc;
+      } else {
+        scrollTop = this.container.scrollHeight;
+      }
+
+      this.container.scrollTop = scrollTop;
+
+      if (this.container.scrollTop === 0) {
+        this.handleFetchHistory();
+      }
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -28,7 +43,6 @@ class ChannelScrollBar extends React.Component {
     }
 
     if (!isFetching && prevProps.isFetching) {
-      this.handleHistory();
       const height = this.container.scrollHeight - prevState.scrollerHeight;
       this.container.scrollTop = height;
     }
@@ -56,19 +70,8 @@ class ChannelScrollBar extends React.Component {
 
   shouldFetchHistory() {
     const { messages, channel } = this.props;
-
     const firstMsgDate = messages[0] && messages[0].createdAt;
-    const parents = messages.filter(msg => !msg.parentMessageId || msg.entityType === 'entry');
-
-    if (!messages[0] || parents.length < 13) {
-      return false;
-    }
-
     return !isOnSameDay(firstMsgDate, channel.createdAt);
-  }
-
-  handleHistory() {
-    this.setState({ hasHistory: this.shouldFetchHistory() });
   }
 
   render() {
@@ -82,13 +85,12 @@ class ChannelScrollBar extends React.Component {
       matchUrl,
       height,
     } = this.props;
-    const { hasHistory } = this.state;
 
     const lastMessage = messages[messages.length - 1];
     const style = { height };
     const classes = classNames('ChannelScrollBar', {
       'ChannelScrollBar--loading': isFetching,
-      'ChannelScrollBar--no-history': !isFetching && !hasHistory,
+      'ChannelScrollBar--no-history': !isFetching && !this.shouldFetchHistory(),
     });
 
     return (
@@ -103,14 +105,12 @@ class ChannelScrollBar extends React.Component {
           shouldAutoScroll
           shouldMountAtBottom
         >
-          {!isFetching && !hasHistory && (
-            <ChannelBlurb
-              channel={channel}
-              currentUserSlug={currentUserSlug}
-              openModal={openModal}
-              matchUrl={matchUrl}
-            />
-          )}
+          <ChannelBlurb
+            channel={channel}
+            currentUserSlug={currentUserSlug}
+            openModal={openModal}
+            matchUrl={matchUrl}
+          />
           <div className="ChannelScrollBar__loader">
             <span className="ChannelScrollBar__loader-txt">Loading...</span>
           </div>

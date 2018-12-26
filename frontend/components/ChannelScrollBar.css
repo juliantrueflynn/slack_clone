@@ -28,3 +28,7 @@
 .ChannelScrollBar--loading .ChannelScrollBar__loader {
   display: block;
 }
+
+.ChannelScrollBar--no-history .ChannelBlurb {
+  display: block;
+}

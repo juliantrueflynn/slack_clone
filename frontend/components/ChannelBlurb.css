@@ -5,10 +5,6 @@
   display: none;
 }
 
-.ChannelScrollBar--no-history .ChannelBlurb {
-  display: block;
-}
-
 .ChannelBlurb__title {
   margin: 0 0 10px;
   font-weight: bold;

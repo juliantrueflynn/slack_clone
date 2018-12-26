@@ -12,26 +12,6 @@ class ScrollBar extends React.Component {
     this.handleScroll = this.handleScroll.bind(this);
   }
 
-  componentDidMount() {
-    const { shouldMountAtBottom, channelScrollLoc } = this.props;
-
-    if (!shouldMountAtBottom) {
-      return;
-    }
-
-    const scroller = this.scroller.current;
-
-    if (channelScrollLoc || channelScrollLoc === 0) {
-      scroller._container.scrollTop = channelScrollLoc;
-    } else {
-      this.scrollToBottom();
-    }
-
-    if (scroller._container.scrollTop === 0) {
-      this.handleIsAtTop(scroller);
-    }
-  }
-
   componentDidUpdate(prevProps) {
     const { shouldAutoScroll } = this.props;
     const { isAtBottom } = this.state;
