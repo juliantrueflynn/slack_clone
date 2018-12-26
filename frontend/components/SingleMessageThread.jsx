@@ -23,6 +23,11 @@ const SingleMessageThread = ({
   const lastDate = `Last reply ${month} ${day}`;
 
   const threadAuthors = authors.map(userSlug => users[userSlug]);
+
+  if (!authors.every(userSlug => userSlug === authors[0])) {
+    threadAuthors.shift();
+  }
+
   let threadLength = thread.length;
   threadLength += threadLength === 1 ? ' reply' : ' replies';
 

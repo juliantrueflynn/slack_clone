@@ -53,7 +53,7 @@ class MessageHoverMenu extends React.Component {
         link: `${chatPathUrl}/convo/${slug}`,
         icon: <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />,
         hasNoDrawer: true,
-        condition: isEntryType,
+        condition: isEntryType && !message.parentMessageId,
       },
       {
         key: 'favorite',
