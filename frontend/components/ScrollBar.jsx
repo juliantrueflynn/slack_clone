@@ -7,7 +7,7 @@ class ScrollBar extends React.Component {
   constructor(props) {
     super(props);
     this.scroller = React.createRef();
-    this.state = { isAtBottom: false, clientHeight: 0 };
+    this.state = { isAtBottom: false };
     this.handleIsAtBottom = this.handleIsAtBottom.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
   }
@@ -32,28 +32,11 @@ class ScrollBar extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { shouldAutoScroll, isFetching } = this.props;
-    const { isAtBottom } = this.state;
+  componentDidUpdate(prevProps) {
+    const { shouldAutoScroll } = this.props;
 
-    if (shouldAutoScroll && (isAtBottom || this.hasNewMessage(isAtBottom, prevProps.lastMessage))) {
+    if (shouldAutoScroll && this.hasNewMessage(prevProps.lastMessage)) {
       this.scrollToBottom();
-    }
-
-    if (isFetching || prevProps.isFetching) {
-      const scroller = this.scroller.current._container;
-      const container = scroller.children[0];
-      const { height } = container.getBoundingClientRect();
-
-      if (isFetching && !prevProps.isFetching) {
-        this.setClientHeight(height);
-      }
-
-      if (!isFetching && prevProps.isFetching) {
-        const clientHeight = height - prevState.clientHeight;
-        this.setClientHeight(clientHeight);
-        scroller.scrollTop = clientHeight;
-      }
     }
   }
 
@@ -66,12 +49,9 @@ class ScrollBar extends React.Component {
     }
   }
 
-  setClientHeight(clientHeight) {
-    this.setState({ clientHeight });
-  }
-
-  hasNewMessage(isAtBottom, prevLastMsg) {
+  hasNewMessage(prevLastMsg) {
     const { lastMessage, currentUserSlug } = this.props;
+    const { isAtBottom } = this.state;
     const hasNewMsg = lastMessage && prevLastMsg && prevLastMsg.id !== lastMessage.id;
     const lastMsgByCurrUser = prevLastMsg && currentUserSlug === prevLastMsg.authorSlug;
 
