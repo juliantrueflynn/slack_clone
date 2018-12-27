@@ -7,7 +7,6 @@ import './MessageForm.css';
 class MessageForm extends React.Component {
   constructor(props) {
     super(props);
-    this.formRef = React.createRef();
     this.state = { isActive: false, editorState: createEmptyEditor() };
     this.onChange = this.onChange.bind(this);
     this.handleActiveClick = this.handleActiveClick.bind(this);
@@ -20,14 +19,6 @@ class MessageForm extends React.Component {
 
     if (!shouldInitOnClick) {
       this.setState({ isActive: true });
-    }
-  }
-
-  componentDidUpdate(_, prevState) {
-    const { isActive } = this.state;
-
-    if (!prevState.isActive && isActive) {
-      this.formRef.current.children[0].children[0].children[0].focus();
     }
   }
 
@@ -106,11 +97,12 @@ class MessageForm extends React.Component {
     }];
 
     return (
-      <div className="MessageForm" ref={this.formRef}>
+      <div className="MessageForm">
         <FormContainer
           fields={fields}
           role="presentation"
           onKeyDown={this.handleEnterSubmit}
+          submitForm={this.handleSubmit}
         >
           {hasSubmitButton && <Button type="submit" buttonFor="submit" size="sm">Send</Button>}
         </FormContainer>
