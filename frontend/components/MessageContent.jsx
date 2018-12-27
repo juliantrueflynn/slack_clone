@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
-import MessageEditor from './MessageEditor';
+import { EditorState } from 'draft-js';
 import { mountEditorState, convertForSubmit } from '../util/editorUtil';
 import Button from './Button';
+import MessageEditor from './MessageEditor';
 
 class MessageContent extends React.Component {
   constructor(props) {
@@ -22,7 +23,15 @@ class MessageContent extends React.Component {
   }
 
   onChange(editorState) {
-    this.setEditorState(editorState);
+    const { decorator } = this.state;
+
+    if (editorState.getDecorator()) {
+      this.setState({ decorator: editorState.getDecorator(), editorState });
+    } else if (decorator) {
+      this.setState({ editorState: EditorState.set(editorState, { decorator }) });
+    } else {
+      this.setState({ editorState });
+    }
   }
 
   setEditorState(editorState) {

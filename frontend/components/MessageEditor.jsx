@@ -1,18 +1,22 @@
 import React from 'react';
 import classNames from 'classnames';
+import createEmojiPlugin from 'draft-js-emoji-plugin';
+import Editor from 'draft-js-plugins-editor';
 import 'draft-js/dist/Draft.css';
 import 'draft-js-emoji-plugin/lib/plugin.css';
-import Editor from 'draft-js-plugins-editor';
-import createEmojiPlugin from 'draft-js-emoji-plugin';
-import { emojiConfig } from '../util/editorUtil';
 import './MessageEditor.css';
+import { emojiConfig } from '../util/editorUtil';
 
 class MessageEditor extends React.Component {
   constructor(props) {
     super(props);
     this.editor = React.createRef();
-    this.emojiPlugin = createEmojiPlugin(emojiConfig);
     this.focus = this.focus.bind(this);
+
+    const emojiPlugin = createEmojiPlugin(emojiConfig);
+    const { EmojiSelect } = emojiPlugin;
+    this.plugins = [emojiPlugin];
+    this.components = { EmojiSelect };
   }
 
   componentDidMount() {
@@ -24,13 +28,7 @@ class MessageEditor extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { containerId, readOnly } = this.props;
-
-    if (!prevProps.readOnly && !readOnly) {
-      if (prevProps.containerId && prevProps.containerId !== containerId) {
-        this.focus();
-      }
-    }
+    const { readOnly } = this.props;
 
     if (prevProps.readOnly && !readOnly) {
       this.focus();
@@ -44,15 +42,9 @@ class MessageEditor extends React.Component {
   }
 
   render() {
-    const {
-      readOnly,
-      editorState,
-      onChange,
-      placeholder,
-    } = this.props;
-    const { EmojiSuggestions, EmojiSelect } = this.emojiPlugin;
+    const { containerId, ...props } = this.props;
+    const { readOnly } = props;
 
-    const plugins = [this.emojiPlugin];
     const editorClassNames = classNames('Editor', {
       Editor__locked: readOnly,
       Editor__unlocked: !readOnly,
@@ -60,16 +52,8 @@ class MessageEditor extends React.Component {
 
     return (
       <div role="presentation" className={editorClassNames} onClick={this.focus}>
-        <Editor
-          ref={this.editor}
-          plugins={plugins}
-          editorState={editorState}
-          onChange={onChange}
-          readOnly={readOnly}
-          placeholder={placeholder}
-        />
-        {readOnly || (<EmojiSuggestions />)}
-        {readOnly || (<EmojiSelect />)}
+        <Editor ref={this.editor} plugins={this.plugins} {...props} />
+        {readOnly || <this.components.EmojiSelect />}
       </div>
     );
   }

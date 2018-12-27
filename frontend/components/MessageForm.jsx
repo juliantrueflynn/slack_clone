@@ -1,13 +1,14 @@
 import React from 'react';
+import { EditorState } from 'draft-js';
 import { convertForSubmit, clearEditor, createEmptyEditor } from '../util/editorUtil';
-import FormContainer from './FormContainer';
 import Button from './Button';
+import MessageEditor from './MessageEditor';
 import './MessageForm.css';
 
 class MessageForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isActive: false, editorState: createEmptyEditor() };
+    this.state = { isActive: false, decorator: null, editorState: createEmptyEditor() };
     this.onChange = this.onChange.bind(this);
     this.handleActiveClick = this.handleActiveClick.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,7 +24,15 @@ class MessageForm extends React.Component {
   }
 
   onChange(editorState) {
-    this.setState({ editorState });
+    const { decorator } = this.state;
+
+    if (editorState.getDecorator()) {
+      this.setState({ decorator: editorState.getDecorator(), editorState });
+    } else if (decorator) {
+      this.setState({ editorState: EditorState.set(editorState, { decorator }) });
+    } else {
+      this.setState({ editorState });
+    }
   }
 
   handleActiveClick() {
@@ -60,14 +69,8 @@ class MessageForm extends React.Component {
   }
 
   render() {
-    const {
-      placeholder,
-      hasSubmitButton,
-      parentMessageId,
-      channelId,
-      shouldInitOnClick,
-    } = this.props;
-    const { isActive } = this.state;
+    const { placeholder, hasSubmitButton, shouldInitOnClick } = this.props;
+    const { isActive, editorState } = this.state;
     const editorPlaceholder = placeholder || 'Reply...';
 
     if (shouldInitOnClick && !isActive) {
@@ -83,30 +86,20 @@ class MessageForm extends React.Component {
       );
     }
 
-    const containerId = parentMessageId || channelId;
-
-    const fields = [{
-      id: 'messageForm',
-      type: 'editor',
-      containerId,
-      isNotConvoForm: !parentMessageId,
-      onChange: this.onChange,
-      placeholder: editorPlaceholder,
-      shouldInitOnClick,
-      ...this.state,
-    }];
-
     return (
-      <div className="MessageForm">
-        <FormContainer
-          fields={fields}
-          role="presentation"
-          onKeyDown={this.handleEnterSubmit}
-          submitForm={this.handleSubmit}
-        >
-          {hasSubmitButton && <Button type="submit" buttonFor="submit" size="sm">Send</Button>}
-        </FormContainer>
-      </div>
+      <form
+        role="presentation"
+        className="MessageForm"
+        onKeyDown={this.handleEnterSubmit}
+        onSubmit={this.handleSubmit}
+      >
+        <MessageEditor
+          editorState={editorState}
+          onChange={this.onChange}
+          placeholder={editorPlaceholder}
+        />
+        {hasSubmitButton && <Button type="submit" buttonFor="submit" size="sm">Send</Button>}
+      </form>
     );
   }
 }
