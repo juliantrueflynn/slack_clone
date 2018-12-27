@@ -59,9 +59,7 @@
 }
 
 .AllThreadsItem .Btn__emoji {
-  height: 37px;
-  line-height: 37px;
-  font-size: 2em;
+  font-size: 18px;
 }
 
 .AllThreadsItem .MessageForm--inactive {

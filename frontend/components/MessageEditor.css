@@ -230,7 +230,7 @@
   height: 41.5px;
   display: flex;
   align-items: center;
-  padding: 0 8px;
+  padding-right: 8px;
 }
 
 .Btn__emoji {

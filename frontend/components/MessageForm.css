@@ -26,10 +26,6 @@
   width: 100%;
 }
 
-.MessageForm--inactive .Btn__emoji {
-  display: block;
-}
-
 .MessageForm--inactive:hover {
   border: 1px solid rgba(113, 114, 116, 0.8);
 }

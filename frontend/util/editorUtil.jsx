@@ -31,7 +31,7 @@ export const mountEditorState = (content) => {
 };
 
 export const EmojiButtonIcon = () => (
-  <span className="fa-layers fa-fw EmojiButtonIcon">
+  <span className="EmojiButtonIcon fa-layers fa-fw">
     <FontAwesomeIcon icon="circle" className="EmojiButtonIcon__bg" />
     <FontAwesomeIcon icon={['far', 'smile']} />
   </span>
