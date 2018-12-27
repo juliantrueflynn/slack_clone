@@ -80,7 +80,6 @@ class ModalChannelForm extends React.Component {
           </p>
         )}
         <FormContainer
-          formFor="channel"
           submitForm={this.handleFormSubmit}
           setFieldValue={this.handleFieldValueChange}
           fields={fields}

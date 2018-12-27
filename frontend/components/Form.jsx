@@ -38,7 +38,6 @@ class Form extends React.Component {
 
   render() {
     const {
-      formFor,
       formSuccess,
       formErrors,
       children,

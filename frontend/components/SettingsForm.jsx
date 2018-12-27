@@ -106,7 +106,6 @@ class SettingsForm extends React.Component {
       <div className="SettingsForm">
         <div className="SettingsForm__col">
           <FormContainer
-            formFor="user"
             fields={fields}
             submitForm={this.handleSubmit}
             setFieldValue={this.handleFieldValueChange}

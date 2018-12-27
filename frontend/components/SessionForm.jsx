@@ -65,7 +65,6 @@ class SessionForm extends React.Component {
           </h1>
           <FormContainer
             fields={fields}
-            formFor="session"
             setFieldValue={this.handleFieldValueChange}
             submitForm={this.handleFormSubmit}
           >

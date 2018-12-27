@@ -45,7 +45,6 @@ class ModalWorkspaceForm extends React.Component {
 
     return (
       <FormContainer
-        formFor="workspace"
         fields={fields}
         setFieldValue={this.handleFieldValueChange}
         submitForm={this.handleFormSubmit}

@@ -56,7 +56,6 @@ class PasswordForm extends React.Component {
 
     return (
       <FormContainer
-        formFor="password"
         fields={fields}
         setFieldValue={this.handleFieldValueChange}
         submitForm={this.handleFormSubmit}
