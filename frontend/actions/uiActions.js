@@ -23,9 +23,9 @@ export const updateDrawer = (drawerType, drawerSlug = null) => actionCreator(
   { drawerType, drawerSlug }
 );
 
-export const updateFormSuccess = (entity, message = null) => actionCreator(
+export const updateFormSuccess = (message = null) => actionCreator(
   FORM_SUCCESS_UPDATE,
-  { entity, message }
+  { message }
 );
 
 export const accordionOpen = (accordionType, accordionItem) => actionCreator(

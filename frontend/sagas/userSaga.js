@@ -32,7 +32,7 @@ function* loadUpdateMember({ user: body }) {
     const currUser = yield select(getCurrentUser);
     const args = { method: 'PATCH', body };
     yield call(api.fetchPromise, `users/${currUser.slug}`, args);
-    yield put(updateFormSuccess('user', 'Profile successfully updated'));
+    yield put(updateFormSuccess('Profile successfully updated'));
   } catch (error) {
     yield put(actions.updateUser.failure(error));
   }
@@ -42,7 +42,7 @@ function* loadPasswordChange({ password }) {
   try {
     const update = yield call(api.apiUpdate, 'password', password);
     yield put(actions.updatePassword.receive(update));
-    yield put(updateFormSuccess('password', 'Password successfully updated'));
+    yield put(updateFormSuccess('Password successfully updated'));
   } catch (error) {
     yield put(actions.updatePassword.failure(error));
   }

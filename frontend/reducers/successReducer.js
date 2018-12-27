@@ -6,24 +6,16 @@ import {
   MODAL_UPDATE,
 } from '../actions/actionTypes';
 
-const _defaultState = {
-  password: null,
-  channel: null,
-  user: null,
-};
+const _defaultState = null;
 
 const successReducer = (state = _defaultState, action) => {
   Object.freeze(state);
 
   let nextState;
   switch (action.type) {
-    case FORM_SUCCESS_UPDATE: {
-      const { entity, message } = action;
-      nextState = { ...state };
-      nextState[entity] = message;
-
+    case FORM_SUCCESS_UPDATE:
+      nextState = action.message;
       return nextState;
-    }
     case MODAL_UPDATE:
     case USER.UPDATE.REQUEST:
     case PASSWORD.UPDATE.REQUEST:
