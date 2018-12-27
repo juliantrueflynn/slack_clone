@@ -158,7 +158,6 @@ class DrawerSwitch extends React.Component {
           drawerTitle={this.getDrawerTitle()}
           closeDrawer={this.handleClose}
           messages={messages}
-          currentUserSlug={currentUserSlug}
           isModalOpen={isModalOpen}
           children={drawerProps => (
             <Component {...props} {...drawerProps} />

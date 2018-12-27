@@ -1,8 +1,10 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import MessagesListContainer from './MessagesListContainer';
 import MessageForm from './MessageForm';
+import ScrollBar from './ScrollBar';
+import withScrollManager from './withScrollManager';
 
-const MessageThreadDrawer = ({ messages, createMessageRequest }) => {
+const MessageThreadDrawer = ({ messages, createMessageRequest, ...props }) => {
   const parentMessage = messages[0];
   const filterMenuItems = ['convo'];
 
@@ -11,7 +13,7 @@ const MessageThreadDrawer = ({ messages, createMessageRequest }) => {
   }
 
   return (
-    <Fragment>
+    <ScrollBar {...props}>
       <MessagesListContainer
         messages={messages}
         role="listitem"
@@ -26,8 +28,8 @@ const MessageThreadDrawer = ({ messages, createMessageRequest }) => {
         createMessageRequest={createMessageRequest}
         hasSubmitButton
       />
-    </Fragment>
+    </ScrollBar>
   );
 };
 
-export default MessageThreadDrawer;
+export default withScrollManager('Message')(MessageThreadDrawer);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ScrollBar from './ScrollBar';
 import Button from './Button';
 import Modal from './Modal';
@@ -10,12 +10,10 @@ const Drawer = ({
   closeDrawer,
   drawerTitle,
   messages,
-  currentUserSlug,
   isModalOpen,
   children,
 }) => {
   const isConvo = drawerType === 'convo';
-  const lastMsg = isConvo ? messages[messages.length - 1] : null;
   const drawerClassNames = `Drawer Drawer__${drawerType}`;
 
   if (isModalOpen) {
@@ -41,11 +39,7 @@ const Drawer = ({
       </header>
       <div className="Drawer__container">
         <div className="Drawer__body">
-          {isConvo && !isLoading && (
-            <ScrollBar lastMessage={lastMsg} currentUserSlug={currentUserSlug} shouldAutoScroll>
-              {children({ messages })}
-            </ScrollBar>
-          )}
+          {isConvo && !isLoading && <Fragment>{children({ messages })}</Fragment>}
           {isConvo || <ScrollBar>{children({ messages })}</ScrollBar>}
         </div>
       </div>

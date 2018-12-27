@@ -4,6 +4,7 @@ import { isOnSameDay } from '../util/dateUtil';
 import ScrollBar from './ScrollBar';
 import ChannelBlurb from './ChannelBlurb';
 import MessagesListContainer from './MessagesListContainer';
+import withScrollManager from './withScrollManager';
 import './ChannelScrollBar.css';
 
 class ChannelScrollBar extends React.Component {
@@ -11,40 +12,38 @@ class ChannelScrollBar extends React.Component {
     super(props);
     this.scrollbar = React.createRef();
     this.state = { scrollerHeight: 0 };
-    this.container = this.scrollbar.current;
     this.handleFetchHistory = this.handleFetchHistory.bind(this);
   }
 
   componentDidMount() {
-    const { channel: { scrollLoc } } = this.props;
-    this.container = this.scrollbar.current.scroller.current._container;
+    const {
+      channel: { scrollLoc },
+      scrollTo,
+      scrollToBottom,
+      currentScrollTop,
+    } = this.props;
 
-    if (this.container) {
-      let scrollTop;
-      if (scrollLoc || scrollLoc === 0) {
-        scrollTop = scrollLoc;
-      } else {
-        scrollTop = this.container.scrollHeight;
-      }
+    if (scrollLoc || scrollLoc === 0) {
+      scrollTo(scrollLoc);
+    } else {
+      scrollToBottom();
+    }
 
-      this.container.scrollTop = scrollTop;
-
-      if (this.container.scrollTop === 0) {
-        this.handleFetchHistory();
-      }
+    if (currentScrollTop <= 50) {
+      this.handleFetchHistory();
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { isFetching } = this.props;
+    const { isFetching, scrollRef, scrollTo } = this.props;
 
     if (isFetching && !prevProps.isFetching) {
-      this.updateScrollerHeight(this.container.scrollHeight);
+      this.updateScrollerHeight(scrollRef.current._container.scrollHeight);
     }
 
     if (!isFetching && prevProps.isFetching) {
-      const height = this.container.scrollHeight - prevState.scrollerHeight;
-      this.container.scrollTop = height;
+      const height = scrollRef.current._container.scrollHeight - prevState.scrollerHeight;
+      scrollTo(height);
     }
   }
 
@@ -82,11 +81,12 @@ class ChannelScrollBar extends React.Component {
       updateScrollTop,
       currentUserSlug,
       openModal,
+      scrollRef,
+      scrollAtBottom,
       matchUrl,
       height,
     } = this.props;
 
-    const lastMessage = messages[messages.length - 1];
     const style = { height };
     const classes = classNames('ChannelScrollBar', {
       'ChannelScrollBar--loading': isFetching,
@@ -96,14 +96,10 @@ class ChannelScrollBar extends React.Component {
     return (
       <div className={classes} style={style}>
         <ScrollBar
-          ref={this.scrollbar}
-          channelScrollLoc={channel.scrollLoc}
-          currentUserSlug={currentUserSlug}
-          lastMessage={lastMessage}
+          scrollRef={scrollRef}
+          scrollAtBottom={scrollAtBottom}
           atTopCallback={this.handleFetchHistory}
           updateScrollTop={updateScrollTop}
-          shouldAutoScroll
-          shouldMountAtBottom
         >
           <ChannelBlurb
             channel={channel}
@@ -127,4 +123,4 @@ class ChannelScrollBar extends React.Component {
   }
 }
 
-export default ChannelScrollBar;
+export default withScrollManager('Channel')(ChannelScrollBar);

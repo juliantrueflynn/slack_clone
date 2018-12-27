@@ -6,41 +6,17 @@ import './ScrollBar.css';
 class ScrollBar extends React.Component {
   constructor(props) {
     super(props);
-    this.scroller = React.createRef();
-    this.state = { isAtBottom: false };
     this.handleIsAtBottom = this.handleIsAtBottom.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
   }
 
-  componentDidUpdate(prevProps) {
-    const { shouldAutoScroll } = this.props;
-    const { isAtBottom } = this.state;
-
-    if (shouldAutoScroll && this.hasNewMessage(prevProps.lastMessage)) {
-      this.scrollToBottom();
-    }
-
-    if (shouldAutoScroll && isAtBottom) {
-      this.scrollToBottom();
-    }
-  }
-
   componentWillUnmount() {
-    const { updateScrollTop } = this.props;
+    const { updateScrollTop, scrollRef } = this.props;
 
     if (updateScrollTop) {
-      const scroller = this.scroller.current._container;
+      const scroller = scrollRef.current._container;
       updateScrollTop(scroller.scrollTop);
     }
-  }
-
-  hasNewMessage(prevLastMsg) {
-    const { lastMessage, currentUserSlug } = this.props;
-    const { isAtBottom } = this.state;
-    const hasNewMsg = lastMessage && prevLastMsg && prevLastMsg.id !== lastMessage.id;
-    const lastMsgByCurrUser = prevLastMsg && currentUserSlug === prevLastMsg.authorSlug;
-
-    return (hasNewMsg && lastMsgByCurrUser) || (isAtBottom && hasNewMsg);
   }
 
   handleIsAtTop(e) {
@@ -52,19 +28,18 @@ class ScrollBar extends React.Component {
   }
 
   handleIsAtBottom() {
-    const { shouldAutoScroll } = this.props;
-    const { isAtBottom } = this.state;
+    const { scrollAtBottom } = this.props;
 
-    if (shouldAutoScroll && !isAtBottom) {
-      this.setState({ isAtBottom: true });
+    if (scrollAtBottom) {
+      scrollAtBottom(true);
     }
   }
 
   handleScroll(e) {
-    const { isAtBottom } = this.state;
+    const { scrollAtBottom } = this.props;
 
-    if (isAtBottom) {
-      this.setState({ isAtBottom: false });
+    if (scrollAtBottom) {
+      scrollAtBottom(false);
     }
 
     if (e.scrollTop === 0) {
@@ -82,27 +57,17 @@ class ScrollBar extends React.Component {
   }
 
   render() {
-    const { children, shouldAutoScroll } = this.props;
-    const psScrollOptions = { suppressScrollX: true };
-
-    if (shouldAutoScroll) {
-      return (
-        <div className="ScrollBar">
-          <PerfectScrollBar
-            ref={this.scroller}
-            onYReachEnd={this.handleIsAtBottom}
-            onScrollY={this.handleScroll}
-            option={psScrollOptions}
-          >
-            <div className="ScrollBar__container">{children}</div>
-          </PerfectScrollBar>
-        </div>
-      );
-    }
+    const { children, scrollRef } = this.props;
+    const psOptions = { suppressScrollX: true };
 
     return (
       <div className="ScrollBar">
-        <PerfectScrollBar option={psScrollOptions}>
+        <PerfectScrollBar
+          ref={scrollRef}
+          onYReachEnd={this.handleIsAtBottom}
+          onScrollY={this.handleScroll}
+          option={psOptions}
+        >
           <div className="ScrollBar__container">{children}</div>
         </PerfectScrollBar>
       </div>
