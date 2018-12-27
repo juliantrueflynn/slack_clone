@@ -1,33 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { getConvoLastEntry, getChannelLastEntry } from '../reducers/selectors';
 
 const withScrollManager = scrollBarFor => (WrappedComponent) => {
   const mapStateToProps = (state) => {
-    const msgsMap = state.entities.messages;
     const { currentUser } = state.session;
 
     let lastMessage;
 
-    if (scrollBarFor === 'Channel') {
-      const channelsMap = state.entities.channels;
-      const chatPath = state.ui.displayChatPath;
-      const msgs = channelsMap[chatPath].messages;
-      const lastEntrySlug = msgs[msgs.length - 1];
-      lastMessage = msgsMap[lastEntrySlug];
-    }
-
     if (scrollBarFor === 'Message') {
-      const { drawerSlug } = state.ui.drawer;
-      const msgs = msgsMap[drawerSlug] && msgsMap[drawerSlug].thread;
-      const lastThreadSlug = msgs && msgs[msgs.length - 1];
-      lastMessage = msgsMap[lastThreadSlug];
+      lastMessage = getConvoLastEntry(state);
     }
 
-    if (lastMessage) {
-      lastMessage.isByCurrentUser = lastMessage.authorSlug === currentUser.slug;
+    if (scrollBarFor === 'Channel') {
+      lastMessage = getChannelLastEntry(state);
     }
 
-    return { lastMessage };
+    return { lastMessage, currentUserSlug: currentUser.slug };
   };
 
   class WithScrollManager extends React.Component {
@@ -78,12 +67,13 @@ const withScrollManager = scrollBarFor => (WrappedComponent) => {
     }
 
     hasNewMessage(prevLastMsg) {
-      const { lastMessage } = this.props;
+      const { lastMessage, currentUserSlug } = this.props;
       const { isAtBottom } = this.state;
       const hasNewMsg = prevLastMsg.slug !== lastMessage.slug;
+      const isByCurrUser = lastMessage.authorSlug === currentUserSlug;
 
       if (hasNewMsg) {
-        return lastMessage.isByCurrentUser || isAtBottom;
+        return isByCurrUser || isAtBottom;
       }
 
       return false;

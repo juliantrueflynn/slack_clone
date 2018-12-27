@@ -188,6 +188,30 @@ export const getDrawerMessages = createSelector(
   }
 );
 
+const getlastEntry = (msgsMap, slugs) => {
+  const msgs = slugs.map(slug => msgsMap[slug]).sort((a, b) => a.id - b.id);
+
+  return msgs[msgs.length - 1];
+};
+
+export const getChannelLastEntry = createSelector(
+  [getAllMessages, getAllChannels, getChatPath],
+  (msgsMap, channelsMap, chatPath) => (
+    getlastEntry(msgsMap, channelsMap[chatPath].messages)
+  )
+);
+
+export const getConvoLastEntry = createSelector(
+  [getAllMessages, getDrawer],
+  (msgsMap, drawer) => {
+    if (drawer.drawerType !== 'convo') {
+      return false;
+    }
+
+    return getlastEntry(msgsMap, msgsMap[drawer.drawerSlug].thread);
+  }
+);
+
 export const getChannelsMap = createSelector(
   [getAllChannels, getCurrentUser, getAllUsers],
   (channelsMap, currUser, users) => (
