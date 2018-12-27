@@ -10,20 +10,16 @@ import './MessageEditor.css';
 class MessageEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.emojiPlugin = createEmojiPlugin(emojiConfig);
     this.editor = React.createRef();
+    this.emojiPlugin = createEmojiPlugin(emojiConfig);
     this.focus = this.focus.bind(this);
   }
 
   componentDidMount() {
-    const { isNotConvoForm, readOnly } = this.props;
+    const { readOnly } = this.props;
 
-    if (!readOnly && isNotConvoForm) {
-      setTimeout(() => this.focus(), 1);
-    }
-
-    if (!readOnly && !isNotConvoForm) {
-      setTimeout(() => this.focus(), 1);
+    if (!readOnly) {
+      this.focus();
     }
   }
 
@@ -42,7 +38,9 @@ class MessageEditor extends React.Component {
   }
 
   focus() {
-    this.editor.current.focus();
+    if (this.editor && this.editor.current) {
+      this.editor.current.focus();
+    }
   }
 
   render() {
@@ -55,10 +53,9 @@ class MessageEditor extends React.Component {
     const { EmojiSuggestions, EmojiSelect } = this.emojiPlugin;
 
     const plugins = [this.emojiPlugin];
-    const hasReadOnly = readOnly || false;
     const editorClassNames = classNames('Editor', {
-      Editor__locked: hasReadOnly,
-      Editor__unlocked: !hasReadOnly,
+      Editor__locked: readOnly,
+      Editor__unlocked: !readOnly,
     });
 
     return (
@@ -68,7 +65,7 @@ class MessageEditor extends React.Component {
           plugins={plugins}
           editorState={editorState}
           onChange={onChange}
-          readOnly={hasReadOnly}
+          readOnly={readOnly}
           placeholder={placeholder}
         />
         {readOnly || (<EmojiSuggestions />)}
