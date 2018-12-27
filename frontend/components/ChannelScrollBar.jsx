@@ -84,6 +84,7 @@ class ChannelScrollBar extends React.Component {
   shouldFetchHistory() {
     const { messages, channel } = this.props;
     const firstMsgDate = messages[0] && messages[0].createdAt;
+
     return !isOnSameDay(firstMsgDate, channel.createdAt);
   }
 
