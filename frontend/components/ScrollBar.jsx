@@ -6,24 +6,16 @@ import './ScrollBar.css';
 class ScrollBar extends React.Component {
   constructor(props) {
     super(props);
+    this.handleIsAtTop = this.handleIsAtTop.bind(this);
     this.handleIsAtBottom = this.handleIsAtBottom.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
   }
 
-  componentWillUnmount() {
-    const { updateScrollTop, scrollRef } = this.props;
+  handleIsAtTop() {
+    const { scrollAtTop } = this.props;
 
-    if (updateScrollTop) {
-      const scroller = scrollRef.current._container;
-      updateScrollTop(scroller.scrollTop);
-    }
-  }
-
-  handleIsAtTop(e) {
-    const { atTopCallback } = this.props;
-
-    if (atTopCallback) {
-      atTopCallback(e);
+    if (scrollAtTop) {
+      scrollAtTop(true);
     }
   }
 
@@ -35,24 +27,15 @@ class ScrollBar extends React.Component {
     }
   }
 
-  handleScroll(e) {
-    const { scrollAtBottom } = this.props;
+  handleScroll() {
+    const { scrollAtBottom, scrollAtTop } = this.props;
 
     if (scrollAtBottom) {
       scrollAtBottom(false);
     }
 
-    if (e.scrollTop === 0) {
-      this.handleIsAtTop(e);
-    }
-  }
-
-  scrollToBottom() {
-    const scroller = this.scroller.current;
-
-    if (scroller && scroller._container) {
-      const { scrollHeight, clientHeight } = scroller._container;
-      scroller._container.scrollTop = scrollHeight - clientHeight;
+    if (scrollAtTop) {
+      scrollAtTop(false);
     }
   }
 
@@ -64,6 +47,7 @@ class ScrollBar extends React.Component {
       <div className="ScrollBar">
         <PerfectScrollBar
           ref={scrollRef}
+          onYReachStart={this.handleIsAtTop}
           onYReachEnd={this.handleIsAtBottom}
           onScrollY={this.handleScroll}
           option={psOptions}

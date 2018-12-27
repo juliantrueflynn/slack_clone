@@ -23,10 +23,11 @@ const withScrollManager = scrollBarFor => (WrappedComponent) => {
     constructor(props) {
       super(props);
       this.scroll = React.createRef();
-      this.state = { isAtBottom: false };
+      this.state = { isAtBottom: false, isAtTop: false };
       this.scrollToBottom = this.scrollToBottom.bind(this);
       this.scrollTo = this.scrollTo.bind(this);
       this.currentScrollTop = this.currentScrollTop.bind(this);
+      this.handleIsAtTop = this.handleIsAtTop.bind(this);
       this.handleIsAtBottom = this.handleIsAtBottom.bind(this);
     }
 
@@ -58,6 +59,14 @@ const withScrollManager = scrollBarFor => (WrappedComponent) => {
       }
     }
 
+    handleIsAtTop(nextState) {
+      const { isAtTop } = this.state;
+
+      if (isAtTop !== nextState) {
+        this.setState({ isAtTop: nextState });
+      }
+    }
+
     handleIsAtBottom(nextState) {
       const { isAtBottom } = this.state;
 
@@ -86,6 +95,7 @@ const withScrollManager = scrollBarFor => (WrappedComponent) => {
           scrollToBottom={this.scrollToBottom}
           scrollTo={this.scrollTo}
           currentScrollTop={this.currentScrollTop}
+          scrollAtTop={this.handleIsAtTop}
           scrollAtBottom={this.handleIsAtBottom}
           {...this.state}
           {...this.props}
