@@ -79,6 +79,12 @@
   margin-right: 8px;
 }
 
+.Message--editing .Editor {
+  background-color: #FFF;
+  border-radius: 4px;
+  border-color: #0576b9;
+}
+
 @media screen and (max-width: 991px) {
   .AllUnreadsItem__body .Message__container,
   .Drawer__convo .Message__container,

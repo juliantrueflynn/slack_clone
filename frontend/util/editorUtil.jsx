@@ -1,9 +1,11 @@
+import React from 'react';
 import {
   ContentState,
   EditorState,
   convertFromRaw,
   convertToRaw
 } from 'draft-js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const createEmptyEditor = () => EditorState.createEmpty();
 
@@ -28,6 +30,13 @@ export const mountEditorState = (content) => {
   }
 };
 
+export const EmojiButtonIcon = () => (
+  <span className="fa-layers fa-fw EmojiButtonIcon">
+    <FontAwesomeIcon icon="circle" className="EmojiButtonIcon__bg" />
+    <FontAwesomeIcon icon={['far', 'smile']} />
+  </span>
+);
+
 export const emojiConfig = {
   theme: {
     emoji: 'emoji',
@@ -39,8 +48,8 @@ export const emojiConfig = {
     emojiSuggestionsEntryIcon: 'emojiSuggestionsEntryIcon',
 
     emojiSelect: 'emojiSelect',
-    emojiSelectButton: 'Btn Btn__emoji',
-    emojiSelectButtonPressed: 'Btn Btn__emoji Btn__emoji--focus',
+    emojiSelectButton: 'Btn Btn__emoji Btn__unstyled',
+    emojiSelectButtonPressed: 'Btn Btn__emoji Btn__unstyled Btn__emoji--focus',
 
     emojiSelectPopover: 'emojiSelect__popover',
     emojiSelectPopoverClosed: 'emojiSelectPopoverClosed',
@@ -68,4 +77,5 @@ export const emojiConfig = {
     emojiSelectPopoverScrollbar: 'emojiSelectPopoverScrollbar',
     emojiSelectPopoverScrollbarThumb: 'emojiSelectPopoverScrollbarThumb',
   },
+  selectButtonContent: <EmojiButtonIcon />,
 };

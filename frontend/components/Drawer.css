@@ -94,13 +94,8 @@
   border-width: 1px;
 }
 
-.Drawer .MessageForm .Form__actions {
-  display: flex;
-  flex: 1;
-  margin-top: 10px;
-}
-
 .Drawer .MessageForm .Btn__submit {
   margin-left: auto;
   display: block;
+  margin-top: 10px;
 }

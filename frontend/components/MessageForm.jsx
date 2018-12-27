@@ -1,6 +1,11 @@
 import React from 'react';
 import { EditorState } from 'draft-js';
-import { convertForSubmit, clearEditor, createEmptyEditor } from '../util/editorUtil';
+import {
+  convertForSubmit,
+  clearEditor,
+  createEmptyEditor,
+  EmojiButtonIcon,
+} from '../util/editorUtil';
 import Button from './Button';
 import MessageEditor from './MessageEditor';
 import './MessageForm.css';
@@ -80,7 +85,9 @@ class MessageForm extends React.Component {
             {editorPlaceholder}
           </Button>
           <div className="emojiSelect">
-            <Button onClick={this.handleActiveClick} buttonFor="emoji" unStyled>☺</Button>
+            <Button onClick={this.handleActiveClick} buttonFor="emoji" unStyled>
+              <EmojiButtonIcon />
+            </Button>
           </div>
         </div>
       );
