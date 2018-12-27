@@ -10,42 +10,22 @@ import {
   USER,
 } from '../actions/actionTypes';
 
-const _defaultState = {
-  workspace: [],
-  channel: [],
-  session: [],
-  password: [],
-  user: [],
-  message: [],
-};
+const _defaultState = [];
 
 const errorsReducer = (state = _defaultState, action) => {
   Object.freeze(state);
 
-  const nextState = { ...state };
-
   switch (action.type) {
     case WORKSPACE.CREATE.FAILURE:
-      nextState.workspace = [...action.errors];
-      return nextState;
     case MESSAGE.CREATE.FAILURE:
     case MESSAGE.UPDATE.FAILURE:
-      nextState.message = [...action.errors];
-      return nextState;
     case SIGN_IN.FAILURE:
     case SIGN_UP.FAILURE:
-      nextState.session = [...action.errors];
-      return nextState;
     case USER.UPDATE.FAILURE:
-      nextState.user = [...action.errors];
-      return nextState;
     case PASSWORD.UPDATE.FAILURE:
-      nextState.password = [...action.errors];
-      return nextState;
     case CHANNEL.CREATE.FAILURE:
     case CHANNEL.UPDATE.FAILURE:
-      nextState.channel = [...action.errors];
-      return nextState;
+      return [...action.errors];
     case WORKSPACE.SHOW.REQUEST:
     case WORKSPACE.CREATE.REQUEST:
     case MESSAGE.CREATE.REQUEST:

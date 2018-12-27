@@ -2,9 +2,9 @@ import { connect } from 'react-redux';
 import Form from './Form';
 import { updateFormSuccess } from '../actions/uiActions';
 
-const mapStateToProps = (state, { formFor }) => ({
+const mapStateToProps = state => ({
   formSuccess: state.success,
-  formErrors: state.errors[formFor],
+  formErrors: state.errors,
 });
 
 const mapDispatchToProps = dispatch => ({
