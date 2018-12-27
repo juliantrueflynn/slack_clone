@@ -19,7 +19,6 @@ const mapStateToProps = state => ({
   pinsMap: state.entities.pins,
   dropdownType: state.ui.dropdown.dropdownType,
   dropdownProps: state.ui.dropdown.dropdownProps,
-  isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_MESSAGE',
   chatPathUrl: getChatPathUrl(state),
 });
 

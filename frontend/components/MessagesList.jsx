@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import Menu from './Menu';
 import Message from './Message';
-import DropdownModal from './DropdownModal';
+import DropdownModalContainer from './DropdownModalContainer';
 
 class MessagesList extends React.Component {
   constructor(props) {
@@ -67,7 +67,6 @@ class MessagesList extends React.Component {
       createPinRequest,
       destroyPinRequest,
       dropdownType,
-      dropdownProps,
       toggleReaction,
       ...props
     } = this.props;
@@ -83,16 +82,12 @@ class MessagesList extends React.Component {
             {...props}
           />
         ))}
-        {dropdownType === 'DROPDOWN_MESSAGE' && (
-          <DropdownModal close={closeDropdown} coordinates={dropdownProps}>
-            <Menu items={this.getDdMenuItems()} />
-          </DropdownModal>
-        )}
-        {dropdownType === 'DROPDOWN_REACTION' && (
-          <DropdownModal close={closeDropdown} coordinates={dropdownProps}>
-            <EmojiPicker onEmojiClick={this.handleEmojiClick} disableDiversityPicker />
-          </DropdownModal>
-        )}
+        <DropdownModalContainer dropdownType="DROPDOWN_MESSAGE">
+          <Menu items={this.getDdMenuItems()} />
+        </DropdownModalContainer>
+        <DropdownModalContainer dropdownType="DROPDOWN_REACTION">
+          <EmojiPicker onEmojiClick={this.handleEmojiClick} disableDiversityPicker />
+        </DropdownModalContainer>
       </Fragment>
     );
   }
