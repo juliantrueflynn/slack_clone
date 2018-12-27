@@ -63,14 +63,12 @@ class MessageContent extends React.Component {
       <Fragment>
         <MessageEditor editorState={editorState} onChange={this.onChange} readOnly={!isEditing} />
         {isEditing && (
-          <Fragment>
-            <Button buttonFor="cancel" onClick={this.handleEditClose} color="white" size="xs">
-              Cancel
-            </Button>
-            <Button type="submit" buttonFor="submit" onClick={this.handleEditSubmit} color="green" size="xs">
-              Save changes
-            </Button>
-          </Fragment>
+          <Button buttonFor="cancel" onClick={this.handleEditClose} color="white" size="xs">Cancel</Button>
+        )}
+        {isEditing && (
+          <Button type="submit" onClick={this.handleEditSubmit} color="green" size="xs">
+            Save changes
+          </Button>
         )}
       </Fragment>
     );

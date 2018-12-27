@@ -15,16 +15,12 @@ const AccordionBodyInfo = ({ channel, currentUserSlug, openModal }) => {
         <header className="AccordionBodyInfo__topic-header">
           <h5 className="AccordionBodyInfo__subtitle">Purpose</h5>
           {!!channel.topic && (
-            <Button onClick={openChannelEditor} buttonFor="edit-topic" unStyled>
-              edit
-            </Button>
+            <Button onClick={openChannelEditor} buttonFor="edit-topic" unStyled>edit</Button>
           )}
         </header>
         {channel.topic}
         {!!channel.topic || (
-          <Button onClick={openChannelEditor} size="sm">
-            Set a channel topic
-          </Button>
+          <Button onClick={openChannelEditor} size="sm">Set a channel topic</Button>
         )}
       </div>
       <div className="AccordionItem__sub">

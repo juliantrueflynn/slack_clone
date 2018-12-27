@@ -42,7 +42,7 @@ class MessageEditor extends React.Component {
   }
 
   render() {
-    const { containerId, ...props } = this.props;
+    const { containerId, children, ...props } = this.props;
     const { readOnly } = props;
 
     const editorClassNames = classNames('Editor', {

@@ -110,6 +110,10 @@
   z-index: 600;
 }
 
+.Modal .Form .Btn__submit {
+  margin-right: 6px;
+}
+
 @media screen and (min-width: 769px) {
   .Modal__overlay--styled .Modal__header .Btn__close {
     display: none;

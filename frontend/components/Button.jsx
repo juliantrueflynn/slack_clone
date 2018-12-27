@@ -10,14 +10,14 @@ const Button = ({
   size,
   color,
   linkTo,
-  fullWidth,
   isActive,
   ...props
 }) => {
+  const { type } = props;
   const btnClassNames = classNames('Btn', {
     Btn__unstyled: unStyled,
     Btn__styled: !unStyled,
-    Btn__w100: fullWidth,
+    [`Btn__${type}`]: !buttonFor && type,
     [`Btn__${size}`]: size,
     [`Btn__${buttonFor}`]: buttonFor,
     [`Btn__${buttonFor}--${modifier}`]: buttonFor && modifier,
@@ -25,7 +25,9 @@ const Button = ({
     [`Btn__${color}`]: color,
   });
 
-  if (linkTo) return <Link role="button" className={btnClassNames} to={linkTo} {...props} />;
+  if (linkTo) {
+    return <Link role="button" className={btnClassNames} to={linkTo} {...props} />;
+  }
 
   return <button type="button" className={btnClassNames} {...props} />;
 };

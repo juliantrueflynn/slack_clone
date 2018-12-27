@@ -2,6 +2,10 @@
   margin-bottom: 20px;
 }
 
+.Form > .Form__group:last-of-type {
+  margin-bottom: 30px;
+}
+
 .Form__row {
   display: flex;
   align-items: center;

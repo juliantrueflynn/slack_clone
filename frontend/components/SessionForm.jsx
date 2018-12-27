@@ -35,6 +35,7 @@ class SessionForm extends React.Component {
     const { location: { pathname } } = this.props;
     const { username, email, password } = this.state;
     const isSignInPage = pathname === '/signin';
+    const sessionText = isSignInPage ? 'Sign in' : 'Sign up';
 
     const fields = [
       {
@@ -60,17 +61,13 @@ class SessionForm extends React.Component {
     return (
       <div className="SessionForm">
         <div className="SessionForm__body">
-          <h1 className="Page__title">
-            {isSignInPage ? 'Sign in' : 'Sign up'}
-          </h1>
+          <h1 className="Page__title">{sessionText}</h1>
           <FormContainer
             fields={fields}
             setFieldValue={this.handleFieldValueChange}
             submitForm={this.handleFormSubmit}
           >
-            <Button type="submit" buttonFor="submit" fullWidth>
-              {isSignInPage ? 'Sign in' : 'Sign Up'}
-            </Button>
+            <Button type="submit">{sessionText}</Button>
           </FormContainer>
         </div>
       </div>

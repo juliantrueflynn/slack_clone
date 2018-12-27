@@ -29,7 +29,6 @@ class ModalChannelForm extends React.Component {
     e.preventDefault();
 
     const { channelFormRequest, workspaceId, channel } = this.props;
-
     const channelProps = { workspaceId, ...this.state };
     channelProps.slug = channel ? channel.slug : null;
 

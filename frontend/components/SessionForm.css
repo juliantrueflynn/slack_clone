@@ -51,6 +51,8 @@
 
 .SessionForm .Btn__submit {
   padding: 15px 10px;
+  display: block;
+  width: 100%;
   background-color: #00b894;
   border-color: #00b894;
   transition: background-color .2s ease-in-out, box-shadow .2s ease-in-out 

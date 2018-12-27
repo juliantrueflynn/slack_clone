@@ -61,8 +61,10 @@ class Form extends React.Component {
           </div>
         )}
         {formSuccess && <div className="Form__alert Form__alert--success">{formSuccess}</div>}
-        {fields.map(field => <FormField key={field.id} setFieldValue={setFieldValue} {...field} />)}
-        {!!children && <div className="Form__submit Btn__group">{children}</div>}
+        {fields && fields.map(field => (
+          <FormField key={field.id} setFieldValue={setFieldValue} {...field} />
+        ))}
+        {children}
       </form>
     );
   }
