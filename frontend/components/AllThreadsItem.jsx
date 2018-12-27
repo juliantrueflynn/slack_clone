@@ -43,6 +43,7 @@ const AllThreadsItem = ({
           parentMessageId={convo.id}
           parentMessageSlug={convo.slug}
           createMessageRequest={createMessageRequest}
+          shouldInitOnClick
         />
       </div>
     </div>

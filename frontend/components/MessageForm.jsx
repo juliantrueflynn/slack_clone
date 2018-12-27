@@ -16,9 +16,9 @@ class MessageForm extends React.Component {
   }
 
   componentDidMount() {
-    const { parentMessageId } = this.props;
+    const { shouldInitOnClick } = this.props;
 
-    if (!parentMessageId) {
+    if (!shouldInitOnClick) {
       this.setState({ isActive: true });
     }
   }
@@ -74,11 +74,12 @@ class MessageForm extends React.Component {
       hasSubmitButton,
       parentMessageId,
       channelId,
+      shouldInitOnClick,
     } = this.props;
-    const { isActive, editorState } = this.state;
+    const { isActive } = this.state;
     const editorPlaceholder = placeholder || 'Reply...';
 
-    if (!isActive) {
+    if (shouldInitOnClick && !isActive) {
       return (
         <div className="MessageForm MessageForm--inactive">
           <Button buttonFor="inactive-editor" onClick={this.handleActiveClick} unStyled>
@@ -96,12 +97,12 @@ class MessageForm extends React.Component {
     const fields = [{
       id: 'messageForm',
       type: 'editor',
-      editorState,
       containerId,
       isNotConvoForm: !parentMessageId,
       onChange: this.onChange,
       placeholder: editorPlaceholder,
-      isActive,
+      shouldInitOnClick,
+      ...this.state,
     }];
 
     return (
