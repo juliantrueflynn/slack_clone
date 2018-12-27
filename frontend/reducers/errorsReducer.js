@@ -2,12 +2,12 @@ import {
   CHANNEL,
   MESSAGE,
   MODAL_UPDATE,
-  SIGN_OUT,
   SIGN_IN,
   SIGN_UP,
   WORKSPACE,
   PASSWORD,
   USER,
+  FORM_ERRORS_DESTROY,
 } from '../actions/actionTypes';
 
 const _defaultState = [];
@@ -26,17 +26,7 @@ const errorsReducer = (state = _defaultState, action) => {
     case CHANNEL.CREATE.FAILURE:
     case CHANNEL.UPDATE.FAILURE:
       return [...action.errors];
-    case WORKSPACE.SHOW.REQUEST:
-    case WORKSPACE.CREATE.REQUEST:
-    case MESSAGE.CREATE.REQUEST:
-    case MESSAGE.UPDATE.REQUEST:
-    case SIGN_IN.REQUEST:
-    case SIGN_UP.REQUEST:
-    case SIGN_OUT.RECEIVE:
-    case USER.UPDATE.REQUEST:
-    case PASSWORD.UPDATE.REQUEST:
-    case CHANNEL.CREATE.REQUEST:
-    case CHANNEL.UPDATE.REQUEST:
+    case FORM_ERRORS_DESTROY:
     case MODAL_UPDATE:
       return _defaultState;
     default:

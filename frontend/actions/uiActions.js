@@ -1,6 +1,7 @@
 import {
   NAVIGATE,
   FORM_SUCCESS_UPDATE,
+  FORM_ERRORS_DESTROY,
   ACCORDION_OPEN,
   SEARCH,
   SEARCH_DESTROY,
@@ -27,6 +28,8 @@ export const updateFormSuccess = (message = null) => actionCreator(
   FORM_SUCCESS_UPDATE,
   { message }
 );
+
+export const destroyFormErrors = () => actionCreator(FORM_ERRORS_DESTROY);
 
 export const accordionOpen = (accordionType, accordionItem) => actionCreator(
   ACCORDION_OPEN,
