@@ -9,7 +9,7 @@ import {
 import * as action from '../actions/channelActions';
 import { CHANNEL } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiUpdate } from '../util/apiUtil';
-import { navigate, createSuccess, updateModal } from '../actions/uiActions';
+import { navigate, updateFormSuccess, updateModal } from '../actions/uiActions';
 import { getCurrentUser } from '../reducers/selectors';
 import { createRead } from '../actions/readActions';
 
@@ -69,7 +69,7 @@ function* fetchUpdate({ channel }) {
   try {
     yield call(apiUpdate, `channels/${channel.slug}`, channel);
 
-    yield put(createSuccess('channel', 'Channel successfully updated'));
+    yield put(updateFormSuccess('channel', 'Channel successfully updated'));
   } catch (error) {
     yield put(action.updateChannel.failure(error));
   }

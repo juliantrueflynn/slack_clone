@@ -1,6 +1,6 @@
 import {
   NAVIGATE,
-  CREATE_SUCCESS,
+  FORM_SUCCESS_UPDATE,
   ACCORDION_OPEN,
   SEARCH,
   SEARCH_DESTROY,
@@ -23,8 +23,8 @@ export const updateDrawer = (drawerType, drawerSlug = null) => actionCreator(
   { drawerType, drawerSlug }
 );
 
-export const createSuccess = (entity = null, message) => actionCreator(
-  CREATE_SUCCESS,
+export const updateFormSuccess = (entity, message = null) => actionCreator(
+  FORM_SUCCESS_UPDATE,
   { entity, message }
 );
 

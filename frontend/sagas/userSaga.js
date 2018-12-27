@@ -14,7 +14,7 @@ import {
 } from '../actions/actionTypes';
 import * as actions from '../actions/userActions';
 import * as api from '../util/apiUtil';
-import { createSuccess } from '../actions/uiActions';
+import { updateFormSuccess } from '../actions/uiActions';
 import { selectUIByDisplay, getCurrentUser } from '../reducers/selectors';
 
 function* loadFetchMember({ userSlug }) {
@@ -32,7 +32,7 @@ function* loadUpdateMember({ user: body }) {
     const currUser = yield select(getCurrentUser);
     const args = { method: 'PATCH', body };
     yield call(api.fetchPromise, `users/${currUser.slug}`, args);
-    yield put(createSuccess('user', 'Profile successfully updated'));
+    yield put(updateFormSuccess('user', 'Profile successfully updated'));
   } catch (error) {
     yield put(actions.updateUser.failure(error));
   }
@@ -42,7 +42,7 @@ function* loadPasswordChange({ password }) {
   try {
     const update = yield call(api.apiUpdate, 'password', password);
     yield put(actions.updatePassword.receive(update));
-    yield put(createSuccess('password', 'Password successfully updated'));
+    yield put(updateFormSuccess('password', 'Password successfully updated'));
   } catch (error) {
     yield put(actions.updatePassword.failure(error));
   }
