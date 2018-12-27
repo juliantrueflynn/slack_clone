@@ -9,6 +9,14 @@ class Form extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentWillUnmount() {
+    const { formSuccess, destroyFormSuccess } = this.props;
+
+    if (formSuccess) {
+      destroyFormSuccess();
+    }
+  }
+
   handleSubmit(e) {
     const { submitForm } = this.props;
 
@@ -26,7 +34,7 @@ class Form extends React.Component {
       setFieldValue,
       fields,
       submitForm,
-      dispatch,
+      destroyFormSuccess,
       ...props
     } = this.props;
 
@@ -44,19 +52,9 @@ class Form extends React.Component {
             </ul>
           </div>
         )}
-        {formSuccess && (
-          <div className="Form__alert Form__alert--success">
-            {formSuccess}
-          </div>
-        )}
-        {fields.map(field => (
-          <FormField key={field.id} setFieldValue={setFieldValue} {...field} />
-        ))}
-        {!!children && (
-          <div className="Form__submit Btn__group">
-            {children}
-          </div>
-        )}
+        {formSuccess && <div className="Form__alert Form__alert--success">{formSuccess}</div>}
+        {fields.map(field => <FormField key={field.id} setFieldValue={setFieldValue} {...field} />)}
+        {!!children && <div className="Form__submit Btn__group">{children}</div>}
       </form>
     );
   }
