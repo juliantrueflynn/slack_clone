@@ -78,11 +78,11 @@
   margin-top: 18px;
 }
 
-.Modal__overlay--styled .Drawer form .Btn__group:last-child {
+.Modal__wrapper--styled .Drawer form .Btn__group:last-child {
   margin-top: 0;
 }
 
-.Modal__overlay--styled .Drawer {
+.Modal__wrapper--styled .Drawer {
   margin-top: -20px;
 }
 

@@ -1,19 +1,5 @@
-/* .ModalSearch {
-  background-color: #F7FAFC;
-  overflow: hidden;
-  height: 100%;
-  width: 100%;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-  position: relative;
-}
-
-.ModalSearch--new {
-  height: auto;
-} */
-
-.Modal__overlay--search {
-  background-color: rgba(0, 0, 0, 0.2);
+.Modal__wrapper--search .Modal__overlay {
+  background-color: rgba(0, 0, 0, 0.25);
 }
 
 .Modal__search {
@@ -86,12 +72,7 @@
     height: 100%;
   }
 
-  .ModalSearch .Modal,
-  .ModalSearch .Modal__body {
+  .ModalSearch .Modal {
     border-radius: 0;
-  }
-
-  .ModalSearch--new .Modal__body {
-    height: 100%;
   }
 }

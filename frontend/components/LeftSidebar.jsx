@@ -137,7 +137,6 @@ class LeftSidebar extends React.Component {
             modalFor="left-sidebar"
             modalPos="left"
             close={closeModal}
-            hasDarkOverlay
             unStyled
           >
             <LeftSidebarWidgets menuGroups={sidebarMenuItems} />

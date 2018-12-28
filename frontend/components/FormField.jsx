@@ -33,12 +33,6 @@ class FormField extends React.Component {
       return null;
     }
 
-    if (field.type === 'editor') {
-      const { id, type, ...editorProps } = field;
-
-      return <MessageEditor {...editorProps} />;
-    }
-
     const input = <input className="Form__control" onChange={this.handleChange} {...field} />;
 
     if (field.type === 'checkbox') {

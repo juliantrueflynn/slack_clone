@@ -40,7 +40,6 @@ const RightSidebarModal = ({
       modalFor="right-sidebar"
       modalPos="right"
       close={closeModal}
-      hasDarkOverlay
       unStyled
     >
       <Menu items={mobileMenuItems} menuFor="right-sidebar" unStyled />

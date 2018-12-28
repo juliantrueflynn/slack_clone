@@ -13,7 +13,7 @@
   color: inherit;
 }
 
-.Modal__overlay--left-sidebar {
+.Modal__wrapper--left-sidebar {
   background-color: rgba(255, 255, 255, 0.6);
 }
 

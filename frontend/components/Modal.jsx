@@ -21,43 +21,35 @@ class Modal extends React.Component {
       bemModifier,
       modalPos,
       modalTitle,
-      hasDarkOverlay,
       close,
       unStyled,
-      hasNoWrappers,
       children,
       ...props
     } = this.props;
 
-    const style = { content: { border: 'none' } };
-    const overlayClassName = classNames('Modal__overlay', {
-      'Modal__overlay--styled': !unStyled,
-      [`Modal__overlay--${modalFor}`]: modalFor,
-      [`Modal__overlay--${modalFor}-${bemModifier}`]: modalFor && bemModifier,
-      'Modal__overlay--pos': modalPos,
-      [`Modal__overlay--pos-${modalPos}`]: modalPos,
-    });
-    const modalClassNames = classNames('Modal', {
-      [`Modal__${modalFor}`]: modalFor,
-      [`Modal__${modalFor}--${bemModifier}`]: modalFor && bemModifier,
-      'Modal--has-pos': modalPos,
-      [`Modal__pos-${modalPos}`]: modalPos,
-    });
+    const shouldCloseOnOverlayClick = !!unStyled;
+
     const bodyOpenClassName = classNames('Modal__wrapper', {
       'ReactModal__Body--open': true,
       [`Modal__wrapper--${modalFor}`]: modalFor,
       [`Modal__wrapper--${modalFor}-${bemModifier}`]: modalFor && bemModifier,
+      'Modal__wrapper--styled': !unStyled,
+      'Modal__wrapper--pos': modalPos,
+    });
+    const modalClassNames = classNames('Modal', {
+      [`Modal__${modalFor}`]: modalFor,
+      [`Modal__${modalFor}--${bemModifier}`]: modalFor && bemModifier,
     });
 
     return (
       <ReactModal
-        style={style}
         className={modalClassNames}
-        overlayClassName={overlayClassName}
+        overlayClassName="Modal__overlay"
         bodyOpenClassName={bodyOpenClassName}
         contentLabel={modalTitle}
         onRequestClose={close}
-        shouldCloseOnOverlayClick
+        shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
+        shouldReturnFocusAfterClose={false}
         {...props}
       >
         <Fragment>
@@ -76,8 +68,7 @@ class Modal extends React.Component {
               </div>
             </header>
           )}
-          {hasNoWrappers && children}
-          {hasNoWrappers || <div className="Modal__body">{children}</div>}
+          {children}
         </Fragment>
       </ReactModal>
     );

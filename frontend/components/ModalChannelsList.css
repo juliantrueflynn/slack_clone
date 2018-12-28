@@ -2,7 +2,7 @@
   max-width: 100%;
 }
 
-.Modal__chats .Modal__body {
+.ModalChannelsList {
   max-width: 600px;
   margin: 0 auto;
 }
