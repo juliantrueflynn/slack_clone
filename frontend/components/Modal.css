@@ -87,6 +87,15 @@
   margin-right: 6px;
 }
 
+.Modal .ps__rail-y,
+.Modal .ps:hover > .ps__rail-y {
+  opacity: 1;
+}
+
+.Modal .ps__rail-y {
+  background-color: #EEE;
+}
+
 @media screen and (min-width: 769px) {
   .Modal__wrapper--styled .Btn__close--header {
     display: none;

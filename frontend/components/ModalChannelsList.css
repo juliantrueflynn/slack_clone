@@ -17,15 +17,6 @@
   border-bottom: 1px solid #DFE6E9;
 }
 
-.ModalChannelsList .ps__rail-y,
-.ModalChannelsList .ps:hover > .ps__rail-y {
-  opacity: 1;
-}
-
-.ModalChannelsList .ps__rail-y {
-  background-color: #EEE;
-}
-
 @media screen and (min-width: 769px) {
   .ModalChannelsList {
     padding: 80px 0 30px;
