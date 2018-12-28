@@ -50,10 +50,6 @@
   display: block;  
 }
 
-.Modal__overlay--styled form .Btn__group:last-child {
-  margin-top: 30px;
-}
-
 .Modal--has-pos {
   width: 250px;
   position: absolute;
@@ -82,7 +78,7 @@
   color: #636e72;
 }
 
-.Modal__overlay--styled .Modal > .Btn__close {
+.Btn__close--overlay {
   font-size: 3.4em;
   position: absolute;
   right: 50px;
@@ -91,8 +87,8 @@
   width: 50px;
 }
 
-.Modal__overlay--styled .Modal > .Btn__close:hover,
-.Modal__overlay--styled .Modal > .Btn__close:focus {
+.Btn__close--overlay:hover,
+.Btn__close--overlay:focus {
   outline: 0;
   background-color: #E8E8E8;
 }
@@ -117,7 +113,7 @@
 }
 
 @media screen and (min-width: 769px) {
-  .Modal__overlay--styled .Modal__header .Btn__close {
+  .Modal__overlay--styled .Btn__close--header {
     display: none;
   }
 }
@@ -127,7 +123,7 @@
     padding-top: 0;
   }
 
-  .Modal__overlay--styled .Modal > .Btn__close {
+  .Modal__overlay--styled .Btn__close--overlay {
     display: none;
   }
 
@@ -138,7 +134,7 @@
     border-bottom: 1px solid #DFE6E9;
   }
 
-  .Modal__overlay--styled .Modal__header .Btn__close {
+  .Modal__overlay--styled .Btn__close--header {
     position: static;
     font-size: 2em;
     height: 28px;

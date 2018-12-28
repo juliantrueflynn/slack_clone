@@ -62,16 +62,16 @@ class Modal extends React.Component {
       >
         <Fragment>
           {unStyled || (
-            <Button buttonFor="close" unStyled onClick={this.handleClose}>
-              <span role="img" aria-label="Close drawer">&times;</span>
+            <Button buttonFor="close" modifier="overlay" unStyled onClick={this.handleClose}>
+              <span role="img" aria-label="Close modal">&times;</span>
             </Button>
           )}
           {modalTitle && (
             <header className="Modal__header">
               <div className="Modal__header-inner">
                 <h2 className="Modal__title">{modalTitle}</h2>
-                <Button buttonFor="close" unStyled onClick={this.handleClose}>
-                  <span role="img" aria-label="Close drawer">&times;</span>
+                <Button buttonFor="close" modifier="header" unStyled onClick={this.handleClose}>
+                  <span role="img" aria-label="Close modal">&times;</span>
                 </Button>
               </div>
             </header>
