@@ -13,7 +13,8 @@ const mapStateToProps = (state) => {
   const messages = searchSlugs.map(msgSlug => msgsMap[msgSlug]).sort((a, b) => b.id - a.id);
 
   const users = state.entities.members;
-  const currUserSlug = state.session.currentUser.slug;
+  const currUser = state.session.currentUser;
+  const user = currUser && users[currUser.slug];
 
   return {
     currModalOpen: state.ui.displayModal.modalType,
@@ -22,7 +23,7 @@ const mapStateToProps = (state) => {
     channels: Object.values(channelsMap).filter(ch => !ch.isSub && !ch.hasDm),
     messages,
     users,
-    user: users[currUserSlug],
+    user,
     searchQuery: state.search.searchQuery,
     isLoading: state.isLoading.search,
   };
