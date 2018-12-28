@@ -24,6 +24,12 @@
   border-color: #636E72;
 }
 
+.Form__control:focus {
+  outline: 0;
+  border-color: #74B9FF;
+  box-shadow: 0 0 0 0.1em rgba(116, 185, 255, 0.5);
+}
+
 .Form__alert {
   padding: 15px 20px;
   text-align: left;
