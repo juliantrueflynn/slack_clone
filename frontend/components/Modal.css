@@ -91,7 +91,9 @@
   width: 50px;
 }
 
-.Modal__overlay--styled .Modal .Btn__close:hover {
+.Modal__overlay--styled .Modal > .Btn__close:hover,
+.Modal__overlay--styled .Modal > .Btn__close:focus {
+  outline: 0;
   background-color: #E8E8E8;
 }
 
