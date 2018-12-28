@@ -30,10 +30,28 @@
   border-radius: 5px;
   margin-bottom: 20px;
   color: #FFF;
+  font-weight: bold;
 }
 
 .Form__alert--errors {
   background-color: #E17055;
+  padding-left: 20px;
+}
+
+.Form__alert--errors > li {
+  margin-bottom: 5px;
+}
+
+.Form__alert--errors > li::before {
+  content: "\00D7";
+  width: 20px;
+  display: inline-block;
+  font-size: 1.35em;
+  vertical-align: middle;
+}
+
+.Form__alert--errors > li:last-child {
+  margin-bottom: 0;
 }
 
 .Form__alert--success {

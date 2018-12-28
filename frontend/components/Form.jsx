@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import FormField from './FormField';
 import './Form.css';
 
@@ -50,17 +51,19 @@ class Form extends React.Component {
     } = this.props;
 
     const hasErrors = !!(formErrors && formErrors.length);
+    const formClassNames = classNames('Form', {
+      'Form--success': formSuccess,
+      'Form--fail': hasErrors,
+    });
 
     return (
-      <form className="Form" onSubmit={this.handleSubmit} {...props}>
-        {hasErrors && (
-          <div className="Form__alert Form__alert--errors">
-            <ul>
-              {formErrors.map(err => <li key={err}>{err}</li>)}
-            </ul>
-          </div>
-        )}
+      <form className={formClassNames} onSubmit={this.handleSubmit} {...props}>
         {formSuccess && <div className="Form__alert Form__alert--success">{formSuccess}</div>}
+        {hasErrors && (
+          <ul className="Form__alert Form__alert--errors">
+            {formErrors.map(err => <li key={err}>{err}</li>)}
+          </ul>
+        )}
         {fields && fields.map(field => (
           <FormField key={field.id} setFieldValue={setFieldValue} {...field} />
         ))}

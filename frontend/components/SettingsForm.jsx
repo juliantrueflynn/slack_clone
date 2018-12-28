@@ -61,7 +61,7 @@ class SettingsForm extends React.Component {
     e.preventDefault();
 
     const { updateUserRequest } = this.props;
-    const { ...state } = this.state;
+    const { displayAvatar, ...state } = this.state;
 
     const formData = new FormData();
     Object.keys(state).forEach((key) => {
