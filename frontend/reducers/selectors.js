@@ -238,6 +238,10 @@ export const getChannelsMap = createSelector(
   )
 );
 
+export const getUnsubbedChannels = createSelector(
+  [getChannelsMap], channelsMap => values(channelsMap).filter(ch => !ch.isSub && !ch.hasDm)
+);
+
 const getAllUnreadsViewChannels = (channelsMap, unreadsMap, unreadChMsgs) => {
   const unreadChannelsMap = values(channelsMap).reduce((acc, curr) => {
     acc[curr.slug] = { ...curr, unreadMessages: [] };

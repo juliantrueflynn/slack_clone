@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getChannelsMap, getMessagesMap } from '../reducers/selectors';
+import { getChannelsMap, getMessagesMap, getUnsubbedChannels } from '../reducers/selectors';
 import { updateModal, fetchSearch, destroySearch } from '../actions/uiActions';
 import { fetchChannels, createChannel, updateChannel } from '../actions/channelActions';
 import { updateUser, updatePassword } from '../actions/userActions';
@@ -7,7 +7,6 @@ import { createWorkspace } from '../actions/workspaceActions';
 import ModalController from './ModalController';
 
 const mapStateToProps = (state) => {
-  const channelsMap = getChannelsMap(state);
   const msgsMap = getMessagesMap(state);
   const searchSlugs = state.search.messagesBySearch;
   const messages = searchSlugs.map(msgSlug => msgsMap[msgSlug]).sort((a, b) => b.id - a.id);
@@ -19,8 +18,8 @@ const mapStateToProps = (state) => {
   return {
     currModalOpen: state.ui.displayModal.modalType,
     modalProps: state.ui.displayModal.modalProps,
-    channelsMap,
-    channels: Object.values(channelsMap).filter(ch => !ch.isSub && !ch.hasDm),
+    channelsMap: getChannelsMap(state),
+    channels: getUnsubbedChannels(state),
     messages,
     users,
     user,
