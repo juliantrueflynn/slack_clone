@@ -33,13 +33,6 @@
   max-width: 800px;
 }
 
-.Modal__wrapper--styled .Modal__title {
-  text-align: center;
-  padding-bottom: 15px;
-  margin: 0;
-  font-size: 2em;
-}
-
 .Modal__wrapper--styled .Form label {
   font-weight: bold;
   margin-bottom: 8px;
@@ -58,7 +51,6 @@
 }
 
 .Modal .Btn__close {
-  display: flex;
   align-items: center;
   justify-content: center;
   line-height: 100%;
@@ -70,7 +62,13 @@
   display: none;
 }
 
-.Modal__wrapper--styled .Btn__close--overlay {
+.Modal__wrapper--styled .Modal__container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.Modal .Btn__close--overlay {
+  display: flex;
   font-size: 3.4em;
   position: absolute;
   right: 50px;
@@ -79,17 +77,10 @@
   width: 50px;
 }
 
-.Modal__wrapper--styled .Btn__close--overlay:hover,
-.Modal__wrapper--styled .Btn__close--overlay:focus {
+.Modal .Btn__close--overlay:hover,
+.Modal .Btn__close--overlay:focus {
   outline: 0;
   background-color: #E8E8E8;
-}
-
-.Modal__wrapper--styled .Modal__header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
 }
 
 .Modal .Form .Btn__submit {
@@ -101,29 +92,14 @@
     display: none;
   }
 
-  .Modal__wrapper--styled .Modal__content-body {
+  .Modal__wrapper--styled .Modal__container {
     padding: 80px 0 30px;
-  }
-
-  .Modal__wrapper--styled .Modal__header {
-    margin-bottom: 15px;
   }
 }
 
 @media screen and (max-width: 768px) {
-  .Modal__wrapper--styled .Modal {
-    padding-top: 0;
-  }
-
-  .Modal__wrapper--styled .Btn__close--overlay {
+  .Modal .Btn__close--overlay {
     display: none;
-  }
-
-  .Modal__wrapper--styled .Modal__header {
-    padding: 10px 15px;
-    margin-bottom: 40px;
-    background-color: #F5F5F5;
-    border-bottom: 1px solid #DFE6E9;
   }
 
   .Modal__wrapper--styled .Btn__close--header {
@@ -138,23 +114,9 @@
   .Modal__wrapper--styled .Modal {
     padding: 0 15px;
   }
-
-  .Modal__wrapper--styled .Modal__title {
-    font-size: 1.6em;
-    text-align: left;
-    padding-bottom: 0;
-    font-size: 1.25em;
-  }
 }
 
 @media screen and (min-width: 576px) and (max-width: 768px) {
-  .Modal__wrapper--styled .Modal__header-inner {
-    max-width: 536px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0 15px;
-  }
-
   .Modal__wrapper--styled .Modal {
     max-width: 536px;
     margin-left: auto;

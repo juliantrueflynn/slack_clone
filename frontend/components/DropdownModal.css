@@ -8,18 +8,18 @@
   border-radius: 6px;
 }
 
-.Modal__dropdown > .Menu {
+.Modal__dropdown .Menu {
   padding-top: 15px;
   padding-bottom: 15px;
   width: 245px;
 }
 
-.Modal__dropdown > .Menu > .MenuItem > .MenuItem__content {
+.Modal__dropdown .Menu > .MenuItem > .MenuItem__content {
   color: rgba(0,0,0,.86);
   width: 100%;
 }
 
-.Modal__dropdown  > .Menu > .MenuItem > .MenuItem__content--btn {
+.Modal__dropdown .Menu > .MenuItem > .MenuItem__content--btn {
   text-align: left;
 }
 

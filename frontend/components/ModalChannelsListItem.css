@@ -5,6 +5,10 @@
   border-top: 1px solid #DFE6E9;
 }
 
+.ModalChannelsListItem:first-child {
+  border-top: 0;
+}
+
 .ModalChannelsListItem:hover {
   background-color: rgba(116, 185, 255, 0.1);
 }

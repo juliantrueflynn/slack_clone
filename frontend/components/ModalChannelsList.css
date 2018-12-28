@@ -1,10 +1,11 @@
-.Modal.Modal__chats {
-  max-width: 100%;
+.Modal__wrapper--chats .Modal__overlay {
+  background-color: #FFF;
 }
 
 .ModalChannelsList {
   max-width: 600px;
   margin: 0 auto;
+  height: 100%;
 }
 
 .ModalChannelsList__subhead {
@@ -13,4 +14,30 @@
   color: #636E72;
   font-size: 14px;
   font-weight: 600;
+  border-bottom: 1px solid #DFE6E9;
+}
+
+.ModalChannelsList .ps__rail-y,
+.ModalChannelsList .ps:hover > .ps__rail-y {
+  opacity: 1;
+}
+
+.ModalChannelsList .ps__rail-y {
+  background-color: #EEE;
+}
+
+@media screen and (min-width: 769px) {
+  .ModalChannelsList {
+    padding: 80px 0 30px;
+  }
+
+  .Modal__wrapper--chats .Btn__close--overlay {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .ModalChannelsList__body {
+    padding: 0 15px;
+  }
 }
