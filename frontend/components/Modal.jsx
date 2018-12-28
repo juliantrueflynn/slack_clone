@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import ReactModal from 'react-modal';
 import Button from './Button';
 import './Modal.css';
+import ScrollBar from './ScrollBar';
 
 class Modal extends React.Component {
   constructor(props) {
@@ -34,6 +35,7 @@ class Modal extends React.Component {
       [`Modal__wrapper--${modalFor}`]: modalFor,
       [`Modal__wrapper--${modalFor}-${bemModifier}`]: modalFor && bemModifier,
       'Modal__wrapper--styled': !unStyled,
+      'Modal__wrapper--unstyled': unStyled,
       'Modal__wrapper--pos': modalPos,
     });
     const modalClassNames = classNames('Modal', {
@@ -53,22 +55,27 @@ class Modal extends React.Component {
         {...props}
       >
         <Fragment>
+          <Button buttonFor="close" modifier="overlay" unStyled onClick={this.handleClose}>
+            <span role="img" aria-label="Close modal">&times;</span>
+          </Button>
           {unStyled || (
-            <Button buttonFor="close" modifier="overlay" unStyled onClick={this.handleClose}>
-              <span role="img" aria-label="Close modal">&times;</span>
-            </Button>
-          )}
-          {modalTitle && (
-            <header className="Modal__header">
-              <div className="Modal__header-inner">
-                <h2 className="Modal__title">{modalTitle}</h2>
-                <Button buttonFor="close" modifier="header" unStyled onClick={this.handleClose}>
-                  <span role="img" aria-label="Close modal">&times;</span>
-                </Button>
+            <ScrollBar>
+              <div className="Modal__content-body">
+                {modalTitle && (
+                  <header className="Modal__header">
+                    <div className="Modal__header-inner">
+                      <h2 className="Modal__title">{modalTitle}</h2>
+                      <Button buttonFor="close" modifier="header" unStyled onClick={this.handleClose}>
+                        <span role="img" aria-label="Close modal">&times;</span>
+                      </Button>
+                    </div>
+                  </header>
+                )}
+                {children}
               </div>
-            </header>
+            </ScrollBar>
           )}
-          {children}
+          {unStyled && children}
         </Fragment>
       </ReactModal>
     );

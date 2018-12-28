@@ -56,10 +56,7 @@ class SearchBar extends React.Component {
     e.preventDefault();
 
     const { openModal } = this.props;
-    openModal('MODAL_SEARCH', {
-      modalFor: 'search',
-      unStyled: true,
-    });
+    openModal('MODAL_SEARCH');
   }
 
   render() {

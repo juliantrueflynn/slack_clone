@@ -47,6 +47,7 @@ class ModalController extends React.Component {
         component: ModalChannelsList,
         modalTitle: 'Browse channels',
         modalFor: 'chats',
+        unStyled: true,
         fetchChannelsRequest,
         channels,
       },
@@ -67,6 +68,8 @@ class ModalController extends React.Component {
       {
         type: 'MODAL_SEARCH',
         component: ModalSearch,
+        modalFor: 'search',
+        unStyled: true,
         isLoading,
         searchQuery,
         channelsMap,
