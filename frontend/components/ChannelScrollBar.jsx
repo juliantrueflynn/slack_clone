@@ -37,17 +37,17 @@ class ChannelScrollBar extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const {
       isFetching,
-      scrollRef,
+      containerRef,
       scrollTo,
       isAtTop,
     } = this.props;
 
     if (isFetching && !prevProps.isFetching) {
-      this.updateScrollerHeight(scrollRef.current._container.scrollHeight);
+      this.updateScrollerHeight(containerRef.current._container.scrollHeight);
     }
 
     if (!isFetching && prevProps.isFetching) {
-      const height = scrollRef.current._container.scrollHeight - prevState.scrollerHeight;
+      const height = containerRef.current._container.scrollHeight - prevState.scrollerHeight;
       scrollTo(height);
     }
 
@@ -95,7 +95,7 @@ class ChannelScrollBar extends React.Component {
       messages,
       currentUserSlug,
       openModal,
-      scrollRef,
+      containerRef,
       scrollAtTop,
       scrollAtBottom,
       matchUrl,
@@ -110,7 +110,11 @@ class ChannelScrollBar extends React.Component {
 
     return (
       <div className={classes} style={style}>
-        <ScrollBar scrollRef={scrollRef} scrollAtTop={scrollAtTop} scrollAtBottom={scrollAtBottom}>
+        <ScrollBar
+          containerRef={containerRef}
+          scrollAtTop={scrollAtTop}
+          scrollAtBottom={scrollAtBottom}
+        >
           <ChannelBlurb
             channel={channel}
             currentUserSlug={currentUserSlug}

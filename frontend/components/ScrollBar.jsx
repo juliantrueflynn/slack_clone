@@ -40,17 +40,26 @@ class ScrollBar extends React.Component {
   }
 
   render() {
-    const { children, scrollRef } = this.props;
+    const {
+      scrollBarRef,
+      containerRef,
+      scrollAtTop,
+      scrollAtBottom,
+      style,
+      children,
+      ...props
+    } = this.props;
     const psOptions = { suppressScrollX: true };
 
     return (
-      <div className="ScrollBar">
+      <div className="ScrollBar" ref={scrollBarRef} style={style}>
         <PerfectScrollBar
-          ref={scrollRef}
+          ref={containerRef}
           onYReachStart={this.handleIsAtTop}
           onYReachEnd={this.handleIsAtBottom}
           onScrollY={this.handleScroll}
           option={psOptions}
+          {...props}
         >
           <div className="ScrollBar__container">{children}</div>
         </PerfectScrollBar>

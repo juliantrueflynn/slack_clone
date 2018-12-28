@@ -45,8 +45,8 @@ class ModalChannelsList extends React.Component {
           <div className="ModalChannelsList__subhead">
             Channels you can join
           </div>
-          <div className="ModalChannelsList__scroller" ref={this.container} style={{ height }}>
-            <ScrollBar>
+          <div className="ModalChannelsList__scroller" ref={this.container}>
+            <ScrollBar style={{ height }}>
               <div role="list" className="ModalChannelsList__list">
                 {channels.map(ch => (
                   <ModalChannelsListItem key={ch.slug} channel={ch} workspaceSlug={workspaceSlug} />

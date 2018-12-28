@@ -22,6 +22,8 @@ class ModalSearch extends React.Component {
       height: 0,
     };
 
+    this.scrollBarRef = React.createRef();
+
     this.setQuery = this.setQuery.bind(this);
     this.handleFilterToggle = this.handleFilterToggle.bind(this);
     this.handleSearchRequest = this.handleSearchRequest.bind(this);
@@ -71,17 +73,9 @@ class ModalSearch extends React.Component {
     }
 
     if (results.length) {
-      this.setHeight(windowHeight - 18);
+      this.updateHeight(windowHeight - 18);
     } else {
-      this.setHeight('inherit');
-    }
-  }
-
-  setHeight(nextHeight) {
-    const { height } = this.state;
-
-    if (height !== nextHeight) {
-      this.setState({ height: nextHeight });
+      this.updateHeight('inherit');
     }
   }
 
@@ -95,6 +89,14 @@ class ModalSearch extends React.Component {
 
   setQuery(query) {
     this.setState({ query });
+  }
+
+  updateHeight(nextHeight) {
+    const { height } = this.state;
+
+    if (height !== nextHeight) {
+      this.setState({ height: nextHeight });
+    }
   }
 
   handleSearchRequest(query) {
@@ -169,7 +171,7 @@ class ModalSearch extends React.Component {
     });
 
     return (
-      <div className={overlayClassName} style={{ height }}>
+      <div className={overlayClassName}>
         <div className="ModalSearch__searchbar">
           <SearchBar
             searchSubmit={this.handleSearchRequest}
@@ -181,7 +183,7 @@ class ModalSearch extends React.Component {
             <FontAwesomeIcon icon="times" />
           </Button>
         </div>
-        <ScrollBar>
+        <ScrollBar style={{ height }} scrollBarRef={this.scrollBarRef}>
           <ModalSearchResults
             results={results}
             isLoading={isLoading}
