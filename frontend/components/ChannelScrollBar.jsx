@@ -102,18 +102,18 @@ class ChannelScrollBar extends React.Component {
       height,
     } = this.props;
 
-    const style = { height };
     const classes = classNames('ChannelScrollBar', {
       'ChannelScrollBar--loading': isFetching,
       'ChannelScrollBar--no-history': !isFetching && !this.shouldFetchHistory(),
     });
 
     return (
-      <div className={classes} style={style}>
+      <div className={classes}>
         <ScrollBar
           containerRef={containerRef}
           scrollAtTop={scrollAtTop}
           scrollAtBottom={scrollAtBottom}
+          style={{ height }}
         >
           <ChannelBlurb
             channel={channel}
