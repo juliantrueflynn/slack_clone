@@ -9,7 +9,7 @@ class ModalChannelsList extends React.Component {
   constructor(props) {
     super(props);
     this.state = { height: 0 };
-    this.container = React.createRef();
+    this.scrollBarRef = React.createRef();
   }
 
   componentDidMount() {
@@ -28,7 +28,7 @@ class ModalChannelsList extends React.Component {
 
   updateHeight() {
     const { windowHeight } = this.props;
-    const { top } = this.container.current.getBoundingClientRect();
+    const { top } = this.scrollBarRef.current.getBoundingClientRect();
     const height = windowHeight - top - 5;
 
     this.setState({ height });
@@ -45,15 +45,13 @@ class ModalChannelsList extends React.Component {
           <div className="ModalChannelsList__subhead">
             Channels you can join
           </div>
-          <div className="ModalChannelsList__scroller" ref={this.container}>
-            <ScrollBar style={{ height }}>
-              <div role="list" className="ModalChannelsList__list">
-                {channels.map(ch => (
-                  <ModalChannelsListItem key={ch.slug} channel={ch} workspaceSlug={workspaceSlug} />
-                ))}
-              </div>
-            </ScrollBar>
-          </div>
+          <ScrollBar scrollBarRef={this.scrollBarRef} style={{ height }}>
+            <div role="list" className="ModalChannelsList__list">
+              {channels.map(ch => (
+                <ModalChannelsListItem key={ch.slug} channel={ch} workspaceSlug={workspaceSlug} />
+              ))}
+            </div>
+          </ScrollBar>
         </div>
       </div>
     );
