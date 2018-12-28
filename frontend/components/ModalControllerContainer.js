@@ -12,20 +12,24 @@ const mapStateToProps = (state) => {
   const searchSlugs = state.search.messagesBySearch;
   const messages = searchSlugs.map(msgSlug => msgsMap[msgSlug]).sort((a, b) => b.id - a.id);
 
+  const users = state.entities.members;
+  const currUserSlug = state.session.currentUser.slug;
+
   return {
     currModalOpen: state.ui.displayModal.modalType,
     modalProps: state.ui.displayModal.modalProps,
     channelsMap,
     channels: Object.values(channelsMap).filter(ch => !ch.isSub && !ch.hasDm),
     messages,
-    users: state.entities.members,
+    users,
+    user: users[currUserSlug],
     searchQuery: state.search.searchQuery,
     isLoading: state.isLoading.search,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  closeModal: () => dispatch(updateModal(null)),
+  close: () => dispatch(updateModal(null)),
   fetchChannelsRequest: workspaceSlug => dispatch(fetchChannels.request(workspaceSlug)),
   channelFormRequest: (channel) => {
     const actionCall = channel.slug ? updateChannel : createChannel;

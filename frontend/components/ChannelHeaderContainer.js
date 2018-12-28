@@ -26,8 +26,6 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
   const unreadsMap = state.entities.unreads;
   const unreads = Object.values(unreadsMap).filter(unread => unread && unread.hasUnreads);
   const convoUnreadsLen = unreads.filter(unread => unread && unread.readableType === 'Message').length;
-  const users = state.entities.members;
-  const currentUserSlug = state.session.currentUser.slug;
 
   return {
     chatPath,
@@ -36,9 +34,8 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
     messages,
     convoUnreadsLen,
     channelUnreadsLen,
-    users,
-    user: users[currentUserSlug],
-    currentUserSlug,
+    users: state.entities.members,
+    currentUserSlug: state.session.currentUser.slug,
     modalType: state.ui.displayModal.modalType,
     drawerType: state.ui.drawer.drawerType,
     searchQuery: state.search.searchQuery,

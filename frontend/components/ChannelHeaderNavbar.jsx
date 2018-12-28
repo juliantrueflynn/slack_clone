@@ -64,7 +64,6 @@ class ChannelHeaderNavbar extends React.Component {
 
   render() {
     const {
-      user,
       channel,
       openChannelEditModal,
       chatTitle,
@@ -78,7 +77,7 @@ class ChannelHeaderNavbar extends React.Component {
     } = this.props;
     const { isSidebarModalOpen } = this.state;
 
-    const openModalProfile = () => openModal('MODAL_PROFILE', { user });
+    const openModalProfile = () => openModal('MODAL_PROFILE');
     let channelMenuItems = [];
     let ddMenuItems = [];
 

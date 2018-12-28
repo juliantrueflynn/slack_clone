@@ -16,7 +16,8 @@ class ModalController extends React.Component {
     const {
       currModalOpen,
       modalProps,
-      closeModal,
+      close,
+      user,
       channels,
       channelsMap,
       users,
@@ -53,6 +54,7 @@ class ModalController extends React.Component {
         type: 'MODAL_PROFILE',
         component: ModalProfile,
         modalTitle: 'Edit your profile',
+        user,
         updateUserRequest,
         updatePasswordRequest,
       },
@@ -77,8 +79,8 @@ class ModalController extends React.Component {
 
     return modals.filter(modal => modal.type === currModalOpen)
       .map(({ component: Component, ...modal }) => (
-        <Modal key={modal.type} isOpen close={closeModal} {...modal} {...props}>
-          <Component {...modal} close={closeModal} {...props} />
+        <Modal key={modal.type} isOpen close={close} {...modal} {...props}>
+          <Component {...modal} close={close} {...props} />
         </Modal>
       ));
   }

@@ -72,7 +72,7 @@ class UserDrawer extends React.Component {
             <Button buttonFor="dm" onClick={this.handleButtonClick}>Message</Button>
           )}
           {isNotCurrUser || (
-            <Button buttonFor="edit-user" onClick={() => openModal('MODAL_PROFILE', { user })}>
+            <Button buttonFor="edit-user" onClick={() => openModal('MODAL_PROFILE')}>
               Edit Profile
             </Button>
           )}
