@@ -4,7 +4,7 @@ import {
   FORM_ERRORS_DESTROY,
   ACCORDION_OPEN,
   SEARCH,
-  SEARCH_DESTROY,
+  SEARCH_QUERY_UPDATE,
   DROPDOWN_UPDATE,
   DRAWER_UPDATE,
   MODAL_UPDATE,
@@ -37,14 +37,14 @@ export const accordionOpen = (accordionType, accordionItem) => actionCreator(
 );
 
 export const fetchSearch = {
-  request: (query, shouldNotSearch = false) => (
-    actionCreator(SEARCH.INDEX.REQUEST, { query, shouldNotSearch })
-  ),
+  request: searchQuery => actionCreator(SEARCH.INDEX.REQUEST, { searchQuery }),
   receive: messages => actionCreator(SEARCH.INDEX.RECEIVE, { messages }),
   failure: errors => actionCreator(SEARCH.INDEX.FAILURE, { errors }),
 };
 
-export const destroySearch = () => ({ type: SEARCH_DESTROY });
+export const updateSearchQuery = (searchQuery = '') => (
+  actionCreator(SEARCH_QUERY_UPDATE, { searchQuery })
+);
 
 export const updateDropdown = (dropdownType, dropdownProps) => actionCreator(
   DROPDOWN_UPDATE,

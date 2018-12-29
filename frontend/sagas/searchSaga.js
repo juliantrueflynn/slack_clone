@@ -1,25 +1,26 @@
-import * as saga from 'redux-saga/effects';
+import {
+  takeLatest,
+  select,
+  call,
+  put,
+} from 'redux-saga/effects';
 import { SEARCH } from '../actions/actionTypes';
 import { fetchSearch } from '../actions/uiActions';
 import { apiFetch } from '../util/apiUtil';
 import { selectUIByDisplay } from '../reducers/selectors';
 
-function* loadSearchResults({ query, shouldNotSearch }) {
-  if (shouldNotSearch) {
-    return;
-  }
-
+function* loadSearchResults({ searchQuery }) {
   try {
-    const workspaceSlug = yield saga.select(selectUIByDisplay, 'displayWorkspaceSlug');
-    const apiUrl = `workspaces/${workspaceSlug}/search/${query}`;
-    const messageThreads = yield saga.call(apiFetch, apiUrl);
+    const workspaceSlug = yield select(selectUIByDisplay, 'displayWorkspaceSlug');
+    const apiUrl = `workspaces/${workspaceSlug}/search/${searchQuery}`;
+    const messageThreads = yield call(apiFetch, apiUrl);
 
-    yield saga.put(fetchSearch.receive(messageThreads));
+    yield put(fetchSearch.receive(messageThreads));
   } catch (error) {
-    yield saga.put(fetchSearch.failure(error));
+    yield put(fetchSearch.failure(error));
   }
 }
 
 export default function* searchSaga() {
-  yield saga.takeLatest(SEARCH.INDEX.REQUEST, loadSearchResults);
+  yield takeLatest(SEARCH.INDEX.REQUEST, loadSearchResults);
 }

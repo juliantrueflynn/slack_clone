@@ -18,7 +18,7 @@ export const READ = apiActions('READ', ['INDEX', 'CREATE', 'UPDATE', 'DESTROY'])
 export const PIN = apiActions('PIN', ['CREATE', 'DESTROY']);
 export const PASSWORD = apiActions('PASSWORD', ['UPDATE']);
 export const SEARCH = apiActions('SEARCH', ['INDEX']);
-export const SEARCH_DESTROY = 'SEARCH_DESTROY';
+export const SEARCH_QUERY_UPDATE = 'SEARCH_QUERY_UPDATE';
 
 export const MODAL_UPDATE = 'MODAL_UPDATE';
 export const DRAWER_UPDATE = 'DRAWER_UPDATE';

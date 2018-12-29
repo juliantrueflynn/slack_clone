@@ -1,5 +1,5 @@
 import {
-  SEARCH_DESTROY,
+  SEARCH_QUERY_UPDATE,
   SEARCH,
   WORKSPACE,
   SIGN_OUT,
@@ -9,12 +9,11 @@ const searchQueryReducer = (state = '', action) => {
   Object.freeze(state);
 
   switch (action.type) {
+    case SEARCH_QUERY_UPDATE:
     case SEARCH.INDEX.REQUEST:
-      return action.query;
+      return action.searchQuery;
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
-    case SEARCH_DESTROY:
-      return '';
     default:
       return state;
   }

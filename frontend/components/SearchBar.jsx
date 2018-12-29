@@ -15,9 +15,9 @@ class SearchBar extends React.Component {
   }
 
   componentDidMount() {
-    const { setQuery } = this.props;
+    const { updateQuery } = this.props;
 
-    if (setQuery) {
+    if (updateQuery) {
       this.focus();
     }
   }
@@ -29,25 +29,25 @@ class SearchBar extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const { searchSubmit, query } = this.props;
+    const { searchSubmit, searchQuery } = this.props;
 
     if (searchSubmit) {
-      searchSubmit(query);
+      searchSubmit(searchQuery);
     }
   }
 
   handleInputVal(e) {
-    const { setQuery } = this.props;
-    setQuery(e.target.value);
+    const { updateQuery } = this.props;
+    updateQuery(e.target.value);
   }
 
   handleClearClick() {
-    const { setQuery, destroySearch } = this.props;
+    const { updateQuery, destroySearchQuery } = this.props;
 
-    destroySearch();
+    destroySearchQuery();
 
-    if (setQuery) {
-      setQuery('');
+    if (updateQuery) {
+      updateQuery('');
       this.focus();
     }
   }
@@ -60,14 +60,14 @@ class SearchBar extends React.Component {
   }
 
   render() {
-    const { query, hasClearIcon, openModal } = this.props;
+    const { searchQuery, hasClearIcon, openModal } = this.props;
 
     const isDisabled = !!openModal;
 
     const searchClassNames = classNames('SearchBar', {
       'SearchBar--disabled': openModal,
-      'SearchBar--queried': query,
-      'SearchBar--empty': !query,
+      'SearchBar--queried': searchQuery,
+      'SearchBar--empty': !searchQuery,
     });
 
     return (
@@ -81,16 +81,16 @@ class SearchBar extends React.Component {
             type="text"
             ref={this.input}
             className="SearchBar__input"
-            value={query}
+            value={searchQuery}
             onChange={this.handleInputVal}
             placeholder="Search"
             disabled={isDisabled}
           />
         </div>
-        {query && (
+        {searchQuery && (
           <Button onClick={this.handleClearClick} buttonFor="clear" unStyled>
             {hasClearIcon || 'Clear'}
-            {hasClearIcon && <span role="img" aria-label="Close drawer">&times;</span>}
+            {hasClearIcon && <span role="img" aria-label="Clear search">&times;</span>}
           </Button>
         )}
       </form>

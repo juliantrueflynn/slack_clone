@@ -4,7 +4,7 @@ import {
   updateModal,
   updateDrawer,
   accordionOpen,
-  destroySearch,
+  updateSearchQuery,
   updateDropdown,
 } from '../actions/uiActions';
 import { destroyChannelSub } from '../actions/channelActions';
@@ -48,7 +48,7 @@ const mapDispatchToProps = (dispatch, { match: { params: { chatPath } } }) => ({
   openDropdown: (ddType, ddProps) => dispatch(updateDropdown(ddType, ddProps)),
   closeDropdown: () => dispatch(updateDropdown(null)),
   accordionOpen: accordionType => dispatch(accordionOpen('details', accordionType)),
-  destroySearch: () => dispatch(destroySearch()),
+  destroySearchQuery: () => dispatch(updateSearchQuery()),
   destroyChannelSubRequest: () => dispatch(destroyChannelSub.request(chatPath)),
 });
 

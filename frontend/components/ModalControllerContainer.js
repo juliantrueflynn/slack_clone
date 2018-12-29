@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { getChannelsMap, getMessagesMap, getUnsubbedChannels } from '../reducers/selectors';
-import { updateModal, fetchSearch, destroySearch } from '../actions/uiActions';
+import { updateModal, fetchSearch, updateSearchQuery } from '../actions/uiActions';
 import { fetchChannels, createChannel, updateChannel } from '../actions/channelActions';
 import { updateUser, updatePassword } from '../actions/userActions';
 import { createWorkspace } from '../actions/workspaceActions';
@@ -39,10 +39,8 @@ const mapDispatchToProps = dispatch => ({
   updateUserRequest: user => dispatch(updateUser.request(user)),
   updatePasswordRequest: password => dispatch(updatePassword.request(password)),
   createWorkspaceRequest: workspace => dispatch(createWorkspace.request(workspace)),
-  fetchSearchRequest: (query, shouldNotSearch = false) => (
-    dispatch(fetchSearch.request(query, shouldNotSearch))
-  ),
-  destroySearch: () => dispatch(destroySearch()),
+  fetchSearchRequest: searchQuery => dispatch(fetchSearch.request(searchQuery)),
+  updateSearchQuery: (searchQuery = '') => dispatch(updateSearchQuery(searchQuery)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalController);

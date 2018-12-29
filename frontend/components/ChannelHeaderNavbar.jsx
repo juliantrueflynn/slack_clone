@@ -71,7 +71,7 @@ class ChannelHeaderNavbar extends React.Component {
       openModal,
       searchQuery,
       destroyChannelSubRequest,
-      destroySearch,
+      destroySearchQuery,
       closeDropdown,
       match: { url },
     } = this.props;
@@ -139,8 +139,8 @@ class ChannelHeaderNavbar extends React.Component {
       <nav className="ChannelHeaderNavbar">
         {channel && <Menu items={channelMenuItems} menuFor="edit" isRow unStyled />}
         <SearchBar
-          query={searchQuery}
-          destroySearch={destroySearch}
+          searchQuery={searchQuery}
+          destroySearchQuery={destroySearchQuery}
           openModal={openModal}
           hasClearIcon
         />
