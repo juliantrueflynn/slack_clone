@@ -19,12 +19,12 @@ class ModalSearch extends React.Component {
       results: [],
       channelFilter: [],
       peopleFilter: [],
-      height: 0,
+      height: 'inherit',
     };
 
     this.scrollBarRef = React.createRef();
 
-    this.updateQuery = this.updateQuery.bind(this);
+    this.setQuery = this.setQuery.bind(this);
     this.handleFilterToggle = this.handleFilterToggle.bind(this);
     this.handleSearchRequest = this.handleSearchRequest.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -39,63 +39,40 @@ class ModalSearch extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { messages, searchQuery, windowHeight } = this.props;
-    const {
-      query,
-      isNewSearch,
-      results,
-      channelFilter,
-      peopleFilter,
-    } = this.state;
-    const prevLastMsg = prevProps.messages[prevProps.messages.length - 1];
-    const lastMsg = messages[messages.length - 1];
-    const hasChannelFilterDiff = channelFilter.length === prevState.channelFilter.length;
-    const hasPeopleFilterDiff = peopleFilter.length === prevState.peopleFilter.length;
+  componentDidUpdate(prevProps) {
+    const { messages, windowHeight } = this.props;
+    const { height, isNewSearch } = this.state;
 
-    if (searchQuery && prevProps.searchQuery !== searchQuery) {
-      this.updateResults(messages);
+    if (messages.length !== prevProps.messages.length) {
+      this.setResults(messages);
     }
 
-    if (searchQuery && searchQuery !== query && prevState.query !== query) {
-      this.updateResults([]);
-      this.updateNewSearch(true);
-    }
-
-    if ((hasChannelFilterDiff || hasPeopleFilterDiff) && !isNewSearch) {
-      if (lastMsg && !results.length && !channelFilter.length && !peopleFilter.length) {
-        this.updateResults(messages);
-      }
-
-      if (lastMsg && prevLastMsg && lastMsg.id !== prevLastMsg.id) {
-        this.updateResults(messages);
+    if (height === 'inherit' || windowHeight !== prevProps.windowHeight) {
+      if (messages.length || !isNewSearch) {
+        const { top } = this.scrollBarRef.current.getBoundingClientRect();
+        const bottomPadding = 8;
+        this.updateHeight(windowHeight - top - bottomPadding);
+      } else {
+        this.updateHeight('inherit');
       }
     }
-
-    if (results.length) {
-      const { top } = this.scrollBarRef.current.getBoundingClientRect();
-      const bottomPadding = 8;
-      this.updateHeight(windowHeight - top - bottomPadding);
-    } else {
-      this.updateHeight('inherit');
-    }
   }
 
-  updateResults(results) {
-    this.setState({ results });
-  }
-
-  updateNewSearch(isNewSearch) {
-    this.setState({ isNewSearch });
-  }
-
-  updateQuery(query) {
+  setQuery(query) {
     this.setState({ query });
 
     if (!query) {
-      this.updateResults([]);
-      this.updateNewSearch(true);
+      this.setResults([]);
+      this.setNewSearch(true);
     }
+  }
+
+  setResults(results) {
+    this.setState({ results });
+  }
+
+  setNewSearch(isNewSearch) {
+    this.setState({ isNewSearch });
   }
 
   updateHeight(nextHeight) {
@@ -107,10 +84,10 @@ class ModalSearch extends React.Component {
   }
 
   handleSearchRequest(query) {
-    const { fetchSearchRequest } = this.props;
+    const { fetchSearchRequest, messages } = this.props;
 
-    this.setState({ isNewSearch: false });
     fetchSearchRequest(query);
+    this.setState({ isNewSearch: false, messages });
   }
 
   filterResults(newFilter, currFilter) {
@@ -142,7 +119,7 @@ class ModalSearch extends React.Component {
   }
 
   handleClose() {
-    const { close, updateSearchQuery, searchQuery } = this.props;
+    const { close, searchQuery, updateSearchQuery } = this.props;
     const { query } = this.state;
 
     if (searchQuery !== query) {
@@ -157,13 +134,13 @@ class ModalSearch extends React.Component {
       users,
       messages,
       channelsMap,
-      updateSearchQuery,
       isLoading,
     } = this.props;
 
     const {
       query,
       results,
+      updateSearchQuery,
       channelFilter,
       peopleFilter,
       isNewSearch,
@@ -184,7 +161,7 @@ class ModalSearch extends React.Component {
           <SearchBar
             searchSubmit={this.handleSearchRequest}
             destroySearchQuery={updateSearchQuery}
-            updateQuery={this.updateQuery}
+            setQuery={this.setQuery}
             searchQuery={query}
           />
           <Button onClick={this.handleClose} buttonFor="modal-close" unStyled>

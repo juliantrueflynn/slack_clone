@@ -15,9 +15,9 @@ class SearchBar extends React.Component {
   }
 
   componentDidMount() {
-    const { updateQuery } = this.props;
+    const { setQuery } = this.props;
 
-    if (updateQuery) {
+    if (setQuery) {
       this.focus();
     }
   }
@@ -37,17 +37,17 @@ class SearchBar extends React.Component {
   }
 
   handleInputVal(e) {
-    const { updateQuery } = this.props;
-    updateQuery(e.target.value);
+    const { setQuery } = this.props;
+    setQuery(e.target.value);
   }
 
   handleClearClick() {
-    const { updateQuery, destroySearchQuery } = this.props;
+    const { setQuery, destroySearchQuery } = this.props;
 
     destroySearchQuery();
 
-    if (updateQuery) {
-      updateQuery('');
+    if (setQuery) {
+      setQuery('');
       this.focus();
     }
   }

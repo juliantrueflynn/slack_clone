@@ -3,10 +3,6 @@
   padding: 0 15px;
 }
 
-.ModalSearchResults .ModalSearchItem:last-child {
-  margin-bottom: 20px;
-}
-
 .ModalSearchResults__empty-txt,
 .ModalSearch--new .ModalSearchResults__count-txt,
 .ModalSearch--loading .ModalSearchResults__empty-txt,
@@ -26,5 +22,5 @@
 }
 
 .ModalSearchResults__count-txt {
-  margin: 0 0 15px;
+  margin: 0;
 }
