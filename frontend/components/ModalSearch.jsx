@@ -15,7 +15,6 @@ class ModalSearch extends React.Component {
 
     this.state = {
       query: '',
-      isNewSearch: true,
       results: [],
       channelFilter: [],
       peopleFilter: [],
@@ -26,35 +25,42 @@ class ModalSearch extends React.Component {
 
     this.setQuery = this.setQuery.bind(this);
     this.handleFilterToggle = this.handleFilterToggle.bind(this);
-    this.handleSearchRequest = this.handleSearchRequest.bind(this);
-    this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {
-    const { searchQuery: query } = this.props;
+    const { searchQuery: query, fetchSearchRequest } = this.props;
     this.setState({ query });
 
     if (query) {
-      this.handleSearchRequest(query);
+      fetchSearchRequest(query);
     }
   }
 
   componentDidUpdate(prevProps) {
-    const { messages, windowHeight } = this.props;
-    const { height, isNewSearch } = this.state;
+    const { messages, windowHeight, searchQuery } = this.props;
+    const { height } = this.state;
 
     if (messages.length !== prevProps.messages.length) {
       this.setResults(messages);
     }
 
-    if (height === 'inherit' || windowHeight !== prevProps.windowHeight) {
-      if (messages.length || !isNewSearch) {
+    if (messages.length || searchQuery) {
+      if (height === 'inherit' || windowHeight !== prevProps.windowHeight) {
         const { top } = this.scrollBarRef.current.getBoundingClientRect();
         const bottomPadding = 8;
         this.updateHeight(windowHeight - top - bottomPadding);
-      } else {
-        this.updateHeight('inherit');
       }
+    } else {
+      this.updateHeight('inherit');
+    }
+  }
+
+  componentWillUnmount() {
+    const { searchQuery, updateSearchQuery } = this.props;
+    const { query } = this.state;
+
+    if (searchQuery !== query) {
+      updateSearchQuery(query);
     }
   }
 
@@ -62,17 +68,15 @@ class ModalSearch extends React.Component {
     this.setState({ query });
 
     if (!query) {
+      const { updateSearchQuery } = this.props;
+
       this.setResults([]);
-      this.setNewSearch(true);
+      updateSearchQuery();
     }
   }
 
   setResults(results) {
     this.setState({ results });
-  }
-
-  setNewSearch(isNewSearch) {
-    this.setState({ isNewSearch });
   }
 
   updateHeight(nextHeight) {
@@ -81,13 +85,6 @@ class ModalSearch extends React.Component {
     if (height !== nextHeight) {
       this.setState({ height: nextHeight });
     }
-  }
-
-  handleSearchRequest(query) {
-    const { fetchSearchRequest, messages } = this.props;
-
-    fetchSearchRequest(query);
-    this.setState({ isNewSearch: false, messages });
   }
 
   filterResults(newFilter, currFilter) {
@@ -118,53 +115,41 @@ class ModalSearch extends React.Component {
     this.setState({ [type]: newFilter, results });
   }
 
-  handleClose() {
-    const { close, searchQuery, updateSearchQuery } = this.props;
-    const { query } = this.state;
-
-    if (searchQuery !== query) {
-      updateSearchQuery(query);
-    }
-
-    close();
-  }
-
   render() {
     const {
       users,
       messages,
       channelsMap,
+      searchQuery,
       isLoading,
+      fetchSearchRequest,
+      updateSearchQuery,
+      close,
     } = this.props;
-
     const {
       query,
       results,
-      updateSearchQuery,
       channelFilter,
       peopleFilter,
-      isNewSearch,
       height,
     } = this.state;
 
-    const isEmpty = !results.length && !peopleFilter.length && !channelFilter.length;
-
     const overlayClassName = classNames('ModalSearch', {
-      'ModalSearch--empty': isEmpty && !isNewSearch && !isLoading,
+      'ModalSearch--empty': !peopleFilter.length && !channelFilter.length && !messages.length,
       'ModalSearch--loading': isLoading,
-      'ModalSearch--new': isNewSearch,
+      'ModalSearch--new': !searchQuery,
     });
 
     return (
       <div className={overlayClassName}>
         <div className="ModalSearch__searchbar">
           <SearchBar
-            searchSubmit={this.handleSearchRequest}
+            searchSubmit={fetchSearchRequest}
             destroySearchQuery={updateSearchQuery}
             setQuery={this.setQuery}
             searchQuery={query}
           />
-          <Button onClick={this.handleClose} buttonFor="modal-close" unStyled>
+          <Button onClick={close} unStyled>
             <FontAwesomeIcon icon="times" />
           </Button>
         </div>
