@@ -36,11 +36,14 @@ class ModalSearch extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const { messages, windowHeight, searchQuery } = this.props;
-    const { height } = this.state;
+    const { height, channelFilter, peopleFilter } = this.state;
 
-    if (messages.length !== prevProps.messages.length) {
+    const filters = [...channelFilter, ...peopleFilter];
+    const prevFilters = [...prevState.channelFilter, ...prevState.peopleFilter];
+
+    if (messages.length !== prevProps.messages.length || filters.length !== prevFilters.length) {
       this.setResults(messages);
     }
 
@@ -48,10 +51,10 @@ class ModalSearch extends React.Component {
       if (height === 'inherit' || windowHeight !== prevProps.windowHeight) {
         const { top } = this.scrollBarRef.current.getBoundingClientRect();
         const bottomPadding = 8;
-        this.updateHeight(windowHeight - top - bottomPadding);
+        this.setHeight(windowHeight - top - bottomPadding);
       }
     } else {
-      this.updateHeight('inherit');
+      this.setHeight('inherit');
     }
   }
 
@@ -75,11 +78,7 @@ class ModalSearch extends React.Component {
     }
   }
 
-  setResults(results) {
-    this.setState({ results });
-  }
-
-  updateHeight(nextHeight) {
+  setHeight(nextHeight) {
     const { height } = this.state;
 
     if (height !== nextHeight) {
@@ -87,32 +86,32 @@ class ModalSearch extends React.Component {
     }
   }
 
-  filterResults(newFilter, currFilter) {
-    const { messages } = this.props;
+  setResults(messages) {
+    const { channelFilter, peopleFilter } = this.state;
 
-    return messages.filter(({ authorSlug, channelSlug }) => (
-      !newFilter.length || (newFilter.includes(authorSlug) || newFilter.includes(channelSlug))
-    )).filter(({ authorSlug, channelSlug }) => (
-      !currFilter.length || (currFilter.includes(authorSlug) || currFilter.includes(channelSlug))
+    const results = messages.filter(msg => (
+      !channelFilter.length || channelFilter.includes(msg.channelSlug)
+    )).filter(msg => (
+      !peopleFilter.length || peopleFilter.includes(msg.authorSlug)
     ));
+
+    this.setState({ results });
   }
 
-  handleFilterToggle(type, slug) {
+  handleFilterToggle(e) {
+    const slug = e.target.id;
+    const type = e.target.getAttribute('data-filter');
     const { ...state } = this.state;
-    const stateFilter = state[type];
-    let newFilter = stateFilter;
+    const checkboxFilter = state[type];
 
-    if (stateFilter.includes(slug)) {
-      newFilter = stateFilter.filter(entitySlug => entitySlug !== slug);
+    let newFilter;
+    if (e.target.checked) {
+      newFilter = [...checkboxFilter, slug];
     } else {
-      stateFilter.push(slug);
-      newFilter = stateFilter;
+      newFilter = checkboxFilter.filter(entitySlug => entitySlug !== slug);
     }
 
-    const altType = type === 'channelFilter' ? state.peopleFilter : state.channelFilter;
-    const results = this.filterResults(newFilter, altType);
-
-    this.setState({ [type]: newFilter, results });
+    this.setState({ [type]: newFilter });
   }
 
   render() {
@@ -133,6 +132,8 @@ class ModalSearch extends React.Component {
       peopleFilter,
       height,
     } = this.state;
+
+    const channels = Object.values(channelsMap).filter(ch => !ch.hasDm && ch.isSub);
 
     const overlayClassName = classNames('ModalSearch', {
       'ModalSearch--empty': !peopleFilter.length && !channelFilter.length && !messages.length,
@@ -162,7 +163,7 @@ class ModalSearch extends React.Component {
           />
           <ModalSearchAside
             messages={messages}
-            channelsMap={channelsMap}
+            channels={channels}
             users={users}
             peopleFilter={peopleFilter}
             channelFilter={channelFilter}

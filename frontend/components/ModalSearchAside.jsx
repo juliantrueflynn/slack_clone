@@ -6,18 +6,14 @@ import './ModalSearchAside.css';
 
 const ModalSearchAside = ({
   messages,
-  channelsMap,
+  channels,
   users,
   peopleFilter,
   channelFilter,
   toggleCheckbox,
 }) => {
-  const channelsFilterMap = messages.reduce((acc, curr) => {
-    const channel = channelsMap[curr.channelSlug];
-    const { channelSlug: id } = curr;
-    acc[id] = { id, label: channel.title };
-    return acc;
-  }, {});
+  const channelsFilterMap = channels.map(({ slug: id, title: label }) => ({ id, label }));
+
   const peopleFilterMap = messages.reduce((acc, curr) => {
     const { authorSlug: id, username: label } = curr;
     acc[id] = { id, label };
@@ -40,18 +36,19 @@ const ModalSearchAside = ({
     ),
     className: null,
     checked: isChecked[type](id),
-    onChange: () => toggleCheckbox(`${type}Filter`, id),
+    onChange: toggleCheckbox,
+    'data-filter': `${type}Filter`,
   });
 
-  const people = Object.values(peopleFilterMap).map(item => (
+  const peopleFilters = Object.values(peopleFilterMap).map(item => (
     checkboxMapper(item, 'people', <Avatar user={users[item.id]} size="18" />)
   ));
 
-  const channels = Object.values(channelsFilterMap).map(item => (
+  const channelsFilters = channelsFilterMap.map(item => (
     checkboxMapper(item, 'channel', <FontAwesomeIcon icon="hashtag" size="sm" />)
   ));
 
-  const widget = (title, arr) => (
+  const Widget = (title, arr) => (
     <div className={`ModalSearchAside__widget ModalSearchAside__widget-${title.toLowerCase()}`}>
       <h4 className="ModalSearchAside__widget-title">{title}</h4>
       {arr.map(item => <FormField key={item.id} {...item} />)}
@@ -61,8 +58,8 @@ const ModalSearchAside = ({
   return (
     <aside className="ModalSearchAside">
       <h3 className="ModalSearchAside__title">Filter by</h3>
-      {widget('People', people)}
-      {widget('Channels', channels)}
+      {Widget('People', peopleFilters)}
+      {Widget('Channels', channelsFilters)}
     </aside>
   );
 };
