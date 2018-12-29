@@ -9,13 +9,8 @@
   position: relative;
 }
 
-.ModalSearch {
-  position: aboslute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  overflow: hidden;
+.ModalSearch .ScrollBar {
+  border-bottom-right-radius: 6px;
 }
 
 .ModalSearch .ScrollBar__container {

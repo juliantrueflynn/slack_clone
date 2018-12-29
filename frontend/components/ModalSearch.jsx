@@ -73,7 +73,9 @@ class ModalSearch extends React.Component {
     }
 
     if (results.length) {
-      this.updateHeight(windowHeight - 18);
+      const { top } = this.scrollBarRef.current.getBoundingClientRect();
+      const bottomPadding = 8;
+      this.updateHeight(windowHeight - top - bottomPadding);
     } else {
       this.updateHeight('inherit');
     }
@@ -183,7 +185,7 @@ class ModalSearch extends React.Component {
             <FontAwesomeIcon icon="times" />
           </Button>
         </div>
-        <ScrollBar style={{ height }} scrollBarRef={this.scrollBarRef}>
+        <ScrollBar scrollBarRef={this.scrollBarRef} style={{ height }}>
           <ModalSearchResults
             results={results}
             isLoading={isLoading}

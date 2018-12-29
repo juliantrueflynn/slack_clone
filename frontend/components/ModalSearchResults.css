@@ -4,7 +4,7 @@
 }
 
 .ModalSearchResults .ModalSearchItem:last-child {
-  margin-bottom: 70px;
+  margin-bottom: 20px;
 }
 
 .ModalSearchResults__empty-txt,
