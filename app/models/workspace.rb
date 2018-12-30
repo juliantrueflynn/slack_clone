@@ -52,6 +52,10 @@ class Workspace < ApplicationRecord
     Message.where(id: entries_ids)
   end
 
+  def channels_ids_with_user_id(user_id)
+    channel_subs.where(user_id: user_id).pluck(:channel_id)
+  end
+
   after_create :generate_workspace_subs, :generate_default_channels
   after_create_commit :broadcast_create
 
