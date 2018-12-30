@@ -1,4 +1,4 @@
-.Modal__wrapper--chats .Modal__overlay {
+.Modal__overlay--chats {
   background-color: #FFF;
 }
 
@@ -18,11 +18,11 @@
 }
 
 @media screen and (min-width: 769px) {
-  .Modal__wrapper--chats .Modal__container {
+  .Modal__overlay--chats .Modal__container {
     padding: 80px 0 30px;
   }
 
-  .Modal__wrapper--chats .Btn__close--overlay {
+  .Modal__overlay--chats .Btn__close--overlay {
     display: flex;
   }
 }

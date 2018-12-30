@@ -32,14 +32,14 @@ class Modal extends React.Component {
 
     const shouldCloseOnOverlayClick = !!unStyled;
 
-    const bodyOpenClassName = classNames('Modal__wrapper', {
-      'ReactModal__Body--open': true,
-      [`Modal__wrapper--${modalFor}`]: modalFor,
-      [`Modal__wrapper--${modalFor}-${bemModifier}`]: modalFor && bemModifier,
-      'Modal__wrapper--styled': !unStyled,
-      'Modal__wrapper--unstyled': unStyled,
-      'Modal__wrapper--pos': modalPos,
+    const overlayClassName = classNames('Modal__overlay', {
+      [`Modal__overlay--${modalFor}`]: modalFor,
+      [`Modal__overlay--${modalFor}-${bemModifier}`]: modalFor && bemModifier,
+      'Modal__overlay--styled': !unStyled,
+      'Modal__overlay--unstyled': unStyled,
+      'Modal__overlay--pos': modalPos,
     });
+
     const modalClassNames = classNames('Modal', {
       [`Modal__${modalFor}`]: modalFor,
       [`Modal__${modalFor}--${bemModifier}`]: modalFor && bemModifier,
@@ -48,8 +48,7 @@ class Modal extends React.Component {
     return (
       <ReactModal
         className={modalClassNames}
-        overlayClassName="Modal__overlay"
-        bodyOpenClassName={bodyOpenClassName}
+        overlayClassName={overlayClassName}
         contentLabel={modalTitle}
         onRequestClose={close}
         shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
