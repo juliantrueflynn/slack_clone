@@ -57,17 +57,14 @@
   padding: 8px 4px;
 }
 
-@media screen and (max-width: 768px) {
-  .ModalSearch .Modal {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
+@media screen and (max-width: 991px) {
+  .Modal__search {
+    margin: 0;
     height: 100%;
-  }
-
-  .ModalSearch .Modal {
     border-radius: 0;
   }
+
+  .ModalSearch .ScrollBar {
+    border-bottom-right-radius: 0;
+  }  
 }

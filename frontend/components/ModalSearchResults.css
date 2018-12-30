@@ -1,6 +1,7 @@
 .ModalSearchResults {
-  width: 80%;
   padding: 0 15px;
+  flex: 0 0 75%;
+  max-width: 75%;
 }
 
 .ModalSearchResults__empty-txt,
@@ -23,4 +24,11 @@
 
 .ModalSearchResults__count-txt {
   margin: 0;
+}
+
+@media screen and (max-width: 991px) {
+  .ModalSearchResults {
+    flex: 0 0 70%;
+    max-width: 70%;
+  }
 }
