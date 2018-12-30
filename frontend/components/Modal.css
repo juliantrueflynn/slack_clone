@@ -3,7 +3,7 @@
 }
 
 .Modal:focus {
-  outline: none;
+  outline: 0;
 }
 
 .Modal__overlay {
@@ -26,11 +26,6 @@
 .Modal__wrapper--pos .Modal,
 .Modal__wrapper--styled .Modal {
   height: 100%;
-}
-
-.Modal__wrapper--styled .Modal__content-body {
-  margin: 0 auto;
-  max-width: 800px;
 }
 
 .Modal__wrapper--styled .Form label {
@@ -71,7 +66,7 @@
   display: none;
 }
 
-.Modal__wrapper--styled .Modal__container {
+.Modal__wrapper--styled .Modal__body {
   max-width: 800px;
   margin: 0 auto;
 }
@@ -102,6 +97,12 @@
   background-color: #EEE;
 }
 
+@media screen and (max-width: 991px) {
+  .Modal__wrapper--styled .Modal__body {
+    max-width: 720px;
+  }
+}
+
 @media screen and (min-width: 769px) {
   .Modal__wrapper--styled .Modal__container {
     padding: 80px 0 30px;
@@ -113,13 +114,13 @@
     display: none;
   }
 
-  .Modal__wrapper--styled .Modal {
+  .Modal__wrapper--styled .Modal__body {
     padding: 0 15px;
   }
 }
 
 @media screen and (min-width: 576px) and (max-width: 768px) {
-  .Modal__wrapper--styled .Modal {
+  .Modal__wrapper--styled .Modal__body {
     max-width: 536px;
     margin-left: auto;
     margin-right: auto;

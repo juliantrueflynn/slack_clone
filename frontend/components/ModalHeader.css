@@ -30,7 +30,7 @@
     border-bottom: 1px solid #DFE6E9;
   }
 
-  .Modal__wrapper--styled .Btn__close--header {
+  .Modal .Btn__close--header {
     display: flex;
     justify-content: center;
     width: 22.5px;

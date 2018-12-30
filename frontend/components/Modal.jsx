@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import ReactModal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -56,20 +56,20 @@ class Modal extends React.Component {
         shouldReturnFocusAfterClose={false}
         {...props}
       >
-        <Fragment>
+        <div className="Modal__container">
           <Button buttonFor="close" modifier="overlay" unStyled onClick={this.handleClose}>
             <FontAwesomeIcon icon="times" />
           </Button>
           {!unStyled && (
             <ScrollBar>
-              <div className="Modal__container">
-                <ModalHeader modalTitle={modalTitle} close={this.handleClose} />
+              <ModalHeader modalTitle={modalTitle} close={this.handleClose} />
+              <div className="Modal__body">
                 {children}
               </div>
             </ScrollBar>
           )}
           {unStyled && children}
-        </Fragment>
+        </div>
       </ReactModal>
     );
   }
