@@ -5,7 +5,6 @@
   max-width: 100%;
 }
 
-.ModalSearch--loading .ModalSearchSidebar,
 .ModalSearch--empty .ModalSearchSidebar,
 .ModalSearch--new .ModalSearchSidebar {
   display: none;
@@ -17,7 +16,6 @@
 }
 
 .ModalSearchSidebar .SidebarWidget__header {
-  margin-bottom: 5px;
   font-weight: normal;
   color: #636E72;
 }

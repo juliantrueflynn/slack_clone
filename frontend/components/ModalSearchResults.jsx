@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ModalSearchItem from './ModalSearchItem';
 import './ModalSearchResults.css';
 
@@ -17,9 +18,15 @@ const ModalSearchResults = ({
 
   return (
     <div className="ModalSearchResults">
-      <span className="ModalSearchResults__loading-txt">Loading</span>
-      <span className="ModalSearchResults__empty-txt">Type and hit enter to search</span>
-      <h4 className="ModalSearchResults__count-txt">{resultsText}</h4>
+      <div className="ModalSearchResults__loader">
+        <FontAwesomeIcon icon="spinner" spin pulse />
+      </div>
+      <span className="ModalSearchResults__txt ModalSearchResults__txt--empty">
+        Type and hit enter to search
+      </span>
+      <h4 className="ModalSearchResults__txt ModalSearchResults__txt--count">
+        {resultsText}
+      </h4>
       {isLoading || results.map(message => (
         <ModalSearchItem
           key={message.slug}
