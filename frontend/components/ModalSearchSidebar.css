@@ -1,0 +1,45 @@
+.ModalSearchSidebar {
+  width: 20%;
+  padding: 0 15px;
+}
+
+.ModalSearch--loading .ModalSearchSidebar,
+.ModalSearch--empty .ModalSearchSidebar,
+.ModalSearch--new .ModalSearchSidebar {
+  display: none;
+}
+
+.ModalSearchSidebar__title {
+  margin: 0 0 10px;
+  color: #636E72;
+}
+
+.ModalSearchSidebar .SidebarWidget__header {
+  margin-bottom: 5px;
+  font-weight: normal;
+  color: #636E72;
+}
+
+.ModalSearchSidebar .Form__checkbox {
+  display: flex;
+  align-items: center;
+  padding: 3px 0;
+}
+
+.SidebarWidget__channels {
+  margin-bottom: 7px;
+}
+
+.ModalSearchSidebar .ModalSearchSidebar__filter-prefix {
+  width: 28px;
+}
+
+.ModalSearchSidebar .Form__checkbox-label {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.ModalSearchSidebar input {
+  margin-left: auto;
+}

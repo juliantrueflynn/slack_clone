@@ -1,0 +1,11 @@
+.SidebarWidget {
+  margin-bottom: 20px;
+}
+
+.SidebarWidget__header {
+  margin-bottom: 5px;
+}
+
+.SidebarWidget:last-of-type {
+  margin-bottom: 0;
+}

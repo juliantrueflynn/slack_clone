@@ -2,9 +2,10 @@ import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Avatar from './Avatar';
 import FormField from './FormField';
-import './ModalSearchAside.css';
+import SidebarWidget from './SidebarWidget';
+import './ModalSearchSidebar.css';
 
-const ModalSearchAside = ({
+const ModalSearchSidebar = ({
   messages,
   channels,
   users,
@@ -12,11 +13,11 @@ const ModalSearchAside = ({
   channelFilter,
   toggleCheckbox,
 }) => {
-  const channelsFilterMap = channels.map(({ slug: id, title: label }) => ({ id, label }));
+  const channelsFilterMap = channels.map(({ slug: id, title }) => ({ id, title }));
 
   const peopleFilterMap = messages.reduce((acc, curr) => {
-    const { authorSlug: id, username: label } = curr;
-    acc[id] = { id, label };
+    const { authorSlug: id, username: title } = curr;
+    acc[id] = { id, title };
     return acc;
   }, {});
 
@@ -25,13 +26,13 @@ const ModalSearchAside = ({
     channel: id => channelFilter.includes(id),
   };
 
-  const checkboxMapper = ({ id, label }, type, prefix) => ({
+  const checkboxMapper = ({ id, title }, type, prefix) => ({
     id,
     type: 'checkbox',
     label: (
       <Fragment>
-        <div className="ModalSearchAside__filter-prefix">{prefix}</div>
-        {label}
+        <div className="ModalSearchSidebar__filter-prefix">{prefix}</div>
+        {title}
       </Fragment>
     ),
     className: null,
@@ -48,20 +49,17 @@ const ModalSearchAside = ({
     checkboxMapper(item, 'channel', <FontAwesomeIcon icon="hashtag" size="sm" />)
   ));
 
-  const Widget = (title, arr) => (
-    <div className={`ModalSearchAside__widget ModalSearchAside__widget-${title.toLowerCase()}`}>
-      <h4 className="ModalSearchAside__widget-title">{title}</h4>
-      {arr.map(item => <FormField key={item.id} {...item} />)}
-    </div>
-  );
-
   return (
-    <aside className="ModalSearchAside">
-      <h3 className="ModalSearchAside__title">Filter by</h3>
-      {Widget('People', peopleFilters)}
-      {Widget('Channels', channelsFilters)}
+    <aside className="ModalSearchSidebar">
+      <h3 className="ModalSearchSidebar__title">Filter by</h3>
+      <SidebarWidget widgetFor="people" widgetTitle="People">
+        {peopleFilters.map(item => <FormField key={item.id} {...item} />)}
+      </SidebarWidget>
+      <SidebarWidget widgetFor="channels" widgetTitle="Channels">
+        {channelsFilters.map(item => <FormField key={item.id} {...item} />)}
+      </SidebarWidget>
     </aside>
   );
 };
 
-export default ModalSearchAside;
+export default ModalSearchSidebar;

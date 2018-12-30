@@ -1,0 +1,119 @@
+
+.LeftSidebarWidgets .SidebarWidget__header,
+.LeftSidebarWidgets .SidebarWidget__profile .Btn__dropdown,
+.LeftSidebarWidgets .SidebarWidget .MenuItem__content {
+  padding-left: 18px;
+  padding-right: 18px;
+  width: 100%;
+}
+
+.LeftSidebarWidgets .SidebarWidget .MenuItem__content {
+  text-align: inherit;
+}
+
+.LeftSidebarWidgets .SidebarWidget .Menu > .MenuItem > .MenuItem__content {
+  color: rgba(255, 255, 255, 0.75);
+  display: block;
+}
+
+.LeftSidebarWidgets .SidebarWidget .Menu > .MenuItem--unread > .MenuItem__content {
+  color: #FFF;
+  font-weight: bold;
+}
+
+.LeftSidebarWidgets .SidebarWidget__header {
+  display: flex;
+  flex-direction: row;
+}
+
+.LeftSidebarWidgets .SidebarWidget__header > .Btn:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.LeftSidebarWidgets .SidebarWidget__header > .Btn {
+  display: block;
+  margin-right: auto;
+}
+
+.LeftSidebarWidgets .SidebarWidget__header .Btn:focus {
+  outline: 0;
+}
+
+.LeftSidebarWidgets .SidebarWidget__chats .Menu > .MenuItem > .MenuItem__content--active {
+  pointer-events: none;
+}
+
+.LeftSidebarWidgets .SidebarWidget .Btn__chats {
+  padding: 0;
+  margin: 0 auto 0 0;
+  width: 100%;
+  text-align: left;
+}
+
+.LeftSidebarWidgets .SidebarWidget__header > .Btn__widget {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.LeftSidebarWidgets .SidebarWidget__header > .Btn__widget:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.LeftSidebarWidgets .SidebarWidget .MenuItem__content > .MenuItem__icon {
+  width: 23px;
+  display: inline-block;
+}
+
+.LeftSidebarWidgets .SidebarWidget .MenuItem__content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.LeftSidebarWidgets .SidebarWidget__quicklinks .Menu .MenuItem__icon svg,
+.LeftSidebarWidgets .SidebarWidget .StatusIcon {
+  width: 1.25em;
+}
+
+.LeftSidebarWidgets .SidebarWidget__chats .Menu .MenuItem__content > .MenuItem__icon,
+.LeftSidebarWidgets .SidebarWidget__quicklinks .Menu .MenuItem__content > .MenuItem__icon {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.LeftSidebarWidgets .SidebarWidget .MenuItem__content--btn:hover:not(.MenuItem__content--active),
+.LeftSidebarWidgets .SidebarWidget .MenuItem__content--link:hover:not(.MenuItem__content--active) {
+  background-color: rgba(223, 230, 233, 0.45);
+}
+
+.LeftSidebarWidgets .SidebarWidget .MenuItem__content--btn:hover:not(.MenuItem__content--active),
+.LeftSidebarWidgets .SidebarWidget .MenuItem__content--link:hover:not(.MenuItem__content--active) {
+  background-color: #3E2E3D;
+}
+
+.LeftSidebarWidgets .SidebarWidget > .Menu > .MenuItem > .MenuItem__content--active {
+  background-color: #4C9689;
+}
+
+.LeftSidebarWidgets .SidebarWidget > .Menu > .MenuItem > .MenuItem__content--btn:focus {
+  outline: 0;
+}
+
+.LeftSidebarWidgets .SidebarWidget__dm-chats .Menu .MenuItem__content .Btn__suffix {
+  height: 15px;
+  right: 16px;
+  display: none;
+}
+
+.LeftSidebarWidgets .SidebarWidget__dm-chats .Menu .MenuItem__content:hover .Btn__suffix {
+  display: block;
+  float: right;
+}
+
+.LeftSidebarWidgets .SidebarWidget__quicklinks .MenuItem__icon,
+.LeftSidebarWidgets .SidebarWidget__chats .MenuItem__icon,
+.LeftSidebar .MenuItem .StatusIcon__offline {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.LeftSidebar .StatusIcon__online {
+  color: rgba(85, 239, 196, 0.5);
+}

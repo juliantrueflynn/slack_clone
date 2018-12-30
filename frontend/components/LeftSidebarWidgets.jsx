@@ -1,10 +1,18 @@
 import React from 'react';
-import LeftSidebarWidget from './LeftSidebarWidget';
+import SidebarWidget from './SidebarWidget';
+import './LeftSidebarWidgets.css';
 
 const LeftSidebarWidgets = ({ menuGroups }) => (
   <div className="LeftSidebarWidgets">
-    {menuGroups.map(({ key, ...widget }) => (
-      <LeftSidebarWidget key={key} widgetFor={key} {...widget} />
+    {menuGroups.map(({
+      key,
+      widgetTitle,
+      component: Component,
+      ...props
+    }) => (
+      <SidebarWidget key={key} widgetFor={key} widgetTitle={widgetTitle}>
+        <Component {...props} />
+      </SidebarWidget>
     ))}
   </div>
 );

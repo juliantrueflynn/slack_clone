@@ -5,7 +5,7 @@ import SearchBar from './SearchBar';
 import Button from './Button';
 import ScrollBar from './ScrollBar';
 import ModalSearchResults from './ModalSearchResults';
-import ModalSearchAside from './ModalSearchAside';
+import ModalSearchSidebar from './ModalSearchSidebar';
 import withWindowResize from './withWindowResize';
 import './ModalSearch.css';
 
@@ -161,7 +161,7 @@ class ModalSearch extends React.Component {
             users={users}
             channelsMap={channelsMap}
           />
-          <ModalSearchAside
+          <ModalSearchSidebar
             messages={messages}
             channels={channels}
             users={users}

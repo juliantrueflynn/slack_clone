@@ -114,7 +114,7 @@ class LeftSidebar extends React.Component {
         key: 'chats',
         component: Menu,
         items: channelsMenuItems,
-        title: (
+        widgetTitle: (
           <SuffixButton icon="plus-circle" onClick={() => openChannelFormModal(workspace.id)}>
             <Button unStyled buttonFor="chats" onClick={openChannelsListModal}>Channels</Button>
           </SuffixButton>
@@ -124,7 +124,7 @@ class LeftSidebar extends React.Component {
         key: 'dm-chats',
         component: Menu,
         items: dmChannelsMenuItems,
-        title: 'Direct Messages',
+        widgetTitle: 'Direct Messages',
       }
     ];
 
