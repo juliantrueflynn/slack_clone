@@ -24,11 +24,11 @@
 }
 
 .Modal__overlay--pos .Modal,
-.Modal__overlay--styled .Modal {
+.Modal--styled {
   height: 100%;
 }
 
-.Modal__overlay--styled .Form label {
+.Modal--styled .Form label {
   font-weight: bold;
   margin-bottom: 8px;
   display: block;  
@@ -43,6 +43,10 @@
   position: absolute;
   top: 0;
   bottom: 0;
+}
+
+.Modal--styled .Modal__container {
+  height: 100%;
 }
 
 .Modal .Btn__close {
@@ -62,11 +66,11 @@
   z-index: 1;
 }
 
-.Modal__overlay--unstyled .Btn__close--overlay {
+.Modal--unstyled .Btn__close--overlay {
   display: none;
 }
 
-.Modal__overlay--styled .Modal__body {
+.Modal--styled .Modal__body {
   max-width: 800px;
   margin: 0 auto;
 }
@@ -97,15 +101,15 @@
   background-color: #EEE;
 }
 
-@media screen and (max-width: 991px) {
-  .Modal__overlay--styled .Modal__body {
-    max-width: 720px;
+@media screen and (min-width: 769px) {
+  .Modal--styled .ScrollBar__container {
+    padding: 80px 0 30px;
   }
 }
 
-@media screen and (min-width: 769px) {
-  .Modal__overlay--styled .Modal__container {
-    padding: 80px 0 30px;
+@media screen and (max-width: 991px) {
+  .Modal__overlay--styled .Modal__body {
+    max-width: 720px;
   }
 }
 

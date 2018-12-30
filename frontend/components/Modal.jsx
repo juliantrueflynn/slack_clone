@@ -43,6 +43,8 @@ class Modal extends React.Component {
     const modalClassNames = classNames('Modal', {
       [`Modal__${modalFor}`]: modalFor,
       [`Modal__${modalFor}--${bemModifier}`]: modalFor && bemModifier,
+      'Modal--styled': !unStyled,
+      'Modal--unstyled': unStyled,
     });
 
     return (
