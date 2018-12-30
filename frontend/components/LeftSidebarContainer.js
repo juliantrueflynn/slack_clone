@@ -14,8 +14,10 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
   const channels = Object.values(channelsMap);
   const chatPath = state.ui.displayChatPath;
 
-  const chatPathUrl = channelsMap[chatPath] ? `${url}/messages/${chatPath}` : `${url}/${chatPath}`;
-  const profileUrl = `${chatPathUrl}/team/${user.slug}`;
+  let profileUrl = `${url}/${chatPath}/team/${user.slug}`;
+  if (channelsMap[chatPath]) {
+    profileUrl = `${url}/messages/${chatPath}/team/${user.slug}`;
+  }
 
   const unreadsMap = state.entities.unreads;
   const unreads = Object.values(unreadsMap).filter(unread => unread && unread.hasUnreads);

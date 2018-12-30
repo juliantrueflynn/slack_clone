@@ -1,12 +1,14 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import UserPreview from './UserPreview';
 import StatusIcon from './StatusIcon';
 import Button from './Button';
 import LeftSidebarWidgets from './LeftSidebarWidgets';
 import SuffixButton from './SuffixButton';
-import ProfileDropdown from './ProfileDropdown';
+import ProfileDropdownTrigger from './ProfileDropdownTrigger';
 import Menu from './Menu';
 import Modal from './Modal';
+import DropdownModalContainer from './DropdownModalContainer';
 import './LeftSidebar.css';
 
 class LeftSidebar extends React.Component {
@@ -67,6 +69,14 @@ class LeftSidebar extends React.Component {
       isMobileSize,
     } = this.props;
 
+    const ddDefaults = [
+      { label: <UserPreview user={user} avatarSize="40" hasNoStatus alignCenter /> },
+      { label: 'Home', onClick: () => this.handleHistoryPush('/') },
+      { label: 'Profile & Account', link: profileUrl, hasNoDrawer: true },
+      { key: 'switch-workspace', label: 'Switch Workspace' },
+    ];
+    const ddMenuItems = ddDefaults.concat(workspaces);
+
     const quicklistMenuItems = [
       {
         icon: <FontAwesomeIcon icon="align-left" />,
@@ -102,10 +112,8 @@ class LeftSidebar extends React.Component {
     const sidebarMenuItems = [
       {
         key: 'profile',
-        component: ProfileDropdown,
+        component: ProfileDropdownTrigger,
         workspaceTitle: workspace.title,
-        workspaces,
-        profileUrl,
         user,
         openDropdown,
       },
@@ -142,6 +150,13 @@ class LeftSidebar extends React.Component {
             <LeftSidebarWidgets menuGroups={sidebarMenuItems} />
           </Modal>
         )}
+        <DropdownModalContainer
+          dropdownType="DROPDOWN_PROFILE"
+          fixedLeftPos="10px"
+          bemModifier="profile"
+        >
+          <Menu items={ddMenuItems} />
+        </DropdownModalContainer>
       </aside>
     );
   }
