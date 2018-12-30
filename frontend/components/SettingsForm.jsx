@@ -104,23 +104,22 @@ class SettingsForm extends React.Component {
 
     return (
       <div className="SettingsForm">
-        <div className="SettingsForm__col">
+        <div className="SettingsForm__col SettingsForm__col--form">
           <FormContainer
             fields={fields}
             submitForm={this.handleSubmit}
             setFieldValue={this.handleFieldValueChange}
           >
+            <div className="SettingsForm__avatar SettingsForm__avatar--sm">
+              <img src={displayAvatar} alt={`${user.username} banner`} height="250" />
+            </div>
             <Button type="submit" color="green" size="lg">Save</Button>
             <Button onClick={close} size="lg">Cancel</Button>
           </FormContainer>
         </div>
-        <div className="SettingsForm__col">
-          <div className="SettingsForm__avatar">
-            <img
-              src={displayAvatar}
-              alt={`${user.username} banner`}
-              height="250"
-            />
+        <div className="SettingsForm__col SettingsForm__col--avatar">
+          <div className="SettingsForm__avatar SettingsForm__avatar--md">
+            <img src={displayAvatar} alt={`${user.username} banner`} height="250" />
           </div>
         </div>
       </div>

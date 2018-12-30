@@ -6,23 +6,20 @@
 
 .ModalProfile__tabs .Btn {
   margin: 0 6px -1px;
+  padding: 8px 10px;
   border: 1px solid transparent;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
   color: #A8A9B0;
-  transition: none;
-}
-
-.ModalProfile__tabs .Btn:hover {
-  box-shadow: none;
+  font-weight: 700;
 }
 
 .ModalProfile__tabs .Btn:focus {
-  outline: none;
+  outline: 0;
 }
 
-.ModalProfile__user .Btn__user-tab,
-.ModalProfile__password .Btn__pw-tab {
+.ModalProfile__user .Btn__tab-user,
+.ModalProfile__password .Btn__tab-pw {
   background-color: #FFF;
   color: #636E72;
   border-top: 1px solid #A8A9B0;
@@ -31,8 +28,8 @@
   border-bottom: 1px solid transparent;
 }
 
-.ModalProfile__user .Btn__pw-tab:hover,
-.ModalProfile__password .Btn__user-tab:hover {
+.ModalProfile__user .Btn__tab-pw:hover,
+.ModalProfile__password .Btn__tab-user:hover {
   border-top: 1px solid #dfe6e9;
   border-left: 1px solid #dfe6e9;
   border-right: 1px solid #dfe6e9;
@@ -43,4 +40,10 @@
 
 .ModalProfile__body {
   padding: 15px;
+}
+
+@media screen and (max-width: 768px) {
+  .ModalProfile__tabs {
+    font-size: 14px;
+  }
 }

@@ -8,10 +8,12 @@ class ModalProfile extends React.Component {
   constructor(props) {
     super(props);
     this.state = { tabOpen: 'user' };
+    this.handleTabClick = this.handleTabClick.bind(this);
   }
 
-  handleTabClick(tabOpen) {
-    return () => this.setState({ tabOpen });
+  handleTabClick(e) {
+    const tabOpen = e.target.getAttribute('data-tab');
+    this.setState({ tabOpen });
   }
 
   render() {
@@ -29,10 +31,10 @@ class ModalProfile extends React.Component {
       <Fragment>
         <div className={classNames}>
           <div className="ModalProfile__tabs">
-            <Button buttonFor="user-tab" onClick={this.handleTabClick('user')}>
+            <Button buttonFor="tab-user" data-tab="user" onClick={this.handleTabClick} unStyled>
               Edit Settings
             </Button>
-            <Button buttonFor="pw-tab" onClick={this.handleTabClick('password')}>
+            <Button buttonFor="tab-pw" data-tab="password" onClick={this.handleTabClick} unStyled>
               Change Password
             </Button>
           </div>

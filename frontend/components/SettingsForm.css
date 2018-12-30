@@ -1,28 +1,53 @@
 .SettingsForm {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   margin-left: -15px;
   margin-right: -15px;
 }
 
-.SettingsForm__col:first-child {
-  width: 100%;
-}
-
 .SettingsForm__col {
-  padding-left: 15px;
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
   padding-right: 15px;
-}
-
-.SettingsForm__avatar {
-  width: 250px;
-  height: 250px;
-  overflow: hidden;
+  padding-left: 15px;
 }
 
 .SettingsForm__avatar > img {
   object-fit: cover;
   object-position: center;
+}
+
+.SettingsForm__avatar--md,
+.SettingsForm__avatar--md > img {
   width: 250px;
   height: 250px;
+}
+
+.SettingsForm__avatar--sm,
+.SettingsForm__avatar--sm > img {
+  width: 200px;
+  height: 200px;
+}
+
+.SettingsForm__avatar--sm {
+  margin-bottom: 30px;
+}
+
+@media screen and (max-width: 768px) {
+  .SettingsForm__col--avatar {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .SettingsForm__avatar--sm {
+    display: none;
+  }
+
+  .SettingsForm__col--avatar {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: none;
+  }
 }
