@@ -4,13 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ModalSearchItem from './ModalSearchItem';
 import './ModalSearchResults.css';
 
-const ModalSearchResults = ({
-  results,
-  isLoading,
-  users,
-  channelsMap,
-  match: { url },
-}) => {
+const ModalSearchResults = ({ results, channelsMap, match: { url } }) => {
   let resultsText = `${results.length} results`;
   if (results.length === 0) {
     resultsText = 'No matches found';
@@ -27,11 +21,10 @@ const ModalSearchResults = ({
       <h4 className="ModalSearchResults__txt ModalSearchResults__txt--count">
         {resultsText}
       </h4>
-      {isLoading || results.map(message => (
+      {results.map(message => (
         <ModalSearchItem
           key={message.slug}
           message={message}
-          users={users}
           channelsMap={channelsMap}
           url={url}
         />

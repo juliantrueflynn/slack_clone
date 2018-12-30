@@ -6,7 +6,6 @@
   margin: 9px 109px 9px;
   border-radius: 6px;
   background-color: #F7FAFC;
-  position: relative;
 }
 
 .ModalSearch .ScrollBar {
@@ -15,8 +14,6 @@
 
 .ModalSearch .ScrollBar__container {
   display: flex;
-  position: relative;
-  flex: 1;
   padding: 15px;
 }
 
@@ -36,11 +33,16 @@
   padding: 0 10px;
 }
 
+.ModalSearch .Btn__clear,
+.ModalSearch__searchbar > .Btn:focus {
+  outline: 0;
+}
+
 .ModalSearch .SearchBar .Btn__clear::after {
   content: "|";
   color: #DFE6E9;
   padding-left: 10px;
-}
+} 
 
 .ModalSearch .SearchBar .Btn__searchbar {
   padding: 0 10px;

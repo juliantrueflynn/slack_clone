@@ -6,18 +6,23 @@ import SidebarWidget from './SidebarWidget';
 import './ModalSearchSidebar.css';
 
 const ModalSearchSidebar = ({
+  isLoading,
   messages,
-  channels,
-  users,
+  channelsMap,
+  usersMap,
   peopleFilter,
   channelFilter,
   toggleCheckbox,
 }) => {
-  const channelsFilterMap = channels.map(({ slug: id, title }) => ({ id, title }));
+  const channelsFilterMap = messages.reduce((acc, curr) => {
+    const channel = channelsMap[curr.channelSlug];
+    acc[channel.slug] = { id: channel.slug, title: channel.title, filter: 'channel' };
+    return acc;
+  }, {});
 
   const peopleFilterMap = messages.reduce((acc, curr) => {
     const { authorSlug: id, username: title } = curr;
-    acc[id] = { id, title };
+    acc[id] = { id, title, filter: 'people' };
     return acc;
   }, {});
 
@@ -26,7 +31,7 @@ const ModalSearchSidebar = ({
     channel: id => channelFilter.includes(id),
   };
 
-  const checkboxMapper = ({ id, title }, type, prefix) => ({
+  const checkboxMapper = ({ id, title, filter }, prefix) => ({
     id,
     type: 'checkbox',
     label: (
@@ -36,27 +41,40 @@ const ModalSearchSidebar = ({
       </Fragment>
     ),
     className: null,
-    checked: isChecked[type](id),
+    checked: isChecked[filter](id),
     onChange: toggleCheckbox,
-    'data-filter': `${type}Filter`,
+    'data-filter': `${filter}Filter`,
   });
 
   const peopleFilters = Object.values(peopleFilterMap).map(item => (
-    checkboxMapper(item, 'people', <Avatar user={users[item.id]} size="18" />)
+    checkboxMapper(item, <Avatar user={usersMap[item.id]} size="18" />)
   ));
 
-  const channelsFilters = channelsFilterMap.map(item => (
-    checkboxMapper(item, 'channel', <FontAwesomeIcon icon="hashtag" size="sm" />)
+  const channelsFilters = Object.values(channelsFilterMap).map(item => (
+    checkboxMapper(item, <FontAwesomeIcon icon="hashtag" size="sm" />)
   ));
+
+  const hasPeople = !(peopleFilters.length);
+  const hasChannels = !(channelsFilters.length);
 
   return (
     <aside className="ModalSearchSidebar">
       <h3 className="ModalSearchSidebar__title">Filter by</h3>
       <SidebarWidget widgetFor="people" widgetTitle="People">
-        {peopleFilters.map(item => <FormField key={item.id} {...item} />)}
+        {isLoading || peopleFilters.map(item => <FormField key={item.id} {...item} />)}
+        {!isLoading && hasPeople && (
+          <div className="ModalSearchSidebar__empty">
+            No authors match results
+          </div>
+        )}
       </SidebarWidget>
       <SidebarWidget widgetFor="channels" widgetTitle="Channels">
         {channelsFilters.map(item => <FormField key={item.id} {...item} />)}
+        {!isLoading && hasChannels && (
+          <div className="ModalSearchSidebar__empty">
+            No channels match results
+          </div>
+        )}
       </SidebarWidget>
     </aside>
   );

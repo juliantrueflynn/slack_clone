@@ -116,7 +116,7 @@ class ModalSearch extends React.Component {
 
   render() {
     const {
-      users,
+      usersMap,
       messages,
       channelsMap,
       searchQuery,
@@ -133,10 +133,8 @@ class ModalSearch extends React.Component {
       height,
     } = this.state;
 
-    const channels = Object.values(channelsMap).filter(ch => !ch.hasDm && ch.isSub);
-
     const overlayClassName = classNames('ModalSearch', {
-      'ModalSearch--empty': !peopleFilter.length && !channelFilter.length && !messages.length,
+      'ModalSearch--empty': !results.length && searchQuery,
       'ModalSearch--loading': isLoading,
       'ModalSearch--new': !searchQuery,
     });
@@ -155,16 +153,12 @@ class ModalSearch extends React.Component {
           </Button>
         </div>
         <ScrollBar scrollBarRef={this.scrollBarRef} style={{ height }}>
-          <ModalSearchResults
-            results={results}
-            isLoading={isLoading}
-            users={users}
-            channelsMap={channelsMap}
-          />
+          <ModalSearchResults results={results} channelsMap={channelsMap} />
           <ModalSearchSidebar
+            isLoading={isLoading}
             messages={messages}
-            channels={channels}
-            users={users}
+            channelsMap={channelsMap}
+            usersMap={usersMap}
             peopleFilter={peopleFilter}
             channelFilter={channelFilter}
             toggleCheckbox={this.handleFilterToggle}

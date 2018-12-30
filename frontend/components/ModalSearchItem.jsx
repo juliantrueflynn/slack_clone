@@ -4,12 +4,7 @@ import { dateUtil } from '../util/dateUtil';
 import Message from './Message';
 import './ModalSearchItem.css';
 
-const ModalSearchItem = ({
-  message,
-  users,
-  channelsMap,
-  url,
-}) => {
+const ModalSearchItem = ({ message, channelsMap, url }) => {
   const date = dateUtil(message.createdAt);
   const monthCreated = date.monthName();
   const dayCreated = date.dayOrdinal();
@@ -39,12 +34,7 @@ const ModalSearchItem = ({
           {dateCreated}
         </span>
       </div>
-      <Message
-        message={message}
-        users={users}
-        url={url}
-        shouldHideEngagement
-      />
+      <Message message={message} url={url} shouldHideEngagement />
       {(hasThread || hasReactions) && (
         <div className="ModalSearchItem__social">
           {hasThread && (

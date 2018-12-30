@@ -11,9 +11,9 @@ const mapStateToProps = (state) => {
   const searchSlugs = state.search.messagesBySearch;
   const messages = searchSlugs.map(msgSlug => msgsMap[msgSlug]).sort((a, b) => b.id - a.id);
 
-  const users = state.entities.members;
+  const usersMap = state.entities.members;
   const currUser = state.session.currentUser;
-  const user = currUser && users[currUser.slug];
+  const user = currUser && usersMap[currUser.slug];
 
   return {
     currModalOpen: state.ui.displayModal.modalType,
@@ -21,7 +21,7 @@ const mapStateToProps = (state) => {
     channelsMap: getChannelsMap(state),
     channels: getUnsubbedChannels(state),
     messages,
-    users,
+    usersMap,
     user,
     searchQuery: state.search.searchQuery,
     isLoading: state.isLoading.search,
