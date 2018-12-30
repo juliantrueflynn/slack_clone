@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ScrollBar from './ScrollBar';
 import Button from './Button';
 import Modal from './Modal';
@@ -34,7 +35,7 @@ const Drawer = ({
       <header className="Drawer__header">
         <h3 className="Drawer__header-title">{drawerTitle}</h3>
         <Button unStyled buttonFor="close" onClick={closeDrawer}>
-          <span role="img" aria-label="Close drawer">&times;</span>
+          <FontAwesomeIcon icon="times" />
         </Button>
       </header>
       <div className="Drawer__container">

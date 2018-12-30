@@ -75,12 +75,6 @@
   background-color: #32c6a9;
 }
 
-.SessionForm .Btn__group,
-.SessionForm .Btn__group > .Btn {
-  margin-left: 0;
-  margin-right: 0;
-}
-
 .SessionForm ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: rgba(255,255,255,.8);
 }

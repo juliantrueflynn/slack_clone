@@ -32,6 +32,12 @@
   background-color: #FFF;
 }
 
+.Btn__purple {
+  background-color: #6C5CE7;
+  border-color: #5846E4;
+  color: #FFF;
+}
+
 .Btn__xs {
   padding: 4px 8px;
   font-size: 13px;
@@ -47,33 +53,9 @@
   font-size: 18px;
 }
 
-.Btn__purple {
-  background-color: #6C5CE7;
-  border-color: #5846E4;
-  color: #FFF;
-}
-
-.Btn__close {
-  position: absolute;
-  right: 0;
-  top: 0;
-  z-index: 1;
-}
-
 .Btn:hover,
 .Btn:focus {
   cursor: pointer;
-}
-
-.Btn__group {
-  padding-top: 10px;
-  margin-left: -3px;
-  margin-right: -3px;
-}
-
-.Btn__group > .Btn {
-  margin-left: 3px;
-  margin-right: 3px;
 }
 
 .Btn > svg {

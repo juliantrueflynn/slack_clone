@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from './Button';
 import './ModalHeader.css';
 
@@ -12,7 +13,7 @@ const ModalHeader = ({ modalTitle, close }) => {
       <div className="ModalHeader__content">
         <h2 className="ModalHeader__title">{modalTitle}</h2>
         <Button buttonFor="close" modifier="header" unStyled onClick={close}>
-          <span role="img" aria-label="Close modal">&times;</span>
+          <FontAwesomeIcon icon="times" />
         </Button>
       </div>
     </header>

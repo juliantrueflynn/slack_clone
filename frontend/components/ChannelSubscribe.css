@@ -21,3 +21,14 @@
   color: #717274;
   margin-bottom: 20px;
 }
+
+.ChannelSubscribe__btn-group {
+  padding-top: 10px;
+  margin-left: -3px;
+  margin-right: -3px;
+}
+
+.ChannelSubscribe__btn-group > .Btn {
+  margin-left: 3px;
+  margin-right: 3px;
+}

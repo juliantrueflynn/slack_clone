@@ -25,10 +25,8 @@
 .Drawer .Btn__close {
   margin: 0 8px 0 auto;
   border: none;
-  position: static;
   color: #636E72;
-  font-size: 2em;
-  line-height: 22px;
+  font-size: 1.25em;
 }
 
 .Drawer__title {
@@ -76,10 +74,6 @@
 
 .Drawer__convo .Message:nth-child(2) {
   margin-top: 18px;
-}
-
-.Modal__wrapper--styled .Drawer form .Btn__group:last-child {
-  margin-top: 0;
 }
 
 .Modal__wrapper--styled .Drawer {

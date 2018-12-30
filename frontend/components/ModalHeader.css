@@ -30,12 +30,11 @@
     border-bottom: 1px solid #DFE6E9;
   }
 
-  .Btn__close--header {
-    position: static;
-    font-size: 2em;
-    height: 28px;
-    width: 28px;
-    display: block;
+  .Modal__wrapper--styled .Btn__close--header {
+    display: flex;
+    justify-content: center;
+    width: 22.5px;
+    font-size: 1.5em;
     margin-left: auto;
   }
 

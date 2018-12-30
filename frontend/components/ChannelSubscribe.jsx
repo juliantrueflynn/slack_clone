@@ -45,7 +45,7 @@ class ChannelSubscribe extends React.Component {
         <div className="ChannelSubscribe__text">
           {`Created by ${ownerName} ${dateCreated}`}
         </div>
-        <div className="Btn__group">
+        <div className="ChannelSubscribe__btn-group">
           <Button buttonFor="subscribe" color="green" onClick={this.clickSubscribe}>
             Join Channel
           </Button>

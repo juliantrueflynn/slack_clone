@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
 import classNames from 'classnames';
 import ReactModal from 'react-modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from './Button';
-import './Modal.css';
 import ScrollBar from './ScrollBar';
 import ModalHeader from './ModalHeader';
+import './Modal.css';
 
 class Modal extends React.Component {
   constructor(props) {
@@ -57,7 +58,7 @@ class Modal extends React.Component {
       >
         <Fragment>
           <Button buttonFor="close" modifier="overlay" unStyled onClick={this.handleClose}>
-            <span role="img" aria-label="Close modal">&times;</span>
+            <FontAwesomeIcon icon="times" />
           </Button>
           {!unStyled && (
             <ScrollBar>
