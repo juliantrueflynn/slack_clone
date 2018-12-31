@@ -29,6 +29,10 @@
   font-size: 1.25em;
 }
 
+.Drawer .Btn__close:focus {
+  outline: 0;
+}
+
 .Drawer__title {
   margin: 0;
 }
