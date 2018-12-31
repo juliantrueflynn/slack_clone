@@ -9,7 +9,7 @@
 
 .ProfileDropdownTrigger > .Btn:hover,
 .ProfileDropdownTrigger > .Btn:focus,
-.Modal__overlay--dropdown-profile .ProfileDropdownTrigger .Btn__dropdown {
+.Modal__wrapper--dropdown-profile .ProfileDropdownTrigger .Btn__dropdown {
   outline: 0;
   box-shadow: none;
   background-color: #3E2E3D;
@@ -36,7 +36,7 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
-.Modal__overlay--dropdown-profile .ProfileDropdownTrigger__username,
+.Modal__wrapper--dropdown-profile .ProfileDropdownTrigger__username,
 .ProfileDropdownTrigger .Btn__dropdown:hover .ProfileDropdownTrigger__username,
 .ProfileDropdownTrigger .Btn__dropdown:focus .ProfileDropdownTrigger__username {
   color: #FFF;
@@ -88,7 +88,7 @@
   display: block;
 }
 
-.Modal__dropdown--profile > .Menu > .MenuItem > .MenuItem__content--active {
+.Modal__dropdown--profile .Menu > .MenuItem > .MenuItem__content--active {
   background-color: #4C9689;
   color: #FFF;
 }

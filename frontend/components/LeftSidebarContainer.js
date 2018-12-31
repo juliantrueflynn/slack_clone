@@ -24,7 +24,8 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
   const hasUnreadChannels = unreads.some(unread => unread.readableType === 'Channel');
   const hasUnreadConvos = unreads.some(unread => unread.readableType === 'Message');
 
-  const workspaces = getSubbedWorkspaces(state).map(({ slug, title: label }) => ({
+  const subbedWorkspaces = getSubbedWorkspaces(state);
+  const workspaces = subbedWorkspaces.map(({ slug, title: label }) => ({
     link: `/${slug}`,
     label,
     hasNoDrawer: true,

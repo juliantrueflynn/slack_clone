@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import Modal from './Modal';
 import withWindowResize from './withWindowResize';
 import './DropdownModal.css';
@@ -36,6 +37,7 @@ class DropdownModal extends React.Component {
       windowWidth,
       windowHeight,
       children,
+      bemModifier,
       ...modalProps
     } = this.props;
     const { top, left } = this.state;
@@ -43,6 +45,11 @@ class DropdownModal extends React.Component {
     if (!isDdOpen) {
       return null;
     }
+
+    const bodyOpenClassName = classNames('React__Body--open', {
+      'Modal__wrapper--dropdown': true,
+      [`Modal__wrapper--dropdown-${bemModifier}`]: bemModifier,
+    });
 
     const style = {
       content: {
@@ -60,6 +67,8 @@ class DropdownModal extends React.Component {
         unStyled
         contentRef={(node) => { this.contentRef = node; }}
         onAfterOpen={this.handleAfterModalOpen}
+        bodyOpenClassName={bodyOpenClassName}
+        bemModifier={bemModifier}
         {...modalProps}
       >
         {children}
