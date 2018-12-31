@@ -44,9 +44,8 @@ class Workspace extends React.Component {
       isLoading,
       workspaceSlug,
       routes,
-      channels,
       channel,
-      chatPath,
+      actionCablesChannels,
       onReceived,
     } = this.props;
     const { quoteText, quoteBy } = sampleWisdomQuote;
@@ -66,10 +65,6 @@ class Workspace extends React.Component {
       );
     }
 
-    const cableChannels = channels.filter(ch => ch.isSub || ch.slug === chatPath).map(ch => (
-      { channel: 'ChatChannel', channelSlug: ch.slug }
-    ));
-
     return (
       <div className="Workspace">
         <ActionCable
@@ -80,7 +75,7 @@ class Workspace extends React.Component {
           channel={decamelizeKeys({ channel: 'AppearanceChannel', workspaceSlug })}
           onReceived={onReceived}
         />
-        {cableChannels.map(cable => (
+        {actionCablesChannels.map(cable => (
           <ActionCable
             key={cable.channelSlug}
             channel={decamelizeKeys(cable)}

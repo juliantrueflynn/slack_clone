@@ -7,18 +7,25 @@ import Workspace from './Workspace';
 
 const mapStateToProps = (state, { workspaceSlug }) => {
   const channelsMap = getChannelsMap(state);
+  const channels = Object.values(getChannelsMap(state));
+
   const defaultChatPath = state.ui.defaultChannel;
   const pathname = state.ui.displayChatPath;
   const chatPath = defaultChatPath || pathname;
   const channel = channelsMap[chatPath] || channelsMap[defaultChatPath];
+
+  const actionCablesChannels = channels.filter(ch => (
+    ch.isSub || ch.slug === chatPath
+  )).map(ch => (
+    { channel: 'ChatChannel', channelSlug: ch.slug }
+  ));
 
   return {
     workspace: state.entities.workspaces[workspaceSlug],
     workspaces: getSubbedWorkspaces(state),
     chatPath,
     channel,
-    channelsMap,
-    channels: Object.values(channelsMap),
+    actionCablesChannels,
   };
 };
 
