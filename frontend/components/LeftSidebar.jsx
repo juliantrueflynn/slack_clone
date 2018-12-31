@@ -71,7 +71,12 @@ class LeftSidebar extends React.Component {
 
     const ddDefaults = [
       { label: <UserPreview user={user} avatarSize="40" hasNoStatus alignCenter /> },
-      { label: 'Home', onClick: () => this.handleHistoryPush('/') },
+      {
+        label: 'Home',
+        link: '/',
+        exact: true,
+        hasNoDrawer: true,
+      },
       { label: 'Profile & Account', link: profileUrl, hasNoDrawer: true },
       { key: 'switch-workspace', label: 'Switch Workspace' },
     ];
