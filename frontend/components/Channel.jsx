@@ -2,50 +2,41 @@ import React from 'react';
 import ChannelSubscribe from './ChannelSubscribe';
 import MessageForm from './MessageForm';
 import ChannelScrollBar from './ChannelScrollBar';
+import withWindowResize from './withWindowResize';
 
 class Channel extends React.Component {
   constructor(props) {
     super(props);
-
     this.container = React.createRef();
-
-    this.state = {
-      height: 0,
-      width: 0,
-      didInitMessagesLoad: false
-    };
-
-    this.handleWindowResizeStyles = this.handleWindowResizeStyles.bind(this);
+    this.state = { height: 0, didInitMessagesLoad: false };
+    this.updateSizeDimensions = this.updateSizeDimensions.bind(this);
   }
 
   componentDidMount() {
-    this.handleWindowResizeStyles();
-    window.addEventListener('resize', this.handleWindowResizeStyles);
+    this.updateSizeDimensions();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { channel, isLoading } = this.props;
-    const { channel: { slug: prevSlug, isSub: prevIsSub } } = prevProps;
-    const { height, width } = this.state;
-    const { height: prevHeight, width: prevWidth } = prevState;
+  componentDidUpdate(prevProps) {
+    const {
+      channel,
+      isLoading,
+      windowWidth: winWidth,
+      windowHeight: winHeight,
+    } = this.props;
+    const { channel: prevChannel } = prevProps;
+    const hasResized = winHeight !== prevProps.windowHeight || winWidth !== prevProps.windowWidth;
 
-    const hasResized = height !== prevHeight || width !== prevWidth;
-
-    if (channel.slug !== prevSlug || channel.isSub !== prevIsSub || hasResized) {
-      this.handleWindowResizeStyles();
+    if (channel.slug !== prevChannel.slug || channel.isSub !== prevChannel.isSub || hasResized) {
+      this.updateSizeDimensions();
     }
 
     if (!isLoading.channel && prevProps.isLoading.channel && !isLoading.history) {
       this.updateInitMessagesLoad(true);
     }
 
-    if (channel.slug !== prevSlug) {
+    if (channel.slug !== prevChannel.slug) {
       this.updateInitMessagesLoad(false);
     }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleWindowResizeStyles);
   }
 
   updateInitMessagesLoad(newState) {
@@ -56,11 +47,12 @@ class Channel extends React.Component {
     }
   }
 
-  handleWindowResizeStyles() {
+  updateSizeDimensions() {
     const pageNode = this.container && this.container.current;
+    const bottomEl = pageNode && pageNode.children[1];
 
-    if (pageNode && pageNode.children[1]) {
-      const { clientHeight: bottomElHeight } = pageNode.children[1];
+    if (bottomEl) {
+      const { clientHeight: bottomElHeight } = bottomEl;
       const { height: channelHeight } = pageNode.getBoundingClientRect();
       const height = channelHeight - bottomElHeight;
 
@@ -122,4 +114,4 @@ class Channel extends React.Component {
   }
 }
 
-export default Channel;
+export default withWindowResize(Channel);
