@@ -28,11 +28,11 @@ class ModalSearch extends React.Component {
   }
 
   componentDidMount() {
-    const { searchQuery: query, fetchSearchRequest } = this.props;
+    const { searchQuery: query, messages } = this.props;
     this.setState({ query });
 
-    if (query) {
-      fetchSearchRequest(query);
+    if (query && messages) {
+      this.setResults(messages);
     }
   }
 
