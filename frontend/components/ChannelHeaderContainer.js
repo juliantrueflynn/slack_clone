@@ -7,7 +7,7 @@ import {
   updateSearchQuery,
   updateDropdown,
 } from '../actions/uiActions';
-import { destroyChannelSub } from '../actions/channelActions';
+import { destroyChannelSub, createChannelSub } from '../actions/channelActions';
 import { getChannelsMap, getMessagesMap } from '../reducers/selectors';
 import ChannelHeader from './ChannelHeader';
 
@@ -49,6 +49,9 @@ const mapDispatchToProps = (dispatch, { match: { params: { chatPath } } }) => ({
   closeDropdown: () => dispatch(updateDropdown(null)),
   accordionOpen: accordionType => dispatch(accordionOpen('details', accordionType)),
   destroySearchQuery: () => dispatch(updateSearchQuery()),
+  createChannelSubRequest: channelId => (
+    dispatch(createChannelSub.request({ channelId, channelSlug: chatPath }))
+  ),
   destroyChannelSubRequest: () => dispatch(destroyChannelSub.request(chatPath)),
 });
 

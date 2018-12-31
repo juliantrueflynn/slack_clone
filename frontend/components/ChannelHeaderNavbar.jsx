@@ -16,6 +16,7 @@ class ChannelHeaderNavbar extends React.Component {
     this.handleLinkToggle = this.handleLinkToggle.bind(this);
     this.handleDdButtonClick = this.handleDdButtonClick.bind(this);
     this.handleSidebarModalToggle = this.handleSidebarModalToggle.bind(this);
+    this.handleChannelSubToggle = this.handleChannelSubToggle.bind(this);
   }
 
   handleLinkToggle(pathName) {
@@ -55,6 +56,23 @@ class ChannelHeaderNavbar extends React.Component {
     this.setState({ isSidebarModalOpen: !isSidebarModalOpen });
   }
 
+  handleChannelSubToggle() {
+    const {
+      channel,
+      createChannelSubRequest,
+      destroyChannelSubRequest,
+      closeDropdown,
+    } = this.props;
+
+    if (channel.isSub) {
+      destroyChannelSubRequest();
+    } else {
+      createChannelSubRequest(channel.id);
+    }
+
+    closeDropdown();
+  }
+
   handleDdButtonClick(e) {
     const { openDropdown } = this.props;
     const { bottom: posY, right: posX } = e.currentTarget.getBoundingClientRect();
@@ -70,7 +88,6 @@ class ChannelHeaderNavbar extends React.Component {
       drawerType,
       openModal,
       searchQuery,
-      destroyChannelSubRequest,
       destroySearchQuery,
       closeDropdown,
       match: { url },
@@ -114,9 +131,14 @@ class ChannelHeaderNavbar extends React.Component {
           condition: !channel.hasDm,
         },
         {
+          label: `Join ${chatTitle}`,
+          onClick: this.handleChannelSubToggle,
+          condition: !channel.hasDm && !channel.isSub,
+        },
+        {
           label: `Leave ${chatTitle}`,
-          onClick: destroyChannelSubRequest,
-          condition: !channel.hasDm,
+          onClick: this.handleChannelSubToggle,
+          condition: !channel.hasDm && channel.isSub,
         }
       ];
     }
