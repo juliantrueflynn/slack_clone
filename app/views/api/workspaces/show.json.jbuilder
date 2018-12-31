@@ -5,8 +5,8 @@ json.workspace do
 end
 
 json.channels do
-  channels = @workspace.channels.without_user_and_dm(user_id)
-  json.array! channels, :id, :slug, :title, :has_dm
+  channels = @workspace.channels.without_user_and_dm(user_id).includes(:owner)
+  json.array! channels, :id, :slug, :title, :has_dm, :owner_slug
 end
 
 json.members do
