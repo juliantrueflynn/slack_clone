@@ -10,8 +10,8 @@ const mapStateToProps = (state, { workspaceSlug }) => {
   const channels = Object.values(getChannelsMap(state));
 
   const defaultChatPath = state.ui.defaultChannel;
-  const pathname = state.ui.displayChatPath;
-  const chatPath = defaultChatPath || pathname;
+  const currentChatPath = state.ui.displayChatPath;
+  const chatPath = currentChatPath || defaultChatPath;
   const channel = channelsMap[chatPath] || channelsMap[defaultChatPath];
 
   const actionCablesChannels = channels.filter(ch => (
