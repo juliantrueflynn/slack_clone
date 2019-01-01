@@ -43,6 +43,8 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
     modalType: state.ui.displayModal.modalType,
     drawerType: state.ui.drawer.drawerType,
     searchQuery: state.search.searchQuery,
+    isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_CHANNEL_EDIT',
+    dropdownProps: state.ui.dropdown.dropdownProps,
   };
 };
 

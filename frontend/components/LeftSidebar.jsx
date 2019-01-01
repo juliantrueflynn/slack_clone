@@ -8,7 +8,7 @@ import SuffixButton from './SuffixButton';
 import ProfileDropdownTrigger from './ProfileDropdownTrigger';
 import Menu from './Menu';
 import Modal from './Modal';
-import DropdownModalContainer from './DropdownModalContainer';
+import DropdownModal from './DropdownModal';
 import './LeftSidebar.css';
 
 class LeftSidebar extends React.Component {
@@ -60,7 +60,10 @@ class LeftSidebar extends React.Component {
       workspace,
       closeModal,
       isModalOpen,
+      isDdOpen,
+      dropdownProps,
       openDropdown,
+      closeDropdown,
       workspaces,
       chatPath,
       profileUrl,
@@ -155,13 +158,16 @@ class LeftSidebar extends React.Component {
             <LeftSidebarWidgets menuGroups={sidebarMenuItems} />
           </Modal>
         )}
-        <DropdownModalContainer
-          dropdownType="DROPDOWN_PROFILE"
-          fixedLeftPos="10px"
-          bemModifier="profile"
-        >
-          <Menu items={ddMenuItems} />
-        </DropdownModalContainer>
+        {isDdOpen && (
+          <DropdownModal
+            coordinates={dropdownProps}
+            fixedLeftPos="10px"
+            bemModifier="profile"
+            close={closeDropdown}
+          >
+            <Menu items={ddMenuItems} />
+          </DropdownModal>
+        )}
       </aside>
     );
   }

@@ -7,12 +7,20 @@ import { updateDropdown, updateModal } from '../actions/uiActions';
 import { getSubbedWorkspaces } from '../reducers/selectors';
 import PublicView from './PublicView';
 
-const mapStateToProps = state => ({
-  isLoggedIn: !!state.session.currentUser,
-  workspacesMap: state.entities.workspaces,
-  subbedWorkspaces: getSubbedWorkspaces(state),
-  currentUser: state.session.currentUser,
-});
+const mapStateToProps = (state) => {
+  const workspacesMap = state.entities.workspaces;
+  const workspaces = Object.values(workspacesMap);
+
+  return {
+    isLoggedIn: !!state.session.currentUser,
+    workspacesMap,
+    workspaces,
+    subbedWorkspaces: getSubbedWorkspaces(state),
+    currentUser: state.session.currentUser,
+    isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_PUBLIC',
+    dropdownProps: state.ui.dropdown.dropdownProps,
+  };
+};
 
 const mapDispatchToProps = (dispatch, { location }) => ({
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),

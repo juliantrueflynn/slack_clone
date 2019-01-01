@@ -55,6 +55,8 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
     chatPath,
     profileUrl,
     drawer: state.ui.drawer,
+    isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_PROFILE',
+    dropdownProps: state.ui.dropdown.dropdownProps,
     isModalOpen: state.ui.displayModal.modalType === 'MODAL_LEFT_SIDEBAR',
   };
 };
@@ -64,6 +66,7 @@ const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug } } }) 
   openChannelFormModal: workspaceId => dispatch(updateModal('MODAL_FORM_CHANNEL', { workspaceId })),
   closeModal: () => dispatch(updateModal(null)),
   openDropdown: (ddType, ddProps) => dispatch(updateDropdown(ddType, ddProps)),
+  closeDropdown: () => dispatch(updateDropdown()),
   updateChannelSubRequest: channelSub => dispatch(updateChannelSub.request(channelSub)),
 });
 

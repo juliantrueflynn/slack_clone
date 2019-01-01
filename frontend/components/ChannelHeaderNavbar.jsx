@@ -6,7 +6,7 @@ import Menu from './Menu';
 import Button from './Button';
 import RightSidebarModal from './RightSidebarModal';
 import withWindowResize from './withWindowResize';
-import DropdownModalContainer from './DropdownModalContainer';
+import DropdownModal from './DropdownModal';
 import './ChannelHeaderNavbar.css';
 
 class ChannelHeaderNavbar extends React.Component {
@@ -90,6 +90,8 @@ class ChannelHeaderNavbar extends React.Component {
       searchQuery,
       isNotDefaultChannel,
       destroySearchQuery,
+      isDdOpen,
+      dropdownProps,
       closeDropdown,
       match: { url },
     } = this.props;
@@ -111,6 +113,7 @@ class ChannelHeaderNavbar extends React.Component {
           key: 'edit-dropdown',
           icon: <FontAwesomeIcon icon="cog" fixedWidth />,
           onClick: this.handleDdButtonClick,
+          isItemActive: isDdOpen,
         }
       ];
 
@@ -180,9 +183,11 @@ class ChannelHeaderNavbar extends React.Component {
             closeModal={this.handleSidebarModalToggle}
           />
         )}
-        <DropdownModalContainer dropdownType="DROPDOWN_CHANNEL_EDIT">
-          <Menu items={ddMenuItems} />
-        </DropdownModalContainer>
+        {isDdOpen && (
+          <DropdownModal coordinates={dropdownProps} close={closeDropdown}>
+            <Menu items={ddMenuItems} />
+          </DropdownModal>
+        )}
       </nav>
     );
   }
