@@ -156,8 +156,8 @@ const getAllThreadViewMessages = (msgsMap, unreadsMap, channelsMap) => (
     ))
 );
 
-const getDisplayChatPage = createSelector(
-  [getChatPath, getAllChannels, getDisplayChannelData],
+export const getDisplayChatPage = createSelector(
+  [getChatPath, getChannelsMap, getDisplayChannelData],
   (chatPath, channelsMap, channelData) => {
     const channel = channelsMap[chatPath];
 

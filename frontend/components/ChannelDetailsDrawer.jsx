@@ -66,7 +66,6 @@ class ChannelDetailsDrawer extends React.Component {
       return null;
     }
 
-    const usersLen = channel.members.length;
     const accordionItems = [];
 
     if (!channel.hasDm) {
@@ -84,7 +83,7 @@ class ChannelDetailsDrawer extends React.Component {
       });
       accordionItems.push({
         icon: 'users',
-        itemTitle: `${usersLen} Members`,
+        itemTitle: `${channel.members.length} Members`,
         name: 'members',
         body: <AccordionBodyMembers members={channel.members} users={users} />
       });
