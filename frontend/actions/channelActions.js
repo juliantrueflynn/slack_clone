@@ -1,5 +1,5 @@
 import { actionCreator } from '../util/actionsUtil';
-import { CHANNEL, CHANNEL_SUB, CHANNEL_SWITCH } from './actionTypes';
+import { CHANNEL, CHANNEL_SUB } from './actionTypes';
 
 export const fetchChannels = {
   request: workspaceSlug => actionCreator(CHANNEL.INDEX.REQUEST, { workspaceSlug }),
@@ -38,8 +38,3 @@ export const destroyChannelSub = {
   request: channelSlug => actionCreator(CHANNEL_SUB.DESTROY.REQUEST, { channelSlug }),
   failure: errors => actionCreator(CHANNEL_SUB.DESTROY.FAILURE, { errors }),
 };
-
-export const switchChannel = (channelSlug, scrollLoc) => actionCreator(
-  CHANNEL_SWITCH,
-  { channelSlug, scrollLoc }
-);

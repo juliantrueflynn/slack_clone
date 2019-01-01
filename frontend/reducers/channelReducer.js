@@ -6,7 +6,7 @@ import {
   CHANNEL_SUB,
   WORKSPACE_SUB,
   HISTORY,
-  CHANNEL_SWITCH,
+  SCROLL_LOCATION_UPDATE,
   PIN,
   SIGN_OUT,
 } from '../actions/actionTypes';
@@ -175,7 +175,7 @@ const channelReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case CHANNEL_SWITCH: {
+    case SCROLL_LOCATION_UPDATE: {
       const { channelSlug, scrollLoc } = action;
 
       if (channelSlug === 'unreads' || channelSlug === 'threads') {

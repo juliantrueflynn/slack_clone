@@ -68,7 +68,7 @@ class Channel extends React.Component {
       currentUserSlug,
       openModal,
       matchUrl,
-      switchChannel,
+      updateScrollLocation,
       createChannelSubRequest,
       fetchHistoryRequest,
       createMessageRequest,
@@ -90,7 +90,7 @@ class Channel extends React.Component {
               isFetching={isLoading.history}
               height={height}
               matchUrl={matchUrl}
-              switchChannel={switchChannel}
+              updateScrollLocation={updateScrollLocation}
               fetchHistoryRequest={fetchHistoryRequest}
             />
           )}

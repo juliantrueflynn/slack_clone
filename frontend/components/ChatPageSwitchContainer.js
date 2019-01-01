@@ -2,9 +2,9 @@ import { connect } from 'react-redux';
 import withEntityWrapper from './withEntityWrapper';
 import { getChannelsMap, getChatPageMessages, getChatViewChannels } from '../reducers/selectors';
 import { fetchHistory, createMessage } from '../actions/messageActions';
-import { createChannelSub, switchChannel } from '../actions/channelActions';
+import { createChannelSub } from '../actions/channelActions';
 import { clearUnreads } from '../actions/readActions';
-import { updateDrawer, updateModal } from '../actions/uiActions';
+import { updateDrawer, updateModal, updateScrollLocation } from '../actions/uiActions';
 import ChatPageSwitch from './ChatPageSwitch';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
@@ -19,7 +19,9 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
 const mapDispatchToProps = dispatch => ({
   createChannelSubRequest: channelSub => dispatch(createChannelSub.request(channelSub)),
   fetchHistoryRequest: (chatSlug, startDate) => dispatch(fetchHistory.request(chatSlug, startDate)),
-  switchChannel: (channelSlug, scrollLoc) => dispatch(switchChannel(channelSlug, scrollLoc)),
+  updateScrollLocation: (channelSlug, scrollLoc) => (
+    dispatch(updateScrollLocation(channelSlug, scrollLoc))
+  ),
   clearUnreads: (channelSlug, lastRead) => dispatch(clearUnreads(channelSlug, lastRead)),
   closeDrawer: () => dispatch(updateDrawer(null)),
   openModal: modalType => dispatch(updateModal(modalType, null)),
