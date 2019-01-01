@@ -78,8 +78,8 @@ const withScrollManager = scrollBarFor => (WrappedComponent) => {
     hasNewMessage(prevLastMsg) {
       const { lastMessage, currentUserSlug } = this.props;
       const { isAtBottom } = this.state;
-      const hasNewMsg = prevLastMsg.slug !== lastMessage.slug;
-      const isByCurrUser = lastMessage.authorSlug === currentUserSlug;
+      const hasNewMsg = lastMessage && lastMessage.slug !== prevLastMsg.slug;
+      const isByCurrUser = lastMessage && lastMessage.authorSlug === currentUserSlug;
 
       if (hasNewMsg) {
         return isByCurrUser || isAtBottom;
