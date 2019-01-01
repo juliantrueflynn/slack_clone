@@ -14,6 +14,9 @@ import ChannelHeader from './ChannelHeader';
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
   const channelsMap = getChannelsMap(state);
   const channel = channelsMap[chatPath];
+  const defaultChatPath = state.ui.defaultChannel;
+  const isNotDefaultChannel = chatPath !== defaultChatPath;
+
   const { unreadsByChannel } = state;
   const channelUnreadsLen = Object.values(unreadsByChannel).reduce((acc, curr) => {
     let total = acc;
@@ -31,6 +34,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
     chatPath,
     channelsMap,
     channel,
+    isNotDefaultChannel,
     messages,
     convoUnreadsLen,
     channelUnreadsLen,

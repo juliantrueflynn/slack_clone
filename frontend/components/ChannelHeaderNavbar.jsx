@@ -88,6 +88,7 @@ class ChannelHeaderNavbar extends React.Component {
       drawerType,
       openModal,
       searchQuery,
+      isNotDefaultChannel,
       destroySearchQuery,
       closeDropdown,
       match: { url },
@@ -138,7 +139,7 @@ class ChannelHeaderNavbar extends React.Component {
         {
           label: `Leave ${chatTitle}`,
           onClick: this.handleChannelSubToggle,
-          condition: !channel.hasDm && channel.isSub,
+          condition: !channel.hasDm && channel.isSub && isNotDefaultChannel,
         }
       ];
     }
