@@ -12,7 +12,6 @@ const _defaultState = {
   selectedChannel: null,
   messages: [],
   pins: [],
-  members: [],
 };
 
 const displayChannelDataReducer = (state = _defaultState, action) => {
@@ -34,12 +33,13 @@ const displayChannelDataReducer = (state = _defaultState, action) => {
       return merge({}, state, nextState);
     }
     case HISTORY.INDEX.RECEIVE: {
-      const { messages } = action.messages;
+      const { messages, pins } = action.messages;
 
       nextState = {
         messages: state.messages.concat(
           messages.filter(msg => !msg.parentMessageId).map(msg => msg.slug)
         ),
+        pins: state.pins.concat(pins.map(pin => pin.id))
       };
 
       return nextState;

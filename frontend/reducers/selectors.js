@@ -9,6 +9,7 @@ const getAllWorkspaces = state => state.entities.workspaces;
 const getAllUsers = state => state.entities.members;
 const getAllMessages = state => state.entities.messages;
 const getAllChannels = state => state.entities.channels;
+const getDisplayChannelData = state => state.displayChannelData;
 const getAllChannelSubs = state => state.entities.channelSubs;
 const getAllFavorites = state => state.entities.favorites;
 const getAllUnreadsByChannel = state => state.unreadsByChannel;
@@ -62,6 +63,32 @@ export const getMessagesMap = createSelector(
         isEditing: curr.slug === isEditingMsgSlug,
         dateCreated,
       };
+
+      return acc;
+    }, {})
+  )
+);
+
+export const getChannelsMap = createSelector(
+  [getAllChannels, getCurrentUser, getAllUsers],
+  (channelsMap, currUser, users) => (
+    values(channelsMap).reduce((acc, curr) => {
+      const channel = { ...curr, isSub: curr.members.includes(currUser.slug) };
+
+      if (channel.hasDm) {
+        const subsUserSlugs = channel.members.filter(slug => slug !== currUser.slug);
+        const subUser = subsUserSlugs[0] && users[subsUserSlugs[0]];
+
+        if (subUser) {
+          channel.title = subUser.username;
+          channel.dmUserSlug = subUser.slug;
+        }
+      } else {
+        const owner = users[channel.ownerSlug];
+        channel.ownerName = owner && owner.username;
+      }
+
+      acc[curr.slug] = channel;
 
       return acc;
     }, {})
@@ -128,21 +155,28 @@ const getAllThreadViewMessages = (msgsMap, unreadsMap, channelsMap) => (
     ))
 );
 
+const getDisplayChatPage = createSelector(
+  [getChatPath, getAllChannels, getDisplayChannelData],
+  (chatPath, channelsMap, channelData) => {
+    const channel = channelsMap[chatPath];
+
+    return { chatPath, ...channel, ...channelData };
+  }
+);
+
 export const getChatPageMessages = createSelector(
-  [getMessagesMap, getAllChannels, getAllUnreads, getChatPath],
-  (messagesMap, channelsMap, unreadsMap, chatPath) => {
-    if (chatPath === 'unreads') {
+  [getDisplayChatPage, getAllChannels, getMessagesMap, getAllUnreads],
+  (chatPage, channelsMap, messagesMap, unreadsMap) => {
+    if (chatPage.chatPath === 'unreads') {
       return messagesMap;
     }
 
-    if (chatPath === 'threads') {
+    if (chatPage.chatPath === 'threads') {
       return getAllThreadViewMessages(messagesMap, unreadsMap, channelsMap);
     }
 
-    const channel = channelsMap[chatPath];
-    if (channel) {
-      const { messages, title } = channel;
-      return getChannelViewMessages(messagesMap, messages, title);
+    if (chatPage.slug) {
+      return getChannelViewMessages(messagesMap, chatPage.messages, chatPage.title);
     }
 
     return [];
@@ -195,9 +229,9 @@ const getlastEntry = (msgsMap, slugs) => {
 };
 
 export const getChannelLastEntry = createSelector(
-  [getAllMessages, getAllChannels, getChatPath],
-  (msgsMap, channelsMap, chatPath) => (
-    getlastEntry(msgsMap, channelsMap[chatPath].messages)
+  [getAllMessages, getDisplayChatPage],
+  (msgsMap, channel) => (
+    getlastEntry(msgsMap, channel.messages)
   )
 );
 
@@ -210,32 +244,6 @@ export const getConvoLastEntry = createSelector(
 
     return getlastEntry(msgsMap, msgsMap[drawer.drawerSlug].thread);
   }
-);
-
-export const getChannelsMap = createSelector(
-  [getAllChannels, getCurrentUser, getAllUsers],
-  (channelsMap, currUser, users) => (
-    values(channelsMap).reduce((acc, curr) => {
-      const channel = { ...curr, isSub: curr.members.includes(currUser.slug) };
-
-      if (channel.hasDm) {
-        const subsUserSlugs = channel.members.filter(slug => slug !== currUser.slug);
-        const subUser = subsUserSlugs[0] && users[subsUserSlugs[0]];
-
-        if (subUser) {
-          channel.title = subUser.username;
-          channel.dmUserSlug = subUser.slug;
-        }
-      } else {
-        const owner = users[channel.ownerSlug];
-        channel.ownerName = owner && owner.username;
-      }
-
-      acc[curr.slug] = channel;
-
-      return acc;
-    }, {})
-  )
 );
 
 export const getUnsubbedChannels = createSelector(
