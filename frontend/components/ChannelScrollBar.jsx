@@ -60,8 +60,11 @@ class ChannelScrollBar extends React.Component {
   }
 
   componentWillUnmount() {
-    const { updateScrollLocation, currentScrollTop } = this.props;
-    updateScrollLocation(this.prevChannelSlug, currentScrollTop());
+    const { updateScrollLocation, currentScrollTop, isAtBottom } = this.props;
+
+    if (!isAtBottom) {
+      updateScrollLocation(this.prevChannelSlug, currentScrollTop());
+    }
   }
 
   updateScrollerHeight(scrollerHeight) {
