@@ -10,6 +10,7 @@ import {
   SEARCH,
   PIN,
   SIGN_OUT,
+  CHANNEL,
 } from '../actions/actionTypes';
 
 const messageReducer = (state = {}, action) => {
@@ -107,6 +108,10 @@ const messageReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
+    case CHANNEL.SHOW.RECEIVE:
+      nextState = {};
+      action.channel.messages.forEach((msg) => { nextState[msg.slug] = msg; });
+      return merge({}, state, nextState);
     case MESSAGE.CREATE.RECEIVE: {
       const { message } = action;
       const { slug, authorSlug, parentMessageSlug: parentSlug } = message;

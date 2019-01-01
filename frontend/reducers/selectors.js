@@ -11,6 +11,7 @@ const getAllMessages = state => state.entities.messages;
 const getAllChannels = state => state.entities.channels;
 const getDisplayChannelData = state => state.displayChannelData;
 const getAllChannelSubs = state => state.entities.channelSubs;
+const getAllPins = state => state.entities.pins;
 const getAllFavorites = state => state.entities.favorites;
 const getAllUnreadsByChannel = state => state.unreadsByChannel;
 export const getAllUnreads = state => state.entities.unreads;
@@ -199,13 +200,13 @@ const getFavoritesDrawer = (msgsMap, favs) => (
   )).map(msg => msgsMap[msg.messageSlug])
 );
 
-const getChannelDetailsDrawer = (msgs, chatPath) => (
-  msgs.filter(msg => msg.pinId && msg.channelSlug === chatPath)
+const getChannelDetailsDrawer = (channelData, pinsMap, msgsMap) => (
+  channelData.pins.map(id => pinsMap[id]).map(pin => msgsMap[pin.messageSlug])
 );
 
 export const getDrawerMessages = createSelector(
-  [getDrawer, getChatPath, getMessagesMap, getAllFavorites],
-  (drawer, chatPath, messages, favorites) => {
+  [getDrawer, getDisplayChannelData, getMessagesMap, getAllFavorites, getAllPins],
+  (drawer, channelData, messages, favorites, pinsMap) => {
     if (drawer.drawerType === 'convo') {
       return getConvoBySlug({ entities: { messages } }, drawer.drawerSlug);
     }
@@ -215,7 +216,7 @@ export const getDrawerMessages = createSelector(
     }
 
     if (drawer.drawerType === 'details') {
-      return getChannelDetailsDrawer(values(messages), chatPath);
+      return getChannelDetailsDrawer(channelData, pinsMap, messages);
     }
 
     return [];
