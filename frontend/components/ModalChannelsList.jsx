@@ -15,7 +15,6 @@ class ModalChannelsList extends React.Component {
   componentDidMount() {
     const { fetchChannelsRequest, workspaceSlug } = this.props;
     fetchChannelsRequest(workspaceSlug);
-    this.updateHeight();
   }
 
   componentDidUpdate(prevProps) {
@@ -35,7 +34,12 @@ class ModalChannelsList extends React.Component {
   }
 
   render() {
-    const { channels, workspaceSlug, close } = this.props;
+    const {
+      channels,
+      workspaceSlug,
+      isLoading,
+      close,
+    } = this.props;
     const { height } = this.state;
 
     return (
@@ -47,7 +51,7 @@ class ModalChannelsList extends React.Component {
           </div>
           <ScrollBar scrollBarRef={this.scrollBarRef} style={{ height }}>
             <div role="list" className="ModalChannelsList__list">
-              {channels.map(ch => (
+              {isLoading || channels.map(ch => (
                 <ModalChannelsListItem key={ch.slug} channel={ch} workspaceSlug={workspaceSlug} />
               ))}
             </div>

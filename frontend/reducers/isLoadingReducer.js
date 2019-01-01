@@ -9,12 +9,14 @@ import {
   SIGN_OUT,
   CHANNEL,
   HISTORY,
+  DRAWER_UPDATE,
 } from '../actions/actionTypes';
 
 const _defaultState = {
   search: false,
   workspace: false,
   channel: false,
+  channels: false,
   drawer: false,
   history: false,
 };
@@ -33,11 +35,11 @@ const isLoadingReducer = (state = _defaultState, action) => {
     case MESSAGE.INDEX.REQUEST:
       nextState.channel = true;
       return nextState;
-    case MESSAGE.SHOW.REQUEST:
-    case FAVORITE.INDEX.REQUEST:
-    case USER.SHOW.REQUEST:
-    case CHANNEL.SHOW.REQUEST:
+    case DRAWER_UPDATE:
       nextState.drawer = true;
+      return nextState;
+    case CHANNEL.INDEX.REQUEST:
+      nextState.channels = true;
       return nextState;
     case SEARCH.INDEX.REQUEST:
       nextState.search = true;
@@ -58,6 +60,9 @@ const isLoadingReducer = (state = _defaultState, action) => {
     case USER.SHOW.RECEIVE:
     case CHANNEL.SHOW.RECEIVE:
       nextState.drawer = false;
+      return nextState;
+    case CHANNEL.INDEX.RECEIVE:
+      nextState.channels = false;
       return nextState;
     case SEARCH.INDEX.RECEIVE:
       nextState.search = false;

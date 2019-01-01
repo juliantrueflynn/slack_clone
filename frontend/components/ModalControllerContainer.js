@@ -24,7 +24,7 @@ const mapStateToProps = (state) => {
     usersMap,
     user,
     searchQuery: state.search.searchQuery,
-    isLoading: state.isLoading.search,
+    isLoading: state.isLoading,
   };
 };
 
