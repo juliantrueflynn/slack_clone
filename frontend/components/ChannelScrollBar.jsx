@@ -13,11 +13,12 @@ class ChannelScrollBar extends React.Component {
     this.scrollbar = React.createRef();
     this.state = { scrollerHeight: 0 };
     this.handleFetchHistory = this.handleFetchHistory.bind(this);
+    this.prevChannelSlug = null;
   }
 
   componentDidMount() {
     const {
-      channel: { scrollLoc },
+      channel: { slug, scrollLoc },
       scrollTo,
       scrollToBottom,
       currentScrollTop,
@@ -32,6 +33,8 @@ class ChannelScrollBar extends React.Component {
     if (currentScrollTop <= 50) {
       this.handleFetchHistory();
     }
+
+    this.prevChannelSlug = slug;
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -57,8 +60,8 @@ class ChannelScrollBar extends React.Component {
   }
 
   componentWillUnmount() {
-    const { updateScrollTop, currentScrollTop } = this.props;
-    updateScrollTop(currentScrollTop());
+    const { switchChannel, currentScrollTop } = this.props;
+    switchChannel(this.prevChannelSlug, currentScrollTop());
   }
 
   updateScrollerHeight(scrollerHeight) {

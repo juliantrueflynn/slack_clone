@@ -9,16 +9,7 @@ import './ChatPageSwitch.css';
 class ChatPageSwitch extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      scrollTop: null,
-      hasSwitchedView: false,
-      prevChannelSlug: null,
-      isInitLoadingDone: false,
-    };
-
-    this.handleScrollTopSwitch = this.handleScrollTopSwitch.bind(this);
-    this.updatePreviousChannelSlug = this.updatePreviousChannelSlug.bind(this);
+    this.state = { isInitLoadingDone: false };
   }
 
   componentDidMount() {
@@ -39,21 +30,12 @@ class ChatPageSwitch extends React.Component {
       channel,
       isLoading,
     } = this.props;
-    const { hasSwitchedView } = this.state;
 
     if (channel && drawerType && isExact && !prevProps.isExact) {
       if (chatPath === prevProps.chatPath) {
         closeDrawer();
         return;
       }
-    }
-
-    if (prevProps.channel && prevProps.chatPath !== chatPath) {
-      this.updatePreviousChannelSlug(prevProps.chatPath);
-    }
-
-    if (hasSwitchedView) {
-      this.handleChannelSwitch();
     }
 
     if (this.selectRedirectUrl()) {
@@ -71,10 +53,6 @@ class ChatPageSwitch extends React.Component {
     if (!isInitLoadingDone) {
       this.setState({ isInitLoadingDone: true });
     }
-  }
-
-  updatePreviousChannelSlug(prevChannelSlug) {
-    this.setState({ prevChannelSlug });
   }
 
   selectRedirectUrl() {
@@ -100,18 +78,6 @@ class ChatPageSwitch extends React.Component {
     return null;
   }
 
-  handleChannelSwitch() {
-    const { switchChannel } = this.props;
-    const { prevChannelSlug, scrollTop } = this.state;
-
-    switchChannel(prevChannelSlug, scrollTop);
-    this.setState({ hasSwitchedView: false });
-  }
-
-  handleScrollTopSwitch(scrollTop) {
-    this.setState({ scrollTop, hasSwitchedView: true });
-  }
-
   render() {
     const {
       chatPath,
@@ -124,6 +90,7 @@ class ChatPageSwitch extends React.Component {
       isLoading,
       clearUnreads,
       openModal,
+      switchChannel,
       fetchHistoryRequest,
       createChannelSubRequest,
       createMessageRequest,
@@ -170,7 +137,7 @@ class ChatPageSwitch extends React.Component {
                 fetchHistoryRequest={fetchHistoryRequest}
                 createChannelSubRequest={createChannelSubRequest}
                 createMessageRequest={createMessageRequest}
-                updateScrollTop={this.handleScrollTopSwitch}
+                switchChannel={switchChannel}
                 matchUrl={url}
               />
             )}
