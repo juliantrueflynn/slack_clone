@@ -149,16 +149,19 @@ const channelReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case MESSAGE.CREATE.RECEIVE: {
-      const { channelSlug, parentMessageId, ...msg } = action.message;
+      const { channelSlug, parentMessageId, slug } = action.message;
 
       if (parentMessageId) {
         return state;
       }
 
-      nextState = merge({}, state);
-      nextState[channelSlug].messages.push(msg.slug);
+      nextState = {};
 
-      return nextState;
+      if (!state[channelSlug].messages.includes(slug)) {
+        nextState[channelSlug] = { messages: [...state[channelSlug].messages, slug] };
+      }
+
+      return merge({}, state, nextState);
     }
     case MESSAGE.DESTROY.RECEIVE: {
       const { slug, parentMessageId, channelSlug: chSlug } = action.message;
@@ -169,6 +172,7 @@ const channelReducer = (state = {}, action) => {
 
       nextState = {};
       nextState[chSlug] = { messages: state[chSlug].messages.filter(val => val !== slug) };
+
       return merge({}, state, nextState);
     }
     case CHANNEL_SWITCH: {
@@ -180,6 +184,7 @@ const channelReducer = (state = {}, action) => {
 
       nextState = {};
       nextState[channelSlug] = { scrollLoc };
+
       return merge({}, state, nextState);
     }
     case HISTORY.INDEX.REQUEST:
