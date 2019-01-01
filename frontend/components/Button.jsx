@@ -21,6 +21,7 @@ const Button = ({
     [`Btn__${size}`]: size,
     [`Btn__${buttonFor}`]: buttonFor,
     [`Btn__${buttonFor}--${modifier}`]: buttonFor && modifier,
+    'Btn--active': !buttonFor && isActive,
     [`Btn__${buttonFor}--active`]: buttonFor && isActive,
     [`Btn__${color}`]: color,
   });

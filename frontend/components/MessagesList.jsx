@@ -72,13 +72,15 @@ class MessagesList extends React.Component {
       ...props
     } = this.props;
 
+    const isDdOpen = !!dropdownType;
+
     return (
       <Fragment>
         {messages && messages.map(message => (
           <Message
             key={message.slug}
             message={message}
-            isDdOpen={!!dropdownType}
+            isDdOpen={isDdOpen}
             toggleReaction={toggleReaction}
             {...props}
           />

@@ -90,14 +90,14 @@ class LeftSidebar extends React.Component {
         icon: <FontAwesomeIcon icon="align-left" />,
         label: 'All Unreads',
         onClick: () => this.handleHistoryPush('unreads'),
-        isItemActive: chatPath === 'unreads',
+        isOpen: chatPath === 'unreads',
         modifierClassName: hasUnreadChannels ? 'unread' : null,
       },
       {
         icon: <FontAwesomeIcon icon={['far', 'comment']} />,
         label: 'All Threads',
         onClick: () => this.handleHistoryPush('threads'),
-        isItemActive: chatPath === 'threads',
+        isOpen: chatPath === 'threads',
         modifierClassName: hasUnreadConvos ? 'unread' : null,
       },
     ];
@@ -124,6 +124,7 @@ class LeftSidebar extends React.Component {
         workspaceTitle: workspace.title,
         user,
         openDropdown,
+        isDdOpen,
       },
       { key: 'quicklinks', component: Menu, items: quicklistMenuItems },
       {

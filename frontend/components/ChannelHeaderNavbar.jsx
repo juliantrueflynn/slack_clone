@@ -107,13 +107,13 @@ class ChannelHeaderNavbar extends React.Component {
           key: 'details',
           icon: <FontAwesomeIcon icon="info-circle" fixedWidth />,
           onClick: () => this.handleLinkToggle('details'),
-          isItemActive: drawerType === 'details',
+          isOpen: drawerType === 'details',
         },
         {
           key: 'edit-dropdown',
           icon: <FontAwesomeIcon icon="cog" fixedWidth />,
           onClick: this.handleDdButtonClick,
-          isItemActive: isDdOpen,
+          isOpen: isDdOpen,
         }
       ];
 
@@ -152,7 +152,7 @@ class ChannelHeaderNavbar extends React.Component {
         key: 'favorites',
         icon: <FontAwesomeIcon icon="star" />,
         onClick: () => this.handleLinkToggle('favorites'),
-        isItemActive: drawerType === 'favorites',
+        isOpen: drawerType === 'favorites',
       },
       {
         key: 'profile',

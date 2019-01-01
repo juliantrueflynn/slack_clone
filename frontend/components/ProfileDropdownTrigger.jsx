@@ -17,11 +17,16 @@ class ProfileDropdownTrigger extends React.Component {
   }
 
   render() {
-    const { user, workspaceTitle } = this.props;
+    const { user, workspaceTitle, isDdOpen } = this.props;
 
     return (
       <div className="ProfileDropdownTrigger">
-        <Button buttonFor="dropdown" unStyled onClick={this.handleDropdownClick}>
+        <Button
+          buttonFor="dropdown"
+          unStyled
+          isActive={isDdOpen}
+          onClick={this.handleDropdownClick}
+        >
           <div className="ProfileDropdownTrigger__workspace">{workspaceTitle}</div>
           <div className="ProfileDropdownTrigger__user">
             <StatusIcon member={user} size="sm" />

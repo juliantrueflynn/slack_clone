@@ -27,8 +27,7 @@ class MenuItem extends React.Component {
       modifierClassName,
       onClick,
       toggleMenu,
-      isItemActive,
-      isActive,
+      isOpen,
       condition,
       ...props
     } = this.props;
@@ -56,11 +55,13 @@ class MenuItem extends React.Component {
       [`MenuItem__${keyId}`]: keyId,
       [`MenuItem__${keyId}--${modifierClassName}`]: keyId && modifierClassName,
       [`MenuItem--${modifierClassName}`]: !keyId && modifierClassName,
+      'MenuItem--active': !keyId && isOpen,
+      [`MenuItem__${keyId}--active`]: keyId && isOpen,
     });
 
     const contentClassNames = classNames('MenuItem__content', {
       [`MenuItem__content--${itemType}`]: itemType,
-      'MenuItem__content--active': isItemActive,
+      'MenuItem__content--active': isOpen,
     });
 
     return (

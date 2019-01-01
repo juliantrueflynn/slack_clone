@@ -20,11 +20,7 @@ class Message extends React.Component {
   handleHover(hasHover) {
     const { isHoverable, isDdOpen } = this.props;
 
-    if (isDdOpen) {
-      return;
-    }
-
-    if (isHoverable) {
+    if (isHoverable && !isDdOpen) {
       this.setState({ hasHover });
     }
   }
@@ -42,7 +38,6 @@ class Message extends React.Component {
       toggleEditor,
       toggleMessageEditor,
       updateMessageRequest,
-      isDdOpen,
       isThreadHidden,
       isHoverable,
       isHighlightable,
@@ -81,7 +76,6 @@ class Message extends React.Component {
           )}
           <MessageHoverMenu
             hasHover={hasHover}
-            isDdOpen={isDdOpen}
             handleHover={this.handleHover}
             toggleDd={this.handleDdToggle}
             chatPathUrl={chatPathUrl}

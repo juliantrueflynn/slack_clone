@@ -24,12 +24,16 @@
 .PublicViewNavBar .MenuItem__dropdown > button {
   text-transform: none;
   border: 2px solid;
-  border-color: rgba(255,255,255,0.7);
+  border-color: rgba(255, 255, 255, 0.7);
   border-radius: 5px;
   padding: 10px;
   display: block;
   transition: border-color ease-in-out .2s,
               color ease-in-out .2s;
+}
+
+.PublicViewNavBar .MenuItem__dropdown--active > button {
+  background-color: rgba(0, 0, 0, 0.125);
 }
 
 .PublicViewNavBar__nav {
@@ -74,6 +78,9 @@
   padding: 10px 15px;
   border-radius: 5px;
   transition: background-color ease-in-out .15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .Modal__dropdown--public .Menu__dropdown .MenuItem > .MenuItem__content:hover {

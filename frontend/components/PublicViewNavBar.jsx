@@ -51,7 +51,7 @@ class PublicViewNavBar extends React.Component {
       {
         key: 'signout',
         label: 'Sign Out',
-        onClick: () => signOutRequest(),
+        onClick: signOutRequest,
         condition: isLoggedIn,
       },
     ];
@@ -72,6 +72,7 @@ class PublicViewNavBar extends React.Component {
       key: 'dropdown',
       label: 'Your Workspaces',
       onClick: this.handleDdClick,
+      isOpen: isDdOpen,
       condition: isLoggedIn && subbedWorkspaces,
     });
 
@@ -89,7 +90,7 @@ class PublicViewNavBar extends React.Component {
               items={desktopMenuItems}
               bemModifier={menuModifier}
             />
-            <Button buttonFor="mobile-public" onClick={this.handleDdClick}>
+            <Button buttonFor="mobile-public" isActive={isDdOpen} onClick={this.handleDdClick}>
               <FontAwesomeIcon icon="bars" fixedWidth size="lg" />
             </Button>
           </nav>
