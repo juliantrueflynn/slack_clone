@@ -176,21 +176,17 @@ const channelReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case SCROLL_LOCATION_UPDATE: {
-      const { channelSlug, scrollLoc } = action;
+      const { channelSlug, lastFetched, scrollLoc } = action;
 
       if (channelSlug === 'unreads' || channelSlug === 'threads') {
         return state;
       }
 
       nextState = {};
-      nextState[channelSlug] = { scrollLoc };
+      nextState[channelSlug] = { scrollLoc, lastFetched };
 
       return merge({}, state, nextState);
     }
-    case HISTORY.INDEX.REQUEST:
-      nextState = {};
-      nextState[action.channelSlug] = { lastFetched: action.startDate };
-      return merge({}, state, nextState);
     case HISTORY.INDEX.RECEIVE: {
       const { messages, channel } = action.messages;
 

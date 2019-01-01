@@ -57,7 +57,7 @@ export const toggleMessageEditor = (messageSlug = null) => actionCreator(
   { messageSlug }
 );
 
-export const updateScrollLocation = (channelSlug, scrollLoc) => actionCreator(
+export const updateScrollLocation = (channelSlug, lastFetched, scrollLoc) => actionCreator(
   SCROLL_LOCATION_UPDATE,
-  { channelSlug, scrollLoc }
+  { channelSlug, lastFetched, scrollLoc }
 );

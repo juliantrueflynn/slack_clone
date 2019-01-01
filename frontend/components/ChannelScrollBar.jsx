@@ -60,10 +60,18 @@ class ChannelScrollBar extends React.Component {
   }
 
   componentWillUnmount() {
-    const { updateScrollLocation, currentScrollTop, isAtBottom } = this.props;
+    const {
+      updateScrollLocation,
+      currentScrollTop,
+      messages,
+      isAtBottom,
+    } = this.props;
 
     if (!isAtBottom) {
-      updateScrollLocation(this.prevChannelSlug, currentScrollTop());
+      const parents = messages.filter(msg => !msg.parentMessageId);
+      const lastFetched = parents[0] && parents[0].createdAt;
+
+      updateScrollLocation(this.prevChannelSlug, lastFetched, currentScrollTop());
     }
   }
 
