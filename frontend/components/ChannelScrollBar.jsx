@@ -60,19 +60,19 @@ class ChannelScrollBar extends React.Component {
   }
 
   componentWillUnmount() {
-    const {
-      updateScrollLocation,
-      currentScrollTop,
-      messages,
-      isAtBottom,
-    } = this.props;
+    const { updateScrollLocation, currentScrollTop, isAtBottom } = this.props;
 
     if (!isAtBottom) {
-      const parents = messages.filter(msg => !msg.parentMessageId);
-      const lastFetched = parents[0] && parents[0].createdAt;
-
+      const lastFetched = this.getFirstMessageCreatedAt();
       updateScrollLocation(this.prevChannelSlug, lastFetched, currentScrollTop());
     }
+  }
+
+  getFirstMessageCreatedAt() {
+    const { messages } = this.props;
+    const parents = messages.filter(msg => !msg.parentMessageId);
+
+    return parents[0] && parents[0].createdAt;
   }
 
   updateScrollerHeight(scrollerHeight) {
@@ -80,15 +80,8 @@ class ChannelScrollBar extends React.Component {
   }
 
   handleFetchHistory() {
-    const {
-      channel,
-      fetchHistoryRequest,
-      messages,
-      isFetching,
-    } = this.props;
-
-    const parents = messages.filter(msg => !msg.parentMessageId);
-    const startDate = parents[0] && parents[0].createdAt;
+    const { channel, fetchHistoryRequest, isFetching } = this.props;
+    const startDate = this.getFirstMessageCreatedAt();
 
     if (!isFetching && this.shouldFetchHistory() && startDate) {
       fetchHistoryRequest(channel.slug, startDate);
