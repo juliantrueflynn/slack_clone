@@ -19,8 +19,8 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => ({
 const mapDispatchToProps = dispatch => ({
   createChannelSubRequest: channelSub => dispatch(createChannelSub.request(channelSub)),
   fetchHistoryRequest: (chatSlug, startDate) => dispatch(fetchHistory.request(chatSlug, startDate)),
-  updateScrollLocation: (channelSlug, lastFetched, scrollLoc) => (
-    dispatch(updateScrollLocation(channelSlug, lastFetched, scrollLoc))
+  updateScrollLocation: (channelSlug, scrollLoc) => (
+    dispatch(updateScrollLocation(channelSlug, scrollLoc))
   ),
   clearUnreads: (channelSlug, lastRead) => dispatch(clearUnreads(channelSlug, lastRead)),
   closeDrawer: () => dispatch(updateDrawer(null)),

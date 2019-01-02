@@ -125,13 +125,13 @@ const channelReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case SCROLL_LOCATION_UPDATE: {
-      const { channelSlug, lastFetched, scrollLoc } = action;
+      const { channelSlug, scrollLoc } = action;
 
       if (channelSlug === 'unreads' || channelSlug === 'threads') {
         return state;
       }
 
-      nextState = { [channelSlug]: { scrollLoc, lastFetched } };
+      nextState = { [channelSlug]: { scrollLoc } };
 
       return merge({}, state, nextState);
     }
