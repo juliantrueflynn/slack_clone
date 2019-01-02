@@ -1,16 +1,18 @@
+first_message = @recent_messages.first
+channel = first_message ? first_message.channel : nil
+
+json.channel do
+  if channel
+    json.(channel, :slug)
+  else
+    json.nil!
+  end
+end
+
 json.messages do
   json.array! @recent_messages.includes(:author, :parent_message) do |message|
     json.(message, :parent_message_slug, *message.attributes.keys)
     json.author_slug message.author.slug
-  end
-end
-
-json.channel do
-  if @recent_messages.first
-    channel = @recent_messages.first.channel
-    json.(channel, :slug)
-  else
-    json.nil!
   end
 end
 

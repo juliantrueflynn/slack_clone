@@ -118,9 +118,9 @@ const channelReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case MESSAGE.INDEX.RECEIVE: {
-      const { channel, members } = action.messages;
+      const { channel } = action.messages;
 
-      nextState = { [channel.slug]: { ...channel, ...state[channel.slug], members } };
+      nextState = { [channel.slug]: { ...channel, ...state[channel.slug] } };
 
       return merge({}, state, nextState);
     }

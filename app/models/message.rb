@@ -80,10 +80,6 @@ class Message < ApplicationRecord
     where("created_at < ?", start_date)
   end
 
-  def self.ids_between(first, last)
-    where("id BETWEEN ? AND ?", first, last)
-  end
-
   def self.parents_or_children(id_or_ids)
     where(id: id_or_ids).or(where(parent_message_id: id_or_ids))
   end

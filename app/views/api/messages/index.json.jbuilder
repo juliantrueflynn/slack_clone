@@ -1,5 +1,5 @@
 json.channel do
-  json.(@channel, :id, :slug, :owner_id, :owner_slug, :topic, :has_dm, :created_at)
+  json.(@channel, :slug, :topic, :created_at)
 end
 
 messages = @channel.older_messages(params[:until_date])
@@ -22,8 +22,6 @@ json.pins do
   pins = Pin.where(message_id: parents).includes(:message, :user)
   json.array! pins, :id, :user_id, :message_id, :message_slug, :user_slug
 end
-
-json.members @channel.members.pluck(:slug)
 
 json.favorites do
   favorites = current_user.favorites.by_message_id(parents)

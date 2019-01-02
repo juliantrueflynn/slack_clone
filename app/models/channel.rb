@@ -68,16 +68,19 @@ class Channel < ApplicationRecord
     messages.by_entry_parent.created_at_before(before_date).order(id: :desc)
   end
 
+  HISTORY_CACHE_AMOUNT = 15
+
   def messages_between(entries)
-    first_id = entries.length < 15 ? messages.first.id : entries.last.id
-    messages.ids_between(first_id, entries.last.id)
+    start_id = entries.last.id
+    start_id = messages.first.id if entries.length < HISTORY_CACHE_AMOUNT
+    messages.where("id BETWEEN ? AND ?", start_id, entries.first.id)
   end
 
   def older_messages(before_date)
     date_from = (before_date || DateTime.current).to_datetime
-    entries = entries_created_at_before(date_from).limit(15)
+    entries = entries_created_at_before(date_from).limit(HISTORY_CACHE_AMOUNT)
     return messages if entries.empty?
-    messages_between(entries).or(messages.parents_or_children(entries))
+    messages_between(entries).or(Message.parents_or_children(entries))
   end
 
   def member_ids=(member_ids)
