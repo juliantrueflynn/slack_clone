@@ -64,30 +64,20 @@ class Channel < ApplicationRecord
     owner ? owner.slug : nil
   end
 
-  def last_message_created_at
-    last_message = messages.last
-    last_message.created_at.to_datetime if last_message
+  def entries_created_at_before(before_date)
+    messages.by_entry_parent.created_at_before(before_date).order(id: :desc)
   end
 
-  def days_since_created(date)
-    start_date = date.midnight.to_date
-    days_between = (start_date - created_at.midnight.to_date).to_i
-    days_between > 0 ? days_between : 1
+  def messages_between(entries)
+    first_id = entries.length < 15 ? messages.first.id : entries.last.id
+    messages.ids_between(first_id, entries.last.id)
   end
 
-  def recent_messages(start_date)
-    days_deep = days_since_created(start_date)
-    messages.created_recently(start_date, days_deep)
-  end
-
-  def previous_messages(end_date)
-    messages.created_until(end_date.midnight)
-  end
-
-  def history_messages(until_date = nil)
-    return messages if messages.by_entry_parent.length <= 12
-    return recent_messages(last_message_created_at) if until_date.nil?
-    previous_messages(until_date)
+  def older_messages(before_date)
+    date_from = (before_date || DateTime.current).to_datetime
+    entries = entries_created_at_before(date_from).limit(15)
+    return messages if entries.empty?
+    messages_between(entries).or(messages.parents_or_children(entries))
   end
 
   def member_ids=(member_ids)

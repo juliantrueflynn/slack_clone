@@ -9,7 +9,7 @@ const getAllWorkspaces = state => state.entities.workspaces;
 const getAllUsers = state => state.entities.members;
 const getAllMessages = state => state.entities.messages;
 const getAllChannels = state => state.entities.channels;
-const getDisplayChannelData = state => state.displayChannelData;
+export const getDisplayChannelData = state => state.displayChannelData;
 const getAllChannelSubs = state => state.entities.channelSubs;
 const getAllPins = state => state.entities.pins;
 const getAllFavorites = state => state.entities.favorites;

@@ -2,8 +2,7 @@ json.channel do
   json.(@channel, :id, :slug, :owner_id, :owner_slug, :topic, :has_dm, :created_at)
 end
 
-until_date = params[:until_date] ? DateTime.parse(params[:until_date]) : nil
-messages = @channel.history_messages(until_date)
+messages = @channel.older_messages(params[:until_date])
 
 json.messages do
   json.array! messages.includes(:parent_message, :author) do |message|
