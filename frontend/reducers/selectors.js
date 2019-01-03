@@ -144,7 +144,7 @@ export const getChannelViewMessages = createSelector(
 );
 
 export const getAllThreadViewMessages = createSelector(
-  [getMessagesMap, getAllUnreads, getAllChannels],
+  [getMessagesMap, getAllUnreads, getChannelsMap],
   (msgsMap, unreadsMap, channelsMap) => (
     values(unreadsMap)
       .filter(unread => unread && unread.readableType === 'Message')
@@ -248,7 +248,7 @@ const getAllUnreadsViewChannels = (channelsMap, unreadsMap, unreadChMsgs) => {
 };
 
 export const getChatViewChannels = createSelector(
-  [getChatPath, getAllChannels, getAllUnreads, getAllUnreadsByChannel],
+  [getChatPath, getChannelsMap, getAllUnreads, getAllUnreadsByChannel],
   (chatPath, channelsMap, unreadsMap, unreadChannelMessages) => {
     if (chatPath === 'unreads') {
       return getAllUnreadsViewChannels(channelsMap, unreadsMap, unreadChannelMessages);
