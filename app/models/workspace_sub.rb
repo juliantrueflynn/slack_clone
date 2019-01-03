@@ -36,7 +36,9 @@
   end
 
   def create_sub_messages(entity_type)
-    user.channels.by_workspace_id(workspace.id).reduce([]) do |memo, channel|
+    channels = user.channels.without_dm.by_workspace_id(workspace.id)
+
+    channels.reduce([]) do |memo, channel|
       channel_hash = { channel_id: channel.id, entity_type: entity_type }
       memo << channel_hash.merge(default_sub_message_params)
     end
