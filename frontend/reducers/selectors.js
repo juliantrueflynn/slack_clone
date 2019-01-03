@@ -94,10 +94,7 @@ export const getChannelsMap = createSelector(
 );
 
 export const getChatPage = createSelector(
-  [getChannelsMap, getChatPath], (channelsMap, chatPath) => ({
-    chatPath,
-    ...channelsMap[chatPath]
-  })
+  [getChannelsMap, getChatPath], (channelsMap, chatPath) => channelsMap[chatPath]
 );
 
 const groupByMessageEntityType = (arr) => {
@@ -180,33 +177,21 @@ export const getConvoBySlug = ({ entities: { messages } }, slug) => {
   return msg.thread.reduce((acc, curr) => [...acc, messages[curr]], [msg]);
 };
 
-const getFavoritesDrawer = (msgsMap, favs) => (
-  values(favs).sort((a, b) => (
-    new Date(b.createdAt) - new Date(a.createdAt)
-  )).map(msg => msgsMap[msg.messageSlug])
+export const getFavoritesDrawer = createSelector(
+  [getAllFavorites, getMessagesMap],
+  (favsMap, msgsMap) => (
+    values(favsMap).sort((a, b) => (
+      new Date(b.createdAt) - new Date(a.createdAt)
+    )).map(msg => msgsMap[msg.messageSlug])
+  )
 );
 
-const getChannelDetailsDrawer = (chatPage, pinsMap, msgsMap) => (
-  chatPage.pins.map(id => pinsMap[id]).map(pin => msgsMap[pin.messageSlug])
-);
-
-export const getDrawerMessages = createSelector(
-  [getDrawer, getChatPage, getMessagesMap, getAllFavorites, getAllPins],
-  (drawer, chatPage, messages, favorites, pinsMap) => {
-    if (drawer.drawerType === 'convo') {
-      return getConvoBySlug({ entities: { messages } }, drawer.drawerSlug);
-    }
-
-    if (drawer.drawerType === 'favorites') {
-      return getFavoritesDrawer(messages, values(favorites));
-    }
-
-    if (drawer.drawerType === 'details') {
-      return getChannelDetailsDrawer(chatPage, pinsMap, messages);
-    }
-
-    return [];
-  }
+export const getChannelDetailsDrawer = createSelector(
+  [getChatPage, getAllPins, getMessagesMap],
+  (chatPage, pinsMap, msgsMap) => (
+    chatPage && chatPage.pins.map(id => pinsMap[id])
+      .map(pin => msgsMap[pin.messageSlug])
+  )
 );
 
 const getLastEntry = (msgsMap, slugs) => {

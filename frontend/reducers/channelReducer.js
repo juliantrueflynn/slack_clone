@@ -9,6 +9,7 @@ import {
   SIGN_OUT,
   CREATE_UNREAD,
   HISTORY,
+  PIN,
 } from '../actions/actionTypes';
 
 const channelReducer = (state = {}, action) => {
@@ -163,6 +164,14 @@ const channelReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
+    case MESSAGE.DESTROY.RECEIVE: {
+      const { channelSlug, slug } = action.message;
+
+      nextState = {};
+      nextState[channelSlug] = { messages: state.messages.filter(msg => msg.slug === slug) };
+
+      return merge({}, state, nextState);
+    }
     case SCROLL_LOCATION_UPDATE: {
       const { channelSlug, scrollLoc } = action;
 
@@ -196,6 +205,23 @@ const channelReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
+    case PIN.CREATE.RECEIVE: {
+      const { id, channelSlug } = action.pin;
+
+      nextState = {};
+      nextState[channelSlug] = { pins: [...state[channelSlug].pins, id] };
+
+      return merge({}, state, nextState);
+    }
+    case PIN.DESTROY.RECEIVE: {
+      const { id, channelSlug } = action.pin;
+
+      nextState = merge({}, state);
+      nextState[channelSlug].pins = state[channelSlug].pins.filter(pinId => pinId !== id);
+
+      return nextState;
+    }
+    case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return {};
     default:

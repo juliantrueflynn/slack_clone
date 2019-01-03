@@ -7,7 +7,6 @@ import ui from './uiReducer';
 import isLoading from './isLoadingReducer';
 import search from './searchReducer';
 import unreadsByChannel from './unreadsByChannelReducer';
-import displayChannelData from './displayChannelDataReducer';
 
 const rootReducer = combineReducers({
   session,
@@ -18,7 +17,6 @@ const rootReducer = combineReducers({
   isLoading,
   search,
   unreadsByChannel,
-  displayChannelData,
 });
 
 export default rootReducer;
