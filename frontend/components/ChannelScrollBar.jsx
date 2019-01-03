@@ -30,7 +30,7 @@ class ChannelScrollBar extends React.Component {
       scrollToBottom();
     }
 
-    if (currentScrollTop <= 50) {
+    if (currentScrollTop <= 25) {
       this.handleFetchHistory();
     }
 
