@@ -4,7 +4,7 @@ import { createChannel } from '../actions/channelActions';
 import { destroyPin, createMessage } from '../actions/messageActions';
 import {
   getChatPage,
-  getConvoBySlug,
+  getConvoDrawer,
   getChannelDetailsDrawer,
   getFavoritesDrawer,
 } from '../reducers/selectors';
@@ -16,7 +16,7 @@ const mapStateToProps = (state, { match: { params } }) => {
   let messages = [];
 
   if (drawerType === 'convo') {
-    messages = getConvoBySlug(state, drawerSlug);
+    messages = getConvoDrawer(state, drawerSlug);
   }
 
   if (drawerType === 'favorites') {

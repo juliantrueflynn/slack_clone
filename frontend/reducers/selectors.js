@@ -182,6 +182,11 @@ export const getConvoBySlug = ({ entities: { messages } }, slug) => {
   return msg.thread.reduce((acc, curr) => [...acc, messages[curr]], [msg]);
 };
 
+export const getConvoDrawer = createSelector(
+  [getMessagesMap, getDrawer],
+  (messages, drawer) => getConvoBySlug({ entities: { messages } }, drawer.drawerSlug)
+);
+
 export const getFavoritesDrawer = createSelector(
   [getAllFavorites, getMessagesMap],
   (favsMap, msgsMap) => (
