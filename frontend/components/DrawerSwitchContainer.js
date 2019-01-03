@@ -2,22 +2,40 @@ import { connect } from 'react-redux';
 import { updateDrawer, updateModal } from '../actions/uiActions';
 import { createChannel } from '../actions/channelActions';
 import { destroyPin, createMessage } from '../actions/messageActions';
-import { getDrawerMessages, getChatPage } from '../reducers/selectors';
+import {
+  getChatPage,
+  getConvoBySlug,
+  getChannelDetailsDrawer,
+  getFavoritesDrawer,
+} from '../reducers/selectors';
 import withWindowResize from './withWindowResize';
 import DrawerSwitch from './DrawerSwitch';
 
 const mapStateToProps = (state, { match: { params } }) => {
-  const chatPath = state.ui.displayChatPath;
+  const { drawerType, drawerSlug } = params;
+  let messages = [];
+
+  if (drawerType === 'convo') {
+    messages = getConvoBySlug(state, drawerSlug);
+  }
+
+  if (drawerType === 'favorites') {
+    messages = getFavoritesDrawer(state);
+  }
+
+  if (drawerType === 'details') {
+    messages = getChannelDetailsDrawer(state);
+  }
 
   return {
     currentUser: state.session.currentUser,
     users: state.entities.members,
     isLoading: state.isLoading.drawer,
-    messages: getDrawerMessages(state),
+    messages,
     channel: getChatPage(state),
-    chatPath,
-    drawerType: params.drawerType,
-    drawerSlug: params.drawerSlug,
+    chatPath: state.ui.displayChatPath,
+    drawerType,
+    drawerSlug,
     accordion: state.ui.accordion.details,
   };
 };

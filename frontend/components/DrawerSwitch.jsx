@@ -28,11 +28,16 @@ class DrawerSwitch extends React.Component {
       drawerType,
       drawerSlug,
       openDrawer,
+      channel,
       isMobileSize
     } = this.props;
     const { isModalOpen } = this.state;
 
     if (drawerType !== prevProps.drawerType || drawerSlug !== prevProps.drawerSlug) {
+      openDrawer();
+    }
+
+    if (drawerType === 'details' && !prevProps.channel && channel) {
       openDrawer();
     }
 
