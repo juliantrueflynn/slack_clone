@@ -56,7 +56,7 @@ const unreadReducer = (state = {}, action) => {
       return nextState;
     }
     case MESSAGE.CREATE.RECEIVE: {
-      const { channelSlug, createdAt, parentMessageId } = action.message;
+      const { channelSlug, createdAt, parentMessageId } = action.message.message;
 
       if (parentMessageId) {
         return state;
@@ -64,6 +64,7 @@ const unreadReducer = (state = {}, action) => {
 
       nextState = {};
       nextState[channelSlug] = { lastActive: createdAt };
+
       return merge({}, state, nextState);
     }
     case USER_THREAD.INDEX.RECEIVE: {

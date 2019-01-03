@@ -113,25 +113,29 @@ const messageReducer = (state = {}, action) => {
       action.channel.messages.forEach((msg) => { nextState[msg.slug] = msg; });
       return merge({}, state, nextState);
     case MESSAGE.CREATE.RECEIVE: {
-      const { message } = action;
-      const { slug, authorSlug, parentMessageSlug: parentSlug } = message;
+      const { message, parentMessage } = action.message;
+      const { slug, authorSlug } = message;
 
       nextState = {};
       nextState[slug] = {
         reactionIds: [],
-        authors: parentSlug ? null : [],
-        thread: parentSlug ? null : [],
+        authors: parentMessage ? null : [],
+        thread: parentMessage ? null : [],
         ...message,
       };
 
-      if (state[parentSlug]) {
-        nextState[parentSlug] = {
-          ...state[parentSlug],
-          thread: [...state[parentSlug].thread, slug],
+      if (parentMessage) {
+        nextState[parentMessage.slug] = {
+          ...state[parentMessage.slug],
+          ...parentMessage,
+          thread: [...state[parentMessage.slug].thread, slug]
         };
 
-        if (!state[parentSlug].authors.includes(authorSlug)) {
-          nextState[parentSlug].authors = [...state[parentSlug].authors, authorSlug];
+        if (!state[parentMessage.slug].authors.includes(authorSlug)) {
+          nextState[parentMessage.slug].authors = [
+            ...state[parentMessage.slug].authors,
+            authorSlug
+          ];
         }
       }
 

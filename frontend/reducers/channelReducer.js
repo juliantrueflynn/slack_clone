@@ -142,13 +142,15 @@ const channelReducer = (state = {}, action) => {
       };
 
       messages.filter(msg => !msg.parentMessageSlug).forEach((msg) => {
-        nextState[channel.slug].messages.push(msg.slug);
+        if (!state[channel.slug].messages.includes(msg.slug)) {
+          nextState[channel.slug].messages.push(msg.slug);
+        }
       });
 
       return merge({}, state, nextState);
     }
     case MESSAGE.CREATE.RECEIVE: {
-      const { parentMessageSlug, slug, channelSlug } = action.message;
+      const { parentMessageSlug, slug, channelSlug } = action.message.message;
 
       if (parentMessageSlug) {
         return state;

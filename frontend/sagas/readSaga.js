@@ -9,7 +9,12 @@ import {
 import { READ, MESSAGE } from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiDestroy } from '../util/apiUtil';
 import * as actions from '../actions/readActions';
-import { selectUIByDisplay, selectEntityBySlug, getChannelsMap } from '../reducers/selectors';
+import {
+  selectUIByDisplay,
+  selectEntityBySlug,
+  getChannelsMap,
+  getCurrentUser,
+} from '../reducers/selectors';
 
 function* fetchCreate({ slug, ...read }) {
   try {
@@ -79,7 +84,21 @@ function* fetchChannelPage({ messages: { channel } }) {
   }
 }
 
-function* loadMessageRead({ message: msg }) {
+function* isUserNotInConvo({ message, parentMessage }) {
+  const currUser = yield select(getCurrentUser);
+
+  if (currUser.slug === message.authorSlug || parentMessage.authorSlug === currUser.slug) {
+    return false;
+  }
+
+  const read = yield select(selectEntityBySlug, 'unreads', parentMessage.slug);
+
+  return !read;
+}
+
+function* loadMessageRead({ message }) {
+  const { message: msg } = message;
+
   if (msg.entityType !== 'entry') {
     return;
   }
@@ -103,6 +122,10 @@ function* loadMessageRead({ message: msg }) {
         currPageSlug = drawer.drawerSlug;
         isCurrPage = currPageSlug === slug;
       }
+    }
+
+    if (yield isUserNotInConvo(message)) {
+      return;
     }
   }
 
