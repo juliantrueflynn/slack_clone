@@ -156,7 +156,7 @@ const channelReducer = (state = {}, action) => {
         return state;
       }
 
-      nextState = { [channelSlug]: { messages: [...state[channelSlug], slug] } };
+      nextState = { [channelSlug]: { messages: [...state[channelSlug].messages, slug] } };
 
       return merge({}, state, nextState);
     }

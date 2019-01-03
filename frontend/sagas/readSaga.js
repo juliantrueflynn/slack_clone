@@ -84,7 +84,7 @@ function* fetchChannelPage({ messages: { channel } }) {
   }
 }
 
-function* isUserNotInConvo({ message, parentMessage }) {
+function* isCurrentUserNotInConvo({ message, parentMessage }) {
   const currUser = yield select(getCurrentUser);
 
   if (currUser.slug === message.authorSlug || parentMessage.authorSlug === currUser.slug) {
@@ -96,42 +96,42 @@ function* isUserNotInConvo({ message, parentMessage }) {
   return !read;
 }
 
+function* isCurrentUserInView(slug, readableType) {
+  const chatPath = yield select(selectUIByDisplay, 'displayChatPath');
+
+  if (readableType === 'Channel') {
+    return chatPath === slug;
+  }
+
+  if (readableType === 'Message') {
+    if (chatPath === 'threads') {
+      return true;
+    }
+
+    const drawer = yield select(selectUIByDisplay, 'drawer');
+
+    return drawer.drawerType === 'convo' && drawer.drawerSlug === slug;
+  }
+
+  return false;
+}
+
 function* loadMessageRead({ message }) {
   const { message: msg } = message;
+  const isNotInConvo = yield isCurrentUserNotInConvo(message) && msg.parentMessageSlug;
 
-  if (msg.entityType !== 'entry') {
+  if (isNotInConvo || msg.entityType !== 'entry') {
     return;
   }
 
   const slug = msg.parentMessageSlug || msg.channelSlug;
+  const unread = yield select(selectEntityBySlug, 'unreads', slug);
   const read = {
     readableType: msg.parentMessageSlug ? 'Message' : 'Channel',
-    readableId: msg.parentMessageId || msg.channelId,
+    readableId: msg.parentMessageId || msg.channelId
   };
 
-  let currPageSlug = yield select(selectUIByDisplay, 'displayChatPath');
-  let isCurrPage = currPageSlug === slug;
-
-  if (read.readableType === 'Message') {
-    if (currPageSlug === 'threads') {
-      isCurrPage = true;
-    } else {
-      const drawer = yield select(selectUIByDisplay, 'drawer');
-
-      if (drawer.drawerType === 'convo') {
-        currPageSlug = drawer.drawerSlug;
-        isCurrPage = currPageSlug === slug;
-      }
-    }
-
-    if (yield isUserNotInConvo(message)) {
-      return;
-    }
-  }
-
-  const unread = yield select(selectEntityBySlug, 'unreads', slug);
-
-  if (isCurrPage) {
+  if (yield isCurrentUserInView(slug, read.readableType)) {
     yield createOrUpdateRead(read, unread);
   } else {
     const lastRead = unread && unread.lastRead;
@@ -140,9 +140,9 @@ function* loadMessageRead({ message }) {
   }
 }
 
-function* loadDestroyConvoRead({ message: { id: readableId, parentMessageId, slug } }) {
+function* loadDestroyConvoRead({ message: { id: readableId, parentMessageSlug, slug } }) {
   try {
-    if (parentMessageId) {
+    if (parentMessageSlug) {
       return;
     }
 
