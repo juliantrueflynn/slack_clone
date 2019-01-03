@@ -10,19 +10,24 @@ class ChatPageSwitch extends React.Component {
   constructor(props) {
     super(props);
     this.state = { isInitLoadingDone: false };
+    this.getChatData = this.getChatData.bind(this);
   }
 
   componentDidMount() {
-    const { history } = this.props;
+    const { history, updateChatPath, chatPath } = this.props;
 
     if (this.selectRedirectUrl()) {
       history.replace(this.selectRedirectUrl());
     }
+
+    updateChatPath(chatPath);
+    this.getChatData();
   }
 
   componentDidUpdate(prevProps) {
     const {
       match: { isExact },
+      updateChatPath,
       drawerType,
       history,
       closeDrawer,
@@ -45,6 +50,23 @@ class ChatPageSwitch extends React.Component {
     if (!isLoading.channel && prevProps.isLoading) {
       this.updateLoadingState();
     }
+
+    if (chatPath !== prevProps.chatPath) {
+      updateChatPath(chatPath);
+
+      if (channel && channel.shouldFetch) {
+        this.getChatData();
+      }
+
+      if (!channel) {
+        this.getChatData();
+      }
+    }
+  }
+
+  getChatData() {
+    const { fetchChatPageData } = this.props;
+    fetchChatPageData();
   }
 
   updateLoadingState() {

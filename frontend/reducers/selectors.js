@@ -4,18 +4,15 @@ import { dateUtil } from '../util/dateUtil';
 const values = entities => Object.values(entities);
 
 export const getCurrentUser = state => state.session.currentUser;
-
 const getAllWorkspaces = state => state.entities.workspaces;
 const getAllUsers = state => state.entities.members;
 const getAllMessages = state => state.entities.messages;
 const getAllChannels = state => state.entities.channels;
-export const getDisplayChannelData = state => state.displayChannelData;
 const getAllChannelSubs = state => state.entities.channelSubs;
 const getAllPins = state => state.entities.pins;
 const getAllFavorites = state => state.entities.favorites;
 const getAllUnreadsByChannel = state => state.unreadsByChannel;
 export const getAllUnreads = state => state.entities.unreads;
-
 const getIsEditingMessage = state => state.ui.isEditingMessage;
 const getChatPath = state => state.ui.displayChatPath;
 const getDrawer = state => state.ui.drawer;
@@ -96,6 +93,13 @@ export const getChannelsMap = createSelector(
   )
 );
 
+export const getChatPage = createSelector(
+  [getChannelsMap, getChatPath], (channelsMap, chatPath) => ({
+    chatPath,
+    ...channelsMap[chatPath]
+  })
+);
+
 const groupByMessageEntityType = (arr) => {
   const entries = [];
 
@@ -117,71 +121,53 @@ const groupByMessageEntityType = (arr) => {
   return entries;
 };
 
-const getChannelViewMessages = (msgsMap, msgsSlugs, title) => {
-  const msgs = msgsSlugs.map(msgSlug => msgsMap[msgSlug]);
-  const entries = msgs.filter(msg => msg && msg.entityType === 'entry');
-  const subs = msgs.filter(msg => msg && msg.entityType !== 'entry').reduce((acc, curr) => {
-    const msg = { ...curr, group: [], channelTitle: `#${title}` };
-    return [...acc, msg];
-  }, []);
+export const getChannelViewMessages = createSelector(
+  [getMessagesMap, getChatPage],
+  (msgsMap, channel) => {
+    if (!channel || !channel.messages) {
+      return [];
+    }
 
-  const items = [...subs, ...entries].sort((a, b) => a.id - b.id);
+    const msgs = channel.messages.map(msgSlug => msgsMap[msgSlug]);
+    const entries = msgs.filter(msg => msg && msg.entityType === 'entry');
+    const subs = msgs.filter(msg => msg && msg.entityType !== 'entry').reduce((acc, curr) => {
+      const msg = { ...curr, group: [], channelTitle: `#${channel.title}` };
+      return [...acc, msg];
+    }, []);
 
-  return groupByMessageEntityType(items);
-};
+    const items = [...subs, ...entries].sort((a, b) => a.id - b.id);
 
-const getAllThreadViewMessages = (msgsMap, unreadsMap, channelsMap) => (
-  values(unreadsMap)
-    .filter(unread => unread && unread.readableType === 'Message')
-    .reduce((acc, curr) => {
-      const msg = msgsMap[curr.slug];
-
-      if (!msg || !msg.thread) {
-        return acc;
-      }
-
-      const replies = msg.thread.map(msgSlug => msgsMap[msgSlug]);
-      const parentMsg = {
-        ...msgsMap[curr.slug],
-        slug: curr.slug,
-        channelSlug: msg.channelSlug,
-        channelTitle: channelsMap[msg.channelSlug].title,
-        messages: [msg, ...replies],
-      };
-
-      return [...acc, parentMsg];
-    }, [])
-    .sort((a, b) => (
-      new Date(unreadsMap[b.slug].lastActive) - new Date(unreadsMap[a.slug].lastActive)
-    ))
-);
-
-export const getDisplayChatPage = createSelector(
-  [getChatPath, getChannelsMap, getDisplayChannelData],
-  (chatPath, channelsMap, channelData) => {
-    const channel = channelsMap[chatPath];
-
-    return { chatPath, ...channel, ...channelData };
+    return groupByMessageEntityType(items);
   }
 );
 
-export const getChatPageMessages = createSelector(
-  [getDisplayChatPage, getAllChannels, getMessagesMap, getAllUnreads],
-  (chatPage, channelsMap, messagesMap, unreadsMap) => {
-    if (chatPage.chatPath === 'unreads') {
-      return messagesMap;
-    }
+export const getAllThreadViewMessages = createSelector(
+  [getMessagesMap, getAllUnreads, getAllChannels],
+  (msgsMap, unreadsMap, channelsMap) => (
+    values(unreadsMap)
+      .filter(unread => unread && unread.readableType === 'Message')
+      .reduce((acc, curr) => {
+        const msg = msgsMap[curr.slug];
 
-    if (chatPage.chatPath === 'threads') {
-      return getAllThreadViewMessages(messagesMap, unreadsMap, channelsMap);
-    }
+        if (!msg || !msg.thread) {
+          return acc;
+        }
 
-    if (chatPage.slug) {
-      return getChannelViewMessages(messagesMap, chatPage.messages, chatPage.title);
-    }
+        const replies = msg.thread.map(msgSlug => msgsMap[msgSlug]);
+        const parentMsg = {
+          ...msgsMap[curr.slug],
+          slug: curr.slug,
+          channelSlug: msg.channelSlug,
+          channelTitle: channelsMap[msg.channelSlug].title,
+          messages: [msg, ...replies],
+        };
 
-    return [];
-  }
+        return [...acc, parentMsg];
+      }, [])
+      .sort((a, b) => (
+        new Date(unreadsMap[b.slug].lastActive) - new Date(unreadsMap[a.slug].lastActive)
+      ))
+  )
 );
 
 export const getConvoBySlug = ({ entities: { messages } }, slug) => {
@@ -200,13 +186,13 @@ const getFavoritesDrawer = (msgsMap, favs) => (
   )).map(msg => msgsMap[msg.messageSlug])
 );
 
-const getChannelDetailsDrawer = (channelData, pinsMap, msgsMap) => (
-  channelData.pins.map(id => pinsMap[id]).map(pin => msgsMap[pin.messageSlug])
+const getChannelDetailsDrawer = (chatPage, pinsMap, msgsMap) => (
+  chatPage.pins.map(id => pinsMap[id]).map(pin => msgsMap[pin.messageSlug])
 );
 
 export const getDrawerMessages = createSelector(
-  [getDrawer, getDisplayChannelData, getMessagesMap, getAllFavorites, getAllPins],
-  (drawer, channelData, messages, favorites, pinsMap) => {
+  [getDrawer, getChatPage, getMessagesMap, getAllFavorites, getAllPins],
+  (drawer, chatPage, messages, favorites, pinsMap) => {
     if (drawer.drawerType === 'convo') {
       return getConvoBySlug({ entities: { messages } }, drawer.drawerSlug);
     }
@@ -216,23 +202,23 @@ export const getDrawerMessages = createSelector(
     }
 
     if (drawer.drawerType === 'details') {
-      return getChannelDetailsDrawer(channelData, pinsMap, messages);
+      return getChannelDetailsDrawer(chatPage, pinsMap, messages);
     }
 
     return [];
   }
 );
 
-const getlastEntry = (msgsMap, slugs) => {
+const getLastEntry = (msgsMap, slugs) => {
   const msgs = slugs.map(slug => msgsMap[slug]).sort((a, b) => a.id - b.id);
 
   return msgs[msgs.length - 1];
 };
 
 export const getChannelLastEntry = createSelector(
-  [getAllMessages, getDisplayChatPage],
-  (msgsMap, channel) => (
-    getlastEntry(msgsMap, channel.messages)
+  [getAllMessages, getChatPath, getAllChannels],
+  (msgsMap, chatPath, channelsMap) => (
+    getLastEntry(msgsMap, channelsMap[chatPath] ? channelsMap[chatPath].messages : [])
   )
 );
 
@@ -243,7 +229,7 @@ export const getConvoLastEntry = createSelector(
       return false;
     }
 
-    return getlastEntry(msgsMap, msgsMap[drawer.drawerSlug].thread);
+    return getLastEntry(msgsMap, msgsMap[drawer.drawerSlug].thread);
   }
 );
 

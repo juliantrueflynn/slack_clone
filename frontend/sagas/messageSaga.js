@@ -14,14 +14,13 @@ import * as api from '../util/apiUtil';
 import {
   selectUIByDisplay,
   selectEntityBySlug,
-  getDisplayChannelData,
   getConvoBySlug,
   getChatPathUrl,
 } from '../reducers/selectors';
 
 function* fetchIndex({ channelSlug }) {
   try {
-    const channel = yield select(getDisplayChannelData);
+    const channel = yield select(selectEntityBySlug, 'channels', channelSlug);
     const firstMsg = yield select(selectEntityBySlug, 'messages', channel.messages[0]);
     let apiUrl = `channels/${channelSlug}/messages`;
 

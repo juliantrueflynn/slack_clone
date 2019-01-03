@@ -8,21 +8,18 @@ class Channel extends React.Component {
   constructor(props) {
     super(props);
     this.container = React.createRef();
-    this.state = { height: 0, didInitMessagesLoad: false };
+    this.state = { height: 0, hasSwitchedView: false };
     this.updateSizeDimensions = this.updateSizeDimensions.bind(this);
+    this.updateHasSwitchedView = this.updateHasSwitchedView.bind(this);
   }
 
   componentDidMount() {
     this.updateSizeDimensions();
   }
 
-  componentDidUpdate(prevProps) {
-    const {
-      channel,
-      isLoading,
-      windowWidth: winWidth,
-      windowHeight: winHeight,
-    } = this.props;
+  componentDidUpdate(prevProps, prevState) {
+    const { channel, windowWidth: winWidth, windowHeight: winHeight } = this.props;
+    const { hasSwitchedView } = this.state;
     const { channel: prevChannel } = prevProps;
     const hasResized = winHeight !== prevProps.windowHeight || winWidth !== prevProps.windowWidth;
 
@@ -30,21 +27,17 @@ class Channel extends React.Component {
       this.updateSizeDimensions();
     }
 
-    if (!isLoading.channel && prevProps.isLoading.channel && !isLoading.history) {
-      this.updateInitMessagesLoad(true);
+    if (channel.slug !== prevChannel.slug) {
+      this.updateHasSwitchedView(true);
     }
 
-    if (channel.slug !== prevChannel.slug) {
-      this.updateInitMessagesLoad(false);
+    if (channel.slug === prevChannel.slug && hasSwitchedView !== prevState.hasSwitchedView) {
+      this.updateHasSwitchedView(false);
     }
   }
 
-  updateInitMessagesLoad(newState) {
-    const { didInitMessagesLoad } = this.state;
-
-    if (didInitMessagesLoad !== newState) {
-      this.setState({ didInitMessagesLoad: newState });
-    }
+  updateHasSwitchedView(hasSwitchedView) {
+    this.setState({ hasSwitchedView });
   }
 
   updateSizeDimensions() {
@@ -73,7 +66,7 @@ class Channel extends React.Component {
       fetchHistoryRequest,
       createMessageRequest,
     } = this.props;
-    const { height, didInitMessagesLoad } = this.state;
+    const { height, hasSwitchedView } = this.state;
 
     const placeholder = channel.hasDm ? `@${channel.title}` : `#${channel.title}`;
     const formPlaceholder = placeholder && `Message ${placeholder}`;
@@ -81,7 +74,7 @@ class Channel extends React.Component {
     return (
       <div className="Channel" ref={this.container}>
         <div className="Channel__body">
-          {!isLoading.channel && didInitMessagesLoad && (
+          {!isLoading.channel && !hasSwitchedView && (
             <ChannelScrollBar
               channel={channel}
               messages={messages}
