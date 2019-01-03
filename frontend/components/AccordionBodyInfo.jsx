@@ -1,12 +1,10 @@
 import React from 'react';
-import { dateUtil } from '../util/dateUtil';
 import AccordionItemBody from './AccordionItemBody';
 import Button from './Button';
 import './AccordionBodyInfo.css';
 
 const AccordionBodyInfo = ({ channel, currentUserSlug, openModal }) => {
-  const dateCreated = dateUtil(channel.createdAt).monthDayYear();
-  const dateText = `${dateCreated} by ${channel.ownerName}`;
+  const dateText = `${channel.createdAt} by ${channel.ownerName}`;
   const openChannelEditor = () => openModal('MODAL_FORM_CHANNEL', { channel, currentUserSlug });
 
   return (

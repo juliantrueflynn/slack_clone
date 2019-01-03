@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { dateUtil } from '../util/dateUtil';
 import './ModalChannelsListItem.css';
 
 const ModalChannelsListItem = ({ channel, workspaceSlug }) => {
@@ -13,7 +12,6 @@ const ModalChannelsListItem = ({ channel, workspaceSlug }) => {
   } = channel;
 
   const channelUrl = `/${workspaceSlug}/messages/${slug}`;
-  const dateCreated = dateUtil(createdAt).monthDayYear();
 
   return (
     <Link role="listitem" className="ModalChannelsListItem" to={channelUrl}>
@@ -27,7 +25,7 @@ const ModalChannelsListItem = ({ channel, workspaceSlug }) => {
           <strong>
             {ownerName}
           </strong>
-          {` on ${dateCreated}`}
+          {` on ${createdAt}`}
         </div>
       </div>
     </Link>

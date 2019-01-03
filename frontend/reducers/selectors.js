@@ -71,10 +71,10 @@ export const getChannelsMap = createSelector(
   [getAllChannels, getCurrentUser, getAllUsers],
   (channelsMap, currUser, users) => (
     values(channelsMap).reduce((acc, curr) => {
-      const channel = { ...curr, isSub: curr.members.includes(currUser.slug) };
+      const channel = {};
 
-      if (channel.hasDm) {
-        const subsUserSlugs = channel.members.filter(slug => slug !== currUser.slug);
+      if (curr.hasDm) {
+        const subsUserSlugs = curr.members.filter(slug => slug !== currUser.slug);
         const subUser = subsUserSlugs[0] && users[subsUserSlugs[0]];
 
         if (subUser) {
@@ -82,11 +82,16 @@ export const getChannelsMap = createSelector(
           channel.dmUserSlug = subUser.slug;
         }
       } else {
-        const owner = users[channel.ownerSlug];
+        const owner = users[curr.ownerSlug];
         channel.ownerName = owner && owner.username;
       }
 
-      acc[curr.slug] = channel;
+      acc[curr.slug] = {
+        ...curr,
+        ...channel,
+        isSub: curr.members.includes(currUser.slug),
+        createdAt: dateUtil(curr.createdAt).monthDayYear(),
+      };
 
       return acc;
     }, {})
