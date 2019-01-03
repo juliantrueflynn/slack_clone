@@ -7,6 +7,8 @@ import {
   WORKSPACE_SUB,
   SCROLL_LOCATION_UPDATE,
   SIGN_OUT,
+  CREATE_UNREAD,
+  HISTORY,
 } from '../actions/actionTypes';
 
 const channelReducer = (state = {}, action) => {
@@ -15,15 +17,10 @@ const channelReducer = (state = {}, action) => {
   let nextState;
   switch (action.type) {
     case CHANNEL.INDEX.RECEIVE: {
-      const { channels, workspaceSlug } = action.channels;
+      const { channels } = action.channels;
 
       nextState = channels.reduce((acc, curr) => {
-        acc[curr.slug] = {
-          members: [],
-          subs: [],
-          workspaceSlug,
-          ...curr,
-        };
+        acc[curr.slug] = curr;
 
         return acc;
       }, {});
@@ -42,7 +39,13 @@ const channelReducer = (state = {}, action) => {
       const { subs, channel, members } = action.channel;
 
       nextState = {};
-      nextState[channel.slug] = { subs: subs.map(sub => sub.id), members, ...channel };
+      nextState[channel.slug] = {
+        subs: subs.map(sub => sub.id),
+        members,
+        messages: [],
+        pins: [],
+        ...channel,
+      };
 
       if (channel.ownerSlug) {
         nextState[channel.slug].members.push(channel.ownerSlug);
@@ -67,6 +70,9 @@ const channelReducer = (state = {}, action) => {
           workspaceSlug: workspace.slug,
           subs: [],
           members: [],
+          messages: [],
+          pins: [],
+          shouldFetch: true,
           ...channel
         };
       });
@@ -91,6 +97,7 @@ const channelReducer = (state = {}, action) => {
         nextState[ch.slug] = {
           workspaceSlug: workspace.slug,
           members: [owner.slug],
+          messages: [],
           subs: channelSubs.map(sub => sub.id),
           ...ch
         };
@@ -117,10 +124,42 @@ const channelReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case MESSAGE.INDEX.RECEIVE: {
-      const { channel } = action.messages;
+    case MESSAGE.INDEX.REQUEST:
+      nextState = { [action.channelSlug]: { shouldFetch: false } };
+      return merge({}, state, nextState);
+    case CREATE_UNREAD:
+      if (action.unread.readableType !== 'Channel') {
+        return state;
+      }
 
-      nextState = { [channel.slug]: { ...channel, ...state[channel.slug] } };
+      nextState = { [action.unread.slug]: { shouldFetch: true } };
+
+      return merge({}, state, nextState);
+    case HISTORY.INDEX.RECEIVE:
+    case MESSAGE.INDEX.RECEIVE: {
+      const { channel, messages } = action.messages;
+
+      nextState = {};
+      nextState[channel.slug] = { ...channel, messages: [...state[channel.slug].messages] };
+      messages.filter(msg => !msg.parentMessageSlug).forEach((msg) => {
+        if (!state[channel.slug].messages.includes(msg.slug)) {
+          nextState[channel.slug].messages.push(msg.slug);
+        }
+      });
+
+      return merge({}, state, nextState);
+    }
+    case MESSAGE.CREATE.RECEIVE: {
+      const { message } = action;
+
+      if (message.parentMessageSlug) {
+        return state;
+      }
+
+      nextState = {};
+      if (!state[message.channelSlug].includes(message.slug)) {
+        nextState[message.channelSlug].messages.push(message.slug);
+      }
 
       return merge({}, state, nextState);
     }
