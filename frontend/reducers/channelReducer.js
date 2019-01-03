@@ -151,16 +151,13 @@ const channelReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case MESSAGE.CREATE.RECEIVE: {
-      const { message } = action;
+      const { parentMessageSlug, slug, channelSlug } = action.message;
 
-      if (message.parentMessageSlug) {
+      if (parentMessageSlug) {
         return state;
       }
 
-      nextState = {};
-      if (!state[message.channelSlug].includes(message.slug)) {
-        nextState[message.channelSlug].messages.push(message.slug);
-      }
+      nextState = { [channelSlug]: { messages: [...state[channelSlug], slug] } };
 
       return merge({}, state, nextState);
     }
