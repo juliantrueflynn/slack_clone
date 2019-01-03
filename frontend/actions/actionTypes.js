@@ -33,3 +33,4 @@ export const CLEAR_UNREADS = 'CLEAR_UNREADS';
 export const NAVIGATE = 'NAVIGATE';
 export const ACCORDION_OPEN = 'ACCORDION_OPEN';
 export const CREATE_UNREAD = 'CREATE_UNREAD';
+export const CHAT_PATH_UPDATE = 'CHAT_PATH_UPDATE';

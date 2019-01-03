@@ -1,26 +1,16 @@
-import {
-  WORKSPACE,
-  MESSAGE,
-  READ,
-  USER_THREAD,
-  SIGN_OUT,
-} from '../actions/actionTypes';
+import { SIGN_OUT, CHAT_PATH_UPDATE, WORKSPACE } from '../actions/actionTypes';
 
-const displayChatPathReducer = (state = null, action) => {
+const _defaultState = null;
+
+const displayChatPathReducer = (state = _defaultState, action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case MESSAGE.INDEX.REQUEST: {
-      const { channelSlug } = action;
-      return channelSlug;
-    }
-    case READ.INDEX.REQUEST:
-      return 'unreads';
-    case USER_THREAD.INDEX.REQUEST:
-      return 'threads';
+    case CHAT_PATH_UPDATE:
+      return action.chatPath;
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
-      return null;
+      return _defaultState;
     default:
       return state;
   }
