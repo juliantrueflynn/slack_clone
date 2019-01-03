@@ -8,18 +8,20 @@ class Channel extends React.Component {
   constructor(props) {
     super(props);
     this.container = React.createRef();
-    this.state = { height: 0, hasSwitchedView: false };
+    this.state = { height: 0, hasInitLoadDone: false };
     this.updateSizeDimensions = this.updateSizeDimensions.bind(this);
-    this.updateHasSwitchedView = this.updateHasSwitchedView.bind(this);
+    this.updateHasInitLoadDone = this.updateHasInitLoadDone.bind(this);
   }
 
   componentDidMount() {
     this.updateSizeDimensions();
+
+    this.updateHasInitLoadDone(true);
   }
 
   componentDidUpdate(prevProps, prevState) {
     const { channel, windowWidth: winWidth, windowHeight: winHeight } = this.props;
-    const { hasSwitchedView } = this.state;
+    const { hasInitLoadDone } = this.state;
     const { channel: prevChannel } = prevProps;
     const hasResized = winHeight !== prevProps.windowHeight || winWidth !== prevProps.windowWidth;
 
@@ -28,16 +30,16 @@ class Channel extends React.Component {
     }
 
     if (channel.slug !== prevChannel.slug) {
-      this.updateHasSwitchedView(true);
+      this.updateHasInitLoadDone(false);
     }
 
-    if (channel.slug === prevChannel.slug && hasSwitchedView !== prevState.hasSwitchedView) {
-      this.updateHasSwitchedView(false);
+    if (channel.slug === prevChannel.slug && hasInitLoadDone !== prevState.hasInitLoadDone) {
+      this.updateHasInitLoadDone(true);
     }
   }
 
-  updateHasSwitchedView(hasSwitchedView) {
-    this.setState({ hasSwitchedView });
+  updateHasInitLoadDone(hasInitLoadDone) {
+    this.setState({ hasInitLoadDone });
   }
 
   updateSizeDimensions() {
@@ -66,7 +68,7 @@ class Channel extends React.Component {
       fetchHistoryRequest,
       createMessageRequest,
     } = this.props;
-    const { height, hasSwitchedView } = this.state;
+    const { height, hasInitLoadDone } = this.state;
 
     const placeholder = channel.hasDm ? `@${channel.title}` : `#${channel.title}`;
     const formPlaceholder = placeholder && `Message ${placeholder}`;
@@ -74,7 +76,7 @@ class Channel extends React.Component {
     return (
       <div className="Channel" ref={this.container}>
         <div className="Channel__body">
-          {!isLoading.channel && !hasSwitchedView && (
+          {!isLoading.channel && hasInitLoadDone && (
             <ChannelScrollBar
               channel={channel}
               messages={messages}

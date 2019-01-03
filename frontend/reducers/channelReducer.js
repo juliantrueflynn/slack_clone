@@ -31,10 +31,10 @@ const channelReducer = (state = {}, action) => {
     case CHANNEL.SHOW.RECEIVE: {
       const { channel, pins } = action.channel;
 
-      nextState = {};
-      nextState[channel.slug] = { pins: pins.map(pin => pin.id) };
+      nextState = merge({}, state);
+      nextState[channel.slug].pins = pins.map(pin => pin.id);
 
-      return merge({}, state, nextState);
+      return nextState;
     }
     case CHANNEL.CREATE.RECEIVE: {
       const { subs, channel, members } = action.channel;
