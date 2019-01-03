@@ -37,20 +37,17 @@ const channelReducer = (state = {}, action) => {
       return nextState;
     }
     case CHANNEL.CREATE.RECEIVE: {
-      const { subs, channel, members } = action.channel;
+      const { subs, channel } = action.channel;
 
       nextState = {};
       nextState[channel.slug] = {
         subs: subs.map(sub => sub.id),
-        members,
+        members: channel.ownerSlug ? [channel.ownerSlug] : [],
         messages: [],
         pins: [],
+        shouldFetch: true,
         ...channel,
       };
-
-      if (channel.ownerSlug) {
-        nextState[channel.slug].members.push(channel.ownerSlug);
-      }
 
       return merge({}, state, nextState);
     }
@@ -125,9 +122,6 @@ const channelReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case MESSAGE.INDEX.REQUEST:
-      nextState = { [action.channelSlug]: { shouldFetch: false } };
-      return merge({}, state, nextState);
     case CREATE_UNREAD:
       if (action.unread.readableType !== 'Channel') {
         return state;
@@ -141,11 +135,14 @@ const channelReducer = (state = {}, action) => {
       const { channel, messages } = action.messages;
 
       nextState = {};
-      nextState[channel.slug] = { ...channel, messages: [...state[channel.slug].messages] };
+      nextState[channel.slug] = {
+        ...channel,
+        messages: [...state[channel.slug].messages, ...messages],
+        shouldFetch: false,
+      };
+
       messages.filter(msg => !msg.parentMessageSlug).forEach((msg) => {
-        if (!state[channel.slug].messages.includes(msg.slug)) {
-          nextState[channel.slug].messages.push(msg.slug);
-        }
+        nextState[channel.slug].messages.push(msg.slug);
       });
 
       return merge({}, state, nextState);
