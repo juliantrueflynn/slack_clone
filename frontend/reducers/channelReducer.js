@@ -168,7 +168,9 @@ const channelReducer = (state = {}, action) => {
       const { channelSlug, slug } = action.message;
 
       nextState = {};
-      nextState[channelSlug] = { messages: state.messages.filter(msg => msg.slug === slug) };
+      nextState[channelSlug] = {
+        messages: state[channelSlug].messages.filter(msg => msg.slug !== slug)
+      };
 
       return merge({}, state, nextState);
     }
