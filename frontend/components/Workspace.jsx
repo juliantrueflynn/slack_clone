@@ -9,7 +9,9 @@ import './Workspace.css';
 
 class Workspace extends React.Component {
   componentDidMount() {
-    const { workspaces, fetchWorkspacesRequest } = this.props;
+    const { workspaces, fetchWorkspacesRequest, fetchWorkspaceRequest } = this.props;
+
+    fetchWorkspaceRequest();
 
     if (!workspaces || !workspaces.length) {
       fetchWorkspacesRequest();
@@ -22,20 +24,24 @@ class Workspace extends React.Component {
       history,
       workspaces,
       isLoading,
-      fetchWorkspacesRequest,
       chatPath,
       channel,
       workspace,
+      workspaceSlug,
+      fetchWorkspaceRequest,
+      fetchWorkspacesRequest,
     } = this.props;
 
-    const hasLoaded = !isLoading.workspace;
+    if (workspaceSlug !== prevProps.workspaceSlug) {
+      fetchWorkspaceRequest();
+    }
 
-    if (hasLoaded && prevProps.workspaces && prevProps.workspaces.length !== workspaces.length) {
+    if (!isLoading && prevProps.workspaces && prevProps.workspaces.length !== workspaces.length) {
       fetchWorkspacesRequest();
     }
 
     if (match.isExact && channel && channel.workspaceSlug === workspace.slug) {
-      history.replace(`/${workspace.slug}/messages/${chatPath}`);
+      history.replace(`/${workspaceSlug}/messages/${chatPath}`);
     }
   }
 
@@ -49,7 +55,7 @@ class Workspace extends React.Component {
       onReceived,
     } = this.props;
     const { quoteText, quoteBy } = sampleWisdomQuote;
-    const hasLoaded = !isLoading.workspace && channel;
+    const hasLoaded = !isLoading && channel;
 
     if (!hasLoaded) {
       return (

@@ -1,11 +1,10 @@
 import { connect } from 'react-redux';
-import withActionCable from './withActionCable';
-import withEntityWrapper from './withEntityWrapper';
-import { fetchWorkspaces } from '../actions/workspaceActions';
+import { fetchWorkspace, fetchWorkspaces } from '../actions/workspaceActions';
 import { getSubbedWorkspaces, getChannelsMap } from '../reducers/selectors';
+import withActionCable from './withActionCable';
 import Workspace from './Workspace';
 
-const mapStateToProps = (state, { workspaceSlug }) => {
+const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => {
   const channelsMap = getChannelsMap(state);
   const channels = Object.values(getChannelsMap(state));
 
@@ -21,18 +20,19 @@ const mapStateToProps = (state, { workspaceSlug }) => {
   ));
 
   return {
+    isLoading: state.isLoading.workspace,
     workspace: state.entities.workspaces[workspaceSlug],
     workspaces: getSubbedWorkspaces(state),
+    workspaceSlug,
     chatPath,
     channel,
     actionCablesChannels,
   };
 };
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug } } }) => ({
+  fetchWorkspaceRequest: () => dispatch(fetchWorkspace.request(workspaceSlug)),
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),
 });
 
-export default withActionCable(
-  withEntityWrapper('workspaceSlug')(connect(mapStateToProps, mapDispatchToProps)(Workspace))
-);
+export default withActionCable(connect(mapStateToProps, mapDispatchToProps)(Workspace));
