@@ -72,7 +72,7 @@ function* fetchUpdate({ channel }) {
   try {
     yield call(apiUpdate, `channels/${channel.slug}`, channel);
 
-    yield put(updateFormSuccess('channel', 'Channel successfully updated'));
+    yield put(updateFormSuccess('Channel successfully updated'));
   } catch (error) {
     yield put(action.updateChannel.failure(error));
   }
