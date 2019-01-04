@@ -19,7 +19,8 @@ json.reactions do
 end
 
 json.pins do
-  pins = Pin.where(message_id: parents).includes(:message, :user)
+  pins = @channel.pins.includes(:message, :user)
+
   json.array! pins, :id, :user_id, :message_id, :message_slug, :user_slug
 end
 

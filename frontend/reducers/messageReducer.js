@@ -96,7 +96,17 @@ const messageReducer = (state = {}, action) => {
 
       if (pins) {
         pins.forEach((pin) => {
-          nextState[pin.messageSlug].pinId = pin.id;
+          nextState[pin.messageSlug] = {
+            id: pin.messageId,
+            slug: pin.messageSlug,
+            pinId: pin.id,
+            reactionIds: [],
+            thread: [],
+            authors: [],
+            entityType: 'entry',
+            channelSlug,
+            ...nextState[pin.messageSlug],
+          };
         });
       }
 

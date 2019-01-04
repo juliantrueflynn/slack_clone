@@ -28,14 +28,6 @@ const channelReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case CHANNEL.SHOW.RECEIVE: {
-      const { channel, pins } = action.channel;
-
-      nextState = merge({}, state);
-      nextState[channel.slug].pins = pins.map(pin => pin.id);
-
-      return nextState;
-    }
     case CHANNEL.CREATE.RECEIVE: {
       const { channel, subs, members } = action.channel;
 
@@ -132,12 +124,13 @@ const channelReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     case HISTORY.INDEX.RECEIVE:
     case MESSAGE.INDEX.RECEIVE: {
-      const { channel, messages } = action.messages;
+      const { channel, messages, pins } = action.messages;
 
       nextState = {};
       nextState[channel.slug] = {
         ...channel,
-        messages: [...state[channel.slug].messages, ...messages],
+        messages: [...state[channel.slug].messages],
+        pins: pins && pins.map(pin => pin.id),
         shouldFetch: false,
       };
 

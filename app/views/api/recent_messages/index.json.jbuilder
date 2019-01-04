@@ -23,11 +23,6 @@ json.reactions do
   json.array! reactions, :id, :user_id, :emoji, :message_id, :message_slug
 end
 
-json.pins do
-  pins = Pin.where(message_id: parents).includes(:message, :user)
-  json.array! pins, :id, :user_id, :message_id, :message_slug, :user_slug
-end
-
 json.favorites do
   favorites = current_user.favorites.by_message_id(parents)
   json.array! favorites, :id, :message_id, :message_slug

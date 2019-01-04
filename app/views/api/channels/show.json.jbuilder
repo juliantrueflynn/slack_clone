@@ -4,16 +4,9 @@ end
 
 json.workspace_slug @channel.workspace.slug
 
-pins = @channel.pins.includes(:user, :message)
-
-json.pins do
-  json.array! pins do |pin|
-    json.(pin, :message_slug, :user_slug, *pin.attributes.keys)
-  end
-end
-
 json.messages do
-  messages = Message.where(id: pins.pluck(:message_id)).includes(:author)
+  pins_message_ids = @channel.pins.pluck(:message_id)
+  messages = Message.where(id: pins_message_ids).includes(:author)
 
   json.array! messages do |message|
     json.(message, *message.attributes.keys)
