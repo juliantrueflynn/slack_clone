@@ -10,49 +10,26 @@ class ChatPageSwitch extends React.Component {
   constructor(props) {
     super(props);
     this.state = { isInitLoadingDone: false };
-    this.getChatData = this.getChatData.bind(this);
   }
 
   componentDidMount() {
-    const { history, updateChatPath, chatPath } = this.props;
-
-    if (this.selectRedirectUrl()) {
-      history.replace(this.selectRedirectUrl());
-    }
-
-    updateChatPath(chatPath);
+    this.updateChatPath();
     this.getChatData();
+    this.updateHistoryDrawerPath();
   }
 
   componentDidUpdate(prevProps) {
     const {
       match: { isExact },
-      updateChatPath,
       drawerType,
-      history,
       closeDrawer,
       chatPath,
       channel,
       isLoading,
     } = this.props;
 
-    if (channel && drawerType && isExact && !prevProps.isExact) {
-      if (chatPath === prevProps.chatPath) {
-        closeDrawer();
-        return;
-      }
-    }
-
-    if (this.selectRedirectUrl()) {
-      history.replace(this.selectRedirectUrl());
-    }
-
-    if (!isLoading.channel && prevProps.isLoading) {
-      this.updateLoadingState();
-    }
-
     if (chatPath !== prevProps.chatPath) {
-      updateChatPath(chatPath);
+      this.updateChatPath();
 
       if (channel && channel.shouldFetch) {
         this.getChatData();
@@ -62,6 +39,19 @@ class ChatPageSwitch extends React.Component {
         this.getChatData();
       }
     }
+
+    if (channel && drawerType && isExact && !prevProps.isExact) {
+      if (chatPath === prevProps.chatPath) {
+        closeDrawer();
+        return;
+      }
+    }
+
+    this.updateHistoryDrawerPath();
+
+    if (!isLoading.channel && prevProps.isLoading) {
+      this.updateLoadingState();
+    }
   }
 
   getChatData() {
@@ -69,15 +59,7 @@ class ChatPageSwitch extends React.Component {
     fetchChatPageData();
   }
 
-  updateLoadingState() {
-    const { isInitLoadingDone } = this.state;
-
-    if (!isInitLoadingDone) {
-      this.setState({ isInitLoadingDone: true });
-    }
-  }
-
-  selectRedirectUrl() {
+  getDrawerRedirectPath() {
     const {
       match: { url, isExact },
       drawerType,
@@ -98,6 +80,27 @@ class ChatPageSwitch extends React.Component {
     }
 
     return null;
+  }
+
+  updateChatPath() {
+    const { updateChatPath, chatPath } = this.props;
+    updateChatPath(chatPath);
+  }
+
+  updateHistoryDrawerPath() {
+    const { history } = this.props;
+
+    if (this.getDrawerRedirectPath()) {
+      history.replace(this.getDrawerRedirectPath());
+    }
+  }
+
+  updateLoadingState() {
+    const { isInitLoadingDone } = this.state;
+
+    if (!isInitLoadingDone) {
+      this.setState({ isInitLoadingDone: true });
+    }
   }
 
   render() {
