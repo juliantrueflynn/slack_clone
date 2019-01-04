@@ -24,7 +24,7 @@ class ChannelBlurb extends React.Component {
   }
 
   render() {
-    const { channel, currentUserSlug } = this.props;
+    const { channel, currentUserSlug, blurbRef } = this.props;
     const {
       hasDm,
       dmUserSlug,
@@ -75,7 +75,7 @@ class ChannelBlurb extends React.Component {
     });
 
     return (
-      <section className={blurbClassNames}>
+      <section className={blurbClassNames} ref={blurbRef}>
         <h2 className="ChannelBlurb__title">{title}</h2>
         {description}
         {!topic && !hasDm && (

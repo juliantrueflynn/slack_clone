@@ -9,9 +9,11 @@ import './ChannelScrollBar.css';
 class ChannelScrollBar extends React.Component {
   constructor(props) {
     super(props);
-    this.scrollbar = React.createRef();
-    this.state = { scrollerHeight: 0 };
+    this.blurbRef = React.createRef();
+    this.state = { scrollerHeight: 0, hasHistory: false };
     this.handleFetchHistory = this.handleFetchHistory.bind(this);
+    this.updateScrollerHeight = this.updateScrollerHeight.bind(this);
+    this.updateScrollTo = this.updateScrollTo.bind(this);
     this.prevChannelSlug = null;
   }
 
@@ -23,6 +25,10 @@ class ChannelScrollBar extends React.Component {
       currentScrollTop,
     } = this.props;
 
+    this.prevChannelSlug = slug;
+
+    this.updateHasHistory();
+
     if (scrollLoc || scrollLoc === 0) {
       scrollTo(scrollLoc);
     } else {
@@ -32,25 +38,23 @@ class ChannelScrollBar extends React.Component {
     if (currentScrollTop <= 25) {
       this.handleFetchHistory();
     }
-
-    this.prevChannelSlug = slug;
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const {
-      isFetching,
-      containerRef,
-      scrollTo,
-      isAtTop,
-    } = this.props;
+    const { isFetching, containerRef, isAtTop } = this.props;
+    const { hasHistory } = this.state;
 
     if (isFetching && !prevProps.isFetching) {
       this.updateScrollerHeight(containerRef.current._container.scrollHeight);
     }
 
     if (!isFetching && prevProps.isFetching) {
-      const height = containerRef.current._container.scrollHeight - prevState.scrollerHeight;
-      scrollTo(height);
+      this.updateHasHistory();
+      this.updateScrollTo(prevState.scrollerHeight);
+    }
+
+    if (!hasHistory && prevState.hasHistory) {
+      this.updateScrollTo(prevState.scrollerHeight);
     }
 
     if (isAtTop && !prevProps.isAtTop) {
@@ -70,14 +74,31 @@ class ChannelScrollBar extends React.Component {
     this.setState({ scrollerHeight });
   }
 
+  updateHasHistory() {
+    const { messages, channel: { earliestMessageSlug } } = this.props;
+    const hasHistory = messages[0] && messages[0].slug !== earliestMessageSlug;
+
+    this.setState({ hasHistory });
+  }
+
+  updateScrollTo(prevScrollerHeight) {
+    const { containerRef, scrollTo } = this.props;
+    const { scrollHeight } = containerRef.current._container;
+
+    const scrollTop = scrollHeight - prevScrollerHeight;
+    const { height: blurbHeight } = this.blurbRef.current.getBoundingClientRect();
+
+    scrollTo(scrollTop + blurbHeight);
+  }
+
   handleFetchHistory() {
     const {
       channel: { slug },
       fetchHistoryRequest,
       isFetching,
-      hasHistory,
       messages,
     } = this.props;
+    const { hasHistory } = this.state;
 
     if (hasHistory && !isFetching) {
       const startDate = messages[0].createdAt;
@@ -96,13 +117,13 @@ class ChannelScrollBar extends React.Component {
       scrollAtTop,
       scrollAtBottom,
       matchUrl,
-      height,
-      hasHistory,
+      style,
     } = this.props;
+    const { hasHistory } = this.state;
 
     const classes = classNames('ChannelScrollBar', {
       'ChannelScrollBar--loading': isFetching,
-      'ChannelScrollBar--no-history': !isFetching && !hasHistory,
+      'ChannelScrollBar--no-history': !hasHistory,
     });
 
     return (
@@ -111,10 +132,11 @@ class ChannelScrollBar extends React.Component {
           containerRef={containerRef}
           scrollAtTop={scrollAtTop}
           scrollAtBottom={scrollAtBottom}
-          style={{ height }}
+          style={style}
         >
           <ChannelBlurb
             channel={channel}
+            blurbRef={this.blurbRef}
             currentUserSlug={currentUserSlug}
             openModal={openModal}
             matchUrl={matchUrl}
