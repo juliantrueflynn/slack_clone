@@ -14,7 +14,7 @@ import {
 } from './actionTypes';
 import { actionCreator } from '../util/actionsUtil';
 
-export const navigate = (path, push) => actionCreator(NAVIGATE, { path, push });
+export const navigate = (path, push = false) => actionCreator(NAVIGATE, { path, push });
 
 export const updateModal = (modalType, modalProps = null) => actionCreator(
   MODAL_UPDATE,
