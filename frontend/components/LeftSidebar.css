@@ -9,8 +9,18 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-.LeftSidebar a {
+.LeftSidebar .ScrollBar__container,
+.Modal__left-sidebar .ScrollBar__container {
+  padding-bottom: 20px;
+}
+
+.LeftSidebar__body a {
   color: inherit;
+}
+
+.LeftSidebar .ps__rail-y,
+.Modal__left-sidebar .ps__rail-y {
+  background-color: transparent;
 }
 
 .Modal__overlay--left-sidebar {

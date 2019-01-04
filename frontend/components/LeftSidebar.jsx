@@ -7,8 +7,9 @@ import LeftSidebarWidgets from './LeftSidebarWidgets';
 import SuffixButton from './SuffixButton';
 import ProfileDropdownTrigger from './ProfileDropdownTrigger';
 import Menu from './Menu';
-import Modal from './Modal';
 import DropdownModal from './DropdownModal';
+import ScrollBar from './ScrollBar';
+import Modal from './Modal';
 import './LeftSidebar.css';
 
 class LeftSidebar extends React.Component {
@@ -69,6 +70,7 @@ class LeftSidebar extends React.Component {
       profileUrl,
       openChannelsListModal,
       openChannelFormModal,
+      windowHeight,
       isMobileSize,
     } = this.props;
 
@@ -145,9 +147,15 @@ class LeftSidebar extends React.Component {
       }
     ];
 
+    const style = { height: windowHeight };
+
     return (
       <aside className="LeftSidebar">
-        <LeftSidebarWidgets menuGroups={sidebarMenuItems} />
+        <div className="LeftSidebar__body">
+          <ScrollBar style={style}>
+            <LeftSidebarWidgets menuGroups={sidebarMenuItems} />
+          </ScrollBar>
+        </div>
         {isModalOpen && isMobileSize && (
           <Modal
             isOpen
@@ -156,7 +164,9 @@ class LeftSidebar extends React.Component {
             close={closeModal}
             unStyled
           >
-            <LeftSidebarWidgets menuGroups={sidebarMenuItems} />
+            <ScrollBar style={style}>
+              <LeftSidebarWidgets menuGroups={sidebarMenuItems} />
+            </ScrollBar>
           </Modal>
         )}
         {isDdOpen && (
