@@ -64,6 +64,10 @@ class Channel < ApplicationRecord
     owner ? owner.slug : nil
   end
 
+  def earliest_message_slug
+    messages.empty? ? nil : messages.first.slug
+  end
+
   def entries_created_at_before(before_date)
     messages.by_entry_parent.created_at_before(before_date).order(id: :desc)
   end

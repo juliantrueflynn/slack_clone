@@ -60,17 +60,6 @@ const getMonthDayYear = (date) => {
   return `${monthName} ${day}, ${year}`;
 };
 
-export const isOnSameDay = (dateStr1, dateStr2) => {
-  if (!dateStr1 || !dateStr2) {
-    return false;
-  }
-
-  const d1 = new Date(dateStr1);
-  const d2 = new Date(dateStr2);
-
-  return d1.toDateString() === d2.toDateString();
-};
-
 export const dateUtil = (dateString) => {
   const date = new Date(dateString);
 

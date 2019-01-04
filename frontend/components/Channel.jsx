@@ -8,7 +8,7 @@ class Channel extends React.Component {
   constructor(props) {
     super(props);
     this.container = React.createRef();
-    this.state = { height: 0, hasInitLoadDone: false };
+    this.state = { height: 0, hasInitLoadDone: false, hasHistory: false };
     this.updateSizeDimensions = this.updateSizeDimensions.bind(this);
     this.updateHasInitLoadDone = this.updateHasInitLoadDone.bind(this);
   }
@@ -16,24 +16,33 @@ class Channel extends React.Component {
   componentDidMount() {
     this.updateSizeDimensions();
     this.updateHasInitLoadDone(true);
+    this.updateHasHistory();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { channel, windowWidth: winWidth, windowHeight: winHeight } = this.props;
+    const {
+      channel: { slug, isSub, messages },
+      windowWidth: winWidth,
+      windowHeight: winHeight,
+    } = this.props;
     const { hasInitLoadDone } = this.state;
-    const { channel: prevChannel } = prevProps;
+    const { channel: { messages: prevMsgs, isSub: prevIsSub, slug: prevSlug } } = prevProps;
     const hasResized = winHeight !== prevProps.windowHeight || winWidth !== prevProps.windowWidth;
 
-    if (channel.slug !== prevChannel.slug || channel.isSub !== prevChannel.isSub || hasResized) {
+    if (slug !== prevSlug || isSub !== prevIsSub || hasResized) {
       this.updateSizeDimensions();
     }
 
-    if (channel.slug !== prevChannel.slug) {
+    if (slug !== prevSlug) {
       this.updateHasInitLoadDone(false);
     }
 
-    if (channel.slug === prevChannel.slug && hasInitLoadDone !== prevState.hasInitLoadDone) {
+    if (slug === prevSlug && hasInitLoadDone !== prevState.hasInitLoadDone) {
       this.updateHasInitLoadDone(true);
+    }
+
+    if (hasInitLoadDone && messages.length !== prevMsgs.length) {
+      this.updateHasHistory();
     }
   }
 
@@ -54,6 +63,14 @@ class Channel extends React.Component {
     }
   }
 
+  updateHasHistory() {
+    const { messages, channel: { earliestMessageSlug } } = this.props;
+    const firstMsgSlug = messages[0] && messages[0].slug;
+    const hasHistory = firstMsgSlug && firstMsgSlug !== earliestMessageSlug;
+
+    this.setState({ hasHistory });
+  }
+
   render() {
     const {
       isLoading,
@@ -67,7 +84,7 @@ class Channel extends React.Component {
       fetchHistoryRequest,
       createMessageRequest,
     } = this.props;
-    const { height, hasInitLoadDone } = this.state;
+    const { hasInitLoadDone, ...state } = this.state;
 
     const placeholder = channel.hasDm ? `@${channel.title}` : `#${channel.title}`;
     const formPlaceholder = placeholder && `Message ${placeholder}`;
@@ -82,10 +99,10 @@ class Channel extends React.Component {
               openModal={openModal}
               currentUserSlug={currentUserSlug}
               isFetching={isLoading.history}
-              height={height}
               matchUrl={matchUrl}
               updateScrollLocation={updateScrollLocation}
               fetchHistoryRequest={fetchHistoryRequest}
+              {...state}
             />
           )}
         </div>

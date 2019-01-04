@@ -1,5 +1,5 @@
 json.channel do
-  json.(@channel, :slug, :topic, :created_at)
+  json.(@channel, :slug, :topic, :earliest_message_slug)
 end
 
 messages = @channel.older_messages(params[:until_date])

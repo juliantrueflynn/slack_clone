@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-import { isOnSameDay } from '../util/dateUtil';
 import ScrollBar from './ScrollBar';
 import ChannelBlurb from './ChannelBlurb';
 import MessagesListContainer from './MessagesListContainer';
@@ -73,24 +72,17 @@ class ChannelScrollBar extends React.Component {
 
   handleFetchHistory() {
     const {
-      channel,
+      channel: { slug },
       fetchHistoryRequest,
       isFetching,
+      hasHistory,
       messages,
     } = this.props;
-    const parents = messages.filter(msg => !msg.parentMessageId);
-    const startDate = parents[0] && parents[0].createdAt;
 
-    if (!isFetching && this.shouldFetchHistory() && startDate) {
-      fetchHistoryRequest(channel.slug, startDate);
+    if (hasHistory && !isFetching) {
+      const startDate = messages[0].createdAt;
+      fetchHistoryRequest(slug, startDate);
     }
-  }
-
-  shouldFetchHistory() {
-    const { messages, channel } = this.props;
-    const firstMsgDate = messages[0] && messages[0].createdAt;
-
-    return firstMsgDate && !isOnSameDay(firstMsgDate, channel.createdAt);
   }
 
   render() {
@@ -105,11 +97,12 @@ class ChannelScrollBar extends React.Component {
       scrollAtBottom,
       matchUrl,
       height,
+      hasHistory,
     } = this.props;
 
     const classes = classNames('ChannelScrollBar', {
       'ChannelScrollBar--loading': isFetching,
-      'ChannelScrollBar--no-history': !isFetching && !this.shouldFetchHistory(),
+      'ChannelScrollBar--no-history': !isFetching && !hasHistory,
     });
 
     return (
