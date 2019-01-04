@@ -9,6 +9,11 @@
   display: none;
 }
 
+.ModalSearch--empty .ModalSearchSidebar,
+.ModalSearch--fw-loading .ModalSearchSidebar {
+  display: none;
+}
+
 .ModalSearchSidebar__title {
   margin: 0 0 10px;
   color: #636E72;

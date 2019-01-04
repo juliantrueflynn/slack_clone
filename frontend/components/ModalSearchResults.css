@@ -4,6 +4,12 @@
   max-width: 75%;
 }
 
+.ModalSearch--empty .ModalSearchResults, 
+.ModalSearch--fw-loading .ModalSearchResults {
+  max-width: 100%;
+  flex: 0 0 100%;
+}
+
 .ModalSearchResults__txt--empty,
 .ModalSearch--new .ModalSearchResults__txt--count,
 .ModalSearch--loading .ModalSearchResults__txt,

@@ -135,6 +135,7 @@ class ModalSearch extends React.Component {
 
     const overlayClassName = classNames('ModalSearch', {
       'ModalSearch--empty': !results.length && searchQuery,
+      'ModalSearch--fw-loading': !results.length && isLoading,
       'ModalSearch--loading': isLoading,
       'ModalSearch--new': !searchQuery,
     });
