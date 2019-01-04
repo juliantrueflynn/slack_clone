@@ -90,7 +90,7 @@ class ChannelScrollBar extends React.Component {
     const { messages, channel } = this.props;
     const firstMsgDate = messages[0] && messages[0].createdAt;
 
-    return !isOnSameDay(firstMsgDate, channel.createdAt);
+    return firstMsgDate && !isOnSameDay(firstMsgDate, channel.createdAt);
   }
 
   render() {

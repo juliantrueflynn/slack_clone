@@ -15,7 +15,6 @@ class Channel extends React.Component {
 
   componentDidMount() {
     this.updateSizeDimensions();
-
     this.updateHasInitLoadDone(true);
   }
 

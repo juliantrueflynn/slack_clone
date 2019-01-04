@@ -12,6 +12,7 @@ import { apiFetch, apiCreate, apiUpdate } from '../util/apiUtil';
 import { navigate, updateFormSuccess, updateModal } from '../actions/uiActions';
 import { getCurrentUser } from '../reducers/selectors';
 import { createRead } from '../actions/readActions';
+import { fetchMessages } from '../actions/messageActions';
 
 function* fetchIndex({ workspaceSlug }) {
   try {
@@ -40,29 +41,31 @@ function* fetchCreateChannel({ channel }) {
   }
 }
 
-function* loadNavigateCreated({ channel: { channel, subs } }) {
-  const {
-    slug,
-    workspaceSlug,
-    ownerSlug,
-    hasDm,
-  } = channel;
+function* isCurrentUserNotOwner({ hasDm, ownerSlug }, channelSubs) {
   const currUser = yield select(getCurrentUser);
-  let isOwner = ownerSlug === currUser.slug;
+  let userSlug = ownerSlug;
 
   if (hasDm) {
-    const subsSorted = subs.sort((a, b) => a.id - b.id);
-    const { userSlug } = subsSorted[0] || {};
-    isOwner = userSlug === currUser.slug;
+    const subs = channelSubs.sort((a, b) => a.id - b.id);
+    userSlug = subs && subs.length && subs[0];
   }
 
-  if (isOwner) {
-    if (!hasDm) {
-      yield put(updateModal(null));
-    }
+  return userSlug && userSlug !== currUser.slug;
+}
 
-    yield put(navigate(`/${workspaceSlug}/messages/${slug}`));
+function* loadNavigateCreated({ channel: { channel, subs } }) {
+  const { slug, workspaceSlug, hasDm } = channel;
+
+  if (yield isCurrentUserNotOwner(channel, subs)) {
+    return;
   }
+
+  if (!hasDm) {
+    yield put(updateModal(null));
+  }
+
+  yield put(navigate(`/${workspaceSlug}/messages/${slug}`));
+  yield put(fetchMessages.request(slug));
 }
 
 function* fetchUpdate({ channel }) {
