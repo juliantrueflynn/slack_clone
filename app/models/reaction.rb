@@ -1,7 +1,6 @@
 class Reaction < ApplicationRecord
-  attr_accessor :skip_broadcast
-
-  validates :message_id, :user_id, :emoji, presence: true
+  validates_presence_of :message_id, :user_id, :emoji
+  validates_uniqueness_of :user_id, scope: [:message_id, :emoji]
 
   belongs_to :user
   belongs_to :message
