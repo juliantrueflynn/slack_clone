@@ -139,16 +139,17 @@ const messageReducer = (state = _defaultState, action) => {
 
       if (parentMessage) {
         nextState[parentMessage.slug] = {
-          ...state[parentMessage.slug],
+          reactionIds: [],
+          authors: [],
+          thread: [],
           ...parentMessage,
-          thread: [...state[parentMessage.slug].thread, slug]
+          ...state[parentMessage.slug],
         };
 
-        if (!state[parentMessage.slug].authors.includes(authorSlug)) {
-          nextState[parentMessage.slug].authors = [
-            ...state[parentMessage.slug].authors,
-            authorSlug
-          ];
+        nextState[parentMessage.slug].thread.push(slug);
+
+        if (!nextState[parentMessage.slug].authors.includes(authorSlug)) {
+          nextState[parentMessage.slug].authors.push(authorSlug);
         }
       }
 
