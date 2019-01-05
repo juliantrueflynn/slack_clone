@@ -29,11 +29,11 @@ const channelReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case CHANNEL.CREATE.RECEIVE: {
-      const { channel, subs, members } = action.channel;
+      const { channel, channelSubs, members } = action.channel;
 
       nextState = {};
       nextState[channel.slug] = {
-        subs: subs.map(sub => sub.id),
+        subs: channelSubs.map(sub => sub.id),
         members: channel.hasDm ? members : [channel.ownerSlug],
         messages: [],
         pins: [],

@@ -53,10 +53,10 @@ function* isCurrentUserNotOwner({ hasDm, ownerSlug }, channelSubs) {
   return userSlug && userSlug !== currUser.slug;
 }
 
-function* loadNavigateCreated({ channel: { channel, subs } }) {
+function* loadNavigateCreated({ channel: { channel, channelSubs } }) {
   const { slug, workspaceSlug, hasDm } = channel;
 
-  if (yield isCurrentUserNotOwner(channel, subs)) {
+  if (yield isCurrentUserNotOwner(channel, channelSubs)) {
     return;
   }
 

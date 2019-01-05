@@ -1,8 +1,6 @@
 class ChannelSub < ApplicationRecord
   attr_accessor :skip_broadcast
 
-  default_scope { joins(:user) }
-
   validates_presence_of :channel_id, scope: :user_id
 
   belongs_to :user

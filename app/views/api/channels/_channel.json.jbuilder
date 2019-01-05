@@ -3,10 +3,12 @@ json.channel do
   json.workspace_slug channel.workspace.slug
 end
 
-json.subs do
-  json.array! channel.subs do |chat_sub|
-    json.(chat_sub, :id, :channel_id, :in_sidebar, :user_id)
-    json.user_slug chat_sub.user.slug
+json.channel_subs do
+  channel_subs = channel.subs.includes(:user)
+
+  json.array! channel_subs do |channel_sub|
+    json.(channel_sub, :id, :channel_id, :in_sidebar, :user_id)
+    json.user_slug channel_sub.user.slug
     json.channel_slug channel.slug
   end
 end

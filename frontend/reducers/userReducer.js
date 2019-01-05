@@ -90,10 +90,10 @@ const userReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case CHANNEL.CREATE.RECEIVE: {
-      const { subs } = action.channel;
+      const { channelSubs } = action.channel;
 
       nextState = {};
-      subs.forEach((sub) => {
+      channelSubs.forEach((sub) => {
         nextState[sub.userSlug] = { subs: [sub.id] };
       });
 
