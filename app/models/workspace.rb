@@ -56,21 +56,26 @@ class Workspace < ApplicationRecord
     channel_subs.where(user_id: user_id).pluck(:channel_id)
   end
 
-  after_create :generate_workspace_subs, :generate_default_channels
-  after_create_commit :broadcast_create
+  after_create_commit :generate_defaults, :broadcast_create
 
   private
 
-  DEFAULT_CHANNELS = %w(general random)
+  def generate_defaults
+    generate_workspace_subs
+    generate_default_channels
+  end
+
+  DEFAULT_CHAT_TITLES = %w(general random)
+
+  def default_channels
+    DEFAULT_CHAT_TITLES.reduce([]) do |memo, ch_title|
+      memo << { title: ch_title, owner_id: owner_id, skip_broadcast: true }
+    end
+  end
 
   def generate_default_channels
     return if skip_broadcast
-
-    defaults_params = DEFAULT_CHANNELS.reduce([]) do |memo, ch_title|
-      memo << { title: ch_title, owner_id: owner_id, skip_broadcast: true }
-    end
-
-    channels.create(defaults_params)
+    channels.create(default_channels)
   end
 
   def generate_workspace_subs
