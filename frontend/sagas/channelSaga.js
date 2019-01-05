@@ -41,31 +41,29 @@ function* fetchCreateChannel({ channel }) {
   }
 }
 
-function* isCurrentUserNotOwner({ hasDm, ownerSlug }, channelSubs) {
+function* isCurrentUserOwner({ hasDm, ownerSlug }, channelSubs) {
   const currUser = yield select(getCurrentUser);
   let userSlug = ownerSlug;
 
   if (hasDm) {
     const subs = channelSubs.sort((a, b) => a.id - b.id);
-    userSlug = subs && subs.length && subs[0];
+    userSlug = subs && subs.length && subs[0].userSlug;
   }
 
-  return userSlug && userSlug !== currUser.slug;
+  return userSlug && userSlug === currUser.slug;
 }
 
 function* loadNavigateCreated({ channel: { channel, channelSubs } }) {
   const { slug, workspaceSlug, hasDm } = channel;
 
-  if (yield isCurrentUserNotOwner(channel, channelSubs)) {
-    return;
-  }
+  if (yield isCurrentUserOwner(channel, channelSubs)) {
+    if (!hasDm) {
+      yield put(updateModal(null));
+    }
 
-  if (!hasDm) {
-    yield put(updateModal(null));
+    yield put(navigate(`/${workspaceSlug}/messages/${slug}`));
+    yield put(fetchMessages.request(slug));
   }
-
-  yield put(navigate(`/${workspaceSlug}/messages/${slug}`));
-  yield put(fetchMessages.request(slug));
 }
 
 function* fetchUpdate({ channel }) {
