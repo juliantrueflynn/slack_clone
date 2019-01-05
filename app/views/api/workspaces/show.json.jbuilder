@@ -20,7 +20,9 @@ json.members do
 end
 
 json.user_appearances do
-  json.array! @workspace.user_appearances, :status, :user_slug
+  user_appearances = @workspace.user_appearances.includes(:user)
+
+  json.array! user_appearances, :status, :user_slug
 end
 
 json.channel_subs do

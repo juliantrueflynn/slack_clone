@@ -6,8 +6,6 @@ class UserAppearance < ApplicationRecord
   belongs_to :user
   belongs_to :workspace
 
-  default_scope { includes(:user) }
-
   def self.in_workspace(id)
     find_by(workspace_id: id)
   end
