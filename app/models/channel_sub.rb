@@ -6,7 +6,6 @@ class ChannelSub < ApplicationRecord
   belongs_to :user
   belongs_to :channel
   has_one :workspace, through: :channel
-  has_many :reads, through: :channel
 
   def self.find_by_slug(channel_slug)
     channel = Channel.find_by(slug: channel_slug)

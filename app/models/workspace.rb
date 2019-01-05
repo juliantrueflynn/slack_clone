@@ -43,7 +43,7 @@ class Workspace < ApplicationRecord
     channel_entries_ids = messages.channel_last_entry_id(user_id).values
     convos_entries_ids = messages.convos_last_entry_id(user_id).values
     entries_ids = (channel_entries_ids + convos_entries_ids)
-    Message.where(id: entries_ids)
+    Message.where(id: entries_ids).includes(:author, :channel, :parent_message)
   end
 
   def channels_ids_with_user_id(user_id)

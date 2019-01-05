@@ -50,9 +50,7 @@ json.messages do
     json.channel_slug message.channel.slug
   end
 
-  messages = @workspace.latest_entries(current_user.id)
-
-  json.array! messages.includes(:author, :channel, :parent_message) do |message|
+  json.array! @workspace.latest_entries(current_user.id) do |message|
     json.(message, *message.attributes.keys)
     json.author_slug message.author.slug
     json.channel_slug message.channel.slug
@@ -61,16 +59,14 @@ json.messages do
 end
 
 json.reads do
-  reads = current_user.reads.where(workspace_id: @workspace.id)
-  read_chats = reads.where(readable_type: 'Channel')
-  read_convos = reads.where(readable_type: 'Message')
+  reads = current_user.reads.by_workspace_id(@workspace.id)
 
-  json.array! read_chats.includes(:channel) do |read|
+  json.array! reads.channels.includes(:channel) do |read|
     json.(read, :id, :accessed_at, :readable_id, :readable_type)
     json.slug read.channel.slug
   end
 
-  json.array! read_convos.includes(:message) do |read|
+  json.array! reads.messages.includes(:message) do |read|
     json.(read, :id, :accessed_at, :readable_id, :readable_type)
     json.slug read.message.slug
   end

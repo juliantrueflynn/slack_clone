@@ -24,11 +24,9 @@ class Channel < ApplicationRecord
     source: :user
   has_many :messages
   has_many :pins, through: :messages
-  has_many :reads, foreign_key: :readable_id do
-    def find_or_initialize_by_user(user_id)
-      find_or_initialize_by(user_id: user_id, readable_type: 'Channel')
-    end
-  end
+  has_many :reads,
+    -> { where(readable_type: 'Channel') },
+    foreign_key: :readable_id
   
   scope :with_dm, -> { where(has_dm: true) }
   scope :without_dm, -> { where(has_dm: false) }

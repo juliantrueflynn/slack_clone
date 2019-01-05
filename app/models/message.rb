@@ -24,7 +24,6 @@ class Message < ApplicationRecord
     foreign_key: :parent_message_id
   has_many :children, class_name: 'Message', foreign_key: :parent_message_id
   has_many :favorites
-  has_many :reads, foreign_key: :readable_id
   has_many :pins
 
   scope :with_parent, -> { where(parent_message_id: nil) }

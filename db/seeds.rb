@@ -55,8 +55,8 @@ def seed_chats(user)
   )
 end
 
-def update_entity_reads(entity)
-  read = entity.reads.find_or_initialize_by_user(1)
+def update_channel_reads(channel)
+  read = channel.reads.find_or_initialize(user_id: 1)
   read.save!
 end
 
@@ -93,7 +93,7 @@ User.create!(email: "jtf@gmail.com", username: "jtf", password: "123456")
 
   User.first.created_channels.create(default_channels)
   
-  workspace.channels.first(2).each { |ch| update_entity_reads(ch) }
+  workspace.channels.first(2).each { |ch| update_channel_reads(ch) }
 
   3.times do
     chat = User.first.created_channels.create(
@@ -104,7 +104,7 @@ User.create!(email: "jtf@gmail.com", username: "jtf", password: "123456")
       updated_at: created_at
     )
 
-    update_entity_reads(chat)
+    update_channel_reads(chat)
   end
 end
 
@@ -195,12 +195,8 @@ Workspace.all.each do |workspace|
   all_convos = workspace.messages.convos_with_author_id(1)
   parents = all_convos.where(parent_message_id: nil)
 
-  reads = parents.reduce([]) do |memo, curr|
-    memo << {
-      readable_id: curr.id,
-      readable_type: 'Message',
-      workspace_id: workspace.id
-    }
+  reads = parents.reduce([]) do |memo, message|
+    memo << { readable_id: message.id, readable_type: 'Message' }
   end
 
   User.first.reads.create(reads)
