@@ -50,13 +50,14 @@ class Workspace < ApplicationRecord
     channel_subs.where(user_id: user_id).pluck(:channel_id)
   end
 
-  after_create_commit :generate_defaults, :broadcast_create
+  after_create_commit :create_defaults_broadcast
 
   private
 
-  def generate_defaults
+  def create_defaults_broadcast
     generate_workspace_subs
     generate_default_channels
+    broadcast_create
   end
 
   DEFAULT_CHAT_TITLES = %w(general random)

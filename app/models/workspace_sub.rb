@@ -14,44 +14,42 @@
     workspace ? workspace.slug : nil
   end
 
-  after_create_commit :broadcast_create_sub
-  after_update_commit :broadcast_update, :generate_channel_sub_messages
+  after_create_commit :generate_default_channel_subs, :broadcast_create
+  after_update_commit :broadcast_update, :generate_channel_sub_message
 
   private
 
-  def sub_user_to_default_chats
-    return if (workspace.owner_id === user.id)
+  def generate_default_channel_subs
+    return if workspace.channels.empty?
+    return if workspace.owner_id === user.id
+    user.channel_subs.create(default_channel_subs)
+  end
 
-    default_chats = workspace.channels.first(2)
-    default_chats.each do |chat|
-      next if chat.is_user_sub?(user.id)
-      user.channel_subs.create(channel_id: chat.id, skip_broadcast: true)
+  def generate_channel_sub_message
+    Message.create(channel_sub_messages)
+  end
+
+  def default_channel_subs
+    default_channels = workspace.channels.first(2)
+
+    default_channels.reduce([]) do |memo, channel|
+      memo << { channel_id: channel.id, skip_broadcast: true }
     end
   end
 
-  def default_sub_message_params
-    date = DateTime.current
-    { author_id: user_id, created_at: date, updated_at: date }
-  end
-
-  def create_sub_messages(entity_type)
+  def channel_sub_messages
     channels = user.channels.without_dm.by_workspace_id(workspace.id)
 
     channels.reduce([]) do |memo, channel|
-      channel_hash = { channel_id: channel.id, entity_type: entity_type }
-      memo << channel_hash.merge(default_sub_message_params)
+      memo << {
+        channel_id: channel.id,
+        entity_type: message_entity_type,
+        author_id: user_id
+      }
     end
   end
 
-  def generate_channel_sub_messages
-    entity_type = is_member ? 'sub_create' : 'sub_destroy'
-    sub_entries = create_sub_messages(entity_type)
-    Message.create(sub_entries)
-  end
-
-  def broadcast_create_sub
-    return if workspace.channels.empty?
-    sub_user_to_default_chats
-    broadcast_create
+  def message_entity_type
+    self.is_member? ? 'sub_create' : 'sub_destroy'
   end
 end
