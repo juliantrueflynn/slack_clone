@@ -103,7 +103,9 @@ function* loadCreateMessageRead({ message }) {
   }
 }
 
-function* loadDestroyConvoRead({ message: { id: readableId, parentMessageSlug, slug } }) {
+function* loadDestroyConvoRead({ message: { message } }) {
+  const { id: readableId, parentMessageSlug, slug } = message;
+
   if (parentMessageSlug) {
     return;
   }

@@ -160,7 +160,7 @@ const messageReducer = (state = _defaultState, action) => {
       nextState[action.message.slug] = { body: action.message.body };
       return merge({}, state, nextState);
     case MESSAGE.DESTROY.RECEIVE: {
-      const { slug, parentMessageSlug: parentSlug } = action.message;
+      const { slug, parentMessageSlug: parentSlug } = action.message.message;
       nextState = merge({}, state);
 
       if (parentSlug && state[parentSlug]) {

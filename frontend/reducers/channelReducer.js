@@ -154,14 +154,14 @@ const channelReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case MESSAGE.DESTROY.RECEIVE: {
-      const { channelSlug, slug } = action.message;
+      const { channelSlug, slug } = action.message.message;
 
-      nextState = {};
-      nextState[channelSlug] = {
-        messages: state[channelSlug].messages.filter(msg => msg.slug !== slug)
-      };
+      nextState = merge({}, state);
+      nextState[channelSlug].messages = state[channelSlug].messages.filter(msg => (
+        msg.slug !== slug
+      ));
 
-      return merge({}, state, nextState);
+      return nextState;
     }
     case SCROLL_LOCATION_UPDATE: {
       const { channelSlug, scrollLoc } = action;
