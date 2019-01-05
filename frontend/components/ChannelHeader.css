@@ -8,6 +8,10 @@
   width: 100%;
 }
 
+.ChannelHeader__info {
+  overflow: hidden;
+}
+
 .ChannelHeader__title {
   font-size: 19px;
   margin: 1px 0 3px;
@@ -64,6 +68,7 @@
   border-radius: 4px;
   padding: 1px 4px;
   margin-left: -4px;
+  white-space: nowrap;
 }
 
 .Menu__header-meta .MenuItem__topic .MenuItem__content:hover {
@@ -96,7 +101,8 @@
   }
 
   .ChannelHeader .SearchBar {
-    max-width: 165px;
+    max-width: 170px;
+    min-width: 160px;
   }
 }
 
