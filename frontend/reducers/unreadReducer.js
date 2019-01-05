@@ -6,8 +6,8 @@ import {
   READ,
   CLEAR_UNREADS,
   MESSAGE,
-  SIGN_OUT,
   WORKSPACE_SUB,
+  SIGN_OUT,
 } from '../actions/actionTypes';
 
 const _defaultState = {};
@@ -97,10 +97,7 @@ const unreadReducer = (state = _defaultState, action) => {
       const { unread } = action;
 
       nextState = {};
-      nextState[unread.slug] = {
-        ...unread,
-        hasUnreads: isDateOlderThanOther(unread.lastRead, unread.lastActive),
-      };
+      nextState[unread.slug] = unread;
 
       return merge({}, state, nextState);
     }

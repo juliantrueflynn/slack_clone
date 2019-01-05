@@ -9,14 +9,15 @@ import {
 import { READ, MESSAGE } from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiDestroy } from '../util/apiUtil';
 import * as actions from '../actions/readActions';
+import { getChannelsMap } from '../reducers/selectors';
 import {
-  selectUIByDisplay,
-  selectEntityBySlug,
-  getChannelsMap,
-  getCurrentUser,
-} from '../reducers/selectors';
+  getReadProps,
+  getUnread,
+  isCurrentUserInView,
+  isCurrentUserNotInConvo,
+} from '../util/readUtil';
 
-function* fetchCreate({ slug, ...read }) {
+function* fetchCreate({ read: { slug, ...read } }) {
   try {
     const created = yield call(apiCreate, 'read', read);
     yield put(actions.createRead.receive(created));
@@ -44,21 +45,17 @@ function* fetchDestroy({ read: { readableId, readableType, slug } }) {
   }
 }
 
-function* createOrUpdateRead(read, unread) {
-  const actionType = unread && unread.lastRead ? 'update' : 'create';
+function* createOrUpdateRead(readProps) {
+  const actionType = readProps.lastRead ? 'update' : 'create';
 
-  try {
-    yield put(actions[`${actionType}Read`].request(read));
-  } catch (error) {
-    yield put(actions[`${actionType}Read`].failure(error));
-  }
+  yield put(actions[`${actionType}Read`].request(readProps));
 }
 
-function* readViewedEntity(read, slug) {
-  const unread = yield select(selectEntityBySlug, 'unreads', slug);
+function* readViewedEntity(readProps) {
+  const unread = yield getUnread(readProps);
 
-  if (unread && unread.hasUnreads) {
-    yield createOrUpdateRead(read, unread);
+  if (unread.hasUnreads) {
+    yield createOrUpdateRead(unread);
   }
 }
 
@@ -68,64 +65,26 @@ function* fetchMessageThread({ messages: { messages } }) {
   }
 
   const [message] = messages;
-  const convoId = message.parentMessageId || message.id;
-  const convoSlug = message.parentMessageSlug || message.slug;
-  const read = { readableType: 'Message', readableId: convoId };
-  yield readViewedEntity(read, convoSlug);
+  const readableId = message.parentMessageId || message.id;
+  const slug = message.parentMessageSlug || message.slug;
+
+  yield readViewedEntity({ readableType: 'Message', readableId, slug });
 }
 
 function* fetchChannelPage({ messages: { channel } }) {
   const channelsMap = yield select(getChannelsMap);
-  const ch = channelsMap[channel.slug];
+  const { slug, id: readableId, isSub } = channelsMap[channel.slug] || {};
 
-  if (ch.isSub) {
-    const read = { readableType: 'Channel', readableId: ch.id };
-    yield readViewedEntity(read, channel.slug);
+  if (isSub) {
+    yield readViewedEntity({ readableType: 'Channel', readableId, slug });
   }
-}
-
-function* isCurrentUserInConvo({ message, parentMessage }) {
-  const currUser = yield select(getCurrentUser);
-
-  if (currUser.slug === message.authorSlug || parentMessage.authorSlug === currUser.slug) {
-    return true;
-  }
-
-  return !!(yield select(selectEntityBySlug, 'unreads', parentMessage.slug));
-}
-
-function* isCurrentUserInView({ slug, readableType }) {
-  const chatPath = yield select(selectUIByDisplay, 'displayChatPath');
-
-  if (readableType === 'Channel') {
-    return chatPath === slug;
-  }
-
-  if (chatPath === 'threads') {
-    return true;
-  }
-
-  const drawer = yield select(selectUIByDisplay, 'drawer');
-
-  return drawer.drawerType === 'convo' && drawer.drawerSlug === slug;
-}
-
-const getReadProps = msg => ({
-  slug: msg.parentMessageSlug || msg.channelSlug,
-  readableType: msg.parentMessageSlug ? 'Message' : 'Channel',
-  readableId: msg.parentMessageId || msg.channelId,
-});
-
-function* getUnread(props) {
-  const unread = yield select(selectEntityBySlug, 'unreads', props.slug);
-
-  return { lastRead: unread && unread.lastRead, ...props };
 }
 
 function* loadCreateMessageRead({ message }) {
   const { message: msg } = message;
+  const isNotInConvo = yield isCurrentUserNotInConvo(message);
 
-  if (msg.entityType !== 'entry') {
+  if (msg.entityType !== 'entry' || (msg.parentMessageSlug && isNotInConvo)) {
     return;
   }
 
@@ -133,33 +92,19 @@ function* loadCreateMessageRead({ message }) {
   const unread = yield getUnread({ messageSlug: msg.slug, lastActive: msg.createdAt, ...read });
   const isUserInView = yield isCurrentUserInView(read);
 
-  if (read.readableType === 'Channel') {
-    if (isUserInView) {
-      yield createOrUpdateRead(read, unread);
-    } else {
-      yield put(actions.createUnread(unread));
-    }
-  }
-
-  if (yield isCurrentUserInConvo(message) && read.readableType === 'Message') {
-    if (isUserInView) {
-      yield createOrUpdateRead(read, unread);
-    } else {
-      yield put(actions.createUnread(unread));
-    }
+  if (isUserInView) {
+    yield createOrUpdateRead({ ...unread, ...read });
+  } else {
+    yield put(actions.createUnread({ ...unread, hasUnreads: true }));
   }
 }
 
 function* loadDestroyConvoRead({ message: { id: readableId, parentMessageSlug, slug } }) {
-  try {
-    if (parentMessageSlug) {
-      return;
-    }
-
-    yield put(actions.destroyRead.request({ readableType: 'Message', readableId, slug }));
-  } catch (error) {
-    yield put(actions.destroyRead.failure(error));
+  if (parentMessageSlug) {
+    return;
   }
+
+  yield put(actions.destroyRead.request({ readableType: 'Message', readableId, slug }));
 }
 
 function* watchCreated() {
