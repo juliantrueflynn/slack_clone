@@ -46,7 +46,7 @@ const unreadsByChannelReducer = (state = {}, action) => {
     }
     case CLEAR_UNREADS:
       nextState = merge({}, state, nextState);
-      nextState[action.channelSlug] = [];
+      nextState[action.chatPath] = [];
       return nextState;
     case WORKSPACE_SUB.CREATE.REQUEST:
     case WORKSPACE.SHOW.REQUEST:

@@ -4,7 +4,6 @@ import {
   CREATE_UNREAD,
   WORKSPACE,
   READ,
-  USER_THREAD,
   CLEAR_UNREADS,
   MESSAGE,
   SIGN_OUT,
@@ -71,17 +70,6 @@ const unreadReducer = (state = _defaultState, action) => {
 
       return merge({}, state, nextState);
     }
-    case USER_THREAD.INDEX.RECEIVE: {
-      const { messages } = action.messages;
-
-      nextState = {};
-      messages.filter(msg => state[msg.slug] && state[msg.slug].readableType === 'Message')
-        .forEach((msg) => {
-          nextState[msg.slug] = { hasUnreads: false };
-        });
-
-      return merge({}, state, nextState);
-    }
     case READ.CREATE.RECEIVE:
     case READ.UPDATE.RECEIVE: {
       const { read } = action;
@@ -118,7 +106,7 @@ const unreadReducer = (state = _defaultState, action) => {
     }
     case CLEAR_UNREADS:
       nextState = {};
-      nextState[action.channelSlug] = { hasUnreads: false, lastActive: action.lastRead };
+      nextState[action.chatPath] = { hasUnreads: false, lastActive: action.lastRead };
       return merge({}, state, nextState);
     case WORKSPACE_SUB.CREATE.REQUEST:
     case WORKSPACE.SHOW.REQUEST:
