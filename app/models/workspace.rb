@@ -12,19 +12,13 @@ class Workspace < ApplicationRecord
     message: "Taken, sorry!"
 
   belongs_to :owner, class_name: 'User'
-  has_many :subs, class_name: 'WorkspaceSub'
-  has_many :users, through: :subs
+  has_many :workspace_subs
+  has_many :users, through: :workspace_subs
   has_many :user_appearances
   has_many :channels
-  has_many :favorites
   has_many :channel_subs,
     through: :channels,
     source: :subs
-  has_many :chat_subs,
-    -> { select('channel_subs.*, channels.slug AS channel_slug, users.slug AS user_slug') },
-    through: :channels,
-    source: :subs
-  has_many :reads
   has_many :messages, through: :channels
 
   def broadcast_name
@@ -32,7 +26,7 @@ class Workspace < ApplicationRecord
   end
 
   def is_user_sub?(user_id)
-    !!subs.find_by(workspace_subs: { user_id: user_id })
+    !!workspace_subs.find_by(workspace_subs: { user_id: user_id })
   end
 
   def user_convos(user_id)
@@ -79,6 +73,6 @@ class Workspace < ApplicationRecord
   end
 
   def generate_workspace_subs
-    subs.create(user_id: owner.id, skip_broadcast: true)
+    workspace_subs.create(user_id: owner.id, skip_broadcast: true)
   end
 end

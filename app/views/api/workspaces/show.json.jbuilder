@@ -1,12 +1,13 @@
-user_id = current_user.id
-
 json.workspace do
   json.(@workspace, :id, :title, :slug)
 end
 
 json.channels do
-  channels = @workspace.channels.without_user_and_dm(user_id).includes(:owner)
-  json.array! channels, :id, :slug, :title, :has_dm, :owner_slug, :created_at
+  channels = @workspace.channels.without_user_and_dm(current_user.id)
+
+  json.array! channels.includes(:owner) do |channel|
+    json.(channel, :id, :slug, :title, :has_dm, :owner_slug, :created_at)
+  end
 end
 
 json.members do
@@ -23,17 +24,17 @@ json.user_appearances do
 end
 
 json.channel_subs do
-  channel_subs = @workspace.chat_subs.shared_with_user_id(user_id)
+  channel_subs = @workspace.channel_subs.shared_with_user_id(current_user.id)
 
-  json.array! channel_subs.includes(:channel) do |chat_sub|
-    json.(chat_sub, :id, :user_id, :in_sidebar, :channel_id, :created_at)
-    json.user_slug chat_sub.user_slug
-    json.channel_slug chat_sub.channel.slug
+  json.array! channel_subs.includes(:channel, :user) do |channel_sub|
+    json.(channel_sub, :id, :user_id, :in_sidebar, :channel_id, :created_at)
+    json.user_slug channel_sub.user.slug
+    json.channel_slug channel_sub.channel.slug
   end
 end
 
 json.workspace_subs do
-  json.array! @workspace.subs.includes(:user) do |workspace_sub|
+  json.array! @workspace.workspace_subs.includes(:user) do |workspace_sub|
     json.(workspace_sub, *workspace_sub.attributes.keys)
     json.user_slug workspace_sub.user.slug
     json.workspace_slug @workspace.slug
@@ -41,13 +42,14 @@ json.workspace_subs do
 end
 
 json.messages do
-  json.array! @workspace.user_convos(user_id).with_parent do |message|
+  json.array! @workspace.user_convos(current_user.id).with_parent do |message|
     json.(message, *message.attributes.keys)
     json.author_slug message.author.slug
     json.channel_slug message.channel.slug
   end
 
-  messages = @workspace.latest_entries(user_id)
+  messages = @workspace.latest_entries(current_user.id)
+
   json.array! messages.includes(:author, :channel, :parent_message) do |message|
     json.(message, *message.attributes.keys)
     json.author_slug message.author.slug

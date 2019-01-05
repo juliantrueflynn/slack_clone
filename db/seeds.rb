@@ -33,7 +33,7 @@ def seed_sub_and_members(user)
   return nil unless chat
 
   unless workspace.is_user_sub?(user.id)
-    workspace.subs.create(user_id: user.id)
+    workspace.workspace_subs.create(user_id: user.id)
   end
 
   unless chat.is_user_sub?(user.id)

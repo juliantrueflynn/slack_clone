@@ -4,7 +4,7 @@ json.avatar_thumb @user.avatar.thumb.url
 json.avatar_large @user.avatar.large.url
 
 workspace = Workspace.find_by(slug: params[:workspace_slug])
-workspace_sub = workspace.subs.find_by(user_id: @user.id)
+workspace_sub = workspace.workspace_subs.find_by(user_id: @user.id)
 
 json.joined_at workspace_sub.created_at
 
