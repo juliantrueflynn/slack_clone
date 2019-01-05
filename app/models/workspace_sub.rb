@@ -5,7 +5,6 @@
 
   belongs_to :user
   belongs_to :workspace
-  has_many :favorites, through: :user
 
   def broadcast_name
     "workspace_#{workspace.slug}"
