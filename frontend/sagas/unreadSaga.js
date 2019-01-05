@@ -33,6 +33,10 @@ function* fetchUserThreadIndexPage() {
 
     return call(apiCall, 'read', read);
   }));
+
+  if (msgs.length) {
+    yield put(clearUnreads('threads'));
+  }
 }
 
 function* fetchClearUnreads({ chatPath }) {

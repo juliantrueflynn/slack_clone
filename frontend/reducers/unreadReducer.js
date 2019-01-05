@@ -104,10 +104,24 @@ const unreadReducer = (state = _defaultState, action) => {
 
       return merge({}, state, nextState);
     }
-    case CLEAR_UNREADS:
+    case CLEAR_UNREADS: {
+      const { chatPath, lastRead } = action;
+
       nextState = {};
-      nextState[action.chatPath] = { hasUnreads: false, lastActive: action.lastRead };
+
+      if (chatPath === 'threads') {
+        nextState = Object.values(state).filter(unread => (
+          unread.readableType === 'Message' && unread.hasUnreads
+        )).reduce((acc, curr) => ({
+          ...acc,
+          [curr.slug]: { hasUnreads: false, lastRead: curr.lastActive }
+        }), {});
+      } else {
+        nextState[chatPath] = { hasUnreads: false, lastActive: lastRead };
+      }
+
       return merge({}, state, nextState);
+    }
     case WORKSPACE_SUB.CREATE.REQUEST:
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
