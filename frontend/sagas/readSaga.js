@@ -84,59 +84,69 @@ function* fetchChannelPage({ messages: { channel } }) {
   }
 }
 
-function* isCurrentUserNotInConvo({ message, parentMessage }) {
+function* isCurrentUserInConvo({ message, parentMessage }) {
   const currUser = yield select(getCurrentUser);
 
   if (currUser.slug === message.authorSlug || parentMessage.authorSlug === currUser.slug) {
-    return false;
+    return true;
   }
 
-  const read = yield select(selectEntityBySlug, 'unreads', parentMessage.slug);
-
-  return !read;
+  return !!(yield select(selectEntityBySlug, 'unreads', parentMessage.slug));
 }
 
-function* isCurrentUserInView(slug, readableType) {
+function* isCurrentUserInView({ slug, readableType }) {
   const chatPath = yield select(selectUIByDisplay, 'displayChatPath');
 
   if (readableType === 'Channel') {
     return chatPath === slug;
   }
 
-  if (readableType === 'Message') {
-    if (chatPath === 'threads') {
-      return true;
-    }
-
-    const drawer = yield select(selectUIByDisplay, 'drawer');
-
-    return drawer.drawerType === 'convo' && drawer.drawerSlug === slug;
+  if (chatPath === 'threads') {
+    return true;
   }
 
-  return false;
+  const drawer = yield select(selectUIByDisplay, 'drawer');
+
+  return drawer.drawerType === 'convo' && drawer.drawerSlug === slug;
 }
 
-function* loadMessageRead({ message }) {
-  const { message: msg } = message;
-  const isNotInConvo = yield isCurrentUserNotInConvo(message) && msg.parentMessageSlug;
+const getReadProps = msg => ({
+  slug: msg.parentMessageSlug || msg.channelSlug,
+  readableType: msg.parentMessageSlug ? 'Message' : 'Channel',
+  readableId: msg.parentMessageId || msg.channelId,
+});
 
-  if (isNotInConvo || msg.entityType !== 'entry') {
+function* getUnread(props) {
+  const unread = yield select(selectEntityBySlug, 'unreads', props.slug);
+
+  return { lastRead: unread && unread.lastRead, ...props };
+}
+
+function* loadCreateMessageRead({ message }) {
+  const { message: msg } = message;
+
+  if (msg.entityType !== 'entry') {
     return;
   }
 
-  const slug = msg.parentMessageSlug || msg.channelSlug;
-  const unread = yield select(selectEntityBySlug, 'unreads', slug);
-  const read = {
-    readableType: msg.parentMessageSlug ? 'Message' : 'Channel',
-    readableId: msg.parentMessageId || msg.channelId
-  };
+  const read = getReadProps(msg);
+  const unread = yield getUnread({ messageSlug: msg.slug, lastActive: msg.createdAt, ...read });
+  const isUserInView = yield isCurrentUserInView(read);
 
-  if (yield isCurrentUserInView(slug, read.readableType)) {
-    yield createOrUpdateRead(read, unread);
-  } else {
-    const lastRead = unread && unread.lastRead;
-    const unreadProps = { slug, lastRead, lastActive: msg.createdAt };
-    yield put(actions.createUnread({ messageSlug: msg.slug, ...read, ...unreadProps }));
+  if (read.readableType === 'Channel') {
+    if (isUserInView) {
+      yield createOrUpdateRead(read, unread);
+    } else {
+      yield put(actions.createUnread(unread));
+    }
+  }
+
+  if (yield isCurrentUserInConvo(message) && read.readableType === 'Message') {
+    if (isUserInView) {
+      yield createOrUpdateRead(read, unread);
+    } else {
+      yield put(actions.createUnread(unread));
+    }
   }
 }
 
@@ -173,7 +183,7 @@ function* watchChannelPage() {
 }
 
 function* watchMessageCreate() {
-  yield takeLatest(MESSAGE.CREATE.RECEIVE, loadMessageRead);
+  yield takeLatest(MESSAGE.CREATE.RECEIVE, loadCreateMessageRead);
 }
 
 function* watchMessageDestroy() {
