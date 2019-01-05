@@ -14,12 +14,12 @@ class Pin < ApplicationRecord
     message.slug
   end
 
-  def channel_slug
-    channel.slug
-  end
-
   def user_slug
     user.slug
+  end
+
+  def channel_slug
+    channel ? channel.slug : nil
   end
 
   private

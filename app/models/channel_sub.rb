@@ -8,8 +8,7 @@ class ChannelSub < ApplicationRecord
   has_one :workspace, through: :channel
 
   def self.find_by_slug(channel_slug)
-    channel = Channel.find_by(slug: channel_slug)
-    find_by(channel_id: channel.id)
+    Channel.find_by_slug(channel_slug)
   end
 
   def self.by_workspace_id(workspace_id)
@@ -24,16 +23,8 @@ class ChannelSub < ApplicationRecord
     "channel_#{channel.slug}"
   end
 
-  def channel_slug
-    channel ? channel.slug : nil
-  end
-
-  def workspace_slug
-    workspace ? workspace.slug : nil
-  end
-
-  after_create_commit :broadcast_create_sub, :generate_create_message
-  after_destroy :generate_destroy_message, :broadcast_destroy
+  after_create_commit :broadcast_create_sub, :generate_sub_message_create
+  after_destroy :generate_sub_message_destroy, :broadcast_destroy
 
   private
 
@@ -41,13 +32,16 @@ class ChannelSub < ApplicationRecord
     broadcast_create if workspace.channels.length > 2
   end
 
-  def generate_create_message
+  def generate_sub_message(entity_type)
     return if channel.has_dm?
-    channel.messages.create(author_id: user_id, entity_type: 'sub_create')
+    channel.messages.create(author_id: user_id, entity_type: entity_type)
   end
 
-  def generate_destroy_message
-    return if channel.has_dm?
-    channel.messages.create(author_id: user_id, entity_type: 'sub_destroy')
+  def generate_sub_message_create
+    generate_sub_message('sub_create')
+  end
+
+  def generate_sub_message_destroy
+    generate_sub_message('sub_destroy')
   end
 end
