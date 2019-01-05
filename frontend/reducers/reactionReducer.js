@@ -9,6 +9,7 @@ import {
   FAVORITE,
   WORKSPACE,
   SIGN_OUT,
+  WORKSPACE_SUB,
 } from '../actions/actionTypes';
 
 const reactionReducer = (state = {}, action) => {
@@ -44,6 +45,7 @@ const reactionReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
+    case WORKSPACE_SUB.CREATE.REQUEST:
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return {};

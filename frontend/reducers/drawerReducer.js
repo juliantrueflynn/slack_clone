@@ -1,4 +1,9 @@
-import { DRAWER_UPDATE, WORKSPACE, SIGN_OUT } from '../actions/actionTypes';
+import {
+  DRAWER_UPDATE,
+  WORKSPACE_SUB,
+  WORKSPACE,
+  SIGN_OUT,
+} from '../actions/actionTypes';
 
 const _defaultState = {
   drawerType: null,
@@ -18,6 +23,7 @@ const rightSidebarReducer = (state = _defaultState, action) => {
 
       return { drawerType, drawerSlug };
     }
+    case WORKSPACE_SUB.CREATE.REQUEST:
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return _defaultState;

@@ -1,4 +1,9 @@
-import { ACCORDION_OPEN, SIGN_OUT } from '../actions/actionTypes';
+import {
+  ACCORDION_OPEN,
+  WORKSPACE_SUB,
+  WORKSPACE,
+  SIGN_OUT,
+} from '../actions/actionTypes';
 
 const _defaultState = { details: {} };
 
@@ -14,6 +19,8 @@ const accordionReducer = (state = _defaultState, action) => {
       nextState[accordionType][accordionItem] = true;
       return nextState;
     }
+    case WORKSPACE_SUB.CREATE.REQUEST:
+    case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return _defaultState;
     default:

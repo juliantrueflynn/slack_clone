@@ -106,6 +106,7 @@ const userReducer = (state = {}, action) => {
       nextState[userSlug] = { status };
       return merge({}, state, nextState);
     }
+    case WORKSPACE_SUB.CREATE.REQUEST:
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return {};

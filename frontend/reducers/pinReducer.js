@@ -1,7 +1,15 @@
 import merge from 'lodash.merge';
-import { MESSAGE, PIN } from '../actions/actionTypes';
+import {
+  MESSAGE,
+  PIN,
+  WORKSPACE_SUB,
+  WORKSPACE,
+  SIGN_OUT,
+} from '../actions/actionTypes';
 
-const pinReducer = (state = {}, action) => {
+const _defaultState = {};
+
+const pinReducer = (state = _defaultState, action) => {
   Object.freeze(state);
 
   let nextState;
@@ -32,6 +40,10 @@ const pinReducer = (state = {}, action) => {
 
       return nextState;
     }
+    case WORKSPACE_SUB.CREATE.REQUEST:
+    case WORKSPACE.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
+      return _defaultState;
     default:
       return state;
   }

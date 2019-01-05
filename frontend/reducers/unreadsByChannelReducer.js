@@ -4,6 +4,7 @@ import {
   WORKSPACE,
   CREATE_UNREAD,
   CLEAR_UNREADS,
+  WORKSPACE_SUB,
   SIGN_OUT,
 } from '../actions/actionTypes';
 
@@ -47,6 +48,7 @@ const unreadsByChannelReducer = (state = {}, action) => {
       nextState = merge({}, state, nextState);
       nextState[action.channelSlug] = [];
       return nextState;
+    case WORKSPACE_SUB.CREATE.REQUEST:
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return {};

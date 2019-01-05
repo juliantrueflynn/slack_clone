@@ -1,10 +1,11 @@
 import {
   MODAL_UPDATE,
   MESSAGE,
-  WORKSPACE,
-  SIGN_OUT,
   READ,
   USER_THREAD,
+  WORKSPACE_SUB,
+  WORKSPACE,
+  SIGN_OUT,
 } from '../actions/actionTypes';
 
 const _defaultState = {
@@ -25,11 +26,12 @@ const modalReducer = (state = _defaultState, action) => {
 
       return { modalType, modalProps };
     }
-    case SIGN_OUT.RECEIVE:
     case MESSAGE.INDEX.REQUEST:
-    case WORKSPACE.SHOW.REQUEST:
     case USER_THREAD.INDEX.REQUEST:
     case READ.INDEX.REQUEST:
+    case WORKSPACE_SUB.CREATE.REQUEST:
+    case WORKSPACE.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
       return _defaultState;
     default:
       return state;

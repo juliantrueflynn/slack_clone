@@ -4,6 +4,7 @@ import {
   MESSAGE,
   SIGN_OUT,
   WORKSPACE,
+  WORKSPACE_SUB,
 } from '../actions/actionTypes';
 
 const favoriteReducer = (state = {}, action) => {
@@ -43,6 +44,7 @@ const favoriteReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
+    case WORKSPACE_SUB.CREATE.REQUEST:
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return {};

@@ -11,9 +11,12 @@ import {
   PIN,
   SIGN_OUT,
   CHANNEL,
+  WORKSPACE_SUB,
 } from '../actions/actionTypes';
 
-const messageReducer = (state = {}, action) => {
+const _defaultState = {};
+
+const messageReducer = (state = _defaultState, action) => {
   Object.freeze(state);
   let nextState;
 
@@ -204,6 +207,7 @@ const messageReducer = (state = {}, action) => {
       nextState = {};
       nextState[action.pin.messageSlug] = { pinId: null };
       return merge({}, state, nextState);
+    case WORKSPACE_SUB.CREATE.REQUEST:
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return {};

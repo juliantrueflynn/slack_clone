@@ -7,9 +7,13 @@ import {
   USER_THREAD,
   CLEAR_UNREADS,
   MESSAGE,
+  SIGN_OUT,
+  WORKSPACE_SUB,
 } from '../actions/actionTypes';
 
-const unreadReducer = (state = {}, action) => {
+const _defaultState = {};
+
+const unreadReducer = (state = _defaultState, action) => {
   Object.freeze(state);
   let nextState;
 
@@ -116,6 +120,10 @@ const unreadReducer = (state = {}, action) => {
       nextState = {};
       nextState[action.channelSlug] = { hasUnreads: false, lastActive: action.lastRead };
       return merge({}, state, nextState);
+    case WORKSPACE_SUB.CREATE.REQUEST:
+    case WORKSPACE.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
+      return _defaultState;
     default:
       return state;
   }

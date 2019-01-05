@@ -4,6 +4,8 @@ import {
   USER,
   PASSWORD,
   MODAL_UPDATE,
+  WORKSPACE_SUB,
+  SIGN_OUT,
 } from '../actions/actionTypes';
 
 const _defaultState = null;
@@ -21,6 +23,8 @@ const successReducer = (state = _defaultState, action) => {
     case PASSWORD.UPDATE.REQUEST:
     case CHANNEL.CREATE.REQUEST:
     case CHANNEL.UPDATE.REQUEST:
+    case WORKSPACE_SUB.CREATE.REQUEST:
+    case SIGN_OUT.RECEIVE:
       return _defaultState;
     default:
       return state;

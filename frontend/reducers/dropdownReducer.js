@@ -8,6 +8,7 @@ import {
   USER,
   PIN,
   MESSAGE_EDITOR_TOGGLE,
+  WORKSPACE_SUB,
 } from '../actions/actionTypes';
 
 const _defaultState = {
@@ -36,8 +37,9 @@ const dropdownReducer = (state = _defaultState, action) => {
     case MESSAGE.DESTROY.RECEIVE:
     case PIN.CREATE.REQUEST:
     case PIN.DESTROY.REQUEST:
-    case SIGN_OUT.RECEIVE:
+    case WORKSPACE_SUB.CREATE.REQUEST:
     case WORKSPACE.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
       return _defaultState;
     default:
       return state;

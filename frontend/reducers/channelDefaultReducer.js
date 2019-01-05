@@ -1,4 +1,4 @@
-import { WORKSPACE, SIGN_OUT } from '../actions/actionTypes';
+import { WORKSPACE, SIGN_OUT, WORKSPACE_SUB } from '../actions/actionTypes';
 
 const _defaultState = null;
 
@@ -12,6 +12,7 @@ const defaultChannelReducer = (state = _defaultState, action) => {
 
       return firstChannel.slug;
     }
+    case WORKSPACE_SUB.CREATE.REQUEST:
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:
       return _defaultState;

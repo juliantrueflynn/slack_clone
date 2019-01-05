@@ -8,6 +8,7 @@ import {
   PASSWORD,
   USER,
   FORM_ERRORS_DESTROY,
+  WORKSPACE_SUB,
 } from '../actions/actionTypes';
 
 const _defaultState = [];
@@ -26,6 +27,7 @@ const errorsReducer = (state = _defaultState, action) => {
     case CHANNEL.CREATE.FAILURE:
     case CHANNEL.UPDATE.FAILURE:
       return [...action.errors];
+    case WORKSPACE_SUB.CREATE.REQUEST:
     case FORM_ERRORS_DESTROY:
     case MODAL_UPDATE:
       return _defaultState;

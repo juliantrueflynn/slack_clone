@@ -1,4 +1,10 @@
-import { SEARCH, SEARCH_QUERY_UPDATE } from '../actions/actionTypes';
+import {
+  SEARCH,
+  SEARCH_QUERY_UPDATE,
+  WORKSPACE_SUB,
+  WORKSPACE,
+  SIGN_OUT,
+} from '../actions/actionTypes';
 
 const _defaultState = [];
 
@@ -15,6 +21,10 @@ const messagesBySearchReducer = (state = _defaultState, action) => {
 
       return state;
     }
+    case WORKSPACE_SUB.CREATE.REQUEST:
+    case WORKSPACE.SHOW.REQUEST:
+    case SIGN_OUT.RECEIVE:
+      return _defaultState;
     default:
       return state;
   }
