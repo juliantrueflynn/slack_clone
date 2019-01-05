@@ -8,7 +8,12 @@ import {
 } from 'redux-saga/effects';
 import { READ, MESSAGE } from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiDestroy } from '../util/apiUtil';
-import * as actions from '../actions/readActions';
+import {
+  createRead,
+  updateRead,
+  destroyRead,
+  createUnread,
+} from '../actions/readActions';
 import { getChannelsMap } from '../reducers/selectors';
 import {
   getReadProps,
@@ -19,19 +24,19 @@ import {
 
 function* fetchCreate({ read: { slug, ...read } }) {
   try {
-    const created = yield call(apiCreate, 'read', read);
-    yield put(actions.createRead.receive(created));
+    const response = yield call(apiCreate, 'read', read);
+    yield put(createRead.receive(response));
   } catch (error) {
-    yield put(actions.createRead.failure(error));
+    yield put(createRead.failure(error));
   }
 }
 
 function* fetchUpdate({ read }) {
   try {
-    const updated = yield call(apiUpdate, 'read', read);
-    yield put(actions.updateRead.receive(updated));
+    const response = yield call(apiUpdate, 'read', read);
+    yield put(updateRead.receive(response));
   } catch (error) {
-    yield put(actions.updateRead.failure(error));
+    yield put(updateRead.failure(error));
   }
 }
 
@@ -39,16 +44,15 @@ function* fetchDestroy({ read: { readableId, readableType, slug } }) {
   try {
     const apiForType = readableType.toLowerCase();
     yield call(apiDestroy, `${apiForType}_reads/${readableId}`);
-    yield put(actions.destroyRead.receive({ readableId, readableType, slug }));
+    yield put(destroyRead.receive({ readableId, readableType, slug }));
   } catch (error) {
-    yield put(actions.destroyRead.failure(error));
+    yield put(destroyRead.failure(error));
   }
 }
 
 function* createOrUpdateRead(readProps) {
-  const actionType = readProps.lastRead ? 'update' : 'create';
-
-  yield put(actions[`${actionType}Read`].request(readProps));
+  const readAction = readProps.lastRead ? updateRead : createRead;
+  yield put(readAction.request(readProps));
 }
 
 function* readViewedEntity(readProps) {
@@ -89,13 +93,13 @@ function* loadCreateMessageRead({ message }) {
   }
 
   const read = getReadProps(msg);
-  const unread = yield getUnread({ messageSlug: msg.slug, lastActive: msg.createdAt, ...read });
-  const isUserInView = yield isCurrentUserInView(read);
+  const { slug: messageSlug, createdAt: lastActive } = msg;
+  const unread = yield getUnread({ messageSlug, lastActive, ...read });
 
-  if (isUserInView) {
+  if (yield call(isCurrentUserInView, read)) {
     yield createOrUpdateRead({ ...unread, ...read });
   } else {
-    yield put(actions.createUnread({ ...unread, hasUnreads: true }));
+    yield put(createUnread({ ...unread, hasUnreads: true }));
   }
 }
 
@@ -104,7 +108,7 @@ function* loadDestroyConvoRead({ message: { id: readableId, parentMessageSlug, s
     return;
   }
 
-  yield put(actions.destroyRead.request({ readableType: 'Message', readableId, slug }));
+  yield put(destroyRead.request({ readableType: 'Message', readableId, slug }));
 }
 
 function* watchCreated() {

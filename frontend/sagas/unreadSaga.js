@@ -7,7 +7,7 @@ import {
   select,
 } from 'redux-saga/effects';
 import { READ, CLEAR_UNREADS, USER_THREAD } from '../actions/actionTypes';
-import { apiFetch, apiUpdate, apiCreate } from '../util/apiUtil';
+import { apiFetch, apiCreate, apiUpdate } from '../util/apiUtil';
 import { fetchUnreads, clearUnreads } from '../actions/readActions';
 import { getAllUnreads } from '../reducers/selectors';
 
@@ -22,19 +22,17 @@ function* fetchIndex({ workspaceSlug }) {
 
 function* fetchUserThreadIndexPage() {
   const unreadsMap = yield select(getAllUnreads);
-  const unreads = Object.values(unreadsMap);
-  const msgs = unreads.filter(unread => (
+  const unreads = Object.values(unreadsMap).filter(unread => (
     unread && unread.hasUnreads && unread.readableType === 'Message'
   ));
 
-  yield all(msgs.map((unread) => {
-    const apiCall = unread.lastRead ? apiUpdate : apiCreate;
-    const read = { readableId: unread.readableId, readableType: 'Message' };
+  yield all(unreads.map(({ lastRead, readableId }) => {
+    const apiCall = lastRead ? apiUpdate : apiCreate;
 
-    return call(apiCall, 'read', read);
+    return call(apiCall, 'read', { readableId, readableType: 'Message' });
   }));
 
-  if (msgs.length) {
+  if (unreads.length) {
     yield put(clearUnreads('threads'));
   }
 }
