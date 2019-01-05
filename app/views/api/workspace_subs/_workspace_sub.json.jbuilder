@@ -14,5 +14,8 @@ json.channel_subs do
   workspace_id = workspace_sub.workspace_id
   channel_subs = user.channel_subs.by_workspace_id(workspace_id)
 
-  json.array! channel_subs, :id, :channel_id, :channel_slug, :created_at
+  json.array! channel_subs do |channel_sub|
+    json.(channel_sub, :id, :channel_id, :created_at)
+    json.channel_slug channel_sub.channel.slug
+  end
 end
