@@ -103,14 +103,15 @@ function* loadCreateMessageRead({ message: msg }) {
 
 function* loadDestroyConvoRead({ message }) {
   const { parentMessageId: readableId, parentMessageSlug: slug } = message;
+  const unread = yield select(selectEntityBySlug, 'unreads', slug);
 
-  if (!readableId) {
+  if (!readableId || !unread) {
     return;
   }
 
-  const convo = yield select(selectEntityBySlug, 'messages', slug);
+  const isUserNotInConvo = yield isCurrentUserNotInConvo(message.authors);
 
-  if (!convo.thread.length) {
+  if (isUserNotInConvo || (!isUserNotInConvo && message.authors.length === 1)) {
     yield put(destroyRead.request({ readableType: 'Message', readableId, slug }));
   }
 }

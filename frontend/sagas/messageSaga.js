@@ -9,12 +9,10 @@ import {
 import { MESSAGE, HISTORY } from '../actions/actionTypes';
 import * as actions from '../actions/messageActions';
 import { navigate } from '../actions/uiActions';
-import { destroyRead } from '../actions/readActions';
 import * as api from '../util/apiUtil';
 import {
   selectUIByDisplay,
   selectEntityBySlug,
-  getConvoBySlug,
   getChatPathUrl,
 } from '../reducers/selectors';
 
@@ -80,24 +78,11 @@ function* closeDrawerIfOpen(slug) {
   }
 }
 
-function* destroyConvoRead(reply) {
-  const convo = yield select(getConvoBySlug, reply.parentMessageSlug);
-  const countCurrUser = convo.slice(1).filter(msg => msg.authorSlug === reply.authorSlug);
-
-  if (countCurrUser.length < 1) {
-    const { parentMessageId: readableId, parentMessageSlug: slug } = reply;
-    const read = { readableType: 'Message', readableId, slug };
-    yield put(destroyRead.request(read));
-  }
-}
-
 function* fetchMessageDestroy({ messageSlug }) {
   try {
     const message = yield call(api.apiDestroy, `messages/${messageSlug}`);
 
-    if (message.parentMessageId) {
-      yield destroyConvoRead(message);
-    } else {
+    if (!message.parentMessageId) {
       yield closeDrawerIfOpen(message.slug);
     }
   } catch (error) {

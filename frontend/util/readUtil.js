@@ -20,7 +20,7 @@ export function* getUnread(props) {
 export function* isCurrentUserNotInConvo(authors) {
   const currUser = yield select(getCurrentUser);
 
-  return authors && authors.some(authorSlug => authorSlug !== currUser.slug);
+  return authors && authors.every(authorSlug => authorSlug !== currUser.slug);
 }
 
 export function* isCurrentUserInView({ slug, readableType }) {
