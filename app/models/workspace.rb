@@ -26,6 +26,12 @@ class Workspace < ApplicationRecord
     "app"
   end
 
+  def members
+    users.select('users.*', 'user_appearances.status AS status')
+      .left_joins(:appears)
+      .order(:id)
+  end
+
   def is_user_sub?(user_id)
     !!workspace_subs.find_by(workspace_subs: { user_id: user_id })
   end

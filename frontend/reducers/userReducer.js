@@ -33,21 +33,17 @@ const userReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.RECEIVE: {
-      const { members, userAppearances, channelSubs } = action.workspace;
+      const { members, channelSubs } = action.workspace;
 
       nextState = members.reduce((acc, curr) => {
         acc[curr.slug] = {
           subs: [],
-          status: 'offline',
+          status: curr.status || 'offline',
           ...curr,
         };
 
         return acc;
       }, {});
-
-      userAppearances.forEach((userAppear) => {
-        nextState[userAppear.userSlug].status = userAppear.status;
-      });
 
       channelSubs.forEach((sub) => {
         nextState[sub.userSlug].subs.push(sub.id);
@@ -58,11 +54,7 @@ const userReducer = (state = {}, action) => {
     case WORKSPACE_SUB.CREATE.RECEIVE: {
       const { user, channelSubs } = action.workspaceSub;
 
-      nextState = {};
-      nextState[user.slug] = {
-        subs: [],
-        ...user,
-      };
+      nextState = { [user.slug]: { subs: [], ...user } };
 
       channelSubs.forEach((sub) => {
         nextState[user.slug].subs.push(sub.id);
@@ -73,8 +65,7 @@ const userReducer = (state = {}, action) => {
     case USER.UPDATE.RECEIVE:
     case USER.SHOW.RECEIVE: {
       const { id, slug, ...rest } = action.user;
-      nextState = {};
-      nextState[slug] = rest;
+      nextState = { [slug]: rest };
       return merge({}, state, nextState);
     }
     case CHANNEL_SUB.CREATE.RECEIVE: {
@@ -102,8 +93,7 @@ const userReducer = (state = {}, action) => {
     case USER_APPEARANCE.CREATE.RECEIVE:
     case USER_APPEARANCE.DESTROY.RECEIVE: {
       const { userSlug, status } = action.userAppearance;
-      nextState = {};
-      nextState[userSlug] = { status };
+      nextState = { [userSlug]: { status } };
       return merge({}, state, nextState);
     }
     case WORKSPACE_SUB.CREATE.REQUEST:
