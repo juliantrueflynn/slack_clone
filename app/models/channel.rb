@@ -93,32 +93,32 @@ class Channel < ApplicationRecord
     !!subs.find_by(channel_subs: { user_id: user_id })
   end
 
-  after_create_commit :sub_users_to_dm_chat, :sub_user_to_public_chat
+  after_create_commit :generate_dm_channel_subs, :generate_public_channel_subs
   after_update_commit :broadcast_update_channel
 
   private
 
-  def sub_user_to_public_chat
+  def generate_public_channel_subs
     return unless owner
     subs.create(user_id: owner.id, skip_broadcast: true)
     broadcast_create
   end
 
-  def sub_users_to_dm_chat
+  def generate_dm_channel_subs
     return unless has_dm?
-    return unless member_ids
-
-    self.member_ids.each_with_index do |dm_user_id, idx|
-      in_sidebar = idx === 0 ? true : false
-      subs.create(
-        channel_id: id,
-        user_id: dm_user_id,
-        in_sidebar: in_sidebar,
-        skip_broadcast: true
-      )
-    end
-
+    subs.create(dm_channel_subs_params)
     broadcast_to_new_dm_subs
+  end
+
+  def broadcast_update_channel 
+    broadcast_update partial: 'api/channels/update'
+  end
+
+  def dm_channel_subs_params
+    member_ids.each_with_index.reduce([]) do |memo, (user_id, idx)|
+      in_sidebar = idx === 0
+      memo << { user_id: user_id, in_sidebar: in_sidebar, skip_broadcast: true }
+    end
   end
 
   def broadcast_to_new_dm_subs
@@ -126,9 +126,5 @@ class Channel < ApplicationRecord
       broadcast_create broadcast_name: "dm_user_#{dm_sub.user.id}",
         partial: 'api/channels/channel'
     end
-  end
-
-  def broadcast_update_channel 
-    broadcast_update partial: 'api/channels/update'
   end
 end
