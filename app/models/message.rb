@@ -29,30 +29,8 @@ class Message < ApplicationRecord
   scope :with_parent, -> { where(parent_message_id: nil) }
   scope :with_child, -> { where.not(parent_message_id: nil) }
   scope :with_entry_type, -> { where(entity_type: 'entry') }
-  scope :without_entry_type, -> { where.not(entity_type: 'entry') }
   scope :by_entry_parent, -> { with_entry_type.with_parent }
   scope :search_import, -> { with_entry_type }
-
-  def self.convo_author_created(author_id)
-    joins(:replies)
-      .where.not(replies_messages: { parent_message_id: nil })
-      .where(author_id: author_id)
-  end
-
-  def self.channel_unreads_with_user_id(user_id)
-    by_entry_parent.joins(channel: :reads)
-      .where(reads: { user_id: user_id })
-      .where('messages.created_at > reads.accessed_at')
-  end
-
-  def self.convo_author_child_of(author_id)
-    joins(:replies).where(replies_messages: { author_id: author_id })
-  end
-
-  def self.convos_with_author_id(author_id)
-    convos = convo_author_created(author_id).or(convo_author_child_of(author_id))
-    parents_or_children(convos)
-  end
 
   def self.channel_last_entry_id(user_id)
     includes(channel: :subs).by_entry_parent
@@ -61,18 +39,21 @@ class Message < ApplicationRecord
       .maximum(:id)
   end
 
+  def self.channel_unreads_with_user_id(user_id)
+    by_entry_parent.joins(channel: :reads)
+      .where(reads: { user_id: user_id })
+      .where('messages.created_at > reads.accessed_at')
+  end
+
+  def self.convos_with_author_id(author_id)
+    convos = convo_author_created(author_id).or(convo_author_child_of(author_id))
+    parents_or_children(convos)
+  end
+
   def self.convos_last_entry_id(user_id)
     convos_with_author_id(user_id).with_child
       .group(:parent_message_id)
       .maximum(:id)
-  end
-
-  def self.created_between(start_date, end_date)
-    where("created_at BETWEEN ? AND ?", start_date, end_date)
-  end
-
-  def self.created_until(until_date)
-    where("created_at > ?", until_date)
   end
 
   def self.created_at_before(start_date)
@@ -81,17 +62,6 @@ class Message < ApplicationRecord
 
   def self.parents_or_children(id_or_ids)
     where(id: id_or_ids).or(where(parent_message_id: id_or_ids))
-  end
-
-  def self.created_recently(until_date, max)
-    results = []
-    0.step(to: max) do |idx|
-      start_date = until_date.midnight - idx
-      results = created_between(start_date, until_date)
-      break if results.by_entry_parent.length > 12
-    end
-
-    results
   end
 
   def broadcast_name
@@ -132,5 +102,15 @@ class Message < ApplicationRecord
   def destroy_replies
     return if parent_message_id?
     Message.where(parent_message_id: id).delete_all
+  end
+
+  def self.convo_author_created(author_id)
+    joins(:replies)
+      .where.not(replies_messages: { parent_message_id: nil })
+      .where(author_id: author_id)
+  end
+
+  def self.convo_author_child_of(author_id)
+    joins(:replies).where(replies_messages: { author_id: author_id })
   end
 end
