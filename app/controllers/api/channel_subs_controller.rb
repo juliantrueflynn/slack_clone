@@ -30,8 +30,8 @@ class Api::ChannelSubsController < ApplicationController
   private
 
   def set_channel_sub
-    channel_slug = params[:channel_slug]
-    @channel_sub = current_user.channel_subs.find_by_slug(channel_slug)    
+    channel = Channel.find_by_slug(params[:channel_slug])
+    @channel_sub = channel.subs.find_by(user_id: current_user.id)
   end
 
   def channel_sub_params

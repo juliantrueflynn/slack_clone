@@ -7,10 +7,6 @@ class ChannelSub < ApplicationRecord
   belongs_to :channel
   has_one :workspace, through: :channel
 
-  def self.find_by_slug(channel_slug)
-    Channel.find_by_slug(channel_slug)
-  end
-
   def self.by_workspace_id(workspace_id)
     includes(:channel).where(channels: { workspace_id: workspace_id })
   end
