@@ -4,11 +4,19 @@ class ActionDispatcherJob < ApplicationJob
   def perform(entity, action_name, opts)
     action = { type: action_type(action_name) }
     action[payload_name.to_sym] = render_json
-    ActionCable.server.broadcast entity.broadcast_name, **action
+    ActionCable.server.broadcast broadcast_name, **action
   end
 
-  def default_params
+  def default_locals
     { locals: {}, partial: "api/#{payload_name.pluralize}/#{payload_name}" }
+  end
+
+  def new_locals
+    arguments.third.except(:broadcast_name)
+  end
+
+  def broadcast_name
+    arguments.third[:broadcast_name] || payload.broadcast_name
   end
 
   def action_type(action_name)
@@ -21,7 +29,7 @@ class ActionDispatcherJob < ApplicationJob
   end
 
   def params
-    args = default_params.merge(arguments.third)
+    args = default_locals.merge(new_locals)
     args[:locals][payload_name.to_sym] = payload
     args
   end
