@@ -59,7 +59,7 @@ const unreadReducer = (state = _defaultState, action) => {
       return nextState;
     }
     case MESSAGE.CREATE.RECEIVE: {
-      const { channelSlug, createdAt, parentMessageId } = action.message.message;
+      const { channelSlug, createdAt, parentMessageId } = action.message;
 
       if (parentMessageId) {
         return state;
@@ -82,10 +82,6 @@ const unreadReducer = (state = _defaultState, action) => {
         readableId: read.readableId,
         hasUnreads: false,
       };
-
-      if (read.lastActive) {
-        nextState[read.slug].lastActive = read.lastActive;
-      }
 
       return merge({}, state, nextState);
     }

@@ -143,7 +143,7 @@ const channelReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case MESSAGE.CREATE.RECEIVE: {
-      const { parentMessageSlug, slug, channelSlug } = action.message.message;
+      const { parentMessageSlug, slug, channelSlug } = action.message;
 
       if (parentMessageSlug) {
         return state;
@@ -154,7 +154,7 @@ const channelReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case MESSAGE.DESTROY.RECEIVE: {
-      const { channelSlug, slug } = action.message.message;
+      const { channelSlug, slug } = action.message;
 
       nextState = merge({}, state);
       nextState[channelSlug].messages = state[channelSlug].messages.filter(msg => (

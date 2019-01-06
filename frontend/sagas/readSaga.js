@@ -14,7 +14,7 @@ import {
   destroyRead,
   createUnread,
 } from '../actions/readActions';
-import { getChannelsMap } from '../reducers/selectors';
+import { getChannelsMap, selectEntityBySlug } from '../reducers/selectors';
 import {
   getReadProps,
   getUnread,
@@ -84,9 +84,8 @@ function* fetchChannelPage({ messages: { channel } }) {
   }
 }
 
-function* loadCreateMessageRead({ message }) {
-  const { message: msg } = message;
-  const isNotInConvo = yield isCurrentUserNotInConvo(message);
+function* loadCreateMessageRead({ message: msg }) {
+  const isNotInConvo = yield isCurrentUserNotInConvo(msg.authors);
 
   if (msg.entityType !== 'entry' || (msg.parentMessageSlug && isNotInConvo)) {
     return;
@@ -103,14 +102,18 @@ function* loadCreateMessageRead({ message }) {
   }
 }
 
-function* loadDestroyConvoRead({ message: { message } }) {
-  const { id: readableId, parentMessageSlug, slug } = message;
+function* loadDestroyConvoRead({ message }) {
+  const { parentMessageId: readableId, parentMessageSlug: slug } = message;
 
-  if (parentMessageSlug) {
+  if (!readableId) {
     return;
   }
 
-  yield put(destroyRead.request({ readableType: 'Message', readableId, slug }));
+  const convo = yield select(selectEntityBySlug, 'messages', slug);
+
+  if (!convo.thread.length) {
+    yield put(destroyRead.request({ readableType: 'Message', readableId, slug }));
+  }
 }
 
 function* watchCreated() {

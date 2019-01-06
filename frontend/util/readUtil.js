@@ -17,17 +17,10 @@ export function* getUnread(props) {
   };
 }
 
-export function* isCurrentUserNotInConvo({ message, parentMessage }) {
-  const parent = parentMessage || {};
+export function* isCurrentUserNotInConvo(authors) {
   const currUser = yield select(getCurrentUser);
 
-  if (message.authorSlug === currUser.slug || parent.authorSlug === currUser.slug) {
-    return false;
-  }
-
-  const read = yield select(selectEntityBySlug, 'unreads', parent.slug);
-
-  return !read;
+  return authors && authors.some(authorSlug => authorSlug !== currUser.slug);
 }
 
 export function* isCurrentUserInView({ slug, readableType }) {

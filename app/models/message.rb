@@ -122,6 +122,12 @@ class Message < ApplicationRecord
     parent_message ? parent_message.slug : nil
   end
 
+  def convo_authors_slugs
+    author_slugs = children.includes(:author).pluck('users.slug')
+    author_slugs.unshift(author.slug)
+    author_slugs.uniq
+  end
+
   after_create_commit :broadcast_create
   after_update_commit :broadcast_update
   after_destroy :destroy_replies, :broadcast_destroy

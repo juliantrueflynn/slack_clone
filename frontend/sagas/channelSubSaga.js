@@ -68,7 +68,7 @@ function* fetchChannelShow({ messages: { channel } }) {
   }
 }
 
-function* fetchDmChatMessage({ message: { message } }) {
+function* fetchDmChatMessage({ message }) {
   try {
     yield updateDmSubBySlug(message.channelSlug);
   } catch (error) {

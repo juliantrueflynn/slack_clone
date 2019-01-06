@@ -126,31 +126,24 @@ const messageReducer = (state = _defaultState, action) => {
       action.channel.messages.forEach((msg) => { nextState[msg.slug] = msg; });
       return merge({}, state, nextState);
     case MESSAGE.CREATE.RECEIVE: {
-      const { message, parentMessage } = action.message;
-      const { slug, authorSlug } = message;
+      const { message } = action;
+      const { slug, authors, parentMessageSlug: parentSlug } = message;
 
       nextState = {};
-      nextState[slug] = {
-        reactionIds: [],
-        authors: parentMessage ? null : [],
-        thread: parentMessage ? null : [],
-        ...message,
-      };
+      nextState[slug] = { reactionIds: [], ...message };
 
-      if (parentMessage) {
-        nextState[parentMessage.slug] = {
+      if (parentSlug) {
+        nextState[parentSlug] = {
+          id: message.parentMessageId,
+          slug: parentSlug,
           reactionIds: [],
-          authors: [],
+          authors,
           thread: [],
-          ...parentMessage,
-          ...state[parentMessage.slug],
+          ...state[parentSlug],
         };
 
-        nextState[parentMessage.slug].thread.push(slug);
-
-        if (!nextState[parentMessage.slug].authors.includes(authorSlug)) {
-          nextState[parentMessage.slug].authors.push(authorSlug);
-        }
+        nextState[slug].thread = null;
+        nextState[parentSlug].thread.push(slug);
       }
 
       return merge({}, state, nextState);
@@ -160,7 +153,7 @@ const messageReducer = (state = _defaultState, action) => {
       nextState[action.message.slug] = { body: action.message.body };
       return merge({}, state, nextState);
     case MESSAGE.DESTROY.RECEIVE: {
-      const { slug, parentMessageSlug: parentSlug } = action.message.message;
+      const { slug, parentMessageSlug: parentSlug } = action.message;
       nextState = merge({}, state);
 
       if (parentSlug && state[parentSlug]) {

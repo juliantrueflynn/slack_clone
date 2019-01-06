@@ -20,7 +20,7 @@ function* fetchUserThreadIndex({ workspaceSlug }) {
   }
 }
 
-function* fetchNewMessageConvo({ message: { message } }) {
+function* fetchNewMessageConvo({ message }) {
   if (!message.parentMessageId) {
     return;
   }
