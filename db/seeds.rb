@@ -192,10 +192,9 @@ Channel.all.each do |chat|
 end
 
 Workspace.all.each do |workspace|
-  all_convos = workspace.messages.convos_with_author_id(1)
-  parents = all_convos.where(parent_message_id: nil)
+  all_convos = workspace.messages.convos_with_author_id(1).with_parent
 
-  reads = parents.reduce([]) do |memo, message|
+  reads = all_convos.reduce([]) do |memo, message|
     memo << { readable_id: message.id, readable_type: 'Message' }
   end
 

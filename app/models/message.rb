@@ -17,14 +17,10 @@ class Message < ApplicationRecord
   belongs_to :parent_message,
     class_name: 'Message',
     optional: true
-  has_one :workspace, through: :channel
-  has_many :replies,
-    -> { includes(:author, :parent_message) },
+  has_many :pins
+  has_many :children,
     class_name: 'Message',
     foreign_key: :parent_message_id
-  has_many :children, class_name: 'Message', foreign_key: :parent_message_id
-  has_many :favorites
-  has_many :pins
 
   scope :with_parent, -> { where(parent_message_id: nil) }
   scope :with_child, -> { where.not(parent_message_id: nil) }
@@ -61,22 +57,15 @@ class Message < ApplicationRecord
   end
 
   def self.parents_or_children(id_or_ids)
-    where(id: id_or_ids).or(where(parent_message_id: id_or_ids))
+    where(id: id_or_ids).or(children_of(id_or_ids))
   end
 
   def broadcast_name
     "channel_#{channel.slug}"
   end
 
-  def plain_text
-    return if body.nil?
-    body_json = ActiveSupport::JSON.decode(body)
-    lines = body_json["blocks"].pluck('text')
-    lines.join(" ")
-  end
-
   def search_data
-    { id: id, body: plain_text, channel_id: channel_id }
+    { id: id, body: body_plain_text, channel_id: channel_id }
   end
 
   def should_index?
@@ -99,18 +88,29 @@ class Message < ApplicationRecord
 
   private
 
-  def destroy_replies
-    return if parent_message_id?
-    Message.where(parent_message_id: id).delete_all
+  def self.convo_author_child_of(author_id)
+    joins(:children).where(children_messages: { author_id: author_id })
   end
 
   def self.convo_author_created(author_id)
-    joins(:replies)
-      .where.not(replies_messages: { parent_message_id: nil })
+    joins(:children)
+      .where.not(children_messages: { parent_message_id: nil })
       .where(author_id: author_id)
   end
 
-  def self.convo_author_child_of(author_id)
-    joins(:replies).where(replies_messages: { author_id: author_id })
+  def self.children_of(id_or_ids)
+    where(parent_message_id: id_or_ids)
+  end
+
+  def body_plain_text
+    return if body.nil?
+    body_json = ActiveSupport::JSON.decode(body)
+    lines = body_json["blocks"].pluck('text')
+    lines.join(" ")
+  end
+
+  def destroy_replies
+    return if parent_message_id?
+    children_of(id).delete_all
   end
 end
