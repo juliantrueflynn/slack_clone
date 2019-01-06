@@ -14,38 +14,36 @@
     workspace ? workspace.slug : nil
   end
 
-  after_create_commit :generate_default_channel_subs, :broadcast_create
+  after_create_commit :generate_new_workspace_sub_defaults, :broadcast_create
   after_update_commit :broadcast_update, :generate_channel_sub_message
 
   private
 
-  def generate_default_channel_subs
-    return if workspace.channels.empty?
+  def generate_new_workspace_sub_defaults
     return if workspace.owner_id === user.id
+    generate_default_channel_subs
+    workspace.generate_default_channel_reads(user)
+  end
+
+  def generate_default_channel_subs
     user.channel_subs.create(default_channel_subs)
   end
 
   def generate_channel_sub_message
-    Message.create(channel_sub_messages)
+    user.messages.create(channel_sub_messages_params)
   end
 
   def default_channel_subs
-    default_channels = workspace.channels.first(2)
-
-    default_channels.reduce([]) do |memo, channel|
+    workspace.default_channels.reduce([]) do |memo, channel|
       memo << { channel_id: channel.id, skip_broadcast: true }
     end
   end
 
-  def channel_sub_messages
+  def channel_sub_messages_params
     channels = user.channels.without_dm.by_workspace_id(workspace.id)
 
     channels.reduce([]) do |memo, channel|
-      memo << {
-        channel_id: channel.id,
-        entity_type: message_entity_type,
-        author_id: user_id
-      }
+      memo << { channel_id: channel.id, entity_type: message_entity_type }
     end
   end
 

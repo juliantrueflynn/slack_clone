@@ -15,6 +15,7 @@ class Workspace < ApplicationRecord
   has_many :workspace_subs
   has_many :users, through: :workspace_subs
   has_many :user_appearances
+  has_many :reads
   has_many :channels
   has_many :channel_subs,
     through: :channels,
@@ -50,6 +51,20 @@ class Workspace < ApplicationRecord
     channel_subs.where(user_id: user_id).pluck(:channel_id)
   end
 
+  def generate_default_channel_reads(user = owner)
+    user.reads.create(default_channel_reads_params)
+  end
+
+  def default_channel_reads_params
+    default_channels.reduce([]) do |memo, channel|
+      memo << { readable_id: channel.id, readable_type: 'Channel' }
+    end
+  end
+
+  def default_channels
+    channels.first(2)
+  end
+
   after_create_commit :create_defaults_broadcast
 
   private
@@ -57,23 +72,24 @@ class Workspace < ApplicationRecord
   def create_defaults_broadcast
     generate_workspace_subs
     generate_default_channels
+    generate_default_channel_reads
     broadcast_create
-  end
-
-  DEFAULT_CHAT_TITLES = %w(general random)
-
-  def default_channels
-    DEFAULT_CHAT_TITLES.reduce([]) do |memo, ch_title|
-      memo << { title: ch_title, owner_id: owner_id, skip_broadcast: true }
-    end
-  end
-
-  def generate_default_channels
-    return if skip_broadcast
-    channels.create(default_channels)
   end
 
   def generate_workspace_subs
     workspace_subs.create(user_id: owner.id, skip_broadcast: true)
+  end
+
+  def generate_default_channels
+    return if skip_broadcast
+    channels.create(default_channels_params)
+  end
+
+  DEFAULT_CHAT_TITLES = %w(general random)
+
+  def default_channels_params
+    DEFAULT_CHAT_TITLES.reduce([]) do |memo, ch_title|
+      memo << { title: ch_title, owner_id: owner_id, skip_broadcast: true }
+    end
   end
 end
