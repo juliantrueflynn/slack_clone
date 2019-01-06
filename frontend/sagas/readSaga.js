@@ -42,8 +42,7 @@ function* fetchUpdate({ read }) {
 
 function* fetchDestroy({ read: { readableId, readableType, slug } }) {
   try {
-    const apiForType = readableType.toLowerCase();
-    yield call(apiDestroy, `${apiForType}_reads/${readableId}`);
+    yield call(apiDestroy, `read_destroy/${readableId}/readable_type/${readableType}`);
     yield put(destroyRead.receive({ readableId, readableType, slug }));
   } catch (error) {
     yield put(destroyRead.failure(error));

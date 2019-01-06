@@ -5,9 +5,6 @@ Rails.application.routes.draw do
     resources :users, only: :update, param: :slug
     resource :password, only: :update
     resource :user_appearance, only: :create
-    resource :read, only: [:create, :update]
-    resources :channel_reads, only: :destroy, param: :readable_id
-    resources :message_reads, only: :destroy, param: :readable_id
 
     resources :workspaces, only: [:index, :show, :create], param: :slug do
       resources :users, only: :show, param: :slug
@@ -34,6 +31,10 @@ Rails.application.routes.draw do
     resources :favorites, only: [:create, :destroy]
     resources :reactions, only: [:create, :destroy]
     resources :pins, only: [:create, :destroy]
+
+    resource :read, only: [:create, :update]
+    delete '/read_destroy/:readable_id/readable_type/:readable_type',
+      to: 'read_destroys#destroy'
   end
 
   mount ActionCable.server => '/cable'
