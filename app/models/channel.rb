@@ -105,7 +105,8 @@ class Channel < ApplicationRecord
   end
 
   def sub_users_to_dm_chat
-    return unless has_dm? || member_ids
+    return unless has_dm?
+    return unless member_ids
 
     self.member_ids.each_with_index do |dm_user_id, idx|
       in_sidebar = idx === 0 ? true : false
@@ -117,7 +118,14 @@ class Channel < ApplicationRecord
       )
     end
 
-    broadcast_create
+    broadcast_to_new_dm_subs
+  end
+
+  def broadcast_to_new_dm_subs
+    subs.each do |dm_sub|
+      broadcast_create broadcast_name: "dm_user_#{dm_sub.user.id}",
+        partial: 'api/channels/channel'
+    end
   end
 
   def broadcast_update_channel 

@@ -78,6 +78,10 @@ class Workspace extends React.Component {
           onReceived={onReceived}
         />
         <ActionCable
+          channel={decamelizeKeys({ channel: 'DmUserChannel' })}
+          onReceived={onReceived}
+        />
+        <ActionCable
           channel={decamelizeKeys({ channel: 'AppearanceChannel', workspaceSlug })}
           onReceived={onReceived}
         />
