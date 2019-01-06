@@ -18,6 +18,9 @@ class Message < ApplicationRecord
     class_name: 'Message',
     optional: true
   has_many :pins
+  has_many :reads,
+    -> { where(readable_type: 'Message') },
+    foreign_key: :readable_id
   has_many :children,
     class_name: 'Message',
     foreign_key: :parent_message_id
@@ -42,7 +45,7 @@ class Message < ApplicationRecord
   end
 
   def self.convos_with_author_id(author_id)
-    convos = convo_author_created(author_id).or(convo_author_child_of(author_id))
+    convos = left_joins(:reads).where(reads: { user_id: author_id })
     parents_or_children(convos)
   end
 
@@ -87,16 +90,6 @@ class Message < ApplicationRecord
   after_destroy :destroy_replies, :broadcast_destroy
 
   private
-
-  def self.convo_author_child_of(author_id)
-    joins(:children).where(children_messages: { author_id: author_id })
-  end
-
-  def self.convo_author_created(author_id)
-    joins(:children)
-      .where.not(children_messages: { parent_message_id: nil })
-      .where(author_id: author_id)
-  end
 
   def self.children_of(id_or_ids)
     where(parent_message_id: id_or_ids)
