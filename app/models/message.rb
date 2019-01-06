@@ -106,12 +106,7 @@ class Message < ApplicationRecord
   end
 
   def search_data
-    {
-      id: id,
-      body: plain_text,
-      channel_id: channel_id,
-      workspace_id: workspace.id
-    }
+    { id: id, body: plain_text, channel_id: channel_id }
   end
 
   def should_index?
