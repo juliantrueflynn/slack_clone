@@ -36,7 +36,7 @@ def seed_sub_and_members(user)
     workspace.workspace_subs.create(user_id: user.id)
   end
 
-  unless chat.is_user_sub?(user.id)
+  unless chat.subs.has_user_id?(user.id)
     chat.subs.create(user_id: user.id)
   end
 end

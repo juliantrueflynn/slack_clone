@@ -66,17 +66,7 @@ class Channel < ApplicationRecord
     messages.empty? ? nil : messages.first.slug
   end
 
-  def entries_created_at_before(before_date)
-    messages.by_entry_parent.created_at_before(before_date).order(id: :desc)
-  end
-
   HISTORY_CACHE_AMOUNT = 15
-
-  def messages_between(entries)
-    start_id = entries.last.id
-    start_id = messages.first.id if entries.length < HISTORY_CACHE_AMOUNT
-    messages.where("id BETWEEN ? AND ?", start_id, entries.first.id)
-  end
 
   def older_messages(before_date)
     date_from = (before_date || DateTime.current).to_datetime
@@ -87,10 +77,6 @@ class Channel < ApplicationRecord
 
   def member_ids=(member_ids)
     @member_ids = member_ids.map(&:to_i)
-  end
-
-  def is_user_sub?(user_id)
-    !!subs.find_by(channel_subs: { user_id: user_id })
   end
 
   after_create_commit :generate_dm_channel_subs, :generate_public_channel_subs
@@ -126,5 +112,15 @@ class Channel < ApplicationRecord
       broadcast_create broadcast_name: "dm_user_#{dm_sub.user.id}",
         partial: 'api/channels/channel'
     end
+  end
+
+  def entries_created_at_before(before_date)
+    messages.by_entry_parent.created_at_before(before_date).order(id: :desc)
+  end
+
+  def messages_between(entries)
+    start_id = entries.last.id
+    start_id = messages.first.id if entries.length < HISTORY_CACHE_AMOUNT
+    messages.where("id BETWEEN ? AND ?", start_id, entries.first.id)
   end
 end
