@@ -54,12 +54,14 @@ json.reads do
   reads = @workspace.reads.where(user_id: current_user.id)
 
   json.array! reads.channels.includes(:channel) do |read|
-    json.(read, :accessed_at, :readable_id, :readable_type)
+    json.(read, :readable_id, :readable_type)
     json.slug read.channel.slug
+    json.last_read read.accessed_at
   end
 
   json.array! reads.messages.includes(:message) do |read|
-    json.(read, :accessed_at, :readable_id, :readable_type)
+    json.(read, :readable_id, :readable_type)
     json.slug read.message.slug
+    json.last_read read.accessed_at
   end
 end

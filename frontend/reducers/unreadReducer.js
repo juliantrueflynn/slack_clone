@@ -18,7 +18,7 @@ const unreadReducer = (state = _defaultState, action) => {
 
   switch (action.type) {
     case WORKSPACE.SHOW.RECEIVE: {
-      const { messages, reads } = action.workspace;
+      const { messages, channels, reads } = action.workspace;
 
       nextState = {};
       messages.forEach((msg) => {
@@ -30,8 +30,16 @@ const unreadReducer = (state = _defaultState, action) => {
         };
       });
 
+      channels.forEach((ch) => {
+        nextState[ch.slug] = {
+          ...nextState[ch.slug],
+          lastActive: ch.lastActive,
+          readableType: 'Channel',
+        };
+      });
+
       reads.forEach((read) => {
-        nextState[read.slug] = { ...nextState[read.slug], ...read, lastRead: read.accessedAt };
+        nextState[read.slug] = { ...nextState[read.slug], ...read };
       });
 
       Object.values(nextState).forEach((unread) => {
