@@ -31,31 +31,28 @@ class Message < ApplicationRecord
   scope :by_entry_parent, -> { with_entry_type.with_parent }
   scope :search_import, -> { with_entry_type }
 
-  def self.channel_last_entry_id(user_id)
-    includes(channel: :subs).by_entry_parent
-      .where(channel_subs: { user_id: user_id })
-      .group(:channel_id)
-      .maximum(:id)
-  end
-
   def self.channel_unreads_with_user_id(user_id)
     by_entry_parent.joins(channel: :reads)
       .where(reads: { user_id: user_id })
       .where('messages.created_at > reads.accessed_at')
   end
 
-  def self.convo_children_with_author_id(author_id)
-    children_of(convo_parents_with_author_id(author_id))
-  end
-
   def self.convo_parents_with_author_id(author_id)
     left_joins(:reads).where(reads: { user_id: author_id })
   end
 
-  def self.convos_last_entry_id(user_id)
-    convo_children_with_author_id(user_id)
-      .group(:parent_message_id)
-      .maximum(:id)
+  def self.convos_last_created_at(author_id)
+    children_of(convo_parents_with_author_id(author_id))
+      .joins(:parent_message)
+      .group('parent_messages_messages.slug')
+      .maximum(:created_at)
+  end
+
+  def self.channels_last_created_at(author_id)
+    by_entry_parent.includes(channel: :subs)
+      .where(channel_subs: { user_id: author_id })
+      .group('channels.slug')
+      .maximum(:created_at)
   end
 
   def self.created_at_before(start_date)

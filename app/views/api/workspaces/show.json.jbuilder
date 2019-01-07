@@ -2,11 +2,11 @@ json.workspace do
   json.(@workspace, :id, :title, :slug)
 end
 
-json.channels do
-  channels = @workspace.channels.without_user_and_dm(current_user.id)
-
-  json.array! channels.includes(:owner) do |channel|
-    json.(channel, :id, :slug, :title, :has_dm, :owner_slug, :created_at)
+json.workspace_subs do
+  json.array! @workspace.workspace_subs.includes(:user) do |workspace_sub|
+    json.(workspace_sub, *workspace_sub.attributes.keys)
+    json.user_slug workspace_sub.user.slug
+    json.workspace_slug @workspace.slug
   end
 end
 
@@ -20,6 +20,26 @@ json.members do
   end
 end
 
+last_actives_map = @workspace.last_entries_created_at_map(current_user.id)
+
+json.messages do
+  json.array! @workspace.user_parent_read_convos(current_user.id) do |message|
+    json.(message, *message.attributes.keys)
+    json.author_slug message.author.slug
+    json.channel_slug message.channel.slug
+    json.last_active last_actives_map[message.slug]
+  end
+end
+
+json.channels do
+  channels = @workspace.channels.without_user_and_dm(current_user.id)
+
+  json.array! channels.includes(:owner) do |channel|
+    json.(channel, :id, :slug, :title, :has_dm, :owner_slug, :created_at)
+    json.last_active last_actives_map[channel.slug]
+  end
+end
+
 json.channel_subs do
   channel_subs = @workspace.channel_subs.shared_with_user_id(current_user.id)
 
@@ -30,31 +50,8 @@ json.channel_subs do
   end
 end
 
-json.workspace_subs do
-  json.array! @workspace.workspace_subs.includes(:user) do |workspace_sub|
-    json.(workspace_sub, *workspace_sub.attributes.keys)
-    json.user_slug workspace_sub.user.slug
-    json.workspace_slug @workspace.slug
-  end
-end
-
-json.messages do
-  json.array! @workspace.user_parent_read_convos(current_user.id) do |message|
-    json.(message, *message.attributes.keys)
-    json.author_slug message.author.slug
-    json.channel_slug message.channel.slug
-  end
-
-  json.array! @workspace.latest_entries(current_user.id) do |message|
-    json.(message, *message.attributes.keys)
-    json.author_slug message.author.slug
-    json.channel_slug message.channel.slug
-    json.parent_message_slug message.parent_message_slug
-  end
-end
-
 json.reads do
-  reads = current_user.reads.by_workspace_id(@workspace.id)
+  reads = @workspace.reads.where(user_id: current_user.id)
 
   json.array! reads.channels.includes(:channel) do |read|
     json.(read, :accessed_at, :readable_id, :readable_type)

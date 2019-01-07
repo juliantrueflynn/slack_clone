@@ -52,11 +52,10 @@ class Workspace < ApplicationRecord
       .order(id: :desc)
   end
 
-  def latest_entries(user_id)
-    channel_entries_ids = messages.channel_last_entry_id(user_id).values
-    convos_entries_ids = messages.convos_last_entry_id(user_id).values
-    entries_ids = (channel_entries_ids + convos_entries_ids)
-    Message.where(id: entries_ids).includes(:author, :channel, :parent_message)
+  def last_entries_created_at_map(user_id)
+    channels = messages.channels_last_created_at(user_id)
+    convos = messages.convos_last_created_at(user_id)
+    convos.merge(channels)
   end
 
   def channels_ids_with_user_id(user_id)

@@ -21,32 +21,17 @@ const unreadReducer = (state = _defaultState, action) => {
       const { messages, reads } = action.workspace;
 
       nextState = {};
-      messages.filter(msg => msg.parentMessageId).forEach((msg) => {
-        nextState[msg.parentMessageSlug] = {
-          slug: msg.parentMessageSlug,
-          lastActive: msg.createdAt,
-          readableId: msg.parentMessageId,
+      messages.forEach((msg) => {
+        nextState[msg.channelSlug] = {
+          slug: msg.channelSlug,
+          lastActive: msg.lastActive,
+          readableId: msg.id,
           readableType: 'Message',
         };
       });
 
-      messages.filter(msg => !msg.parentMessageId).forEach((msg) => {
-        nextState[msg.channelSlug] = {
-          slug: msg.channelSlug,
-          lastActive: msg.createdAt,
-          readableId: msg.channelId,
-          readableType: 'Channel',
-        };
-      });
-
       reads.forEach((read) => {
-        nextState[read.slug] = {
-          ...nextState[read.slug],
-          slug: read.slug,
-          readableId: read.readableId,
-          readableType: read.readableType,
-          lastRead: read.accessedAt,
-        };
+        nextState[read.slug] = { ...nextState[read.slug], ...read, lastRead: read.accessedAt };
       });
 
       Object.values(nextState).forEach((unread) => {
