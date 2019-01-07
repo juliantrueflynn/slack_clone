@@ -24,6 +24,7 @@ class Message < ApplicationRecord
   has_many :children,
     class_name: 'Message',
     foreign_key: :parent_message_id
+  has_one :workspace, through: :channel
 
   scope :with_parent, -> { where(parent_message_id: nil) }
   scope :with_child, -> { where.not(parent_message_id: nil) }
