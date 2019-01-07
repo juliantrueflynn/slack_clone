@@ -37,9 +37,8 @@ class Workspace < ApplicationRecord
   end
 
   def user_convos(user_id)
-    parents = messages.convo_parents_with_author_id(author_id)
-    children = messages.convo_children_with_author_id(author_id)
-    parents.or(children).includes(:channel, :author)
+    parents = messages.convo_parents_with_author_id(user_id)
+    Message.parents_or_children(parents).includes(:channel, :author)
   end
 
   def user_parent_read_convos(user_id)
