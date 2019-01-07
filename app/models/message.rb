@@ -44,13 +44,16 @@ class Message < ApplicationRecord
       .where('messages.created_at > reads.accessed_at')
   end
 
-  def self.convos_with_author_id(author_id)
-    convos = left_joins(:reads).where(reads: { user_id: author_id })
-    parents_or_children(convos)
+  def self.convo_children_with_author_id(author_id)
+    children_of(convo_parents_with_author_id(author_id))
+  end
+
+  def self.convo_parents_with_author_id(author_id)
+    left_joins(:reads).where(reads: { user_id: author_id })
   end
 
   def self.convos_last_entry_id(user_id)
-    convos_with_author_id(user_id).with_child
+    convo_children_with_author_id(user_id)
       .group(:parent_message_id)
       .maximum(:id)
   end

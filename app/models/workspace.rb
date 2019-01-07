@@ -37,7 +37,13 @@ class Workspace < ApplicationRecord
   end
 
   def user_convos(user_id)
-    messages.convos_with_author_id(user_id).includes(:channel, :author)
+    parents = messages.convo_parents_with_author_id(author_id)
+    children = messages.convo_children_with_author_id(author_id)
+    parents.or(children).includes(:channel, :author)
+  end
+
+  def user_parent_read_convos(user_id)
+    messages.convo_parents_with_author_id(user_id).includes(:channel, :author)
   end
 
   def user_unreads(user_id)
@@ -45,7 +51,7 @@ class Workspace < ApplicationRecord
       .includes(:author)
       .order(id: :desc)
   end
-  
+
   def latest_entries(user_id)
     channel_entries_ids = messages.channel_last_entry_id(user_id).values
     convos_entries_ids = messages.convos_last_entry_id(user_id).values

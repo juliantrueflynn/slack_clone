@@ -39,7 +39,7 @@ json.workspace_subs do
 end
 
 json.messages do
-  json.array! @workspace.user_convos(current_user.id).with_parent do |message|
+  json.array! @workspace.user_parent_read_convos(current_user.id) do |message|
     json.(message, *message.attributes.keys)
     json.author_slug message.author.slug
     json.channel_slug message.channel.slug
@@ -57,12 +57,12 @@ json.reads do
   reads = current_user.reads.by_workspace_id(@workspace.id)
 
   json.array! reads.channels.includes(:channel) do |read|
-    json.(read, :id, :accessed_at, :readable_id, :readable_type)
+    json.(read, :accessed_at, :readable_id, :readable_type)
     json.slug read.channel.slug
   end
 
   json.array! reads.messages.includes(:message) do |read|
-    json.(read, :id, :accessed_at, :readable_id, :readable_type)
+    json.(read, :accessed_at, :readable_id, :readable_type)
     json.slug read.message.slug
   end
 end
