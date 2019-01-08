@@ -11,8 +11,9 @@ class Api::WorkspaceSubsController < ApplicationController
 
   def update
     @workspace_sub = current_user.workspace_subs.find_by(workspace_sub_params)
+    is_member = !@workspace_sub.is_member
 
-    if @workspace_sub.update(is_member: !@workspace_sub.is_member)
+    if @workspace_sub.update(is_member: is_member)
       render 'api/workspace_subs/show'
     else
       render json: @workspace_sub.errors.full_messages, status: 422

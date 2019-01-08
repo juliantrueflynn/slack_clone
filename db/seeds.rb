@@ -32,7 +32,7 @@ def seed_sub_and_members(user)
   chat = workspace.channels.sample
   return nil unless chat
 
-  unless workspace.is_user_sub?(user.id)
+  unless workspace.workspace_subs.has_user_id?(user.id)
     workspace.workspace_subs.create(user_id: user.id)
   end
 

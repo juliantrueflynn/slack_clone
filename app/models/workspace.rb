@@ -32,10 +32,6 @@ class Workspace < ApplicationRecord
       .order(:id)
   end
 
-  def is_user_sub?(user_id)
-    !!workspace_subs.find_by(workspace_subs: { user_id: user_id })
-  end
-
   def user_convos(user_id)
     parents = messages.convo_parents_with_author_id(user_id)
     Message.parents_or_children(parents).includes(:channel, :author)
