@@ -21,37 +21,6 @@ const messageReducer = (state = _defaultState, action) => {
   let nextState;
 
   switch (action.type) {
-    case WORKSPACE.SHOW.RECEIVE: {
-      const { messages, reads } = action.workspace;
-
-      nextState = {};
-      messages.forEach((msg) => {
-        nextState[msg.slug] = msg;
-
-        if (msg.parentMessageId) {
-          nextState[msg.parentMessageSlug] = {
-            id: msg.parentMessageId,
-            slug: msg.parentMessageSlug,
-            channelSlug: msg.channelSlug,
-          };
-        }
-      });
-
-      reads.filter(read => read.readableType === 'Message').forEach(({ slug }) => {
-        nextState[slug] = { slug, ...nextState[slug] };
-      });
-
-      Object.values(nextState).forEach((msg) => {
-        nextState[msg.slug] = { ...msg, reactionIds: [] };
-
-        if (!msg.parentMessageId) {
-          nextState[msg.slug].thread = [];
-          nextState[msg.slug].authors = [];
-        }
-      });
-
-      return nextState;
-    }
     case MESSAGE.SHOW.RECEIVE:
     case MESSAGE.INDEX.RECEIVE:
     case HISTORY.INDEX.RECEIVE:
@@ -114,9 +83,7 @@ const messageReducer = (state = _defaultState, action) => {
       }
 
       if (favorites) {
-        favorites.forEach((fav) => {
-          nextState[fav.messageSlug].favoriteId = fav.id;
-        });
+        favorites.forEach((fav) => { nextState[fav.messageSlug].favoriteId = fav.id; });
       }
 
       return merge({}, state, nextState);
@@ -128,38 +95,37 @@ const messageReducer = (state = _defaultState, action) => {
       const { message } = action;
       const { slug, authors, parentMessageSlug: parentSlug } = message;
 
-      nextState = {};
-      nextState[slug] = { reactionIds: [], ...message };
+      nextState = { [slug]: { reactionIds: [], ...message } };
 
-      if (parentSlug) {
-        nextState[parentSlug] = {
-          id: message.parentMessageId,
-          slug: parentSlug,
-          reactionIds: [],
-          authors,
-          thread: [],
-          ...state[parentSlug],
-        };
+      if (parentSlug && state[parentSlug]) {
+        nextState[parentSlug] = { ...state[parentSlug], authors };
 
-        nextState[slug].thread = null;
         nextState[parentSlug].thread.push(slug);
       }
 
       return merge({}, state, nextState);
     }
     case MESSAGE.UPDATE.RECEIVE:
-      nextState = {};
-      nextState[action.message.slug] = { body: action.message.body };
+      if (!state[action.message.slug]) {
+        return state;
+      }
+
+      nextState = { [action.message.slug]: { body: action.message.body } };
+
       return merge({}, state, nextState);
     case MESSAGE.DESTROY.RECEIVE: {
       const { slug, parentMessageSlug: parentSlug } = action.message;
+
       nextState = merge({}, state);
 
       if (parentSlug && state[parentSlug]) {
         nextState[parentSlug].thread = state[parentSlug].thread.filter(val => val !== slug);
       }
 
-      delete nextState[slug];
+      if (state[slug]) {
+        delete nextState[slug];
+      }
+
       return nextState;
     }
     case REACTION.CREATE.RECEIVE: {
@@ -169,9 +135,10 @@ const messageReducer = (state = _defaultState, action) => {
         return state;
       }
 
-      nextState = merge({}, state);
-      nextState[slug].reactionIds = [...state[slug].reactionIds, id];
-      return nextState;
+      nextState = {};
+      nextState[slug].reactionIds.push(id);
+
+      return merge({}, state, nextState);
     }
     case REACTION.DESTROY.RECEIVE: {
       const { id, messageSlug: slug } = action.reaction;
@@ -182,23 +149,30 @@ const messageReducer = (state = _defaultState, action) => {
 
       nextState = merge({}, state);
       nextState[slug].reactionIds = state[slug].reactionIds.filter(val => val !== id);
+
       return nextState;
     }
     case FAVORITE.CREATE.RECEIVE:
-      nextState = {};
-      nextState[action.favorite.messageSlug] = { favoriteId: action.favorite.id };
+      nextState = { [action.favorite.messageSlug]: { favoriteId: action.favorite.id } };
       return merge({}, state, nextState);
     case FAVORITE.DESTROY.RECEIVE:
-      nextState = {};
-      nextState[action.favorite.messageSlug] = { favoriteId: null };
+      nextState = { [action.favorite.messageSlug]: { favoriteId: null } };
       return merge({}, state, nextState);
     case PIN.CREATE.RECEIVE:
-      nextState = {};
-      nextState[action.pin.messageSlug] = { pinId: action.pin.id };
+      if (!state[action.pin.messageSlug]) {
+        return state;
+      }
+
+      nextState = { [action.pin.messageSlug]: { pinId: action.pin.id } };
+
       return merge({}, state, nextState);
     case PIN.DESTROY.RECEIVE:
-      nextState = {};
-      nextState[action.pin.messageSlug] = { pinId: null };
+      if (!state[action.pin.messageSlug]) {
+        return state;
+      }
+
+      nextState = { [action.pin.messageSlug]: { pinId: null } };
+
       return merge({}, state, nextState);
     case WORKSPACE_SUB.CREATE.REQUEST:
     case WORKSPACE.SHOW.REQUEST:

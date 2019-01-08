@@ -18,12 +18,7 @@ const channelReducer = (state = {}, action) => {
   let nextState;
   switch (action.type) {
     case CHANNEL.INDEX.RECEIVE:
-      nextState = action.channels.reduce((acc, curr) => {
-        acc[curr.slug] = curr;
-
-        return acc;
-      }, {});
-
+      nextState = action.channels.reduce((acc, curr) => ({ ...acc, [curr.slug]: curr }), {});
       return merge({}, state, nextState);
     case CHANNEL.CREATE.RECEIVE: {
       const { channel, channelSubs, members } = action.channel;
@@ -131,10 +126,10 @@ const channelReducer = (state = {}, action) => {
         shouldFetch: false,
       };
 
-      messages.filter(msg => !msg.parentMessageSlug).forEach((msg) => {
-        if (!state[channel.slug].messages.includes(msg.slug)) {
-          nextState[channel.slug].messages.push(msg.slug);
-        }
+      messages.filter(msg => (
+        !msg.parentMessageSlug && !state[channel.slug].messages.includes(msg.slug)
+      )).forEach((msg) => {
+        nextState[channel.slug].messages.push(msg.slug);
       });
 
       return merge({}, state, nextState);
@@ -195,18 +190,13 @@ const channelReducer = (state = {}, action) => {
     }
     case PIN.CREATE.RECEIVE: {
       const { id, channelSlug } = action.pin;
-
-      nextState = {};
-      nextState[channelSlug] = { pins: [...state[channelSlug].pins, id] };
-
+      nextState = { [channelSlug]: { pins: [...state[channelSlug].pins, id] } };
       return merge({}, state, nextState);
     }
     case PIN.DESTROY.RECEIVE: {
       const { id, channelSlug } = action.pin;
-
       nextState = merge({}, state);
       nextState[channelSlug].pins = state[channelSlug].pins.filter(pinId => pinId !== id);
-
       return nextState;
     }
     case WORKSPACE_SUB.CREATE.REQUEST:
