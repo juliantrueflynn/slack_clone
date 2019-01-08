@@ -1,13 +1,13 @@
 import React from 'react';
 import Button from './Button';
 import StatusIcon from './StatusIcon';
-import { dateUtil } from '../util/dateUtil';
 import './UserDrawer.css';
 
 class UserDrawer extends React.Component {
   constructor(props) {
     super(props);
     this.handleButtonClick = this.handleButtonClick.bind(this);
+    this.openProfileModal = this.openProfileModal.bind(this);
   }
 
   handleButtonClick() {
@@ -26,15 +26,19 @@ class UserDrawer extends React.Component {
     }
   }
 
-  render() {
-    const { currentUserSlug, openModal, user } = this.props;
+  openProfileModal() {
+    const { openModal } = this.props;
+    openModal('MODAL_PROFILE');
+  }
 
-    if (!user) {
+  render() {
+    const { isLoading, currentUserSlug, user } = this.props;
+
+    if (!user || isLoading) {
       return null;
     }
 
     const isNotCurrUser = currentUserSlug !== user.slug;
-    const dateJoined = dateUtil(user.joinedAt).monthDayYear();
 
     let profileText = `You haven't direct messaged ${user.username} yet. Why not say hi?`;
     if (user.dmChat) {
@@ -64,7 +68,7 @@ class UserDrawer extends React.Component {
               </div>
               <div className="UserDrawer__row">
                 <div className="UserDrawer__col">Joined</div>
-                <div className="UserDrawer__col">{dateJoined}</div>
+                <div className="UserDrawer__col">{user.joinedAt}</div>
               </div>
             </div>
           )}
@@ -72,9 +76,7 @@ class UserDrawer extends React.Component {
             <Button buttonFor="dm" onClick={this.handleButtonClick}>Message</Button>
           )}
           {isNotCurrUser || (
-            <Button buttonFor="edit-user" onClick={() => openModal('MODAL_PROFILE')}>
-              Edit Profile
-            </Button>
+            <Button buttonFor="edit-user" onClick={this.openProfileModal}>Edit Profile</Button>
           )}
         </div>
       </div>

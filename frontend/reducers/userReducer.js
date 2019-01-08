@@ -8,11 +8,12 @@ import {
   SIGN_OUT,
   USER,
 } from '../actions/actionTypes';
+import { dateUtil } from '../util/dateUtil';
 
 const userReducer = (state = {}, action) => {
   Object.freeze(state);
-
   let nextState;
+
   switch (action.type) {
     case WORKSPACE.INDEX.RECEIVE: {
       const { workspaceSubs } = action.workspaces;
@@ -60,7 +61,8 @@ const userReducer = (state = {}, action) => {
     case USER.UPDATE.RECEIVE:
     case USER.SHOW.RECEIVE: {
       const { id, slug, ...rest } = action.user;
-      nextState = { [slug]: rest };
+      const joinedAt = dateUtil(rest.joinedAt).monthDayYear();
+      nextState = { [slug]: { ...rest, joinedAt } };
       return merge({}, state, nextState);
     }
     case CHANNEL_SUB.CREATE.RECEIVE: {

@@ -132,6 +132,7 @@ class DrawerSwitch extends React.Component {
         path: 'team',
         createChannelRequest,
         history,
+        isLoading,
         workspaceSlug,
         currentUserSlug,
         openModal,
