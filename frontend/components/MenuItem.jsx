@@ -28,6 +28,7 @@ class MenuItem extends React.Component {
       onClick,
       toggleMenu,
       isOpen,
+      itemRef,
       condition,
       ...props
     } = this.props;
@@ -65,7 +66,7 @@ class MenuItem extends React.Component {
     });
 
     return (
-      <li className={itemClassNames}>
+      <li className={itemClassNames} ref={itemRef}>
         {itemType === 'link' && (
           <LinkWithDrawer
             isNavLink

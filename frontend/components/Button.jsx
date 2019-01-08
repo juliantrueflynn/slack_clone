@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import './Button.css';
 
-const Button = ({
+const Button = React.forwardRef(({
   unStyled,
   buttonFor,
   modifier,
@@ -12,7 +12,7 @@ const Button = ({
   linkTo,
   isActive,
   ...props
-}) => {
+}, ref) => {
   const { type } = props;
   const btnClassNames = classNames('Btn', {
     Btn__unstyled: unStyled,
@@ -27,10 +27,10 @@ const Button = ({
   });
 
   if (linkTo) {
-    return <Link role="button" className={btnClassNames} to={linkTo} {...props} />;
+    return <Link role="button" ref={ref} className={btnClassNames} to={linkTo} {...props} />;
   }
 
-  return <button type="button" className={btnClassNames} {...props} />;
-};
+  return <button type="button" ref={ref} className={btnClassNames} {...props} />;
+});
 
 export default Button;

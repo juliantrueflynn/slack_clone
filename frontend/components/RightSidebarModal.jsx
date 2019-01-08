@@ -5,12 +5,17 @@ import Menu from './Menu';
 import './RightSidebarModal.css';
 
 const RightSidebarModal = ({
+  isOpen,
   closeModal,
   openModalProfile,
   drawerType,
   channel,
   toggleLink,
 }) => {
+  if (!isOpen) {
+    return null;
+  }
+
   const mobileMenuItems = [
     {
       key: 'details',

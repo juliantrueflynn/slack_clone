@@ -18,6 +18,8 @@ const mapStateToProps = (state) => {
     subbedWorkspaces: getSubbedWorkspaces(state),
     currentUser: state.session.currentUser,
     isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_PUBLIC',
+    isProfileDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_PUBLIC',
+    isMobileDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_PUBLIC_MOBILE',
     dropdownProps: state.ui.dropdown.dropdownProps,
   };
 };

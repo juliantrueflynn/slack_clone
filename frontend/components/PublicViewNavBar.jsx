@@ -10,27 +10,53 @@ import './PublicViewNavBar.css';
 class PublicViewNavBar extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { left: 0, isMobileSize: false };
     this.handleDdClick = this.handleDdClick.bind(this);
+    this.ddToggler = React.createRef();
+    this.ddTogglerMobile = React.createRef();
+  }
+
+  componentDidMount() {
+    this.updateModalStyles();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { windowWidth } = this.props;
+
+    if (windowWidth !== prevProps.windowWidth) {
+      this.updateModalStyles();
+    }
+  }
+
+  updateModalStyles() {
+    const { windowWidth } = this.props;
+    const isMobileSize = windowWidth <= 576;
+    const togglerRef = isMobileSize ? this.ddTogglerMobile : this.ddToggler;
+    const { right } = togglerRef.current.getBoundingClientRect();
+
+    this.setState({ left: `${right - 245}px`, isMobileSize });
   }
 
   handleDdClick(e) {
     const { openDropdown } = this.props;
-    const { bottom: posY, right: posX } = e.target.getBoundingClientRect();
+    const { bottom: posY, right: posX } = e.currentTarget.getBoundingClientRect();
+    const ddType = e.currentTarget.getAttribute('data-dropdown');
 
-    openDropdown('DROPDOWN_PUBLIC', { posY, posX });
+    openDropdown(`DROPDOWN_${ddType}`, { posY, posX });
   }
 
   render() {
     const {
-      isMobileSize,
       isLoggedIn,
       signOutRequest,
       subbedWorkspaces,
       openWorkspaceModal,
+      isProfileDdOpen,
+      isMobileDdOpen,
       dropdownProps,
-      isDdOpen,
       closeDropdown,
     } = this.props;
+    const { isMobileSize, left } = this.state;
 
     const menuModifier = subbedWorkspaces.length ? 'filled' : 'empty';
     const sessionMenuItems = [
@@ -67,31 +93,49 @@ class PublicViewNavBar extends React.Component {
     };
     workspaceMenuItems.push(createWorkspaceItem);
 
-    const desktopMenuItems = [].concat(sessionMenuItems);
-    desktopMenuItems.push({
+    const menuItems = [].concat(sessionMenuItems);
+    menuItems.push({
       key: 'dropdown',
       label: 'Your Workspaces',
       onClick: this.handleDdClick,
-      isOpen: isDdOpen,
+      isOpen: isProfileDdOpen,
+      itemRef: this.ddToggler,
+      'data-dropdown': 'PUBLIC',
       condition: isLoggedIn && subbedWorkspaces,
     });
 
     const mobileMenuItems = sessionMenuItems.concat(workspaceMenuItems);
     const ddItems = isMobileSize ? mobileMenuItems : workspaceMenuItems;
-    const contentStyle = { top: '65px' };
+    const contentStyle = { top: '65px', left };
 
     return (
       <div className="PublicViewNavBar">
         <div className="PublicView__container">
           <nav className="PublicViewNavBar__nav">
             <Link className="PublicViewNavBar__logo" to="/" rel="home">Slack Clone</Link>
-            <Menu menuFor="public" isRow items={desktopMenuItems} bemModifier={menuModifier} />
-            <Button buttonFor="mobile-public" isActive={isDdOpen} onClick={this.handleDdClick}>
+            <Menu menuFor="public" isRow items={menuItems} bemModifier={menuModifier} />
+            <Button
+              buttonFor="mobile-public"
+              isActive={isMobileDdOpen}
+              onClick={this.handleDdClick}
+              ref={this.ddTogglerMobile}
+              data-dropdown="PUBLIC_MOBILE"
+            >
               <FontAwesomeIcon icon="bars" fixedWidth size="lg" />
             </Button>
           </nav>
         </div>
-        {isDdOpen && (
+        {isProfileDdOpen && (
+          <DropdownModal
+            coords={dropdownProps}
+            contentStyle={contentStyle}
+            close={closeDropdown}
+            bemModifier="public"
+          >
+            <Menu menuFor="dropdown" items={ddItems} bemModifier={menuModifier} />
+          </DropdownModal>
+        )}
+        {isMobileDdOpen && (
           <DropdownModal
             coords={dropdownProps}
             contentStyle={contentStyle}
