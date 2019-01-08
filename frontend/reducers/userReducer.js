@@ -35,15 +35,14 @@ const userReducer = (state = {}, action) => {
     case WORKSPACE.SHOW.RECEIVE: {
       const { members, channelSubs } = action.workspace;
 
-      nextState = members.reduce((acc, curr) => {
-        acc[curr.slug] = {
-          subs: [],
-          status: curr.status || 'offline',
+      nextState = members.reduce((acc, curr) => ({
+        ...acc,
+        [curr.slug]: {
           ...curr,
-        };
-
-        return acc;
-      }, {});
+          subs: [],
+          status: curr.status || 'offline'
+        },
+      }), {});
 
       channelSubs.forEach((sub) => {
         nextState[sub.userSlug].subs.push(sub.id);
