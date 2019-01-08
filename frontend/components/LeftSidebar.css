@@ -19,7 +19,13 @@
 }
 
 .LeftSidebar .ps__rail-y,
-.Modal__left-sidebar .ps__rail-y {
+.LeftSidebar .ps .ps__rail-y:hover,
+.LeftSidebar .ps .ps__rail-y:focus,
+.LeftSidebar .ps .ps__rail-y.ps--clicking,
+.Modal__left-sidebar .ps__rail-y,
+.Modal__left-sidebar .ps .ps__rail-y:hover,
+.Modal__left-sidebar .ps .ps__rail-y:focus,
+.Modal__left-sidebar .ps .ps__rail-y.ps--clicking {
   background-color: transparent;
 }
 
