@@ -24,7 +24,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, { location }) => ({
   fetchWorkspacesRequest: () => dispatch(fetchWorkspaces.request()),
-  openModal: (modalType, modalProps) => dispatch(updateModal(modalType, modalProps)),
+  openWorkspaceModal: () => dispatch(updateModal('MODAL_FORM_WORKSPACE', null)),
   openDropdown: (ddType, ddProps) => dispatch(updateDropdown(ddType, ddProps)),
   closeDropdown: () => dispatch(updateDropdown(null)),
   createWorkspaceSubRequest: workspaceSub => dispatch(createWorkspaceSub.request(workspaceSub)),

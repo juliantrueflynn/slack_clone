@@ -89,6 +89,7 @@ class ChannelHeaderNavbar extends React.Component {
       openModal,
       searchQuery,
       isNotDefaultChannel,
+      dmChannelPath,
       destroySearchQuery,
       isDdOpen,
       dropdownProps,
@@ -96,56 +97,52 @@ class ChannelHeaderNavbar extends React.Component {
       match: { url },
     } = this.props;
     const { isSidebarModalOpen } = this.state;
-
     const openModalProfile = () => openModal('MODAL_PROFILE');
-    let channelMenuItems = [];
-    let ddMenuItems = [];
+    const contentStyle = { top: '46px' };
 
-    if (channel) {
-      channelMenuItems = [
-        {
-          key: 'details',
-          icon: <FontAwesomeIcon icon="info-circle" fixedWidth />,
-          onClick: () => this.handleLinkToggle('details'),
-          isOpen: drawerType === 'details',
-        },
-        {
-          key: 'edit-dropdown',
-          icon: <FontAwesomeIcon icon="cog" fixedWidth />,
-          onClick: this.handleDdButtonClick,
-          isOpen: isDdOpen,
-        }
-      ];
+    const channelMenuItems = [
+      {
+        key: 'details',
+        icon: <FontAwesomeIcon icon="info-circle" fixedWidth />,
+        onClick: () => this.handleLinkToggle('details'),
+        isOpen: drawerType === 'details',
+      },
+      {
+        key: 'edit-dropdown',
+        icon: <FontAwesomeIcon icon="cog" fixedWidth />,
+        onClick: this.handleDdButtonClick,
+        isOpen: isDdOpen,
+      }
+    ];
 
-      ddMenuItems = [
-        {
-          label: 'View channel details',
-          link: `${url}/details`,
-          onClick: closeDropdown,
-        },
-        {
-          label: `View ${chatTitle}’s profile`,
-          link: `${url}/team/${channel.dmUserSlug}`,
-          onClick: closeDropdown,
-          condition: channel.hasDm,
-        },
-        {
-          label: 'Edit channel',
-          onClick: openChannelEditModal,
-          condition: !channel.hasDm,
-        },
-        {
-          label: `Join ${chatTitle}`,
-          onClick: this.handleChannelSubToggle,
-          condition: !channel.hasDm && !channel.isSub,
-        },
-        {
-          label: `Leave ${chatTitle}`,
-          onClick: this.handleChannelSubToggle,
-          condition: !channel.hasDm && channel.isSub && isNotDefaultChannel,
-        }
-      ];
-    }
+    const ddMenuItems = [
+      {
+        label: 'View channel details',
+        link: `${url}/details`,
+        onClick: closeDropdown,
+      },
+      {
+        label: `View ${chatTitle}’s profile`,
+        link: dmChannelPath,
+        onClick: closeDropdown,
+        condition: channel && channel.hasDm,
+      },
+      {
+        label: 'Edit channel',
+        onClick: openChannelEditModal,
+        condition: channel && !channel.hasDm,
+      },
+      {
+        label: `Join ${chatTitle}`,
+        onClick: this.handleChannelSubToggle,
+        condition: channel && !channel.hasDm && !channel.isSub,
+      },
+      {
+        label: `Leave ${chatTitle}`,
+        onClick: this.handleChannelSubToggle,
+        condition: channel && !channel.hasDm && channel.isSub && isNotDefaultChannel,
+      }
+    ];
 
     const userMenuItems = [
       {
@@ -184,7 +181,7 @@ class ChannelHeaderNavbar extends React.Component {
           />
         )}
         {isDdOpen && (
-          <DropdownModal coordinates={dropdownProps} close={closeDropdown}>
+          <DropdownModal coords={dropdownProps} contentStyle={contentStyle} close={closeDropdown}>
             <Menu items={ddMenuItems} />
           </DropdownModal>
         )}

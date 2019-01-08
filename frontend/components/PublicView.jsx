@@ -32,7 +32,7 @@ class PublicView extends React.Component {
       fetchWorkspacesRequest,
       workspaces,
       workspacesMap,
-      openModal,
+      openWorkspaceModal,
       render,
       ...props
     } = this.props;
@@ -48,8 +48,12 @@ class PublicView extends React.Component {
     return (
       <div className={pageClassNames}>
         <ScrollBar>
-          <PublicViewNavBar openModal={openModal} isLoggedIn={isLoggedIn} {...props} />
-          {render({ workspaces, openModal })}
+          <PublicViewNavBar
+            openWorkspaceModal={openWorkspaceModal}
+            isLoggedIn={isLoggedIn}
+            {...props}
+          />
+          {render({ workspaces, openWorkspaceModal })}
         </ScrollBar>
       </div>
     );

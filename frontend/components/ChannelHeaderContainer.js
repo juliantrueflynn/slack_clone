@@ -11,11 +11,12 @@ import { destroyChannelSub, createChannelSub } from '../actions/channelActions';
 import { getChannelsMap, getMessagesMap } from '../reducers/selectors';
 import ChannelHeader from './ChannelHeader';
 
-const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
+const mapStateToProps = (state, { match: { url, params: { chatPath } } }) => {
   const channelsMap = getChannelsMap(state);
   const channel = channelsMap[chatPath];
   const defaultChatPath = state.ui.defaultChannel;
   const isNotDefaultChannel = chatPath !== defaultChatPath;
+  const dmChannelPath = channel ? `${url}/team/${channel.dmUserSlug}` : null;
 
   const { unreadsByChannel } = state;
   const channelUnreadsLen = Object.values(unreadsByChannel).reduce((acc, curr) => {
@@ -34,6 +35,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
     chatPath,
     channelsMap,
     channel,
+    dmChannelPath,
     isNotDefaultChannel,
     messages,
     convoUnreadsLen,

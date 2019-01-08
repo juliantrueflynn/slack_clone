@@ -86,12 +86,12 @@ class MessagesList extends React.Component {
           />
         ))}
         {dropdownType === 'DROPDOWN_MESSAGE' && (
-          <DropdownModal coordinates={dropdownProps} close={closeDropdown}>
+          <DropdownModal coords={dropdownProps} close={closeDropdown}>
             <Menu items={this.getDdMenuItems()} />
           </DropdownModal>
         )}
         {dropdownType === 'DROPDOWN_REACTION' && (
-          <DropdownModal coordinates={dropdownProps} close={closeDropdown}>
+          <DropdownModal coords={dropdownProps} close={closeDropdown}>
             <EmojiPicker onEmojiClick={this.handleEmojiClick} disableDiversityPicker />
           </DropdownModal>
         )}

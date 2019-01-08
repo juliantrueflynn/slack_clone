@@ -19,6 +19,10 @@
   border-radius: 6px;
 }
 
+.Modal__dropdown .ps--active-y .Menu li:last-child {
+  padding-bottom: 15px;
+}
+
 .Modal__dropdown .ps__rail-y,
 .Modal__dropdown .ps .ps__rail-y:hover,
 .Modal__dropdown .ps .ps__rail-y:focus,

@@ -148,6 +148,7 @@ class LeftSidebar extends React.Component {
     ];
 
     const style = { height: windowHeight };
+    const contentStyle = { top: '60px', left: '10px' };
 
     return (
       <aside className="LeftSidebar">
@@ -171,8 +172,8 @@ class LeftSidebar extends React.Component {
         )}
         {isDdOpen && (
           <DropdownModal
-            coordinates={dropdownProps}
-            fixedLeftPos="10px"
+            coords={dropdownProps}
+            contentStyle={contentStyle}
             bemModifier="profile"
             close={closeDropdown}
           >

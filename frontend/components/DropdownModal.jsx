@@ -15,7 +15,7 @@ class DropdownModal extends React.Component {
     const {
       windowWidth,
       windowHeight,
-      coordinates: { posX, posY }
+      coords: { posX, posY }
     } = this.props;
     const { clientWidth, clientHeight } = this.contentRef;
 
@@ -31,7 +31,7 @@ class DropdownModal extends React.Component {
 
   render() {
     const {
-      coordinates,
+      coords,
       windowWidth,
       windowHeight,
       children,

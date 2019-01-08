@@ -4,7 +4,7 @@ import PublicWorkspaces from './PublicWorkspaces';
 import './PageHome.css';
 
 const PageHome = ({
-  content: { workspaces, openModal },
+  content: { workspaces, openWorkspaceModal },
   isLoggedIn,
   currentUser,
   createWorkspaceSubRequest,
@@ -34,7 +34,7 @@ const PageHome = ({
           isLoggedIn={isLoggedIn}
           workspaces={workspaces}
           currentUser={currentUser}
-          openModal={openModal}
+          openWorkspaceModal={openWorkspaceModal}
           createWorkspaceSubRequest={createWorkspaceSubRequest}
           updateWorkspaceSubRequest={updateWorkspaceSubRequest}
         />

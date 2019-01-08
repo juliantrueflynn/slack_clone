@@ -26,7 +26,7 @@ class PublicViewNavBar extends React.Component {
       isLoggedIn,
       signOutRequest,
       subbedWorkspaces,
-      openModal,
+      openWorkspaceModal,
       dropdownProps,
       isDdOpen,
       closeDropdown,
@@ -63,7 +63,7 @@ class PublicViewNavBar extends React.Component {
     const createWorkspaceItem = {
       key: 'createWorkspace',
       label: 'Create Workspace',
-      onClick: () => openModal('MODAL_FORM_WORKSPACE'),
+      onClick: openWorkspaceModal,
     };
     workspaceMenuItems.push(createWorkspaceItem);
 
@@ -78,25 +78,26 @@ class PublicViewNavBar extends React.Component {
 
     const mobileMenuItems = sessionMenuItems.concat(workspaceMenuItems);
     const ddItems = isMobileSize ? mobileMenuItems : workspaceMenuItems;
+    const contentStyle = { top: '65px' };
 
     return (
       <div className="PublicViewNavBar">
         <div className="PublicView__container">
           <nav className="PublicViewNavBar__nav">
             <Link className="PublicViewNavBar__logo" to="/" rel="home">Slack Clone</Link>
-            <Menu
-              menuFor="public"
-              isRow
-              items={desktopMenuItems}
-              bemModifier={menuModifier}
-            />
+            <Menu menuFor="public" isRow items={desktopMenuItems} bemModifier={menuModifier} />
             <Button buttonFor="mobile-public" isActive={isDdOpen} onClick={this.handleDdClick}>
               <FontAwesomeIcon icon="bars" fixedWidth size="lg" />
             </Button>
           </nav>
         </div>
         {isDdOpen && (
-          <DropdownModal coordinates={dropdownProps} bemModifier="public" close={closeDropdown}>
+          <DropdownModal
+            coords={dropdownProps}
+            contentStyle={contentStyle}
+            close={closeDropdown}
+            bemModifier="public"
+          >
             <Menu menuFor="dropdown" items={ddItems} bemModifier={menuModifier} />
           </DropdownModal>
         )}
