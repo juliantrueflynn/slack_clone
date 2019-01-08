@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from './Modal';
 import withWindowResize from './withWindowResize';
+import ScrollBar from './ScrollBar';
 import './DropdownModal.css';
 
 class DropdownModal extends React.Component {
@@ -31,20 +32,21 @@ class DropdownModal extends React.Component {
   render() {
     const {
       coordinates,
-      fixedLeftPos,
       windowWidth,
       windowHeight,
       children,
       bemModifier,
+      contentStyle,
       ...modalProps
     } = this.props;
     const { top, left } = this.state;
 
     const style = {
       content: {
-        top: `${windowHeight - top}px`,
-        left: fixedLeftPos || `${windowWidth - left}px`,
         position: 'absolute',
+        top: `${windowHeight - top}px`,
+        left: `${windowWidth - left}px`,
+        ...contentStyle,
       }
     };
 
@@ -59,7 +61,7 @@ class DropdownModal extends React.Component {
         bemModifier={bemModifier}
         {...modalProps}
       >
-        {children}
+        <ScrollBar>{children}</ScrollBar>
       </Modal>
     );
   }

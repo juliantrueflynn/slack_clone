@@ -12,6 +12,18 @@
   padding-top: 15px;
   padding-bottom: 15px;
   width: 245px;
+  max-height: 290px;
+}
+
+.Modal__dropdown .ScrollBar {
+  border-radius: 6px;
+}
+
+.Modal__dropdown .ps__rail-y,
+.Modal__dropdown .ps .ps__rail-y:hover,
+.Modal__dropdown .ps .ps__rail-y:focus,
+.Modal__dropdown .ps .ps__rail-y.ps--clicking {
+  background-color: transparent;
 }
 
 .Modal__dropdown .Menu > .MenuItem > .MenuItem__content {
