@@ -7,42 +7,49 @@ import ChannelHeaderNavbar from './ChannelHeaderNavbar';
 import './ChannelHeader.css';
 
 class ChannelHeader extends React.Component {
-  getPageTitle() {
-    const { channel, chatPath } = this.props;
+  constructor(props) {
+    super(props);
+    this.handleChannelEditModal = this.handleChannelEditModal.bind(this);
+    this.handleAccordionOpen = this.handleAccordionOpen.bind(this);
+  }
 
-    let title;
-    if (chatPath === 'unreads') {
-      title = 'All Unreads';
-    } else if (chatPath === 'threads') {
-      title = 'All Threads';
-    } else if (channel) {
-      title = channel.hasDm ? channel.title : `#${channel.title}`;
-    }
+  handleChannelEditModal() {
+    const { openModal, channel, currentUserSlug } = this.props;
+    openModal('MODAL_FORM_CHANNEL', { channel, currentUserSlug });
+  }
 
-    return title;
+  handleAccordionOpen(e) {
+    const { accordionOpen } = this.props;
+    const accordionType = e.target.getAttribute('data-accordion');
+    accordionOpen(accordionType);
   }
 
   render() {
     const {
       channel,
-      currentUserSlug,
+      chatTitle,
+      isNotDefaultChannel,
+      destroySearchQuery,
       messages,
       channelUnreadsLen,
       convoUnreadsLen,
+      dmChannelUser,
       users,
-      accordionOpen,
+      searchQuery,
       openModal,
       chatPath,
       closeDropdown,
-      match: { url },
-      ...props
+      dropdownProps,
+      drawerType,
+      closeDrawer,
+      isDdOpen,
+      openChannelDropdown,
+      createChannelSubRequest,
+      destroyChannelSubRequest,
+      history,
+      match,
     } = this.props;
-
-    const openChannelEditModal = () => openModal(
-      'MODAL_FORM_CHANNEL',
-      { channel, currentUserSlug }
-    );
-    const { dmUserSlug } = channel || {};
+    const { url } = match;
 
     let metaMenuItems = [];
 
@@ -53,12 +60,10 @@ class ChannelHeader extends React.Component {
       const label = convoUnreadsLen ? `${convoUnreadsLen} updated convos` : 'No new replies';
       metaMenuItems = [{ key: 'unreads', label }];
     } else if (channel && channel.hasDm) {
-      const user = users[dmUserSlug];
-      const userStatus = user && user.status;
-      const email = user && user.email;
+      const { email, status } = dmChannelUser;
 
       metaMenuItems = [
-        { key: 'status', icon: <StatusIcon member={user} />, label: userStatus },
+        { key: 'status', icon: <StatusIcon member={dmChannelUser} />, label: status },
         { key: 'email', label: email },
       ];
     } else if (channel && !channel.hasDm) {
@@ -68,43 +73,61 @@ class ChannelHeader extends React.Component {
           icon: <FontAwesomeIcon icon="user" size="sm" />,
           link: `${url}/details`,
           label: channel.members.length,
-          onClick: () => accordionOpen('members'),
+          onClick: this.handleAccordionOpen,
+          'data-accordion': 'members',
         },
         {
           key: 'pinned',
           icon: <FontAwesomeIcon icon="thumbtack" size="sm" />,
           link: `${url}/details`,
           label: channel.pins && channel.pins.length,
-          onClick: () => accordionOpen('pinned'),
+          onClick: this.handleAccordionOpen,
+          'data-accordion': 'pinned',
           condition: channel.pins && channel.pins.length,
         },
         {
           key: 'topic',
           icon: !!channel.topic || <FontAwesomeIcon icon="edit" size="sm" />,
           label: channel.topic || 'Add topic',
-          onClick: openChannelEditModal,
+          onClick: this.handleChannelEditModal,
         }
       ];
     }
 
     return (
       <header className="ChannelHeader">
-        <Button buttonFor="left-sidebar-mobile" unStyled onClick={() => openModal('MODAL_LEFT_SIDEBAR')}>
+        <Button
+          buttonFor="left-sidebar-mobile"
+          unStyled
+          onClick={() => openModal('MODAL_LEFT_SIDEBAR')}
+        >
           <FontAwesomeIcon icon="bars" size="lg" />
         </Button>
         <div className="ChannelHeader__info">
-          <h1 className="ChannelHeader__title">{this.getPageTitle()}</h1>
+          <h1 className="ChannelHeader__title">{chatTitle}</h1>
           <Menu menuFor="header-meta" items={metaMenuItems} isRow unStyled />
         </div>
         <ChannelHeaderNavbar
-          chatTitle={this.getPageTitle()}
+          chatTitle={chatTitle}
+          isNotDefaultChannel={isNotDefaultChannel}
           openModal={openModal}
+          isDdOpen={isDdOpen}
+          dropdownProps={dropdownProps}
+          openChannelDropdown={openChannelDropdown}
           closeDropdown={closeDropdown}
-          openChannelEditModal={openChannelEditModal}
+          dmChannelUser={dmChannelUser}
+          openChannelEditModal={this.handleChannelEditModal}
           channel={channel}
           messages={messages}
           users={users}
-          {...props}
+          drawerType={drawerType}
+          closeDrawer={closeDrawer}
+          searchQuery={searchQuery}
+          destroySearchQuery={destroySearchQuery}
+          createChannelSubRequest={createChannelSubRequest}
+          destroyChannelSubRequest={destroyChannelSubRequest}
+          history={history}
+          match={match}
         />
       </header>
     );

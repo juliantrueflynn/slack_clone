@@ -11,12 +11,27 @@ import { destroyChannelSub, createChannelSub } from '../actions/channelActions';
 import { getChannelsMap, getMessagesMap } from '../reducers/selectors';
 import ChannelHeader from './ChannelHeader';
 
-const mapStateToProps = (state, { match: { url, params: { chatPath } } }) => {
+const getChatTitle = (chatPath, channel) => {
+  let title;
+  if (chatPath === 'unreads') {
+    title = 'All Unreads';
+  } else if (chatPath === 'threads') {
+    title = 'All Threads';
+  } else if (channel) {
+    title = channel.hasDm ? channel.title : `#${channel.title}`;
+  }
+
+  return title;
+};
+
+const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
+  const { members: users, unreads: unreadsMap } = state.entities;
+
   const channelsMap = getChannelsMap(state);
   const channel = channelsMap[chatPath];
   const defaultChatPath = state.ui.defaultChannel;
   const isNotDefaultChannel = chatPath !== defaultChatPath;
-  const dmChannelPath = channel ? `${url}/team/${channel.dmUserSlug}` : null;
+  const dmChannelUser = channel && channel.hasDm ? users[channel.dmUserSlug] : {};
 
   const { unreadsByChannel } = state;
   const channelUnreadsLen = Object.values(unreadsByChannel).reduce((acc, curr) => {
@@ -27,7 +42,6 @@ const mapStateToProps = (state, { match: { url, params: { chatPath } } }) => {
 
   const msgsMap = getMessagesMap(state);
   const messages = Object.values(msgsMap);
-  const unreadsMap = state.entities.unreads;
   const unreads = Object.values(unreadsMap).filter(unread => unread && unread.hasUnreads);
   const convoUnreadsLen = unreads.filter(unread => unread && unread.readableType === 'Message').length;
 
@@ -35,12 +49,13 @@ const mapStateToProps = (state, { match: { url, params: { chatPath } } }) => {
     chatPath,
     channelsMap,
     channel,
-    dmChannelPath,
+    chatTitle: getChatTitle(chatPath, channel),
+    dmChannelUser,
     isNotDefaultChannel,
     messages,
     convoUnreadsLen,
     channelUnreadsLen,
-    users: state.entities.members,
+    users,
     currentUserSlug: state.session.currentUser.slug,
     modalType: state.ui.displayModal.modalType,
     drawerType: state.ui.drawer.drawerType,
@@ -52,8 +67,9 @@ const mapStateToProps = (state, { match: { url, params: { chatPath } } }) => {
 
 const mapDispatchToProps = (dispatch, { match: { params: { chatPath } } }) => ({
   openModal: (modalType, modalProps) => dispatch(updateModal(modalType, modalProps)),
+  openLeftSidebarModal: () => dispatch(updateModal('MODAL_LEFT_SIDEBAR', null)),
   closeDrawer: () => dispatch(updateDrawer(null)),
-  openDropdown: (ddType, ddProps) => dispatch(updateDropdown(ddType, ddProps)),
+  openChannelDropdown: ddProps => dispatch(updateDropdown('DROPDOWN_CHANNEL_EDIT', ddProps)),
   closeDropdown: () => dispatch(updateDropdown(null)),
   accordionOpen: accordionType => dispatch(accordionOpen('details', accordionType)),
   destroySearchQuery: () => dispatch(updateSearchQuery()),

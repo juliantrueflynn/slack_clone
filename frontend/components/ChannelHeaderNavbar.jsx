@@ -1,5 +1,4 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBar from './SearchBar';
 import Menu from './Menu';
@@ -14,7 +13,7 @@ class ChannelHeaderNavbar extends React.Component {
     super(props);
     this.state = { isSidebarModalOpen: false };
     this.handleLinkToggle = this.handleLinkToggle.bind(this);
-    this.handleDdButtonClick = this.handleDdButtonClick.bind(this);
+    this.handleDdClick = this.handleDdClick.bind(this);
     this.handleSidebarModalToggle = this.handleSidebarModalToggle.bind(this);
     this.handleChannelSubToggle = this.handleChannelSubToggle.bind(this);
   }
@@ -73,11 +72,11 @@ class ChannelHeaderNavbar extends React.Component {
     closeDropdown();
   }
 
-  handleDdButtonClick(e) {
-    const { openDropdown } = this.props;
-    const { bottom: posY, right: posX } = e.currentTarget.getBoundingClientRect();
+  handleDdClick(e) {
+    const { openChannelDropdown } = this.props;
+    const { bottom: posY, right: posX } = e.target.getBoundingClientRect();
 
-    openDropdown('DROPDOWN_CHANNEL_EDIT', { posY, posX });
+    openChannelDropdown({ posY, posX });
   }
 
   render() {
@@ -89,7 +88,7 @@ class ChannelHeaderNavbar extends React.Component {
       openModal,
       searchQuery,
       isNotDefaultChannel,
-      dmChannelPath,
+      dmChannelUser,
       destroySearchQuery,
       isDdOpen,
       dropdownProps,
@@ -110,7 +109,7 @@ class ChannelHeaderNavbar extends React.Component {
       {
         key: 'edit-dropdown',
         icon: <FontAwesomeIcon icon="cog" fixedWidth />,
-        onClick: this.handleDdButtonClick,
+        onClick: this.handleDdClick,
         isOpen: isDdOpen,
       }
     ];
@@ -123,7 +122,7 @@ class ChannelHeaderNavbar extends React.Component {
       },
       {
         label: `View ${chatTitle}’s profile`,
-        link: dmChannelPath,
+        link: `${url}/team/${dmChannelUser.slug}`,
         onClick: closeDropdown,
         condition: channel && channel.hasDm,
       },
@@ -171,15 +170,14 @@ class ChannelHeaderNavbar extends React.Component {
         <Button buttonFor="right-sidebar-mobile" unStyled onClick={this.handleSidebarModalToggle}>
           <FontAwesomeIcon icon="ellipsis-v" />
         </Button>
-        {isSidebarModalOpen && (
-          <RightSidebarModal
-            drawerType={drawerType}
-            toggleLink={this.handleLinkToggle}
-            channel={channel}
-            openModalProfile={openModalProfile}
-            closeModal={this.handleSidebarModalToggle}
-          />
-        )}
+        <RightSidebarModal
+          isOpen={isSidebarModalOpen}
+          drawerType={drawerType}
+          toggleLink={this.handleLinkToggle}
+          channel={channel}
+          openModalProfile={openModalProfile}
+          closeModal={this.handleSidebarModalToggle}
+        />
         {isDdOpen && (
           <DropdownModal coords={dropdownProps} contentStyle={contentStyle} close={closeDropdown}>
             <Menu items={ddMenuItems} />
@@ -190,4 +188,4 @@ class ChannelHeaderNavbar extends React.Component {
   }
 }
 
-export default withRouter(withWindowResize(ChannelHeaderNavbar));
+export default withWindowResize(ChannelHeaderNavbar);
