@@ -8,7 +8,6 @@ import {
 } from '../util/editorUtil';
 import Button from './Button';
 import MessageEditor from './MessageEditor';
-import FormContainer from './FormContainer';
 import './MessageForm.css';
 
 class MessageForm extends React.Component {
@@ -95,11 +94,11 @@ class MessageForm extends React.Component {
     }
 
     return (
-      <FormContainer
+      <form
         role="presentation"
         className="MessageForm"
-        onKeyDown={this.handleEnterSubmit}
         onSubmit={this.handleSubmit}
+        onKeyDown={this.handleEnterSubmit}
       >
         <MessageEditor
           editorState={editorState}
@@ -107,7 +106,7 @@ class MessageForm extends React.Component {
           placeholder={editorPlaceholder}
         />
         {hasSubmitButton && <Button type="submit" size="sm">Send</Button>}
-      </FormContainer>
+      </form>
     );
   }
 }

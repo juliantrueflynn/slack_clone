@@ -67,7 +67,7 @@ class SessionForm extends React.Component {
             setFieldValue={this.handleFieldValueChange}
             submitForm={this.handleFormSubmit}
           >
-            <Button type="submit">{sessionText}</Button>
+            <Button type="submit" color="green" size="lg">{sessionText}</Button>
           </FormContainer>
         </div>
       </div>

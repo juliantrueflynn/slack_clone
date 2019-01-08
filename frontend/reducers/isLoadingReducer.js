@@ -10,6 +10,8 @@ import {
   CHANNEL,
   HISTORY,
   DRAWER_UPDATE,
+  PASSWORD,
+  CHAT_PATH_UPDATE,
 } from '../actions/actionTypes';
 
 const _defaultState = {
@@ -19,57 +21,59 @@ const _defaultState = {
   channels: false,
   drawer: false,
   history: false,
+  form: false,
 };
 
 const isLoadingReducer = (state = _defaultState, action) => {
   Object.freeze(state);
-  const nextState = { ...state };
 
   switch (action.type) {
     case WORKSPACE.SHOW.REQUEST:
-      nextState.workspace = true;
-      nextState.channel = true;
-      return nextState;
-    case USER_THREAD.INDEX.REQUEST:
-    case READ.INDEX.REQUEST:
-    case MESSAGE.INDEX.REQUEST:
-      nextState.channel = true;
-      return nextState;
+      return { ...state, workspace: true };
+    case WORKSPACE.CREATE.REQUEST:
+    case CHANNEL.CREATE.REQUEST:
+    case CHANNEL.UPDATE.REQUEST:
+    case PASSWORD.UPDATE.REQUEST:
+    case USER.UPDATE.REQUEST:
+      return { ...state, form: true };
+    case CHAT_PATH_UPDATE:
+      return { ...state, channel: true };
     case DRAWER_UPDATE:
-      nextState.drawer = true;
-      return nextState;
+      return { ...state, drawer: true };
     case CHANNEL.INDEX.REQUEST:
-      nextState.channels = true;
-      return nextState;
+      return { ...state, channels: true };
     case SEARCH.INDEX.REQUEST:
-      nextState.search = true;
-      return nextState;
+      return { ...state, search: true };
     case HISTORY.INDEX.REQUEST:
-      nextState.history = true;
-      return nextState;
+      return { ...state, history: true };
     case WORKSPACE.SHOW.RECEIVE:
-      nextState.workspace = false;
-      return nextState;
+      return { ...state, workspace: false };
+    case WORKSPACE.CREATE.RECEIVE:
+    case CHANNEL.CREATE.RECEIVE:
+    case CHANNEL.UPDATE.RECEIVE:
+    case PASSWORD.UPDATE.RECEIVE:
+    case USER.UPDATE.RECEIVE:
+    case WORKSPACE.CREATE.FAILURE:
+    case CHANNEL.CREATE.FAILURE:
+    case CHANNEL.UPDATE.FAILURE:
+    case PASSWORD.UPDATE.FAILURE:
+    case USER.UPDATE.FAILURE:
+      return { ...state, form: false };
     case USER_THREAD.INDEX.RECEIVE:
     case READ.INDEX.RECEIVE:
     case MESSAGE.INDEX.RECEIVE:
-      nextState.channel = false;
-      return nextState;
+      return { ...state, channel: false };
     case MESSAGE.SHOW.RECEIVE:
     case FAVORITE.INDEX.RECEIVE:
     case USER.SHOW.RECEIVE:
     case CHANNEL.SHOW.RECEIVE:
-      nextState.drawer = false;
-      return nextState;
+      return { ...state, drawer: false };
     case CHANNEL.INDEX.RECEIVE:
-      nextState.channels = false;
-      return nextState;
+      return { ...state, channels: false };
     case SEARCH.INDEX.RECEIVE:
-      nextState.search = false;
-      return nextState;
+      return { ...state, search: false };
     case HISTORY.INDEX.RECEIVE:
-      nextState.history = false;
-      return nextState;
+      return { ...state, history: false };
     case SIGN_OUT.RECEIVE:
       return _defaultState;
     default:

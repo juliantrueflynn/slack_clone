@@ -81,6 +81,7 @@ class ModalChannelForm extends React.Component {
         <FormContainer
           submitForm={this.handleFormSubmit}
           setFieldValue={this.handleFieldValueChange}
+          hasNoSubmittingText={!!channel}
           fields={fields}
         >
           <Button type="submit" color="green" size="lg">{buttonText}</Button>

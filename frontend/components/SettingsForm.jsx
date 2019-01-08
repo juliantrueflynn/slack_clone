@@ -109,6 +109,7 @@ class SettingsForm extends React.Component {
             fields={fields}
             submitForm={this.handleSubmit}
             setFieldValue={this.handleFieldValueChange}
+            hasNoSubmittingText
           >
             <div className="SettingsForm__avatar SettingsForm__avatar--sm">
               <img src={displayAvatar} alt={`${user.username} banner`} height="250" />

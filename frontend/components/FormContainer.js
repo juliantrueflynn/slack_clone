@@ -5,6 +5,7 @@ import { updateFormSuccess, destroyFormErrors } from '../actions/uiActions';
 const mapStateToProps = state => ({
   formSuccess: state.success,
   formErrors: state.errors,
+  isSubmitting: state.isLoading.form,
 });
 
 const mapDispatchToProps = dispatch => ({

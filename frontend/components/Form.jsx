@@ -29,7 +29,11 @@ class Form extends React.Component {
   }
 
   handleSubmit(e) {
-    const { submitForm } = this.props;
+    const { submitForm, isSubmitting } = this.props;
+
+    if (isSubmitting) {
+      return;
+    }
 
     if (submitForm) {
       submitForm(e);
@@ -41,19 +45,23 @@ class Form extends React.Component {
     const {
       formSuccess,
       formErrors,
-      children,
+      isSubmitting,
       setFieldValue,
       fields,
       submitForm,
       destroyFormSuccess,
       destroyFormErrors,
+      hasNoSubmittingText,
+      children,
       ...props
     } = this.props;
 
     const hasErrors = !!(formErrors && formErrors.length);
     const formClassNames = classNames('Form', {
+      'Form__no-submitting-txt': hasNoSubmittingText,
       'Form--success': formSuccess,
       'Form--fail': hasErrors,
+      'Form--submitting': isSubmitting,
     });
 
     return (
