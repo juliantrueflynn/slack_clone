@@ -37,11 +37,7 @@ const userReducer = (state = {}, action) => {
 
       nextState = members.reduce((acc, curr) => ({
         ...acc,
-        [curr.slug]: {
-          ...curr,
-          subs: [],
-          status: curr.status || 'offline'
-        },
+        [curr.slug]: { ...curr, subs: [], status: curr.status || 'offline' },
       }), {});
 
       channelSubs.forEach((sub) => {

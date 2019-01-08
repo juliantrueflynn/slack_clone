@@ -22,15 +22,6 @@ end
 
 last_actives_map = @workspace.last_entries_created_at_map(current_user.id)
 
-json.messages do
-  json.array! @workspace.user_parent_read_convos(current_user.id) do |message|
-    json.(message, *message.attributes.keys)
-    json.author_slug message.author.slug
-    json.channel_slug message.channel.slug
-    json.last_active last_actives_map[message.slug]
-  end
-end
-
 json.channels do
   channels = @workspace.channels.without_user_and_dm(current_user.id)
 
@@ -59,9 +50,10 @@ json.reads do
     json.last_read read.accessed_at
   end
 
-  json.array! reads.messages.includes(:message) do |read|
-    json.(read, :readable_id, :readable_type)
-    json.slug read.message.slug
-    json.last_read read.accessed_at
+  json.array! @workspace.user_convos_reads(current_user.id) do |message|
+    json.(message, :slug, :last_read)
+    json.readable_id message.id
+    json.last_active last_actives_map[message.slug]
+    json.readable_type 'Message'
   end
 end

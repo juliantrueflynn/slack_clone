@@ -17,10 +17,7 @@ const unreadsByChannelReducer = (state = _defaultState, action) => {
 
   switch (action.type) {
     case WORKSPACE.SHOW.RECEIVE:
-      return action.workspace.channels.reduce((acc, curr) => {
-        acc[curr.slug] = [];
-        return acc;
-      }, {});
+      return action.workspace.channels.reduce((acc, curr) => ({ ...acc, [curr.slug]: [] }), {});
     case READ.INDEX.RECEIVE: {
       const { messages } = action.messages;
 

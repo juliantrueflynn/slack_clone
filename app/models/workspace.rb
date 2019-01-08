@@ -37,8 +37,9 @@ class Workspace < ApplicationRecord
     Message.parents_or_children(parents).includes(:channel, :author)
   end
 
-  def user_parent_read_convos(user_id)
-    messages.convo_parents_with_author_id(user_id).includes(:channel, :author)
+  def user_convos_reads(user_id)
+    messages.select('messages.*', 'reads.accessed_at AS last_read')
+      .convo_parents_with_author_id(user_id)
   end
 
   def user_unreads(user_id)

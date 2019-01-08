@@ -13,7 +13,7 @@ const channelSubReducer = (state = {}, action) => {
   let nextState;
   switch (action.type) {
     case WORKSPACE.SHOW.RECEIVE: {
-      const { workspace: { channelSubs } } = action;
+      const { channelSubs } = action.workspace;
 
       return channelSubs.reduce((acc, curr) => {
         acc[curr.id] = curr;
