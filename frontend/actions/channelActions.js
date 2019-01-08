@@ -9,7 +9,7 @@ export const fetchChannels = {
 
 export const fetchChannel = {
   request: channelSlug => actionCreator(CHANNEL.SHOW.REQUEST, { channelSlug }),
-  receive: channel => actionCreator(CHANNEL.SHOW.RECEIVE, { channel }),
+  receive: messages => actionCreator(CHANNEL.SHOW.RECEIVE, { messages }),
   failure: errors => actionCreator(CHANNEL.SHOW.FAILURE, { errors }),
 };
 

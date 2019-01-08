@@ -122,8 +122,7 @@ const messageReducer = (state = _defaultState, action) => {
       return merge({}, state, nextState);
     }
     case CHANNEL.SHOW.RECEIVE:
-      nextState = {};
-      action.channel.messages.forEach((msg) => { nextState[msg.slug] = msg; });
+      nextState = action.messages.reduce((acc, curr) => ({ ...acc, [curr.slug]: curr }), {});
       return merge({}, state, nextState);
     case MESSAGE.CREATE.RECEIVE: {
       const { message } = action;

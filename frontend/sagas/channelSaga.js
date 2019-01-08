@@ -16,8 +16,8 @@ import { fetchMessages } from '../actions/messageActions';
 
 function* fetchIndex({ workspaceSlug }) {
   try {
-    const channels = yield call(apiFetch, `workspaces/${workspaceSlug}/channels`);
-    yield put(action.fetchChannels.receive(channels));
+    const response = yield call(apiFetch, `workspaces/${workspaceSlug}/channels`);
+    yield put(action.fetchChannels.receive(response));
   } catch (error) {
     yield put(action.fetchChannels.failure(error));
   }
@@ -78,8 +78,8 @@ function* fetchUpdate({ channel }) {
 
 function* fetchShow({ channelSlug }) {
   try {
-    const channel = yield call(apiFetch, `channels/${channelSlug}`);
-    yield put(action.fetchChannel.receive(channel));
+    const response = yield call(apiFetch, `channels/${channelSlug}`);
+    yield put(action.fetchChannel.receive(response));
   } catch (error) {
     yield put(action.fetchChannel.failure(error));
   }

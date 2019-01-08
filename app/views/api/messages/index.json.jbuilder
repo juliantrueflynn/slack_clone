@@ -1,5 +1,5 @@
 json.channel do
-  json.(@channel, :slug, :topic, :earliest_message_slug)
+  json.(@channel, :slug, :owner_slug, :topic, :created_at, :earliest_message_slug)
 end
 
 messages = @channel.older_messages(params[:until_date])
@@ -15,6 +15,7 @@ parents = messages.with_parent
 
 json.reactions do
   reactions = Reaction.by_message_id(parents)
+
   json.array! reactions, :id, :user_id, :emoji, :message_id, :message_slug
 end
 

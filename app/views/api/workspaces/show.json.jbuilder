@@ -34,8 +34,8 @@ end
 json.channels do
   channels = @workspace.channels.without_user_and_dm(current_user.id)
 
-  json.array! channels.includes(:owner) do |channel|
-    json.(channel, :id, :slug, :title, :has_dm, :owner_slug, :created_at)
+  json.array! channels do |channel|
+    json.(channel, :id, :slug, :title, :has_dm)
     json.last_active last_actives_map[channel.slug]
   end
 end

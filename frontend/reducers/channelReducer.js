@@ -17,17 +17,14 @@ const channelReducer = (state = {}, action) => {
 
   let nextState;
   switch (action.type) {
-    case CHANNEL.INDEX.RECEIVE: {
-      const { channels } = action.channels;
-
-      nextState = channels.reduce((acc, curr) => {
+    case CHANNEL.INDEX.RECEIVE:
+      nextState = action.channels.reduce((acc, curr) => {
         acc[curr.slug] = curr;
 
         return acc;
       }, {});
 
       return merge({}, state, nextState);
-    }
     case CHANNEL.CREATE.RECEIVE: {
       const { channel, channelSubs, members } = action.channel;
 
