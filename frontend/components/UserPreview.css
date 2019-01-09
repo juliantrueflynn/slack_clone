@@ -1,8 +1,5 @@
 .UserPreview {
   display: flex;
-}
-
-.UserPreview__align-center {
   align-items: center;
 }
 

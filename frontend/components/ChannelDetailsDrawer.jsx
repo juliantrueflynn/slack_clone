@@ -106,9 +106,7 @@ class ChannelDetailsDrawer extends React.Component {
 
     return (
       <div className="ChannelDetailsDrawer">
-        {channel.hasDm && user && (
-          <UserPreview user={user} avatarSize="52" avatarVersion="avatarLarge" />
-        )}
+        {channel.hasDm && user && <UserPreview user={user} avatarSize="52" avatarVersion="avatarLarge" />}
         {accordionItems.map(item => (
           <AccordionItem
             key={item.name}

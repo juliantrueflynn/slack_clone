@@ -12,7 +12,7 @@ const ProfileDropdownTrigger = ({
   profileUrl,
 }) => {
   const ddDefaults = [
-    { label: <UserPreview user={user} avatarSize="40" hasNoStatus alignCenter /> },
+    { label: <UserPreview user={user} avatarSize="40" hasNoStatus /> },
     {
       label: 'Home',
       link: '/',
