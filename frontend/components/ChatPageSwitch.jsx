@@ -13,7 +13,9 @@ class ChatPageSwitch extends React.Component {
   }
 
   componentDidMount() {
-    this.updateChatPath();
+    const { updateChatPath } = this.props;
+
+    updateChatPath();
     this.getChatData();
     this.updateHistoryDrawerPath();
   }
@@ -21,6 +23,7 @@ class ChatPageSwitch extends React.Component {
   componentDidUpdate(prevProps) {
     const {
       match: { isExact },
+      updateChatPath,
       drawerType,
       closeDrawer,
       chatPath,
@@ -29,7 +32,7 @@ class ChatPageSwitch extends React.Component {
     } = this.props;
 
     if (chatPath !== prevProps.chatPath) {
-      this.updateChatPath();
+      updateChatPath();
 
       if (channel && channel.shouldFetch) {
         this.getChatData();
@@ -80,11 +83,6 @@ class ChatPageSwitch extends React.Component {
     }
 
     return null;
-  }
-
-  updateChatPath() {
-    const { updateChatPath, chatPath } = this.props;
-    updateChatPath(chatPath);
   }
 
   updateHistoryDrawerPath() {

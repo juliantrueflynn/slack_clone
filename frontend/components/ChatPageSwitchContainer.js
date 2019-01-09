@@ -49,7 +49,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
 };
 
 const mapDispatchToProps = (dispatch, { match: { params } }) => ({
-  updateChatPath: chatPath => dispatch(updateChatPath(chatPath)),
+  updateChatPath: () => dispatch(updateChatPath(params.chatPath)),
   fetchChatPageData: () => {
     let slug = params.workspaceSlug;
     let fetchChatPage;
