@@ -145,7 +145,7 @@ export const getChannelViewMessages = createSelector(
 
 export const getAllThreadViewMessages = createSelector(
   [getMessagesMap, getAllUnreads, getChannelsMap],
-  (msgsMap, unreadsMap, channelsMap) => (
+  (msgsMap, unreadsMap, chMap) => (
     values(unreadsMap)
       .filter(unread => unread && unread.readableType === 'Message')
       .reduce((acc, curr) => {
@@ -160,7 +160,7 @@ export const getAllThreadViewMessages = createSelector(
           ...msgsMap[curr.slug],
           slug: curr.slug,
           channelSlug: msg.channelSlug,
-          channelTitle: channelsMap[msg.channelSlug].title,
+          channelTitle: chMap[msg.channelSlug].title,
           messages: [msg, ...replies],
         };
 
