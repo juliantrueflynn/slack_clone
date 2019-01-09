@@ -17,8 +17,7 @@ const mapStateToProps = state => ({
   users: state.entities.members,
   reactionsMap: state.entities.reactions,
   pinsMap: state.entities.pins,
-  dropdownType: state.ui.dropdown.dropdownType,
-  dropdownProps: state.ui.dropdown.dropdownProps,
+  isDdOpen: !!state.ui.dropdown.dropdownType,
   chatPathUrl: getChatPathUrl(state),
 });
 
@@ -30,7 +29,6 @@ const mapDispatchToProps = dispatch => ({
   toggleMessageEditor: slug => dispatch(toggleMessageEditor(slug)),
   createPinRequest: pin => dispatch(createPin.request(pin)),
   destroyPinRequest: id => dispatch(destroyPin.request(id)),
-  openDropdown: (ddType, ddProps) => dispatch(updateDropdown(ddType, ddProps)),
   closeDropdown: () => dispatch(updateDropdown(null)),
 });
 

@@ -78,6 +78,7 @@ class Message extends React.Component {
             hasHover={hasHover}
             handleHover={this.handleHover}
             toggleDd={this.handleDdToggle}
+            toggleReaction={toggleReaction}
             chatPathUrl={chatPathUrl}
             message={message}
             {...props}

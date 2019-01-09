@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import Button from './Button';
 import LinkWithDrawer from '../util/linkUtil';
 import './MenuItem.css';
+import DropdownModalTriggerContainer from './DropdownModalTriggerContainer';
 
 class MenuItem extends React.Component {
   constructor(props) {
@@ -21,14 +22,14 @@ class MenuItem extends React.Component {
   render() {
     const {
       className,
-      icon,
       keyId,
+      icon,
       label,
       modifierClassName,
       onClick,
       toggleMenu,
       isOpen,
-      itemRef,
+      dropdownType,
       condition,
       ...props
     } = this.props;
@@ -43,7 +44,9 @@ class MenuItem extends React.Component {
     itemProps.onClick = this.handleOnClick;
 
     let itemType = 'link';
-    if (!link && onClick) {
+    if (dropdownType) {
+      itemType = 'dropdown';
+    } else if (!link && onClick) {
       itemType = 'btn';
     } else if (!link && !onClick) {
       itemType = 'text';
@@ -66,7 +69,7 @@ class MenuItem extends React.Component {
     });
 
     return (
-      <li className={itemClassNames} ref={itemRef}>
+      <li className={itemClassNames}>
         {itemType === 'link' && (
           <LinkWithDrawer
             isNavLink
@@ -79,14 +82,22 @@ class MenuItem extends React.Component {
             {label}
           </LinkWithDrawer>
         )}
-
+        {itemType === 'dropdown' && (
+          <DropdownModalTriggerContainer
+            className={contentClassNames}
+            dropdownType={dropdownType}
+            {...itemProps}
+          >
+            {itemIcon}
+            {label}
+          </DropdownModalTriggerContainer>
+        )}
         {itemType === 'btn' && (
           <Button className={contentClassNames} {...itemProps}>
             {itemIcon}
             {label}
           </Button>
         )}
-
         {itemType === 'text' && (
           <span className={contentClassNames} {...itemProps}>
             {itemIcon}

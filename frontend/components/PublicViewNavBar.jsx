@@ -103,7 +103,7 @@ class PublicViewNavBar extends React.Component {
       label: 'Your Workspaces',
       onClick: this.handleDdClick,
       isOpen: isProfileDdOpen,
-      itemRef: this.ddToggler,
+      ddRef: this.ddToggler,
       'data-dropdown': 'PUBLIC',
       condition: isLoggedIn && subbedWorkspaces,
     });
