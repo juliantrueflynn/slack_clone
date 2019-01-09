@@ -29,6 +29,10 @@ class PublicViewNavBar extends React.Component {
   }
 
   updateModalStyles() {
+    if (!this.ddTogglerMobile.current || !this.ddToggler.current) {
+      return;
+    }
+
     const { windowWidth } = this.props;
     const isMobileSize = windowWidth <= 576;
     const togglerRef = isMobileSize ? this.ddTogglerMobile : this.ddToggler;
