@@ -7,31 +7,29 @@ import './DropdownModal.css';
 class DropdownModal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { left: 0, top: 0 };
     this.handleAfterModalOpen = this.handleAfterModalOpen.bind(this);
   }
 
-  handleAfterModalOpen() {
-    const {
-      windowWidth,
-      windowHeight,
-      coords: { posX, posY }
-    } = this.props;
-    const { clientWidth, clientHeight } = this.contentRef;
+  componentDidUpdate(prevProps) {
+    const { windowWidth, windowHeight } = this.props;
 
-    const left = windowWidth - posX + clientWidth;
-    let top = windowHeight - posY;
-
-    if ((posY + clientHeight) > (windowHeight - 10)) {
-      top = clientHeight + 20;
+    if (windowWidth !== prevProps.windowWidth || windowHeight !== prevProps.windowHeight) {
+      this.handleModalCoordinates();
     }
+  }
 
-    this.setState({ left, top });
+  handleAfterModalOpen() {
+    this.handleModalCoordinates();
+  }
+
+  handleModalCoordinates() {
+    const { updateModalStyles } = this.props;
+    const { width, height } = this.contentRef.getBoundingClientRect();
+    updateModalStyles({ width, height });
   }
 
   render() {
     const {
-      coords,
       windowWidth,
       windowHeight,
       children,
@@ -39,15 +37,9 @@ class DropdownModal extends React.Component {
       contentStyle,
       ...modalProps
     } = this.props;
-    const { top, left } = this.state;
 
     const style = {
-      content: {
-        position: 'absolute',
-        top: `${windowHeight - top}px`,
-        left: `${windowWidth - left}px`,
-        ...contentStyle,
-      }
+      content: { position: 'absolute', ...contentStyle }
     };
 
     return (

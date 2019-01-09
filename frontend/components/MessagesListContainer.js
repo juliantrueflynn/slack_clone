@@ -8,7 +8,7 @@ import {
 } from '../actions/messageActions';
 import { toggleReaction } from '../actions/reactionActions';
 import { toggleFavorite } from '../actions/favoriteActions';
-import { toggleMessageEditor, updateDropdown } from '../actions/uiActions';
+import { toggleMessageEditor } from '../actions/uiActions';
 import { getChatPathUrl } from '../reducers/selectors';
 import MessagesList from './MessagesList';
 
@@ -29,7 +29,6 @@ const mapDispatchToProps = dispatch => ({
   toggleMessageEditor: slug => dispatch(toggleMessageEditor(slug)),
   createPinRequest: pin => dispatch(createPin.request(pin)),
   destroyPinRequest: id => dispatch(destroyPin.request(id)),
-  closeDropdown: () => dispatch(updateDropdown(null)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MessagesList));

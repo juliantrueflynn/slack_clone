@@ -5,32 +5,69 @@ import DropdownModal from './DropdownModal';
 class DropdownModalTrigger extends React.Component {
   constructor(props) {
     super(props);
-    this.handleDdToggleClick = this.handleDdToggleClick.bind(this);
+    this.state = { left: null, top: null };
+    this.triggerRef = React.createRef();
+    this.handleClick = this.handleClick.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.updateModalStyles = this.updateModalStyles.bind(this);
   }
 
-  handleDdToggleClick(e) {
-    const { openDropdown } = this.props;
-    const { bottom: posY, right: posX } = e.currentTarget.getBoundingClientRect();
+  handleClick(e) {
+    const { openDropdown, onClick } = this.props;
 
-    openDropdown({ posY, posX });
+    openDropdown();
+
+    if (onClick) {
+      onClick(e);
+    }
+  }
+
+  handleClose(e) {
+    const { onClose, closeDropdown } = this.props;
+
+    if (onClose) {
+      onClose(e);
+    }
+
+    closeDropdown();
+  }
+
+  updateModalStyles({ width, height }) {
+    if (!this.triggerRef && !this.triggerRef.current) {
+      return;
+    }
+
+    const { right, bottom } = this.triggerRef.current.getBoundingClientRect();
+    let topPos = bottom;
+
+    if (height + bottom > window.innerHeight) {
+      topPos = window.innerHeight - height - 20;
+    }
+
+    this.setState({
+      left: `${right - width}px`,
+      top: `${topPos}px`,
+    });
   }
 
   render() {
     const {
       children,
       className,
-      closeDropdown,
-      dropdownProps,
       isDdOpen,
       bemModifier,
       contentStyle,
       dropdownChild,
     } = this.props;
+    const { left, top } = this.state;
+
+    const style = { left, top, ...contentStyle };
 
     return (
       <Fragment>
         <Button
-          onClick={this.handleDdToggleClick}
+          ref={this.triggerRef}
+          onClick={this.handleClick}
           className={className}
           isActive={isDdOpen}
           unStyled
@@ -39,10 +76,10 @@ class DropdownModalTrigger extends React.Component {
         </Button>
         {isDdOpen && (
           <DropdownModal
-            coords={dropdownProps}
-            close={closeDropdown}
             bemModifier={bemModifier}
-            contentStyle={contentStyle}
+            contentStyle={style}
+            close={this.handleClose}
+            updateModalStyles={this.updateModalStyles}
           >
             {dropdownChild}
           </DropdownModal>

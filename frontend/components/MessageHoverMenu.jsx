@@ -75,7 +75,6 @@ class MessageHoverMenu extends React.Component {
     let menuItems = [
       {
         key: 'reaction',
-        onClick: this.handleDropdownModal,
         icon: <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />,
         dropdownType: `DROPDOWN_REACTION_${message.slug}`,
         dropdownChild: <EmojiPicker onEmojiClick={this.handleEmojiClick} disableDiversityPicker />

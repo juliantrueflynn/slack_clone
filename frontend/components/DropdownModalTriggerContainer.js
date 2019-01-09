@@ -4,11 +4,10 @@ import DropdownModalTrigger from './DropdownModalTrigger';
 
 const mapStateToProps = (state, { dropdownType }) => ({
   isDdOpen: state.ui.dropdown.dropdownType === dropdownType,
-  dropdownProps: state.ui.dropdown.dropdownProps,
 });
 
 const mapDispatchToProps = (dispatch, { dropdownType }) => ({
-  openDropdown: dropdownProps => dispatch(updateDropdown(dropdownType, dropdownProps)),
+  openDropdown: () => dispatch(updateDropdown(dropdownType)),
   closeDropdown: () => dispatch(updateDropdown(null)),
 });
 
