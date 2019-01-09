@@ -1,4 +1,6 @@
-.Menu__msg-hover {
+.MessageHoverMenu {
+  display: none;
+  align-items: center;
   background-color: #FFF;
   border: 0.5px solid rgba(0,0,0,0.18);
   border-radius: 3px;
@@ -7,57 +9,59 @@
   position: absolute;
   top: -8px;
   right: 16px;
-  display: none;
   z-index: 100;
 }
 
-.Message--hoverable.Message--hover:not(.Message--editing) .Menu__msg-hover,
-.Message--hoverable.Message:hover:not(.Message--editing) .Menu__msg-hover {
+.Message--hoverable.Message--hover:not(.Message--editing) .MessageHoverMenu,
+.Message--hoverable.Message:hover:not(.Message--editing) .MessageHoverMenu {
   display: flex;
 }
 
-.Drawer .Message:first-child .Menu__msg-hover {
+.Drawer .Message:first-child .MessageHoverMenu {
   top: 10px;
   right: 18px;
 }
 
-.Drawer .Message:not(:first-child) .Menu__msg-hover {
+.Drawer .Message:not(:first-child) .MessageHoverMenu {
   top: -5px;
   right: 18px;
 }
 
-.Menu__msg-hover:hover {
+.MessageHoverMenu:hover {
   -webkit-box-shadow: 0px 0.5px 1px -0.5px rgba(0,0,0,0.33);
   -moz-box-shadow: 0px 0.5px 1px -0.5px rgba(0,0,0,0.33);
   box-shadow: 0px 0.5px 1px -0.5px rgba(0,0,0,0.33);
   border-color: rgba(0,0,0,0.28);
 }
 
-.Menu__msg-hover .Btn__dropdown:focus {
+.MessageHoverMenu .Btn__dropdown:focus {
   box-shadow: none;
+  outline: 0;
 }
 
-.Menu__msg-hover .Btn__dropdown,
-.Menu__msg-hover > .MenuItem > .MenuItem__content {
+.MessageHoverMenu .Btn__dropdown,
+.MessageHoverMenu > .MenuItem > .MenuItem__content:not(.MenuItem__content--dropdown) {
   padding: 3px 6px;
   font-size: 14px;
   color: rgba(0,0,0,0.7);
 }
 
-.Menu__msg-hover > .MenuItem {
+.MessageHoverMenu > .MenuItem {
   border-left: 0.5px solid rgba(0,0,0,0.18);
+  display: flex;
+  align-items: center;
 }
 
-.Menu__msg-hover > .MenuItem:first-child {
+.MessageHoverMenu > .MenuItem:first-child {
   border-left: none;
 }
 
-.Menu__msg-hover .Btn__dropdown:hover,
-.Menu__msg-hover > .MenuItem > .MenuItem__content:hover {
+.MessageHoverMenu .Btn__dropdown:hover,
+.MessageHoverMenu > .MenuItem > .MenuItem__content:hover {
   color: #0576B9;
 }
 
-.Menu__msg-hover .MenuItem__favorite--solid .MenuItem__content:hover svg,
-.Menu__msg-hover .MenuItem__favorite--solid svg {
+.MessageHoverMenu .MenuItem__favorite--solid .MenuItem__content:hover svg,
+.MessageHoverMenu .MenuItem__favorite--solid svg {
   color: #FDCB6E;
 }

@@ -13,7 +13,11 @@ class DropdownModalTrigger extends React.Component {
   }
 
   getBemModifier() {
-    const { dropdownType } = this.props;
+    const { dropdownType, shouldSkipBemModifier } = this.props;
+
+    if (shouldSkipBemModifier) {
+      return null;
+    }
 
     return dropdownType.slice(9).replace(/_/g, '-').toLowerCase();
   }
