@@ -20,6 +20,7 @@ class ModalController extends React.Component {
       user,
       channels,
       channelsMap,
+      chatPath,
       usersMap,
       messages,
       searchQuery,
@@ -51,6 +52,7 @@ class ModalController extends React.Component {
         isLoading: isLoading.channels,
         fetchChannelsRequest,
         channels,
+        chatPath,
       },
       {
         type: 'MODAL_PROFILE',

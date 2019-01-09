@@ -20,6 +20,7 @@ const mapStateToProps = (state) => {
     modalProps: state.ui.displayModal.modalProps,
     channelsMap: getChannelsMap(state),
     channels: getUnsubbedChannels(state),
+    chatPath: state.ui.displayChatPath,
     messages,
     usersMap,
     user,

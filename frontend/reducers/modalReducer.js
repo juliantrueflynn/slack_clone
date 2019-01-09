@@ -1,8 +1,5 @@
 import {
   MODAL_UPDATE,
-  MESSAGE,
-  READ,
-  USER_THREAD,
   WORKSPACE_SUB,
   WORKSPACE,
   SIGN_OUT,
@@ -26,9 +23,6 @@ const modalReducer = (state = _defaultState, action) => {
 
       return { modalType, modalProps };
     }
-    case MESSAGE.INDEX.REQUEST:
-    case USER_THREAD.INDEX.REQUEST:
-    case READ.INDEX.REQUEST:
     case WORKSPACE_SUB.CREATE.REQUEST:
     case WORKSPACE.SHOW.REQUEST:
     case SIGN_OUT.RECEIVE:

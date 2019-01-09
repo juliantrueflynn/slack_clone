@@ -39,6 +39,7 @@ class ModalChannelsList extends React.Component {
       workspaceSlug,
       isLoading,
       close,
+      chatPath,
     } = this.props;
     const { height } = this.state;
 
@@ -51,8 +52,13 @@ class ModalChannelsList extends React.Component {
           </div>
           <ScrollBar scrollBarRef={this.scrollBarRef} style={{ height }}>
             <div role="list" className="ModalChannelsList__list">
-              {isLoading || channels.map(ch => (
-                <ModalChannelsListItem key={ch.slug} channel={ch} workspaceSlug={workspaceSlug} />
+              {isLoading || channels.filter(ch => chatPath !== ch.slug).map(ch => (
+                <ModalChannelsListItem
+                  key={ch.slug}
+                  channel={ch}
+                  workspaceSlug={workspaceSlug}
+                  close={close}
+                />
               ))}
             </div>
           </ScrollBar>
