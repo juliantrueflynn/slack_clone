@@ -132,11 +132,13 @@ class LeftSidebar extends React.Component {
 
     return (
       <aside className="LeftSidebar">
-        <div className="LeftSidebar__body">
-          <ScrollBar style={style}>
-            <LeftSidebarWidgets menuGroups={sidebarMenuItems} />
-          </ScrollBar>
-        </div>
+        {!isModalOpen && !isMobileSize && (
+          <div className="LeftSidebar__body">
+            <ScrollBar style={style}>
+              <LeftSidebarWidgets menuGroups={sidebarMenuItems} />
+            </ScrollBar>
+          </div>
+        )}
         {isModalOpen && isMobileSize && (
           <Modal
             isOpen
@@ -145,9 +147,11 @@ class LeftSidebar extends React.Component {
             close={closeModal}
             unStyled
           >
-            <ScrollBar style={style}>
-              <LeftSidebarWidgets menuGroups={sidebarMenuItems} />
-            </ScrollBar>
+            <div className="LeftSidebar__body">
+              <ScrollBar style={style}>
+                <LeftSidebarWidgets menuGroups={sidebarMenuItems} />
+              </ScrollBar>
+            </div>
           </Modal>
         )}
       </aside>
