@@ -92,17 +92,12 @@ class ChannelScrollBar extends React.Component {
   }
 
   handleFetchHistory() {
-    const {
-      channel: { slug },
-      fetchHistoryRequest,
-      isFetching,
-      messages,
-    } = this.props;
+    const { fetchHistoryRequest, isFetching, messages } = this.props;
     const { hasHistory } = this.state;
 
     if (hasHistory && !isFetching) {
       const startDate = messages[0].createdAt;
-      fetchHistoryRequest(slug, startDate);
+      fetchHistoryRequest(startDate);
     }
   }
 

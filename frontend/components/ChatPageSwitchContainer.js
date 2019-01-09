@@ -66,7 +66,9 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
     return dispatch(fetchChatPage.request(slug));
   },
   createChannelSubRequest: channelSub => dispatch(createChannelSub.request(channelSub)),
-  fetchHistoryRequest: (chatSlug, startDate) => dispatch(fetchHistory.request(chatSlug, startDate)),
+  fetchHistoryRequest: startDate => (
+    dispatch(fetchHistory.request(params.chatPath, startDate))
+  ),
   updateScrollLocation: (channelSlug, scrollLoc) => (
     dispatch(updateScrollLocation(channelSlug, scrollLoc))
   ),
