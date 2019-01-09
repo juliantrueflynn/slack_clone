@@ -50,6 +50,7 @@ class ChannelHeader extends React.Component {
       match,
     } = this.props;
     const { url } = match;
+    const openLeftSidebarModal = () => openModal('MODAL_LEFT_SIDEBAR');
 
     let metaMenuItems = [];
 
@@ -96,11 +97,7 @@ class ChannelHeader extends React.Component {
 
     return (
       <header className="ChannelHeader">
-        <Button
-          buttonFor="left-sidebar-mobile"
-          unStyled
-          onClick={() => openModal('MODAL_LEFT_SIDEBAR')}
-        >
+        <Button buttonFor="left-sidebar-mobile" unStyled onClick={openLeftSidebarModal}>
           <FontAwesomeIcon icon="bars" size="lg" />
         </Button>
         <div className="ChannelHeader__info">

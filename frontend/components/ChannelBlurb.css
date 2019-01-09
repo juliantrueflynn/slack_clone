@@ -11,10 +11,18 @@
   font-size: 1.85em;
 }
 
-.ChannelBlurb__channel .ChannelBlurb__title::before {
-  content: "\0023";
+.ChatPageSwitch__channel .ChannelBlurb__title::before {
   font-weight: normal;
   margin-right: 4px;
+}
+
+.ChatPageSwitch__channel .ChannelBlurb__title::before,
+.ChannelBlurb__ch-name::before {
+  content: "\0023";
+}
+
+.ChannelBlurb__ch-name {
+  font-weight: bold;
 }
 
 .ChannelBlurb__description {

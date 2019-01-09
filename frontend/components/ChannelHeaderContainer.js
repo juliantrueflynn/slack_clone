@@ -12,16 +12,15 @@ import { getChannelsMap, getMessagesMap } from '../reducers/selectors';
 import ChannelHeader from './ChannelHeader';
 
 const getChatTitle = (chatPath, channel) => {
-  let title;
   if (chatPath === 'unreads') {
-    title = 'All Unreads';
-  } else if (chatPath === 'threads') {
-    title = 'All Threads';
-  } else if (channel) {
-    title = channel.hasDm ? channel.title : `#${channel.title}`;
+    return 'All Unreads';
   }
 
-  return title;
+  if (chatPath === 'threads') {
+    return 'All Threads';
+  }
+
+  return channel && channel.title;
 };
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
@@ -37,6 +36,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
   const channelUnreadsLen = Object.values(unreadsByChannel).reduce((acc, curr) => {
     let total = acc;
     total += curr.length;
+
     return total;
   }, 0);
 

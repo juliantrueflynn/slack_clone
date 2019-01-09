@@ -17,6 +17,10 @@
   margin: 1px 0 3px;
 }
 
+.ChatPageSwitch__channel .ChannelHeader__title::before {
+  content: "\0023";
+}
+
 .Menu__header-meta {
   font-size: 14px;
 }

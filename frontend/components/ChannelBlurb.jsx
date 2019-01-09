@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import classNames from 'classnames';
 import { dateUtil } from '../util/dateUtil';
 import Button from './Button';
 import './ChannelBlurb.css';
@@ -57,7 +56,7 @@ class ChannelBlurb extends React.Component {
         <div className="ChannelBlurb__description">
           {creator}
           {` created this channel ${dateCreated}. This is the beginning of the `}
-          {title}
+          <span className="ChannelBlurb__ch-name">{title}</span>
           {' channel. '}
           {topic && `Purpose: ${topic} `}
           {topic && (
@@ -69,13 +68,8 @@ class ChannelBlurb extends React.Component {
       );
     }
 
-    const blurbClassNames = classNames('ChannelBlurb', {
-      ChannelBlurb__dm: hasDm,
-      ChannelBlurb__channel: !hasDm,
-    });
-
     return (
-      <section className={blurbClassNames} ref={blurbRef}>
+      <section className="ChannelBlurb" ref={blurbRef}>
         <h2 className="ChannelBlurb__title">{title}</h2>
         {description}
         {!topic && !hasDm && (
