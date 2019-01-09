@@ -10,18 +10,16 @@
   background-color: #FFF;
 }
 
-.PublicViewNavBar .MenuItem__dropdown > button,
-.PublicViewNavBar .Btn__mobile-public {
+.PublicViewNavBar .Btn__dropdown {
   color: rgba(255, 255, 255, 0.8);
 }
 
-.PublicViewNavBar .MenuItem__dropdown > button:hover,
-.PublicViewNavBar .Btn__mobile-public:hover {
+.PublicViewNavBar .Btn__dropdown:hover {
   color: rgba(255, 255, 255, 1.0);
   border-color: rgba(255, 255, 255, 0.9);
 }
 
-.PublicViewNavBar .MenuItem__dropdown > button {
+.PublicViewNavBar .Btn__dropdown {
   text-transform: none;
   border: 2px solid;
   border-color: rgba(255, 255, 255, 0.7);
@@ -32,7 +30,7 @@
               color ease-in-out .2s;
 }
 
-.PublicViewNavBar .MenuItem__dropdown--active > button {
+.PublicViewNavBar .Btn__dropdown--active {
   background-color: rgba(0, 0, 0, 0.125);
 }
 
@@ -70,13 +68,11 @@
   color: rgba(255, 255, 255, 1.0);
 }
 
-.Modal__dropdown--public-mobile .Menu__dropdown,
-.Modal__dropdown--public .Menu__dropdown {
+.Modal__dropdown--public .Menu {
   padding: 15px 10px;
 }
 
-.Modal__dropdown--public-mobile .Menu__dropdown .MenuItem > .MenuItem__content,
-.Modal__dropdown--public .Menu__dropdown .MenuItem > .MenuItem__content {
+.Modal__dropdown--public .Menu .MenuItem > .MenuItem__content {
   padding: 10px 15px;
   border-radius: 5px;
   transition: background-color ease-in-out .15s;
@@ -85,38 +81,38 @@
   text-overflow: ellipsis;
 }
 
-.Modal__dropdown--public-mobile .Menu__dropdown .MenuItem > .MenuItem__content:hover,
-.Modal__dropdown--public .Menu__dropdown .MenuItem > .MenuItem__content:hover {
+.Modal__dropdown--public .Menu .MenuItem > .MenuItem__content:hover {
   background-color: rgba(223, 230, 233, 0.45);
 }
 
-.Modal__dropdown--public-mobile .Menu__dropdown--filled .MenuItem__signout,
 .Modal__dropdown--public .Menu__dropdown--filled .MenuItem__signout {
   border-bottom: 1px solid #DFE6E9;
   margin-bottom: 7px;
   padding-bottom: 8px;
 }
 
-.Modal__dropdown--public-mobile .Menu__dropdown--filled .MenuItem:last-child,
 .Modal__dropdown--public .Menu__dropdown--filled .MenuItem:last-child {
   border-top: 1px solid #DFE6E9;
   margin-top: 7px;
   padding-top: 8px;
 }
 
-.PublicViewNavBar .Btn__mobile-public {
-  margin-left: auto;
-  display: none;
-  padding: 4px;
-  border: 0;
+@media screen and (min-width: 577px) {
+  .PublicViewNavBar .Menu--row > li.MenuItem__dropdown-mobile {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 576px) {
-  .PublicViewNavBar .Btn__mobile-public {
-    display: block;
+  .PublicViewNavBar .Btn__dropdown {
+    margin-left: auto;
+    padding: 10px;
+    border: 0;
   }
 
-  .PublicViewNavBar .Menu__public {
+  .PublicViewNavBar .Menu--row > li.MenuItem__signin,
+  .PublicViewNavBar .Menu--row > li.MenuItem__signout,
+  .PublicViewNavBar .Menu--row > li.MenuItem__dropdown {
     display: none;
   }
 }
