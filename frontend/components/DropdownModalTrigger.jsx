@@ -65,7 +65,6 @@ class DropdownModalTrigger extends React.Component {
     const {
       children,
       isDdOpen,
-      bemModifier,
       contentStyle,
       dropdownChild,
     } = this.props;
@@ -87,7 +86,7 @@ class DropdownModalTrigger extends React.Component {
         </Button>
         {isDdOpen && (
           <DropdownModal
-            bemModifier={bemModifier}
+            bemModifier={this.getBemModifier()}
             contentStyle={style}
             close={this.handleClose}
             updateModalStyles={this.updateModalStyles}

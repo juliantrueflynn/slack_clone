@@ -22,7 +22,8 @@
 
 .ChannelHeaderNavbar .Dropdown__channel-edit,
 .ChannelHeaderNavbar .Menu__edit > .MenuItem > .MenuItem__content,
-.ChannelHeaderNavbar .Menu__header-user .MenuItem__content {
+.ChannelHeaderNavbar .Menu__header-user .MenuItem__content:not(.MenuItem__content--dropdown),
+.Btn__dropdown--channel-edit {
   padding: 6px;
   border-radius: 4px;
 }
@@ -36,11 +37,12 @@
 }
 
 .ChannelHeaderNavbar .Menu__edit > .MenuItem > .MenuItem__content--active,
-.ChannelHeaderNavbar .Menu__header-user .MenuItem__content--active {
+.ChannelHeaderNavbar .Menu__header-user .MenuItem__content--active,
+.ChannelHeaderNavbar .Btn__dropdown--active {
   background-color: #DFE6E9;
 }
 
-.ChannelHeaderNavbar .Dropdown__channel-edit .MenuItem__content--active {
+.Modal__overlay--dropdown-channel-edit .Menu > .MenuItem > .MenuItem__content--active {
   background-color: #74B9FF;
   color: #FFF;
 }

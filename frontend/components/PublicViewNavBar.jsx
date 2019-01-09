@@ -134,7 +134,6 @@ class PublicViewNavBar extends React.Component {
             coords={dropdownProps}
             contentStyle={contentStyle}
             close={closeDropdown}
-            bemModifier="public"
           >
             <Menu menuFor="dropdown" items={ddItems} bemModifier={menuModifier} />
           </DropdownModal>
@@ -144,7 +143,6 @@ class PublicViewNavBar extends React.Component {
             coords={dropdownProps}
             contentStyle={contentStyle}
             close={closeDropdown}
-            bemModifier="public"
           >
             <Menu menuFor="dropdown" items={ddItems} bemModifier={menuModifier} />
           </DropdownModal>

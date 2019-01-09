@@ -70,10 +70,12 @@
   color: rgba(255, 255, 255, 1.0);
 }
 
+.Modal__dropdown--public-mobile .Menu__dropdown,
 .Modal__dropdown--public .Menu__dropdown {
   padding: 15px 10px;
 }
 
+.Modal__dropdown--public-mobile .Menu__dropdown .MenuItem > .MenuItem__content,
 .Modal__dropdown--public .Menu__dropdown .MenuItem > .MenuItem__content {
   padding: 10px 15px;
   border-radius: 5px;
@@ -83,16 +85,19 @@
   text-overflow: ellipsis;
 }
 
+.Modal__dropdown--public-mobile .Menu__dropdown .MenuItem > .MenuItem__content:hover,
 .Modal__dropdown--public .Menu__dropdown .MenuItem > .MenuItem__content:hover {
   background-color: rgba(223, 230, 233, 0.45);
 }
 
+.Modal__dropdown--public-mobile .Menu__dropdown--filled .MenuItem__signout,
 .Modal__dropdown--public .Menu__dropdown--filled .MenuItem__signout {
   border-bottom: 1px solid #DFE6E9;
   margin-bottom: 7px;
   padding-bottom: 8px;
 }
 
+.Modal__dropdown--public-mobile .Menu__dropdown--filled .MenuItem:last-child,
 .Modal__dropdown--public .Menu__dropdown--filled .MenuItem:last-child {
   border-top: 1px solid #DFE6E9;
   margin-top: 7px;

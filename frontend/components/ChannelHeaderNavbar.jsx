@@ -92,6 +92,7 @@ class ChannelHeaderNavbar extends React.Component {
         label: 'View channel details',
         link: `${url}/details`,
         onClick: closeDropdown,
+        isOpen: drawerType === 'details',
       },
       {
         label: `View ${chatTitle}’s profile`,
