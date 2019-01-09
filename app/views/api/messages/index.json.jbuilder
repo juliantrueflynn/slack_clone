@@ -29,3 +29,5 @@ json.favorites do
   favorites = current_user.favorites.by_message_id(parents)
   json.array! favorites, :id, :message_id, :message_slug
 end
+
+json.members @channel.members.pluck(:slug)
