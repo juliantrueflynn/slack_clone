@@ -10,23 +10,19 @@ class ChannelSubscribe extends React.Component {
   }
 
   clickSubscribe() {
-    const { createChannelSubRequest, id: channelId, slug: channelSlug } = this.props;
-    createChannelSubRequest({ channelId, channelSlug });
+    const { createChannelSubRequest, channelId } = this.props;
+    createChannelSubRequest(channelId);
   }
 
   render() {
     const {
-      title,
+      channelTitle,
       createdAt,
       ownerName,
       matchUrl,
     } = this.props;
 
-    if (!title) {
-      return null;
-    }
-
-    const chatTitle = ` #${title}`;
+    const chatTitle = ` #${channelTitle}`;
     const date = dateUtil(createdAt);
     let dateCreated;
     if (date.isToday()) {
@@ -34,6 +30,7 @@ class ChannelSubscribe extends React.Component {
     } else {
       dateCreated = 'today';
     }
+
     const detailsUrl = `${matchUrl}/details`;
 
     return (

@@ -20,23 +20,27 @@ class Channel extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {
-      channel: { slug, isSub },
+      channel,
       windowWidth: winWidth,
       windowHeight: winHeight,
+      isLoading,
     } = this.props;
     const { hasInitLoadDone } = this.state;
     const { channel: { isSub: prevIsSub, slug: prevSlug } } = prevProps;
-    const hasResized = winHeight !== prevProps.windowHeight || winWidth !== prevProps.windowWidth;
 
-    if (slug !== prevSlug || isSub !== prevIsSub || hasResized) {
+    const hasResized = winHeight !== prevProps.windowHeight || winWidth !== prevProps.windowWidth;
+    const hasLoaded = isLoading.channel !== prevProps.isLoading.channel;
+
+    if (hasLoaded || channel.isSub !== prevIsSub || hasResized) {
       this.updateSizeDimensions();
     }
 
-    if (slug !== prevSlug) {
+    if (channel.slug !== prevSlug) {
       this.updateHasInitLoadDone(false);
+      this.updateSizeDimensions();
     }
 
-    if (slug === prevSlug && hasInitLoadDone !== prevState.hasInitLoadDone) {
+    if (channel.slug === prevSlug && hasInitLoadDone !== prevState.hasInitLoadDone) {
       this.updateHasInitLoadDone(true);
     }
   }
@@ -72,15 +76,17 @@ class Channel extends React.Component {
       createMessageRequest,
     } = this.props;
     const { hasInitLoadDone, height } = this.state;
+    const { isSub, hasDm, title } = channel;
 
-    const placeholder = channel.hasDm ? `@${channel.title}` : `#${channel.title}`;
+    const hasLoaded = (!isLoading.channel && hasInitLoadDone) || !channel.shouldFetch;
+    const placeholder = hasDm ? `@${title}` : `#${title}`;
     const formPlaceholder = placeholder && `Message ${placeholder}`;
     const style = { height };
 
     return (
       <div className="Channel" ref={this.container}>
         <div className="Channel__body">
-          {!isLoading.channel && hasInitLoadDone && (
+          {hasLoaded && (
             <ChannelScrollBar
               channel={channel}
               messages={messages}
@@ -94,18 +100,21 @@ class Channel extends React.Component {
             />
           )}
         </div>
-        {channel.isSub && (
+        {isSub && (
           <MessageForm
             channelId={channel.id}
             placeholder={formPlaceholder}
             createMessageRequest={createMessageRequest}
           />
         )}
-        {channel.isSub || channel.hasDm || (
+        {hasLoaded && !isSub && !hasDm && (
           <ChannelSubscribe
             createChannelSubRequest={createChannelSubRequest}
             matchUrl={matchUrl}
-            {...channel}
+            channelId={channel.id}
+            channelTitle={channel.title}
+            createdAt={channel.createdAt}
+            ownerName={channel.ownerName}
           />
         )}
       </div>
