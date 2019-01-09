@@ -83,14 +83,12 @@ class MenuItem extends React.Component {
           </LinkWithDrawer>
         )}
         {itemType === 'dropdown' && (
-          <DropdownModalTriggerContainer
-            className={contentClassNames}
-            dropdownType={dropdownType}
-            {...itemProps}
-          >
-            {itemIcon}
-            {label}
-          </DropdownModalTriggerContainer>
+          <div className={contentClassNames}>
+            <DropdownModalTriggerContainer dropdownType={dropdownType} {...itemProps}>
+              {itemIcon}
+              {label}
+            </DropdownModalTriggerContainer>
+          </div>
         )}
         {itemType === 'btn' && (
           <Button className={contentClassNames} {...itemProps}>

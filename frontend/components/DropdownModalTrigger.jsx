@@ -12,6 +12,12 @@ class DropdownModalTrigger extends React.Component {
     this.updateModalStyles = this.updateModalStyles.bind(this);
   }
 
+  getBemModifier() {
+    const { dropdownType } = this.props;
+
+    return dropdownType.slice(9).replace(/_/g, '-').toLowerCase();
+  }
+
   handleClick(e) {
     const { openDropdown, onClick } = this.props;
 
@@ -39,13 +45,18 @@ class DropdownModalTrigger extends React.Component {
 
     const { right, bottom } = this.triggerRef.current.getBoundingClientRect();
     let topPos = bottom;
+    let leftPos = right - width;
 
     if (height + bottom > window.innerHeight) {
       topPos = window.innerHeight - height - 20;
     }
 
+    if (right - width < 10) {
+      leftPos = 10;
+    }
+
     this.setState({
-      left: `${right - width}px`,
+      left: `${leftPos}px`,
       top: `${topPos}px`,
     });
   }
@@ -53,7 +64,6 @@ class DropdownModalTrigger extends React.Component {
   render() {
     const {
       children,
-      className,
       isDdOpen,
       bemModifier,
       contentStyle,
@@ -68,7 +78,8 @@ class DropdownModalTrigger extends React.Component {
         <Button
           ref={this.triggerRef}
           onClick={this.handleClick}
-          className={className}
+          buttonFor="dropdown"
+          modifier={this.getBemModifier()}
           isActive={isDdOpen}
           unStyled
         >

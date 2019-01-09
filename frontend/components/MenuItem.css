@@ -2,12 +2,12 @@
   display: block;
 }
 
-button.MenuItem__content {
+.MenuItem__content--btn {
   cursor: pointer;
   border: 0;
 }
 
-button.MenuItem__content:focus {
+.MenuItem__content--btn:focus {
   outline: 0;
 }
 
