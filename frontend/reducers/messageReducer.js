@@ -40,7 +40,7 @@ const messageReducer = (state = _defaultState, action) => {
       const channelSlug = channel && channel.slug;
 
       messages.forEach((msg) => {
-        nextState[msg.slug] = { reactionIds: [], channelSlug, ...msg };
+        nextState[msg.slug] = { ...msg, reactionIds: [], channelSlug };
       });
 
       messages.filter(msg => !msg.parentMessageId).forEach((msg) => {
@@ -135,8 +135,7 @@ const messageReducer = (state = _defaultState, action) => {
         return state;
       }
 
-      nextState = {};
-      nextState[slug].reactionIds.push(id);
+      nextState = { [slug]: { reactionIds: [...state[slug].reactionIds, id] } };
 
       return merge({}, state, nextState);
     }
