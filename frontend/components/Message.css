@@ -2,9 +2,7 @@
   position: relative;
 }
 
-.AllUnreadsItem__body .Message__container,
-.Drawer__convo .Message__container,
-.Channel .Message__container {
+.Message__container {
   padding: 4px 24px;
 }
 
@@ -13,10 +11,6 @@
   -ms-flex-direction: row;
   flex-direction: row;
   padding: 2px 0;
-}
-
-.ChannelDetailsDrawer .Message__body {
-  margin-left: 0;
 }
 
 .Message__body {
@@ -86,9 +80,7 @@
 }
 
 @media screen and (max-width: 991px) {
-  .AllUnreadsItem__body .Message__container,
-  .Drawer__convo .Message__container,
-  .Channel .Message__container {
+  .Message__container {
     padding: 4px 18px;
   }
 }

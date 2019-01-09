@@ -1,8 +1,8 @@
-.Drawer__favorites .Message:first-child .MessageHoverMenu {
+.FavoritesDrawer .Message:first-child .MessageHoverMenu {
   top: -5px;
 }
 
-.Drawer__favorites .Message__container {
+.FavoritesDrawer .Message__container {
   padding: 3px 10px 12px;
   margin: 10px 8px;
   background-color: #FFF;
@@ -10,7 +10,7 @@
 }
 
 @media screen and (max-width: 768px) {
-  .Drawer__favorites .Message__container {
+  .FavoritesDrawer .Message__container {
     padding: 3px 8px 12px;
     margin: 10px -8px;
     background-color: #FFF;

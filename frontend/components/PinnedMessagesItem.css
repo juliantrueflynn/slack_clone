@@ -5,6 +5,10 @@
   margin: 0 16px 8px;
 }
 
+.PinnedMessagesItem .Message__container {
+  padding: 0;
+}
+
 .PinnedMessagesItem__container {
   position: relative;
 }

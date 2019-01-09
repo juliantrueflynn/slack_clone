@@ -6,6 +6,10 @@
   margin-top: 10px;
 }
 
+.ModalSearchItem .Message__container {
+  padding: 0;
+}
+
 .ModalSearchItem:last-child {
   margin-bottom: 20px;
 }

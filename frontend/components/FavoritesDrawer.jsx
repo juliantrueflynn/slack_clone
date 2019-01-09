@@ -6,13 +6,15 @@ const FavoritesDrawer = ({ messages }) => {
   const filterMenuItems = ['dropdown', 'reaction', 'convo'];
 
   return (
-    <MessagesListContainer
-      messages={messages}
-      role="listitem"
-      filterMenuItems={filterMenuItems}
-      isThreadHidden
-      isHoverable
-    />
+    <div className="FavoritesDrawer">
+      <MessagesListContainer
+        messages={messages}
+        role="listitem"
+        filterMenuItems={filterMenuItems}
+        isThreadHidden
+        isHoverable
+      />
+    </div>
   );
 };
 
