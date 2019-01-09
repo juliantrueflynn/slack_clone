@@ -60,8 +60,6 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
     modalType: state.ui.displayModal.modalType,
     drawerType: state.ui.drawer.drawerType,
     searchQuery: state.search.searchQuery,
-    isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_CHANNEL_EDIT',
-    dropdownProps: state.ui.dropdown.dropdownProps,
   };
 };
 
@@ -69,7 +67,6 @@ const mapDispatchToProps = (dispatch, { match: { params: { chatPath } } }) => ({
   openModal: (modalType, modalProps) => dispatch(updateModal(modalType, modalProps)),
   openLeftSidebarModal: () => dispatch(updateModal('MODAL_LEFT_SIDEBAR', null)),
   closeDrawer: () => dispatch(updateDrawer(null)),
-  openChannelDropdown: ddProps => dispatch(updateDropdown('DROPDOWN_CHANNEL_EDIT', ddProps)),
   closeDropdown: () => dispatch(updateDropdown(null)),
   accordionOpen: accordionType => dispatch(accordionOpen('details', accordionType)),
   destroySearchQuery: () => dispatch(updateSearchQuery()),

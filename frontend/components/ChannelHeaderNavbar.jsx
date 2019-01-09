@@ -5,7 +5,6 @@ import Menu from './Menu';
 import Button from './Button';
 import RightSidebarModal from './RightSidebarModal';
 import withWindowResize from './withWindowResize';
-import DropdownModal from './DropdownModal';
 import './ChannelHeaderNavbar.css';
 
 class ChannelHeaderNavbar extends React.Component {
@@ -13,7 +12,6 @@ class ChannelHeaderNavbar extends React.Component {
     super(props);
     this.state = { isSidebarModalOpen: false };
     this.handleLinkToggle = this.handleLinkToggle.bind(this);
-    this.handleDdClick = this.handleDdClick.bind(this);
     this.handleSidebarModalToggle = this.handleSidebarModalToggle.bind(this);
     this.handleChannelSubToggle = this.handleChannelSubToggle.bind(this);
   }
@@ -72,13 +70,6 @@ class ChannelHeaderNavbar extends React.Component {
     closeDropdown();
   }
 
-  handleDdClick(e) {
-    const { openChannelDropdown } = this.props;
-    const { bottom: posY, right: posX } = e.target.getBoundingClientRect();
-
-    openChannelDropdown({ posY, posX });
-  }
-
   render() {
     const {
       channel,
@@ -90,29 +81,11 @@ class ChannelHeaderNavbar extends React.Component {
       isNotDefaultChannel,
       dmChannelUser,
       destroySearchQuery,
-      isDdOpen,
-      dropdownProps,
       closeDropdown,
       match: { url },
     } = this.props;
     const { isSidebarModalOpen } = this.state;
     const openModalProfile = () => openModal('MODAL_PROFILE');
-    const contentStyle = { top: '46px' };
-
-    const channelMenuItems = [
-      {
-        key: 'details',
-        icon: <FontAwesomeIcon icon="info-circle" fixedWidth />,
-        onClick: () => this.handleLinkToggle('details'),
-        isOpen: drawerType === 'details',
-      },
-      {
-        key: 'edit-dropdown',
-        icon: <FontAwesomeIcon icon="cog" fixedWidth />,
-        onClick: this.handleDdClick,
-        isOpen: isDdOpen,
-      }
-    ];
 
     const ddMenuItems = [
       {
@@ -140,6 +113,21 @@ class ChannelHeaderNavbar extends React.Component {
         label: `Leave ${chatTitle}`,
         onClick: this.handleChannelSubToggle,
         condition: channel && !channel.hasDm && channel.isSub && isNotDefaultChannel,
+      }
+    ];
+
+    const channelMenuItems = [
+      {
+        key: 'details',
+        icon: <FontAwesomeIcon icon="info-circle" fixedWidth />,
+        onClick: () => this.handleLinkToggle('details'),
+        isOpen: drawerType === 'details',
+      },
+      {
+        key: 'edit-dropdown',
+        icon: <FontAwesomeIcon icon="cog" fixedWidth />,
+        dropdownType: 'DROPDOWN_CHANNEL_EDIT',
+        dropdownChild: <Menu items={ddMenuItems} />
       }
     ];
 
@@ -178,11 +166,6 @@ class ChannelHeaderNavbar extends React.Component {
           openModalProfile={openModalProfile}
           closeModal={this.handleSidebarModalToggle}
         />
-        {isDdOpen && (
-          <DropdownModal coords={dropdownProps} contentStyle={contentStyle} close={closeDropdown}>
-            <Menu items={ddMenuItems} />
-          </DropdownModal>
-        )}
       </nav>
     );
   }
