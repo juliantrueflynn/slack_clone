@@ -17,16 +17,6 @@
   display: flex;
 }
 
-.Drawer .Message:first-child .MessageHoverMenu {
-  top: 10px;
-  right: 18px;
-}
-
-.Drawer .Message:not(:first-child) .MessageHoverMenu {
-  top: -5px;
-  right: 18px;
-}
-
 .MessageHoverMenu:hover {
   -webkit-box-shadow: 0px 0.5px 1px -0.5px rgba(0,0,0,0.33);
   -moz-box-shadow: 0px 0.5px 1px -0.5px rgba(0,0,0,0.33);

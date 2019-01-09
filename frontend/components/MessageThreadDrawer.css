@@ -1,0 +1,46 @@
+.MessageThreadDrawer .ScrollBar .Message:first-child .Message__container {
+  padding: 10px 18px;
+}
+
+.MessageThreadDrawer .ScrollBar .Message:not(:first-child) .Message__container {
+  padding: 6px 18px;
+}
+
+.MessageThreadDrawer .Message:nth-child(2):before {
+  height: 1px;
+  display: block;
+  content: "";
+  position: absolute;
+  top: -12px;
+  right: 18px;
+  left: 18px;
+  background: #e8e8e8;
+}
+
+.MessageThreadDrawer .Message:nth-child(2) {
+  margin-top: 18px;
+}
+
+.MessageThreadDrawer .Message:first-child .MessageHoverMenu {
+  top: 10px;
+  right: 18px;
+}
+
+.MessageThreadDrawer .Message:not(:first-child) .MessageHoverMenu {
+  top: -5px;
+  right: 18px;
+}
+
+.MessageThreadDrawer .MessageForm  {
+  margin: 15px 16px;
+}
+
+.MessageThreadDrawer .MessageForm .Editor {
+  border-width: 1px;
+}
+
+.MessageThreadDrawer .MessageForm .Btn__submit {
+  margin-left: auto;
+  display: block;
+  margin-top: 10px;
+}
