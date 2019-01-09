@@ -1,41 +1,41 @@
 import React from 'react';
-import Button from './Button';
 import StatusIcon from './StatusIcon';
+import DropdownModalTriggerContainer from './DropdownModalTriggerContainer';
+import Menu from './Menu';
+import UserPreview from './UserPreview';
 import './ProfileDropdownTrigger.css';
 
-class ProfileDropdownTrigger extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleDropdownClick = this.handleDropdownClick.bind(this);
-  }
+const ProfileDropdownTrigger = ({
+  user,
+  workspaceTitle,
+  workspaces,
+  profileUrl,
+}) => {
+  const ddDefaults = [
+    { label: <UserPreview user={user} avatarSize="40" hasNoStatus alignCenter /> },
+    {
+      label: 'Home',
+      link: '/',
+      exact: true,
+      hasNoDrawer: true,
+    },
+    { label: 'Profile & Account', link: profileUrl, hasNoDrawer: true },
+    { key: 'switch-workspace', label: 'Switch Workspace' },
+  ];
+  const ddMenuItems = ddDefaults.concat(workspaces);
 
-  handleDropdownClick(e) {
-    const { openDropdown } = this.props;
-    const { bottom: posY } = e.currentTarget.getBoundingClientRect();
-
-    openDropdown('DROPDOWN_PROFILE', { posY });
-  }
-
-  render() {
-    const { user, workspaceTitle, isDdOpen } = this.props;
-
-    return (
-      <div className="ProfileDropdownTrigger">
-        <Button
-          buttonFor="dropdown"
-          unStyled
-          isActive={isDdOpen}
-          onClick={this.handleDropdownClick}
-        >
-          <div className="ProfileDropdownTrigger__workspace">{workspaceTitle}</div>
-          <div className="ProfileDropdownTrigger__user">
-            <StatusIcon member={user} size="sm" />
-            <div className="ProfileDropdownTrigger__username">{user.username}</div>
-          </div>
-        </Button>
+  return (
+    <DropdownModalTriggerContainer
+      dropdownType="DROPDOWN_PROFILE"
+      dropdownChild={<Menu items={ddMenuItems} />}
+    >
+      <div className="ProfileDropdownTrigger__workspace">{workspaceTitle}</div>
+      <div className="ProfileDropdownTrigger__user">
+        <StatusIcon member={user} size="sm" />
+        <div className="ProfileDropdownTrigger__username">{user.username}</div>
       </div>
-    );
-  }
-}
+    </DropdownModalTriggerContainer>
+  );
+};
 
 export default ProfileDropdownTrigger;

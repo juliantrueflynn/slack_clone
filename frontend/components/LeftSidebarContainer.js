@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getSubbedWorkspaces, getChannelsMap, getDMChannels } from '../reducers/selectors';
-import { updateModal, updateDropdown } from '../actions/uiActions';
+import { updateModal } from '../actions/uiActions';
 import { updateChannelSub } from '../actions/channelActions';
 import withWindowResize from './withWindowResize';
 import LeftSidebar from './LeftSidebar';
@@ -55,8 +55,6 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
     chatPath,
     profileUrl,
     drawer: state.ui.drawer,
-    isDdOpen: state.ui.dropdown.dropdownType === 'DROPDOWN_PROFILE',
-    dropdownProps: state.ui.dropdown.dropdownProps,
     isModalOpen: state.ui.displayModal.modalType === 'MODAL_LEFT_SIDEBAR',
   };
 };
@@ -65,8 +63,6 @@ const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug } } }) 
   openChannelsListModal: () => dispatch(updateModal('MODAL_CHATS', { workspaceSlug })),
   openChannelFormModal: workspaceId => dispatch(updateModal('MODAL_FORM_CHANNEL', { workspaceId })),
   closeModal: () => dispatch(updateModal(null)),
-  openDropdown: (ddType, ddProps) => dispatch(updateDropdown(ddType, ddProps)),
-  closeDropdown: () => dispatch(updateDropdown()),
   updateChannelSubRequest: channelSub => dispatch(updateChannelSub.request(channelSub)),
 });
 

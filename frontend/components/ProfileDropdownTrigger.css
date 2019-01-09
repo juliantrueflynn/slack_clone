@@ -1,21 +1,18 @@
-.ProfileDropdownTrigger,
-.ProfileDropdownTrigger > .Btn {
+.Btn__dropdown--profile {
+  text-align: left;
+  width: 100%;
   min-height: 60px;
 }
 
-.ProfileDropdownTrigger > .Btn {
-  text-align: left;
-}
-
-.ProfileDropdownTrigger > .Btn:hover,
-.ProfileDropdownTrigger > .Btn:focus,
-.ProfileDropdownTrigger .Btn__dropdown--active {
+.Btn__dropdown--profile:hover,
+.Btn__dropdown--profile:focus,
+.Btn__dropdown--profile--active {
   outline: 0;
   box-shadow: none;
   background-color: #3E2E3D;
 }
 
-.ProfileDropdownTrigger .ProfileDropdownTrigger__workspace {
+.ProfileDropdownTrigger__workspace {
   font-weight: bold;
   color: #FFF;
   margin-bottom: 3px;
@@ -25,24 +22,24 @@
   text-overflow: ellipsis;
 }
 
-.ProfileDropdownTrigger .ProfileDropdownTrigger__user {
+.ProfileDropdownTrigger__user {
   display: flex;
   flex-direction: row;
   font-size: .9em;
   align-items: center;
 }
 
-.ProfileDropdownTrigger .ProfileDropdownTrigger__username {
+.ProfileDropdownTrigger__username {
   color: rgba(255, 255, 255, 0.6);
 }
 
-.ProfileDropdownTrigger .Btn__dropdown--active .ProfileDropdownTrigger__username,
-.ProfileDropdownTrigger .Btn__dropdown:hover .ProfileDropdownTrigger__username,
-.ProfileDropdownTrigger .Btn__dropdown:focus .ProfileDropdownTrigger__username {
+.Btn__dropdown--profile.Btn__dropdown--active .ProfileDropdownTrigger__username,
+.Btn__dropdown--profile:hover .ProfileDropdownTrigger__username,
+.Btn__dropdown--profile:focus .ProfileDropdownTrigger__username {
   color: #FFF;
 }
 
-.ProfileDropdownTrigger .StatusIcon {
+.Btn__dropdown--profile .StatusIcon {
   padding-right: 6px;
 }
 
@@ -51,7 +48,7 @@
   padding-bottom: 8px;
 }
 
-.Modal__dropdown--profile .MenuItem > .MenuItem__content:not(.MenuItem__content--active) {
+.Modal__dropdown--profile .MenuItem .MenuItem__content:not(.MenuItem__content--active) {
   background-color: #FFF;
   transition: background-color ease-in-out .15s;
 }
@@ -88,7 +85,7 @@
   display: block;
 }
 
-.Modal__dropdown--profile .Menu > .MenuItem > .MenuItem__content--active {
+.Modal__dropdown--profile .Menu .MenuItem .MenuItem__content--active {
   background-color: #4C9689;
   color: #FFF;
 }

@@ -1,13 +1,11 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import UserPreview from './UserPreview';
 import StatusIcon from './StatusIcon';
 import Button from './Button';
 import LeftSidebarWidgets from './LeftSidebarWidgets';
 import SuffixButton from './SuffixButton';
 import ProfileDropdownTrigger from './ProfileDropdownTrigger';
 import Menu from './Menu';
-import DropdownModal from './DropdownModal';
 import ScrollBar from './ScrollBar';
 import Modal from './Modal';
 import './LeftSidebar.css';
@@ -61,10 +59,6 @@ class LeftSidebar extends React.Component {
       workspace,
       closeModal,
       isModalOpen,
-      isDdOpen,
-      dropdownProps,
-      openDropdown,
-      closeDropdown,
       workspaces,
       chatPath,
       profileUrl,
@@ -73,19 +67,6 @@ class LeftSidebar extends React.Component {
       windowHeight,
       isMobileSize,
     } = this.props;
-
-    const ddDefaults = [
-      { label: <UserPreview user={user} avatarSize="40" hasNoStatus alignCenter /> },
-      {
-        label: 'Home',
-        link: '/',
-        exact: true,
-        hasNoDrawer: true,
-      },
-      { label: 'Profile & Account', link: profileUrl, hasNoDrawer: true },
-      { key: 'switch-workspace', label: 'Switch Workspace' },
-    ];
-    const ddMenuItems = ddDefaults.concat(workspaces);
 
     const quicklistMenuItems = [
       {
@@ -125,8 +106,8 @@ class LeftSidebar extends React.Component {
         component: ProfileDropdownTrigger,
         workspaceTitle: workspace.title,
         user,
-        openDropdown,
-        isDdOpen,
+        profileUrl,
+        workspaces,
       },
       { key: 'quicklinks', component: Menu, items: quicklistMenuItems },
       {
@@ -148,7 +129,6 @@ class LeftSidebar extends React.Component {
     ];
 
     const style = { height: windowHeight };
-    const contentStyle = { top: '60px', left: '10px' };
 
     return (
       <aside className="LeftSidebar">
@@ -169,16 +149,6 @@ class LeftSidebar extends React.Component {
               <LeftSidebarWidgets menuGroups={sidebarMenuItems} />
             </ScrollBar>
           </Modal>
-        )}
-        {isDdOpen && (
-          <DropdownModal
-            coords={dropdownProps}
-            contentStyle={contentStyle}
-            bemModifier="profile"
-            close={closeDropdown}
-          >
-            <Menu items={ddMenuItems} />
-          </DropdownModal>
         )}
       </aside>
     );
