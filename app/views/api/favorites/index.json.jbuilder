@@ -1,5 +1,5 @@
 json.favorites do
-  json.array! @favorites, :id, :message_id, :message_slug, :created_at
+  json.array! @favorites.includes(:message), :id, :message_slug, :created_at
 end
 
 message_ids = @favorites.pluck(:message_id)
@@ -16,7 +16,7 @@ json.messages do
 end
 
 json.reactions do
-  reactions = Reaction.by_message_id(message_ids)
+  reactions = Reaction.by_message_id(message_ids).includes(:user)
 
   json.array! reactions do |reaction|
     json.(reaction, :id, :emoji, :message_id, :message_slug, :user_slug)

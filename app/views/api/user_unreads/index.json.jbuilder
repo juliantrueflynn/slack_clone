@@ -16,5 +16,5 @@ end
 
 json.favorites do
   favorites = current_user.favorites.by_message_id(@unreads)
-  json.array! favorites, :id, :message_id, :message_slug
+  json.array! favorites, :id, :message_slug
 end
