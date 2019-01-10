@@ -16,3 +16,7 @@
   font-weight: 400;
   font-size: .8em;
 }
+
+.Workspace--loading .EmptyDisplay__txt {
+  padding: 0 20px;
+}

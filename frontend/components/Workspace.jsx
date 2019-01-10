@@ -60,7 +60,6 @@ class Workspace extends React.Component {
     if (!hasLoaded) {
       return (
         <div className="Workspace Workspace--loading">
-          <div className="LeftSidebar" />
           <EmptyDisplay topIcon="quote-left" hasLoadingIcon>
             <blockquote className="Workspace__quote">
               {quoteText}

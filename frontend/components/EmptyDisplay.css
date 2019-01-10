@@ -26,3 +26,28 @@
   margin-top: 45px;
   color: #74B9FF;
 }
+
+@media screen and (max-width: 991px) {
+  .EmptyDisplay {
+    font-size: 1.1em;
+  }
+
+  .EmptyDisplay__top-icon {
+    margin-bottom: 14px;
+    font-size: 3.2em;
+  }
+
+  .EmptyDisplay__loading-icon {
+    margin-top: 35px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .EmptyDisplay {
+    font-size: 1em;
+  }
+
+  .EmptyDisplay__top-icon {
+    margin-top: 25px;
+  }
+}
