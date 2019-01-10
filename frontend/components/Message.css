@@ -30,8 +30,8 @@
   padding-right: 2px;
 }
 
-.Message--hoverable.Message--hover:not(.Message--highlighted),
-.Message--hoverable:not(.Message--highlighted):not(.Message--editing):hover {
+.MessagesList--hoverable .Message--hover:not(.Message--highlighted),
+.MessagesList--hoverable .Message:not(.Message--highlighted):not(.Message--editing):hover {
   background-color: #F9F9F9;
 }
 

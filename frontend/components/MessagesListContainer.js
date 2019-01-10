@@ -12,14 +12,20 @@ import { toggleMessageEditor, updateDropdown } from '../actions/uiActions';
 import { getChatPathUrl } from '../reducers/selectors';
 import MessagesList from './MessagesList';
 
-const mapStateToProps = state => ({
-  currentUserSlug: state.session.currentUser.slug,
-  usersMap: state.entities.members,
-  reactionsMap: state.entities.reactions,
-  pinsMap: state.entities.pins,
-  isDdOpen: !!state.ui.dropdown.dropdownType,
-  chatPathUrl: getChatPathUrl(state),
-});
+const mapStateToProps = (state) => {
+  const { dropdownType: ddType } = state.ui.dropdown;
+  const isReactionDdOpen = !!(ddType && ddType.lastIndexOf('DROPDOWN_REACTION', 0) === 0);
+
+  return {
+    currentUserSlug: state.session.currentUser.slug,
+    usersMap: state.entities.members,
+    reactionsMap: state.entities.reactions,
+    pinsMap: state.entities.pins,
+    isDdOpen: !!ddType,
+    isReactionDdOpen,
+    chatPathUrl: getChatPathUrl(state),
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   updateMessageRequest: message => dispatch(updateMessage.request(message)),

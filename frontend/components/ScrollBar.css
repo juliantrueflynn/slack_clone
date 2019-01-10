@@ -15,6 +15,7 @@
   width: 6px;
 }
 
-.ScrollBar .ScrollBar__container > [role="listitem"]:last-child {
+.ScrollBar .ScrollBar__container > [role="listitem"]:last-child,
+.ScrollBar .ScrollBar__container > div > [role="listitem"]:last-child {
   margin-bottom: 21px;
 }

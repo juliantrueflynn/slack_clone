@@ -12,14 +12,6 @@ class MessageHoverMenu extends React.Component {
     this.getDdMenuItems = this.getDdMenuItems.bind(this);
   }
 
-  componentDidUpdate(prevProps) {
-    const { hasHover, isDdOpen, handleHover } = this.props;
-
-    if (hasHover && !isDdOpen && prevProps.isDdOpen) {
-      handleHover(false);
-    }
-  }
-
   getMenuItems() {
     const {
       message,
@@ -37,7 +29,7 @@ class MessageHoverMenu extends React.Component {
       {
         key: 'reaction',
         icon: <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />,
-        shouldSkipBemModifier: true,
+        bemModifier: 'reaction',
         dropdownType: `DROPDOWN_REACTION_${message.slug}`,
         dropdownChild: <EmojiPicker onEmojiClick={this.handleEmojiClick} disableDiversityPicker />,
       },
@@ -58,7 +50,7 @@ class MessageHoverMenu extends React.Component {
       {
         key: 'dropdown',
         icon: <FontAwesomeIcon icon="ellipsis-h" fixedWidth />,
-        shouldSkipBemModifier: true,
+        bemModifier: 'msg-dd',
         dropdownType: `DROPDOWN_MESSAGE_${message.slug}`,
         dropdownChild: <Menu items={this.getDdMenuItems()} />,
         condition: isEntryType,

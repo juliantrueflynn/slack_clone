@@ -12,8 +12,8 @@
   z-index: 100;
 }
 
-.Message--hoverable.Message--hover:not(.Message--editing) .MessageHoverMenu,
-.Message--hoverable.Message:hover:not(.Message--editing) .MessageHoverMenu {
+.MessagesList--hoverable .Message--hover:not(.Message--editing) .MessageHoverMenu,
+.MessagesList--hoverable .Message:hover:not(.Message--editing) .MessageHoverMenu {
   display: flex;
 }
 

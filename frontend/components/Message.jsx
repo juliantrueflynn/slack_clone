@@ -17,6 +17,15 @@ class Message extends React.Component {
     this.handleHover = this.handleHover.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    const { isHoverable, isDdOpen } = this.props;
+    const { hasHover } = this.state;
+
+    if (isHoverable && hasHover && !isDdOpen && prevProps.isDdOpen) {
+      this.handleHover(false);
+    }
+  }
+
   handleHover(hasHover) {
     const { isHoverable, isDdOpen } = this.props;
 
@@ -39,19 +48,19 @@ class Message extends React.Component {
       toggleMessageEditor,
       updateMessageRequest,
       isThreadHidden,
-      isHoverable,
       isHighlightable,
+      isReactionDdOpen,
       shouldHideEngagement,
       ...props
     } = this.props;
     const { hasHover } = this.state;
+    const { isEditing, pinId, favoriteId } = message;
     const authorUrl = `${chatPathUrl}/team/${message.authorSlug}`;
 
     const msgClassNames = classNames('Message', {
-      'Message--hoverable': isHoverable,
       'Message--editing': message.isEditing,
-      'Message--highlighted': isHighlightable && (message.favoriteId || message.pinId),
-      'Message--hover': hasHover && !message.isEditing && !message.pinId,
+      'Message--highlighted': isHighlightable && (favoriteId || pinId),
+      'Message--hover': hasHover && !isReactionDdOpen && !isEditing && !pinId,
     });
 
     return (
@@ -63,20 +72,17 @@ class Message extends React.Component {
           onMouseLeave={() => this.handleHover(false)}
           onMouseOver={() => !hasHover && this.handleHover(true)}
         >
-          {isHighlightable && (!!message.pinId || !!message.favoriteId) && (
+          {isHighlightable && (!!pinId || !!favoriteId) && (
             <MessageHighlight
-              pinId={message.pinId}
+              pinId={pinId}
               pinsMap={pinsMap}
-              isFavorited={message.favoriteId}
+              isFavorited={favoriteId}
               users={usersMap}
               chatPathUrl={chatPathUrl}
               currentUserSlug={currentUserSlug}
             />
           )}
           <MessageHoverMenu
-            hasHover={hasHover}
-            handleHover={this.handleHover}
-            toggleDd={this.handleDdToggle}
             toggleReaction={toggleReaction}
             chatPathUrl={chatPathUrl}
             message={message}
@@ -92,7 +98,7 @@ class Message extends React.Component {
                 </div>
                 {message.entityType === 'entry' && (
                   <MessageContent
-                    isEditing={message.isEditing}
+                    isEditing={isEditing}
                     content={message.body}
                     updateMessageRequest={updateMessageRequest}
                     closeEditor={toggleMessageEditor}
