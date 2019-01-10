@@ -12,20 +12,15 @@ const favoriteReducer = (state = {}, action) => {
 
   let nextState;
   switch (action.type) {
-    case FAVORITE.INDEX.RECEIVE: {
+    case FAVORITE.INDEX.RECEIVE:
+    case MESSAGE.INDEX.RECEIVE: {
       const { favorites } = action.messages;
-
-      nextState = {};
-      favorites.forEach((favorite) => {
-        nextState[favorite.id] = favorite;
-      });
-
+      nextState = favorites.reduce((acc, curr) => ({ ...acc, [curr.id]: curr }), {});
       return merge({}, state, nextState);
     }
     case FAVORITE.CREATE.RECEIVE: {
       const { favorite } = action;
-      nextState = {};
-      nextState[favorite.id] = favorite;
+      nextState = { [favorite.id]: favorite };
       return merge({}, state, nextState);
     }
     case FAVORITE.DESTROY.RECEIVE: {
@@ -33,16 +28,6 @@ const favoriteReducer = (state = {}, action) => {
       nextState = merge({}, state);
       delete nextState[favorite.id];
       return nextState;
-    }
-    case MESSAGE.INDEX.RECEIVE: {
-      const { favorites } = action.messages;
-
-      nextState = {};
-      favorites.forEach((favorite) => {
-        nextState[favorite.id] = favorite;
-      });
-
-      return merge({}, state, nextState);
     }
     case WORKSPACE_SUB.CREATE.REQUEST:
     case WORKSPACE.SHOW.REQUEST:

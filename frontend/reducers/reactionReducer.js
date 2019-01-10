@@ -19,8 +19,7 @@ const reactionReducer = (state = {}, action) => {
   switch (action.type) {
     case REACTION.CREATE.RECEIVE: {
       const { reaction } = action;
-      nextState = {};
-      nextState[reaction.id] = reaction;
+      nextState = { [reaction.id]: reaction };
       return merge({}, state, nextState);
     }
     case REACTION.DESTROY.RECEIVE: {
@@ -37,12 +36,7 @@ const reactionReducer = (state = {}, action) => {
     case MESSAGE.INDEX.RECEIVE:
     case MESSAGE.SHOW.RECEIVE: {
       const { reactions } = action.messages;
-
-      nextState = {};
-      reactions.forEach((reaction) => {
-        nextState[reaction.id] = reaction;
-      });
-
+      nextState = reactions.reduce((acc, curr) => ({ ...acc, [curr.id]: curr }), {});
       return merge({}, state, nextState);
     }
     case WORKSPACE_SUB.CREATE.REQUEST:
