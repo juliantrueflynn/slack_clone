@@ -1,0 +1,37 @@
+.MessageReactionsItem {
+  margin-right: 5px;
+}
+
+.MessageReactionsItem:last-child {
+  margin-right: 0;
+}
+
+.MessageReactionsItem .Btn__reaction {
+  border: 1px solid;
+  border-color: #E8E8E8;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 2px;
+  border-radius: 3px;
+  font-size: 13px;
+  color: #717274;
+  display: flex;
+  align-items: center;
+  transition: border-color ease-in-out .2s;
+}
+
+.MessageReactionsItem .Btn__reaction:hover {
+  border-color: #0576b9;
+}
+
+.MessageReactionsItem__counter {
+  margin: 0 1px 0 2px;
+}
+
+.MessageReactionsItem--has-user .Btn__reaction {
+  background-color: rgba(5, 118, 185, .05);
+  border-color: rgba(5, 118, 185, 0.3);
+}
+
+.MessageReactionsItem--has-user .ReactionItem__counter {
+  color: #0576b9;
+}

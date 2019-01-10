@@ -2,21 +2,26 @@ import React from 'react';
 import Emojify from 'react-emojione';
 import classNames from 'classnames';
 import Button from './Button';
-import './ReactionsItem.css';
+import './MessageReactionsItem.css';
 
-const ReactionItem = ({
+const MessageReactionsItem = ({
   reaction,
   reactionStyle,
   currentUserSlug,
   toggleClick,
 }) => {
-  const reactionClassNames = classNames('ReactionsItem', {
-    'ReactionsItem--has-user': reaction.userSlugs.includes(currentUserSlug),
+  const reactionClassNames = classNames('MessageReactionsItem', {
+    'MessageReactionsItem--has-user': reaction.userSlugs.includes(currentUserSlug),
   });
 
   return (
     <li className={reactionClassNames}>
-      <Button buttonFor="reaction" unStyled onClick={() => toggleClick(reaction.emoji)}>
+      <Button
+        buttonFor="reaction"
+        data-emoji={reaction.emoji}
+        onClick={toggleClick}
+        unStyled
+      >
         <Emojify style={reactionStyle} className="ReactionItem__emoji">
           {`:${reaction.emoji}:`}
         </Emojify>
@@ -28,4 +33,4 @@ const ReactionItem = ({
   );
 };
 
-export default ReactionItem;
+export default MessageReactionsItem;

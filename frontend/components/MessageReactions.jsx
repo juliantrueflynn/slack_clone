@@ -1,19 +1,26 @@
 import React from 'react';
-import ReactionItem from './ReactionsItem';
+import MessageReactionsItem from './MessageReactionsItem';
+import './MessageReactions.css';
 
-class Reactions extends React.Component {
+class MessageReactions extends React.Component {
   constructor(props) {
     super(props);
     this.handleToggleClick = this.handleToggleClick.bind(this);
   }
 
-  handleToggleClick(emoji) {
+  handleToggleClick(e) {
     const { messageSlug, toggleReaction } = this.props;
+    const emoji = e.target.getAttribute('data-emoji');
     toggleReaction({ messageSlug, emoji });
   }
 
   render() {
-    const { reactionIds, reactionsMap, currentUserId } = this.props;
+    const { reactionIds, reactionsMap, currentUserSlug } = this.props;
+
+    if (!reactionIds && !reactionIds.length) {
+      return null;
+    }
+
     const reactions = reactionIds.map(id => reactionsMap[id]);
 
     const reactionCounts = reactions.reduce((acc, curr) => {
@@ -29,12 +36,6 @@ class Reactions extends React.Component {
 
     const reactionItems = Object.values(reactionCounts);
 
-    const style = {
-      display: 'flex',
-      flexDirection: 'row',
-      margin: '6px 0 0',
-    };
-
     const reactionEmojiStyle = {
       height: 17,
       width: 17,
@@ -43,13 +44,13 @@ class Reactions extends React.Component {
     };
 
     return (
-      <ul className="Reactions" style={style}>
+      <ul className="MessageReactions">
         {reactionItems.map(reaction => (
-          <ReactionItem
+          <MessageReactionsItem
             key={reaction.emoji}
             reactionStyle={reactionEmojiStyle}
             toggleClick={this.handleToggleClick}
-            currentUserId={currentUserId}
+            currentUserSlug={currentUserSlug}
             reaction={reaction}
           />
         ))}
@@ -58,4 +59,4 @@ class Reactions extends React.Component {
   }
 }
 
-export default Reactions;
+export default MessageReactions;

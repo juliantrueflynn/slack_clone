@@ -2,17 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { dateUtil } from '../util/dateUtil';
 import Avatar from './Avatar';
-import './SingleMessageThread.css';
+import './MessageThreadPreview.css';
 
-const SingleMessageThread = ({
+const MessageThreadPreview = ({
   thread,
   slug,
   authors,
   lastMessageDate,
   users,
   chatPathUrl,
+  isThreadHidden,
 }) => {
-  if (!thread || !thread.length) {
+  if (!thread || !thread.length || isThreadHidden) {
     return null;
   }
 
@@ -32,18 +33,18 @@ const SingleMessageThread = ({
   threadLength += threadLength === 1 ? ' reply' : ' replies';
 
   return (
-    <div className="SingleMessageThread">
-      <Link to={convoUrl} className="SingleMessageThread__link">
-        <ul className="SingleMessageThread__items">
-          <li className="SingleMessageThread__item SingleMessageThread__avatars">
+    <div className="MessageThreadPreview">
+      <Link to={convoUrl} className="MessageThreadPreview__link">
+        <ul className="MessageThreadPreview__items">
+          <li className="MessageThreadPreview__item MessageThreadPreview__avatars">
             {threadAuthors.map(user => (
               <Avatar key={user.id} user={user} avatarFor="convo" size="24" />
             ))}
           </li>
-          <li className="SingleMessageThread__item SingleMessageThread__counter">
+          <li className="MessageThreadPreview__item MessageThreadPreview__counter">
             {threadLength}
           </li>
-          <li className="SingleMessageThread__item SingleMessageThread__date">
+          <li className="MessageThreadPreview__item MessageThreadPreview__date">
             <time className="SingleMessage__date-text">{lastDate}</time>
           </li>
         </ul>
@@ -52,4 +53,4 @@ const SingleMessageThread = ({
   );
 };
 
-export default SingleMessageThread;
+export default MessageThreadPreview;

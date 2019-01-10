@@ -8,13 +8,13 @@ import {
 } from '../actions/messageActions';
 import { toggleReaction } from '../actions/reactionActions';
 import { toggleFavorite } from '../actions/favoriteActions';
-import { toggleMessageEditor } from '../actions/uiActions';
+import { toggleMessageEditor, updateDropdown } from '../actions/uiActions';
 import { getChatPathUrl } from '../reducers/selectors';
 import MessagesList from './MessagesList';
 
 const mapStateToProps = state => ({
   currentUserSlug: state.session.currentUser.slug,
-  users: state.entities.members,
+  usersMap: state.entities.members,
   reactionsMap: state.entities.reactions,
   pinsMap: state.entities.pins,
   isDdOpen: !!state.ui.dropdown.dropdownType,
@@ -29,6 +29,7 @@ const mapDispatchToProps = dispatch => ({
   toggleMessageEditor: slug => dispatch(toggleMessageEditor(slug)),
   createPinRequest: pin => dispatch(createPin.request(pin)),
   destroyPinRequest: id => dispatch(destroyPin.request(id)),
+  closeDropdown: () => dispatch(updateDropdown(null)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MessagesList));

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import MessageHoverMenu from './MessageHoverMenu';
-import Reactions from './Reactions';
+import MessageReactions from './MessageReactions';
 import Avatar from './Avatar';
 import MessageContent from './MessageContent';
-import SingleMessageThread from './SingleMessageThread';
+import MessageThreadPreview from './MessageThreadPreview';
 import ChannelSub from './ChannelSub';
 import MessageHighlight from './MessageHighlight';
 import './Message.css';
@@ -29,7 +29,7 @@ class Message extends React.Component {
     const {
       message,
       role,
-      users,
+      usersMap,
       reactionsMap,
       pinsMap,
       currentUserSlug,
@@ -46,7 +46,6 @@ class Message extends React.Component {
     } = this.props;
     const { hasHover } = this.state;
     const authorUrl = `${chatPathUrl}/team/${message.authorSlug}`;
-    const hasReactions = !!(reactionsMap && message.reactionIds && message.reactionIds.length);
 
     const msgClassNames = classNames('Message', {
       'Message--hoverable': isHoverable,
@@ -69,7 +68,7 @@ class Message extends React.Component {
               pinId={message.pinId}
               pinsMap={pinsMap}
               isFavorited={message.favoriteId}
-              users={users}
+              users={usersMap}
               chatPathUrl={chatPathUrl}
               currentUserSlug={currentUserSlug}
             />
@@ -96,23 +95,31 @@ class Message extends React.Component {
                     isEditing={message.isEditing}
                     content={message.body}
                     updateMessageRequest={updateMessageRequest}
-                    closeEditor={() => toggleMessageEditor(null)}
+                    closeEditor={toggleMessageEditor}
                     slug={message.slug}
                   />
                 )}
                 {message.entityType !== 'entry' && <ChannelSub sub={message} />}
               </div>
-              {hasReactions && !shouldHideEngagement && (
-                <Reactions
-                  toggleReaction={toggleReaction}
-                  reactionIds={message.reactionIds}
-                  reactionsMap={reactionsMap}
-                  currentUserSlug={currentUserSlug}
-                  messageSlug={message.slug}
-                />
-              )}
-              {isThreadHidden || shouldHideEngagement || (
-                <SingleMessageThread chatPathUrl={chatPathUrl} users={users} {...message} />
+              {shouldHideEngagement || (
+                <Fragment>
+                  <MessageReactions
+                    toggleReaction={toggleReaction}
+                    reactionIds={message.reactionIds}
+                    reactionsMap={reactionsMap}
+                    currentUserSlug={currentUserSlug}
+                    messageSlug={message.slug}
+                  />
+                  <MessageThreadPreview
+                    isThreadHidden={isThreadHidden}
+                    chatPathUrl={chatPathUrl}
+                    users={usersMap}
+                    thread={message.thread}
+                    lastMessageDate={message.lastMessageDate}
+                    authors={message.authors}
+                    slug={message.slug}
+                  />
+                </Fragment>
               )}
             </div>
           </div>

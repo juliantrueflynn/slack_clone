@@ -1,11 +1,11 @@
-.SingleMessageThread {
+.MessageThreadPreview {
   font-size: small;
   text-decoration: none;
   padding-top: 2px;
   margin: 3px -4px 0;
 }
 
-.SingleMessageThread__link {
+.MessageThreadPreview__link {
   display: block;
   max-width: 550px;
   padding: 3px 4px;
@@ -16,53 +16,48 @@
               background-color ease-in-out .1s;
 }
 
-.SingleMessageThread__link:hover {
+.MessageThreadPreview__link:hover {
   border-color: #e8e8e8;
   background-color: #FFF;
 }
 
-.SingleMessageThread__items {
-  display: -webkit-box;
-  display: -ms-flexbox;
+.MessageThreadPreview__items {
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: row;
   flex-direction: row;
 }
 
-.SingleMessageThread__avatars .Avatar {
+.MessageThreadPreview__avatars .Avatar {
   margin-right: 3px;
 }
 
-.SingleMessageThread__avatars .Avatar:last-child {
+.MessageThreadPreview__avatars .Avatar:last-child {
   margin-right: 0;
 }
 
-.SingleMessageThread__item {
+.MessageThreadPreview__item {
   margin-left: 6px;
   display: flex;
   align-items: center;
 }
 
-.SingleMessageThread__items .SingleMessageThread__item:first-child {
+.MessageThreadPreview__items .MessageThreadPreview__item:first-child {
   margin-left: 0;
 }
 
-.SingleMessageThread .SingleMessageThread__counter {
+.MessageThreadPreview .MessageThreadPreview__counter {
   margin-right: 2px;
 }
 
-.SingleMessageThread .SingleMessageThread__counter:hover {
+.MessageThreadPreview .MessageThreadPreview__counter:hover {
   text-decoration: underline;
 }
 
-.SingleMessageThread__date {
+.MessageThreadPreview__date {
   color: rgba(0,0,0,.5);
 }
 
 @media screen and (max-width: 768px) {
-  .SingleMessageThread__date {
+  .MessageThreadPreview__date {
     display: none;
   }
 }

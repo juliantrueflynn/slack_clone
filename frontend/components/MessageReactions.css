@@ -1,0 +1,5 @@
+.MessageReactions {
+  display: flex;
+  flex-direction: row;
+  margin: 6px 0 0;
+}

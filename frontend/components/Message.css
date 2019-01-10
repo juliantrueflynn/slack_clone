@@ -8,7 +8,6 @@
 
 .Message__row {
   display: flex;
-  -ms-flex-direction: row;
   flex-direction: row;
   padding: 2px 0;
 }
@@ -22,10 +21,7 @@
 
 .Message__meta {
   display: flex;
-  -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
   margin-bottom: 4px;
 }
@@ -62,7 +58,7 @@
 .Message--editing .Reactions,
 .Message--editing .SingleMessageThread,
 .Message--editing .Message__meta {
-  display: none !important;
+  display: none;
 }
 
 .Message--editing .Message__content .Editor__unlocked {
