@@ -1,4 +1,6 @@
 import { fork, all } from 'redux-saga/effects';
+import allThreadsSaga from './allThreadsSaga';
+import allUnreadsSaga from './allUnreadsSaga';
 import sessionSaga from './sessionSaga';
 import workspaceSaga from './workspaceSaga';
 import channelSaga from './channelSaga';
@@ -7,17 +9,17 @@ import workspaceSubSaga from './workspaceSubSaga';
 import messageSaga from './messageSaga';
 import pinSaga from './pinSaga';
 import userSaga from './userSaga';
-import userThreadSaga from './userThreadSaga';
 import favoriteSaga from './favoriteSaga';
 import navigateSaga from './navigateSaga';
 import reactionSaga from './reactionSaga';
 import unreadSaga from './unreadSaga';
-import readSaga from './readSaga';
 import searchSaga from './searchSaga';
 import drawerSaga from './drawerSaga';
 
 export default function* root() {
   yield all([
+    fork(allThreadsSaga),
+    fork(allUnreadsSaga),
     fork(navigateSaga),
     fork(sessionSaga),
     fork(workspaceSaga),
@@ -27,11 +29,9 @@ export default function* root() {
     fork(messageSaga),
     fork(pinSaga),
     fork(userSaga),
-    fork(userThreadSaga),
     fork(favoriteSaga),
     fork(reactionSaga),
     fork(unreadSaga),
-    fork(readSaga),
     fork(searchSaga),
     fork(drawerSaga),
   ]);

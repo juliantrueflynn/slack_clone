@@ -44,7 +44,7 @@ function* watchCreateMessage() {
   yield takeLatest(MESSAGE.CREATE.RECEIVE, fetchNewMessageConvo);
 }
 
-export default function* userThreadSaga() {
+export default function* allThreadsSaga() {
   yield all([
     fork(watchUserThreadIndex),
     fork(watchCreateMessage),
