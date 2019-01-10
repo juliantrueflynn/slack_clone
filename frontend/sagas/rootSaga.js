@@ -12,7 +12,7 @@ import userSaga from './userSaga';
 import favoriteSaga from './favoriteSaga';
 import navigateSaga from './navigateSaga';
 import reactionSaga from './reactionSaga';
-import unreadSaga from './unreadSaga';
+import readSaga from './readSaga';
 import searchSaga from './searchSaga';
 import drawerSaga from './drawerSaga';
 
@@ -31,7 +31,7 @@ export default function* root() {
     fork(userSaga),
     fork(favoriteSaga),
     fork(reactionSaga),
-    fork(unreadSaga),
+    fork(readSaga),
     fork(searchSaga),
     fork(drawerSaga),
   ]);

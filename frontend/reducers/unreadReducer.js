@@ -52,7 +52,6 @@ const unreadReducer = (state = _defaultState, action) => {
 
       return merge({}, state, nextState);
     }
-    case READ.CREATE.RECEIVE:
     case READ.UPDATE.RECEIVE: {
       const { read } = action;
 

@@ -10,19 +10,18 @@ import { CHANNEL_SUB, MESSAGE } from '../actions/actionTypes';
 import { createChannelSub, updateChannelSub, destroyChannelSub } from '../actions/channelActions';
 import { apiCreate, apiDestroy, apiUpdate } from '../util/apiUtil';
 import { selectEntities, getCurrentUser, selectEntityBySlug } from '../reducers/selectors';
-import { destroyRead, createRead } from '../actions/readActions';
+import { updateRead, destroyRead } from '../actions/readActions';
 
-function* callReadAction(actionCaller, channelSub) {
-  if (channelSub) {
-    const { channelId: readableId } = channelSub;
-    yield put(actionCaller.request({ readableId, readableType: 'Channel' }));
+function* callReadAction(actionCaller, sub) {
+  if (sub && sub.channelId) {
+    yield put(actionCaller.request({ readableId: sub.channelId, readableType: 'Channel' }));
   }
 }
 
 function* fetchCreate({ channelSub }) {
   try {
     const response = yield call(apiCreate, 'channel_subs', channelSub);
-    yield callReadAction(createRead, response);
+    yield callReadAction(updateRead, response);
   } catch (error) {
     yield put(createChannelSub.failure(error));
   }

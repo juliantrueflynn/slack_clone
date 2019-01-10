@@ -7,12 +7,6 @@ export const fetchUnreads = {
   failure: errors => actionCreator(READ.INDEX.FAILURE, { errors }),
 };
 
-export const createRead = {
-  request: read => actionCreator(READ.CREATE.REQUEST, { read }),
-  receive: read => actionCreator(READ.CREATE.RECEIVE, { read }),
-  failure: errors => actionCreator(READ.CREATE.FAILURE, { errors }),
-};
-
 export const updateRead = {
   request: read => actionCreator(READ.UPDATE.REQUEST, { read }),
   receive: read => actionCreator(READ.UPDATE.RECEIVE, { read }),

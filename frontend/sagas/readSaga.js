@@ -8,12 +8,7 @@ import {
 } from 'redux-saga/effects';
 import { READ, MESSAGE } from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiDestroy } from '../util/apiUtil';
-import {
-  createRead,
-  updateRead,
-  destroyRead,
-  createUnread,
-} from '../actions/readActions';
+import { updateRead, destroyRead, createUnread } from '../actions/readActions';
 import { getChannelsMap, selectEntityBySlug } from '../reducers/selectors';
 import {
   getReadProps,
@@ -22,18 +17,10 @@ import {
   isCurrentUserNotInConvo,
 } from '../util/readUtil';
 
-function* fetchCreate({ read: { slug, ...read } }) {
-  try {
-    const response = yield call(apiCreate, 'read', read);
-    yield put(createRead.receive(response));
-  } catch (error) {
-    yield put(createRead.failure(error));
-  }
-}
-
 function* fetchUpdate({ read }) {
   try {
-    const response = yield call(apiUpdate, 'read', read);
+    const apiCall = read.lastRead ? apiUpdate : apiCreate;
+    const response = yield call(apiCall, 'read', read);
     yield put(updateRead.receive(response));
   } catch (error) {
     yield put(updateRead.failure(error));
@@ -49,16 +36,11 @@ function* fetchDestroy({ read: { readableId, readableType, slug } }) {
   }
 }
 
-function* createOrUpdateRead(readProps) {
-  const readAction = readProps.lastRead ? updateRead : createRead;
-  yield put(readAction.request(readProps));
-}
-
 function* readViewedEntity(readProps) {
   const unread = yield getUnread(readProps);
 
   if (unread.hasUnreads) {
-    yield createOrUpdateRead(unread);
+    yield put(updateRead.request(unread));
   }
 }
 
@@ -95,7 +77,7 @@ function* loadCreateMessageRead({ message: msg }) {
   const unread = yield getUnread({ messageSlug, lastActive, ...read });
 
   if (yield call(isCurrentUserInView, read)) {
-    yield createOrUpdateRead({ ...unread, ...read });
+    yield put(updateRead.request({ ...unread, ...read }));
   } else {
     yield put(createUnread({ ...unread, hasUnreads: true }));
   }
@@ -114,10 +96,6 @@ function* loadDestroyConvoRead({ message }) {
   if (isUserNotInConvo || (!isUserNotInConvo && message.authors.length === 1)) {
     yield put(destroyRead.request({ readableType: 'Message', readableId, slug }));
   }
-}
-
-function* watchCreated() {
-  yield takeLatest(READ.CREATE.REQUEST, fetchCreate);
 }
 
 function* watchUpdated() {
@@ -144,9 +122,8 @@ function* watchMessageDestroy() {
   yield takeLatest(MESSAGE.DESTROY.RECEIVE, loadDestroyConvoRead);
 }
 
-export default function* unreadSaga() {
+export default function* readSaga() {
   yield all([
-    fork(watchCreated),
     fork(watchUpdated),
     fork(watchDestroyed),
     fork(watchMessageThread),

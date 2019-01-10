@@ -11,7 +11,7 @@ import { CHANNEL } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiUpdate } from '../util/apiUtil';
 import { navigate, updateFormSuccess, updateModal } from '../actions/uiActions';
 import { getCurrentUser } from '../reducers/selectors';
-import { createRead } from '../actions/readActions';
+import { updateRead } from '../actions/readActions';
 import { fetchMessages } from '../actions/messageActions';
 
 function* fetchIndex({ workspaceSlug }) {
@@ -35,7 +35,7 @@ function* fetchCreateChannel({ channel }) {
     }
 
     const response = yield call(apiCreate, apiUrl, channelProps);
-    yield put(createRead.request({ readableId: response.id, readableType: 'Channel' }));
+    yield put(updateRead.request({ readableId: response.id, readableType: 'Channel' }));
   } catch (error) {
     yield put(action.createChannel.failure(error));
   }
