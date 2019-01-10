@@ -1,5 +1,7 @@
 json.favorites do
-  json.array! @favorites.includes(:message), :id, :message_slug, :created_at
+  favorites = @favorites.includes(:message)
+
+  json.array! favorites, :id, :message_slug, :created_at
 end
 
 message_ids = @favorites.pluck(:message_id)
