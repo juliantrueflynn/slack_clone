@@ -14,7 +14,7 @@ end
 
 json.reactions do
   reactions = Reaction.by_message_id(@user_threads)
-  json.array! reactions, :id, :user_id, :emoji, :message_id, :message_slug
+  json.array! reactions, :id, :emoji, :message_id, :message_slug, :user_slug
 end
 
 json.favorites do

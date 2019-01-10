@@ -17,6 +17,10 @@ class Reaction < ApplicationRecord
   def message_slug
     message.slug
   end
+
+  def user_slug
+    user.slug
+  end
   
   after_create_commit :broadcast_create
   after_destroy :broadcast_destroy

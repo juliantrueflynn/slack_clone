@@ -11,13 +11,13 @@ import { REACTION, REACTION_TOGGLE } from '../actions/actionTypes';
 import { apiCreate, apiDestroy } from '../util/apiUtil';
 import { getCurrentUser, getMessagesMap, selectEntities } from '../reducers/selectors';
 
-function* matchingReactionByUser({ id: msgId, reactionIds }, emoji) {
+function* matchingReactionByUser({ slug, reactionIds }, emoji) {
   const currUser = yield select(getCurrentUser);
   const reactionsMap = yield select(selectEntities, 'reactions');
 
   const matches = reactionIds.map(id => reactionsMap[id]).filter(reaction => (
-    reaction.userId === currUser.id
-    && reaction.messageId === msgId
+    reaction.userSlug === currUser.slug
+    && reaction.messageSlug === slug
     && reaction.emoji === emoji
   ));
 
