@@ -4,7 +4,6 @@ import {
   MESSAGE,
   READ,
   USER_THREAD,
-  HISTORY,
   SEARCH,
   FAVORITE,
   WORKSPACE,
@@ -30,7 +29,6 @@ const reactionReducer = (state = {}, action) => {
     }
     case FAVORITE.INDEX.RECEIVE:
     case SEARCH.INDEX.RECEIVE:
-    case HISTORY.INDEX.RECEIVE:
     case READ.INDEX.RECEIVE:
     case USER_THREAD.INDEX.RECEIVE:
     case MESSAGE.INDEX.RECEIVE:

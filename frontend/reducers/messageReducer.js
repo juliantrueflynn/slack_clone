@@ -6,7 +6,6 @@ import {
   READ,
   FAVORITE,
   WORKSPACE,
-  HISTORY,
   SEARCH,
   PIN,
   SIGN_OUT,
@@ -23,7 +22,6 @@ const messageReducer = (state = _defaultState, action) => {
   switch (action.type) {
     case MESSAGE.SHOW.RECEIVE:
     case MESSAGE.INDEX.RECEIVE:
-    case HISTORY.INDEX.RECEIVE:
     case READ.INDEX.RECEIVE:
     case USER_THREAD.INDEX.RECEIVE:
     case SEARCH.INDEX.RECEIVE:

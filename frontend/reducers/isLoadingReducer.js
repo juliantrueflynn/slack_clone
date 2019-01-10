@@ -8,7 +8,6 @@ import {
   USER,
   SIGN_OUT,
   CHANNEL,
-  HISTORY,
   DRAWER_UPDATE,
   PASSWORD,
   CHAT_PATH_UPDATE,
@@ -38,14 +37,18 @@ const isLoadingReducer = (state = _defaultState, action) => {
       return { ...state, form: true };
     case CHAT_PATH_UPDATE:
       return { ...state, channel: true };
+    case MESSAGE.INDEX.REQUEST:
+      if (state.channel) {
+        return state;
+      }
+
+      return { ...state, history: true };
     case DRAWER_UPDATE:
       return { ...state, drawer: true };
     case CHANNEL.INDEX.REQUEST:
       return { ...state, channels: true };
     case SEARCH.INDEX.REQUEST:
       return { ...state, search: true };
-    case HISTORY.INDEX.REQUEST:
-      return { ...state, history: true };
     case WORKSPACE.SHOW.RECEIVE:
       return { ...state, workspace: false };
     case WORKSPACE.CREATE.RECEIVE:
@@ -62,7 +65,7 @@ const isLoadingReducer = (state = _defaultState, action) => {
     case USER_THREAD.INDEX.RECEIVE:
     case READ.INDEX.RECEIVE:
     case MESSAGE.INDEX.RECEIVE:
-      return { ...state, channel: false };
+      return { ...state, channel: false, history: false };
     case MESSAGE.SHOW.RECEIVE:
     case FAVORITE.INDEX.RECEIVE:
     case USER.SHOW.RECEIVE:
@@ -72,8 +75,6 @@ const isLoadingReducer = (state = _defaultState, action) => {
       return { ...state, channels: false };
     case SEARCH.INDEX.RECEIVE:
       return { ...state, search: false };
-    case HISTORY.INDEX.RECEIVE:
-      return { ...state, history: false };
     case SIGN_OUT.RECEIVE:
       return _defaultState;
     default:

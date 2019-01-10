@@ -1,8 +1,9 @@
+start_date = params[:start_date]
+messages = @channel.older_messages(start_date)
+
 json.channel do
   json.(@channel, :slug, :owner_slug, :topic, :created_at, :earliest_message_slug)
 end
-
-messages = @channel.older_messages(params[:until_date])
 
 json.messages do
   json.array! messages.includes(:parent_message, :author) do |message|
@@ -21,15 +22,17 @@ json.reactions do
   end
 end
 
-json.pins do
-  pins = @channel.pins.includes(:message, :user)
-
-  json.array! pins, :id, :user_id, :message_id, :message_slug, :user_slug
-end
-
 json.favorites do
   favorites = current_user.favorites.by_message_id(parents)
   json.array! favorites, :id, :message_slug
 end
 
-json.members @channel.members.pluck(:slug)
+unless start_date
+  json.pins do
+    pins = @channel.pins.includes(:message, :user)
+  
+    json.array! pins, :id, :user_id, :message_id, :message_slug, :user_slug
+  end
+
+  json.members @channel.members.pluck(:slug)
+end

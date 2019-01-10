@@ -8,7 +8,6 @@ export const USER_APPEARANCE = apiActions('USER_APPEARANCE', ['CREATE', 'DESTROY
 export const WORKSPACE = apiActions('WORKSPACE', ['INDEX', 'SHOW', 'CREATE', 'UPDATE', 'DESTROY']);
 export const CHANNEL = apiActions('CHANNEL', ['INDEX', 'SHOW', 'CREATE', 'UPDATE', 'DESTROY']);
 export const MESSAGE = apiActions('MESSAGE', ['INDEX', 'SHOW', 'CREATE', 'UPDATE', 'DESTROY']);
-export const HISTORY = apiActions('HISTORY', ['INDEX']);
 export const WORKSPACE_SUB = apiActions('WORKSPACE_SUB', ['CREATE', 'UPDATE', 'DESTROY']);
 export const CHANNEL_SUB = apiActions('CHANNEL_SUB', ['CREATE', 'UPDATE', 'DESTROY']);
 export const FAVORITE = apiActions('FAVORITE', ['INDEX', 'CREATE', 'DESTROY']);

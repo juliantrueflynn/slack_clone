@@ -8,7 +8,6 @@ import {
 } from '../reducers/selectors';
 import {
   fetchMessages,
-  fetchHistory,
   createMessage,
   fetchUserThreads,
 } from '../actions/messageActions';
@@ -69,7 +68,7 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
     dispatch(createChannelSub.request({ channelSlug: params.chatPath, channelId }))
   ),
   fetchHistoryRequest: startDate => (
-    dispatch(fetchHistory.request(params.chatPath, startDate))
+    dispatch(fetchMessages.request(params.chatPath, startDate))
   ),
   updateScrollLocation: (channelSlug, scrollLoc) => (
     dispatch(updateScrollLocation(channelSlug, scrollLoc))

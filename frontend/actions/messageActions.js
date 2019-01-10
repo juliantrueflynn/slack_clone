@@ -1,23 +1,10 @@
 import { actionCreator } from '../util/actionsUtil';
-import {
-  MESSAGE,
-  USER_THREAD,
-  HISTORY,
-  PIN,
-} from './actionTypes';
+import { MESSAGE, USER_THREAD, PIN } from './actionTypes';
 
 export const fetchMessages = {
   request: channelSlug => actionCreator(MESSAGE.INDEX.REQUEST, { channelSlug }),
   receive: messages => actionCreator(MESSAGE.INDEX.RECEIVE, { messages }),
   failure: errors => actionCreator(MESSAGE.INDEX.FAILURE, { errors }),
-};
-
-export const fetchHistory = {
-  request: (channelSlug, startDate) => (
-    actionCreator(HISTORY.INDEX.REQUEST, { channelSlug, startDate })
-  ),
-  receive: messages => actionCreator(HISTORY.INDEX.RECEIVE, { messages }),
-  failure: errors => actionCreator(HISTORY.INDEX.FAILURE, { errors }),
 };
 
 export const fetchMessage = {

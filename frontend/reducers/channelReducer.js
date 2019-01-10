@@ -8,7 +8,6 @@ import {
   SCROLL_LOCATION_UPDATE,
   SIGN_OUT,
   CREATE_UNREAD,
-  HISTORY,
   PIN,
 } from '../actions/actionTypes';
 
@@ -114,7 +113,6 @@ const channelReducer = (state = {}, action) => {
       nextState = { [action.unread.slug]: { shouldFetch: true } };
 
       return merge({}, state, nextState);
-    case HISTORY.INDEX.RECEIVE:
     case MESSAGE.INDEX.RECEIVE: {
       const {
         channel,

@@ -17,6 +17,10 @@ const pinReducer = (state = _defaultState, action) => {
     case MESSAGE.INDEX.RECEIVE: {
       const { pins } = action.messages;
 
+      if (!pins) {
+        return state;
+      }
+
       nextState = pins.reduce((acc, curr) => {
         acc[curr.id] = curr;
         return acc;
