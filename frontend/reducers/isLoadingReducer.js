@@ -10,7 +10,6 @@ import {
   CHANNEL,
   DRAWER_UPDATE,
   PASSWORD,
-  CHAT_PATH_UPDATE,
 } from '../actions/actionTypes';
 
 const _defaultState = {
@@ -35,14 +34,11 @@ const isLoadingReducer = (state = _defaultState, action) => {
     case PASSWORD.UPDATE.REQUEST:
     case USER.UPDATE.REQUEST:
       return { ...state, form: true };
-    case CHAT_PATH_UPDATE:
+    case USER_THREAD.INDEX.REQUEST:
+    case READ.INDEX.REQUEST:
       return { ...state, channel: true };
     case MESSAGE.INDEX.REQUEST:
-      if (state.channel) {
-        return state;
-      }
-
-      return { ...state, history: true };
+      return { ...state, channel: true, history: true };
     case DRAWER_UPDATE:
       return { ...state, drawer: true };
     case CHANNEL.INDEX.REQUEST:
@@ -64,6 +60,7 @@ const isLoadingReducer = (state = _defaultState, action) => {
       return { ...state, form: false };
     case USER_THREAD.INDEX.RECEIVE:
     case READ.INDEX.RECEIVE:
+      return { ...state, channel: false };
     case MESSAGE.INDEX.RECEIVE:
       return { ...state, channel: false, history: false };
     case MESSAGE.SHOW.RECEIVE:

@@ -18,14 +18,13 @@ class Channel extends React.Component {
     this.updateHasInitLoadDone(true);
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const {
       channel,
       windowWidth: winWidth,
       windowHeight: winHeight,
       isLoading,
     } = this.props;
-    const { hasInitLoadDone } = this.state;
     const { channel: { isSub: prevIsSub, slug: prevSlug } } = prevProps;
 
     const hasResized = winHeight !== prevProps.windowHeight || winWidth !== prevProps.windowWidth;
@@ -40,13 +39,17 @@ class Channel extends React.Component {
       this.updateSizeDimensions();
     }
 
-    if (channel.slug === prevSlug && hasInitLoadDone !== prevState.hasInitLoadDone) {
+    if (channel.slug === prevSlug) {
       this.updateHasInitLoadDone(true);
     }
   }
 
-  updateHasInitLoadDone(hasInitLoadDone) {
-    this.setState({ hasInitLoadDone });
+  updateHasInitLoadDone(nextState) {
+    const { hasInitLoadDone } = this.state;
+
+    if (hasInitLoadDone !== nextState) {
+      this.setState({ hasInitLoadDone: nextState });
+    }
   }
 
   updateSizeDimensions() {
@@ -78,7 +81,7 @@ class Channel extends React.Component {
     const { hasInitLoadDone, height } = this.state;
     const { isSub, hasDm, title } = channel;
 
-    const hasLoaded = (!isLoading.channel && hasInitLoadDone) || !channel.shouldFetch;
+    const hasLoaded = !isLoading.channel && hasInitLoadDone;
     const placeholder = hasDm ? `@${title}` : `#${title}`;
     const formPlaceholder = placeholder && `Message ${placeholder}`;
     const style = { height };
