@@ -23,7 +23,7 @@ export const updateMessage = {
   failure: errors => actionCreator(MESSAGE.UPDATE.FAILURE, { errors }),
 };
 
-export const deleteMessage = {
+export const destroyMessage = {
   request: messageSlug => actionCreator(MESSAGE.DESTROY.REQUEST, { messageSlug }),
   failure: errors => actionCreator(MESSAGE.DESTROY.FAILURE, { errors }),
 };

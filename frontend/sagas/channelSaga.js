@@ -20,6 +20,15 @@ function* channelIndex({ workspaceSlug }) {
   }
 }
 
+function* channelShow({ channelSlug }) {
+  try {
+    const response = yield call(apiFetch, `channels/${channelSlug}`);
+    yield put(action.fetchChannel.receive(response));
+  } catch (error) {
+    yield put(action.fetchChannel.failure(error));
+  }
+}
+
 function* redirectOwner({ hasDm, workspaceSlug, slug }) {
   if (!hasDm) {
     yield put(updateModal(null));
@@ -28,18 +37,22 @@ function* redirectOwner({ hasDm, workspaceSlug, slug }) {
   yield put(navigate(`/${workspaceSlug}/messages/${slug}`));
 }
 
+function* dmChatCreate({ workspaceSlug, ...dmChat }) {
+  const response = yield call(apiCreate, `workspaces/${workspaceSlug}/dm_chat`, dmChat);
+
+  return response;
+}
+
 function* channelCreate({ channel }) {
   try {
-    let apiUrl = 'channels';
-    let channelProps = channel;
+    let response;
 
     if (channel.hasDm) {
-      const { workspaceSlug, ...dmChat } = channel;
-      apiUrl = `workspaces/${channel.workspaceSlug}/dm_chat`;
-      channelProps = { dmChat };
+      response = yield call(dmChatCreate, channel);
+    } else {
+      response = yield call(apiCreate, 'channels', channel);
     }
 
-    const response = yield call(apiCreate, apiUrl, channelProps);
     yield put(updateRead.request({ readableId: response.channel.id, readableType: 'Channel' }));
     yield call(redirectOwner, response.channel);
   } catch (error) {
@@ -53,15 +66,6 @@ function* channelUpdate({ channel }) {
     yield put(updateFormSuccess('Channel successfully updated'));
   } catch (error) {
     yield put(action.updateChannel.failure(error));
-  }
-}
-
-function* channelShow({ channelSlug }) {
-  try {
-    const response = yield call(apiFetch, `channels/${channelSlug}`);
-    yield put(action.fetchChannel.receive(response));
-  } catch (error) {
-    yield put(action.fetchChannel.failure(error));
   }
 }
 

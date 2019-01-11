@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { updateMessage, deleteMessage } from '../actions/messageActions';
+import { updateMessage, destroyMessage } from '../actions/messageActions';
 import { createPin, destroyPin } from '../actions/pinActions';
 import { toggleReaction } from '../actions/reactionActions';
 import { toggleFavorite } from '../actions/favoriteActions';
@@ -25,7 +25,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   updateMessageRequest: message => dispatch(updateMessage.request(message)),
-  deleteMessageRequest: messageSlug => dispatch(deleteMessage.request(messageSlug)),
+  deleteMessageRequest: messageSlug => dispatch(destroyMessage.request(messageSlug)),
   toggleReaction: reaction => dispatch(toggleReaction(reaction)),
   toggleFavorite: favorite => dispatch(toggleFavorite(favorite)),
   toggleMessageEditor: slug => dispatch(toggleMessageEditor(slug)),

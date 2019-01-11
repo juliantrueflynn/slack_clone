@@ -12,8 +12,8 @@ import { apiFetch, apiCreate } from '../util/apiUtil';
 
 function* workspaceIndex() {
   try {
-    const workspaces = yield call(apiFetch, 'workspaces');
-    yield put(actions.fetchWorkspaces.receive(workspaces));
+    const response = yield call(apiFetch, 'workspaces');
+    yield put(actions.fetchWorkspaces.receive(response));
   } catch (error) {
     yield put(actions.fetchWorkspaces.failure(error));
   }
@@ -21,8 +21,8 @@ function* workspaceIndex() {
 
 function* workspaceShow({ workspaceSlug }) {
   try {
-    const workspace = yield call(apiFetch, `workspaces/${workspaceSlug}`);
-    yield put(actions.fetchWorkspace.receive(workspace));
+    const response = yield call(apiFetch, `workspaces/${workspaceSlug}`);
+    yield put(actions.fetchWorkspace.receive(response));
   } catch (error) {
     yield put(actions.fetchWorkspace.failure(error));
   }

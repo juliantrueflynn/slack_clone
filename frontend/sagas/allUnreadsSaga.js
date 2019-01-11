@@ -13,8 +13,8 @@ import { getAllUnreads } from '../reducers/selectors';
 
 function* fetchIndex({ workspaceSlug }) {
   try {
-    const received = yield call(apiFetch, `workspaces/${workspaceSlug}/user_unreads`);
-    yield put(fetchUnreads.receive(received));
+    const response = yield call(apiFetch, `workspaces/${workspaceSlug}/user_unreads`);
+    yield put(fetchUnreads.receive(response));
   } catch (error) {
     yield put(fetchUnreads.failure(error));
   }

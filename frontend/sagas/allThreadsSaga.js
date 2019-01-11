@@ -13,14 +13,14 @@ import { selectEntityBySlug, selectUIByDisplay } from '../reducers/selectors';
 
 function* userThreadIndex({ workspaceSlug }) {
   try {
-    const messageThreads = yield call(apiFetch, `workspaces/${workspaceSlug}/user_threads`);
-    yield put(fetchUserThreads.receive(messageThreads));
+    const response = yield call(apiFetch, `workspaces/${workspaceSlug}/user_threads`);
+    yield put(fetchUserThreads.receive(response));
   } catch (error) {
     yield put(fetchUserThreads.failure(error));
   }
 }
 
-function* newMessageInView({ message }) {
+function* fetchMessageForNewMessagesInView({ message }) {
   if (!message.parentMessageId) {
     return;
   }
@@ -41,7 +41,7 @@ function* watchUserThreadIndexRequest() {
 }
 
 function* watchMessageCreateReceive() {
-  yield takeLatest(MESSAGE.CREATE.RECEIVE, newMessageInView);
+  yield takeLatest(MESSAGE.CREATE.RECEIVE, fetchMessageForNewMessagesInView);
 }
 
 export default function* allThreadsSaga() {

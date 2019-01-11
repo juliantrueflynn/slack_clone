@@ -11,8 +11,8 @@ import { apiFetch, apiCreate, apiDestroy } from '../util/apiUtil';
 
 function* favoriteIndex({ workspaceSlug }) {
   try {
-    const favorites = yield call(apiFetch, `workspaces/${workspaceSlug}/favorites`);
-    yield put(fetchFavorites.receive(favorites));
+    const response = yield call(apiFetch, `workspaces/${workspaceSlug}/favorites`);
+    yield put(fetchFavorites.receive(response));
   } catch (error) {
     yield put(fetchFavorites.failure(error));
   }

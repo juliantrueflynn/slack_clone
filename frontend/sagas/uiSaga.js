@@ -58,10 +58,8 @@ function* fetchDrawerEntities({ drawerType, drawerSlug }) {
 function* loadSearchResults({ searchQuery }) {
   try {
     const workspaceSlug = yield select(selectUIByDisplay, 'displayWorkspaceSlug');
-    const apiUrl = `workspaces/${workspaceSlug}/search/${searchQuery}`;
-    const messageThreads = yield call(apiFetch, apiUrl);
-
-    yield put(fetchSearch.receive(messageThreads));
+    const response = yield call(apiFetch, `workspaces/${workspaceSlug}/search/${searchQuery}`);
+    yield put(fetchSearch.receive(response));
   } catch (error) {
     yield put(fetchSearch.failure(error));
   }

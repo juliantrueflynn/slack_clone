@@ -7,9 +7,20 @@ import {
   takeLatest
 } from 'redux-saga/effects';
 import { MESSAGE } from '../actions/actionTypes';
-import * as actions from '../actions/messageActions';
+import {
+  fetchMessages,
+  fetchMessage,
+  createMessage,
+  updateMessage,
+  destroyMessage,
+} from '../actions/messageActions';
 import { navigate } from '../actions/uiActions';
-import * as api from '../util/apiUtil';
+import {
+  apiFetch,
+  apiCreate,
+  apiUpdate,
+  apiDestroy,
+} from '../util/apiUtil';
 import {
   selectUIByDisplay,
   getChatPathUrl,
@@ -38,39 +49,43 @@ function* messageIndex({ channelSlug }) {
       apiUrl += `/${firstMsgId}`;
     }
 
-    const response = yield call(api.apiFetch, apiUrl);
-    yield put(actions.fetchMessages.receive(response));
+    const response = yield call(apiFetch, apiUrl);
+    yield put(fetchMessages.receive(response));
   } catch (error) {
-    yield put(actions.fetchMessages.failure(error));
+    yield put(fetchMessages.failure(error));
   }
 }
 
 function* messageShow({ messageSlug }) {
   try {
-    const message = yield call(api.apiFetch, `message_convos/${messageSlug}`);
-    yield put(actions.fetchMessage.receive(message));
+    const message = yield call(apiFetch, `message_convos/${messageSlug}`);
+    yield put(fetchMessage.receive(message));
   } catch (error) {
-    yield put(actions.fetchMessage.failure(error));
+    yield put(fetchMessage.failure(error));
   }
 }
 
 function* messageCreate({ message }) {
   try {
-    yield call(api.apiCreate, 'messages', message);
+    yield call(apiCreate, 'messages', message);
   } catch (error) {
-    yield put(actions.createMessage.failure(error));
+    yield put(createMessage.failure(error));
   }
 }
 
 function* messageUpdate({ message }) {
   try {
-    yield call(api.apiUpdate, `messages/${message.slug}`, message);
+    yield call(apiUpdate, `messages/${message.slug}`, message);
   } catch (error) {
-    yield put(actions.updateMessage.failure(error));
+    yield put(updateMessage.failure(error));
   }
 }
 
-function* closeDrawerIfOpen(slug) {
+function* closeDrawerIfOpen({ slug, parentMessageId }) {
+  if (!parentMessageId) {
+    return;
+  }
+
   const drawer = yield select(selectUIByDisplay, 'drawer');
   const { drawerType, drawerSlug } = drawer;
 
@@ -82,13 +97,10 @@ function* closeDrawerIfOpen(slug) {
 
 function* messageDestroy({ messageSlug }) {
   try {
-    const message = yield call(api.apiDestroy, `messages/${messageSlug}`);
-
-    if (!message.parentMessageId) {
-      yield closeDrawerIfOpen(message.slug);
-    }
+    const response = yield call(apiDestroy, `messages/${messageSlug}`);
+    yield closeDrawerIfOpen(response);
   } catch (error) {
-    yield put(actions.deleteMessage.failure(error));
+    yield put(destroyMessage.failure(error));
   }
 }
 

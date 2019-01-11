@@ -20,8 +20,8 @@ import { selectUIByDisplay, getCurrentUser } from '../reducers/selectors';
 function* userShow({ userSlug }) {
   try {
     const workspaceSlug = yield select(selectUIByDisplay, 'displayWorkspaceSlug');
-    const user = yield call(api.apiFetch, `workspaces/${workspaceSlug}/users/${userSlug}`);
-    yield put(actions.fetchUser.receive(user));
+    const response = yield call(api.apiFetch, `workspaces/${workspaceSlug}/users/${userSlug}`);
+    yield put(actions.fetchUser.receive(response));
   } catch (error) {
     yield put(actions.fetchUser.failure(error));
   }
@@ -40,8 +40,8 @@ function* userUpdate({ user: body }) {
 
 function* passwordUpdate({ password }) {
   try {
-    const update = yield call(api.apiUpdate, 'password', password);
-    yield put(actions.updatePassword.receive(update));
+    const response = yield call(api.apiUpdate, 'password', password);
+    yield put(actions.updatePassword.receive(response));
     yield put(updateFormSuccess('Password successfully updated'));
   } catch (error) {
     yield put(actions.updatePassword.failure(error));

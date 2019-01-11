@@ -5,34 +5,34 @@ import {
   put,
   takeLatest
 } from 'redux-saga/effects';
-import * as actions from '../actions/sessionActions';
+import { signIn, signUp, signOut } from '../actions/sessionActions';
 import { SIGN_IN, SIGN_UP, SIGN_OUT } from '../actions/actionTypes';
 import { apiCreate, apiDestroy } from '../util/apiUtil';
 
 function* sessionCreate({ currentUser: user }) {
   try {
-    const session = yield call(apiCreate, 'session', { user });
-    yield put(actions.signIn.receive(session));
+    const response = yield call(apiCreate, 'session', { user });
+    yield put(signIn.receive(response));
   } catch (error) {
-    yield put(actions.signIn.failure(error));
+    yield put(signIn.failure(error));
   }
 }
 
 function* userCreate({ currentUser: user }) {
   try {
-    const session = yield call(apiCreate, 'user', { user });
-    yield put(actions.signUp.receive(session));
+    const response = yield call(apiCreate, 'user', { user });
+    yield put(signUp.receive(response));
   } catch (error) {
-    yield put(actions.signUp.failure(error));
+    yield put(signUp.failure(error));
   }
 }
 
 function* sessionDestroy() {
   try {
     yield call(apiDestroy, 'session');
-    yield put(actions.signOut.receive());
+    yield put(signOut.receive());
   } catch (error) {
-    yield put(actions.signOut.failure(error));
+    yield put(signOut.failure(error));
   }
 }
 
