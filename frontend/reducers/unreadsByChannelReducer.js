@@ -3,8 +3,8 @@ import {
   READ,
   WORKSPACE,
   CHANNEL,
-  CREATE_UNREAD,
-  CLEAR_UNREADS,
+  UNREAD_UPDATE,
+  UNREAD_CLEAR_ALL,
   WORKSPACE_SUB,
   SIGN_OUT,
 } from '../actions/actionTypes';
@@ -35,7 +35,7 @@ const unreadsByChannelReducer = (state = _defaultState, action) => {
     case CHANNEL.CREATE.RECEIVE:
       nextState = { [action.channel.channel.slug]: [] };
       return merge({}, state, nextState);
-    case CREATE_UNREAD: {
+    case UNREAD_UPDATE: {
       const { readableType, slug, messageSlug } = action.unread;
 
       if (readableType !== 'Channel') {
@@ -47,7 +47,7 @@ const unreadsByChannelReducer = (state = _defaultState, action) => {
 
       return nextState;
     }
-    case CLEAR_UNREADS:
+    case UNREAD_CLEAR_ALL:
       nextState = merge({}, state, nextState);
       nextState[action.chatPath] = [];
       return nextState;

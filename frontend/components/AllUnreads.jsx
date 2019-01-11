@@ -10,13 +10,13 @@ class AllUnreads extends React.Component {
   }
 
   handleClearUnreadsClick(channel) {
-    const { clearUnreads } = this.props;
+    const { clearAllUnread } = this.props;
 
-    clearUnreads(channel.slug, channel.lastActive);
+    clearAllUnread(channel.slug, channel.lastActive);
   }
 
   render() {
-    const { channels, clearUnreads, ...props } = this.props;
+    const { channels, clearAllUnread, ...props } = this.props;
 
     if (!channels.length) {
       return (

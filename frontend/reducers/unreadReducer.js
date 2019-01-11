@@ -1,10 +1,10 @@
 import merge from 'lodash.merge';
 import { isDateOlderThanOther } from '../util/dateUtil';
 import {
-  CREATE_UNREAD,
+  UNREAD_UPDATE,
   WORKSPACE,
   READ,
-  CLEAR_UNREADS,
+  UNREAD_CLEAR_ALL,
   MESSAGE,
   WORKSPACE_SUB,
   SIGN_OUT,
@@ -70,7 +70,7 @@ const unreadReducer = (state = _defaultState, action) => {
       nextState = merge({}, state);
       delete nextState[action.read.slug];
       return nextState;
-    case CREATE_UNREAD: {
+    case UNREAD_UPDATE: {
       const { unread } = action;
 
       nextState = {};
@@ -78,7 +78,7 @@ const unreadReducer = (state = _defaultState, action) => {
 
       return merge({}, state, nextState);
     }
-    case CLEAR_UNREADS: {
+    case UNREAD_CLEAR_ALL: {
       const { chatPath, lastRead } = action;
 
       nextState = {};

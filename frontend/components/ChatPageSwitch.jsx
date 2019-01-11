@@ -111,7 +111,7 @@ class ChatPageSwitch extends React.Component {
       channels,
       currentUser,
       isLoading,
-      clearUnreads,
+      clearAllUnread,
       openModal,
       updateScrollLocation,
       fetchHistoryRequest,
@@ -137,7 +137,7 @@ class ChatPageSwitch extends React.Component {
                 users={users}
                 isLoading={isLoading.channel}
                 channels={channels}
-                clearUnreads={clearUnreads}
+                clearAllUnread={clearAllUnread}
               />
             )}
             {chatPath === 'threads' && (

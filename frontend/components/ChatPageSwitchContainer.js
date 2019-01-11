@@ -18,7 +18,7 @@ import {
   updateChatPath,
 } from '../actions/uiActions';
 import { createChannelSub } from '../actions/channelActions';
-import { clearUnreads, fetchUnreads } from '../actions/readActions';
+import { clearAllUnread, fetchUnreads } from '../actions/readActions';
 import ChatPageSwitch from './ChatPageSwitch';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
@@ -73,7 +73,7 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
   updateScrollLocation: (channelSlug, scrollLoc) => (
     dispatch(updateScrollLocation(channelSlug, scrollLoc))
   ),
-  clearUnreads: (channelSlug, lastRead) => dispatch(clearUnreads(channelSlug, lastRead)),
+  clearAllUnread: (channelSlug, lastRead) => dispatch(clearAllUnread(channelSlug, lastRead)),
   closeDrawer: () => dispatch(updateDrawer(null)),
   openModal: modalType => dispatch(updateModal(modalType, null)),
   createMessageRequest: message => dispatch(createMessage.request(message)),

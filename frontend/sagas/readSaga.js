@@ -8,7 +8,7 @@ import {
 } from 'redux-saga/effects';
 import { READ, MESSAGE } from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiDestroy } from '../util/apiUtil';
-import { updateRead, destroyRead, createUnread } from '../actions/readActions';
+import { updateRead, destroyRead, updateUnread } from '../actions/readActions';
 import { getChannelsMap, selectEntityBySlug } from '../reducers/selectors';
 import {
   getReadProps,
@@ -79,7 +79,7 @@ function* loadCreateMessageRead({ message: msg }) {
   if (yield call(isCurrentUserInView, read)) {
     yield put(updateRead.request({ ...unread, ...read }));
   } else {
-    yield put(createUnread({ ...unread, hasUnreads: true }));
+    yield put(updateUnread({ ...unread, hasUnreads: true }));
   }
 }
 

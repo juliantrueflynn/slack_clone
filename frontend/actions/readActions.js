@@ -1,5 +1,5 @@
 import { actionCreator } from '../util/actionsUtil';
-import { READ, CLEAR_UNREADS, CREATE_UNREAD } from './actionTypes';
+import { READ, UNREAD_CLEAR_ALL, UNREAD_UPDATE } from './actionTypes';
 
 export const fetchUnreads = {
   request: workspaceSlug => actionCreator(READ.INDEX.REQUEST, { workspaceSlug }),
@@ -19,9 +19,9 @@ export const destroyRead = {
   failure: errors => actionCreator(READ.DESTROY.FAILURE, { errors }),
 };
 
-export const createUnread = unread => actionCreator(CREATE_UNREAD, { unread });
+export const updateUnread = unread => actionCreator(UNREAD_UPDATE, { unread });
 
-export const clearUnreads = (chatPath, lastRead = null) => actionCreator(
-  CLEAR_UNREADS,
+export const clearAllUnread = (chatPath, lastRead = null) => actionCreator(
+  UNREAD_CLEAR_ALL,
   { chatPath, lastRead },
 );

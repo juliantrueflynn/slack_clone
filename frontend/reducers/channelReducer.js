@@ -7,7 +7,7 @@ import {
   WORKSPACE_SUB,
   SCROLL_LOCATION_UPDATE,
   SIGN_OUT,
-  CREATE_UNREAD,
+  UNREAD_UPDATE,
   PIN,
 } from '../actions/actionTypes';
 
@@ -105,7 +105,7 @@ const channelReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case CREATE_UNREAD:
+    case UNREAD_UPDATE:
       if (action.unread.readableType !== 'Channel') {
         return state;
       }

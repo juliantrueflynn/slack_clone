@@ -6,9 +6,9 @@ import {
   put,
   select,
 } from 'redux-saga/effects';
-import { READ, CLEAR_UNREADS, USER_THREAD } from '../actions/actionTypes';
+import { READ, UNREAD_CLEAR_ALL, USER_THREAD } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiUpdate } from '../util/apiUtil';
-import { fetchUnreads, clearUnreads } from '../actions/readActions';
+import { fetchUnreads, clearAllUnread } from '../actions/readActions';
 import { getAllUnreads } from '../reducers/selectors';
 
 function* fetchIndex({ workspaceSlug }) {
@@ -33,7 +33,7 @@ function* fetchUserThreadIndexPage() {
   }));
 
   if (unreads.length) {
-    yield put(clearUnreads('threads'));
+    yield put(clearAllUnread('threads'));
   }
 }
 
@@ -56,7 +56,7 @@ function* watchUserThreadIndex() {
 }
 
 function* watchClearUnreads() {
-  yield takeLatest(CLEAR_UNREADS, fetchClearUnreads);
+  yield takeLatest(UNREAD_CLEAR_ALL, fetchClearUnreads);
 }
 
 export default function* allUnreadsSaga() {
