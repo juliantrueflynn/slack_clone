@@ -17,13 +17,13 @@ class Message < ApplicationRecord
   belongs_to :parent_message,
     class_name: 'Message',
     optional: true
+  has_many :children,
+    class_name: 'Message',
+    foreign_key: :parent_message_id
   has_many :pins
   has_many :reads,
     -> { where(readable_type: 'Message') },
     foreign_key: :readable_id
-  has_many :children,
-    class_name: 'Message',
-    foreign_key: :parent_message_id
   has_one :workspace, through: :channel
 
   scope :with_parent, -> { where(parent_message_id: nil) }

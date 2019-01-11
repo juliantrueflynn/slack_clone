@@ -1,6 +1,5 @@
 class Reaction < ApplicationRecord
   validates_presence_of :message_id, :user_id, :emoji
-  validates_uniqueness_of :user_id, scope: [:message_id, :emoji]
 
   belongs_to :user
   belongs_to :message
@@ -21,7 +20,7 @@ class Reaction < ApplicationRecord
   def user_slug
     user.slug
   end
-  
+
   after_create_commit :broadcast_create
   after_destroy :broadcast_destroy
 end
