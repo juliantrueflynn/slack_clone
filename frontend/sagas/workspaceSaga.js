@@ -3,14 +3,12 @@ import {
   call,
   fork,
   put,
-  select,
   takeLatest,
 } from 'redux-saga/effects';
 import * as actions from '../actions/workspaceActions';
 import { WORKSPACE } from '../actions/actionTypes';
 import { navigate } from '../actions/uiActions';
 import { apiFetch, apiCreate } from '../util/apiUtil';
-import { getCurrentUser } from '../reducers/selectors';
 
 function* workspaceIndex() {
   try {
@@ -32,17 +30,10 @@ function* workspaceShow({ workspaceSlug }) {
 
 function* workspaceCreate({ workspace }) {
   try {
-    yield call(apiCreate, 'workspaces', workspace);
+    const response = yield call(apiCreate, 'workspaces', workspace);
+    yield put(navigate(`/${response.slug}`));
   } catch (error) {
     yield put(actions.createWorkspace.failure(error));
-  }
-}
-
-function* redirectOwner({ workspace: { workspace, owner } }) {
-  const currUser = yield select(getCurrentUser);
-
-  if (currUser.id === owner.id) {
-    yield put(navigate(`/${workspace.slug}`));
   }
 }
 
@@ -58,15 +49,10 @@ function* watchWorkspaceCreateRequest() {
   yield takeLatest(WORKSPACE.CREATE.REQUEST, workspaceCreate);
 }
 
-function* watchWorkspaceCreateReceive() {
-  yield takeLatest(WORKSPACE.CREATE.RECEIVE, redirectOwner);
-}
-
 export default function* workspaceSaga() {
   yield all([
     fork(watchWorkspaceIndexRequest),
     fork(watchWorkspaceShowRequest),
     fork(watchWorkspaceCreateRequest),
-    fork(watchWorkspaceCreateReceive),
   ]);
 }
