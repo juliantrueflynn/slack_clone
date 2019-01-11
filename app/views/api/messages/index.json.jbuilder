@@ -1,5 +1,5 @@
-start_date = params[:start_date]
-messages = @channel.older_messages(start_date)
+last_message_id = params[:last_id]
+messages = @channel.older_messages(last_message_id)
 
 json.channel do
   json.(@channel, :slug, :owner_slug, :topic, :created_at, :earliest_message_slug)
@@ -27,7 +27,7 @@ json.favorites do
   json.array! favorites, :id, :message_slug
 end
 
-unless start_date
+unless last_message_id
   json.pins do
     pins = @channel.pins.includes(:message, :user)
   

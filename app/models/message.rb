@@ -56,8 +56,8 @@ class Message < ApplicationRecord
       .maximum(:created_at)
   end
 
-  def self.created_at_before(start_date)
-    where("created_at < ?", start_date)
+  def self.with_id_before(start_id)
+    where("id <= ?", start_id)
   end
 
   def self.parents_or_children(id_or_ids)

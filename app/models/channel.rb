@@ -54,6 +54,10 @@ class Channel < ApplicationRecord
       .order(:id)
   end
 
+  def member_ids=(member_ids)
+    @member_ids = member_ids.map(&:to_i)
+  end
+
   def broadcast_name
     "workspace_#{workspace.slug}"
   end
@@ -66,17 +70,13 @@ class Channel < ApplicationRecord
     messages.empty? ? nil : messages.first.slug
   end
 
-  HISTORY_CACHE_AMOUNT = 15
+  ENTRIES_CACHE_SIZE = 15
 
-  def older_messages(before_date)
-    date_from = (before_date || DateTime.current).to_datetime
-    entries = entries_created_at_before(date_from).limit(HISTORY_CACHE_AMOUNT)
-    return messages if entries.empty?
-    messages_between(entries).or(Message.parents_or_children(entries))
-  end
-
-  def member_ids=(member_ids)
-    @member_ids = member_ids.map(&:to_i)
+  def older_messages(last_message_id)
+    return messages if messages.by_entry_parent.length <= ENTRIES_CACHE_SIZE
+    last_id = last_message_id || messages.by_entry_parent.last.id
+    entries = entries_before_message_id(last_id)
+    messages_between(last_id, entries).or(Message.children_of(entries))
   end
 
   after_create_commit :generate_dm_channel_subs, :generate_public_channel_subs
@@ -114,13 +114,16 @@ class Channel < ApplicationRecord
     end
   end
 
-  def entries_created_at_before(before_date)
-    messages.by_entry_parent.created_at_before(before_date).order(id: :desc)
+  def entries_before_message_id(message_id)
+    messages.by_entry_parent
+      .with_id_before(message_id)
+      .order(id: :desc)
+      .limit(ENTRIES_CACHE_SIZE)
   end
 
-  def messages_between(entries)
-    start_id = entries.last.id
-    start_id = messages.first.id if entries.length < HISTORY_CACHE_AMOUNT
-    messages.where("id BETWEEN ? AND ?", start_id, entries.first.id)
+  def messages_between(latest_id, entries)
+    almost_empty = entries.length < ENTRIES_CACHE_SIZE
+    return messages.with_id_before(latest_id) if almost_empty
+    messages.where("id BETWEEN ? AND ?", entries.last.id, latest_id)
   end
 end

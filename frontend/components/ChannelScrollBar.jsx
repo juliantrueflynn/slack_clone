@@ -118,7 +118,7 @@ class ChannelScrollBar extends React.Component {
 
     const classes = classNames('ChannelScrollBar', {
       'ChannelScrollBar--loading': isFetching,
-      'ChannelScrollBar--no-history': !hasHistory,
+      'ChannelScrollBar--no-history': !hasHistory || !channel.shouldFetch,
     });
 
     return (

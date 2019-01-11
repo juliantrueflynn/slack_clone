@@ -10,16 +10,32 @@ import { MESSAGE } from '../actions/actionTypes';
 import * as actions from '../actions/messageActions';
 import { navigate } from '../actions/uiActions';
 import * as api from '../util/apiUtil';
-import { selectUIByDisplay, getChatPathUrl, selectEntityBySlug } from '../reducers/selectors';
+import {
+  selectUIByDisplay,
+  getChatPathUrl,
+  selectEntityBySlug,
+  selectEntities,
+} from '../reducers/selectors';
+
+function* getEarliestMessageId(channelSlug) {
+  const msgsMap = yield select(selectEntities, 'messages');
+  const sortedMsgs = Object.values(msgsMap).filter(msg => (
+    msg.channelSlug === channelSlug
+  )).sort((a, b) => a.id - b.id);
+
+  const { id } = sortedMsgs[0] || {};
+
+  return id;
+}
 
 function* fetchIndex({ channelSlug }) {
   try {
     const channel = yield select(selectEntityBySlug, 'channels', channelSlug);
-    const firstMsg = yield select(selectEntityBySlug, 'messages', channel.messages[0]);
     let apiUrl = `channels/${channelSlug}/messages`;
 
-    if (firstMsg && firstMsg.createdAt) {
-      apiUrl += `/${firstMsg.createdAt}`;
+    if (channel.messages.length) {
+      const firstMsgId = yield getEarliestMessageId(channelSlug);
+      apiUrl += `/${firstMsgId}`;
     }
 
     const messages = yield call(api.apiFetch, apiUrl);
