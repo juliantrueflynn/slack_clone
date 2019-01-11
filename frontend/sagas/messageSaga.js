@@ -33,13 +33,13 @@ function* messageIndex({ channelSlug }) {
     const channel = yield select(selectEntityBySlug, 'channels', channelSlug);
     let apiUrl = `channels/${channelSlug}/messages`;
 
-    if (channel.messages.length) {
+    if (channel && channel.messages.length) {
       const firstMsgId = yield getEarliestMessageId(channelSlug);
       apiUrl += `/${firstMsgId}`;
     }
 
-    const messages = yield call(api.apiFetch, apiUrl);
-    yield put(actions.fetchMessages.receive(messages));
+    const response = yield call(api.apiFetch, apiUrl);
+    yield put(actions.fetchMessages.receive(response));
   } catch (error) {
     yield put(actions.fetchMessages.failure(error));
   }

@@ -3,16 +3,13 @@ import {
   call,
   fork,
   put,
-  select,
   takeLatest
 } from 'redux-saga/effects';
 import * as action from '../actions/channelActions';
 import { CHANNEL } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiUpdate } from '../util/apiUtil';
 import { navigate, updateFormSuccess, updateModal } from '../actions/uiActions';
-import { getCurrentUser } from '../reducers/selectors';
 import { updateRead } from '../actions/readActions';
-import { fetchMessages } from '../actions/messageActions';
 
 function* channelIndex({ workspaceSlug }) {
   try {
@@ -21,6 +18,14 @@ function* channelIndex({ workspaceSlug }) {
   } catch (error) {
     yield put(action.fetchChannels.failure(error));
   }
+}
+
+function* redirectOwner({ hasDm, workspaceSlug, slug }) {
+  if (!hasDm) {
+    yield put(updateModal(null));
+  }
+
+  yield put(navigate(`/${workspaceSlug}/messages/${slug}`));
 }
 
 function* channelCreate({ channel }) {
@@ -35,34 +40,10 @@ function* channelCreate({ channel }) {
     }
 
     const response = yield call(apiCreate, apiUrl, channelProps);
-    yield put(updateRead.request({ readableId: response.id, readableType: 'Channel' }));
+    yield put(updateRead.request({ readableId: response.channel.id, readableType: 'Channel' }));
+    yield call(redirectOwner, response.channel);
   } catch (error) {
     yield put(action.createChannel.failure(error));
-  }
-}
-
-function* isCurrentUserOwner({ hasDm, ownerSlug }, channelSubs) {
-  const currUser = yield select(getCurrentUser);
-  let userSlug = ownerSlug;
-
-  if (hasDm) {
-    const subs = channelSubs.sort((a, b) => a.id - b.id);
-    userSlug = subs && subs.length && subs[0].userSlug;
-  }
-
-  return userSlug && userSlug === currUser.slug;
-}
-
-function* redirectOwner({ channel: { channel, channelSubs } }) {
-  const { slug, workspaceSlug, hasDm } = channel;
-
-  if (yield isCurrentUserOwner(channel, channelSubs)) {
-    if (!hasDm) {
-      yield put(updateModal(null));
-    }
-
-    yield put(navigate(`/${workspaceSlug}/messages/${slug}`));
-    yield put(fetchMessages.request(slug));
   }
 }
 
@@ -96,10 +77,6 @@ function* watchChannelCreateRequest() {
   yield takeLatest(CHANNEL.CREATE.REQUEST, channelCreate);
 }
 
-function* watchChannelCreateReceive() {
-  yield takeLatest(CHANNEL.CREATE.RECEIVE, redirectOwner);
-}
-
 function* watchChannelUpdateRequest() {
   yield takeLatest(CHANNEL.UPDATE.REQUEST, channelUpdate);
 }
@@ -109,7 +86,6 @@ export default function* channelSaga() {
     fork(watchChannelIndexRequest),
     fork(watchChannelShowRequest),
     fork(watchChannelCreateRequest),
-    fork(watchChannelCreateReceive),
     fork(watchChannelUpdateRequest),
   ]);
 }

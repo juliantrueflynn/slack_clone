@@ -7,7 +7,7 @@ class Api::DmChatsController < ApplicationController
     @channel.member_ids = [current_user.id, params[:dm_chat][:member_id]]
 
     if @channel.save
-      render json: @channel
+      render partial: 'api/channels/channel', object: @channel
     else
       render json: @channel.errors.full_messages, status: 422
     end
