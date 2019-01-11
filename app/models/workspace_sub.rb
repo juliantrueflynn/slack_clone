@@ -14,10 +14,6 @@
     workspace ? workspace.slug : nil
   end
 
-  def self.has_user_id?(user_id)
-    exists?(user_id: user_id)
-  end
-
   after_create_commit :generate_new_workspace_sub_defaults, :broadcast_create
   after_update_commit :broadcast_update, :generate_channel_sub_message
 

@@ -15,10 +15,6 @@ class ChannelSub < ApplicationRecord
     where(channel_id: where(user_id: user_id).pluck(:channel_id))
   end
 
-  def self.has_user_id?(user_id)
-    exists?(user_id: user_id)
-  end
-
   def broadcast_name
     "channel_#{channel.slug}"
   end
