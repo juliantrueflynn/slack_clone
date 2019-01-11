@@ -11,7 +11,7 @@ import { REACTION, REACTION_TOGGLE } from '../actions/actionTypes';
 import { apiCreate, apiDestroy } from '../util/apiUtil';
 import { getCurrentUser, getMessagesMap, selectEntities } from '../reducers/selectors';
 
-function* matchingReactionByUser({ slug, reactionIds }, emoji) {
+function* getMatchingReactionByUser({ slug, reactionIds }, emoji) {
   const currUser = yield select(getCurrentUser);
   const reactionsMap = yield select(selectEntities, 'reactions');
 
@@ -24,11 +24,10 @@ function* matchingReactionByUser({ slug, reactionIds }, emoji) {
   return matches[0];
 }
 
-function* loadToggleReaction({ reaction: { messageSlug, emoji } }) {
+function* reactionToggle({ reaction: { messageSlug, emoji } }) {
   try {
-    const msgsMap = yield select(getMessagesMap);
-    const msg = msgsMap[messageSlug];
-    const matchingReaction = yield matchingReactionByUser(msg, emoji);
+    const msg = yield select(getMessagesMap)[messageSlug];
+    const matchingReaction = yield getMatchingReactionByUser(msg, emoji);
 
     if (matchingReaction) {
       yield put(destroyReaction.request(matchingReaction.id));
@@ -41,15 +40,7 @@ function* loadToggleReaction({ reaction: { messageSlug, emoji } }) {
   }
 }
 
-function* loadDestroyReaction({ id }) {
-  try {
-    yield call(apiDestroy, `reactions/${id}`);
-  } catch (error) {
-    yield put(destroyReaction.failure(error));
-  }
-}
-
-function* loadCreateReaction({ reaction }) {
+function* reactionCreate({ reaction }) {
   try {
     yield call(apiCreate, 'reactions', reaction);
   } catch (error) {
@@ -57,22 +48,30 @@ function* loadCreateReaction({ reaction }) {
   }
 }
 
-function* watchToggleReaction() {
-  yield takeLatest(REACTION_TOGGLE, loadToggleReaction);
+function* reactionDestroy({ id }) {
+  try {
+    yield call(apiDestroy, `reactions/${id}`);
+  } catch (error) {
+    yield put(destroyReaction.failure(error));
+  }
 }
 
-function* watchCreateReaction() {
-  yield takeLatest(REACTION.CREATE.REQUEST, loadCreateReaction);
+function* watchReactionToggle() {
+  yield takeLatest(REACTION_TOGGLE, reactionToggle);
 }
 
-function* watchDeleteReaction() {
-  yield takeLatest(REACTION.DESTROY.REQUEST, loadDestroyReaction);
+function* watchReactionCreateRequest() {
+  yield takeLatest(REACTION.CREATE.REQUEST, reactionCreate);
+}
+
+function* watchReactionDestroyRequest() {
+  yield takeLatest(REACTION.DESTROY.REQUEST, reactionDestroy);
 }
 
 export default function* reactionSaga() {
   yield all([
-    fork(watchToggleReaction),
-    fork(watchCreateReaction),
-    fork(watchDeleteReaction),
+    fork(watchReactionToggle),
+    fork(watchReactionCreateRequest),
+    fork(watchReactionDestroyRequest),
   ]);
 }

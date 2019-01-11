@@ -9,7 +9,7 @@ import { createPin, destroyPin } from '../actions/pinActions';
 import { PIN } from '../actions/actionTypes';
 import { apiCreate, apiDestroy } from '../util/apiUtil';
 
-function* loadCreatePin({ pin }) {
+function* pinCreate({ pin }) {
   try {
     yield call(apiCreate, 'pins', pin);
   } catch (error) {
@@ -17,7 +17,7 @@ function* loadCreatePin({ pin }) {
   }
 }
 
-function* loadDestroyPin({ id }) {
+function* pinDestroy({ id }) {
   try {
     yield call(apiDestroy, `pins/${id}`);
   } catch (error) {
@@ -25,17 +25,17 @@ function* loadDestroyPin({ id }) {
   }
 }
 
-function* watchCreateReaction() {
-  yield takeLatest(PIN.CREATE.REQUEST, loadCreatePin);
+function* watchPinCreateRequest() {
+  yield takeLatest(PIN.CREATE.REQUEST, pinCreate);
 }
 
-function* watchDeleteReaction() {
-  yield takeLatest(PIN.DESTROY.REQUEST, loadDestroyPin);
+function* watchPinDestroyRequest() {
+  yield takeLatest(PIN.DESTROY.REQUEST, pinDestroy);
 }
 
 export default function* pinSaga() {
   yield all([
-    fork(watchCreateReaction),
-    fork(watchDeleteReaction),
+    fork(watchPinCreateRequest),
+    fork(watchPinDestroyRequest),
   ]);
 }

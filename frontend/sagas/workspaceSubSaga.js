@@ -9,7 +9,7 @@ import * as actions from '../actions/workspaceActions';
 import { WORKSPACE_SUB } from '../actions/actionTypes';
 import { apiCreate, apiUpdate } from '../util/apiUtil';
 
-function* loadCreateSub({ workspaceSub: { workspaceId } }) {
+function* workspaceSubCreate({ workspaceSub: { workspaceId } }) {
   try {
     const response = yield call(apiCreate, 'workspace_sub', { workspaceId });
     yield put(actions.createWorkspaceSub.receive(response, true));
@@ -18,7 +18,7 @@ function* loadCreateSub({ workspaceSub: { workspaceId } }) {
   }
 }
 
-function* loadUpdateSub({ workspaceSub: { workspaceId } }) {
+function* workspaceSubUpdate({ workspaceSub: { workspaceId } }) {
   try {
     const response = yield call(apiUpdate, 'workspace_sub', { workspaceId });
     yield put(actions.updateWorkspaceSub.receive(response, true));
@@ -27,17 +27,17 @@ function* loadUpdateSub({ workspaceSub: { workspaceId } }) {
   }
 }
 
-function* watchCreateWorkspaceSub() {
-  yield takeLatest(WORKSPACE_SUB.CREATE.REQUEST, loadCreateSub);
+function* watchWorkspaceSubCreateRequest() {
+  yield takeLatest(WORKSPACE_SUB.CREATE.REQUEST, workspaceSubCreate);
 }
 
-function* watchUpdateSubWorkspace() {
-  yield takeLatest(WORKSPACE_SUB.UPDATE.REQUEST, loadUpdateSub);
+function* watchWorkspaceSubUpdateRequest() {
+  yield takeLatest(WORKSPACE_SUB.UPDATE.REQUEST, workspaceSubUpdate);
 }
 
 export default function* workspaceSubSaga() {
   yield all([
-    fork(watchCreateWorkspaceSub),
-    fork(watchUpdateSubWorkspace),
+    fork(watchWorkspaceSubCreateRequest),
+    fork(watchWorkspaceSubUpdateRequest),
   ]);
 }

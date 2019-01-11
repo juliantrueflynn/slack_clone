@@ -14,7 +14,7 @@ import { getCurrentUser } from '../reducers/selectors';
 import { updateRead } from '../actions/readActions';
 import { fetchMessages } from '../actions/messageActions';
 
-function* fetchIndex({ workspaceSlug }) {
+function* channelIndex({ workspaceSlug }) {
   try {
     const response = yield call(apiFetch, `workspaces/${workspaceSlug}/channels`);
     yield put(action.fetchChannels.receive(response));
@@ -23,7 +23,7 @@ function* fetchIndex({ workspaceSlug }) {
   }
 }
 
-function* fetchCreateChannel({ channel }) {
+function* channelCreate({ channel }) {
   try {
     let apiUrl = 'channels';
     let channelProps = channel;
@@ -53,7 +53,7 @@ function* isCurrentUserOwner({ hasDm, ownerSlug }, channelSubs) {
   return userSlug && userSlug === currUser.slug;
 }
 
-function* loadNavigateCreated({ channel: { channel, channelSubs } }) {
+function* redirectOwner({ channel: { channel, channelSubs } }) {
   const { slug, workspaceSlug, hasDm } = channel;
 
   if (yield isCurrentUserOwner(channel, channelSubs)) {
@@ -66,17 +66,16 @@ function* loadNavigateCreated({ channel: { channel, channelSubs } }) {
   }
 }
 
-function* fetchUpdate({ channel }) {
+function* channelUpdate({ channel }) {
   try {
     yield call(apiUpdate, `channels/${channel.slug}`, channel);
-
     yield put(updateFormSuccess('Channel successfully updated'));
   } catch (error) {
     yield put(action.updateChannel.failure(error));
   }
 }
 
-function* fetchShow({ channelSlug }) {
+function* channelShow({ channelSlug }) {
   try {
     const response = yield call(apiFetch, `channels/${channelSlug}`);
     yield put(action.fetchChannel.receive(response));
@@ -85,32 +84,32 @@ function* fetchShow({ channelSlug }) {
   }
 }
 
-function* watchIndex() {
-  yield takeLatest(CHANNEL.INDEX.REQUEST, fetchIndex);
+function* watchChannelIndexRequest() {
+  yield takeLatest(CHANNEL.INDEX.REQUEST, channelIndex);
 }
 
-function* watchCreate() {
-  yield takeLatest(CHANNEL.CREATE.REQUEST, fetchCreateChannel);
+function* watchChannelShowRequest() {
+  yield takeLatest(CHANNEL.SHOW.REQUEST, channelShow);
 }
 
-function* watchCreatedReceive() {
-  yield takeLatest(CHANNEL.CREATE.RECEIVE, loadNavigateCreated);
+function* watchChannelCreateRequest() {
+  yield takeLatest(CHANNEL.CREATE.REQUEST, channelCreate);
 }
 
-function* watchUpdate() {
-  yield takeLatest(CHANNEL.UPDATE.REQUEST, fetchUpdate);
+function* watchChannelCreateReceive() {
+  yield takeLatest(CHANNEL.CREATE.RECEIVE, redirectOwner);
 }
 
-function* watchFetch() {
-  yield takeLatest(CHANNEL.SHOW.REQUEST, fetchShow);
+function* watchChannelUpdateRequest() {
+  yield takeLatest(CHANNEL.UPDATE.REQUEST, channelUpdate);
 }
 
 export default function* channelSaga() {
   yield all([
-    fork(watchIndex),
-    fork(watchCreate),
-    fork(watchCreatedReceive),
-    fork(watchUpdate),
-    fork(watchFetch),
+    fork(watchChannelIndexRequest),
+    fork(watchChannelShowRequest),
+    fork(watchChannelCreateRequest),
+    fork(watchChannelCreateReceive),
+    fork(watchChannelUpdateRequest),
   ]);
 }

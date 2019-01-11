@@ -17,7 +17,7 @@ import * as api from '../util/apiUtil';
 import { updateFormSuccess } from '../actions/uiActions';
 import { selectUIByDisplay, getCurrentUser } from '../reducers/selectors';
 
-function* loadFetchMember({ userSlug }) {
+function* userShow({ userSlug }) {
   try {
     const workspaceSlug = yield select(selectUIByDisplay, 'displayWorkspaceSlug');
     const user = yield call(api.apiFetch, `workspaces/${workspaceSlug}/users/${userSlug}`);
@@ -27,7 +27,7 @@ function* loadFetchMember({ userSlug }) {
   }
 }
 
-function* loadUpdateMember({ user: body }) {
+function* userUpdate({ user: body }) {
   try {
     const currUser = yield select(getCurrentUser);
     const args = { method: 'PATCH', body };
@@ -38,7 +38,7 @@ function* loadUpdateMember({ user: body }) {
   }
 }
 
-function* loadPasswordChange({ password }) {
+function* passwordUpdate({ password }) {
   try {
     const update = yield call(api.apiUpdate, 'password', password);
     yield put(actions.updatePassword.receive(update));
@@ -48,7 +48,7 @@ function* loadPasswordChange({ password }) {
   }
 }
 
-function* fetchCreateAppearance({ workspaceId }) {
+function* userAppearanceCreate({ workspaceId }) {
   try {
     yield call(api.apiCreate, 'user_appearance', { workspaceId });
   } catch (error) {
@@ -56,7 +56,7 @@ function* fetchCreateAppearance({ workspaceId }) {
   }
 }
 
-function* fetchWorkspace({ workspace: { workspace } }) {
+function* userAppearanceCreateByWorkspaceShow({ workspace: { workspace } }) {
   try {
     yield put(actions.createUserAppearance.request(workspace.id));
   } catch (error) {
@@ -64,32 +64,32 @@ function* fetchWorkspace({ workspace: { workspace } }) {
   }
 }
 
-function* watchShowUser() {
-  yield takeLatest(USER.SHOW.REQUEST, loadFetchMember);
+function* watchUserShowRequest() {
+  yield takeLatest(USER.SHOW.REQUEST, userShow);
 }
 
-function* watchUpdateUser() {
-  yield takeLatest(USER.UPDATE.REQUEST, loadUpdateMember);
+function* watchUserUpdateRequest() {
+  yield takeLatest(USER.UPDATE.REQUEST, userUpdate);
 }
 
-function* watchPasswordChange() {
-  yield takeLatest(PASSWORD.UPDATE.REQUEST, loadPasswordChange);
+function* watchPasswordUpdateRequest() {
+  yield takeLatest(PASSWORD.UPDATE.REQUEST, passwordUpdate);
 }
 
-function* watchCreateAppearance() {
-  yield takeLatest(USER_APPEARANCE.CREATE.REQUEST, fetchCreateAppearance);
+function* watchUserAppearanceCreateRequest() {
+  yield takeLatest(USER_APPEARANCE.CREATE.REQUEST, userAppearanceCreate);
 }
 
-function* watchWorkspaceShow() {
-  yield takeLatest(WORKSPACE.SHOW.RECEIVE, fetchWorkspace);
+function* watchWorkspaceShowRequest() {
+  yield takeLatest(WORKSPACE.SHOW.RECEIVE, userAppearanceCreateByWorkspaceShow);
 }
 
 export default function* memberSaga() {
   yield all([
-    fork(watchShowUser),
-    fork(watchUpdateUser),
-    fork(watchPasswordChange),
-    fork(watchCreateAppearance),
-    fork(watchWorkspaceShow),
+    fork(watchUserShowRequest),
+    fork(watchUserUpdateRequest),
+    fork(watchPasswordUpdateRequest),
+    fork(watchUserAppearanceCreateRequest),
+    fork(watchWorkspaceShowRequest),
   ]);
 }

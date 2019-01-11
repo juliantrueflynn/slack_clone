@@ -28,7 +28,7 @@ function* getEarliestMessageId(channelSlug) {
   return id;
 }
 
-function* fetchIndex({ channelSlug }) {
+function* messageIndex({ channelSlug }) {
   try {
     const channel = yield select(selectEntityBySlug, 'channels', channelSlug);
     let apiUrl = `channels/${channelSlug}/messages`;
@@ -45,7 +45,7 @@ function* fetchIndex({ channelSlug }) {
   }
 }
 
-function* fetchMessageShow({ messageSlug }) {
+function* messageShow({ messageSlug }) {
   try {
     const message = yield call(api.apiFetch, `message_convos/${messageSlug}`);
     yield put(actions.fetchMessage.receive(message));
@@ -54,7 +54,7 @@ function* fetchMessageShow({ messageSlug }) {
   }
 }
 
-function* fetchMessageCreate({ message }) {
+function* messageCreate({ message }) {
   try {
     yield call(api.apiCreate, 'messages', message);
   } catch (error) {
@@ -62,7 +62,7 @@ function* fetchMessageCreate({ message }) {
   }
 }
 
-function* fetchMessageUpdate({ message }) {
+function* messageUpdate({ message }) {
   try {
     yield call(api.apiUpdate, `messages/${message.slug}`, message);
   } catch (error) {
@@ -80,7 +80,7 @@ function* closeDrawerIfOpen(slug) {
   }
 }
 
-function* fetchMessageDestroy({ messageSlug }) {
+function* messageDestroy({ messageSlug }) {
   try {
     const message = yield call(api.apiDestroy, `messages/${messageSlug}`);
 
@@ -92,32 +92,32 @@ function* fetchMessageDestroy({ messageSlug }) {
   }
 }
 
-function* watchIndex() {
-  yield takeLatest(MESSAGE.INDEX.REQUEST, fetchIndex);
+function* watchMessageIndexRequest() {
+  yield takeLatest(MESSAGE.INDEX.REQUEST, messageIndex);
 }
 
-function* watchRequestMessage() {
-  yield takeLatest(MESSAGE.SHOW.REQUEST, fetchMessageShow);
+function* watchMessageShowRequest() {
+  yield takeLatest(MESSAGE.SHOW.REQUEST, messageShow);
 }
 
-function* watchCreateMessage() {
-  yield takeLatest(MESSAGE.CREATE.REQUEST, fetchMessageCreate);
+function* watchMessageCreateRequest() {
+  yield takeLatest(MESSAGE.CREATE.REQUEST, messageCreate);
 }
 
-function* watchEditMessage() {
-  yield takeLatest(MESSAGE.UPDATE.REQUEST, fetchMessageUpdate);
+function* watchMessageUpdateRequest() {
+  yield takeLatest(MESSAGE.UPDATE.REQUEST, messageUpdate);
 }
 
-function* watchDeleteMessage() {
-  yield takeLatest(MESSAGE.DESTROY.REQUEST, fetchMessageDestroy);
+function* watchMessageDestroyRequest() {
+  yield takeLatest(MESSAGE.DESTROY.REQUEST, messageDestroy);
 }
 
 export default function* messageSaga() {
   yield all([
-    fork(watchIndex),
-    fork(watchRequestMessage),
-    fork(watchCreateMessage),
-    fork(watchEditMessage),
-    fork(watchDeleteMessage),
+    fork(watchMessageIndexRequest),
+    fork(watchMessageShowRequest),
+    fork(watchMessageCreateRequest),
+    fork(watchMessageUpdateRequest),
+    fork(watchMessageDestroyRequest),
   ]);
 }

@@ -9,7 +9,7 @@ import * as actions from '../actions/sessionActions';
 import { SIGN_IN, SIGN_UP, SIGN_OUT } from '../actions/actionTypes';
 import { apiCreate, apiDestroy } from '../util/apiUtil';
 
-function* fetchSignIn({ currentUser: user }) {
+function* sessionCreate({ currentUser: user }) {
   try {
     const session = yield call(apiCreate, 'session', { user });
     yield put(actions.signIn.receive(session));
@@ -18,7 +18,7 @@ function* fetchSignIn({ currentUser: user }) {
   }
 }
 
-function* fetchSignUp({ currentUser: user }) {
+function* userCreate({ currentUser: user }) {
   try {
     const session = yield call(apiCreate, 'user', { user });
     yield put(actions.signUp.receive(session));
@@ -27,7 +27,7 @@ function* fetchSignUp({ currentUser: user }) {
   }
 }
 
-function* fetchSignOut() {
+function* sessionDestroy() {
   try {
     yield call(apiDestroy, 'session');
     yield put(actions.signOut.receive());
@@ -36,22 +36,22 @@ function* fetchSignOut() {
   }
 }
 
-function* watchSignIn() {
-  yield takeLatest(SIGN_IN.REQUEST, fetchSignIn);
+function* watchSignInRequest() {
+  yield takeLatest(SIGN_IN.REQUEST, sessionCreate);
 }
 
-function* watchSignUp() {
-  yield takeLatest(SIGN_UP.REQUEST, fetchSignUp);
+function* watchSignUpRequest() {
+  yield takeLatest(SIGN_UP.REQUEST, userCreate);
 }
 
-function* watchSignOut() {
-  yield takeLatest(SIGN_OUT.REQUEST, fetchSignOut);
+function* watchSignOutRequest() {
+  yield takeLatest(SIGN_OUT.REQUEST, sessionDestroy);
 }
 
 export default function* sessionSaga() {
   yield all([
-    fork(watchSignIn),
-    fork(watchSignUp),
-    fork(watchSignOut),
+    fork(watchSignInRequest),
+    fork(watchSignUpRequest),
+    fork(watchSignOutRequest),
   ]);
 }

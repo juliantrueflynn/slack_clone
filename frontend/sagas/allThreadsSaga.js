@@ -11,7 +11,7 @@ import { fetchUserThreads, fetchMessage } from '../actions/messageActions';
 import { apiFetch } from '../util/apiUtil';
 import { selectEntityBySlug, selectUIByDisplay } from '../reducers/selectors';
 
-function* fetchUserThreadIndex({ workspaceSlug }) {
+function* userThreadIndex({ workspaceSlug }) {
   try {
     const messageThreads = yield call(apiFetch, `workspaces/${workspaceSlug}/user_threads`);
     yield put(fetchUserThreads.receive(messageThreads));
@@ -20,7 +20,7 @@ function* fetchUserThreadIndex({ workspaceSlug }) {
   }
 }
 
-function* fetchNewMessageConvo({ message }) {
+function* newMessageInView({ message }) {
   if (!message.parentMessageId) {
     return;
   }
@@ -36,17 +36,17 @@ function* fetchNewMessageConvo({ message }) {
   }
 }
 
-function* watchUserThreadIndex() {
-  yield takeLatest(USER_THREAD.INDEX.REQUEST, fetchUserThreadIndex);
+function* watchUserThreadIndexRequest() {
+  yield takeLatest(USER_THREAD.INDEX.REQUEST, userThreadIndex);
 }
 
-function* watchCreateMessage() {
-  yield takeLatest(MESSAGE.CREATE.RECEIVE, fetchNewMessageConvo);
+function* watchMessageCreateReceive() {
+  yield takeLatest(MESSAGE.CREATE.RECEIVE, newMessageInView);
 }
 
 export default function* allThreadsSaga() {
   yield all([
-    fork(watchUserThreadIndex),
-    fork(watchCreateMessage),
+    fork(watchUserThreadIndexRequest),
+    fork(watchMessageCreateReceive),
   ]);
 }

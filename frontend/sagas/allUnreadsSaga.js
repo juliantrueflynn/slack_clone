@@ -20,7 +20,7 @@ function* fetchIndex({ workspaceSlug }) {
   }
 }
 
-function* fetchUserThreadIndexPage() {
+function* updateUnreadsByAllThreads() {
   const unreadsMap = yield select(getAllUnreads);
   const unreads = Object.values(unreadsMap).filter(unread => (
     unread && unread.hasUnreads && unread.readableType === 'Message'
@@ -37,7 +37,7 @@ function* fetchUserThreadIndexPage() {
   }
 }
 
-function* fetchClearUnreads({ chatPath }) {
+function* updateUnreadsByChat(chatPath) {
   if (chatPath === 'threads') {
     return;
   }
@@ -47,22 +47,22 @@ function* fetchClearUnreads({ chatPath }) {
   yield call(apiUpdate, 'read', { readableId, readableType });
 }
 
-function* watchIndex() {
+function* watchReadIndexRequest() {
   yield takeLatest(READ.INDEX.REQUEST, fetchIndex);
 }
 
-function* watchUserThreadIndex() {
-  yield takeLatest(USER_THREAD.INDEX.REQUEST, fetchUserThreadIndexPage);
+function* watchUserThreadIndexRequest() {
+  yield takeLatest(USER_THREAD.INDEX.REQUEST, updateUnreadsByAllThreads);
 }
 
-function* watchClearUnreads() {
-  yield takeLatest(UNREAD_CLEAR_ALL, fetchClearUnreads);
+function* watchClearAllUnreads() {
+  yield takeLatest(UNREAD_CLEAR_ALL, updateUnreadsByChat);
 }
 
 export default function* allUnreadsSaga() {
   yield all([
-    fork(watchIndex),
-    fork(watchUserThreadIndex),
-    fork(watchClearUnreads),
+    fork(watchReadIndexRequest),
+    fork(watchUserThreadIndexRequest),
+    fork(watchClearAllUnreads),
   ]);
 }

@@ -9,7 +9,7 @@ import { FAVORITE, FAVORITE_TOGGLE } from '../actions/actionTypes';
 import { fetchFavorites, createFavorite, destroyFavorite } from '../actions/favoriteActions';
 import { apiFetch, apiCreate, apiDestroy } from '../util/apiUtil';
 
-function* loadIndexFavorite({ workspaceSlug }) {
+function* favoriteIndex({ workspaceSlug }) {
   try {
     const favorites = yield call(apiFetch, `workspaces/${workspaceSlug}/favorites`);
     yield put(fetchFavorites.receive(favorites));
@@ -18,7 +18,7 @@ function* loadIndexFavorite({ workspaceSlug }) {
   }
 }
 
-function* loadToggleFavorite({ favorite }) {
+function* favoriteToggle({ favorite }) {
   if (favorite.id) {
     yield put(destroyFavorite.request(favorite.id));
   } else {
@@ -26,7 +26,7 @@ function* loadToggleFavorite({ favorite }) {
   }
 }
 
-function* loadCreateFavorite({ favorite }) {
+function* favoriteCreate({ favorite }) {
   try {
     const response = yield call(apiCreate, 'favorites', favorite);
     yield put(createFavorite.receive(response));
@@ -35,7 +35,7 @@ function* loadCreateFavorite({ favorite }) {
   }
 }
 
-function* loadDestroyFavorite({ id }) {
+function* favoriteDestroy({ id }) {
   try {
     const response = yield call(apiDestroy, `favorites/${id}`);
     yield put(destroyFavorite.receive(response));
@@ -44,27 +44,27 @@ function* loadDestroyFavorite({ id }) {
   }
 }
 
-function* watchFavoriteToggle() {
-  yield takeLatest(FAVORITE_TOGGLE, loadToggleFavorite);
+function* watchFavoriteUpdateRequest() {
+  yield takeLatest(FAVORITE_TOGGLE, favoriteToggle);
 }
 
-function* watchFavoriteIndex() {
-  yield takeLatest(FAVORITE.INDEX.REQUEST, loadIndexFavorite);
+function* watchFavoriteIndexRequest() {
+  yield takeLatest(FAVORITE.INDEX.REQUEST, favoriteIndex);
 }
 
-function* watchFavoriteCreate() {
-  yield takeLatest(FAVORITE.CREATE.REQUEST, loadCreateFavorite);
+function* watchFavoriteCreateRequest() {
+  yield takeLatest(FAVORITE.CREATE.REQUEST, favoriteCreate);
 }
 
-function* watchFavoriteDestroy() {
-  yield takeLatest(FAVORITE.DESTROY.REQUEST, loadDestroyFavorite);
+function* watchFavoriteDestroyRequest() {
+  yield takeLatest(FAVORITE.DESTROY.REQUEST, favoriteDestroy);
 }
 
 export default function* favoriteSaga() {
   yield all([
-    fork(watchFavoriteToggle),
-    fork(watchFavoriteIndex),
-    fork(watchFavoriteCreate),
-    fork(watchFavoriteDestroy),
+    fork(watchFavoriteUpdateRequest),
+    fork(watchFavoriteIndexRequest),
+    fork(watchFavoriteCreateRequest),
+    fork(watchFavoriteDestroyRequest),
   ]);
 }

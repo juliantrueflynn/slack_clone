@@ -6,7 +6,7 @@ import {
   select,
   takeLatest,
 } from 'redux-saga/effects';
-import { CHANNEL_SUB, MESSAGE } from '../actions/actionTypes';
+import { CHANNEL_SUB, MESSAGE, CHAT_PATH_UPDATE } from '../actions/actionTypes';
 import { createChannelSub, updateChannelSub, destroyChannelSub } from '../actions/channelActions';
 import { apiCreate, apiDestroy, apiUpdate } from '../util/apiUtil';
 import { selectEntities, getCurrentUser, selectEntityBySlug } from '../reducers/selectors';
@@ -18,7 +18,7 @@ function* callReadAction(actionCaller, sub) {
   }
 }
 
-function* fetchCreate({ channelSub }) {
+function* channelSubCreate({ channelSub }) {
   try {
     const response = yield call(apiCreate, 'channel_subs', channelSub);
     yield callReadAction(updateRead, response);
@@ -27,7 +27,7 @@ function* fetchCreate({ channelSub }) {
   }
 }
 
-function* fetchUpdate({ channelSlug }) {
+function* channelSubUpdate({ channelSlug }) {
   try {
     const response = yield call(apiUpdate, `channels/${channelSlug}/channel_sub`);
     yield put(updateChannelSub.receive(response));
@@ -45,10 +45,14 @@ function* fetchDestroy({ channelSlug }) {
   }
 }
 
-function* updateDmSubBySlug(channelSlug) {
+function* updateDmChatSubBySlug(channelSlug) {
   const channel = yield select(selectEntityBySlug, 'channels', channelSlug);
 
-  if (channel.hasDm) {
+  if (!channel || !channel.hasDm) {
+    return;
+  }
+
+  try {
     const user = yield select(getCurrentUser);
     const subsMap = yield select(selectEntities, 'channelSubs');
     const userSub = channel.subs.map(id => subsMap[id]).filter(sub => sub.userId === user.id)[0];
@@ -56,51 +60,47 @@ function* updateDmSubBySlug(channelSlug) {
     if (userSub && !userSub.inSidebar) {
       yield put(updateChannelSub.request(channelSlug));
     }
-  }
-}
-
-function* fetchChannelShow({ messages: { channel } }) {
-  try {
-    yield updateDmSubBySlug(channel.slug);
   } catch (error) {
     yield put(updateChannelSub.failure(error));
   }
 }
 
-function* fetchDmChatMessage({ message }) {
-  try {
-    yield updateDmSubBySlug(message.channelSlug);
-  } catch (error) {
-    yield put(updateChannelSub.failure(error));
+function* dmChatSubUpdateByChatPath({ chatPath }) {
+  if (chatPath !== 'unreads' || chatPath !== 'threads') {
+    yield updateDmChatSubBySlug(chatPath);
   }
 }
 
-function* watchCreate() {
-  yield takeLatest(CHANNEL_SUB.CREATE.REQUEST, fetchCreate);
+function* dmChatSubUpdateByMessage({ message }) {
+  yield updateDmChatSubBySlug(message.channelSlug);
 }
 
-function* watchUpdate() {
-  yield takeLatest(CHANNEL_SUB.UPDATE.REQUEST, fetchUpdate);
+function* watchChannelSubCreateRequest() {
+  yield takeLatest(CHANNEL_SUB.CREATE.REQUEST, channelSubCreate);
 }
 
-function* watchDestroy() {
+function* watchChannelSubUpdateRequest() {
+  yield takeLatest(CHANNEL_SUB.UPDATE.REQUEST, channelSubUpdate);
+}
+
+function* watchChannelSubDestroyRequest() {
   yield takeLatest(CHANNEL_SUB.DESTROY.REQUEST, fetchDestroy);
 }
 
-function* watchChannelShow() {
-  yield takeLatest(MESSAGE.INDEX.RECEIVE, fetchChannelShow);
+function* watchMessageIndexReceive() {
+  yield takeLatest(CHAT_PATH_UPDATE, dmChatSubUpdateByChatPath);
 }
 
-function* watchDmChatMessage() {
-  yield takeLatest(MESSAGE.CREATE.RECEIVE, fetchDmChatMessage);
+function* watchMessageCreateReceive() {
+  yield takeLatest(MESSAGE.CREATE.RECEIVE, dmChatSubUpdateByMessage);
 }
 
 export default function* channelSubSaga() {
   yield all([
-    fork(watchCreate),
-    fork(watchUpdate),
-    fork(watchDestroy),
-    fork(watchChannelShow),
-    fork(watchDmChatMessage),
+    fork(watchChannelSubCreateRequest),
+    fork(watchChannelSubUpdateRequest),
+    fork(watchChannelSubDestroyRequest),
+    fork(watchMessageIndexReceive),
+    fork(watchMessageCreateReceive),
   ]);
 }

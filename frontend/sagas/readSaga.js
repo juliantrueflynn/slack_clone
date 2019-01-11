@@ -6,7 +6,7 @@ import {
   select,
   call,
 } from 'redux-saga/effects';
-import { READ, MESSAGE } from '../actions/actionTypes';
+import { READ, MESSAGE, CHAT_PATH_UPDATE } from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiDestroy } from '../util/apiUtil';
 import { updateRead, destroyRead, updateUnread } from '../actions/readActions';
 import { getChannelsMap, selectEntityBySlug } from '../reducers/selectors';
@@ -17,7 +17,7 @@ import {
   isCurrentUserNotInConvo,
 } from '../util/readUtil';
 
-function* fetchUpdate({ read }) {
+function* readUpdate({ read }) {
   try {
     const apiCall = read.lastRead ? apiUpdate : apiCreate;
     const response = yield call(apiCall, 'read', read);
@@ -27,7 +27,7 @@ function* fetchUpdate({ read }) {
   }
 }
 
-function* fetchDestroy({ read: { readableId, readableType, slug } }) {
+function* readDestroy({ read: { readableId, readableType, slug } }) {
   try {
     yield call(apiDestroy, `read_destroy/${readableId}/readable_type/${readableType}`);
     yield put(destroyRead.receive({ readableId, readableType, slug }));
@@ -44,7 +44,16 @@ function* readViewedEntity(readProps) {
   }
 }
 
-function* fetchMessageThread({ messages: { messages } }) {
+function* readUpdateByChat({ chatPath }) {
+  const channel = yield select(getChannelsMap)[chatPath];
+  const { slug, id: readableId, isSub } = channel || {};
+
+  if (channel && isSub) {
+    yield readViewedEntity({ readableType: 'Channel', readableId, slug });
+  }
+}
+
+function* readUpdateByMessageShow({ messages: { messages } }) {
   if (messages.length <= 1) {
     return;
   }
@@ -56,16 +65,7 @@ function* fetchMessageThread({ messages: { messages } }) {
   yield readViewedEntity({ readableType: 'Message', readableId, slug });
 }
 
-function* fetchChannelPage({ messages: { channel } }) {
-  const channelsMap = yield select(getChannelsMap);
-  const { slug, id: readableId, isSub } = channelsMap[channel.slug] || {};
-
-  if (isSub) {
-    yield readViewedEntity({ readableType: 'Channel', readableId, slug });
-  }
-}
-
-function* loadCreateMessageRead({ message: msg }) {
+function* readUpdateByMessageCreate({ message: msg }) {
   const isNotInConvo = yield isCurrentUserNotInConvo(msg.authors);
 
   if (msg.entityType !== 'entry' || (msg.parentMessageSlug && isNotInConvo)) {
@@ -83,7 +83,7 @@ function* loadCreateMessageRead({ message: msg }) {
   }
 }
 
-function* loadDestroyConvoRead({ message }) {
+function* readDestroyByConvo({ message }) {
   const { parentMessageId: readableId, parentMessageSlug: slug } = message;
   const unread = yield select(selectEntityBySlug, 'unreads', slug);
 
@@ -98,37 +98,37 @@ function* loadDestroyConvoRead({ message }) {
   }
 }
 
-function* watchUpdated() {
-  yield takeLatest(READ.UPDATE.REQUEST, fetchUpdate);
+function* watchReadUpdateRequest() {
+  yield takeLatest(READ.UPDATE.REQUEST, readUpdate);
 }
 
-function* watchDestroyed() {
-  yield takeLatest(READ.DESTROY.REQUEST, fetchDestroy);
+function* watchReadDestroyRequest() {
+  yield takeLatest(READ.DESTROY.REQUEST, readDestroy);
+}
+
+function* watchChannelShowRequest() {
+  yield takeLatest(CHAT_PATH_UPDATE, readUpdateByChat);
 }
 
 function* watchMessageThread() {
-  yield takeLatest(MESSAGE.SHOW.RECEIVE, fetchMessageThread);
+  yield takeLatest(MESSAGE.SHOW.RECEIVE, readUpdateByMessageShow);
 }
 
-function* watchChannelPage() {
-  yield takeLatest(MESSAGE.INDEX.RECEIVE, fetchChannelPage);
+function* watchMessageCreateRequest() {
+  yield takeLatest(MESSAGE.CREATE.RECEIVE, readUpdateByMessageCreate);
 }
 
-function* watchMessageCreate() {
-  yield takeLatest(MESSAGE.CREATE.RECEIVE, loadCreateMessageRead);
-}
-
-function* watchMessageDestroy() {
-  yield takeLatest(MESSAGE.DESTROY.RECEIVE, loadDestroyConvoRead);
+function* watchMessageDestroyRequest() {
+  yield takeLatest(MESSAGE.DESTROY.RECEIVE, readDestroyByConvo);
 }
 
 export default function* readSaga() {
   yield all([
-    fork(watchUpdated),
-    fork(watchDestroyed),
+    fork(watchReadUpdateRequest),
+    fork(watchReadDestroyRequest),
     fork(watchMessageThread),
-    fork(watchChannelPage),
-    fork(watchMessageCreate),
-    fork(watchMessageDestroy),
+    fork(watchChannelShowRequest),
+    fork(watchMessageCreateRequest),
+    fork(watchMessageDestroyRequest),
   ]);
 }

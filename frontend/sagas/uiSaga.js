@@ -75,7 +75,7 @@ function* watchDrawerUpdate() {
   yield takeLatest(DRAWER_UPDATE, fetchDrawerEntities);
 }
 
-function* watchSearchQuery() {
+function* watchSearchIndexRequest() {
   yield takeLatest(SEARCH.INDEX.REQUEST, loadSearchResults);
 }
 
@@ -83,6 +83,6 @@ export default function* uiSaga() {
   yield all([
     fork(watchNavigate),
     fork(watchDrawerUpdate),
-    fork(watchSearchQuery),
+    fork(watchSearchIndexRequest),
   ]);
 }
