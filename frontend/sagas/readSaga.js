@@ -9,7 +9,7 @@ import {
 import { READ, MESSAGE, CHAT_PATH_UPDATE } from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiDestroy } from '../util/apiUtil';
 import { updateRead, destroyRead, updateUnread } from '../actions/readActions';
-import { getChannelsMap, selectEntityBySlug } from '../reducers/selectors';
+import { selectEntityBySlug, getChatPage } from '../reducers/selectors';
 import {
   getReadProps,
   getUnread,
@@ -45,7 +45,7 @@ function* readViewedEntity(readProps) {
 }
 
 function* readUpdateByChat({ chatPath }) {
-  const channel = yield select(getChannelsMap)[chatPath];
+  const channel = yield select(getChatPage, chatPath);
   const { slug, id: readableId, isSub } = channel || {};
 
   if (channel && isSub) {
