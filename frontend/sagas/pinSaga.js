@@ -5,7 +5,7 @@ import {
   put,
   takeLatest,
 } from 'redux-saga/effects';
-import { createPin, destroyPin } from '../actions/messageActions';
+import { createPin, destroyPin } from '../actions/pinActions';
 import { PIN } from '../actions/actionTypes';
 import { apiCreate, apiDestroy } from '../util/apiUtil';
 
