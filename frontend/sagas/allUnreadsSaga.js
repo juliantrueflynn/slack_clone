@@ -43,8 +43,12 @@ function* updateUnreadsByChat(chatPath) {
   }
 
   const unreadsMap = yield select(getAllUnreads);
-  const { readableId, readableType } = unreadsMap[chatPath];
-  yield call(apiUpdate, 'read', { readableId, readableType });
+  const unread = unreadsMap[chatPath];
+
+  if (unread) {
+    const { readableId, readableType } = unread;
+    yield call(apiUpdate, 'read', { readableId, readableType });
+  }
 }
 
 function* watchReadIndexRequest() {
