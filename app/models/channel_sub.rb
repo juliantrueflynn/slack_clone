@@ -11,6 +11,10 @@ class ChannelSub < ApplicationRecord
     includes(:channel).where(channels: { workspace_id: workspace_id })
   end
 
+  def self.by_user(user_id)
+    find_by(user_id: user_id)
+  end
+
   def self.shared_with_user_id(user_id)
     where(channel_id: where(user_id: user_id).pluck(:channel_id))
   end

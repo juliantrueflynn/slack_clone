@@ -27,6 +27,7 @@ def chat_with_entries
   Channel.left_joins(:messages)
     .where(messages: { entity_type: 'entry' })
     .distinct
+    .sample
 end
 
 def read_create_or_update(entity, user_id)
@@ -42,18 +43,6 @@ def read_destroy(entity, user_id)
   read.delete if read
 end
 
-def workspace_with_user_not_subbed(user)
-  Workspace.includes(:workspace_subs)
-    .where.not(workspace_subs: { user_id: user })
-    .sample
-end
-
-def chat_with_user_not_subbed(workspace, user)
-  workspace.channels.includes(:subs)
-    .where.not(channel_subs: { user_id: user })
-    .sample
-end
-
 def seed_workspace_create(user)
   title = Faker::Company.unique.name
   slug = title.parameterize
@@ -62,7 +51,7 @@ end
 
 def seed_workspace_sub_create
   user = User.all.sample
-  workspace = workspace_with_user_not_subbed(user)
+  workspace = Workspace.without_user_sub(user).sample
   return unless workspace
   workspace.workspace_subs.find_or_create_by!(user_id: user.id)
 end
@@ -70,7 +59,7 @@ end
 def seed_workspace_sub_update
   user = User.all.where.not(id: 1).sample
   workspace = user.workspaces.sample
-  workspace_sub = workspace.workspace_subs.find_by(user_id: user.id)
+  workspace_sub = workspace.workspace_subs.by_user(user)
   workspace_sub.update!(is_member: !workspace_sub.is_member)
 
   unless !workspace_sub.is_member
@@ -83,7 +72,7 @@ end
 def seed_chat_sub_create
   workspace = Workspace.all.sample
   user = workspace.users.sample
-  chat = chat_with_user_not_subbed(workspace, user)
+  chat = workspace.channels.without_user_sub(user).sample
   return unless chat
   chat.subs.find_or_create_by!(user_id: user.id)
   read_create_or_update(chat, user.id)
@@ -93,7 +82,7 @@ def seed_chat_sub_destroy
   user = User.all.where.not(id: 1).sample
   chat = user.channels.sample
   default_chats = chat.workspace.default_channels
-  channel_sub = chat.subs.where.not(id: default_chats).find_by(user_id: user.id)
+  channel_sub = chat.subs.where.not(id: default_chats).by_user(user)
   read_destroy(chat, user.id)
 end
 
@@ -121,7 +110,7 @@ def seed_parent_message_create
 end
 
 def seed_child_message_create
-  chat = chat_with_entries.sample
+  chat = chat_with_entries
   user = chat.members.sample
   parent = chat.messages.by_entry_parent.sample
 
@@ -137,16 +126,14 @@ def seed_child_message_create
 end
 
 def seed_favorite_create
-  chat = chat_with_entries.sample
-  user = chat.members.sample
-  message = chat.messages.by_entry_parent.sample
+  user = chat_with_entries.members.sample
+  message = chat_with_entries.messages.by_entry_parent.sample
   user.favorites.find_or_create_by!(message_id: message.id)
 end
 
 def seed_reaction_create
-  chat = chat_with_entries.sample
-  user = chat.members.sample
-  message = chat.messages.sample
+  user = chat_with_entries.members.sample
+  message = chat_with_entries.messages.sample
   emoji = REACTIONS.sample
   user.reactions.find_or_create_by!(emoji: emoji, message_id: message.id)
 end
@@ -161,16 +148,16 @@ User.create!(email: "demo", username: "demouser", password: "123456")
   )
 end
 
-3.times { seed_workspace_create(User.first) }
-
 3.times do
+  seed_workspace_create(User.first)
+
   user = User.where.not(id: 1).sample
   seed_workspace_create(user)
 end
 
-60.times { seed_workspace_sub_create }
-20.times { seed_chat_create }
-20.times { seed_chat_sub_create }
+45.times { seed_workspace_sub_create }
+40.times { seed_chat_create }
+35.times { seed_chat_sub_create }
 5.times { seed_chat_sub_destroy }
 50.times { seed_parent_message_create }
 30.times { seed_child_message_create }
@@ -179,5 +166,5 @@ end
 60.times { seed_reaction_create }
 30.times { seed_favorite_create }
 3.times { seed_workspace_sub_update }
-20.times { seed_parent_message_create }
+40.times { seed_parent_message_create }
 30.times { seed_child_message_create }

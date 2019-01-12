@@ -47,6 +47,10 @@ class Channel < ApplicationRecord
       .take
   end
 
+  def self.without_user_sub(user_id)
+    includes(:subs).where.not(channel_subs: { user_id: user_id })
+  end
+
   def self.without_user_and_dm(user_id)
     includes(:subs)
       .where("channel_subs.user_id != ? OR channels.has_dm = 'f'", user_id)

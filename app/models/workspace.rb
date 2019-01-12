@@ -22,6 +22,10 @@ class Workspace < ApplicationRecord
     source: :subs
   has_many :messages, through: :channels
 
+  def self.without_user_sub(user_id)
+    includes(:workspace_subs).where.not(workspace_subs: { user_id: user_id })
+  end
+
   def broadcast_name
     "app"
   end
