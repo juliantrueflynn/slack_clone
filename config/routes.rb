@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
     resources :workspaces, only: [:index, :show, :create], param: :slug do
       resources :users, only: :show, param: :slug
-      resources :channels, only: :index
+      resources :chatrooms, only: :index
       resource :dm_chat, only: :create
       resources :favorites, only: :index
       resources :user_threads, only: :index
@@ -19,12 +19,12 @@ Rails.application.routes.draw do
 
     resource :workspace_sub, only: [:create, :update]
 
-    resources :channels, only: [:show, :create, :update], param: :slug do
+    resources :chatrooms, only: [:show, :create, :update], param: :slug do
       get '/messages(/:last_id)', to: 'messages#index'
-      resource :channel_sub, only: [:update, :destroy]
+      resource :chatroom_sub, only: [:update, :destroy]
     end
 
-    resources :channel_subs, only: :create
+    resources :chatroom_subs, only: :create
     resources :messages, only: [:create, :update, :destroy], param: :slug
     resources :message_convos, only: :show, param: :slug
     resources :favorites, only: [:create, :destroy]

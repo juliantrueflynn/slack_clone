@@ -1,14 +1,14 @@
-class ChannelSub < ApplicationRecord
+class ChatroomSub < ApplicationRecord
   attr_accessor :skip_broadcast
 
-  validates_presence_of :channel_id, scope: :user_id
+  validates_presence_of :chatroom_id, scope: :user_id
 
   belongs_to :user
-  belongs_to :channel
-  has_one :workspace, through: :channel
+  belongs_to :chatroom
+  has_one :workspace, through: :chatroom
 
   def self.by_workspace_id(workspace_id)
-    includes(:channel).where(channels: { workspace_id: workspace_id })
+    includes(:chatroom).where(chatrooms: { workspace_id: workspace_id })
   end
 
   def self.by_user(user_id)
@@ -16,11 +16,11 @@ class ChannelSub < ApplicationRecord
   end
 
   def self.shared_with_user_id(user_id)
-    where(channel_id: where(user_id: user_id).pluck(:channel_id))
+    where(chatroom_id: where(user_id: user_id).pluck(:chatroom_id))
   end
 
   def broadcast_name
-    "channel_#{channel.slug}"
+    "chatroom_#{chatroom.slug}"
   end
 
   after_create_commit :broadcast_create_sub, :generate_sub_message_create
@@ -29,12 +29,12 @@ class ChannelSub < ApplicationRecord
   private
 
   def broadcast_create_sub
-    broadcast_create if workspace.channels.length > 2
+    broadcast_create if workspace.chatrooms.length > 2
   end
 
   def generate_sub_message(entity_type)
-    return if channel.has_dm?
-    channel.messages.create(author_id: user_id, entity_type: entity_type)
+    return if chatroom.has_dm?
+    chatroom.messages.create(author_id: user_id, entity_type: entity_type)
   end
 
   def generate_sub_message_create

@@ -1,0 +1,1 @@
+json.partial! 'api/chatroom_subs/chatroom_sub', chatroom_sub: @chatroom_sub

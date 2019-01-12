@@ -5,14 +5,14 @@ class Message < ApplicationRecord
 
   attr_accessor :skip_broadcast
 
-  validates_presence_of :slug, :author_id, :entity_type, :channel_id
+  validates_presence_of :slug, :author_id, :entity_type, :chatroom_id
   validates_uniqueness_of :slug
   validates_length_of :body,
     maximum: 50000,
     too_long: 'is too long (max: 50000 characters)'
   validates_inclusion_of :entity_type, in: %w(entry sub_create sub_destroy)
 
-  belongs_to :channel
+  belongs_to :chatroom
   belongs_to :author, class_name: 'User'
   belongs_to :parent_message,
     class_name: 'Message',
@@ -24,7 +24,7 @@ class Message < ApplicationRecord
   has_many :reads,
     -> { where(readable_type: 'Message') },
     foreign_key: :readable_id
-  has_one :workspace, through: :channel
+  has_one :workspace, through: :chatroom
 
   scope :with_parent, -> { where(parent_message_id: nil) }
   scope :with_child, -> { where.not(parent_message_id: nil) }
@@ -32,8 +32,8 @@ class Message < ApplicationRecord
   scope :by_entry_parent, -> { with_entry_type.with_parent }
   scope :search_import, -> { with_entry_type }
 
-  def self.channel_unreads_with_user_id(user_id)
-    by_entry_parent.joins(channel: :reads)
+  def self.chatroom_unreads_with_user_id(user_id)
+    by_entry_parent.joins(chatroom: :reads)
       .where(reads: { user_id: user_id })
       .where('messages.created_at > reads.accessed_at')
   end
@@ -49,10 +49,10 @@ class Message < ApplicationRecord
       .maximum(:created_at)
   end
 
-  def self.channels_last_created_at(author_id)
-    by_entry_parent.includes(channel: :subs)
-      .where(channel_subs: { user_id: author_id })
-      .group('channels.slug')
+  def self.chatrooms_last_created_at(author_id)
+    by_entry_parent.includes(chatroom: :subs)
+      .where(chatroom_subs: { user_id: author_id })
+      .group('chatrooms.slug')
       .maximum(:created_at)
   end
 
@@ -65,11 +65,11 @@ class Message < ApplicationRecord
   end
 
   def broadcast_name
-    "channel_#{channel.slug}"
+    "chatroom_#{chatroom.slug}"
   end
 
   def search_data
-    { id: id, body: body_plain_text, channel_id: channel_id }
+    { id: id, body: body_plain_text, chatroom_id: chatroom_id }
   end
 
   def should_index?

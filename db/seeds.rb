@@ -20,11 +20,12 @@ end
 
 def message_body
   '{"blocks":[{"key":"' + SecureRandom.urlsafe_base64(6) + '","text":"' +
-  message_body_text + '","type":"unstyled","depth":0,"inlineStyleRanges":[],''"entityRanges":[],"data":{}}],"entityMap":{}}'
+  message_body_text + '","type":"unstyled","depth":0,"inlineStyleRanges":[],' +
+  '"entityRanges":[],"data":{}}],"entityMap":{}}'
 end
 
-def chat_with_entries
-  Channel.left_joins(:messages)
+def chatroom_with_entries
+  Chatroom.left_joins(:messages)
     .where(messages: { entity_type: 'entry' })
     .distinct
     .sample
@@ -63,16 +64,16 @@ def seed_workspace_sub_update
   workspace_sub.update!(is_member: !workspace_sub.is_member)
 
   unless !workspace_sub.is_member
-    user.channels.where(workspace_id: workspace.id).each do |chat|
+    user.chatrooms.where(workspace_id: workspace.id).each do |chat|
       read_destroy(chat, user.id)
     end
   end
 end
 
-def seed_chat_sub_create
+def seed_chatroom_sub_create
   workspace = Workspace.all.sample
   user = workspace.users.sample
-  chat = workspace.channels.without_user_sub(user).sample
+  chat = workspace.chatrooms.without_user_sub(user).sample
   return unless chat
   chat.subs.find_or_create_by!(user_id: user.id)
   read_create_or_update(chat, user.id)
@@ -80,17 +81,17 @@ end
 
 def seed_chat_sub_destroy
   user = User.all.where.not(id: 1).sample
-  chat = user.channels.sample
-  default_chats = chat.workspace.default_channels
-  channel_sub = chat.subs.where.not(id: default_chats).by_user(user)
+  chat = user.chatrooms.sample
+  default_chats = chat.workspace.default_chatrooms
+  chatroom_sub = chat.subs.where.not(id: default_chats).by_user(user)
   read_destroy(chat, user.id)
 end
 
-def seed_chat_create
+def seed_chatroom_create
   workspace = Workspace.all.sample
   user = workspace.users.sample
   return unless workspace
-  chat = user.created_channels.create!(
+  chat = user.created_chatrooms.create!(
     title: Faker::Company.unique.buzzword,
     topic: (rand < 0.2 ? Faker::Company.bs : nil),
     workspace_id: workspace.id
@@ -99,18 +100,18 @@ def seed_chat_create
 end
 
 def seed_parent_message_create
-  chat = Channel.all.sample
+  chat = Chatroom.all.sample
   user = chat.members.sample
 
   loop do
-    message = user.messages.create!(body: message_body, channel_id: chat.id)
+    message = user.messages.create!(body: message_body, chatroom_id: chat.id)
     read_create_or_update(chat, user.id)
     break if rand < 0.7
   end
 end
 
 def seed_child_message_create
-  chat = chat_with_entries
+  chat = chatroom_with_entries
   user = chat.members.sample
   parent = chat.messages.by_entry_parent.sample
 
@@ -118,7 +119,7 @@ def seed_child_message_create
     reply = parent.children.create!(
       body: message_body,
       author_id: user.id,
-      channel_id: chat.id
+      chatroom_id: chat.id
     )
     read_create_or_update(parent, user.id)
     break if rand < 0.7
@@ -126,14 +127,14 @@ def seed_child_message_create
 end
 
 def seed_favorite_create
-  user = chat_with_entries.members.sample
-  message = chat_with_entries.messages.by_entry_parent.sample
+  user = chatroom_with_entries.members.sample
+  message = chatroom_with_entries.messages.by_entry_parent.sample
   user.favorites.find_or_create_by!(message_id: message.id)
 end
 
 def seed_reaction_create
-  user = chat_with_entries.members.sample
-  message = chat_with_entries.messages.sample
+  user = chatroom_with_entries.members.sample
+  message = chatroom_with_entries.messages.sample
   emoji = REACTIONS.sample
   user.reactions.find_or_create_by!(emoji: emoji, message_id: message.id)
 end
@@ -156,12 +157,12 @@ end
 end
 
 40.times { seed_workspace_sub_create }
-45.times { seed_chat_create }
-35.times { seed_chat_sub_create }
+45.times { seed_chatroom_create }
+35.times { seed_chatroom_sub_create }
 5.times { seed_chat_sub_destroy }
 50.times { seed_parent_message_create }
 30.times { seed_child_message_create }
-30.times { seed_chat_sub_create }
+30.times { seed_chatroom_sub_create }
 10.times { seed_chat_sub_destroy }
 60.times { seed_reaction_create }
 30.times { seed_favorite_create }

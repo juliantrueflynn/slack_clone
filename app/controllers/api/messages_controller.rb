@@ -2,7 +2,7 @@ class Api::MessagesController < ApplicationController
   before_action :set_message, only: [:show, :update, :destroy]
 
   def index
-    @channel = Channel.find_by_slug(params[:channel_slug])
+    @channel = Chatroom.find_by_slug(params[:channel_slug])
   end
 
   def create

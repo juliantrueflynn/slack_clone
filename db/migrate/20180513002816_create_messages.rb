@@ -4,7 +4,7 @@ class CreateMessages < ActiveRecord::Migration[5.1]
       t.text :body
       t.integer :author_id, null: false
       t.string :slug, null: false
-      t.references :channel, foreign_key: {on_delete: :cascade}
+      t.references :chatroom, foreign_key: { on_delete: :cascade }
       t.integer :parent_message_id, default: nil
       t.string :entity_type, default: 'entry'
 

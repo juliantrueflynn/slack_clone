@@ -4,7 +4,7 @@ class Pin < ApplicationRecord
 
   belongs_to :message
   belongs_to :user
-  has_one :channel, through: :message
+  has_one :chatroom, through: :message
 
   def broadcast_name
     "channel_#{channel_slug}"

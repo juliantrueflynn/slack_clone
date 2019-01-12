@@ -22,31 +22,31 @@ end
 
 last_actives_map = @workspace.last_entries_created_at_map(current_user.id)
 
-json.channels do
-  channels = @workspace.channels.without_user_and_dm(current_user.id)
+json.chatrooms do
+  chatrooms = @workspace.chatrooms.without_user_and_dm(current_user.id)
 
-  json.array! channels do |channel|
-    json.(channel, :id, :slug, :title, :has_dm)
-    json.last_active last_actives_map[channel.slug]
+  json.array! chatrooms do |chatroom|
+    json.(chatroom, :id, :slug, :title, :has_dm)
+    json.last_active last_actives_map[chatroom.slug]
   end
 end
 
-json.channel_subs do
-  channel_subs = @workspace.channel_subs.shared_with_user_id(current_user.id)
+json.chatroom_subs do
+  chatroom_subs = @workspace.chatroom_subs.shared_with_user_id(current_user.id)
 
-  json.array! channel_subs.includes(:channel, :user) do |channel_sub|
-    json.(channel_sub, :id, :user_id, :in_sidebar, :channel_id, :created_at)
-    json.user_slug channel_sub.user.slug
-    json.channel_slug channel_sub.channel.slug
+  json.array! chatroom_subs.includes(:chatroom, :user) do |chatroom_sub|
+    json.(chatroom_sub, :id, :user_id, :in_sidebar, :chatroom_id, :created_at)
+    json.user_slug chatroom_sub.user.slug
+    json.chatroom_slug chatroom_sub.chatroom.slug
   end
 end
 
 json.reads do
   reads = @workspace.reads.where(user_id: current_user.id)
 
-  json.array! reads.channels.includes(:channel) do |read|
+  json.array! reads.chatrooms.includes(:chatroom) do |read|
     json.(read, :readable_id, :readable_type)
-    json.slug read.channel.slug
+    json.slug read.chatroom.slug
     json.last_read read.accessed_at
   end
 

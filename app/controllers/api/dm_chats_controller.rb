@@ -3,13 +3,13 @@ class Api::DmChatsController < ApplicationController
 
   def create
     workspace = Workspace.find_by_slug(params[:workspace_slug])
-    @channel = workspace.channels.build(dm_chat_params)
-    @channel.member_ids = [current_user.id, params[:dm_chat][:member_id]]
+    @chatroom = workspace.channels.build(dm_chat_params)
+    @chatroom.member_ids = [current_user.id, params[:dm_chat][:member_id]]
 
-    if @channel.save
-      render partial: 'api/channels/channel', object: @channel
+    if @chatroom.save
+      render partial: 'api/channels/channel', object: @chatroom
     else
-      render json: @channel.errors.full_messages, status: 422
+      render json: @chatroom.errors.full_messages, status: 422
     end
   end
 

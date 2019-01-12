@@ -19,35 +19,35 @@
   end
 
   after_create_commit :generate_new_workspace_sub_defaults, :broadcast_create
-  after_update_commit :broadcast_update, :generate_channel_sub_message
+  after_update_commit :broadcast_update, :generate_chatroom_sub_message
 
   private
 
   def generate_new_workspace_sub_defaults
     return if workspace.owner_id === user.id
-    generate_default_channel_subs
-    workspace.generate_default_channel_reads(user)
+    generate_default_chatroom_subs
+    workspace.generate_default_chatrooms_reads(user)
   end
 
-  def generate_default_channel_subs
-    user.channel_subs.create(default_channel_subs)
+  def generate_default_chatroom_subs
+    user.chatroom_subs.create(default_chatroom_subs)
   end
 
-  def generate_channel_sub_message
-    user.messages.create(channel_sub_messages_params)
+  def generate_chatroom_sub_message
+    user.messages.create(chatroom_sub_messages_params)
   end
 
-  def default_channel_subs
-    workspace.default_channels.reduce([]) do |memo, channel|
-      memo << { channel_id: channel.id, skip_broadcast: true }
+  def default_chatroom_subs
+    workspace.default_chatrooms.reduce([]) do |memo, chatroom|
+      memo << { chatroom_id: chatroom.id, skip_broadcast: true }
     end
   end
 
-  def channel_sub_messages_params
-    channels = user.channels.without_dm.by_workspace_id(workspace.id)
+  def chatroom_sub_messages_params
+    chatrooms = user.chatrooms.without_dm.by_workspace_id(workspace.id)
 
-    channels.reduce([]) do |memo, channel|
-      memo << { channel_id: channel.id, entity_type: message_entity_type }
+    chatrooms.reduce([]) do |memo, chatroom|
+      memo << { chatroom_id: chatroom.id, entity_type: message_entity_type }
     end
   end
 

@@ -1,8 +1,8 @@
 last_message_id = params[:last_id]
-messages = @channel.older_messages(last_message_id)
+messages = @chatroom.older_messages(last_message_id)
 
-json.channel do
-  json.(@channel, :slug, :owner_slug, :topic, :created_at, :earliest_message_slug)
+json.chatroom do
+  json.(@chatroom, :slug, :owner_slug, :topic, :created_at, :earliest_message_slug)
 end
 
 json.messages do
@@ -29,10 +29,10 @@ end
 
 unless last_message_id
   json.pins do
-    pins = @channel.pins.includes(:message, :user)
+    pins = @chatroom.pins.includes(:message, :user)
   
     json.array! pins, :id, :user_id, :message_id, :message_slug, :user_slug
   end
 
-  json.members @channel.members.pluck(:slug)
+  json.members @chatroom.members.pluck(:slug)
 end

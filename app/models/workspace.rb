@@ -16,11 +16,11 @@ class Workspace < ApplicationRecord
   has_many :users, through: :workspace_subs
   has_many :user_appearances
   has_many :reads
-  has_many :channels
-  has_many :channel_subs,
-    through: :channels,
+  has_many :chatrooms
+  has_many :chatroom_subs,
+    through: :chatrooms,
     source: :subs
-  has_many :messages, through: :channels
+  has_many :messages, through: :chatrooms
 
   def self.without_user_sub(user_id)
     includes(:workspace_subs).where.not(workspace_subs: { user_id: user_id })
@@ -38,7 +38,7 @@ class Workspace < ApplicationRecord
 
   def user_convos(user_id)
     parents = messages.convo_parents_with_author_id(user_id)
-    Message.parents_or_children(parents).includes(:channel, :author)
+    Message.parents_or_children(parents).includes(:chatroom, :author)
   end
 
   def user_convos_reads(user_id)
@@ -47,33 +47,33 @@ class Workspace < ApplicationRecord
   end
 
   def user_unreads(user_id)
-    messages.channel_unreads_with_user_id(user_id)
+    messages.chatrooms_unreads_with_user_id(user_id)
       .includes(:author)
       .order(id: :desc)
   end
 
   def last_entries_created_at_map(user_id)
-    channels = messages.channels_last_created_at(user_id)
+    chatrooms = messages.chatrooms_last_created_at(user_id)
     convos = messages.convos_last_created_at(user_id)
-    convos.merge(channels)
+    convos.merge(chatrooms)
   end
 
-  def channels_ids_with_user_id(user_id)
-    channel_subs.where(user_id: user_id).pluck(:channel_id)
+  def chatrooms_ids_with_user_id(user_id)
+    chatrooms_subs.where(user_id: user_id).pluck(:chatroom_id)
   end
 
-  def generate_default_channel_reads(user = owner)
-    user.reads.create(default_channel_reads_params)
+  def generate_default_chatrooms_reads(user = owner)
+    user.reads.create(default_chatrooms_reads_params)
   end
 
-  def default_channel_reads_params
-    default_channels.reduce([]) do |memo, channel|
-      memo << { readable_id: channel.id, readable_type: 'Channel' }
+  def default_chatrooms_reads_params
+    default_chatrooms.reduce([]) do |memo, chatroom|
+      memo << { readable_id: chatroom.id, readable_type: 'Chatroom' }
     end
   end
 
-  def default_channels
-    channels.first(2)
+  def default_chatrooms
+    chatrooms.first(2)
   end
 
   after_create_commit :create_defaults_broadcast
@@ -82,8 +82,8 @@ class Workspace < ApplicationRecord
 
   def create_defaults_broadcast
     generate_workspace_subs
-    generate_default_channels
-    generate_default_channel_reads
+    generate_default_chatrooms
+    generate_default_chatrooms_reads
     broadcast_create
   end
 
@@ -91,14 +91,14 @@ class Workspace < ApplicationRecord
     workspace_subs.create(user_id: owner.id, skip_broadcast: true)
   end
 
-  def generate_default_channels
+  def generate_default_chatrooms
     return if skip_broadcast
-    channels.create(default_channels_params)
+    chatrooms.create(default_chatrooms_params)
   end
 
   DEFAULT_CHAT_TITLES = %w(general random)
 
-  def default_channels_params
+  def default_chatrooms_params
     DEFAULT_CHAT_TITLES.reduce([]) do |memo, ch_title|
       memo << { title: ch_title, owner_id: owner_id, skip_broadcast: true }
     end

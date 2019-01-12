@@ -1,8 +1,8 @@
 json.messages do
-  json.array! @unreads.includes(:channel, :author) do |message|
+  json.array! @unreads.includes(:chatroom, :author) do |message|
     json.(message, *message.attributes.keys)
     json.author_slug message.author.slug
-    json.channel_slug message.channel.slug
+    json.chatroom_slug message.chatroom.slug
   end
 end
 

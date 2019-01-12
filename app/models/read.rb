@@ -7,7 +7,7 @@ class Read < ApplicationRecord
 
   belongs_to :user
   belongs_to :workspace
-  belongs_to :channel, foreign_key: :readable_id, optional: true
+  belongs_to :chatroom, foreign_key: :readable_id, optional: true
   belongs_to :message, foreign_key: :readable_id, optional: true
 
   def self.with_type(readable_type)
@@ -18,12 +18,12 @@ class Read < ApplicationRecord
     with_type('Message')
   end
 
-  def self.channels
-    with_type('Channel')
+  def self.chatrooms
+    with_type('Chatroom')
   end
 
-  def self.channels_with_user(user_id)
-    channels.where(user_id: user_id)
+  def self.chatrooms_with_user(user_id)
+    chatrooms.where(user_id: user_id)
   end
 
   def self.by_user_id(user_id)

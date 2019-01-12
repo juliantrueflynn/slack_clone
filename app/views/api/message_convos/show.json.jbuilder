@@ -8,8 +8,8 @@ json.messages do
   end
 end
 
-json.channel do
-  json.(@message.channel, :slug)
+json.chatroom do
+  json.(@message.chatroom, :slug)
 end
 
 json.reactions do

@@ -13,13 +13,13 @@ class User < ApplicationRecord
   has_many :created_workspaces,
     class_name: 'Workspace',
     foreign_key: :owner_id
-  has_many :created_channels,
-    class_name: 'Channel',
+  has_many :created_chatrooms,
+    class_name: 'Chatroom',
     foreign_key: :owner_id
   has_many :workspace_subs
   has_many :workspaces, through: :workspace_subs
-  has_many :channel_subs
-  has_many :channels, through: :channel_subs
+  has_many :chatroom_subs
+  has_many :chatrooms, through: :chatroom_subs
   has_many :messages, foreign_key: :author_id
   has_many :favorites
   has_many :reactions

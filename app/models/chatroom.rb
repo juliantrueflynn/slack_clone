@@ -1,4 +1,4 @@
-class Channel < ApplicationRecord
+class Chatroom < ApplicationRecord
   attr_accessor :skip_broadcast, :member_id
   attr_reader :member_ids
 
@@ -17,7 +17,7 @@ class Channel < ApplicationRecord
     class_name: 'User',
     foreign_key: :owner_id,
     optional: true
-  has_many :subs, class_name: 'ChannelSub'
+  has_many :subs, class_name: 'ChatroomSub'
   has_many :members,
     class_name: 'User',
     through: :subs,
@@ -25,7 +25,7 @@ class Channel < ApplicationRecord
   has_many :messages
   has_many :pins, through: :messages
   has_many :reads,
-    -> { where(readable_type: 'Channel') },
+    -> { where(readable_type: 'Chatroom') },
     foreign_key: :readable_id
   
   scope :with_dm, -> { where(has_dm: true) }
@@ -41,20 +41,20 @@ class Channel < ApplicationRecord
 
   def self.by_user_ids(users_ids)
     joins(:subs)
-      .where(channel_subs: { user_id: users_ids })
+      .where(chatroom_subs: { user_id: users_ids })
       .group('channels.id')
       .having('COUNT(channels.id) > 1')
       .take
   end
 
   def self.without_user_sub(user_id)
-    includes(:subs).where.not(channel_subs: { user_id: user_id })
+    includes(:subs).where.not(chatroom_subs: { user_id: user_id })
   end
 
   def self.without_user_and_dm(user_id)
     includes(:subs)
-      .where("channel_subs.user_id != ? OR channels.has_dm = 'f'", user_id)
-      .references(:channel_subs)
+      .where("chatroom_subs.user_id != ? OR channels.has_dm = 'f'", user_id)
+      .references(:chatroom_subs)
       .order(:id)
   end
 
@@ -83,20 +83,20 @@ class Channel < ApplicationRecord
     messages_between(last_id, entries).or(Message.children_of(entries))
   end
 
-  after_create_commit :generate_dm_channel_subs, :generate_public_channel_subs
+  after_create_commit :generate_dm_chatroom_subs, :generate_chatroom_subs
   after_update_commit :broadcast_update_channel
 
   private
 
-  def generate_public_channel_subs
+  def generate_chatroom_subs
     return unless owner
     subs.create(user_id: owner.id, skip_broadcast: true)
     broadcast_create
   end
 
-  def generate_dm_channel_subs
+  def generate_dm_chatroom_subs
     return unless has_dm?
-    subs.create(dm_channel_subs_params)
+    subs.create(dm_chatroom_subs_params)
     broadcast_to_new_dm_subs
   end
 
@@ -104,7 +104,7 @@ class Channel < ApplicationRecord
     broadcast_update partial: 'api/channels/update'
   end
 
-  def dm_channel_subs_params
+  def dm_chatroom_subs_params
     member_ids.each_with_index.reduce([]) do |memo, (user_id, idx)|
       in_sidebar = idx === 0
       memo << { user_id: user_id, in_sidebar: in_sidebar, skip_broadcast: true }

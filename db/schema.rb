@@ -15,16 +15,16 @@ ActiveRecord::Schema.define(version: 20181027210426) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "channel_subs", force: :cascade do |t|
+  create_table "chatroom_subs", force: :cascade do |t|
     t.bigint "user_id"
-    t.bigint "channel_id"
+    t.bigint "chatroom_id"
     t.boolean "in_sidebar", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["channel_id", "user_id"], name: "index_channel_subs_on_channel_id_and_user_id", unique: true
+    t.index ["chatroom_id", "user_id"], name: "index_chatroom_subs_on_chatroom_id_and_user_id", unique: true
   end
 
-  create_table "channels", force: :cascade do |t|
+  create_table "chatrooms", force: :cascade do |t|
     t.string "title"
     t.string "topic"
     t.string "slug", null: false
@@ -33,8 +33,8 @@ ActiveRecord::Schema.define(version: 20181027210426) do
     t.boolean "has_dm", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["slug"], name: "index_channels_on_slug", unique: true
-    t.index ["workspace_id"], name: "index_channels_on_workspace_id"
+    t.index ["slug"], name: "index_chatrooms_on_slug", unique: true
+    t.index ["workspace_id"], name: "index_chatrooms_on_workspace_id"
   end
 
   create_table "favorites", force: :cascade do |t|
@@ -50,12 +50,12 @@ ActiveRecord::Schema.define(version: 20181027210426) do
     t.text "body"
     t.integer "author_id", null: false
     t.string "slug", null: false
-    t.bigint "channel_id"
+    t.bigint "chatroom_id"
     t.integer "parent_message_id"
     t.string "entity_type", default: "entry"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["channel_id"], name: "index_messages_on_channel_id"
+    t.index ["chatroom_id"], name: "index_messages_on_chatroom_id"
     t.index ["slug"], name: "index_messages_on_slug", unique: true
   end
 
@@ -129,13 +129,13 @@ ActiveRecord::Schema.define(version: 20181027210426) do
     t.index ["slug"], name: "index_workspaces_on_slug", unique: true
   end
 
-  add_foreign_key "channel_subs", "channels", on_delete: :cascade
-  add_foreign_key "channel_subs", "users", on_delete: :cascade
-  add_foreign_key "channels", "workspaces", on_delete: :cascade
+  add_foreign_key "chatroom_subs", "chatrooms", on_delete: :cascade
+  add_foreign_key "chatroom_subs", "users", on_delete: :cascade
+  add_foreign_key "chatrooms", "workspaces", on_delete: :cascade
   add_foreign_key "favorites", "messages", on_delete: :cascade
   add_foreign_key "favorites", "users", on_delete: :cascade
   add_foreign_key "favorites", "workspaces", on_delete: :cascade
-  add_foreign_key "messages", "channels", on_delete: :cascade
+  add_foreign_key "messages", "chatrooms", on_delete: :cascade
   add_foreign_key "messages", "users", column: "author_id", on_delete: :cascade
   add_foreign_key "pins", "messages", on_delete: :cascade
   add_foreign_key "pins", "users", on_delete: :cascade

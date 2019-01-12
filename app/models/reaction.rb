@@ -3,7 +3,7 @@ class Reaction < ApplicationRecord
 
   belongs_to :user
   belongs_to :message
-  has_one :channel, through: :message
+  has_one :chatroom, through: :message
 
   def self.by_message_id(message_ids)
     includes(:message).where(message_id: message_ids)

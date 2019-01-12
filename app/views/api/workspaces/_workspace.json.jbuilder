@@ -6,13 +6,13 @@ json.owner do
   json.(workspace.owner, :id, :slug, :username, :email)
 end
 
-json.channels do
-  json.array! workspace.channels, :id, :title, :slug
+json.chatrooms do
+  json.array! workspace.chatrooms, :id, :title, :slug
 end
 
-json.channel_subs do
-  json.array! workspace.channel_subs do |channel_sub|
-    json.(channel_sub, :id)
-    json.channel_slug channel_sub.channel.slug
+json.chatroom_subs do
+  json.array! workspace.chatroom_subs do |chatroom_sub|
+    json.(chatroom_sub, :id)
+    json.chatroom_slug chatroom_sub.chatroom.slug
   end
 end

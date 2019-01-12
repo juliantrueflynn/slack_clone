@@ -9,10 +9,10 @@ message_ids = @favorites.pluck(:message_id)
 json.messages do
   messages = Message.where(id: message_ids)
 
-  json.array! messages.includes(:author, :channel, :parent_message) do |message|
+  json.array! messages.includes(:author, :chatroom, :parent_message) do |message|
     json.(message, *message.attributes.keys)
     json.author_slug message.author.slug
-    json.channel_slug message.channel.slug
+    json.chatroom_slug message.chatroom.slug
     json.parent_message_slug message.parent_message_slug
   end
 end

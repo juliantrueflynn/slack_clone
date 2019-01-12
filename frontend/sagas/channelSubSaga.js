@@ -20,7 +20,7 @@ function* callReadAction(actionCaller, sub) {
 
 function* channelSubCreate({ channelSub }) {
   try {
-    const response = yield call(apiCreate, 'channel_subs', channelSub);
+    const response = yield call(apiCreate, 'chatroom_subs', channelSub);
     yield callReadAction(updateRead, response);
   } catch (error) {
     yield put(createChannelSub.failure(error));
