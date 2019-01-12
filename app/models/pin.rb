@@ -7,7 +7,7 @@ class Pin < ApplicationRecord
   has_one :chatroom, through: :message
 
   def broadcast_name
-    "channel_#{channel_slug}"
+    "chatroom_#{chatroom_slug}"
   end
 
   def message_slug
@@ -18,8 +18,8 @@ class Pin < ApplicationRecord
     user.slug
   end
 
-  def channel_slug
-    channel ? channel.slug : nil
+  def chatroom_slug
+    chatroom ? chatroom.slug : nil
   end
 
   private

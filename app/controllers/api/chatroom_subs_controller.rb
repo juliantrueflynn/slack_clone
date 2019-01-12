@@ -2,7 +2,7 @@ class Api::ChatroomSubsController < ApplicationController
   before_action :set_chatroom_sub, except: :create
 
   def create
-    @chatroom_sub = current_user.chatroom_subs.build(channel_sub_params)
+    @chatroom_sub = current_user.chatroom_subs.build(chatroom_sub_params)
 
     if @chatroom_sub.save
       render 'api/chatroom_subs/show'
@@ -30,11 +30,11 @@ class Api::ChatroomSubsController < ApplicationController
   private
 
   def set_chatroom_sub
-    channel = Chatroom.find_by_slug(params[:channel_slug])
-    @chatroom_sub = channel.subs.find_by(user_id: current_user.id)
+    chatroom = Chatroom.find_by_slug(params[:chatroom_slug])
+    @chatroom_sub = chatroom.subs.find_by(user_id: current_user.id)
   end
 
-  def channel_sub_params
-    params.require(:chatroom_sub).permit(:channel_id)
+  def chatroom_sub_params
+    params.require(:chatroom_sub).permit(:chatroom_id)
   end
 end

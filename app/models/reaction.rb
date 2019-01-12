@@ -10,7 +10,7 @@ class Reaction < ApplicationRecord
   end
 
   def broadcast_name
-    "channel_#{channel.slug}"
+    "chatroom_#{chatroom.slug}"
   end
 
   def message_slug

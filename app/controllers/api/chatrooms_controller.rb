@@ -1,26 +1,26 @@
 class Api::ChatroomsController < ApplicationController
-  before_action :set_channel, only: [:show, :update]
+  before_action :set_chatroom, only: [:show, :update]
 
   def index
     workspace = Workspace.find_by(slug: params[:workspace_slug])
-    @channels = workspace.channels.without_dm.includes(:owner)
+    @chatrooms = workspace.chatrooms.without_dm.includes(:owner)
   end
 
   def show
   end
 
   def create
-    @chatroom = current_user.created_chatrooms.build(channel_params)
+    @chatroom = current_user.created_chatrooms.build(chatroom_params)
 
     if @chatroom.save
-      render partial: 'api/channels/channel', object: @chatroom
+      render partial: 'api/chatrooms/chatroom', object: @chatroom
     else
       render json: @chatroom.errors.full_messages, status: 422
     end
   end
 
   def update
-    if @chatroom.update(channel_params)
+    if @chatroom.update(chatroom_params)
       render json: @chatroom
     else
       render json: @chatroom.errors.full_messages, status: 422
@@ -29,11 +29,11 @@ class Api::ChatroomsController < ApplicationController
 
   private
 
-  def set_channel
+  def set_chatroom
     @chatroom = Chatroom.find_by(slug: params[:slug])
   end
 
-  def channel_params
-    params.require(:channel).permit(:title, :slug, :topic, :workspace_id)
+  def chatroom_params
+    params.require(:chatroom).permit(:title, :slug, :topic, :workspace_id)
   end
 end

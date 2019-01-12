@@ -3,11 +3,11 @@ class Api::DmChatsController < ApplicationController
 
   def create
     workspace = Workspace.find_by_slug(params[:workspace_slug])
-    @chatroom = workspace.channels.build(dm_chat_params)
+    @chatroom = workspace.chatrooms.build(dm_chat_params)
     @chatroom.member_ids = [current_user.id, params[:dm_chat][:member_id]]
 
     if @chatroom.save
-      render partial: 'api/channels/channel', object: @chatroom
+      render partial: 'api/chatrooms/chatroom', object: @chatroom
     else
       render json: @chatroom.errors.full_messages, status: 422
     end
@@ -18,7 +18,7 @@ class Api::DmChatsController < ApplicationController
   def is_duplicate?
     workspace = Workspace.find_by_slug(params[:workspace_slug])
     user_ids = [current_user.id, params[:dm_chat][:member_id]]
-    workspace.channels.has_dm_with_user_ids?(user_ids)
+    workspace.chatrooms.has_dm_with_user_ids?(user_ids)
   end
 
   def ensure_unique_dm_chat

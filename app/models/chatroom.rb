@@ -42,8 +42,8 @@ class Chatroom < ApplicationRecord
   def self.by_user_ids(users_ids)
     joins(:subs)
       .where(chatroom_subs: { user_id: users_ids })
-      .group('channels.id')
-      .having('COUNT(channels.id) > 1')
+      .group('chatrooms.id')
+      .having('COUNT(chatrooms.id) > 1')
       .take
   end
 
@@ -53,7 +53,7 @@ class Chatroom < ApplicationRecord
 
   def self.without_user_and_dm(user_id)
     includes(:subs)
-      .where("chatroom_subs.user_id != ? OR channels.has_dm = 'f'", user_id)
+      .where("chatroom_subs.user_id != ? OR chatrooms.has_dm = 'f'", user_id)
       .references(:chatroom_subs)
       .order(:id)
   end
@@ -84,7 +84,7 @@ class Chatroom < ApplicationRecord
   end
 
   after_create_commit :generate_dm_chatroom_subs, :generate_chatroom_subs
-  after_update_commit :broadcast_update_channel
+  after_update_commit :broadcast_update_chatroom
 
   private
 
@@ -100,8 +100,8 @@ class Chatroom < ApplicationRecord
     broadcast_to_new_dm_subs
   end
 
-  def broadcast_update_channel 
-    broadcast_update partial: 'api/channels/update'
+  def broadcast_update_chatroom 
+    broadcast_update partial: 'api/chatrooms/update'
   end
 
   def dm_chatroom_subs_params
@@ -114,7 +114,7 @@ class Chatroom < ApplicationRecord
   def broadcast_to_new_dm_subs
     subs.each do |dm_sub|
       broadcast_create broadcast_name: "dm_user_#{dm_sub.user.id}",
-        partial: 'api/channels/channel'
+        partial: 'api/chatrooms/chatroom'
     end
   end
 

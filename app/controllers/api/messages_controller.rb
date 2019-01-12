@@ -2,7 +2,7 @@ class Api::MessagesController < ApplicationController
   before_action :set_message, only: [:show, :update, :destroy]
 
   def index
-    @channel = Chatroom.find_by_slug(params[:channel_slug])
+    @chatroom = Chatroom.find_by_slug(params[:chatroom_slug])
   end
 
   def create
@@ -38,6 +38,6 @@ class Api::MessagesController < ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:body, :channel_id, :parent_message_id)
+    params.require(:message).permit(:body, :chatroom_id, :parent_message_id)
   end
 end
