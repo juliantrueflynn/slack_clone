@@ -28,7 +28,7 @@ const ModalSearchSidebar = ({
 
   const isChecked = {
     people: id => peopleFilter.includes(id),
-    chatroom: id => channelFilter.includes(id),
+    channel: id => channelFilter.includes(id),
   };
 
   const checkboxMapper = ({ id, title, filter }, prefix) => ({
