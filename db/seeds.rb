@@ -6,7 +6,7 @@ def random_num(min: 3, max: 9)
   [*min.to_i..max.to_i].sample
 end
 
-def random_message_body_text
+def message_body_text
   [
     Faker::Lorem.paragraph(random_num, rand < 0.5, random_num),
     Faker::Lorem.paragraph(random_num),
@@ -18,54 +18,135 @@ def random_message_body_text
   ].sample
 end
 
-def generate_message_body
-  '{"blocks":[{"key":"' +
-  SecureRandom.urlsafe_base64(6) +
-  '","text":"' +
-  random_message_body_text +
-  '","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'
+def message_body
+  '{"blocks":[{"key":"' + SecureRandom.urlsafe_base64(6) + '","text":"' +
+  message_body_text + '","type":"unstyled","depth":0,"inlineStyleRanges":[],''"entityRanges":[],"data":{}}],"entityMap":{}}'
 end
 
-def generate_workspace(user)
+def chat_with_entries
+  Channel.left_joins(:messages)
+    .where(messages: { entity_type: 'entry' })
+    .distinct
+end
+
+def read_create_or_update(entity, user_id)
+  entity.reads.find_or_initialize_by(user_id: user_id).save!
+end
+
+def read_destroy(entity, user_id)
+  read = entity.reads.find_by(
+    readable_id: entity.id,
+    readable_type: entity.class.name,
+    user_id: user_id
+  )
+  read.delete if read
+end
+
+def workspace_with_user_not_subbed(user)
+  Workspace.includes(:workspace_subs)
+    .where.not(workspace_subs: { user_id: user })
+    .sample
+end
+
+def chat_with_user_not_subbed(workspace, user)
+  workspace.channels.includes(:subs)
+    .where.not(channel_subs: { user_id: user })
+    .sample
+end
+
+def seed_workspace_create(user)
   title = Faker::Company.unique.name
   slug = title.parameterize
   workspace = user.created_workspaces.create!(title: title, slug: slug)
 end
 
-def seed_workspace_sub
+def seed_workspace_sub_create
   user = User.all.sample
-  workspace = Workspace.includes(:workspace_subs).where.not(workspace_subs: { user_id: user }).take
+  workspace = workspace_with_user_not_subbed(user)
   return unless workspace
   workspace.workspace_subs.find_or_create_by!(user_id: user.id)
 end
 
-def seed_chat_subs
-  user = User.all.sample
+def seed_workspace_sub_update
+  user = User.all.where.not(id: 1).sample
   workspace = user.workspaces.sample
-  return unless workspace
-  chat = workspace.channels.includes(:subs).where.not(channel_subs: { user_id: user }).take
-  chat.subs.find_or_create_by!(user_id: user.id)
-  chat.reads.find_or_create_by!(user_id: user.id)
+  workspace_sub = workspace.workspace_subs.find_by(user_id: user.id)
+  workspace_sub.update!(is_member: !workspace_sub.is_member)
+
+  unless !workspace_sub.is_member
+    user.channels.where(workspace_id: workspace.id).each do |chat|
+      read_destroy(chat, user.id)
+    end
+  end
 end
 
-def seed_chat
-  user = User.all.sample
-  workspace = user.workspaces.sample  
+def seed_chat_sub_create
+  workspace = Workspace.all.sample
+  user = workspace.users.sample
+  chat = chat_with_user_not_subbed(workspace, user)
+  return unless chat
+  chat.subs.find_or_create_by!(user_id: user.id)
+  read_create_or_update(chat, user.id)
+end
+
+def seed_chat_sub_destroy
+  user = User.all.where.not(id: 1).sample
+  chat = user.channels.sample
+  default_chats = chat.workspace.default_channels
+  channel_sub = chat.subs.where.not(id: default_chats).find_by(user_id: user.id)
+  read_destroy(chat, user.id)
+end
+
+def seed_chat_create
+  workspace = Workspace.all.sample
+  user = workspace.users.sample
   return unless workspace
-  title = Faker::Company.unique.buzzword
-  topic = (rand < 0.2 ? Faker::Company.bs : nil)
-  user.created_channels.create!(
-    title: title,
-    topic: topic,
+  chat = user.created_channels.create!(
+    title: Faker::Company.unique.buzzword,
+    topic: (rand < 0.2 ? Faker::Company.bs : nil),
     workspace_id: workspace.id
   )
+  read_create_or_update(chat, user.id)
 end
 
-def generate_message_interaction(chat)
+def seed_parent_message_create
+  chat = Channel.all.sample
   user = chat.members.sample
-  message = chat.messages.with_entry_type.sample
-  return unless message
-  user.favorites.find_or_create_by!(message_id: message.id) if rand < 0.3
+
+  loop do
+    message = user.messages.create!(body: message_body, channel_id: chat.id)
+    read_create_or_update(chat, user.id)
+    break if rand < 0.7
+  end
+end
+
+def seed_child_message_create
+  chat = chat_with_entries.sample
+  user = chat.members.sample
+  parent = chat.messages.by_entry_parent.sample
+
+  loop do
+    reply = parent.children.create!(
+      body: message_body,
+      author_id: user.id,
+      channel_id: chat.id
+    )
+    read_create_or_update(parent, user.id)
+    break if rand < 0.7
+  end
+end
+
+def seed_favorite_create
+  chat = chat_with_entries.sample
+  user = chat.members.sample
+  message = chat.messages.by_entry_parent.sample
+  user.favorites.find_or_create_by!(message_id: message.id)
+end
+
+def seed_reaction_create
+  chat = chat_with_entries.sample
+  user = chat.members.sample
+  message = chat.messages.sample
   emoji = REACTIONS.sample
   user.reactions.find_or_create_by!(emoji: emoji, message_id: message.id)
 end
@@ -80,91 +161,23 @@ User.create!(email: "demo", username: "demouser", password: "123456")
   )
 end
 
-3.times { generate_workspace(User.first) }
+3.times { seed_workspace_create(User.first) }
 
-5.times do
+3.times do
   user = User.where.not(id: 1).sample
-  generate_workspace(user)
+  seed_workspace_create(user)
 end
 
-15.times { seed_workspace_sub }
-10.times { seed_chat }
-30.times { seed_chat_subs }
-
-50.times do
-  user = User.all.sample
-  chat = user.channels.sample
-  next unless chat
-
-  parent_entries = chat.messages.by_entry_parent
-
-  loop do
-    user.messages.create!(body: generate_message_body, channel_id: chat.id)
-    break if rand < 0.4
-  end
-
-  loop do
-    break if parent_entries.empty?
-    break if rand < 0.75
-
-    parent = parent_entries.sample
-    user.messages.create!(
-      body: generate_message_body,
-      channel_id: chat.id,
-      parent_message_id: parent.id
-    )
-  end
-
-  unless parent_entries.empty?
-    convo = parent_entries.sample
-    user.messages.create!(
-      body: generate_message_body,
-      channel_id: convo.channel_id,
-      parent_message_id: convo.id
-    )
-  end
-
-  generate_message_interaction(chat) if rand < 0.7
-end
-
-20.times do
-  user = User.all.except(1).sample
-  chat = user.channels.sample
-  next unless chat
-
-  loop do
-    user.messages.create(body: generate_message_body, channel_id: chat.id)
-    break if rand < 0.4
-  end
-
-  parent_entries = chat.messages.by_entry_parent
-
-  loop do
-    break if parent_entries.empty?
-    break if rand < 0.75
-
-    parent = parent_entries.sample
-    user.messages.create(
-      body: generate_message_body,
-      channel_id: chat.id,
-      parent_message_id: parent.id
-    )
-  end
-
-  generate_message_interaction(chat) if rand < 0.7
-end
-
-User.first.workspaces.each do |workspace|
-  all_convos = workspace.messages.convo_parents_with_author_id(1)
-  all_convos.each do |convo|
-    convo.reads.find_or_create_by!(user_id: user.id)
-  end
-end
-
-User.first.channels.each do |workspace|
-  chats = User.first.channels.where(workspace_id: workspace.id)
-
-  chats.each do |chat|
-    chat.messages.create!(body: generate_message_body, author_id: 1)
-  end
-end
+60.times { seed_workspace_sub_create }
+20.times { seed_chat_create }
+20.times { seed_chat_sub_create }
+5.times { seed_chat_sub_destroy }
+50.times { seed_parent_message_create }
+30.times { seed_child_message_create }
+30.times { seed_chat_sub_create }
+10.times { seed_chat_sub_destroy }
+60.times { seed_reaction_create }
+30.times { seed_favorite_create }
+3.times { seed_workspace_sub_update }
+20.times { seed_parent_message_create }
+30.times { seed_child_message_create }
