@@ -155,8 +155,8 @@ end
   seed_workspace_create(user)
 end
 
-45.times { seed_workspace_sub_create }
-40.times { seed_chat_create }
+40.times { seed_workspace_sub_create }
+45.times { seed_chat_create }
 35.times { seed_chat_sub_create }
 5.times { seed_chat_sub_destroy }
 50.times { seed_parent_message_create }
