@@ -17,11 +17,11 @@ class LeftSidebar extends React.Component {
     this.handleHistoryPush = this.handleHistoryPush.bind(this);
   }
 
-  handleDmUnsubClick(e, channelSlug) {
+  handleDmUnsubClick(e, chatroomSlug) {
     e.preventDefault();
 
-    const { updateChannelSubRequest } = this.props;
-    updateChannelSubRequest(channelSlug);
+    const { updateChatroomSubRequest } = this.props;
+    updateChatroomSubRequest(chatroomSlug);
   }
 
   handleHistoryPush(linkUrl) {
@@ -85,7 +85,7 @@ class LeftSidebar extends React.Component {
       },
     ];
 
-    const channelsMenuItems = subbedChannels.map(ch => ({
+    const chatroomsMenuItems = subbedChannels.map(ch => ({
       ...ch,
       icon: <FontAwesomeIcon icon="hashtag" size="sm" />,
     }));
@@ -113,7 +113,7 @@ class LeftSidebar extends React.Component {
       {
         key: 'chats',
         component: Menu,
-        items: channelsMenuItems,
+        items: chatroomsMenuItems,
         widgetTitle: (
           <SuffixButton icon="plus-circle" onClick={() => openChannelFormModal(workspace.id)}>
             <Button unStyled buttonFor="chats" onClick={openChannelsListModal}>Channels</Button>

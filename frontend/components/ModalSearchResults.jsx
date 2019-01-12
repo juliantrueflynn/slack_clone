@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ModalSearchItem from './ModalSearchItem';
 import './ModalSearchResults.css';
 
-const ModalSearchResults = ({ results, channelsMap, match: { url } }) => {
+const ModalSearchResults = ({ results, chatroomsMap, match: { url } }) => {
   let resultsText = `${results.length} results`;
   if (results.length === 0) {
     resultsText = 'No matches found';
@@ -25,7 +25,7 @@ const ModalSearchResults = ({ results, channelsMap, match: { url } }) => {
         <ModalSearchItem
           key={message.slug}
           message={message}
-          channelsMap={channelsMap}
+          chatroomsMap={chatroomsMap}
           url={url}
         />
       ))}

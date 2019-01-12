@@ -8,15 +8,15 @@ import './ModalSearchSidebar.css';
 const ModalSearchSidebar = ({
   isLoading,
   messages,
-  channelsMap,
+  chatroomsMap,
   usersMap,
   peopleFilter,
   channelFilter,
   toggleCheckbox,
 }) => {
   const channelsFilterMap = messages.reduce((acc, curr) => {
-    const channel = channelsMap[curr.channelSlug];
-    acc[channel.slug] = { id: channel.slug, title: channel.title, filter: 'channel' };
+    const ch = chatroomsMap[curr.chatroomSlug];
+    acc[ch.slug] = { id: ch.slug, title: ch.title, filter: 'channel' };
     return acc;
   }, {});
 
@@ -28,7 +28,7 @@ const ModalSearchSidebar = ({
 
   const isChecked = {
     people: id => peopleFilter.includes(id),
-    channel: id => channelFilter.includes(id),
+    chatroom: id => channelFilter.includes(id),
   };
 
   const checkboxMapper = ({ id, title, filter }, prefix) => ({

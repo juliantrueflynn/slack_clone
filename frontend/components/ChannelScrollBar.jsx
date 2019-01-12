@@ -19,7 +19,7 @@ class ChannelScrollBar extends React.Component {
 
   componentDidMount() {
     const {
-      channel: { slug, scrollLoc },
+      chatroom: { slug, scrollLoc },
       scrollTo,
       scrollToBottom,
       currentScrollTop,
@@ -75,7 +75,7 @@ class ChannelScrollBar extends React.Component {
   }
 
   updateHasHistory() {
-    const { messages, channel: { earliestMessageSlug } } = this.props;
+    const { messages, chatroom: { earliestMessageSlug } } = this.props;
     const hasHistory = messages[0] && messages[0].slug !== earliestMessageSlug;
 
     this.setState({ hasHistory });
@@ -104,7 +104,7 @@ class ChannelScrollBar extends React.Component {
   render() {
     const {
       isFetching,
-      channel,
+      chatroom,
       messages,
       currentUserSlug,
       openModal,
@@ -130,7 +130,7 @@ class ChannelScrollBar extends React.Component {
           style={style}
         >
           <ChannelBlurb
-            channel={channel}
+            chatroom={chatroom}
             blurbRef={this.blurbRef}
             currentUserSlug={currentUserSlug}
             openModal={openModal}
@@ -142,7 +142,7 @@ class ChannelScrollBar extends React.Component {
           <MessagesListContainer
             role="listitem"
             messages={messages}
-            isDm={channel.hasDm}
+            isDm={chatroom.hasDm}
             isHighlightable
             isHoverable
           />

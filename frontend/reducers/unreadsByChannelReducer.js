@@ -2,7 +2,7 @@ import merge from 'lodash.merge';
 import {
   READ,
   WORKSPACE,
-  CHANNEL,
+  CHATROOM,
   UNREAD_UPDATE,
   UNREAD_CLEAR_ALL,
   WORKSPACE_SUB,
@@ -17,7 +17,7 @@ const unreadsByChannelReducer = (state = _defaultState, action) => {
 
   switch (action.type) {
     case WORKSPACE.SHOW.RECEIVE:
-      return action.workspace.channels.reduce((acc, curr) => ({ ...acc, [curr.slug]: [] }), {});
+      return action.workspace.chatrooms.reduce((acc, curr) => ({ ...acc, [curr.slug]: [] }), {});
     case READ.INDEX.RECEIVE: {
       const { messages } = action.messages;
 
@@ -27,13 +27,13 @@ const unreadsByChannelReducer = (state = _defaultState, action) => {
       });
 
       messages.forEach((msg) => {
-        nextState[msg.channelSlug].push(msg.slug);
+        nextState[msg.chatroomSlug].push(msg.slug);
       });
 
       return merge({}, state, nextState);
     }
-    case CHANNEL.CREATE.RECEIVE:
-      nextState = { [action.channel.channel.slug]: [] };
+    case CHATROOM.CREATE.RECEIVE:
+      nextState = { [action.chatroom.chatroom.slug]: [] };
       return merge({}, state, nextState);
     case UNREAD_UPDATE: {
       const { readableType, slug, messageSlug } = action.unread;

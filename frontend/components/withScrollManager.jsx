@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getConvoLastEntry, getChannelLastEntry } from '../reducers/selectors';
+import { getConvoLastEntry, getChatroomLastEntry } from '../reducers/selectors';
 
 const withScrollManager = scrollBarFor => (WrappedComponent) => {
   const mapStateToProps = (state) => {
@@ -13,7 +13,7 @@ const withScrollManager = scrollBarFor => (WrappedComponent) => {
     }
 
     if (scrollBarFor === 'Channel') {
-      lastMessage = getChannelLastEntry(state);
+      lastMessage = getChatroomLastEntry(state);
     }
 
     return { lastMessage, currentUserSlug: currentUser.slug };

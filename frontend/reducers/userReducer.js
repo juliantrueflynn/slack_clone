@@ -2,8 +2,8 @@ import merge from 'lodash.merge';
 import {
   WORKSPACE,
   USER_APPEARANCE,
-  CHANNEL_SUB,
-  CHANNEL,
+  CHATROOM_SUB,
+  CHATROOM,
   WORKSPACE_SUB,
   SIGN_OUT,
   USER,
@@ -34,25 +34,25 @@ const userReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.RECEIVE: {
-      const { members, channelSubs } = action.workspace;
+      const { members, chatroomSubs } = action.workspace;
 
       nextState = members.reduce((acc, curr) => ({
         ...acc,
         [curr.slug]: { ...curr, subs: [], status: curr.status || 'offline' },
       }), {});
 
-      channelSubs.forEach((sub) => {
+      chatroomSubs.forEach((sub) => {
         nextState[sub.userSlug].subs.push(sub.id);
       });
 
       return merge({}, state, nextState);
     }
     case WORKSPACE_SUB.CREATE.RECEIVE: {
-      const { user, channelSubs } = action.workspaceSub;
+      const { user, chatroomSubs } = action.workspaceSub;
 
       nextState = { [user.slug]: { subs: [], ...user } };
 
-      channelSubs.forEach((sub) => {
+      chatroomSubs.forEach((sub) => {
         nextState[user.slug].subs.push(sub.id);
       });
 
@@ -65,23 +65,23 @@ const userReducer = (state = {}, action) => {
       nextState = { [slug]: { ...rest, joinedAt } };
       return merge({}, state, nextState);
     }
-    case CHANNEL_SUB.CREATE.RECEIVE: {
-      const { channelSub: { id, userSlug } } = action;
+    case CHATROOM_SUB.CREATE.RECEIVE: {
+      const { chatroomSub: { id, userSlug } } = action;
       nextState = merge({}, state);
       nextState[userSlug].subs.push(id);
       return nextState;
     }
-    case CHANNEL_SUB.DESTROY.RECEIVE: {
-      const { channelSub: { id, userSlug } } = action;
+    case CHATROOM_SUB.DESTROY.RECEIVE: {
+      const { chatroomSub: { id, userSlug } } = action;
       nextState = {};
       nextState[userSlug] = { subs: state[userSlug].subs.filter(subId => id !== subId) };
       return merge({}, state, nextState);
     }
-    case CHANNEL.CREATE.RECEIVE: {
-      const { channelSubs } = action.channel;
+    case CHATROOM.CREATE.RECEIVE: {
+      const { chatroomSubs } = action.chatroom;
 
       nextState = {};
-      channelSubs.forEach((sub) => {
+      chatroomSubs.forEach((sub) => {
         nextState[sub.userSlug] = { subs: [sub.id] };
       });
 

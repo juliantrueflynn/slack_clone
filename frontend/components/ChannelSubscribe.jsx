@@ -10,19 +10,19 @@ class ChannelSubscribe extends React.Component {
   }
 
   clickSubscribe() {
-    const { createChannelSubRequest, channelId } = this.props;
-    createChannelSubRequest(channelId);
+    const { createChatroomSubRequest, chatroomId } = this.props;
+    createChatroomSubRequest(chatroomId);
   }
 
   render() {
     const {
-      channelTitle,
+      chatroomTitle,
       createdAt,
       ownerName,
       matchUrl,
     } = this.props;
 
-    const chatTitle = ` #${channelTitle}`;
+    const chatTitle = ` #${chatroomTitle}`;
     const date = dateUtil(createdAt);
     let dateCreated;
     if (date.isToday()) {

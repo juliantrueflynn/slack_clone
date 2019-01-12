@@ -27,23 +27,23 @@ class ChatPageSwitch extends React.Component {
       drawerType,
       closeDrawer,
       chatPath,
-      channel,
+      chatroom,
       isLoading,
     } = this.props;
 
     if (chatPath !== prevProps.chatPath) {
       updateChatPath();
 
-      if (channel && channel.shouldFetch) {
+      if (chatroom && chatroom.shouldFetch) {
         this.getChatData();
       }
 
-      if (!channel) {
+      if (!chatroom) {
         this.getChatData();
       }
     }
 
-    if (channel && drawerType && isExact && !prevProps.isExact) {
+    if (chatroom && drawerType && isExact && !prevProps.isExact) {
       if (chatPath === prevProps.chatPath) {
         closeDrawer();
         return;
@@ -52,7 +52,7 @@ class ChatPageSwitch extends React.Component {
 
     this.updateHistoryDrawerPath();
 
-    if (!isLoading.channel && prevProps.isLoading) {
+    if (!isLoading.chatroom && prevProps.isLoading) {
       this.updateLoadingState();
     }
   }
@@ -67,10 +67,10 @@ class ChatPageSwitch extends React.Component {
       match: { url, isExact },
       drawerType,
       drawerSlug,
-      channel,
+      chatroom,
     } = this.props;
 
-    if (isExact && drawerType === 'details' && !channel) {
+    if (isExact && drawerType === 'details' && !chatroom) {
       return null;
     }
 
@@ -107,15 +107,15 @@ class ChatPageSwitch extends React.Component {
       routes,
       messages,
       users,
-      channel,
-      channels,
+      chatroom,
+      chatrooms,
       currentUser,
       isLoading,
       clearAllUnread,
       openModal,
       updateScrollLocation,
       fetchHistoryRequest,
-      createChannelSubRequest,
+      createChatroomSubRequest,
       createMessageRequest,
       match: { url, params: { workspaceSlug } },
     } = this.props;
@@ -135,8 +135,8 @@ class ChatPageSwitch extends React.Component {
               <AllUnreads
                 messagesMap={messages}
                 users={users}
-                isLoading={isLoading.channel}
-                channels={channels}
+                isLoading={isLoading.chatroom}
+                chatrooms={chatrooms}
                 clearAllUnread={clearAllUnread}
               />
             )}
@@ -144,21 +144,21 @@ class ChatPageSwitch extends React.Component {
               <AllThreads
                 messages={messages}
                 users={users}
-                isLoading={isLoading.channel}
+                isLoading={isLoading.chatroom}
                 currentUserSlug={currentUser.slug}
                 workspaceSlug={workspaceSlug}
                 createMessageRequest={createMessageRequest}
               />
             )}
-            {channel && (
+            {chatroom && (
               <Channel
                 messages={messages}
                 isLoading={isLoading}
-                channel={channel}
+                chatroom={chatroom}
                 currentUserSlug={currentUser.slug}
                 openModal={openModal}
                 fetchHistoryRequest={fetchHistoryRequest}
-                createChannelSubRequest={createChannelSubRequest}
+                createChatroomSubRequest={createChatroomSubRequest}
                 createMessageRequest={createMessageRequest}
                 updateScrollLocation={updateScrollLocation}
                 matchUrl={url}

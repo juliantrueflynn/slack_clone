@@ -9,7 +9,7 @@ const RightSidebarModal = ({
   closeModal,
   openModalProfile,
   drawerType,
-  channel,
+  chatroom,
   toggleLink,
 }) => {
   if (!isOpen) {
@@ -22,7 +22,7 @@ const RightSidebarModal = ({
       label: 'Channel Details',
       icon: <FontAwesomeIcon icon="info-circle" fixedWidth />,
       onClick: () => toggleLink('details'),
-      isOpen: channel && drawerType === 'details',
+      isOpen: chatroom && drawerType === 'details',
     },
     {
       key: 'favorites',

@@ -55,16 +55,16 @@ class ChannelHeaderNavbar extends React.Component {
 
   handleChannelSubToggle() {
     const {
-      channel,
-      createChannelSubRequest,
-      destroyChannelSubRequest,
+      chatroom,
+      createChatroomSubRequest,
+      destroyChatroomSubRequest,
       closeDropdown,
     } = this.props;
 
-    if (channel.isSub) {
-      destroyChannelSubRequest();
+    if (chatroom.isSub) {
+      destroyChatroomSubRequest();
     } else {
-      createChannelSubRequest(channel.id);
+      createChatroomSubRequest(chatroom.id);
     }
 
     closeDropdown();
@@ -72,7 +72,7 @@ class ChannelHeaderNavbar extends React.Component {
 
   render() {
     const {
-      channel,
+      chatroom,
       openChannelEditModal,
       chatTitle,
       drawerType,
@@ -98,22 +98,22 @@ class ChannelHeaderNavbar extends React.Component {
         label: `View ${chatTitle}’s profile`,
         link: `${url}/team/${dmChannelUser.slug}`,
         onClick: closeDropdown,
-        condition: channel && channel.hasDm,
+        condition: chatroom && chatroom.hasDm,
       },
       {
         label: 'Edit channel',
         onClick: openChannelEditModal,
-        condition: channel && !channel.hasDm,
+        condition: chatroom && !chatroom.hasDm,
       },
       {
         label: `Join ${chatTitle}`,
         onClick: this.handleChannelSubToggle,
-        condition: channel && !channel.hasDm && !channel.isSub,
+        condition: chatroom && !chatroom.hasDm && !chatroom.isSub,
       },
       {
         label: `Leave ${chatTitle}`,
         onClick: this.handleChannelSubToggle,
-        condition: channel && !channel.hasDm && channel.isSub && isNotDefaultChannel,
+        condition: chatroom && !chatroom.hasDm && chatroom.isSub && isNotDefaultChannel,
       }
     ];
 
@@ -127,7 +127,7 @@ class ChannelHeaderNavbar extends React.Component {
       {
         key: 'edit-dropdown',
         icon: <FontAwesomeIcon icon="cog" fixedWidth />,
-        dropdownType: 'DROPDOWN_CHANNEL_EDIT',
+        dropdownType: 'DROPDOWN_CHATROOM_EDIT',
         dropdownChild: <Menu items={ddMenuItems} />
       }
     ];
@@ -148,7 +148,7 @@ class ChannelHeaderNavbar extends React.Component {
 
     return (
       <nav className="ChannelHeaderNavbar">
-        {channel && <Menu items={channelMenuItems} menuFor="edit" isRow unStyled />}
+        {chatroom && <Menu items={channelMenuItems} menuFor="edit" isRow unStyled />}
         <SearchBar
           searchQuery={searchQuery}
           destroySearchQuery={destroySearchQuery}
@@ -163,7 +163,7 @@ class ChannelHeaderNavbar extends React.Component {
           isOpen={isSidebarModalOpen}
           drawerType={drawerType}
           toggleLink={this.handleLinkToggle}
-          channel={channel}
+          chatroom={chatroom}
           openModalProfile={openModalProfile}
           closeModal={this.handleSidebarModalToggle}
         />

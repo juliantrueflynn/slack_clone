@@ -90,7 +90,7 @@ class ModalSearch extends React.Component {
     const { channelFilter, peopleFilter } = this.state;
 
     const results = messages.filter(msg => (
-      !channelFilter.length || channelFilter.includes(msg.channelSlug)
+      !channelFilter.length || channelFilter.includes(msg.chatroomSlug)
     )).filter(msg => (
       !peopleFilter.length || peopleFilter.includes(msg.authorSlug)
     ));
@@ -118,7 +118,7 @@ class ModalSearch extends React.Component {
     const {
       usersMap,
       messages,
-      channelsMap,
+      chatroomsMap,
       searchQuery,
       isLoading,
       fetchSearchRequest,
@@ -154,11 +154,11 @@ class ModalSearch extends React.Component {
           </Button>
         </div>
         <ScrollBar scrollBarRef={this.scrollBarRef} style={{ height }}>
-          <ModalSearchResults results={results} channelsMap={channelsMap} />
+          <ModalSearchResults results={results} chatroomsMap={chatroomsMap} />
           <ModalSearchSidebar
             isLoading={isLoading}
             messages={messages}
-            channelsMap={channelsMap}
+            chatroomsMap={chatroomsMap}
             usersMap={usersMap}
             peopleFilter={peopleFilter}
             channelFilter={channelFilter}

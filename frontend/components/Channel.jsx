@@ -20,26 +20,26 @@ class Channel extends React.Component {
 
   componentDidUpdate(prevProps) {
     const {
-      channel,
+      chatroom,
       windowWidth: winWidth,
       windowHeight: winHeight,
       isLoading,
     } = this.props;
-    const { channel: { isSub: prevIsSub, slug: prevSlug } } = prevProps;
+    const { chatroom: { isSub: prevIsSub, slug: prevSlug } } = prevProps;
 
     const hasResized = winHeight !== prevProps.windowHeight || winWidth !== prevProps.windowWidth;
-    const hasLoaded = isLoading.channel !== prevProps.isLoading.channel;
+    const hasLoaded = isLoading.chatroom !== prevProps.isLoading.chatroom;
 
-    if (hasLoaded || channel.isSub !== prevIsSub || hasResized) {
+    if (hasLoaded || chatroom.isSub !== prevIsSub || hasResized) {
       this.updateSizeDimensions();
     }
 
-    if (channel.slug !== prevSlug) {
+    if (chatroom.slug !== prevSlug) {
       this.updateHasInitLoadDone(false);
       this.updateSizeDimensions();
     }
 
-    if (channel.slug === prevSlug) {
+    if (chatroom.slug === prevSlug) {
       this.updateHasInitLoadDone(true);
     }
   }
@@ -68,20 +68,20 @@ class Channel extends React.Component {
   render() {
     const {
       isLoading,
-      channel,
+      chatroom,
       messages,
       currentUserSlug,
       openModal,
       matchUrl,
       updateScrollLocation,
-      createChannelSubRequest,
+      createChatroomSubRequest,
       fetchHistoryRequest,
       createMessageRequest,
     } = this.props;
     const { hasInitLoadDone, height } = this.state;
-    const { isSub, hasDm, title } = channel;
+    const { isSub, hasDm, title } = chatroom;
 
-    const hasLoaded = !isLoading.channel && hasInitLoadDone;
+    const hasLoaded = !isLoading.chatroom && hasInitLoadDone;
     const placeholder = hasDm ? `@${title}` : `#${title}`;
     const formPlaceholder = placeholder && `Message ${placeholder}`;
     const style = { height };
@@ -91,7 +91,7 @@ class Channel extends React.Component {
         <div className="Channel__body">
           {hasLoaded && (
             <ChannelScrollBar
-              channel={channel}
+              chatroom={chatroom}
               messages={messages}
               openModal={openModal}
               currentUserSlug={currentUserSlug}
@@ -105,19 +105,19 @@ class Channel extends React.Component {
         </div>
         {isSub && (
           <MessageForm
-            channelId={channel.id}
+            chatroomId={chatroom.id}
             placeholder={formPlaceholder}
             createMessageRequest={createMessageRequest}
           />
         )}
         {hasLoaded && !isSub && !hasDm && (
           <ChannelSubscribe
-            createChannelSubRequest={createChannelSubRequest}
+            createChatroomSubRequest={createChatroomSubRequest}
             matchUrl={matchUrl}
-            channelId={channel.id}
-            channelTitle={channel.title}
-            createdAt={channel.createdAt}
-            ownerName={channel.ownerName}
+            chatroomId={chatroom.id}
+            chatroomTitle={chatroom.title}
+            createdAt={chatroom.createdAt}
+            ownerName={chatroom.ownerName}
           />
         )}
       </div>

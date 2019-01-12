@@ -11,16 +11,16 @@ class ModalChannelForm extends React.Component {
   }
 
   componentDidMount() {
-    const { channel } = this.props;
+    const { chatroom } = this.props;
     const { title, topic } = this.state;
 
-    if (channel) {
-      if (channel.title && !title) {
-        this.setState({ title: channel.title });
+    if (chatroom) {
+      if (chatroom.title && !title) {
+        this.setState({ title: chatroom.title });
       }
 
-      if (channel.topic && !topic) {
-        this.setState({ topic: channel.topic });
+      if (chatroom.topic && !topic) {
+        this.setState({ topic: chatroom.topic });
       }
     }
   }
@@ -28,11 +28,11 @@ class ModalChannelForm extends React.Component {
   handleFormSubmit(e) {
     e.preventDefault();
 
-    const { channelFormRequest, workspaceId, channel } = this.props;
-    const channelProps = { workspaceId, ...this.state };
-    channelProps.slug = channel ? channel.slug : null;
+    const { channelFormRequest, workspaceId, chatroom } = this.props;
+    const chProps = { workspaceId, ...this.state };
+    chProps.slug = chatroom ? chatroom.slug : null;
 
-    channelFormRequest(channelProps);
+    channelFormRequest(chProps);
   }
 
   handleFieldValueChange(value, prop) {
@@ -40,7 +40,7 @@ class ModalChannelForm extends React.Component {
   }
 
   render() {
-    const { close, currentUserSlug, channel } = this.props;
+    const { close, currentUserSlug, chatroom } = this.props;
     const { title, topic } = this.state;
 
     let buttonText = 'Create channel';
@@ -51,7 +51,7 @@ class ModalChannelForm extends React.Component {
       value: title,
     }];
 
-    if (channel) {
+    if (chatroom) {
       buttonText = 'Update';
       fields = [
         {
@@ -65,14 +65,14 @@ class ModalChannelForm extends React.Component {
           label: 'Topic',
           value: topic,
           placeholder: 'e.g. Discuss XYZ',
-          condition: currentUserSlug === channel.ownerSlug,
+          condition: currentUserSlug === chatroom.ownerSlug,
         },
       ];
     }
 
     return (
       <Fragment>
-        {!channel && (
+        {!chatroom && (
           <p className="Form__text">
             Channels are where your members communicate.
             They&#39;re best when organized around a topic — #leads, for example.
@@ -81,7 +81,7 @@ class ModalChannelForm extends React.Component {
         <FormContainer
           submitForm={this.handleFormSubmit}
           setFieldValue={this.handleFieldValueChange}
-          hasNoSubmittingText={!!channel}
+          hasNoSubmittingText={!!chatroom}
           fields={fields}
         >
           <Button type="submit" color="green" size="lg">{buttonText}</Button>

@@ -28,7 +28,7 @@ class DrawerSwitch extends React.Component {
       drawerType,
       drawerSlug,
       openDrawer,
-      channel,
+      chatroom,
       isMobileSize
     } = this.props;
     const { isModalOpen } = this.state;
@@ -37,7 +37,7 @@ class DrawerSwitch extends React.Component {
       openDrawer();
     }
 
-    if (drawerType === 'details' && !prevProps.channel && channel) {
+    if (drawerType === 'details' && !prevProps.chatroom && chatroom) {
       openDrawer();
     }
 
@@ -65,12 +65,12 @@ class DrawerSwitch extends React.Component {
         title = 'Workspace directory';
         break;
       case 'details': {
-        const { channel } = this.props;
-        if (channel && !channel.hasDm) {
-          title = `About #${channel.title}`;
+        const { chatroom } = this.props;
+        if (chatroom && !chatroom.hasDm) {
+          title = `About #${chatroom.title}`;
         }
 
-        if (channel && channel.hasDm) {
+        if (chatroom && chatroom.hasDm) {
           title = 'About this conversation';
         }
 
@@ -106,7 +106,7 @@ class DrawerSwitch extends React.Component {
     const {
       drawerSlug,
       drawerType,
-      channel,
+      chatroom,
       messages,
       users,
       isLoading,
@@ -114,14 +114,14 @@ class DrawerSwitch extends React.Component {
       accordion,
       openModal,
       history,
-      createChannelRequest,
+      createChatroomRequest,
       destroyPinRequest,
       createMessageRequest,
       match: { params: { workspaceSlug } },
     } = this.props;
     const { isModalOpen } = this.state;
 
-    if (drawerType === 'details' && !channel) {
+    if (drawerType === 'details' && !chatroom) {
       return null;
     }
 
@@ -130,7 +130,7 @@ class DrawerSwitch extends React.Component {
       {
         component: UserDrawer,
         path: 'team',
-        createChannelRequest,
+        createChatroomRequest,
         history,
         isLoading,
         workspaceSlug,
@@ -144,7 +144,7 @@ class DrawerSwitch extends React.Component {
       {
         component: ChannelDetailsDrawer,
         path: 'details',
-        channel,
+        chatroom,
         accordion,
         isLoading,
         destroyPinRequest,

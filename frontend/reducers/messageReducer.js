@@ -9,7 +9,7 @@ import {
   SEARCH,
   PIN,
   SIGN_OUT,
-  CHANNEL,
+  CHATROOM,
   WORKSPACE_SUB,
 } from '../actions/actionTypes';
 
@@ -30,15 +30,15 @@ const messageReducer = (state = _defaultState, action) => {
         messages,
         reactions,
         favorites,
-        channel,
+        chatroom,
         pins,
       } = action.messages;
 
       nextState = {};
-      const channelSlug = channel && channel.slug;
+      const chatroomSlug = chatroom && chatroom.slug;
 
       messages.forEach((msg) => {
-        nextState[msg.slug] = { reactionIds: [], channelSlug, ...msg };
+        nextState[msg.slug] = { reactionIds: [], chatroomSlug, ...msg };
       });
 
       messages.filter(msg => !msg.parentMessageId).forEach((msg) => {
@@ -74,7 +74,7 @@ const messageReducer = (state = _defaultState, action) => {
             thread: [],
             authors: [],
             entityType: 'entry',
-            channelSlug,
+            chatroomSlug,
             ...nextState[pin.messageSlug],
           };
         });
@@ -86,7 +86,7 @@ const messageReducer = (state = _defaultState, action) => {
 
       return merge({}, state, nextState);
     }
-    case CHANNEL.SHOW.RECEIVE:
+    case CHATROOM.SHOW.RECEIVE:
       nextState = action.messages.reduce((acc, curr) => ({ ...acc, [curr.slug]: curr }), {});
       return merge({}, state, nextState);
     case MESSAGE.CREATE.RECEIVE: {

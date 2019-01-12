@@ -24,7 +24,7 @@ const MessageThreadDrawer = ({ messages, createMessageRequest, ...props }) => {
           isHoverable
         />
         <MessageForm
-          channelId={parentMessage.channelId}
+          chatroomId={parentMessage.chatroomId}
           parentMessageId={parentMessage.id}
           parentMessageSlug={parentMessage.slug}
           createMessageRequest={createMessageRequest}

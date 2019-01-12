@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
 import { updateDrawer, updateModal } from '../actions/uiActions';
-import { createChannel } from '../actions/channelActions';
-import { destroyPin, createMessage } from '../actions/messageActions';
+import { createChatroom } from '../actions/chatroomActions';
+import { createMessage } from '../actions/messageActions';
+import { destroyPin } from '../actions/pinActions';
 import {
   getChatPage,
   getConvoDrawer,
-  getChannelDetailsDrawer,
+  getChatroomDetailsDrawer,
   getFavoritesDrawer,
 } from '../reducers/selectors';
 import withWindowResize from './withWindowResize';
@@ -24,29 +25,33 @@ const mapStateToProps = (state, { match: { params } }) => {
   }
 
   if (drawerType === 'details') {
-    messages = getChannelDetailsDrawer(state);
+    messages = getChatroomDetailsDrawer(state);
   }
 
   return {
+    accordion: state.ui.accordion.details,
     currentUser: state.session.currentUser,
-    users: state.entities.members,
+    drawerSlug,
+    drawerType,
+    chatroom: getChatPage(state),
+    chatPath: state.ui.displayChatPath,
     isLoading: state.isLoading.drawer,
     messages,
-    channel: getChatPage(state),
-    chatPath: state.ui.displayChatPath,
-    drawerType,
-    drawerSlug,
-    accordion: state.ui.accordion.details,
+    users: state.entities.members,
   };
 };
 
-const mapDispatchToProps = (dispatch, { match: { params: { drawerType, drawerSlug } } }) => ({
-  openDrawer: () => dispatch(updateDrawer(drawerType, drawerSlug)),
-  closeDrawer: () => dispatch(updateDrawer(null)),
-  openModal: (modalType, modalProps = {}) => dispatch(updateModal(modalType, modalProps)),
-  createChannelRequest: dmChat => dispatch(createChannel.request(dmChat)),
-  destroyPinRequest: id => dispatch(destroyPin.request(id)),
-  createMessageRequest: message => dispatch(createMessage.request(message)),
-});
+const mapDispatchToProps = (dispatch, { match: { params } }) => {
+  const { drawerType, drawerSlug } = params;
+
+  return {
+    openDrawer: () => dispatch(updateDrawer(drawerType, drawerSlug)),
+    closeDrawer: () => dispatch(updateDrawer(null)),
+    openModal: (modalType, modalProps = {}) => dispatch(updateModal(modalType, modalProps)),
+    createChatroomRequest: dmChat => dispatch(createChatroom.request(dmChat)),
+    destroyPinRequest: id => dispatch(destroyPin.request(id)),
+    createMessageRequest: message => dispatch(createMessage.request(message)),
+  };
+};
 
 export default withWindowResize(connect(mapStateToProps, mapDispatchToProps)(DrawerSwitch));

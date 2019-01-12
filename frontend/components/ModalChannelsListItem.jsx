@@ -15,13 +15,13 @@ class ModalChannelsListItem extends React.Component {
   }
 
   render() {
-    const { channel, workspaceSlug } = this.props;
+    const { chatroom, workspaceSlug } = this.props;
     const {
       slug,
       createdAt,
       ownerName,
       title,
-    } = channel;
+    } = chatroom;
 
     const channelUrl = `/${workspaceSlug}/messages/${slug}`;
 

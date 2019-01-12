@@ -15,7 +15,7 @@ const ChannelSub = ({ sub }) => {
     }
 
     if (isParent) {
-      string += ` ${entity.channelTitle}`;
+      string += ` ${entity.chatroomTitle}`;
     }
 
     if (isParent && sub.group.length) {

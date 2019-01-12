@@ -50,7 +50,7 @@ class MessageForm extends React.Component {
     const { editorState } = this.state;
     const body = convertForSubmit(editorState);
     const {
-      channelId,
+      chatroomId,
       parentMessageId,
       parentMessageSlug,
       createMessageRequest,
@@ -58,7 +58,7 @@ class MessageForm extends React.Component {
 
     const message = {
       body,
-      channelId,
+      chatroomId,
       parentMessageId,
       parentMessageSlug,
     };

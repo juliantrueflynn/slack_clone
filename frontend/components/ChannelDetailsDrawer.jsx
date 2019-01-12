@@ -52,7 +52,7 @@ class ChannelDetailsDrawer extends React.Component {
 
   render() {
     const {
-      channel,
+      chatroom,
       messages,
       users,
       isLoading,
@@ -62,20 +62,20 @@ class ChannelDetailsDrawer extends React.Component {
     } = this.props;
     const { ...state } = this.state;
 
-    if (!channel || isLoading) {
+    if (!chatroom || isLoading) {
       return null;
     }
 
     const accordionItems = [];
 
-    if (!channel.hasDm) {
+    if (!chatroom.hasDm) {
       accordionItems.push({
         icon: 'info-circle',
         itemTitle: 'Channel Details',
         name: 'details',
         body: (
           <AccordionBodyInfo
-            channel={channel}
+            chatroom={chatroom}
             currentUserSlug={currentUserSlug}
             openModal={openModal}
           />
@@ -83,9 +83,9 @@ class ChannelDetailsDrawer extends React.Component {
       });
       accordionItems.push({
         icon: 'users',
-        itemTitle: `${channel.members.length} Members`,
+        itemTitle: `${chatroom.members.length} Members`,
         name: 'members',
-        body: <AccordionBodyMembers members={channel.members} users={users} />
+        body: <AccordionBodyMembers members={chatroom.members} users={users} />
       });
     }
 
@@ -102,11 +102,11 @@ class ChannelDetailsDrawer extends React.Component {
       ),
     });
 
-    const user = users[channel.dmUserSlug];
+    const user = users[chatroom.dmUserSlug];
 
     return (
       <div className="ChannelDetailsDrawer">
-        {channel.hasDm && user && <UserPreview user={user} avatarSize="52" avatarVersion="avatarLarge" />}
+        {chatroom.hasDm && user && <UserPreview user={user} avatarSize="52" avatarVersion="avatarLarge" />}
         {accordionItems.map(item => (
           <AccordionItem
             key={item.name}

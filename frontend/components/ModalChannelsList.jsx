@@ -13,8 +13,8 @@ class ModalChannelsList extends React.Component {
   }
 
   componentDidMount() {
-    const { fetchChannelsRequest, workspaceSlug } = this.props;
-    fetchChannelsRequest(workspaceSlug);
+    const { fetchChatroomsRequest, workspaceSlug } = this.props;
+    fetchChatroomsRequest(workspaceSlug);
   }
 
   componentDidUpdate(prevProps) {
@@ -35,7 +35,7 @@ class ModalChannelsList extends React.Component {
 
   render() {
     const {
-      channels,
+      chatrooms,
       workspaceSlug,
       isLoading,
       close,
@@ -52,10 +52,10 @@ class ModalChannelsList extends React.Component {
           </div>
           <ScrollBar scrollBarRef={this.scrollBarRef} style={{ height }}>
             <div role="list" className="ModalChannelsList__list">
-              {isLoading || channels.filter(ch => chatPath !== ch.slug).map(ch => (
+              {isLoading || chatrooms.filter(ch => chatPath !== ch.slug).map(ch => (
                 <ModalChannelsListItem
                   key={ch.slug}
-                  channel={ch}
+                  chatroom={ch}
                   workspaceSlug={workspaceSlug}
                   close={close}
                 />

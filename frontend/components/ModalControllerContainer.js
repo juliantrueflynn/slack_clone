@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
-import { getChannelsMap, getMessagesMap, getUnsubbedChannels } from '../reducers/selectors';
+import { getChatroomsMap, getMessagesMap, getUnsubbedChannels } from '../reducers/selectors';
 import { updateModal, fetchSearch, updateSearchQuery } from '../actions/uiActions';
-import { fetchChannels, createChannel, updateChannel } from '../actions/channelActions';
+import { fetchChatrooms, createChatroom, updateChatroom } from '../actions/chatroomActions';
 import { updateUser, updatePassword } from '../actions/userActions';
 import { createWorkspace } from '../actions/workspaceActions';
 import ModalController from './ModalController';
@@ -18,8 +18,8 @@ const mapStateToProps = (state) => {
   return {
     currModalOpen: state.ui.displayModal.modalType,
     modalProps: state.ui.displayModal.modalProps,
-    channelsMap: getChannelsMap(state),
-    channels: getUnsubbedChannels(state),
+    chatroomsMap: getChatroomsMap(state),
+    chatrooms: getUnsubbedChannels(state),
     chatPath: state.ui.displayChatPath,
     messages,
     usersMap,
@@ -31,11 +31,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   close: () => dispatch(updateModal(null)),
-  fetchChannelsRequest: workspaceSlug => dispatch(fetchChannels.request(workspaceSlug)),
-  channelFormRequest: (channel) => {
-    const actionCall = channel.slug ? updateChannel : createChannel;
+  fetchChatroomsRequest: workspaceSlug => dispatch(fetchChatrooms.request(workspaceSlug)),
+  channelFormRequest: (chatroom) => {
+    const actionCall = chatroom.slug ? updateChatroom : createChatroom;
 
-    return dispatch(actionCall.request(channel));
+    return dispatch(actionCall.request(chatroom));
   },
   updateUserRequest: user => dispatch(updateUser.request(user)),
   updatePasswordRequest: password => dispatch(updatePassword.request(password)),

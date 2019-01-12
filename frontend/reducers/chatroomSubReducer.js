@@ -1,58 +1,58 @@
 import merge from 'lodash.merge';
 import {
-  CHANNEL_SUB,
+  CHATROOM_SUB,
   WORKSPACE,
-  CHANNEL,
+  CHATROOM,
   WORKSPACE_SUB,
   SIGN_OUT,
 } from '../actions/actionTypes';
 
-const channelSubReducer = (state = {}, action) => {
+const chatroomSubReducer = (state = {}, action) => {
   Object.freeze(state);
 
   let nextState;
   switch (action.type) {
     case WORKSPACE.SHOW.RECEIVE: {
-      const { channelSubs } = action.workspace;
+      const { chatroomSubs } = action.workspace;
 
-      return channelSubs.reduce((acc, curr) => {
+      return chatroomSubs.reduce((acc, curr) => {
         acc[curr.id] = curr;
         return acc;
       }, {});
     }
-    case CHANNEL_SUB.CREATE.RECEIVE: {
-      const { channelSub } = action;
+    case CHATROOM_SUB.CREATE.RECEIVE: {
+      const { chatroomSub } = action;
       nextState = {};
-      nextState[channelSub.id] = channelSub;
+      nextState[chatroomSub.id] = chatroomSub;
       return merge({}, state, nextState);
     }
-    case CHANNEL_SUB.UPDATE.RECEIVE: {
-      const { id, inSidebar } = action.channelSub;
+    case CHATROOM_SUB.UPDATE.RECEIVE: {
+      const { id, inSidebar } = action.chatroomSub;
       nextState = {};
       nextState[id] = { inSidebar };
       return merge({}, state, nextState);
     }
-    case CHANNEL_SUB.DESTROY.RECEIVE: {
-      const { channelSub } = action;
+    case CHATROOM_SUB.DESTROY.RECEIVE: {
+      const { chatroomSub } = action;
       nextState = merge({}, state);
-      delete nextState[channelSub.id];
+      delete nextState[chatroomSub.id];
       return nextState;
     }
     case WORKSPACE_SUB.CREATE.RECEIVE: {
-      const { channelSubs } = action.workspaceSub;
+      const { chatroomSubs } = action.workspaceSub;
 
       nextState = {};
-      channelSubs.forEach((sub) => {
+      chatroomSubs.forEach((sub) => {
         nextState[sub.id] = sub;
       });
 
       return merge({}, state, nextState);
     }
-    case CHANNEL.CREATE.RECEIVE: {
-      const { channelSubs } = action.channel;
+    case CHATROOM.CREATE.RECEIVE: {
+      const { chatroomSubs } = action.chatroom;
 
       nextState = {};
-      channelSubs.forEach((sub) => {
+      chatroomSubs.forEach((sub) => {
         nextState[sub.id] = sub;
       });
 
@@ -67,4 +67,4 @@ const channelSubReducer = (state = {}, action) => {
   }
 };
 
-export default channelSubReducer;
+export default chatroomSubReducer;

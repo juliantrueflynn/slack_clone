@@ -14,8 +14,8 @@ class ChannelHeader extends React.Component {
   }
 
   handleChannelEditModal() {
-    const { openModal, channel, currentUserSlug } = this.props;
-    openModal('MODAL_FORM_CHANNEL', { channel, currentUserSlug });
+    const { openModal, chatroom, currentUserSlug } = this.props;
+    openModal('MODAL_FORM_CHATROOM', { chatroom, currentUserSlug });
   }
 
   handleAccordionOpen(e) {
@@ -26,7 +26,7 @@ class ChannelHeader extends React.Component {
 
   render() {
     const {
-      channel,
+      chatroom,
       chatTitle,
       isNotDefaultChannel,
       destroySearchQuery,
@@ -44,8 +44,8 @@ class ChannelHeader extends React.Component {
       closeDrawer,
       isDdOpen,
       openChannelDropdown,
-      createChannelSubRequest,
-      destroyChannelSubRequest,
+      createChatroomSubRequest,
+      destroyChatroomSubRequest,
       history,
       match,
     } = this.props;
@@ -60,20 +60,20 @@ class ChannelHeader extends React.Component {
     } else if (chatPath === 'threads') {
       const label = convoUnreadsLen ? `${convoUnreadsLen} updated convos` : 'No new replies';
       metaMenuItems = [{ key: 'unreads', label }];
-    } else if (channel && channel.hasDm) {
+    } else if (chatroom && chatroom.hasDm) {
       const { email, status } = dmChannelUser;
 
       metaMenuItems = [
         { key: 'status', icon: <StatusIcon member={dmChannelUser} />, label: status },
         { key: 'email', label: email },
       ];
-    } else if (channel && !channel.hasDm) {
+    } else if (chatroom && !chatroom.hasDm) {
       metaMenuItems = [
         {
           key: 'details',
           icon: <FontAwesomeIcon icon="user" size="sm" />,
           link: `${url}/details`,
-          label: channel.members.length,
+          label: chatroom.members.length,
           onClick: this.handleAccordionOpen,
           'data-accordion': 'members',
         },
@@ -81,15 +81,15 @@ class ChannelHeader extends React.Component {
           key: 'pinned',
           icon: <FontAwesomeIcon icon="thumbtack" size="sm" />,
           link: `${url}/details`,
-          label: channel.pins && channel.pins.length,
+          label: chatroom.pins && chatroom.pins.length,
           onClick: this.handleAccordionOpen,
           'data-accordion': 'pinned',
-          condition: channel.pins && channel.pins.length,
+          condition: chatroom.pins && chatroom.pins.length,
         },
         {
           key: 'topic',
-          icon: !!channel.topic || <FontAwesomeIcon icon="edit" size="sm" />,
-          label: channel.topic || 'Add topic',
+          icon: !!chatroom.topic || <FontAwesomeIcon icon="edit" size="sm" />,
+          label: chatroom.topic || 'Add topic',
           onClick: this.handleChannelEditModal,
         }
       ];
@@ -114,15 +114,15 @@ class ChannelHeader extends React.Component {
           closeDropdown={closeDropdown}
           dmChannelUser={dmChannelUser}
           openChannelEditModal={this.handleChannelEditModal}
-          channel={channel}
+          chatroom={chatroom}
           messages={messages}
           users={users}
           drawerType={drawerType}
           closeDrawer={closeDrawer}
           searchQuery={searchQuery}
           destroySearchQuery={destroySearchQuery}
-          createChannelSubRequest={createChannelSubRequest}
-          destroyChannelSubRequest={destroyChannelSubRequest}
+          createChatroomSubRequest={createChatroomSubRequest}
+          destroyChatroomSubRequest={destroyChatroomSubRequest}
           history={history}
           match={match}
         />

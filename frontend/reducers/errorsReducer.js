@@ -1,5 +1,5 @@
 import {
-  CHANNEL,
+  CHATROOM,
   MESSAGE,
   MODAL_UPDATE,
   SIGN_IN,
@@ -24,8 +24,8 @@ const errorsReducer = (state = _defaultState, action) => {
     case SIGN_UP.FAILURE:
     case USER.UPDATE.FAILURE:
     case PASSWORD.UPDATE.FAILURE:
-    case CHANNEL.CREATE.FAILURE:
-    case CHANNEL.UPDATE.FAILURE:
+    case CHATROOM.CREATE.FAILURE:
+    case CHATROOM.UPDATE.FAILURE:
       return [...action.errors];
     case WORKSPACE_SUB.CREATE.REQUEST:
     case FORM_ERRORS_DESTROY:

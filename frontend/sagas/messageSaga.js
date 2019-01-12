@@ -28,10 +28,10 @@ import {
   selectEntities,
 } from '../reducers/selectors';
 
-function* getEarliestMessageId(channelSlug) {
+function* getEarliestMessageId(chatroomSlug) {
   const msgsMap = yield select(selectEntities, 'messages');
   const sortedMsgs = Object.values(msgsMap).filter(msg => (
-    msg.channelSlug === channelSlug
+    msg.chatroomSlug === chatroomSlug
   )).sort((a, b) => a.id - b.id);
 
   const { id } = sortedMsgs[0] || {};
@@ -39,13 +39,13 @@ function* getEarliestMessageId(channelSlug) {
   return id;
 }
 
-function* messageIndex({ channelSlug }) {
+function* messageIndex({ chatroomSlug }) {
   try {
-    const channel = yield select(selectEntityBySlug, 'channels', channelSlug);
-    let apiUrl = `channels/${channelSlug}/messages`;
+    const chatroom = yield select(selectEntityBySlug, 'chatrooms', chatroomSlug);
+    let apiUrl = `chatrooms/${chatroomSlug}/messages`;
 
-    if (channel && channel.messages.length) {
-      const firstMsgId = yield getEarliestMessageId(channelSlug);
+    if (chatroom && chatroom.messages.length) {
+      const firstMsgId = yield getEarliestMessageId(chatroomSlug);
       apiUrl += `/${firstMsgId}`;
     }
 

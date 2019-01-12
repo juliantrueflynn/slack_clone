@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import {
-  getChannelsMap,
+  getChatroomsMap,
   getChatViewChannels,
   getMessagesMap,
   getAllThreadViewMessages,
-  getChannelViewMessages,
+  getChatroomViewMessages,
 } from '../reducers/selectors';
 import {
   fetchMessages,
@@ -17,12 +17,12 @@ import {
   updateScrollLocation,
   updateChatPath,
 } from '../actions/uiActions';
-import { createChannelSub } from '../actions/channelActions';
+import { createChatroomSub } from '../actions/chatroomActions';
 import { clearAllUnread, fetchUnreads } from '../actions/readActions';
 import ChatPageSwitch from './ChatPageSwitch';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
-  const channel = getChannelsMap(state)[chatPath];
+  const chatroom = getChatroomsMap(state)[chatPath];
   let messages = [];
 
   if (chatPath === 'unreads') {
@@ -30,7 +30,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
   } else if (chatPath === 'threads') {
     messages = getAllThreadViewMessages(state);
   } else {
-    messages = getChannelViewMessages(state);
+    messages = getChatroomViewMessages(state);
   }
 
   return {
@@ -40,10 +40,10 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
     drawerType: state.ui.drawer.drawerType,
     drawerSlug: state.ui.drawer.drawerSlug,
     chatPath,
-    channel,
+    chatroom,
     messages,
     unreadsMap: state.entities.unreads,
-    channels: getChatViewChannels(state),
+    chatrooms: getChatViewChannels(state),
   };
 };
 
@@ -64,16 +64,16 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
 
     return dispatch(fetchChatPage.request(slug));
   },
-  createChannelSubRequest: channelId => (
-    dispatch(createChannelSub.request({ channelSlug: params.chatPath, channelId }))
+  createChatroomSubRequest: chatroomId => (
+    dispatch(createChatroomSub.request({ chatroomSlug: params.chatPath, chatroomId }))
   ),
   fetchHistoryRequest: startDate => (
     dispatch(fetchMessages.request(params.chatPath, startDate))
   ),
-  updateScrollLocation: (channelSlug, scrollLoc) => (
-    dispatch(updateScrollLocation(channelSlug, scrollLoc))
+  updateScrollLocation: (chatroomSlug, scrollLoc) => (
+    dispatch(updateScrollLocation(chatroomSlug, scrollLoc))
   ),
-  clearAllUnread: (channelSlug, lastRead) => dispatch(clearAllUnread(channelSlug, lastRead)),
+  clearAllUnread: (chatroomSlug, lastRead) => dispatch(clearAllUnread(chatroomSlug, lastRead)),
   closeDrawer: () => dispatch(updateDrawer(null)),
   openModal: modalType => dispatch(updateModal(modalType, null)),
   createMessageRequest: message => dispatch(createMessage.request(message)),

@@ -25,7 +25,7 @@ class Workspace extends React.Component {
       workspaces,
       isLoading,
       chatPath,
-      channel,
+      chatroom,
       workspace,
       workspaceSlug,
       fetchWorkspaceRequest,
@@ -40,7 +40,7 @@ class Workspace extends React.Component {
       fetchWorkspacesRequest();
     }
 
-    if (match.isExact && channel && channel.workspaceSlug === workspace.slug) {
+    if (match.isExact && chatroom && chatroom.workspaceSlug === workspace.slug) {
       history.replace(`/${workspaceSlug}/messages/${chatPath}`);
     }
   }
@@ -50,12 +50,12 @@ class Workspace extends React.Component {
       isLoading,
       workspaceSlug,
       routes,
-      channel,
+      chatroom,
       actionCablesChannels,
       onReceived,
     } = this.props;
     const { quoteText, quoteBy } = sampleWisdomQuote;
-    const hasLoaded = !isLoading && channel;
+    const hasLoaded = !isLoading && chatroom;
 
     if (!hasLoaded) {
       return (
@@ -86,7 +86,7 @@ class Workspace extends React.Component {
         />
         {actionCablesChannels.map(cable => (
           <ActionCable
-            key={cable.channelSlug}
+            key={cable.chatroomSlug}
             channel={decamelizeKeys(cable)}
             onReceived={onReceived}
           />

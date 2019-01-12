@@ -7,11 +7,11 @@ import {
   updateSearchQuery,
   updateDropdown,
 } from '../actions/uiActions';
-import { destroyChannelSub, createChannelSub } from '../actions/channelActions';
-import { getChannelsMap, getMessagesMap } from '../reducers/selectors';
+import { destroyChatroomSub, createChatroomSub } from '../actions/chatroomActions';
+import { getChatroomsMap, getMessagesMap } from '../reducers/selectors';
 import ChannelHeader from './ChannelHeader';
 
-const getChatTitle = (chatPath, channel) => {
+const getChatTitle = (chatPath, chatroom) => {
   if (chatPath === 'unreads') {
     return 'All Unreads';
   }
@@ -20,17 +20,17 @@ const getChatTitle = (chatPath, channel) => {
     return 'All Threads';
   }
 
-  return channel && channel.title;
+  return chatroom && chatroom.title;
 };
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
   const { members: users, unreads: unreadsMap } = state.entities;
 
-  const channelsMap = getChannelsMap(state);
-  const channel = channelsMap[chatPath];
+  const chatroomsMap = getChatroomsMap(state);
+  const chatroom = chatroomsMap[chatPath];
   const defaultChatPath = state.ui.defaultChannel;
   const isNotDefaultChannel = chatPath !== defaultChatPath;
-  const dmChannelUser = channel && channel.hasDm ? users[channel.dmUserSlug] : {};
+  const dmChannelUser = chatroom && chatroom.hasDm ? users[chatroom.dmUserSlug] : {};
 
   const { unreadsByChannel } = state;
   const channelUnreadsLen = Object.values(unreadsByChannel).reduce((acc, curr) => {
@@ -47,9 +47,9 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
 
   return {
     chatPath,
-    channelsMap,
-    channel,
-    chatTitle: getChatTitle(chatPath, channel),
+    chatroomsMap,
+    chatroom,
+    chatTitle: getChatTitle(chatPath, chatroom),
     dmChannelUser,
     isNotDefaultChannel,
     messages,
@@ -70,10 +70,10 @@ const mapDispatchToProps = (dispatch, { match: { params: { chatPath } } }) => ({
   closeDropdown: () => dispatch(updateDropdown(null)),
   accordionOpen: accordionType => dispatch(accordionOpen('details', accordionType)),
   destroySearchQuery: () => dispatch(updateSearchQuery()),
-  createChannelSubRequest: channelId => (
-    dispatch(createChannelSub.request({ channelId, channelSlug: chatPath }))
+  createChatroomSubRequest: chatroomId => (
+    dispatch(createChatroomSub.request({ chatroomId, chatroomSlug: chatPath }))
   ),
-  destroyChannelSubRequest: () => dispatch(destroyChannelSub.request(chatPath)),
+  destroyChatroomSubRequest: () => dispatch(destroyChatroomSub.request(chatPath)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChannelHeader));

@@ -13,7 +13,7 @@ class UserDrawer extends React.Component {
   handleButtonClick() {
     const {
       history,
-      createChannelRequest,
+      createChatroomRequest,
       workspaceSlug,
       user,
     } = this.props;
@@ -22,7 +22,7 @@ class UserDrawer extends React.Component {
     if (dmChat) {
       history.replace(`/${workspaceSlug}/messages/${dmChat}`);
     } else {
-      createChannelRequest({ workspaceSlug, hasDm: true, memberId });
+      createChatroomRequest({ workspaceSlug, hasDm: true, memberId });
     }
   }
 

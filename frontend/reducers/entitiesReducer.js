@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import workspaces from './workspaceReducer';
 import workspaceSubs from './workspaceSubReducer';
-import channels from './channelReducer';
-import channelSubs from './channelSubReducer';
+import chatrooms from './chatroomReducer';
+import chatroomSubs from './chatroomSubReducer';
 import members from './userReducer';
 import messages from './messageReducer';
 import favorites from './favoriteReducer';
@@ -13,8 +13,8 @@ import pins from './pinReducer';
 const entitiesReducer = combineReducers({
   workspaces,
   workspaceSubs,
-  channels,
-  channelSubs,
+  chatrooms,
+  chatroomSubs,
   members,
   messages,
   pins,

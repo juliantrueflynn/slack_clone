@@ -45,11 +45,11 @@ function* readViewedEntity(readProps) {
 }
 
 function* readUpdateByChat({ chatPath }) {
-  const channel = yield select(getChatPage, chatPath);
-  const { slug, id: readableId, isSub } = channel || {};
+  const chatroom = yield select(getChatPage, chatPath);
+  const { slug, id: readableId, isSub } = chatroom || {};
 
-  if (channel && isSub) {
-    yield readViewedEntity({ readableType: 'Channel', readableId, slug });
+  if (chatroom && isSub) {
+    yield readViewedEntity({ readableType: 'Chatroom', readableId, slug });
   }
 }
 

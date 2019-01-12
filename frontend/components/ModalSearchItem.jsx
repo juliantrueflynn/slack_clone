@@ -4,7 +4,7 @@ import { dateUtil } from '../util/dateUtil';
 import Message from './Message';
 import './ModalSearchItem.css';
 
-const ModalSearchItem = ({ message, channelsMap, url }) => {
+const ModalSearchItem = ({ message, chatroomsMap, url }) => {
   const date = dateUtil(message.createdAt);
   const monthCreated = date.monthName();
   const dayCreated = date.dayOrdinal();
@@ -27,7 +27,7 @@ const ModalSearchItem = ({ message, channelsMap, url }) => {
       <div className="ModalSearchItem__meta">
         <span className="ModalSearchItem__meta-channel">
           <span className="ModalSearchItem__meta-hashtag">#</span>
-          <strong>{channelsMap[message.channelSlug].title}</strong>
+          <strong>{chatroomsMap[message.chatroomSlug].title}</strong>
         </span>
         <span className="ModalSearchItem__meta-sep">–</span>
         <span className="ModalSearchItem__meta-date">

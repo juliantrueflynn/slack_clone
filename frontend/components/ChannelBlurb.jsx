@@ -17,13 +17,13 @@ class ChannelBlurb extends React.Component {
   }
 
   openEditor() {
-    const { openModal, channel, currentUserSlug } = this.props;
+    const { openModal, chatroom, currentUserSlug } = this.props;
 
-    openModal('MODAL_FORM_CHANNEL', { channel, currentUserSlug });
+    openModal('MODAL_FORM_CHATROOM', { chatroom, currentUserSlug });
   }
 
   render() {
-    const { channel, currentUserSlug, blurbRef } = this.props;
+    const { chatroom, currentUserSlug, blurbRef } = this.props;
     const {
       hasDm,
       dmUserSlug,
@@ -32,7 +32,7 @@ class ChannelBlurb extends React.Component {
       createdAt,
       topic,
       title,
-    } = channel;
+    } = chatroom;
     let description = (
       <div className="ChannelBlurb__description">
         {'This is the beginning of your direct message conversation with '}

@@ -7,7 +7,7 @@ import {
   FAVORITE,
   USER,
   SIGN_OUT,
-  CHANNEL,
+  CHATROOM,
   DRAWER_UPDATE,
   PASSWORD,
 } from '../actions/actionTypes';
@@ -15,8 +15,8 @@ import {
 const _defaultState = {
   search: false,
   workspace: false,
-  channel: false,
-  channels: false,
+  chatroom: false,
+  chatrooms: false,
   drawer: false,
   history: false,
   form: false,
@@ -29,47 +29,47 @@ const isLoadingReducer = (state = _defaultState, action) => {
     case WORKSPACE.SHOW.REQUEST:
       return { ...state, workspace: true };
     case WORKSPACE.CREATE.REQUEST:
-    case CHANNEL.CREATE.REQUEST:
-    case CHANNEL.UPDATE.REQUEST:
+    case CHATROOM.CREATE.REQUEST:
+    case CHATROOM.UPDATE.REQUEST:
     case PASSWORD.UPDATE.REQUEST:
     case USER.UPDATE.REQUEST:
       return { ...state, form: true };
     case USER_THREAD.INDEX.REQUEST:
     case READ.INDEX.REQUEST:
-      return { ...state, channel: true };
+      return { ...state, chatroom: true };
     case MESSAGE.INDEX.REQUEST:
-      return { ...state, channel: true, history: true };
+      return { ...state, chatroom: true, history: true };
     case DRAWER_UPDATE:
       return { ...state, drawer: true };
-    case CHANNEL.INDEX.REQUEST:
-      return { ...state, channels: true };
+    case CHATROOM.INDEX.REQUEST:
+      return { ...state, chatrooms: true };
     case SEARCH.INDEX.REQUEST:
       return { ...state, search: true };
     case WORKSPACE.SHOW.RECEIVE:
       return { ...state, workspace: false };
     case WORKSPACE.CREATE.RECEIVE:
-    case CHANNEL.CREATE.RECEIVE:
-    case CHANNEL.UPDATE.RECEIVE:
+    case CHATROOM.CREATE.RECEIVE:
+    case CHATROOM.UPDATE.RECEIVE:
     case PASSWORD.UPDATE.RECEIVE:
     case USER.UPDATE.RECEIVE:
     case WORKSPACE.CREATE.FAILURE:
-    case CHANNEL.CREATE.FAILURE:
-    case CHANNEL.UPDATE.FAILURE:
+    case CHATROOM.CREATE.FAILURE:
+    case CHATROOM.UPDATE.FAILURE:
     case PASSWORD.UPDATE.FAILURE:
     case USER.UPDATE.FAILURE:
       return { ...state, form: false };
     case USER_THREAD.INDEX.RECEIVE:
     case READ.INDEX.RECEIVE:
-      return { ...state, channel: false };
+      return { ...state, chatroom: false };
     case MESSAGE.INDEX.RECEIVE:
-      return { ...state, channel: false, history: false };
+      return { ...state, chatroom: false, history: false };
     case MESSAGE.SHOW.RECEIVE:
     case FAVORITE.INDEX.RECEIVE:
     case USER.SHOW.RECEIVE:
-    case CHANNEL.SHOW.RECEIVE:
+    case CHATROOM.SHOW.RECEIVE:
       return { ...state, drawer: false };
-    case CHANNEL.INDEX.RECEIVE:
-      return { ...state, channels: false };
+    case CHATROOM.INDEX.RECEIVE:
+      return { ...state, chatrooms: false };
     case SEARCH.INDEX.RECEIVE:
       return { ...state, search: false };
     case SIGN_OUT.RECEIVE:

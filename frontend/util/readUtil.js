@@ -2,9 +2,9 @@ import { select } from 'redux-saga/effects';
 import { selectEntityBySlug, selectUIByDisplay, getCurrentUser } from '../reducers/selectors';
 
 export const getReadProps = msg => ({
-  slug: msg.parentMessageSlug || msg.channelSlug,
+  slug: msg.parentMessageSlug || msg.chatroomSlug,
   readableType: msg.parentMessageSlug ? 'Message' : 'Channel',
-  readableId: msg.parentMessageId || msg.channelId,
+  readableId: msg.parentMessageId || msg.chatroomId,
 });
 
 export function* getUnread(props) {

@@ -58,9 +58,9 @@ export const toggleMessageEditor = (messageSlug = null) => actionCreator(
   { messageSlug }
 );
 
-export const updateScrollLocation = (channelSlug, scrollLoc) => actionCreator(
+export const updateScrollLocation = (chatroomSlug, scrollLoc) => actionCreator(
   SCROLL_LOCATION_UPDATE,
-  { channelSlug, scrollLoc }
+  { chatroomSlug, scrollLoc }
 );
 
 export const updateChatPath = chatPath => actionCreator(CHAT_PATH_UPDATE, { chatPath });

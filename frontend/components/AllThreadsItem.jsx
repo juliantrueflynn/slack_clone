@@ -13,14 +13,14 @@ const AllThreadsItem = ({
   createMessageRequest,
   workspaceSlug,
 }) => {
-  const channelUrl = `/${workspaceSlug}/messages/${convo.channelSlug}`;
+  const chatroomUrl = `/${workspaceSlug}/messages/${convo.chatroomSlug}`;
 
   return (
     <div className="AllThreadsItem" role="listitem">
       <header className="AllThreadsItem__header">
-        <LinkWithDrawer to={channelUrl} className="AllThreadsItem__title">
+        <LinkWithDrawer to={chatroomUrl} className="AllThreadsItem__title">
           <FontAwesomeIcon icon="hashtag" size="xs" className="AllThreadsItem__hashtag" />
-          <div className="AllThreadsItem__title-text">{convo.channelTitle}</div>
+          <div className="AllThreadsItem__title-text">{convo.chatroomTitle}</div>
         </LinkWithDrawer>
         <MessageThreadAuthors
           parentAuthorSlug={convo.authorSlug}
@@ -39,7 +39,7 @@ const AllThreadsItem = ({
           />
         </div>
         <MessageForm
-          channelId={convo.channelId}
+          chatroomId={convo.chatroomId}
           parentMessageId={convo.id}
           parentMessageSlug={convo.slug}
           createMessageRequest={createMessageRequest}

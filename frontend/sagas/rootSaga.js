@@ -1,8 +1,8 @@
 import { fork, all } from 'redux-saga/effects';
 import allThreadsSaga from './allThreadsSaga';
 import allUnreadsSaga from './allUnreadsSaga';
-import channelSaga from './channelSaga';
-import channelSubSaga from './channelSubSaga';
+import chatroomSaga from './chatroomSaga';
+import chatroomSubSaga from './chatroomSubSaga';
 import favoriteSaga from './favoriteSaga';
 import messageSaga from './messageSaga';
 import pinSaga from './pinSaga';
@@ -18,8 +18,8 @@ export default function* root() {
   yield all([
     fork(allThreadsSaga),
     fork(allUnreadsSaga),
-    fork(channelSaga),
-    fork(channelSubSaga),
+    fork(chatroomSaga),
+    fork(chatroomSubSaga),
     fork(favoriteSaga),
     fork(messageSaga),
     fork(pinSaga),

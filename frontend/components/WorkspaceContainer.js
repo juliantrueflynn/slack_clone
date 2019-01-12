@@ -1,22 +1,22 @@
 import { connect } from 'react-redux';
 import { fetchWorkspace, fetchWorkspaces } from '../actions/workspaceActions';
-import { getSubbedWorkspaces, getChannelsMap } from '../reducers/selectors';
+import { getSubbedWorkspaces, getChatroomsMap } from '../reducers/selectors';
 import withActionCable from './withActionCable';
 import Workspace from './Workspace';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => {
-  const channelsMap = getChannelsMap(state);
-  const channels = Object.values(getChannelsMap(state));
+  const chatroomsMap = getChatroomsMap(state);
+  const chatrooms = Object.values(getChatroomsMap(state));
 
   const defaultChatPath = state.ui.defaultChannel;
   const currentChatPath = state.ui.displayChatPath;
   const chatPath = currentChatPath || defaultChatPath;
-  const channel = channelsMap[chatPath] || channelsMap[defaultChatPath];
+  const chatroom = chatroomsMap[chatPath] || chatroomsMap[defaultChatPath];
 
-  const actionCablesChannels = channels.filter(ch => (
+  const actionCablesChannels = chatrooms.filter(ch => (
     ch.isSub || ch.slug === chatPath
   )).map(ch => (
-    { channel: 'ChatChannel', channelSlug: ch.slug }
+    { chatroom: 'ChatroomChannel', chatroomSlug: ch.slug }
   ));
 
   return {
@@ -25,7 +25,7 @@ const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => {
     workspaces: getSubbedWorkspaces(state),
     workspaceSlug,
     chatPath,
-    channel,
+    chatroom,
     actionCablesChannels,
   };
 };

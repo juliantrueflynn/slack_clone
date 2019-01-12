@@ -12,7 +12,7 @@ import { apiFetch } from '../util/apiUtil';
 import { fetchMessage } from '../actions/messageActions';
 import { fetchUser } from '../actions/userActions';
 import { fetchFavorites } from '../actions/favoriteActions';
-import { fetchChannel } from '../actions/channelActions';
+import { fetchChatroom } from '../actions/chatroomActions';
 import { fetchSearch } from '../actions/uiActions';
 import { selectUIByDisplay } from '../reducers/selectors';
 
@@ -45,7 +45,7 @@ function* fetchDrawerEntities({ drawerType, drawerSlug }) {
       }
 
       entitySlug = chatPath;
-      fetchActionFunc = fetchChannel;
+      fetchActionFunc = fetchChatroom;
       break;
     }
     default:

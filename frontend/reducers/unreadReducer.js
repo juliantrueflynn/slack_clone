@@ -18,10 +18,10 @@ const unreadReducer = (state = _defaultState, action) => {
 
   switch (action.type) {
     case WORKSPACE.SHOW.RECEIVE: {
-      const { channels, reads } = action.workspace;
+      const { chatrooms, reads } = action.workspace;
 
       nextState = {};
-      channels.forEach((ch) => {
+      chatrooms.forEach((ch) => {
         nextState[ch.slug] = { lastActive: ch.lastActive, readableType: 'Channel' };
       });
 
@@ -39,15 +39,15 @@ const unreadReducer = (state = _defaultState, action) => {
       return nextState;
     }
     case MESSAGE.CREATE.RECEIVE: {
-      const { channelSlug, createdAt, parentMessageSlug: parentSlug } = action.message;
+      const { chatroomSlug, createdAt, parentMessageSlug: parentSlug } = action.message;
 
       nextState = {};
       if (parentSlug && state[parentSlug] && state[parentSlug].readableType === 'Message') {
-        nextState[channelSlug] = { lastActive: createdAt };
+        nextState[chatroomSlug] = { lastActive: createdAt };
       }
 
       if (!parentSlug) {
-        nextState[channelSlug] = { lastActive: createdAt };
+        nextState[chatroomSlug] = { lastActive: createdAt };
       }
 
       return merge({}, state, nextState);

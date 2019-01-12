@@ -9,16 +9,16 @@ class AllUnreads extends React.Component {
     this.handleClearUnreadsClick = this.handleClearUnreadsClick.bind(this);
   }
 
-  handleClearUnreadsClick(channel) {
+  handleClearUnreadsClick(chatroom) {
     const { clearAllUnread } = this.props;
 
-    clearAllUnread(channel.slug, channel.lastActive);
+    clearAllUnread(chatroom.slug, chatroom.lastActive);
   }
 
   render() {
-    const { channels, clearAllUnread, ...props } = this.props;
+    const { chatrooms, clearAllUnread, ...props } = this.props;
 
-    if (!channels.length) {
+    if (!chatrooms.length) {
       return (
         <EmptyDisplay topIcon={['far', 'smile-beam']} topIconHexColor="#FECB6E">
           You&#8217;re all caught up!
@@ -28,10 +28,10 @@ class AllUnreads extends React.Component {
 
     return (
       <ScrollBar>
-        {channels.map(channel => (
+        {chatrooms.map(ch => (
           <AllUnreadsItem
-            key={channel.slug}
-            channel={channel}
+            key={ch.slug}
+            chatroom={ch}
             clearChannelUnreads={this.handleClearUnreadsClick}
             {...props}
           />

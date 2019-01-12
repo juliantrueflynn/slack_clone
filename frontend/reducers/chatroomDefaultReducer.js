@@ -7,8 +7,8 @@ const defaultChannelReducer = (state = _defaultState, action) => {
 
   switch (action.type) {
     case WORKSPACE.SHOW.RECEIVE: {
-      const { channels } = action.workspace;
-      const firstChannel = channels.sort((a, b) => a.id - b.id)[0];
+      const { chatrooms } = action.workspace;
+      const firstChannel = chatrooms.sort((a, b) => a.id - b.id)[0];
 
       return firstChannel.slug;
     }

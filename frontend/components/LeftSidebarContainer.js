@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getSubbedWorkspaces, getChannelsMap, getDMChannels } from '../reducers/selectors';
+import { getSubbedWorkspaces, getChatroomsMap, getDMChannels } from '../reducers/selectors';
 import { updateModal } from '../actions/uiActions';
-import { updateChannelSub } from '../actions/channelActions';
+import { updateChatroomSub } from '../actions/chatroomActions';
 import withWindowResize from './withWindowResize';
 import LeftSidebar from './LeftSidebar';
 
@@ -10,12 +10,12 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
   const currUserSlug = state.session.currentUser.slug;
   const user = state.entities.members[currUserSlug];
 
-  const channelsMap = getChannelsMap(state);
-  const channels = Object.values(channelsMap);
+  const chatroomsMap = getChatroomsMap(state);
+  const chatrooms = Object.values(chatroomsMap);
   const chatPath = state.ui.displayChatPath;
 
   let profileUrl = `${url}/${chatPath}/team/${user.slug}`;
-  if (channelsMap[chatPath]) {
+  if (chatroomsMap[chatPath]) {
     profileUrl = `${url}/messages/${chatPath}/team/${user.slug}`;
   }
 
@@ -31,7 +31,7 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
     hasNoDrawer: true,
   }));
 
-  const channelItemDecorate = ({ title: label, slug, status }) => ({
+  const chatItemDecorate = ({ title: label, slug, status }) => ({
     slug,
     status,
     label,
@@ -39,10 +39,10 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
     modifierClassName: unreadsMap[slug] && unreadsMap[slug].hasUnreads ? 'unread' : null,
     isActive: (match, { pathname }) => match && pathname.includes(`messages/${chatPath}`),
   });
-  const dmChannels = getDMChannels(state).map(ch => channelItemDecorate(ch));
-  const subbedChannels = channels.filter(ch => ch.isSub && !ch.hasDm).sort((a, b) => (
+  const dmChannels = getDMChannels(state).map(ch => chatItemDecorate(ch));
+  const subbedChannels = chatrooms.filter(ch => ch.isSub && !ch.hasDm).sort((a, b) => (
     a.title.localeCompare(b.title)
-  )).map(ch => channelItemDecorate(ch));
+  )).map(ch => chatItemDecorate(ch));
 
   return {
     hasUnreadConvos,
@@ -61,9 +61,9 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
 
 const mapDispatchToProps = (dispatch, { match: { params: { workspaceSlug } } }) => ({
   openChannelsListModal: () => dispatch(updateModal('MODAL_CHATS', { workspaceSlug })),
-  openChannelFormModal: workspaceId => dispatch(updateModal('MODAL_FORM_CHANNEL', { workspaceId })),
+  openChannelFormModal: workspaceId => dispatch(updateModal('MODAL_FORM_CHATROOM', { workspaceId })),
   closeModal: () => dispatch(updateModal(null)),
-  updateChannelSubRequest: channelSub => dispatch(updateChannelSub.request(channelSub)),
+  updateChatroomSubRequest: chatroomSub => dispatch(updateChatroomSub.request(chatroomSub)),
 });
 
 export default withRouter(

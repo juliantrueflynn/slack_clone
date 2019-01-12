@@ -5,21 +5,21 @@ import MessagesListContainer from './MessagesListContainer';
 import './AllUnreadsItem.css';
 
 const AllUnreadsItem = ({
-  channel,
+  chatroom,
   clearChannelUnreads,
   messagesMap,
 }) => {
-  const msgsLenTxt = `${channel.unreadMessages && channel.unreadMessages.length} messages`;
-  const messages = channel.unreadMessages.map(msgSlug => messagesMap[msgSlug]);
+  const msgsLenTxt = `${chatroom.unreadMessages && chatroom.unreadMessages.length} messages`;
+  const messages = chatroom.unreadMessages.map(msgSlug => messagesMap[msgSlug]);
 
   return (
     <div className="AllUnreadsItem" role="listitem">
       <header className="AllUnreadsItem__header">
         <FontAwesomeIcon className="AllUnreadsItem__title-hashtag" icon="hashtag" size="sm" />
-        <h3 className="AllUnreadsItem__title">{channel.title}</h3>
+        <h3 className="AllUnreadsItem__title">{chatroom.title}</h3>
         <div className="AllUnreadsItem__meta">
           <div className="AllUnreadsItem__length">{msgsLenTxt}</div>
-          <Button buttonFor="unread" size="sm" onClick={() => clearChannelUnreads(channel)}>
+          <Button buttonFor="unread" size="sm" onClick={() => clearChannelUnreads(chatroom)}>
             Mark as Read
           </Button>
         </div>

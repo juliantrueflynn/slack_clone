@@ -1,6 +1,6 @@
 import {
   FORM_SUCCESS_UPDATE,
-  CHANNEL,
+  CHATROOM,
   USER,
   PASSWORD,
   MODAL_UPDATE,
@@ -21,8 +21,8 @@ const successReducer = (state = _defaultState, action) => {
     case MODAL_UPDATE:
     case USER.UPDATE.REQUEST:
     case PASSWORD.UPDATE.REQUEST:
-    case CHANNEL.CREATE.REQUEST:
-    case CHANNEL.UPDATE.REQUEST:
+    case CHATROOM.CREATE.REQUEST:
+    case CHATROOM.UPDATE.REQUEST:
     case WORKSPACE_SUB.CREATE.REQUEST:
     case SIGN_OUT.RECEIVE:
       return _defaultState;
