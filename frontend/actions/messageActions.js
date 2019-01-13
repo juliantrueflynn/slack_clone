@@ -2,7 +2,9 @@ import { actionCreator } from '../util/actionsUtil';
 import { MESSAGE, USER_THREAD } from './actionTypes';
 
 export const fetchMessages = {
-  request: chatroomSlug => actionCreator(MESSAGE.INDEX.REQUEST, { chatroomSlug }),
+  request: (chatroomSlug, lastId = null) => (
+    actionCreator(MESSAGE.INDEX.REQUEST, { chatroomSlug, lastId })
+  ),
   receive: messages => actionCreator(MESSAGE.INDEX.RECEIVE, { messages }),
   failure: errors => actionCreator(MESSAGE.INDEX.FAILURE, { errors }),
 };

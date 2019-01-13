@@ -21,32 +21,14 @@ import {
   apiUpdate,
   apiDestroy,
 } from '../util/apiUtil';
-import {
-  selectUIByDisplay,
-  getChatPathUrl,
-  selectEntityBySlug,
-  selectEntities,
-} from '../reducers/selectors';
+import { selectUIByDisplay, getChatPathUrl } from '../reducers/selectors';
 
-function* getEarliestMessageId(chatroomSlug) {
-  const msgsMap = yield select(selectEntities, 'messages');
-  const sortedMsgs = Object.values(msgsMap).filter(msg => (
-    msg.chatroomSlug === chatroomSlug
-  )).sort((a, b) => a.id - b.id);
-
-  const { id } = sortedMsgs[0] || {};
-
-  return id;
-}
-
-function* messageIndex({ chatroomSlug }) {
+function* messageIndex({ chatroomSlug, lastId }) {
   try {
-    const chatroom = yield select(selectEntityBySlug, 'chatrooms', chatroomSlug);
     let apiUrl = `chatrooms/${chatroomSlug}/messages`;
 
-    if (chatroom && chatroom.messages.length) {
-      const firstMsgId = yield getEarliestMessageId(chatroomSlug);
-      apiUrl += `/${firstMsgId}`;
+    if (lastId) {
+      apiUrl += `/${lastId}`;
     }
 
     const response = yield call(apiFetch, apiUrl);

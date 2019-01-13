@@ -67,8 +67,8 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
   createChatroomSubRequest: chatroomId => (
     dispatch(createChatroomSub.request({ chatroomSlug: params.chatPath, chatroomId }))
   ),
-  fetchHistoryRequest: startDate => (
-    dispatch(fetchMessages.request(params.chatPath, startDate))
+  fetchHistoryRequest: lastId => (
+    dispatch(fetchMessages.request(params.chatPath, lastId))
   ),
   updateScrollLocation: (chatroomSlug, scrollLoc) => (
     dispatch(updateScrollLocation(chatroomSlug, scrollLoc))

@@ -11,6 +11,7 @@ class ChannelScrollBar extends React.Component {
     super(props);
     this.blurbRef = React.createRef();
     this.state = { scrollerHeight: 0, hasHistory: false };
+    this.getFirstMessage = this.getFirstMessage.bind(this);
     this.handleFetchHistory = this.handleFetchHistory.bind(this);
     this.updateScrollerHeight = this.updateScrollerHeight.bind(this);
     this.updateScrollTo = this.updateScrollTo.bind(this);
@@ -70,13 +71,21 @@ class ChannelScrollBar extends React.Component {
     }
   }
 
+  getFirstMessage() {
+    const { messages } = this.props;
+    const firstMsg = messages.sort((a, b) => a.id - b.id)[0];
+
+    return firstMsg || {};
+  }
+
   updateScrollerHeight(scrollerHeight) {
     this.setState({ scrollerHeight });
   }
 
   updateHasHistory() {
-    const { messages, chatroom: { earliestMessageSlug } } = this.props;
-    const hasHistory = messages[0] && messages[0].slug !== earliestMessageSlug;
+    const { chatroom: { earliestMessageSlug } } = this.props;
+    const { slug } = this.getFirstMessage();
+    const hasHistory = slug && slug !== earliestMessageSlug;
 
     this.setState({ hasHistory });
   }
@@ -92,12 +101,12 @@ class ChannelScrollBar extends React.Component {
   }
 
   handleFetchHistory() {
-    const { fetchHistoryRequest, isFetching, messages } = this.props;
+    const { fetchHistoryRequest, isFetching } = this.props;
     const { hasHistory } = this.state;
 
     if (hasHistory && !isFetching) {
-      const startDate = messages[0].createdAt;
-      fetchHistoryRequest(startDate);
+      const { id } = this.getFirstMessage();
+      fetchHistoryRequest(id);
     }
   }
 
