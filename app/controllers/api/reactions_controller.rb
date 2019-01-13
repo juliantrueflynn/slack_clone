@@ -12,10 +12,10 @@ class Api::ReactionsController < ApplicationController
   end
 
   def destroy
-    @reaction = Reaction.find_by(id: params[:id])
+    @reaction = Reaction.find_by_id(params[:id])
 
-    if @reaction.destroy
-      render json: @reaction
+    if @reaction
+      render json: @reaction.destroy
     else
       render json: ["doesn't exist"]
     end
@@ -24,7 +24,7 @@ class Api::ReactionsController < ApplicationController
   private
 
   def is_duplicate?
-    current_user.reactions.exists(reaction_params)
+    current_user.reactions.exists?(reaction_params)
   end
 
   def ensure_unique_reaction_by_user

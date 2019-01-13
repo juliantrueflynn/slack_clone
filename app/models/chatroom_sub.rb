@@ -7,12 +7,16 @@ class ChatroomSub < ApplicationRecord
   belongs_to :chatroom
   has_one :workspace, through: :chatroom
 
-  def self.by_workspace_id(workspace_id)
+  def self.with_workspace(workspace_id)
     includes(:chatroom).where(chatrooms: { workspace_id: workspace_id })
   end
 
   def self.with_user(user_id)
     where(user_id: user_id)
+  end
+
+  def self.by_user(user_id)
+    find_by_user_id(user_id)
   end
 
   def self.chatroom_ids_with_user(user_id)

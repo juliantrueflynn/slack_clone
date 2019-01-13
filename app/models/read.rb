@@ -26,17 +26,9 @@ class Read < ApplicationRecord
     chatrooms.where(user_id: user_id)
   end
 
-  def self.by_user_id(user_id)
-    find_by(user_id: user_id)
-  end
-
-  def self.by_workspace_id(workspace_id)
-    where(workspace_id: workspace_id)
-  end
-
   def associated_entity
     entity_obj = readable_type.constantize
-    entity_obj.find_by(id: readable_id)
+    entity_obj.find_by_id(readable_id)
   end
 
   def slug

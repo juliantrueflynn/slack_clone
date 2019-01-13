@@ -6,11 +6,11 @@ class Favorite < ApplicationRecord
   belongs_to :message
   belongs_to :user
 
-  def self.by_message_id(message_ids)
-    includes(:message).where(message_id: message_ids)
+  def self.with_message(message_id)
+    includes(:message).where(message_id: message_id)
   end
 
-  def self.in_workspace(workspace_id)
+  def self.with_workspace(workspace_id)
     where(workspace_id: workspace_id)
   end
 

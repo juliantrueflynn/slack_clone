@@ -7,7 +7,7 @@ json.messages do
 end
 
 json.reactions do
-  reactions = Reaction.by_message_id(@unreads)
+  reactions = Reaction.with_message(@unreads)
 
   json.array! reactions do |reaction|
     json.(reaction, :id, :emoji, :message_id, :message_slug, :user_slug)
@@ -15,6 +15,6 @@ json.reactions do
 end
 
 json.favorites do
-  favorites = current_user.favorites.by_message_id(@unreads)
+  favorites = current_user.favorites.with_message(@unreads)
   json.array! favorites, :id, :message_slug
 end

@@ -11,7 +11,7 @@ class Api::UserAppearancesController < ApplicationController
   end
 
   def destroy
-    @user_appearance = current_user.appears.in_workspace(params[:workspace_slug])
+    @user_appearance = current_user.appears.by_workspace(params[:workspace_slug])
 
     if @user_appearance.destroy
       render json: @user_appearance

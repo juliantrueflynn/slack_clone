@@ -106,7 +106,7 @@ const chatroomReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case UNREAD_UPDATE:
-      if (action.unread.readableType !== 'Channel') {
+      if (action.unread.readableType !== 'Chatroom') {
         return state;
       }
 

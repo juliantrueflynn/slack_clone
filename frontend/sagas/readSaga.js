@@ -17,10 +17,10 @@ import {
   isCurrentUserNotInConvo,
 } from '../util/readUtil';
 
-function* readUpdate({ read }) {
+function* readUpdate({ read: { lastRead, readableId, readableType } }) {
   try {
-    const apiCall = read.lastRead ? apiUpdate : apiCreate;
-    const response = yield call(apiCall, 'read', read);
+    const apiCall = lastRead ? apiUpdate : apiCreate;
+    const response = yield call(apiCall, 'read', { readableId, readableType });
     yield put(updateRead.receive(response));
   } catch (error) {
     yield put(updateRead.failure(error));

@@ -18,7 +18,7 @@ class Api::DmChatsController < ApplicationController
   def is_duplicate?
     workspace = Workspace.find_by_slug(params[:workspace_slug])
     user_ids = [current_user.id, params[:dm_chat][:member_id]]
-    workspace.chatrooms.has_dm_with_user_ids?(user_ids)
+    workspace.chatrooms.has_dm_with_users?(user_ids)
   end
 
   def ensure_unique_dm_chat

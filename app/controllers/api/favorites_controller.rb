@@ -1,7 +1,7 @@
 class Api::FavoritesController < ApplicationController
   def index
     workspace = Workspace.find_by_slug(params[:workspace_slug])
-    @favorites = current_user.favorites.in_workspace(workspace.id)
+    @favorites = current_user.favorites.with_workspace(workspace)
   end
 
   def create
@@ -15,9 +15,10 @@ class Api::FavoritesController < ApplicationController
   end
 
   def destroy
-    @favorite = Favorite.find_by(id: params[:id])
+    @favorite = Favorite.find_by_id(params[:id])
 
-    if @favorite && @favorite.destroy
+    if @favorite
+      @favorite.destroy
       render 'api/favorites/show'
     else
       render json: ["missing"], status: 422

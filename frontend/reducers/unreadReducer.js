@@ -22,7 +22,7 @@ const unreadReducer = (state = _defaultState, action) => {
 
       nextState = {};
       chatrooms.forEach((ch) => {
-        nextState[ch.slug] = { lastActive: ch.lastActive, readableType: 'Channel' };
+        nextState[ch.slug] = { lastActive: ch.lastActive, readableType: 'Chatroom' };
       });
 
       reads.forEach((read) => {

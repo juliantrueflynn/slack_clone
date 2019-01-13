@@ -239,7 +239,7 @@ const getAllUnreadsViewChannels = (chatroomsMap, unreadsMap, unreadChMsgs) => {
   }, {});
 
   return values(unreadsMap)
-    .filter(unread => unread && unread.readableType === 'Channel' && unread.hasUnreads)
+    .filter(unread => unread && unread.readableType === 'Chatroom' && unread.hasUnreads)
     .map(unread => ({
       ...unreadChannelsMap[unread.slug],
       unreadMessages: unreadChMsgs[unread.slug] || [],

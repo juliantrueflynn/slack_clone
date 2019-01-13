@@ -21,7 +21,7 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
 
   const unreadsMap = state.entities.unreads;
   const unreads = Object.values(unreadsMap).filter(unread => unread && unread.hasUnreads);
-  const hasUnreadChannels = unreads.some(unread => unread.readableType === 'Channel');
+  const hasUnreadChannels = unreads.some(unread => unread.readableType === 'Chatroom');
   const hasUnreadConvos = unreads.some(unread => unread.readableType === 'Message');
 
   const subbedWorkspaces = getSubbedWorkspaces(state);

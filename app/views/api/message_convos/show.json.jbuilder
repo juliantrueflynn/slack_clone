@@ -13,11 +13,11 @@ json.chatroom do
 end
 
 json.reactions do
-  reactions = Reaction.by_message_id(@user_threads)
+  reactions = Reaction.with_message(@user_threads)
   json.array! reactions, :id, :emoji, :message_id, :message_slug, :user_slug
 end
 
 json.favorites do
-  favorites = current_user.favorites.by_message_id(@user_threads)
+  favorites = current_user.favorites.with_message(@user_threads)
   json.array! favorites, :id, :message_slug
 end

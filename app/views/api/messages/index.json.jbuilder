@@ -15,7 +15,7 @@ end
 parents = messages.with_parent
 
 json.reactions do
-  reactions = Reaction.by_message_id(parents).includes(:user)
+  reactions = Reaction.with_message(parents).includes(:user)
 
   json.array! reactions do |reaction|
     json.(reaction, :id, :emoji, :message_id, :message_slug, :user_slug)
@@ -23,7 +23,7 @@ json.reactions do
 end
 
 json.favorites do
-  favorites = current_user.favorites.by_message_id(parents)
+  favorites = current_user.favorites.with_message(parents)
   json.array! favorites, :id, :message_slug
 end
 

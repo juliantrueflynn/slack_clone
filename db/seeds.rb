@@ -36,12 +36,8 @@ def read_create_or_update(entity, user_id)
 end
 
 def read_destroy(entity, user_id)
-  read = entity.reads.find_by(
-    readable_id: entity,
-    readable_type: entity.class.name,
-    user_id: user_id
-  )
-  read.delete if read
+  read = entity.reads.find_by_user_id(user_id)
+  read.delete unless read.nil?
 end
 
 def seed_workspace_create(user)
@@ -60,7 +56,7 @@ end
 def seed_workspace_sub_update
   workspace_sub = WorkspaceSub.where.not(user_id: 1).with_is_member.sample
   workspace_sub.update!(is_member: false)
-  chatrooms = workspace_sub.user.chatrooms.by_workspace_id(workspace_sub.workspace)
+  chatrooms = workspace_sub.user.chatrooms.with_workspace(workspace_sub.workspace)
   chatrooms.each { |chatroom| read_destroy(chatroom, workspace_sub.user.id) }
 end
 
@@ -108,7 +104,7 @@ end
 def seed_child_message_create
   chatroom = chatroom_with_entries
   user = chatroom.users.sample
-  parent = chatroom.messages.by_entry_parent.sample
+  parent = chatroom.entries_parents.sample
 
   loop do
     reply = parent.children.create!(
@@ -123,7 +119,7 @@ end
 
 def seed_favorite_create
   user = chatroom_with_entries.users.sample
-  message = chatroom_with_entries.messages.by_entry_parent.sample
+  message = chatroom_with_entries.entries_parents.sample
   user.favorites.find_or_create_by!(message_id: message.chatroom_id)
 end
 

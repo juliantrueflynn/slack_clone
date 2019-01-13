@@ -2,7 +2,7 @@ class Api::ChatroomsController < ApplicationController
   before_action :set_chatroom, only: [:show, :update]
 
   def index
-    workspace = Workspace.find_by(slug: params[:workspace_slug])
+    workspace = Workspace.find_by_slug(params[:workspace_slug])
     @chatrooms = workspace.chatrooms.without_dm.includes(:owner)
   end
 
@@ -30,7 +30,7 @@ class Api::ChatroomsController < ApplicationController
   private
 
   def set_chatroom
-    @chatroom = Chatroom.find_by(slug: params[:slug])
+    @chatroom = Chatroom.find_by_slug(params[:slug])
   end
 
   def chatroom_params

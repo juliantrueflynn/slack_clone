@@ -20,6 +20,9 @@ class Chatroom < ApplicationRecord
   has_many :chatroom_subs
   has_many :users, through: :chatroom_subs
   has_many :messages
+  has_many :entries_parents,
+    -> { with_entry_type.with_parent },
+    class_name: 'Message'
   has_many :pins, through: :messages
   has_many :reads,
     -> { chatrooms },
@@ -30,15 +33,15 @@ class Chatroom < ApplicationRecord
   scope :with_dm, -> { where(has_dm: true) }
   scope :without_dm, -> { where(has_dm: false) }
 
-  def self.by_workspace_id(workspace_id)
+  def self.with_workspace(workspace_id)
     where(workspace_id: workspace_id)
   end
 
-  def self.has_dm_with_user_ids?(user_ids)
-    !!with_dm.by_user_ids(user_ids)
+  def self.has_dm_with_users?(user_ids)
+    !!with_dm.with_users(user_ids)
   end
 
-  def self.by_user_ids(users_ids)
+  def self.with_users(users_ids)
     joins(:chatroom_subs)
       .where(chatroom_subs: { user_id: users_ids })
       .group('chatrooms.id')
@@ -76,8 +79,8 @@ class Chatroom < ApplicationRecord
   ENTRIES_CACHE_SIZE = 15
 
   def older_messages(last_message_id)
-    return messages if messages.by_entry_parent.length <= ENTRIES_CACHE_SIZE
-    last_id = last_message_id || messages.by_entry_parent.last.id
+    return messages if entries_parents.length <= ENTRIES_CACHE_SIZE
+    last_id = last_message_id || entries_parents.last.id
     entries = entries_before_message_id(last_id)
     messages_between(last_id, entries).or(Message.children_of(entries))
   end
@@ -118,8 +121,7 @@ class Chatroom < ApplicationRecord
   end
 
   def entries_before_message_id(message_id)
-    messages.by_entry_parent
-      .with_id_before(message_id)
+    entries_parents.with_id_before(message_id)
       .order(id: :desc)
       .limit(ENTRIES_CACHE_SIZE)
   end

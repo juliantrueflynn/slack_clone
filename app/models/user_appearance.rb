@@ -6,13 +6,10 @@ class UserAppearance < ApplicationRecord
   belongs_to :user
   belongs_to :workspace
 
-  def self.in_workspace(id)
-    find_by(workspace_id: id)
-  end
-
-  def self.by_workspace_slug(slug)
-    workspace = Workspace.find_by_slug(slug)
-    in_workspace(workspace.id)
+  def self.by_workspace(workspace_id)
+    joins(:workspace).where(workspaces: { id: workspace_id })
+      .or(joins(:workspace).where(workspaces: { slug: workspace_id }))
+      .take
   end
 
   def broadcast_name

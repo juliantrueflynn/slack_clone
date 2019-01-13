@@ -18,7 +18,7 @@ json.messages do
 end
 
 json.reactions do
-  reactions = Reaction.by_message_id(message_ids).includes(:user)
+  reactions = Reaction.with_message(message_ids).includes(:user)
 
   json.array! reactions do |reaction|
     json.(reaction, :id, :emoji, :message_id, :message_slug, :user_slug)

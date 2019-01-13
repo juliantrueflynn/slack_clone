@@ -12,7 +12,7 @@ const withScrollManager = scrollBarFor => (WrappedComponent) => {
       lastMessage = getConvoLastEntry(state);
     }
 
-    if (scrollBarFor === 'Channel') {
+    if (scrollBarFor === 'Chatroom') {
       lastMessage = getChatroomLastEntry(state);
     }
 

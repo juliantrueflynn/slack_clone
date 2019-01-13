@@ -26,7 +26,7 @@ class Api::UsersController < ApplicationController
   private
 
   def set_user
-    @user = User.find_by(slug: params[:slug])
+    @user = User.find_by_slug(params[:slug])
   end
 
   def user_params

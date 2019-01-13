@@ -5,8 +5,8 @@ class Reaction < ApplicationRecord
   belongs_to :message
   has_one :chatroom, through: :message
 
-  def self.by_message_id(message_ids)
-    includes(:message).where(message_id: message_ids)
+  def self.with_message(message_id)
+    includes(:message).where(message_id: message_id)
   end
 
   def broadcast_name

@@ -26,7 +26,8 @@ function* getMatchingReactionByUser({ slug, reactionIds }, emoji) {
 
 function* reactionToggle({ reaction: { messageSlug, emoji } }) {
   try {
-    const msg = yield select(getMessagesMap)[messageSlug];
+    const msgsMap = yield select(getMessagesMap);
+    const msg = msgsMap[messageSlug];
     const matchingReaction = yield getMatchingReactionByUser(msg, emoji);
 
     if (matchingReaction) {

@@ -31,7 +31,7 @@ class Api::ChatroomSubsController < ApplicationController
 
   def set_chatroom_sub
     chatroom = Chatroom.find_by_slug(params[:chatroom_slug])
-    @chatroom_sub = chatroom.subs.find_by(user_id: current_user.id)
+    @chatroom_sub = chatroom.subs.by_user(current_user)
   end
 
   def chatroom_sub_params

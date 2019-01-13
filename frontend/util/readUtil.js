@@ -3,7 +3,7 @@ import { selectEntityBySlug, selectUIByDisplay, getCurrentUser } from '../reduce
 
 export const getReadProps = msg => ({
   slug: msg.parentMessageSlug || msg.chatroomSlug,
-  readableType: msg.parentMessageSlug ? 'Message' : 'Channel',
+  readableType: msg.parentMessageSlug ? 'Message' : 'Chatroom',
   readableId: msg.parentMessageId || msg.chatroomId,
 });
 
@@ -26,7 +26,7 @@ export function* isCurrentUserNotInConvo(authors) {
 export function* isCurrentUserInView({ slug, readableType }) {
   const chatPath = yield select(selectUIByDisplay, 'displayChatPath');
 
-  if (readableType === 'Channel') {
+  if (readableType === 'Chatroom') {
     return chatPath === slug;
   }
 

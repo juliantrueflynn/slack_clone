@@ -34,7 +34,7 @@ class Api::MessagesController < ApplicationController
   private
 
   def set_message
-    @message = Message.find_by(slug: params[:slug])
+    @message = Message.find_by_slug(params[:slug])
   end
 
   def message_params

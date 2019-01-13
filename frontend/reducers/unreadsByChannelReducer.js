@@ -38,7 +38,7 @@ const unreadsByChannelReducer = (state = _defaultState, action) => {
     case UNREAD_UPDATE: {
       const { readableType, slug, messageSlug } = action.unread;
 
-      if (readableType !== 'Channel') {
+      if (readableType !== 'Chatroom') {
         return state;
       }
 

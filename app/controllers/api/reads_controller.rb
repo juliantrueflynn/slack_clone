@@ -12,7 +12,7 @@ class Api::ReadsController < ApplicationController
   end
 
   def update
-    if @read.save
+    if @read.update(read_params)
       render 'api/reads/show'
     else
       render json: @read.errors.full_messages, status: 422
@@ -22,13 +22,10 @@ class Api::ReadsController < ApplicationController
   private
 
   def set_read
-    @read = current_user.reads.find_by(
-      readable_id: params[:readable_id],
-      readable_type: params[:readable_type]
-    )
+    @read = current_user.reads.find_by(read_params)
   end
 
   def read_params
-    params.require(:read).permit(:readable_id, :readable_type, :workspace_id)
+    params.require(:read).permit(:readable_id, :readable_type)
   end
 end

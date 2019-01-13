@@ -28,7 +28,7 @@ class User < ApplicationRecord
   has_many :pins
 
   def self.find_by_email_and_password(email, password)
-    user = User.find_by(email: email)
+    user = User.find_by_email(email)
     return nil if user.nil?
     user.is_password?(password) ? user : nil
   end
@@ -54,7 +54,7 @@ class User < ApplicationRecord
   end
 
   def offline!(workspace_slug)
-    user_appearance = appears.by_workspace_slug(workspace_slug)
+    user_appearance = appears.by_workspace(workspace_slug)
     return if user_appearance.nil?
     user_appearance.destroy!
   end
@@ -74,7 +74,7 @@ class User < ApplicationRecord
   def generate_unique_session_token
     self.session_token = new_session_token
 
-    while User.find_by(session_token: self.session_token)
+    while User.find_by_session_token(self.session_token)
       self.session_token = new_session_token
     end
 

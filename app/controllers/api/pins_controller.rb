@@ -10,7 +10,7 @@ class Api::PinsController < ApplicationController
   end
 
   def destroy
-    @pin = Pin.find_by(id: params[:id])
+    @pin = Pin.find_by_id(params[:id])
 
     if @pin
       render json: @pin.destroy

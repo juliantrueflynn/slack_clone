@@ -152,4 +152,4 @@ class ChannelScrollBar extends React.Component {
   }
 }
 
-export default withScrollManager('Channel')(ChannelScrollBar);
+export default withScrollManager('Chatroom')(ChannelScrollBar);

@@ -4,7 +4,7 @@ class Api::WorkspacesController < ApplicationController
   end
 
   def show
-    @workspace = Workspace.find_by(slug: params[:slug])
+    @workspace = Workspace.find_by_slug(params[:slug])
   end
 
   def create

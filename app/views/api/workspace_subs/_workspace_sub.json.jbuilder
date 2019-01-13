@@ -11,8 +11,7 @@ end
 
 json.chatroom_subs do
   user = workspace_sub.user
-  workspace_id = workspace_sub.workspace_id
-  chatroom_subs = user.chatroom_subs.by_workspace_id(workspace_id)
+  chatroom_subs = user.chatroom_subs.with_workspace(workspace_sub.workspace_id)
 
   json.array! chatroom_subs do |chatroom_sub|
     json.(chatroom_sub, :id, :chatroom_id, :created_at)

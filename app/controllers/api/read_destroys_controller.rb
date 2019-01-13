@@ -5,7 +5,8 @@ class Api::ReadDestroysController < ApplicationController
       readable_id: params[:readable_id]
     )
 
-    if @read && @read.destroy
+    if @read
+      @read.destroy
       render partial: 'api/reads/read', object: @read
     else
       render json: ['not found']

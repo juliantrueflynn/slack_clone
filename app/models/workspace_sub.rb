@@ -8,6 +8,10 @@
 
   scope :with_is_member, -> { where(is_member: true) }
 
+  def self.by_user(user_id)
+    find_by_user_id(user_id)
+  end
+
   def broadcast_name
     "workspace_#{workspace.slug}"
   end
@@ -42,7 +46,7 @@
   end
 
   def chatroom_sub_messages_params
-    chatrooms = user.chatrooms.without_dm.by_workspace_id(workspace.id)
+    chatrooms = user.chatrooms.without_dm.with_workspace(workspace)
 
     chatrooms.reduce([]) do |memo, chatroom|
       memo << { chatroom_id: chatroom.id, entity_type: message_entity_type }

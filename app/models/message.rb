@@ -29,11 +29,10 @@ class Message < ApplicationRecord
   scope :with_parent, -> { where(parent_message_id: nil) }
   scope :with_child, -> { where.not(parent_message_id: nil) }
   scope :with_entry_type, -> { where(entity_type: 'entry') }
-  scope :by_entry_parent, -> { with_entry_type.with_parent }
   scope :search_import, -> { with_entry_type }
 
   def self.chatroom_unreads_with_user_id(user_id)
-    by_entry_parent.joins(chatroom: :reads)
+    with_entry_type.with_parent.joins(chatroom: :reads)
       .where(reads: { user_id: user_id })
       .where('messages.created_at > reads.accessed_at')
   end
@@ -50,7 +49,7 @@ class Message < ApplicationRecord
   end
 
   def self.chatrooms_last_created_at(author_id)
-    by_entry_parent.includes(chatroom: :chatroom_subs)
+    with_entry_type.with_parent.includes(chatroom: :chatroom_subs)
       .where(chatroom_subs: { user_id: author_id })
       .group('chatrooms.slug')
       .maximum(:created_at)
