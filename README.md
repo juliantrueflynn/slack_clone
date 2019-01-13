@@ -20,16 +20,16 @@ Slack clone powered by Rails, React, and Redux. [View live demo](https://slack-c
 - Favorite messages and view list of favorited messages
 - Pin messages to channel
 - Add reactions to messages
-- Add emojis to messages by typing (ex. :smile:) or selecting from dropdown
+- Add emojis to messages by typing (ex. ```:smile:```) or selecting from dropdown
 - View channel details, pinned messages, or subscribers
 - Search channels you're not subscribed to
 - Be notified of unread channels or conversations you've joined
 - View all unread messages
-- View all conversations you're in
+- View all conversations you're present in
 
 ## How to Use
 
-Steps below are used to set the project locally. You could also review the app by visting the live demo: [slack-clone-julian.herokuapp.com](https://slack-clone-julian.herokuapp.com/)
+Steps below are used to set the project locally. You could also review the app by visting the [live demo](https://slack-clone-julian.herokuapp.com/)
 
 ```
 # clone the project
@@ -50,7 +50,7 @@ rails db:migrate
 # generate mock data so app is not so empty (optional)
 rails db:seed
 
-# start the Rails server and visit the url: http://localhost:3000
+# start the server, then open your browser to: http://localhost:3000
 rails s
 ```
 
@@ -59,7 +59,7 @@ rails s
 - Rails 5.1.5
 - React 16.5.2
 - ElasticSearch 6.1.0
-- ActionCable 5.1.6
+- Action Cable 5.1.6
 - React Router 4.3.1
 - Redux 3.7.2
 - Redux Saga 0.16.2
