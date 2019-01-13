@@ -14,7 +14,6 @@
     "babel-preset-stage-2": "^6.24.1",
     "classnames": "^2.2.6",
     "css-loader": "^0.28.11",
-    "css-object-loader": "0.0.7",
     "draft-js": "^0.10.5",
     "draft-js-emoji-plugin": "^2.1.1",
     "draft-js-plugins-editor": "^2.1.1",
