@@ -1,8 +1,6 @@
 class User < ApplicationRecord
+  attr_accessor :skip_broadcast
   attr_reader :password
-
-  before_validation :generate_slug, unless: :slug?
-  after_initialize :ensure_session_token
 
   validates_presence_of :username, :email, :password_digest, :session_token
   validates_uniqueness_of :username, :email
@@ -59,6 +57,8 @@ class User < ApplicationRecord
     user_appearance.destroy!
   end
 
+  before_validation :generate_slug, unless: :slug?
+  after_initialize :ensure_session_token
   after_update_commit :user_broadcast_update
 
   private

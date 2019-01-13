@@ -1,4 +1,6 @@
 class Pin < ApplicationRecord
+  attr_accessor :skip_broadcast
+
   validates_presence_of :message_id, :user_id
   validates_uniqueness_of :message_id
 

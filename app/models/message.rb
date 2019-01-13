@@ -1,8 +1,6 @@
 class Message < ApplicationRecord
   searchkick
 
-  before_validation :generate_slug, unless: :slug?
-
   attr_accessor :skip_broadcast
 
   validates_presence_of :slug, :author_id, :entity_type, :chatroom_id
@@ -85,6 +83,7 @@ class Message < ApplicationRecord
     author_slugs.uniq
   end
 
+  before_validation :generate_slug, unless: :slug?
   after_create_commit :broadcast_create
   after_update_commit :broadcast_update
   after_destroy :destroy_replies, :broadcast_destroy

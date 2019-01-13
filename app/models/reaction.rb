@@ -1,4 +1,6 @@
 class Reaction < ApplicationRecord
+  attr_accessor :skip_broadcast
+
   validates_presence_of :message_id, :user_id, :emoji
 
   belongs_to :user

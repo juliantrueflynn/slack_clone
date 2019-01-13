@@ -1,4 +1,6 @@
 class UserAppearance < ApplicationRecord
+  attr_accessor :skip_broadcast
+
   validates_presence_of :user_id, :workspace_id, :status
   validates_inclusion_of :status, in: %w(online offline)
   validates_uniqueness_of :workspace_id, scope: :user_id

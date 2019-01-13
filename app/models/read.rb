@@ -1,7 +1,4 @@
 class Read < ApplicationRecord
-  before_validation :ensure_workspace_id
-  before_validation :generate_accessed_at
-
   validates_presence_of :readable_id, :readable_type, :workspace_id, :user_id, :accessed_at
   validates_uniqueness_of :readable_type, scope: [:readable_id, :workspace_id, :user_id]
 
@@ -34,6 +31,9 @@ class Read < ApplicationRecord
   def slug
     associated_entity.slug if associated_entity
   end
+
+  before_validation :ensure_workspace_id
+  before_validation :generate_accessed_at
 
   private
 
