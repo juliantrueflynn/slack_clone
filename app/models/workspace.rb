@@ -88,7 +88,6 @@ class Workspace < ApplicationRecord
   end
 
   def generate_default_chatrooms
-    return if skip_broadcast
     chatrooms.create(default_chatrooms_params)
   end
 
