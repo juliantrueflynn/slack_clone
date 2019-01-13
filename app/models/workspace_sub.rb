@@ -6,9 +6,7 @@
   belongs_to :user
   belongs_to :workspace
 
-  def self.by_user(user_id)
-    find_by(user_id: user_id)
-  end
+  scope :with_is_member, -> { where(is_member: true) }
 
   def broadcast_name
     "workspace_#{workspace.slug}"

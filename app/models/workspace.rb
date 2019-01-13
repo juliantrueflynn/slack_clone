@@ -58,10 +58,6 @@ class Workspace < ApplicationRecord
     convos.merge(chatrooms)
   end
 
-  def chatroom_ids_with_user_id(user_id)
-    chatroom_subs.where(user_id: user_id).pluck(:chatroom_id)
-  end
-
   def generate_default_chatrooms_reads(user = owner)
     user.reads.create(default_chatrooms_reads_params)
   end

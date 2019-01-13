@@ -37,7 +37,7 @@ end
 
 def read_destroy(entity, user_id)
   read = entity.reads.find_by(
-    readable_id: entity.id,
+    readable_id: entity,
     readable_type: entity.class.name,
     user_id: user_id
   )
@@ -58,68 +58,63 @@ def seed_workspace_sub_create
 end
 
 def seed_workspace_sub_update
-  user = User.all.where.not(id: 1).sample
-  workspace = user.workspaces.sample
-  workspace_sub = workspace.workspace_subs.by_user(user)
-  workspace_sub.update!(is_member: !workspace_sub.is_member)
-
-  unless !workspace_sub.is_member
-    user.chatrooms.where(workspace_id: workspace.id).each do |chat|
-      read_destroy(chat, user.id)
-    end
-  end
+  workspace_sub = WorkspaceSub.where.not(user_id: 1).with_is_member.sample
+  workspace_sub.update!(is_member: false)
+  rooms = workspace_sub.user.chatrooms.by_workspace_id(workspace_sub.workspace)
+  rooms.each { |room| read_destroy(room, workspace_sub.user.id) }
 end
 
 def seed_chatroom_sub_create
   workspace = Workspace.all.sample
   user = workspace.users.sample
-  chat = workspace.chatrooms.without_user_sub(user).sample
-  return unless chat
-  chat.subs.find_or_create_by!(user_id: user.id)
-  read_create_or_update(chat, user.id)
+  room = workspace.chatrooms.without_user_sub(user).sample
+  return unless room
+  room.subs.find_or_create_by!(user_id: user.id)
+  read_create_or_update(room, user.id)
 end
 
 def seed_chat_sub_destroy
-  user = User.all.where.not(id: 1).sample
-  chat = user.chatrooms.sample
-  default_chats = chat.workspace.default_chatrooms
-  chatroom_sub = chat.subs.where.not(id: default_chats).by_user(user)
-  read_destroy(chat, user.id)
+  workspace = Workspace.all.sample
+  user = workspace.users.where.not(id: 1).sample
+  default_room = workspace.chatrooms.first
+  room_subs = workspace.chatroom_subs
+  room_sub = room_subs.where.not(id: default_room).with_user(user).sample
+  read_destroy(room_sub.chatroom, user.id)
 end
 
 def seed_chatroom_create
   workspace = Workspace.all.sample
   user = workspace.users.sample
   return unless workspace
-  chat = user.created_chatrooms.create!(
+  room = user.created_chatrooms.create!(
     title: Faker::Company.unique.buzzword,
     topic: (rand < 0.2 ? Faker::Company.bs : nil),
     workspace_id: workspace.id
   )
-  read_create_or_update(chat, user.id)
+  read_create_or_update(room, user.id)
 end
 
 def seed_parent_message_create
-  chat = Chatroom.all.sample
-  user = chat.members.sample
+  room = Chatroom.all.sample
+  user = room.members.sample
 
   loop do
-    message = user.messages.create!(body: message_body, chatroom_id: chat.id)
-    read_create_or_update(chat, user.id)
+    message = user.messages.create!(body: message_body, chatroom_id: room.id)
+    read_create_or_update(room, user.id)
     break if rand < 0.7
   end
 end
 
 def seed_child_message_create
-  chat = chatroom_with_entries
-  user = chat.members.sample
-  parent = chat.messages.by_entry_parent.sample
+  room = chatroom_with_entries
+  user = room.members.sample
+  parent = room.messages.by_entry_parent.sample
 
   loop do
     reply = parent.children.create!(
       body: message_body,
       author_id: user.id,
-      chatroom_id: chat.id
+      chatroom_id: room.id
     )
     read_create_or_update(parent, user.id)
     break if rand < 0.7
@@ -129,7 +124,7 @@ end
 def seed_favorite_create
   user = chatroom_with_entries.members.sample
   message = chatroom_with_entries.messages.by_entry_parent.sample
-  user.favorites.find_or_create_by!(message_id: message.id)
+  user.favorites.find_or_create_by!(message_id: message.chatroom_id)
 end
 
 def seed_reaction_create
@@ -157,15 +152,18 @@ end
 end
 
 40.times { seed_workspace_sub_create }
-45.times { seed_chatroom_create }
-35.times { seed_chatroom_sub_create }
+99.times { seed_parent_message_create }
+25.times { seed_chatroom_create }
+20.times { seed_chatroom_sub_create }
 5.times { seed_chat_sub_destroy }
-50.times { seed_parent_message_create }
-30.times { seed_child_message_create }
-30.times { seed_chatroom_sub_create }
-10.times { seed_chat_sub_destroy }
+99.times { seed_parent_message_create }
+40.times { seed_child_message_create }
+20.times { seed_chatroom_sub_create }
+30.times { seed_chat_sub_destroy }
 60.times { seed_reaction_create }
 30.times { seed_favorite_create }
 3.times { seed_workspace_sub_update }
-40.times { seed_parent_message_create }
+99.times { seed_parent_message_create }
 30.times { seed_child_message_create }
+15.times { seed_chatroom_sub_create }
+99.times { seed_parent_message_create }

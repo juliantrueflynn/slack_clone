@@ -11,12 +11,16 @@ class ChatroomSub < ApplicationRecord
     includes(:chatroom).where(chatrooms: { workspace_id: workspace_id })
   end
 
-  def self.by_user(user_id)
-    find_by(user_id: user_id)
+  def self.with_user(user_id)
+    where(user_id: user_id)
+  end
+
+  def self.chatroom_ids_with_user(user_id)
+    with_user(user_id).pluck(:chatroom_id)
   end
 
   def self.shared_with_user_id(user_id)
-    where(chatroom_id: where(user_id: user_id).pluck(:chatroom_id))
+    where(chatroom_id: chatroom_ids_with_user(user_id))
   end
 
   def broadcast_name
