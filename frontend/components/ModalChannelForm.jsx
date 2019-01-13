@@ -59,13 +59,13 @@ class ModalChannelForm extends React.Component {
           label: 'Title',
           type: 'text',
           value: title,
+          condition: currentUserSlug === chatroom.ownerSlug,
         },
         {
           id: 'topic',
           label: 'Topic',
           value: topic,
           placeholder: 'e.g. Discuss XYZ',
-          condition: currentUserSlug === chatroom.ownerSlug,
         },
       ];
     }
