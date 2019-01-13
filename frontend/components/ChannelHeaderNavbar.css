@@ -16,14 +16,8 @@
   margin-right: 0;
 }
 
-.ChannelHeaderNavbar .Dropdown__channel-edit .Menu {
-  top: 32px;
-}
-
-.ChannelHeaderNavbar .Dropdown__channel-edit,
-.ChannelHeaderNavbar .Menu__edit > .MenuItem > .MenuItem__content,
-.ChannelHeaderNavbar .Menu__header-user .MenuItem__content:not(.MenuItem__content--dropdown),
-.Btn__dropdown--channel-edit {
+.ChannelHeaderNavbar .Btn__dropdown--chatroom-edit,
+.ChannelHeaderNavbar .Menu__header-user .MenuItem__content:not(.MenuItem__content--dropdown) {
   padding: 6px;
   border-radius: 4px;
 }
@@ -36,13 +30,12 @@
   color: #74B9FF;
 }
 
-.ChannelHeaderNavbar .Menu__edit > .MenuItem > .MenuItem__content--active,
 .ChannelHeaderNavbar .Menu__header-user .MenuItem__content--active,
 .ChannelHeaderNavbar .Btn__dropdown--active {
   background-color: #DFE6E9;
 }
 
-.Modal__overlay--dropdown-channel-edit .Menu > .MenuItem > .MenuItem__content--active {
+.Modal__dropdown--chatroom-edit .Menu > .MenuItem > .MenuItem__content--active {
   background-color: #74B9FF;
   color: #FFF;
 }
@@ -121,7 +114,6 @@
 }
 
 @media screen and (max-width: 768px) {
-  .ChannelHeaderNavbar .Menu__edit,
   .ChannelHeaderNavbar .Menu__header-user {
     display: none;
   }
