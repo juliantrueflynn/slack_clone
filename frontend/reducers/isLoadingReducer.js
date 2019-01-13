@@ -13,13 +13,13 @@ import {
 } from '../actions/actionTypes';
 
 const _defaultState = {
-  search: false,
-  workspace: false,
   chatroom: false,
   chatrooms: false,
   drawer: false,
-  history: false,
   form: false,
+  messages: false,
+  search: false,
+  workspace: false,
 };
 
 const isLoadingReducer = (state = _defaultState, action) => {
@@ -39,7 +39,7 @@ const isLoadingReducer = (state = _defaultState, action) => {
       return { ...state, chatroom: true };
     case MESSAGE.INDEX.REQUEST:
       if (action.lastId) {
-        return { ...state, history: true };
+        return { ...state, messages: true };
       }
 
       return { ...state, chatroom: true };
@@ -66,7 +66,7 @@ const isLoadingReducer = (state = _defaultState, action) => {
     case READ.INDEX.RECEIVE:
       return { ...state, chatroom: false };
     case MESSAGE.INDEX.RECEIVE:
-      return { ...state, chatroom: false, history: false };
+      return { ...state, chatroom: false, messages: false };
     case MESSAGE.SHOW.RECEIVE:
     case FAVORITE.INDEX.RECEIVE:
     case USER.SHOW.RECEIVE:

@@ -95,7 +95,7 @@ class Channel extends React.Component {
               messages={messages}
               openModal={openModal}
               currentUserSlug={currentUserSlug}
-              isFetching={isLoading.history}
+              isFetching={isLoading.messages}
               matchUrl={matchUrl}
               updateScrollLocation={updateScrollLocation}
               fetchHistoryRequest={fetchHistoryRequest}
