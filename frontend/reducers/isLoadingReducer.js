@@ -38,7 +38,11 @@ const isLoadingReducer = (state = _defaultState, action) => {
     case READ.INDEX.REQUEST:
       return { ...state, chatroom: true };
     case MESSAGE.INDEX.REQUEST:
-      return { ...state, chatroom: true, history: true };
+      if (action.lastId) {
+        return { ...state, history: true };
+      }
+
+      return { ...state, chatroom: true };
     case DRAWER_UPDATE:
       return { ...state, drawer: true };
     case CHATROOM.INDEX.REQUEST:
