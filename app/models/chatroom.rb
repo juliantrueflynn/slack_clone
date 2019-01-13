@@ -17,16 +17,15 @@ class Chatroom < ApplicationRecord
     class_name: 'User',
     foreign_key: :owner_id,
     optional: true
-  has_many :subs, class_name: 'ChatroomSub'
-  has_many :members,
-    class_name: 'User',
-    through: :subs,
-    source: :user
+  has_many :chatroom_subs
+  has_many :users, through: :chatroom_subs
   has_many :messages
   has_many :pins, through: :messages
   has_many :reads,
-    -> { where(readable_type: 'Chatroom') },
+    -> { chatrooms },
     foreign_key: :readable_id
+  
+  alias_attribute :subs, :chatroom_subs
   
   scope :with_dm, -> { where(has_dm: true) }
   scope :without_dm, -> { where(has_dm: false) }
@@ -40,7 +39,7 @@ class Chatroom < ApplicationRecord
   end
 
   def self.by_user_ids(users_ids)
-    joins(:subs)
+    joins(:chatroom_subs)
       .where(chatroom_subs: { user_id: users_ids })
       .group('chatrooms.id')
       .having('COUNT(chatrooms.id) > 1')
@@ -48,11 +47,11 @@ class Chatroom < ApplicationRecord
   end
 
   def self.without_user_sub(user_id)
-    includes(:subs).where.not(chatroom_subs: { user_id: user_id })
+    includes(:chatroom_subs).where.not(chatroom_subs: { user_id: user_id })
   end
 
   def self.without_user_and_dm(user_id)
-    includes(:subs)
+    includes(:chatroom_subs)
       .where("chatroom_subs.user_id != ? OR chatrooms.has_dm = 'f'", user_id)
       .references(:chatroom_subs)
       .order(:id)

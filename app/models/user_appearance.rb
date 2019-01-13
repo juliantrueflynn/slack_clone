@@ -11,7 +11,7 @@ class UserAppearance < ApplicationRecord
   end
 
   def self.by_workspace_slug(slug)
-    workspace = Workspace.find_by(slug: slug)
+    workspace = Workspace.find_by_slug(slug)
     in_workspace(workspace.id)
   end
 

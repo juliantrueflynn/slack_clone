@@ -34,5 +34,5 @@ unless last_message_id
     json.array! pins, :id, :user_id, :message_id, :message_slug, :user_slug
   end
 
-  json.members @chatroom.members.pluck(:slug)
+  json.members @chatroom.users.pluck(:slug)
 end

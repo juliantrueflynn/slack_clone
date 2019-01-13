@@ -16,7 +16,7 @@ const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => {
   const actionCablesChannels = chatrooms.filter(ch => (
     ch.isSub || ch.slug === chatPath
   )).map(ch => (
-    { chatroom: 'ChatroomChannel', chatroomSlug: ch.slug }
+    { channel: 'ChatroomChannel', chatroomSlug: ch.slug }
   ));
 
   return {

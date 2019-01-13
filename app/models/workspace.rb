@@ -17,10 +17,10 @@ class Workspace < ApplicationRecord
   has_many :user_appearances
   has_many :reads
   has_many :chatrooms
-  has_many :chatroom_subs,
-    through: :chatrooms,
-    source: :subs
+  has_many :chatroom_subs, through: :chatrooms
   has_many :messages, through: :chatrooms
+
+  alias_attribute :subs, :workspace_subs
 
   def self.without_user_sub(user_id)
     includes(:workspace_subs).where.not(workspace_subs: { user_id: user_id })
@@ -84,7 +84,7 @@ class Workspace < ApplicationRecord
   end
 
   def generate_workspace_subs
-    workspace_subs.create(user_id: owner.id, skip_broadcast: true)
+    subs.create(user_id: owner.id, skip_broadcast: true)
   end
 
   def generate_default_chatrooms

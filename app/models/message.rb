@@ -50,7 +50,7 @@ class Message < ApplicationRecord
   end
 
   def self.chatrooms_last_created_at(author_id)
-    by_entry_parent.includes(chatroom: :subs)
+    by_entry_parent.includes(chatroom: :chatroom_subs)
       .where(chatroom_subs: { user_id: author_id })
       .group('chatrooms.slug')
       .maximum(:created_at)

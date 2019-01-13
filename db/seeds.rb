@@ -54,23 +54,23 @@ def seed_workspace_sub_create
   user = User.all.sample
   workspace = Workspace.without_user_sub(user).sample
   return unless workspace
-  workspace.workspace_subs.find_or_create_by!(user_id: user.id)
+  workspace.subs.find_or_create_by!(user_id: user.id)
 end
 
 def seed_workspace_sub_update
   workspace_sub = WorkspaceSub.where.not(user_id: 1).with_is_member.sample
   workspace_sub.update!(is_member: false)
-  rooms = workspace_sub.user.chatrooms.by_workspace_id(workspace_sub.workspace)
-  rooms.each { |room| read_destroy(room, workspace_sub.user.id) }
+  chatrooms = workspace_sub.user.chatrooms.by_workspace_id(workspace_sub.workspace)
+  chatrooms.each { |chatroom| read_destroy(chatroom, workspace_sub.user.id) }
 end
 
 def seed_chatroom_sub_create
   workspace = Workspace.all.sample
   user = workspace.users.sample
-  room = workspace.chatrooms.without_user_sub(user).sample
-  return unless room
-  room.subs.find_or_create_by!(user_id: user.id)
-  read_create_or_update(room, user.id)
+  chatroom = workspace.chatrooms.without_user_sub(user).sample
+  return unless chatroom
+  chatroom.subs.find_or_create_by!(user_id: user.id)
+  read_create_or_update(chatroom, user.id)
 end
 
 def seed_chat_sub_destroy
@@ -86,35 +86,35 @@ def seed_chatroom_create
   workspace = Workspace.all.sample
   user = workspace.users.sample
   return unless workspace
-  room = user.created_chatrooms.create!(
+  chatroom = user.created_chatrooms.create!(
     title: Faker::Company.unique.buzzword,
     topic: (rand < 0.2 ? Faker::Company.bs : nil),
     workspace_id: workspace.id
   )
-  read_create_or_update(room, user.id)
+  read_create_or_update(chatroom, user.id)
 end
 
 def seed_parent_message_create
-  room = Chatroom.all.sample
-  user = room.members.sample
+  chatroom = Chatroom.all.sample
+  user = chatroom.users.sample
 
   loop do
-    message = user.messages.create!(body: message_body, chatroom_id: room.id)
-    read_create_or_update(room, user.id)
+    message = user.messages.create!(body: message_body, chatroom_id: chatroom.id)
+    read_create_or_update(chatroom, user.id)
     break if rand < 0.7
   end
 end
 
 def seed_child_message_create
-  room = chatroom_with_entries
-  user = room.members.sample
-  parent = room.messages.by_entry_parent.sample
+  chatroom = chatroom_with_entries
+  user = chatroom.users.sample
+  parent = chatroom.messages.by_entry_parent.sample
 
   loop do
     reply = parent.children.create!(
       body: message_body,
       author_id: user.id,
-      chatroom_id: room.id
+      chatroom_id: chatroom.id
     )
     read_create_or_update(parent, user.id)
     break if rand < 0.7
@@ -122,13 +122,13 @@ def seed_child_message_create
 end
 
 def seed_favorite_create
-  user = chatroom_with_entries.members.sample
+  user = chatroom_with_entries.users.sample
   message = chatroom_with_entries.messages.by_entry_parent.sample
   user.favorites.find_or_create_by!(message_id: message.chatroom_id)
 end
 
 def seed_reaction_create
-  user = chatroom_with_entries.members.sample
+  user = chatroom_with_entries.users.sample
   message = chatroom_with_entries.messages.sample
   emoji = REACTIONS.sample
   user.reactions.find_or_create_by!(emoji: emoji, message_id: message.id)

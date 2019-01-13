@@ -3,7 +3,7 @@ json.workspace do
 end
 
 json.workspace_subs do
-  json.array! @workspace.workspace_subs.includes(:user) do |workspace_sub|
+  json.array! @workspace.subs.includes(:user) do |workspace_sub|
     json.(workspace_sub, *workspace_sub.attributes.keys)
     json.user_slug workspace_sub.user.slug
     json.workspace_slug @workspace.slug

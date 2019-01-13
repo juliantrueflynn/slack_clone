@@ -13,4 +13,4 @@ json.chatroom_subs do
   end
 end
 
-json.members chatroom.has_dm ? chatroom.members.pluck(:slug) : []
+json.members chatroom.has_dm ? chatroom.users.pluck(:slug) : []
