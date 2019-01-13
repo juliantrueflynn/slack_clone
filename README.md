@@ -1,105 +1,66 @@
 # React & Rails Slack Clone
 
-Creating a [Slack](https://slack.com/) clone, trying to complete as many features as possible in 12 days.
+Slack clone powered by Rails, React, and Redux. [View live demo](https://slack-clone-julian.herokuapp.com/)
 
-#### Working Dates
+## Table of Contents
 
-Start date is 4/4/18, end date is 4/16/18.
+1. [Features](#features)
+2. [How to Use](#how-to-use)
+3. [Technologies](#technologies)
 
 ## Features
 
-- Create new channels or join a channel
-- Invite people to their Slacks and or channels
-- User can switch between signed in Slack chats
-- Add details to channel and set topics
-- User can view all channel members and search list
-- Search messages and "jump to" dates
-- User can reply to or start new message thread
-- User can favorite messages and view list of their favorited messages
-- User can "mention" other users which notifies mentioned user
-- User can view all their activity with other users
-- Add "reactions" to messages (i.e. emojis)
-- Users can privately direct message each other
-- User can edit or delete their own comment
-- User can edit settings per Slack or per channel
-- Bonus: user can set their public online status per Slack
-- Bonus: messages allow markdown formatting
-- Bonus: extra tags for "mention" like "@channel" and "@all"
+- Responsive design
+- Create new workspaces and channels, or join ones already created
+- Edit the channel topic, and channel creators can edit the title
+- Send other users in workspace a direct message
+- Search all messages in workspace for channels you're subscribed to
+- Edit or delete your messages
+- Start message threads or join a conversation
+- Favorite messages and view list of favorited messages
+- Pin messages to channel
+- Add reactions to messages
+- Add emojis to messages by typing (ex. :smile:) or selecting from dropdown
+- View channel details, pinned messages, or subscribers
+- Search channels you're not subscribed to
+- Be notified of unread channels or conversations you've joined
+- View all unread messages
+- View all conversations you're in
 
-## State Shape
+## How to Use
 
-Before building app, here is the planned state shape:
+Steps below are used to set the project locally. You could also review the app by visting the live demo: [slack-clone-julian.herokuapp.com](https://slack-clone-julian.herokuapp.com/)
 
 ```
-{
-  entities: {
-    channels: {
-      1: {
-        title: "#examplechannelone",
-        subscribed: true,
-        members: 7,
-        description: "Blah blah blah",
-      },
-      2: {
-        title: "#exchanneltwo",
-        subscribed: false,
-      },
-    },
-    messages: {
-      1: {
-        id: 1,
-        body: "Welcome to examplechannelone everyone",
-        authorId: 3,
-        parentCommentId: null,
-        channelId: 1,
-        reactionIds: [1, 4],
-      },
-      2: {
-        id: 2,
-        body: "What a nice clone of Slack!",
-        authorId: 2,
-        parentCommentId: null,
-        channelId: 1,
-        reactionIds: [],
-      },
-      3: {
-        id: 3,
-        body: "this is soo cool",
-        authorId: 2,
-        parentCommentId: 2,
-        channelId: 1,
-        reactionIds: [],
-      }
-    },
-    reactions: {
-      2: {
-        id: 1,
-        type: 'thumbs_up',
-        userId: 1,
-        messageId: 1
-      },
-      13: {
-        id: 13,
-        type: 'thumbs_up',
-        userId: 2,
-        messageId: 1
-      },
-    }
-  },
-  ui: {
-    loading: false,
-    displayChannelId: 1,
-    displayMessageId: 2,
-  },
-  errors: {
-    session: [],
-    messageForm: [],
-  },
-  session: {
-    id: 5,
-    username: "joe_schmoe",
-    email: "hello@example.com"
-    img_url: "https://example.com/avatar.jpg"
-  }
-}
+# clone the project
+git clone https://github.com/juliantrueflynn/slack_clone.git
+
+# change directory to where the project was downloaded
+cd slack_clone
+
+# install all necessary gems
+bundle install
+
+# install all node dependencies
+npm install
+
+# run migrations to setup PostgreSQL database and tables
+rails db:migrate
+
+# generate mock data so app is not so empty (optional)
+rails db:seed
+
+# start the Rails server and visit the url: http://localhost:3000
+rails s
 ```
+
+## Technologies
+
+- Rails 5.1.5
+- React 16.5.2
+- ElasticSearch 6.1.0
+- ActionCable 5.1.6
+- React Router 4.3.1
+- Redux 3.7.2
+- Redux Saga 0.16.2
+- Draft JS 0.10.5
