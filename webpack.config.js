@@ -1,8 +1,8 @@
 var path = require("path");
 var webpack = require("webpack");
 
-var plugins = []; // dev and prod plugins
-var devPlugins = []; // if using plugins for dev
+var plugins = [];
+var devPlugins = [];
 
 var prodPlugins = [
   new webpack.DefinePlugin({
@@ -19,10 +19,10 @@ plugins = plugins.concat(
 // include plugins config
 module.exports = {
   context: __dirname,
-  entry: "./frontend/SlackClone.jsx",
+  entry: './frontend/SlackClone.jsx',
   output: {
-    path: path.resolve(__dirname, "app", "assets", "javascripts"),
-    filename: "bundle.js"
+    path: path.resolve(__dirname, 'app', 'assets', 'javascripts'),
+    filename: 'bundle.js'
   },
   plugins: plugins,
   module: {
@@ -43,6 +43,6 @@ module.exports = {
   },
   devtool: 'source-map',
   resolve: {
-    extensions: [".js", ".jsx", "*"]
+    extensions: ['.js', '.jsx', '*']
   }
 };
