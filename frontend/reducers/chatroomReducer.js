@@ -184,13 +184,11 @@ const chatroomReducer = (state = {}, action) => {
     case CHATROOM_SUB.DESTROY.RECEIVE: {
       const { chatroomSlug, id, userSlug } = action.chatroomSub;
 
-      nextState = {};
-      nextState[chatroomSlug] = {
-        subs: state[chatroomSlug].subs.filter(val => val !== id),
-        members: state[chatroomSlug].members.filter(val => val !== userSlug),
-      };
+      nextState = merge({}, state, nextState);
+      nextState[chatroomSlug].subs = state[chatroomSlug].subs.filter(val => val !== id);
+      nextState[chatroomSlug].members = state[chatroomSlug].members.filter(val => val !== userSlug);
 
-      return merge({}, state, nextState);
+      return nextState;
     }
     case PIN.CREATE.RECEIVE: {
       const { id, chatroomSlug } = action.pin;
