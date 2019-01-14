@@ -273,16 +273,12 @@ export const getDMChannels = createSelector(
     return user.subs.map(subId => subsMap[subId]).filter(sub => (
       sub && chatroomsMap[sub.chatroomSlug].hasDm && sub.inSidebar
     )).map((sub) => {
-      const ch = { ...chatroomsMap[sub.chatroomSlug] };
+      const ch = chatroomsMap[sub.chatroomSlug];
       const subsUserSlugs = ch.members.filter(userSlug => userSlug !== user.slug);
-      const subUser = subsUserSlugs[0] && usersMap[subsUserSlugs[0]];
+      const dmSubUser = usersMap[subsUserSlugs[0]];
+      const { username: title, status } = dmSubUser || {};
 
-      if (subUser) {
-        ch.title = subUser.username;
-        ch.status = subUser.status;
-      }
-
-      return ch;
+      return { ...ch, title, status };
     });
   }
 );

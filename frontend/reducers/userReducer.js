@@ -80,10 +80,10 @@ const userReducer = (state = {}, action) => {
     case CHATROOM.CREATE.RECEIVE: {
       const { chatroomSubs } = action.chatroom;
 
-      nextState = {};
-      chatroomSubs.forEach((sub) => {
-        nextState[sub.userSlug] = { subs: [sub.id] };
-      });
+      nextState = chatroomSubs.reduce((acc, { id, userSlug }) => ({
+        ...acc,
+        [userSlug]: { subs: [...state[userSlug].subs, id] },
+      }), {});
 
       return merge({}, state, nextState);
     }
