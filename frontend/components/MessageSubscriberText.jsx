@@ -19,25 +19,22 @@ class MessageSubscriberText extends React.Component {
     }
   }
 
-  getParentText(entity) {
+  static getEntityType(entity) {
+    return entity.entityType === 'sub_create' ? 'joined' : 'left';
+  }
+
+  getParentText(groupParent) {
     const { sub } = this.props;
-    const typeText = entity.entityType === 'sub_create' ? 'joined' : 'left';
-    const isParent = sub.id === entity.id;
 
-    let string = typeText;
-    if (!isParent) {
-      string = `${entity.username} ${typeText}`;
+    if (groupParent) {
+      return `${MessageSubscriberText.getEntityType(groupParent)}`;
     }
 
-    if (isParent) {
-      string += ` ${entity.chatroomTitle}`;
+    if (!groupParent && sub.group.every(item => item.authorSlug === sub.authorSlug)) {
+      return `${MessageSubscriberText.getEntityType(sub)} ${sub.chatroomTitle}.`;
     }
 
-    if (isParent && sub.group.length) {
-      return string;
-    }
-
-    return `${string}.`;
+    return `${MessageSubscriberText.getEntityType(sub)} ${sub.chatroomTitle}`;
   }
 
   static getUniqueAuthorIds(parentAuthorId, group) {
@@ -46,16 +43,18 @@ class MessageSubscriberText extends React.Component {
     ));
   }
 
-  static getSingleOrMultiText(parent, arr) {
+  static getMixedGroupText(parent, arr) {
     let string = '';
 
-    if (parent && arr.length === 1) {
-      if (parent.authorId !== arr[0].authorId) {
-        string = ` along with ${arr[0].username}.`;
-      }
+    if (!parent) {
+      return string;
     }
 
-    if (parent && arr.length > 1) {
+    if (arr.length === 1 && parent.authorId !== arr[0].authorId) {
+      string = ` along with ${arr[0].username}.`;
+    }
+
+    if (arr.length > 1) {
       const authorIds = MessageSubscriberText.getUniqueAuthorIds(parent.authorId, arr);
 
       if (authorIds.length) {
@@ -69,26 +68,36 @@ class MessageSubscriberText extends React.Component {
   getDisplayText() {
     const { sub } = this.props;
 
-    if (this.hasOneMessageType()) {
-      return MessageSubscriberText.getSingleOrMultiText(sub, sub.group);
-    }
-
-    if (!this.hasOneMessageType()) {
+    if (!this.isSingleEntityType()) {
       const bySubType1 = sub.group.filter(item => item.entityType === sub.entityType);
       const subsByType2 = sub.group.filter(item => item.entityType !== sub.entityType);
       const childSubsType2 = subsByType2.slice(1);
 
-      let displayText = MessageSubscriberText.getSingleOrMultiText(sub, bySubType1);
-      displayText += ` Also, ${this.getParentText(subsByType2[0])}`;
-      displayText += MessageSubscriberText.getSingleOrMultiText(subsByType2[0], childSubsType2);
+      const primaryParentTxt = this.getParentText();
+      const secondaryParentTxt = this.getParentText(subsByType2[0]);
 
-      return displayText;
+      if (this.isAllSameAuthor()) {
+        return `${primaryParentTxt} Also, ${sub.username} ${secondaryParentTxt}.`;
+      }
+
+      return (`
+        ${primaryParentTxt}
+        ${MessageSubscriberText.getMixedGroupText(sub, bySubType1)}
+        Also, ${sub.username} ${secondaryParentTxt}
+        ${MessageSubscriberText.getMixedGroupText(subsByType2[0], childSubsType2)}
+      `);
     }
 
-    return this.getParentText(sub);
+    return `${this.getParentText()} ${MessageSubscriberText.getMixedGroupText(sub, sub.group)}`;
   }
 
-  hasOneMessageType() {
+  isAllSameAuthor() {
+    const { sub } = this.props;
+
+    return sub.group.every(item => item.authorSlug === sub.authorSlug);
+  }
+
+  isSingleEntityType() {
     const { sub } = this.props;
 
     return sub.group.every(item => item.entityType === sub.entityType);
