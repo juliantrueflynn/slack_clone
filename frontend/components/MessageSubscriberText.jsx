@@ -19,36 +19,30 @@ class MessageSubscriberText extends React.Component {
     }
   }
 
-  static getEntityType(entity) {
-    return entity.entityType === 'sub_create' ? 'joined' : 'left';
-  }
-
-  getParentText(groupParent) {
-    const { sub } = this.props;
-
-    if (groupParent) {
-      return `${MessageSubscriberText.getEntityType(groupParent)}`;
-    }
-
-    if (!groupParent && sub.group.every(item => item.authorSlug === sub.authorSlug)) {
-      return `${MessageSubscriberText.getEntityType(sub)} ${sub.chatroomTitle}.`;
-    }
-
-    return `${MessageSubscriberText.getEntityType(sub)} ${sub.chatroomTitle}`;
-  }
-
   static getUniqueAuthorIds(parentAuthorId, group) {
     return group.map(item => item.authorId).filter((id, idx, self) => (
       id !== parentAuthorId && self.indexOf(id) === idx
     ));
   }
 
-  static getMixedGroupText(parent, arr) {
-    let string = '';
+  getParentText(groupParent) {
+    const { sub } = this.props;
+    const parent = groupParent || sub;
+    const entityType = parent.entityType === 'sub_create' ? 'joined' : 'left';
 
-    if (!parent) {
-      return string;
+    if (groupParent) {
+      return `${entityType}`;
     }
+
+    const appendedPeriod = this.isAllSameAuthor() ? '.' : '';
+
+    return `${entityType} ${sub.chatroomTitle}${appendedPeriod}`;
+  }
+
+  getMixedGroupText(arr, groupParent) {
+    const { sub } = this.props;
+    const parent = groupParent || sub;
+    let string = '';
 
     if (arr.length === 1 && parent.authorId !== arr[0].authorId) {
       string = ` along with ${arr[0].username}.`;
@@ -56,39 +50,50 @@ class MessageSubscriberText extends React.Component {
 
     if (arr.length > 1) {
       const authorIds = MessageSubscriberText.getUniqueAuthorIds(parent.authorId, arr);
-
-      if (authorIds.length) {
-        string = ` along with ${authorIds.length} others.`;
-      }
+      const appendS = authorIds.length > 1 ? 's' : '';
+      string = ` along with ${authorIds.length} other${appendS}.`;
     }
 
     return string;
   }
 
+  getSecondaryGroup() {
+    const { sub } = this.props;
+
+    return sub.group.filter(item => item.entityType !== sub.entityType) || [];
+  }
+
   getDisplayText() {
     const { sub } = this.props;
 
-    if (!this.isSingleEntityType()) {
-      const bySubType1 = sub.group.filter(item => item.entityType === sub.entityType);
-      const subsByType2 = sub.group.filter(item => item.entityType !== sub.entityType);
-      const childSubsType2 = subsByType2.slice(1);
-
-      const primaryParentTxt = this.getParentText();
-      const secondaryParentTxt = this.getParentText(subsByType2[0]);
-
-      if (this.isAllSameAuthor()) {
-        return `${primaryParentTxt} Also, ${sub.username} ${secondaryParentTxt}.`;
-      }
-
-      return (`
-        ${primaryParentTxt}
-        ${MessageSubscriberText.getMixedGroupText(sub, bySubType1)}
-        Also, ${sub.username} ${secondaryParentTxt}
-        ${MessageSubscriberText.getMixedGroupText(subsByType2[0], childSubsType2)}
-      `);
+    if (this.hasMultipleEntityTypes() && this.isAllSameAuthor()) {
+      return this.formatMixedGroupDisplayText('', '.');
     }
 
-    return `${this.getParentText()} ${MessageSubscriberText.getMixedGroupText(sub, sub.group)}`;
+    if (this.hasMultipleEntityTypes()) {
+      const primaryGroup = sub.group.filter(item => item.entityType === sub.entityType);
+      const [secondaryParent] = this.getSecondaryGroup();
+      const secondaryGroupChildren = this.getSecondaryGroup().slice(1);
+
+      return this.formatMixedGroupDisplayText(
+        this.getMixedGroupText(primaryGroup),
+        ` ${this.getMixedGroupText(secondaryGroupChildren, secondaryParent)}`
+      );
+    }
+
+    const primaryParentTxt = this.getParentText();
+    const primaryGroupTxt = this.getMixedGroupText(sub.group);
+
+    return `${primaryParentTxt} ${primaryGroupTxt}`;
+  }
+
+  formatMixedGroupDisplayText(prepend, append) {
+    const { sub: { username } } = this.props;
+    const parentTxt = this.getParentText();
+    const [secondaryParent] = this.getSecondaryGroup();
+    const secondaryParentTxt = this.getParentText(secondaryParent);
+
+    return `${parentTxt} ${prepend} Also, ${username} ${secondaryParentTxt}${append}`;
   }
 
   isAllSameAuthor() {
@@ -97,10 +102,10 @@ class MessageSubscriberText extends React.Component {
     return sub.group.every(item => item.authorSlug === sub.authorSlug);
   }
 
-  isSingleEntityType() {
+  hasMultipleEntityTypes() {
     const { sub } = this.props;
 
-    return sub.group.every(item => item.entityType === sub.entityType);
+    return !(sub.group.every(item => item.entityType === sub.entityType));
   }
 
   handleDisplayText() {
