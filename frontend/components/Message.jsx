@@ -6,7 +6,7 @@ import MessageReactions from './MessageReactions';
 import Avatar from './Avatar';
 import MessageContent from './MessageContent';
 import MessageThreadPreview from './MessageThreadPreview';
-import ChannelSub from './ChannelSub';
+import MessageSubscriberText from './MessageSubscriberText';
 import MessageHighlight from './MessageHighlight';
 import './Message.css';
 
@@ -105,7 +105,7 @@ class Message extends React.Component {
                     slug={message.slug}
                   />
                 )}
-                {message.entityType !== 'entry' && <ChannelSub sub={message} />}
+                {message.entityType !== 'entry' && <MessageSubscriberText sub={message} />}
               </div>
               {shouldHideEngagement || (
                 <Fragment>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ChannelSub = ({ sub }) => {
+const MessageSubscriberText = ({ sub }) => {
   if (!sub.group) {
     return null;
   }
@@ -66,11 +66,7 @@ const ChannelSub = ({ sub }) => {
 
   const style = { color: '#636E72' };
 
-  return (
-    <div className="ChannelSub" style={style}>
-      {bodyText}
-    </div>
-  );
+  return <div className="MessageSubscriberText" style={style}>{bodyText}</div>;
 };
 
-export default ChannelSub;
+export default MessageSubscriberText;
