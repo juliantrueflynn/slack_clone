@@ -47,9 +47,9 @@ class Workspace < ApplicationRecord
   end
 
   def user_unreads(user_id)
-    messages.chatrooms_unreads_with_user_id(user_id)
-      .includes(:author)
-      .order(id: :desc)
+    messages.with_entry_type.with_parent.joins(chatroom: :reads)
+      .where(reads: { user_id: user_id })
+      .where('messages.created_at > reads.accessed_at')
   end
 
   def last_entries_created_at_map(user_id)

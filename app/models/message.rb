@@ -29,12 +29,6 @@ class Message < ApplicationRecord
   scope :with_entry_type, -> { where(entity_type: 'entry') }
   scope :search_import, -> { with_entry_type }
 
-  def self.chatroom_unreads_with_user_id(user_id)
-    with_entry_type.with_parent.joins(chatroom: :reads)
-      .where(reads: { user_id: user_id })
-      .where('messages.created_at > reads.accessed_at')
-  end
-
   def self.convo_parents_with_author_id(author_id)
     left_joins(:reads).where(reads: { user_id: author_id })
   end
