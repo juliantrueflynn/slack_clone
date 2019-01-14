@@ -80,7 +80,7 @@ class Chatroom < ApplicationRecord
 
   def older_messages(last_message_id)
     return messages if entries_parents.length <= ENTRIES_CACHE_SIZE
-    last_id = last_message_id || entries_parents.last.id
+    last_id = last_message_id || messages.last.id
     entries = entries_before_message_id(last_id)
     messages_between(last_id, entries).or(Message.children_of(entries))
   end
