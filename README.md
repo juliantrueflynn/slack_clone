@@ -2,6 +2,8 @@
 
 Slack clone powered by Rails, React, and Redux. [View live demo](https://slack-clone-julian.herokuapp.com/)
 
+![Slack Clone preview](https://user-images.githubusercontent.com/2691129/51093288-1e155000-1770-11e9-9340-6404999b711e.png)
+
 ## Table of Contents
 
 1. [Features](#features)
