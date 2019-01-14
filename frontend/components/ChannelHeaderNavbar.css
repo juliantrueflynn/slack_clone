@@ -114,16 +114,15 @@
 }
 
 @media screen and (max-width: 768px) {
-  .ChannelHeaderNavbar .Menu__header-user {
+  .ChannelHeaderNavbar .MenuItem__edit-dropdown,
+  .ChannelHeaderNavbar .MenuItem__details,
+  .ChannelHeaderNavbar .Menu__header-user,
+  .ChannelHeaderNavbar .SearchBar .SearchBar__input {
     display: none;
   }
 
   .ChannelHeaderNavbar .SearchBar {
     border: none;
-  }
-
-  .ChannelHeaderNavbar .SearchBar .SearchBar__input {
-    display: none;
   }
 
   .ChannelHeaderNavbar .SearchBar .Btn__searchbar {
