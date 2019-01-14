@@ -21,7 +21,7 @@ import {
   apiUpdate,
   apiDestroy,
 } from '../util/apiUtil';
-import { selectUIByDisplay, getChatPathUrl } from '../reducers/selectors';
+import { getChatPathUrl, getDrawer } from '../reducers/selectors';
 
 function* messageIndex({ chatroomSlug, lastId }) {
   try {
@@ -68,7 +68,7 @@ function* closeDrawerIfOpen({ slug, parentMessageId }) {
     return;
   }
 
-  const drawer = yield select(selectUIByDisplay, 'drawer');
+  const drawer = yield select(getDrawer);
   const { drawerType, drawerSlug } = drawer;
 
   if (drawerType === 'convo' && drawerSlug === slug) {

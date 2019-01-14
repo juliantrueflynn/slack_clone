@@ -4,6 +4,7 @@ import {
   getChatViewChannels,
   getMessagesMap,
   getAllThreadViewMessages,
+  getDrawerPath,
   getChatroomViewMessages,
 } from '../reducers/selectors';
 import {
@@ -33,12 +34,18 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
     messages = getChatroomViewMessages(state);
   }
 
+  const { drawerType } = state.ui.drawer;
+  let drawerPath = getDrawerPath(state);
+
+  if (chatroom && drawerType === 'details') {
+    drawerPath = '';
+  }
+
   return {
     users: state.entities.members,
     currentUser: state.session.currentUser,
     isLoading: state.isLoading,
-    drawerType: state.ui.drawer.drawerType,
-    drawerSlug: state.ui.drawer.drawerSlug,
+    drawerPath,
     chatPath,
     chatroom,
     messages,

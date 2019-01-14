@@ -1,6 +1,11 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getSubbedWorkspaces, getChatroomsMap, getDMChannels } from '../reducers/selectors';
+import {
+  getSubbedWorkspaces,
+  getChatroomsMap,
+  getDMChannels,
+  getDrawerPath,
+} from '../reducers/selectors';
 import { updateModal } from '../actions/uiActions';
 import { updateChatroomSub } from '../actions/chatroomActions';
 import withWindowResize from './withWindowResize';
@@ -44,6 +49,9 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
     a.title.localeCompare(b.title)
   )).map(ch => chatItemDecorate(ch));
 
+  const { drawerType } = state.ui.drawer;
+  const drawerPath = drawerType !== 'details' ? getDrawerPath(state) : '';
+
   return {
     hasUnreadConvos,
     hasUnreadChannels,
@@ -54,7 +62,7 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
     dmChannels,
     chatPath,
     profileUrl,
-    drawer: state.ui.drawer,
+    drawerPath,
     isModalOpen: state.ui.displayModal.modalType === 'MODAL_LEFT_SIDEBAR',
   };
 };

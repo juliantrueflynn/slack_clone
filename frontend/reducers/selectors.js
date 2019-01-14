@@ -15,7 +15,7 @@ const getAllUnreadsByChannel = state => state.unreadsByChannel;
 export const getAllUnreads = state => state.entities.unreads;
 const getIsEditingMessage = state => state.ui.isEditingMessage;
 const getChatPath = state => state.ui.displayChatPath;
-const getDrawer = state => state.ui.drawer;
+export const getDrawer = state => state.ui.drawer;
 
 export const getSubbedWorkspaces = createSelector(
   [getAllWorkspaces], workspacesMap => (
@@ -297,6 +297,18 @@ export const selectEntityBySlug = ({ entities }, entityType, slug) => {
   }
 
   return entities[entityType][slug] || null;
+};
+
+export const getDrawerPath = ({ ui: { drawer: { drawerType, drawerSlug } } }) => {
+  if (drawerType) {
+    if (drawerSlug) {
+      return `/${drawerType}/${drawerSlug}`;
+    }
+
+    return `/${drawerType}`;
+  }
+
+  return '';
 };
 
 export const getChatPathUrl = ({ ui }) => {

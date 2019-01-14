@@ -27,26 +27,17 @@ class LeftSidebar extends React.Component {
   handleHistoryPush(linkUrl) {
     const {
       match: { url },
-      drawer: { drawerType, drawerSlug },
+      drawerPath,
       history,
       isModalOpen,
       closeModal,
     } = this.props;
 
-    let menuUrl = `${url}/${linkUrl}`;
-    if (drawerType && drawerType !== 'details') {
-      menuUrl += `/${drawerType}`;
-
-      if (drawerSlug) {
-        menuUrl += `/${drawerSlug}`;
-      }
-    }
-
     if (isModalOpen) {
       closeModal();
     }
 
-    history.push(menuUrl);
+    history.push(`${url}/${linkUrl + drawerPath}`);
   }
 
   render() {

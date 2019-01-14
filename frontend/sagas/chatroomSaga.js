@@ -3,6 +3,7 @@ import {
   call,
   fork,
   put,
+  select,
   takeLatest
 } from 'redux-saga/effects';
 import * as action from '../actions/chatroomActions';
@@ -10,6 +11,7 @@ import { CHATROOM } from '../actions/actionTypes';
 import { apiFetch, apiCreate, apiUpdate } from '../util/apiUtil';
 import { navigate, updateFormSuccess, updateModal } from '../actions/uiActions';
 import { updateRead } from '../actions/readActions';
+import { getDrawerPath } from '../reducers/selectors';
 
 function* chatroomIndex({ workspaceSlug }) {
   try {
@@ -34,7 +36,14 @@ function* redirectOwner({ hasDm, workspaceSlug, slug }) {
     yield put(updateModal(null));
   }
 
-  yield put(navigate(`/${workspaceSlug}/messages/${slug}`));
+  const drawerUrl = yield select(getDrawerPath);
+  let redirectUrl = `/${workspaceSlug}/messages/${slug}`;
+
+  if (drawerUrl) {
+    redirectUrl += drawerUrl;
+  }
+
+  yield put(navigate(redirectUrl));
 }
 
 function* dmChatCreate({ workspaceSlug, ...dmChat }) {

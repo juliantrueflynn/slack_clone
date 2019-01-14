@@ -13,10 +13,10 @@ class ChatPageSwitch extends React.Component {
   }
 
   componentDidMount() {
-    const { updateChatPath } = this.props;
+    const { updateChatPath, fetchChatPageData } = this.props;
 
     updateChatPath();
-    this.getChatData();
+    fetchChatPageData();
     this.updateHistoryDrawerPath();
   }
 
@@ -24,7 +24,8 @@ class ChatPageSwitch extends React.Component {
     const {
       match: { isExact },
       updateChatPath,
-      drawerType,
+      fetchChatPageData,
+      drawerPath,
       closeDrawer,
       chatPath,
       chatroom,
@@ -35,15 +36,15 @@ class ChatPageSwitch extends React.Component {
       updateChatPath();
 
       if (chatroom && chatroom.shouldFetch) {
-        this.getChatData();
+        fetchChatPageData();
       }
 
       if (!chatroom) {
-        this.getChatData();
+        fetchChatPageData();
       }
     }
 
-    if (chatroom && drawerType && isExact && !prevProps.isExact) {
+    if (chatroom && drawerPath && isExact && !prevProps.isExact) {
       if (chatPath === prevProps.chatPath) {
         closeDrawer();
         return;
@@ -57,39 +58,15 @@ class ChatPageSwitch extends React.Component {
     }
   }
 
-  getChatData() {
-    const { fetchChatPageData } = this.props;
-    fetchChatPageData();
-  }
-
-  getDrawerRedirectPath() {
+  updateHistoryDrawerPath() {
     const {
-      match: { url, isExact },
-      drawerType,
-      drawerSlug,
-      chatroom,
+      history,
+      drawerPath,
+      match: { isExact, url },
     } = this.props;
 
-    if (isExact && drawerType === 'details' && !chatroom) {
-      return null;
-    }
-
-    if (isExact && drawerType) {
-      if (drawerSlug) {
-        return `${url}/${drawerType}/${drawerSlug}`;
-      }
-
-      return `${url}/${drawerType}`;
-    }
-
-    return null;
-  }
-
-  updateHistoryDrawerPath() {
-    const { history } = this.props;
-
-    if (this.getDrawerRedirectPath()) {
-      history.replace(this.getDrawerRedirectPath());
+    if (drawerPath && isExact) {
+      history.replace(url + drawerPath);
     }
   }
 
