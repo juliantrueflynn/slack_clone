@@ -105,7 +105,9 @@ class Message extends React.Component {
                     slug={message.slug}
                   />
                 )}
-                {message.entityType !== 'entry' && <MessageSubscriberText sub={message} />}
+                {message.entityType !== 'entry' && message.group && (
+                  <MessageSubscriberText sub={message} />
+                )}
               </div>
               {shouldHideEngagement || (
                 <Fragment>

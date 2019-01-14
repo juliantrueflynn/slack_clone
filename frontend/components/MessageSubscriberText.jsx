@@ -1,11 +1,26 @@
 import React from 'react';
 
-const MessageSubscriberText = ({ sub }) => {
-  if (!sub.group) {
-    return null;
+class MessageSubscriberText extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { displayText: '' };
+    this.handleDisplayText = this.handleDisplayText.bind(this);
   }
 
-  const parentText = (entity) => {
+  componentDidMount() {
+    this.handleDisplayText();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { sub } = this.props;
+
+    if (sub.group.length !== prevProps.sub.group.length) {
+      this.handleDisplayText();
+    }
+  }
+
+  getParentText(entity) {
+    const { sub } = this.props;
     const typeText = entity.entityType === 'sub_create' ? 'joined' : 'left';
     const isParent = sub.id === entity.id;
 
@@ -23,21 +38,25 @@ const MessageSubscriberText = ({ sub }) => {
     }
 
     return `${string}.`;
-  };
+  }
 
-  const childrenSingleOrMultiText = (parent, arr) => {
+  static getUniqueAuthorIds(parentAuthorId, group) {
+    return group.map(item => item.authorId).filter((id, idx, self) => (
+      id !== parentAuthorId && self.indexOf(id) === idx
+    ));
+  }
+
+  static getSingleOrMultiText(parent, arr) {
     let string = '';
 
-    if (arr.length === 1 && parent) {
+    if (parent && arr.length === 1) {
       if (parent.authorId !== arr[0].authorId) {
         string = ` along with ${arr[0].username}.`;
       }
     }
 
-    if (arr.length > 1 && parent) {
-      const authorIds = arr.map(item => item.authorId).filter((id, idx, self) => (
-        id !== parent.authorId && self.indexOf(id) === idx
-      ));
+    if (parent && arr.length > 1) {
+      const authorIds = MessageSubscriberText.getUniqueAuthorIds(parent.authorId, arr);
 
       if (authorIds.length) {
         string = ` along with ${authorIds.length} others.`;
@@ -45,28 +64,47 @@ const MessageSubscriberText = ({ sub }) => {
     }
 
     return string;
-  };
-
-  const has1Type = sub.group.every(item => item.entityType === sub.entityType);
-  let bodyText = parentText(sub);
-
-  if (has1Type) {
-    bodyText += childrenSingleOrMultiText(sub, sub.group);
   }
 
-  if (!has1Type) {
-    const bySubType1 = sub.group.filter(item => item.entityType === sub.entityType);
-    const subsByType2 = sub.group.filter(item => item.entityType !== sub.entityType);
-    const childSubsType2 = subsByType2.slice(1);
+  getDisplayText() {
+    const { sub } = this.props;
 
-    bodyText += childrenSingleOrMultiText(sub, bySubType1);
-    bodyText += ` Also, ${parentText(subsByType2[0])}`;
-    bodyText += childrenSingleOrMultiText(subsByType2[0], childSubsType2);
+    if (this.hasOneMessageType()) {
+      return MessageSubscriberText.getSingleOrMultiText(sub, sub.group);
+    }
+
+    if (!this.hasOneMessageType()) {
+      const bySubType1 = sub.group.filter(item => item.entityType === sub.entityType);
+      const subsByType2 = sub.group.filter(item => item.entityType !== sub.entityType);
+      const childSubsType2 = subsByType2.slice(1);
+
+      let displayText = MessageSubscriberText.getSingleOrMultiText(sub, bySubType1);
+      displayText += ` Also, ${this.getParentText(subsByType2[0])}`;
+      displayText += MessageSubscriberText.getSingleOrMultiText(subsByType2[0], childSubsType2);
+
+      return displayText;
+    }
+
+    return this.getParentText(sub);
   }
 
-  const style = { color: '#636E72' };
+  hasOneMessageType() {
+    const { sub } = this.props;
 
-  return <div className="MessageSubscriberText" style={style}>{bodyText}</div>;
-};
+    return sub.group.every(item => item.entityType === sub.entityType);
+  }
+
+  handleDisplayText() {
+    const displayText = this.getDisplayText();
+    this.setState({ displayText });
+  }
+
+  render() {
+    const { displayText } = this.state;
+    const style = { color: '#636E72' };
+
+    return <div className="MessageSubscriberText" style={style}>{displayText}</div>;
+  }
+}
 
 export default MessageSubscriberText;

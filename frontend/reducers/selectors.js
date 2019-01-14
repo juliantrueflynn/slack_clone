@@ -29,19 +29,13 @@ export const getMessagesMap = createSelector(
   [getAllMessages, getAllUsers, getIsEditingMessage],
   (messages, users, isEditingMsgSlug) => (
     values(messages).reduce((acc, curr) => {
-      const msg = {};
+      const { username, avatarThumb } = users[curr.authorSlug] || {};
+      const msg = { username, avatarThumb };
 
       if (curr.thread && curr.thread.length) {
         const threadLastSlug = curr.thread[curr.thread.length - 1];
         const threadLastMsg = messages[threadLastSlug];
         msg.lastMessageDate = threadLastMsg && threadLastMsg.createdAt;
-      }
-
-      const author = users[curr.authorSlug];
-
-      if (author) {
-        msg.username = author.username;
-        msg.avatarThumb = author.avatarThumb;
       }
 
       const date = dateUtil(curr.createdAt);
@@ -134,6 +128,7 @@ export const getChatroomViewMessages = createSelector(
     const entries = msgs.filter(msg => msg && msg.entityType === 'entry');
     const subs = msgs.filter(msg => msg && msg.entityType !== 'entry').reduce((acc, curr) => {
       const msg = { ...curr, group: [], chatroomTitle: `#${chatroom.title}` };
+
       return [...acc, msg];
     }, []);
 
