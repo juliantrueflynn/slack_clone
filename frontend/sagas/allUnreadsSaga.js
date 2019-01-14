@@ -37,7 +37,7 @@ function* updateUnreadsByAllThreads() {
   }
 }
 
-function* updateUnreadsByChat(chatPath) {
+function* updateUnreadsByChat({ chatPath }) {
   if (chatPath === 'threads') {
     return;
   }
