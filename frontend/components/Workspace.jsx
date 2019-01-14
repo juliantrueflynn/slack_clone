@@ -60,7 +60,7 @@ class Workspace extends React.Component {
     if (!hasLoaded) {
       return (
         <div className="Workspace Workspace--loading">
-          <EmptyDisplay topIcon="quote-left" hasLoadingIcon>
+          <EmptyDisplay topIcon="quote-left" loadingIcon="spinner" pulse>
             <blockquote className="Workspace__quote">
               {quoteText}
               <footer>{`— ${quoteBy}`}</footer>

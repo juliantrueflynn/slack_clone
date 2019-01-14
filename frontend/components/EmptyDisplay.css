@@ -23,8 +23,7 @@
 
 .EmptyDisplay__loading-icon {
   display: block;
-  margin-top: 45px;
-  color: #74B9FF;
+  color: #DFE6E9;
 }
 
 @media screen and (max-width: 991px) {

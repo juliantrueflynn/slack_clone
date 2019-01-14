@@ -5,7 +5,7 @@ import AllThreadsItem from './AllThreadsItem';
 
 const AllThreads = ({ messages, isLoading, ...props }) => {
   if (isLoading) {
-    return <EmptyDisplay hasLoadingIcon />;
+    return <EmptyDisplay loadingIcon="circle-notch" />;
   }
 
   if (!messages.length) {

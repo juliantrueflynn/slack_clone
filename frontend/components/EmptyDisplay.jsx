@@ -6,7 +6,8 @@ const EmptyDisplay = ({
   topIcon,
   topIconHexColor,
   children,
-  hasLoadingIcon,
+  loadingIcon,
+  ...props
 }) => {
   const color = topIconHexColor || '#00CEC9';
   const iconStyle = { color };
@@ -23,8 +24,14 @@ const EmptyDisplay = ({
           {children}
         </div>
       )}
-      {hasLoadingIcon && (
-        <FontAwesomeIcon className="EmptyDisplay__loading-icon" icon="spinner" spin pulse size="3x" />
+      {loadingIcon && (
+        <FontAwesomeIcon
+          className="EmptyDisplay__loading-icon"
+          icon={loadingIcon}
+          spin
+          size="3x"
+          {...props}
+        />
       )}
     </div>
   );

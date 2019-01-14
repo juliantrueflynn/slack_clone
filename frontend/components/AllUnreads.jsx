@@ -16,7 +16,16 @@ class AllUnreads extends React.Component {
   }
 
   render() {
-    const { chatrooms, clearAllUnread, ...props } = this.props;
+    const {
+      chatrooms,
+      clearAllUnread,
+      isLoading,
+      ...props
+    } = this.props;
+
+    if (isLoading) {
+      return <EmptyDisplay loadingIcon="circle-notch" />;
+    }
 
     if (!chatrooms.length) {
       return (
