@@ -1,4 +1,5 @@
 import React from 'react';
+import { faTimesCircle, faAlignLeft, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import StatusIcon from './StatusIcon';
 import Button from './Button';
@@ -61,7 +62,7 @@ class LeftSidebar extends React.Component {
 
     const quicklistMenuItems = [
       {
-        icon: <FontAwesomeIcon icon="align-left" />,
+        icon: <FontAwesomeIcon icon={faAlignLeft} />,
         label: 'All Unreads',
         onClick: () => this.handleHistoryPush('unreads'),
         isOpen: chatPath === 'unreads',
@@ -85,7 +86,7 @@ class LeftSidebar extends React.Component {
       ...ch,
       icon: <StatusIcon member={{ status }} />,
       label: (
-        <SuffixButton icon="times-circle" onClick={e => this.handleDmUnsubClick(e, ch.slug)}>
+        <SuffixButton icon={faTimesCircle} onClick={e => this.handleDmUnsubClick(e, ch.slug)}>
           {ch.label}
         </SuffixButton>
       ),
@@ -106,7 +107,7 @@ class LeftSidebar extends React.Component {
         component: Menu,
         items: chatroomsMenuItems,
         widgetTitle: (
-          <SuffixButton icon="plus-circle" onClick={() => openChannelFormModal(workspace.id)}>
+          <SuffixButton icon={faPlusCircle} onClick={() => openChannelFormModal(workspace.id)}>
             <Button unStyled buttonFor="chats" onClick={openChannelsListModal}>Channels</Button>
           </SuffixButton>
         ),

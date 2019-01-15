@@ -1,4 +1,5 @@
 import React from 'react';
+import { faUserCog, faEllipsisV, faCog } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBar from './SearchBar';
 import Menu from './Menu';
@@ -76,7 +77,8 @@ class ChannelHeaderNavbar extends React.Component {
       openChannelEditModal,
       chatTitle,
       drawerType,
-      openModal,
+      openSearchModal,
+      openProfileModal,
       searchQuery,
       isNotDefaultChannel,
       dmChannelUser,
@@ -85,7 +87,6 @@ class ChannelHeaderNavbar extends React.Component {
       match: { url },
     } = this.props;
     const { isSidebarModalOpen } = this.state;
-    const openModalProfile = () => openModal('MODAL_PROFILE');
 
     const ddMenuItems = [
       {
@@ -126,7 +127,7 @@ class ChannelHeaderNavbar extends React.Component {
       },
       {
         key: 'edit-dropdown',
-        icon: <FontAwesomeIcon icon="cog" fixedWidth />,
+        icon: <FontAwesomeIcon icon={faCog} fixedWidth />,
         dropdownType: 'DROPDOWN_CHATROOM_EDIT',
         dropdownChild: <Menu items={ddMenuItems} />
       }
@@ -141,8 +142,8 @@ class ChannelHeaderNavbar extends React.Component {
       },
       {
         key: 'profile',
-        icon: <FontAwesomeIcon icon="user-cog" />,
-        onClick: openModalProfile,
+        icon: <FontAwesomeIcon icon={faUserCog} />,
+        onClick: openProfileModal,
       },
     ];
 
@@ -152,19 +153,19 @@ class ChannelHeaderNavbar extends React.Component {
         <SearchBar
           searchQuery={searchQuery}
           destroySearchQuery={destroySearchQuery}
-          openModal={openModal}
+          openSearchModal={openSearchModal}
           hasClearIcon
         />
         <Menu menuFor="header-user" isRow items={userMenuItems} />
         <Button buttonFor="right-sidebar-mobile" unStyled onClick={this.handleSidebarModalToggle}>
-          <FontAwesomeIcon icon="ellipsis-v" />
+          <FontAwesomeIcon icon={faEllipsisV} />
         </Button>
         <RightSidebarModal
           isOpen={isSidebarModalOpen}
           drawerType={drawerType}
           toggleLink={this.handleLinkToggle}
           chatroom={chatroom}
-          openModalProfile={openModalProfile}
+          openProfileModal={openProfileModal}
           closeModal={this.handleSidebarModalToggle}
         />
       </nav>

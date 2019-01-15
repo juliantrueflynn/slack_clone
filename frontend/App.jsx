@@ -1,39 +1,15 @@
 import React from 'react';
 import 'sanitize.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSmile, faComment } from '@fortawesome/free-regular-svg-icons';
 import {
-  faEdit as farEdit,
-  faTrashAlt,
-  faSmile,
-  faComment,
-  faComments,
-  faCircle as farCircle,
-  faStar as farStar,
-} from '@fortawesome/free-regular-svg-icons';
-import {
-  faEdit,
-  faUser,
-  faTimes,
-  faTimesCircle,
-  faCircle,
-  faAlignLeft,
-  faPlusCircle,
-  faHashtag,
-  faSquare,
-  faInfoCircle,
-  faCircleNotch,
-  faCog,
-  faUsers,
-  faUserCog,
-  faSearch,
-  faEllipsisH,
-  faEllipsisV,
-  faThumbtack,
-  faSpinner,
-  faQuoteLeft,
-  faPencilAlt,
   faBars,
-  faStar as fasStar,
+  faEdit,
+  faHashtag,
+  faInfoCircle,
+  faThumbtack,
+  faTimes,
+  faStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { routesConfig, PageRoutes } from './util/routeUtil';
 import ActionCablesContainer from './components/ActionCablesContainer';
@@ -41,36 +17,15 @@ import ModalControllerContainer from './components/ModalControllerContainer';
 import './App.css';
 
 library.add(
-  faComments,
-  faTimes,
-  faTrashAlt,
-  faEdit,
-  farEdit,
-  faSquare,
-  faEllipsisH,
-  faEllipsisV,
-  faTimesCircle,
-  farCircle,
-  faPlusCircle,
-  faHashtag,
-  faAlignLeft,
-  farStar,
-  fasStar,
-  faSmile,
-  faSearch,
-  faQuoteLeft,
-  faComment,
-  faInfoCircle,
-  faCircleNotch,
-  faCircle,
-  faCog,
-  faUser,
-  faUsers,
-  faUserCog,
-  faThumbtack,
-  faSpinner,
-  faPencilAlt,
   faBars,
+  faComment,
+  faEdit,
+  faHashtag,
+  faInfoCircle,
+  faThumbtack,
+  faTimes,
+  faStar,
+  faSmile,
 );
 
 const App = () => (

@@ -65,6 +65,8 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
 
 const mapDispatchToProps = (dispatch, { match: { params: { chatPath } } }) => ({
   openModal: (modalType, modalProps) => dispatch(updateModal(modalType, modalProps)),
+  openProfileModal: () => dispatch(updateModal('MODAL_PROFILE')),
+  openSearchModal: () => dispatch(updateModal('MODAL_SEARCH')),
   openLeftSidebarModal: () => dispatch(updateModal('MODAL_LEFT_SIDEBAR', null)),
   closeDrawer: () => dispatch(updateDrawer(null)),
   closeDropdown: () => dispatch(updateDropdown(null)),

@@ -75,7 +75,7 @@ class ChannelBlurb extends React.Component {
         {!topic && !hasDm && (
           <div className="ChannelBlurb__editor">
             <Button buttonFor="edit-label" onClick={this.openEditor} unStyled>
-              <FontAwesomeIcon icon="pencil-alt" size="xs" />
+              <FontAwesomeIcon icon="edit" size="xs" />
               Set a topic
             </Button>
           </div>

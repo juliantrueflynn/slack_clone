@@ -1,4 +1,5 @@
 import React from 'react';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import EmptyDisplay from './EmptyDisplay';
 import ScrollBar from './ScrollBar';
 import AllUnreadsItem from './AllUnreadsItem';
@@ -24,7 +25,7 @@ class AllUnreads extends React.Component {
     } = this.props;
 
     if (isLoading) {
-      return <EmptyDisplay loadingIcon="circle-notch" />;
+      return <EmptyDisplay loadingIcon={faCircleNotch} />;
     }
 
     if (!chatrooms.length) {

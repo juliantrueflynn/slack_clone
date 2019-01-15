@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ModalSearchItem from './ModalSearchItem';
 import './ModalSearchResults.css';
@@ -13,7 +14,7 @@ const ModalSearchResults = ({ results, chatroomsMap, match: { url } }) => {
   return (
     <div className="ModalSearchResults">
       <div className="ModalSearchResults__loader">
-        <FontAwesomeIcon icon="spinner" spin pulse />
+        <FontAwesomeIcon icon={faSpinner} spin pulse />
       </div>
       <span className="ModalSearchResults__txt ModalSearchResults__txt--empty">
         Type and hit enter to search

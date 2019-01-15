@@ -5,6 +5,7 @@ import {
   convertFromRaw,
   convertToRaw
 } from 'draft-js';
+import { faCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const createEmptyEditor = () => EditorState.createEmpty();
@@ -32,7 +33,7 @@ export const mountEditorState = (content) => {
 
 export const EmojiButtonIcon = () => (
   <span className="EmojiButtonIcon fa-layers fa-fw">
-    <FontAwesomeIcon icon="circle" className="EmojiButtonIcon__bg" />
+    <FontAwesomeIcon icon={faCircle} className="EmojiButtonIcon__bg" />
     <FontAwesomeIcon icon={['far', 'smile']} />
   </span>
 );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { faSpinner, faQuoteLeft } from '@fortawesome/free-solid-svg-icons';
 import sampleWisdomQuote from '../util/wisdomQuotesUtil';
 import EmptyDisplay from './EmptyDisplay';
 import LeftSidebarContainer from './LeftSidebarContainer';
@@ -51,7 +52,7 @@ class Workspace extends React.Component {
     if (!hasLoaded) {
       return (
         <div className="Workspace Workspace--loading">
-          <EmptyDisplay topIcon="quote-left" loadingIcon="spinner" pulse>
+          <EmptyDisplay topIcon={faQuoteLeft} loadingIcon={faSpinner} pulse>
             <blockquote className="Workspace__quote">
               {quoteText}
               <footer>{`— ${quoteBy}`}</footer>

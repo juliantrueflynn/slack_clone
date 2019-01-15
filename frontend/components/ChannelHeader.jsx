@@ -1,4 +1,5 @@
 import React from 'react';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from './Menu';
 import StatusIcon from './StatusIcon';
@@ -46,6 +47,8 @@ class ChannelHeader extends React.Component {
       openChannelDropdown,
       createChatroomSubRequest,
       destroyChatroomSubRequest,
+      openProfileModal,
+      openSearchModal,
       history,
       match,
     } = this.props;
@@ -71,7 +74,7 @@ class ChannelHeader extends React.Component {
       metaMenuItems = [
         {
           key: 'details',
-          icon: <FontAwesomeIcon icon="user" size="sm" />,
+          icon: <FontAwesomeIcon icon={faUser} size="sm" />,
           link: `${url}/details`,
           label: chatroom.members.length,
           onClick: this.handleAccordionOpen,
@@ -88,7 +91,7 @@ class ChannelHeader extends React.Component {
         },
         {
           key: 'topic',
-          icon: !!chatroom.topic || <FontAwesomeIcon icon="edit" size="sm" />,
+          icon: chatroom.topic && <FontAwesomeIcon icon="edit" size="sm" />,
           label: chatroom.topic || 'Add topic',
           onClick: this.handleChannelEditModal,
         }
@@ -123,6 +126,8 @@ class ChannelHeader extends React.Component {
           destroySearchQuery={destroySearchQuery}
           createChatroomSubRequest={createChatroomSubRequest}
           destroyChatroomSubRequest={destroyChatroomSubRequest}
+          openSearchModal={openSearchModal}
+          openProfileModal={openProfileModal}
           history={history}
           match={match}
         />

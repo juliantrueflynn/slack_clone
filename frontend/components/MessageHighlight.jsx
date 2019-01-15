@@ -31,7 +31,7 @@ const MessageHighlight = ({
   }
 
   if (isFavorited && !pinId) {
-    faIcon = ['fas', 'star'];
+    faIcon = 'star';
     favText = 'Added to your starred items';
   }
 

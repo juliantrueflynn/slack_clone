@@ -1,4 +1,5 @@
 import React from 'react';
+import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import AccordionItem from './AccordionItem';
 import UserPreview from './UserPreview';
 import AccordionBodyInfo from './AccordionBodyInfo';
@@ -82,7 +83,7 @@ class ChannelDetailsDrawer extends React.Component {
         ),
       });
       accordionItems.push({
-        icon: 'users',
+        icon: faUsers,
         itemTitle: `${chatroom.members.length} Members`,
         name: 'members',
         body: <AccordionBodyMembers members={chatroom.members} users={users} />

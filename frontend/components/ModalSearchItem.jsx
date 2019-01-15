@@ -45,7 +45,7 @@ const ModalSearchItem = ({ message, chatroomsMap, url }) => {
           )}
           {hasReactions && (
             <div className="ModalSearchItem__reactions">
-              <FontAwesomeIcon icon={['far', 'smile']} />
+              <FontAwesomeIcon icon="{['far', 'smile']}" />
               {reactionCount}
             </div>
           )}

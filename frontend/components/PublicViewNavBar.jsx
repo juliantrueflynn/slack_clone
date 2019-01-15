@@ -89,7 +89,7 @@ class PublicViewNavBar extends React.Component {
 
     menuItems.push({
       key: 'dropdown-mobile',
-      icon: <FontAwesomeIcon icon="bars" fixedWidth size="lg" />,
+      icon: <FontAwesomeIcon icon="bars" size="lg" />,
       dropdownType: 'DROPDOWN_PUBLIC',
       dropdownChild: <Menu items={ddItems} menuFor="dropdown" bemModifier={menuModifier} />,
       condition: isLoggedIn && isMobileSize,

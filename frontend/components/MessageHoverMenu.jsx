@@ -1,4 +1,6 @@
 import React from 'react';
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
+import { faStar as farStar } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import EmojiPicker from 'emoji-picker-react';
 import Menu from './Menu';
@@ -22,7 +24,7 @@ class MessageHoverMenu extends React.Component {
 
     const { id: messageId, slug, favoriteId } = message;
     const isEntryType = message.entityType === 'entry';
-    const favIcon = favoriteId ? ['fas', 'star'] : ['far', 'star'];
+    const favIcon = favoriteId ? 'star' : farStar;
     const favClassName = favoriteId ? 'solid' : 'empty';
 
     let menuItems = [
@@ -49,7 +51,7 @@ class MessageHoverMenu extends React.Component {
       },
       {
         key: 'dropdown',
-        icon: <FontAwesomeIcon icon="ellipsis-h" fixedWidth />,
+        icon: <FontAwesomeIcon icon={faEllipsisH} fixedWidth />,
         bemModifier: 'msg-dd',
         dropdownType: `DROPDOWN_MESSAGE_${message.slug}`,
         dropdownChild: <Menu items={this.getDdMenuItems()} />,
@@ -105,7 +107,9 @@ class MessageHoverMenu extends React.Component {
   }
 
   render() {
-    return <Menu className="MessageHoverMenu" items={this.getMenuItems()} />;
+    const menuItems = this.getMenuItems();
+
+    return <Menu className="MessageHoverMenu" items={menuItems} />;
   }
 }
 

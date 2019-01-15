@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from './Button';
 import './SearchBar.css';
@@ -55,17 +56,17 @@ class SearchBar extends React.Component {
   handleModalOpen(e) {
     e.preventDefault();
 
-    const { openModal } = this.props;
-    openModal('MODAL_SEARCH');
+    const { openSearchModal } = this.props;
+    openSearchModal();
   }
 
   render() {
-    const { searchQuery, hasClearIcon, openModal } = this.props;
+    const { searchQuery, hasClearIcon, openSearchModal } = this.props;
 
-    const isDisabled = !!openModal;
+    const isDisabled = !!openSearchModal;
 
     const searchClassNames = classNames('SearchBar', {
-      'SearchBar--disabled': openModal,
+      'SearchBar--disabled': openSearchModal,
       'SearchBar--queried': searchQuery,
       'SearchBar--empty': !searchQuery,
     });
@@ -75,7 +76,7 @@ class SearchBar extends React.Component {
         <div className="SearchBar__hoverable">
           <div className="SearchBar__disabled-overlay" role="presentation" onClick={this.handleModalOpen} />
           <Button type="submit" buttonFor="searchbar" unStyled disabled={isDisabled}>
-            <FontAwesomeIcon icon="search" />
+            <FontAwesomeIcon icon={faSearch} />
           </Button>
           <input
             type="text"

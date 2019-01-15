@@ -1,4 +1,5 @@
 import React from 'react';
+import { faUserCog } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from './Modal';
 import Menu from './Menu';
@@ -7,7 +8,7 @@ import './RightSidebarModal.css';
 const RightSidebarModal = ({
   isOpen,
   closeModal,
-  openModalProfile,
+  openProfileModal,
   drawerType,
   chatroom,
   toggleLink,
@@ -34,8 +35,8 @@ const RightSidebarModal = ({
     {
       key: 'profile',
       label: 'Edit Profile',
-      icon: <FontAwesomeIcon icon="user-cog" />,
-      onClick: openModalProfile,
+      icon: <FontAwesomeIcon icon={faUserCog} />,
+      onClick: openProfileModal,
     }
   ];
 
