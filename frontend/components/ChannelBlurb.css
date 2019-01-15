@@ -11,12 +11,12 @@
   font-size: 1.85em;
 }
 
-.ChatPageSwitch__channel .ChannelBlurb__title::before {
+.ChatPageSwitch__channel--public .ChannelBlurb__title::before {
   font-weight: normal;
   margin-right: 4px;
 }
 
-.ChatPageSwitch__channel .ChannelBlurb__title::before,
+.ChatPageSwitch__channel--public .ChannelBlurb__title::before,
 .ChannelBlurb__ch-name::before {
   content: "\0023";
 }

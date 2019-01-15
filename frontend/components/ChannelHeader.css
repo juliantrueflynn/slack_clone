@@ -17,7 +17,7 @@
   margin: 1px 0 3px;
 }
 
-.ChatPageSwitch__channel .ChannelHeader__title::before {
+.ChatPageSwitch__channel--public .ChannelHeader__title::before {
   content: "\0023";
 }
 

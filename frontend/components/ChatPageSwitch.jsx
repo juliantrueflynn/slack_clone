@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import ChannelHeaderContainer from './ChannelHeaderContainer';
 import AllUnreads from './AllUnreads';
 import AllThreads from './AllThreads';
@@ -103,8 +104,14 @@ class ChatPageSwitch extends React.Component {
       chatType = chatPath;
     }
 
+    const pageClassNames = classNames('ChatPageSwitch', {
+      [`ChatPageSwitch__${chatType}`]: chatType,
+      'ChatPageSwitch__channel--dm': chatroom && chatroom.hasDm,
+      'ChatPageSwitch__channel--public': chatroom && !chatroom.hasDm,
+    });
+
     return (
-      <div className={`ChatPageSwitch ChatPageSwitch__${chatType}`}>
+      <div className={pageClassNames}>
         <ChannelHeaderContainer />
         <div className="ChatPageSwitch__row">
           <div className="ChatPageSwitch__body">
