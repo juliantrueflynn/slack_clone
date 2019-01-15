@@ -28,7 +28,8 @@ const userReducer = (state = {}, action) => {
         id: currUser.userId,
         slug: currUser.userSlug,
         subs: [],
-        status: 'online'
+        status: 'online',
+        isCurrentUser: true,
       };
 
       return merge({}, state, nextState);
@@ -78,12 +79,21 @@ const userReducer = (state = {}, action) => {
       return merge({}, state, nextState);
     }
     case CHATROOM.CREATE.RECEIVE: {
-      const { chatroomSubs } = action.chatroom;
+      const { chatroom, chatroomSubs } = action.chatroom;
 
       nextState = chatroomSubs.reduce((acc, { id, userSlug }) => ({
         ...acc,
         [userSlug]: { subs: [...state[userSlug].subs, id] },
       }), {});
+
+      if (chatroom.hasDm) {
+        const dmCreatorSlug = chatroomSubs[0].userSlug;
+
+        if (state[dmCreatorSlug].isCurrentUser) {
+          const { userSlug } = chatroomSubs[1] || {};
+          nextState[userSlug].dmChat = chatroom.slug;
+        }
+      }
 
       return merge({}, state, nextState);
     }
