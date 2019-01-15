@@ -17,7 +17,7 @@ class MessageReactions extends React.Component {
   render() {
     const { reactionIds, reactionsMap, currentUserSlug } = this.props;
 
-    if (!reactionIds && !reactionIds.length) {
+    if (!reactionIds || !reactionIds.length) {
       return null;
     }
 
