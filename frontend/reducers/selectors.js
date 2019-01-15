@@ -96,26 +96,21 @@ export const getChatPage = createSelector(
   [getChatroomsMap, getChatPath], (chatroomsMap, chatPath) => chatroomsMap[chatPath]
 );
 
-const groupByMessageEntityType = (arr) => {
-  const entries = [];
-
-  for (let idx = 0; idx < arr.length; idx += 1) {
-    entries.push(arr[idx]);
-
-    if (arr[idx].entityType !== 'entry') {
-      for (let i = idx; i < arr.length; i += 1) {
-        if (!arr[i + 1] || arr[i + 1].entityType === 'entry') {
-          idx = i;
-          break;
-        }
-
-        entries[entries.length - 1].group.push(arr[i + 1]);
-      }
+const groupByMessageEntityType = msgs => (
+  msgs.reduce((acc, msg) => {
+    if (acc.msgParent.entityType !== 'entry' && msg.entityType !== 'entry') {
+      acc.msgParent.group.push(msg);
+    } else {
+      acc.processedMessages.push(msg);
+      acc.msgParent = msg;
     }
-  }
 
-  return entries;
-};
+    return acc;
+  }, {
+    processedMessages: [],
+    msgParent: {},
+  }).processedMessages
+);
 
 export const getChatroomViewMessages = createSelector(
   [getMessagesMap, getChatPage],
