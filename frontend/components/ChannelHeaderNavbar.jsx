@@ -154,7 +154,6 @@ class ChannelHeaderNavbar extends React.Component {
           searchQuery={searchQuery}
           destroySearchQuery={destroySearchQuery}
           openSearchModal={openSearchModal}
-          hasClearIcon
         />
         <Menu menuFor="header-user" isRow items={userMenuItems} />
         <Button buttonFor="right-sidebar-mobile" unStyled onClick={this.handleSidebarModalToggle}>

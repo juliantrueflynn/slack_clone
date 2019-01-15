@@ -61,7 +61,7 @@ class SearchBar extends React.Component {
   }
 
   render() {
-    const { searchQuery, hasClearIcon, openSearchModal } = this.props;
+    const { searchQuery, openSearchModal } = this.props;
 
     const isDisabled = !!openSearchModal;
 
@@ -90,8 +90,8 @@ class SearchBar extends React.Component {
         </div>
         {searchQuery && (
           <Button onClick={this.handleClearClick} buttonFor="clear" unStyled>
-            {hasClearIcon || 'Clear'}
-            {hasClearIcon && <span role="img" aria-label="Clear search">&times;</span>}
+            {isDisabled || 'Clear'}
+            {isDisabled && <span role="img" aria-label="Clear search">&times;</span>}
           </Button>
         )}
       </form>
