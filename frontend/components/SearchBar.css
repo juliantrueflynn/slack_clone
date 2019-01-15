@@ -38,3 +38,7 @@
 .SearchBar--disabled .Btn__clear {
   z-index: 200;
 }
+
+.SearchBar .Btn__clear:focus {
+  outline: 0;
+}

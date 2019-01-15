@@ -91,7 +91,7 @@ class SearchBar extends React.Component {
         {searchQuery && (
           <Button onClick={this.handleClearClick} buttonFor="clear" unStyled>
             {isDisabled || 'Clear'}
-            {isDisabled && <span role="img" aria-label="Clear search">&times;</span>}
+            {isDisabled && <FontAwesomeIcon icon="times" />}
           </Button>
         )}
       </form>
