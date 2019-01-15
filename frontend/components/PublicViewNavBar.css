@@ -110,7 +110,7 @@
     border: 0;
   }
 
-  .PublicViewNavBar .Menu--row > li.MenuItem__signin,
+  .PublicView--signed-in .PublicViewNavBar .Menu--row > li.MenuItem__signin,
   .PublicViewNavBar .Menu--row > li.MenuItem__signout,
   .PublicViewNavBar .Menu--row > li.MenuItem__dropdown {
     display: none;
