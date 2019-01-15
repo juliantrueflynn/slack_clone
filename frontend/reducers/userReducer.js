@@ -29,13 +29,12 @@ const userReducer = (state = {}, action) => {
         slug: currUser.userSlug,
         subs: [],
         status: 'online',
-        isCurrentUser: true,
       };
 
       return merge({}, state, nextState);
     }
     case WORKSPACE.SHOW.RECEIVE: {
-      const { members, chatroomSubs } = action.workspace;
+      const { members, chatroomSubs, currentUserSlug } = action.workspace;
 
       nextState = members.reduce((acc, curr) => ({
         ...acc,
@@ -45,6 +44,8 @@ const userReducer = (state = {}, action) => {
       chatroomSubs.forEach((sub) => {
         nextState[sub.userSlug].subs.push(sub.id);
       });
+
+      nextState[currentUserSlug].isCurrentUser = true;
 
       return merge({}, state, nextState);
     }
@@ -87,9 +88,9 @@ const userReducer = (state = {}, action) => {
       }), {});
 
       if (chatroom.hasDm) {
-        const dmCreatorSlug = chatroomSubs[0].userSlug;
+        const dmOwnerSlug = chatroomSubs[0].userSlug;
 
-        if (state[dmCreatorSlug].isCurrentUser) {
+        if (state[dmOwnerSlug].isCurrentUser) {
           const { userSlug } = chatroomSubs[1] || {};
           nextState[userSlug].dmChat = chatroom.slug;
         }

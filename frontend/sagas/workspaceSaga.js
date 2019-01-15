@@ -4,11 +4,13 @@ import {
   fork,
   put,
   takeLatest,
+  select,
 } from 'redux-saga/effects';
 import * as actions from '../actions/workspaceActions';
 import { WORKSPACE } from '../actions/actionTypes';
 import { navigate } from '../actions/uiActions';
 import { apiFetch, apiCreate } from '../util/apiUtil';
+import { getCurrentUser } from '../reducers/selectors';
 
 function* workspaceIndex() {
   try {
@@ -22,7 +24,9 @@ function* workspaceIndex() {
 function* workspaceShow({ workspaceSlug }) {
   try {
     const response = yield call(apiFetch, `workspaces/${workspaceSlug}`);
-    yield put(actions.fetchWorkspace.receive(response));
+    const currentUser = yield select(getCurrentUser);
+    const currentUserSlug = currentUser.slug;
+    yield put(actions.fetchWorkspace.receive({ ...response, currentUserSlug }));
   } catch (error) {
     yield put(actions.fetchWorkspace.failure(error));
   }
