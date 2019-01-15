@@ -29,7 +29,7 @@ class AllUnreads extends React.Component {
 
     if (!chatrooms.length) {
       return (
-        <EmptyDisplay topIcon={['far', 'smile-beam']} topIconHexColor="#FECB6E">
+        <EmptyDisplay topIcon={['far', 'smile']} topIconHexColor="#FECB6E">
           You&#8217;re all caught up!
         </EmptyDisplay>
       );

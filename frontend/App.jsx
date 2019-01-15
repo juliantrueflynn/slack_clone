@@ -6,7 +6,6 @@ import {
   faTrashAlt,
   faSmile,
   faComment,
-  faSmileBeam,
   faComments,
   faCircle as farCircle,
   faStar as farStar,
@@ -36,14 +35,12 @@ import {
   faBars,
   faStar as fasStar,
 } from '@fortawesome/free-solid-svg-icons';
-import { ActionCable } from 'react-actioncable-provider';
-import withActionCable from './components/withActionCable';
 import { routesConfig, PageRoutes } from './util/routeUtil';
+import ActionCablesContainer from './components/ActionCablesContainer';
 import ModalControllerContainer from './components/ModalControllerContainer';
 import './App.css';
 
 library.add(
-  faSmileBeam,
   faComments,
   faTimes,
   faTrashAlt,
@@ -76,12 +73,12 @@ library.add(
   faBars,
 );
 
-const App = ({ isLoggedIn, onReceived }) => (
+const App = () => (
   <div className="App">
-    {isLoggedIn && <ActionCable channel={{ channel: 'AppChannel' }} onReceived={onReceived} />}
     <PageRoutes routes={routesConfig} />
+    <ActionCablesContainer />
     <ModalControllerContainer />
   </div>
 );
 
-export default withActionCable(App);
+export default App;

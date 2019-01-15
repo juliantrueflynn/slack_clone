@@ -1,6 +1,4 @@
 import React from 'react';
-import { ActionCable } from 'react-actioncable-provider';
-import { decamelizeKeys } from 'humps';
 import sampleWisdomQuote from '../util/wisdomQuotesUtil';
 import EmptyDisplay from './EmptyDisplay';
 import LeftSidebarContainer from './LeftSidebarContainer';
@@ -46,14 +44,7 @@ class Workspace extends React.Component {
   }
 
   render() {
-    const {
-      isLoading,
-      workspaceSlug,
-      routes,
-      chatroom,
-      actionCablesChannels,
-      onReceived,
-    } = this.props;
+    const { isLoading, routes, chatroom } = this.props;
     const { quoteText, quoteBy } = sampleWisdomQuote;
     const hasLoaded = !isLoading && chatroom;
 
@@ -72,25 +63,6 @@ class Workspace extends React.Component {
 
     return (
       <div className="Workspace">
-        <ActionCable
-          channel={decamelizeKeys({ channel: 'WorkspaceChannel', workspaceSlug })}
-          onReceived={onReceived}
-        />
-        <ActionCable
-          channel={decamelizeKeys({ channel: 'DmUserChannel' })}
-          onReceived={onReceived}
-        />
-        <ActionCable
-          channel={decamelizeKeys({ channel: 'AppearanceChannel', workspaceSlug })}
-          onReceived={onReceived}
-        />
-        {actionCablesChannels.map(cable => (
-          <ActionCable
-            key={cable.chatroomSlug}
-            channel={decamelizeKeys(cable)}
-            onReceived={onReceived}
-          />
-        ))}
         {hasLoaded && <LeftSidebarContainer />}
         {hasLoaded && <PageRoutes routes={routes} />}
       </div>
