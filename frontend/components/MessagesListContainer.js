@@ -8,9 +8,13 @@ import { toggleMessageEditor, updateDropdown } from '../actions/uiActions';
 import { getChatPathUrl } from '../reducers/selectors';
 import MessagesList from './MessagesList';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, { match: { params } }) => {
   const { dropdownType: ddType } = state.ui.dropdown;
   const isReactionDdOpen = !!(ddType && ddType.lastIndexOf('DROPDOWN_REACTION', 0) === 0);
+
+  const chatroom = state.entities.chatrooms[params.chatPath];
+  const { title } = chatroom || {};
+  const chatroomTitle = title ? `#${title}` : '';
 
   return {
     currentUserSlug: state.session.currentUser.slug,
@@ -19,6 +23,7 @@ const mapStateToProps = (state) => {
     pinsMap: state.entities.pins,
     isDdOpen: !!ddType,
     isReactionDdOpen,
+    chatroomTitle,
     chatPathUrl: getChatPathUrl(state),
   };
 };

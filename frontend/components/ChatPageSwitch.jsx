@@ -11,21 +11,18 @@ class ChatPageSwitch extends React.Component {
   constructor(props) {
     super(props);
     this.state = { isInitLoadingDone: false };
+    this.fetchChatroomData = this.fetchChatroomData.bind(this);
+    this.updateLoadingState = this.updateLoadingState.bind(this);
   }
 
   componentDidMount() {
-    const { updateChatPath, fetchChatPageData } = this.props;
-
-    updateChatPath();
-    fetchChatPageData();
+    this.fetchChatroomData();
     this.updateHistoryDrawerPath();
   }
 
   componentDidUpdate(prevProps) {
     const {
       match: { isExact },
-      updateChatPath,
-      fetchChatPageData,
       drawerPath,
       closeDrawer,
       chatPath,
@@ -34,15 +31,7 @@ class ChatPageSwitch extends React.Component {
     } = this.props;
 
     if (chatPath !== prevProps.chatPath) {
-      updateChatPath();
-
-      if (chatroom && chatroom.shouldFetch) {
-        fetchChatPageData();
-      }
-
-      if (!chatroom) {
-        fetchChatPageData();
-      }
+      this.fetchChatroomData();
     }
 
     if (chatroom && drawerPath && isExact && !prevProps.isExact) {
@@ -56,6 +45,16 @@ class ChatPageSwitch extends React.Component {
 
     if (!isLoading.chatroom && prevProps.isLoading) {
       this.updateLoadingState();
+    }
+  }
+
+  fetchChatroomData() {
+    const { chatroom, updateChatPath, fetchChatPageData } = this.props;
+
+    updateChatPath();
+
+    if (!chatroom || (chatroom && chatroom.shouldFetch)) {
+      fetchChatPageData();
     }
   }
 

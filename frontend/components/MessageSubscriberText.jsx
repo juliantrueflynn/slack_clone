@@ -26,7 +26,7 @@ class MessageSubscriberText extends React.Component {
   }
 
   getParentText(groupParent) {
-    const { sub } = this.props;
+    const { sub, chatroomTitle } = this.props;
     const parent = groupParent || sub;
     const entityType = parent.entityType === 'sub_create' ? 'joined' : 'left';
 
@@ -36,7 +36,7 @@ class MessageSubscriberText extends React.Component {
 
     const appendedPeriod = this.isAllSameAuthor() ? '.' : '';
 
-    return `${entityType} ${sub.chatroomTitle}${appendedPeriod}`;
+    return `${entityType} ${chatroomTitle}${appendedPeriod}`;
   }
 
   getMixedGroupText(arr, groupParent) {

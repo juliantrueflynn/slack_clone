@@ -42,6 +42,7 @@ class Message extends React.Component {
       reactionsMap,
       pinsMap,
       currentUserSlug,
+      chatroomTitle,
       chatPathUrl,
       toggleReaction,
       toggleEditor,
@@ -106,7 +107,7 @@ class Message extends React.Component {
                   />
                 )}
                 {message.entityType !== 'entry' && message.group && (
-                  <MessageSubscriberText sub={message} />
+                  <MessageSubscriberText sub={message} chatroomTitle={chatroomTitle} />
                 )}
               </div>
               {shouldHideEngagement || (

@@ -118,19 +118,16 @@ const groupByMessageEntityType = (arr) => {
 };
 
 export const getChatroomViewMessages = createSelector(
-  [getMessagesMap, getChatPage],
-  (msgsMap, chatroom) => {
-    if (!chatroom || !chatroom.messages) {
-      return [];
-    }
+  [getMessagesMap, getAllChatrooms, getChatPath],
+  (msgsMap, chatrooms, chatPath) => {
+    const chatroom = chatrooms[chatPath];
+    const roomMsgs = chatroom ? chatroom.messages : [];
 
-    const msgs = chatroom.messages.map(msgSlug => msgsMap[msgSlug]);
+    const msgs = roomMsgs.map(msgSlug => msgsMap[msgSlug]);
     const entries = msgs.filter(msg => msg && msg.entityType === 'entry');
-    const subs = msgs.filter(msg => msg && msg.entityType !== 'entry').reduce((acc, curr) => {
-      const msg = { ...curr, group: [], chatroomTitle: `#${chatroom.title}` };
-
-      return [...acc, msg];
-    }, []);
+    const subs = msgs.filter(msg => msg && msg.entityType !== 'entry').reduce((acc, curr) => (
+      [...acc, { ...curr, group: [] }]
+    ), []);
 
     const items = [...subs, ...entries].sort((a, b) => a.id - b.id);
 
