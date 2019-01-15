@@ -96,7 +96,7 @@ const messageReducer = (state = _defaultState, action) => {
       nextState = { [slug]: { reactionIds: [], ...message } };
 
       if (parentSlug && state[parentSlug]) {
-        nextState[parentSlug] = { ...state[parentSlug], authors };
+        nextState[parentSlug] = { thread: [], ...state[parentSlug], authors };
 
         nextState[parentSlug].thread.push(slug);
       }
