@@ -8,7 +8,6 @@ class DropdownModalTrigger extends React.Component {
     this.state = { left: null, top: null };
     this.triggerRef = React.createRef();
     this.handleClick = this.handleClick.bind(this);
-    this.handleClose = this.handleClose.bind(this);
     this.updateModalStyles = this.updateModalStyles.bind(this);
   }
 
@@ -26,16 +25,6 @@ class DropdownModalTrigger extends React.Component {
     if (onClick) {
       onClick(e);
     }
-  }
-
-  handleClose(e) {
-    const { onClose, closeDropdown } = this.props;
-
-    if (onClose) {
-      onClose(e);
-    }
-
-    closeDropdown();
   }
 
   updateModalStyles({ width, height }) {
@@ -66,6 +55,7 @@ class DropdownModalTrigger extends React.Component {
       children,
       isDdOpen,
       contentStyle,
+      closeDropdown,
       dropdownChild,
     } = this.props;
     const { left, top } = this.state;
@@ -88,7 +78,7 @@ class DropdownModalTrigger extends React.Component {
           <Dropdown
             bemModifier={this.getBemModifier()}
             contentStyle={style}
-            close={this.handleClose}
+            close={closeDropdown}
             updateModalStyles={this.updateModalStyles}
           >
             {dropdownChild}
