@@ -14,6 +14,11 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
+.PublicViewNavBar .Btn__dropdown:focus {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
 .PublicViewNavBar .Btn__dropdown:hover {
   color: rgba(255, 255, 255, 1.0);
   border-color: rgba(255, 255, 255, 0.9);
@@ -64,6 +69,7 @@
   transition: color ease-in-out .2s
 }
 
+.PublicViewNavBar .Menu__public > .MenuItem > .MenuItem__content:focus,
 .PublicViewNavBar .Menu__public > .MenuItem > .MenuItem__content:hover {
   color: rgba(255, 255, 255, 1.0);
 }
