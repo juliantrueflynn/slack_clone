@@ -20,7 +20,7 @@ class ModalController extends React.Component {
       user,
       chatrooms,
       chatroomsMap,
-      chatPath,
+      chatroomSlug,
       usersMap,
       messages,
       searchQuery,
@@ -52,7 +52,7 @@ class ModalController extends React.Component {
         isLoading: isLoading.chatrooms,
         fetchChatroomsRequest,
         chatrooms,
-        chatPath,
+        chatroomSlug,
       },
       {
         type: 'MODAL_PROFILE',

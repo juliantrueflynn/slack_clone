@@ -6,17 +6,16 @@ import Workspace from '../components/Workspace';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => {
   const chatroomsMap = getChatroomsMap(state);
-  const defaultChatPath = state.ui.defaultChannel;
-  const currentChatPath = state.ui.displayChatPath;
-  const chatPath = currentChatPath || defaultChatPath;
-  const chatroom = chatroomsMap[chatPath] || chatroomsMap[defaultChatPath];
+  const { defaultChannelSlug, displayChatPath: currChatroomSlug } = state.ui;
+  const chatroomSlug = currChatroomSlug || defaultChannelSlug;
+  const chatroom = chatroomsMap[chatroomSlug] || chatroomsMap[defaultChannelSlug];
 
   return {
     isLoading: state.isLoading.workspace,
     workspace: state.entities.workspaces[workspaceSlug],
     workspaces: getSubbedWorkspaces(state),
     workspaceSlug,
-    chatPath,
+    chatroomSlug,
     chatroom,
   };
 };

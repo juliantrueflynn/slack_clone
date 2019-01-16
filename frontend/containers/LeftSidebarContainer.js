@@ -17,11 +17,11 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
 
   const chatroomsMap = getChatroomsMap(state);
   const chatrooms = Object.values(chatroomsMap);
-  const chatPath = state.ui.displayChatPath;
+  const chatroomSlug = state.ui.displayChatPath;
 
-  let profileUrl = `${url}/${chatPath}/team/${user.slug}`;
-  if (chatroomsMap[chatPath]) {
-    profileUrl = `${url}/messages/${chatPath}/team/${user.slug}`;
+  let profileUrl = `${url}/${chatroomSlug}/team/${user.slug}`;
+  if (chatroomsMap[chatroomSlug]) {
+    profileUrl = `${url}/messages/${chatroomSlug}/team/${user.slug}`;
   }
 
   const unreadsMap = state.entities.unreads;
@@ -42,7 +42,7 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
     label,
     link: `${url}/messages/${slug}`,
     modifierClassName: unreadsMap[slug] && unreadsMap[slug].hasUnreads ? 'unread' : null,
-    isActive: (match, { pathname }) => match && pathname.includes(`messages/${chatPath}`),
+    isActive: (match, { pathname }) => match && pathname.includes(`messages/${chatroomSlug}`),
   });
   const dmChannels = getDMChannels(state).map(ch => chatItemDecorate(ch));
   const subbedChannels = chatrooms.filter(ch => ch.isSub && !ch.hasDm).sort((a, b) => (
@@ -60,7 +60,7 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
     workspace: state.entities.workspaces[workspaceSlug],
     subbedChannels,
     dmChannels,
-    chatPath,
+    chatroomSlug,
     profileUrl,
     drawerPath,
     isModalOpen: state.ui.displayModal.modalType === 'MODAL_LEFT_SIDEBAR',

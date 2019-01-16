@@ -37,13 +37,13 @@ function* updateUnreadsByAllThreads() {
   }
 }
 
-function* updateUnreadsByChat({ chatPath }) {
-  if (chatPath === 'threads') {
+function* updateUnreadsByChat({ chatroomSlug }) {
+  if (chatroomSlug === 'threads') {
     return;
   }
 
   const unreadsMap = yield select(getAllUnreads);
-  const unread = unreadsMap[chatPath];
+  const unread = unreadsMap[chatroomSlug];
 
   if (unread) {
     const { readableId, readableType } = unread;

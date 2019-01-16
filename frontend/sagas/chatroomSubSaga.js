@@ -65,9 +65,9 @@ function* updateDmChatSubBySlug(chatroomSlug) {
   }
 }
 
-function* dmChatSubUpdateByChatPath({ chatPath }) {
-  if (chatPath !== 'unreads' || chatPath !== 'threads') {
-    yield updateDmChatSubBySlug(chatPath);
+function* dmChatSubUpdateByChatPath({ chatroomSlug }) {
+  if (chatroomSlug !== 'unreads' || chatroomSlug !== 'threads') {
+    yield updateDmChatSubBySlug(chatroomSlug);
   }
 }
 

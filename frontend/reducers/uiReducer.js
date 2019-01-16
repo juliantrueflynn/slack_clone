@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import displayWorkspaceSlug from './workspaceDisplayReducer';
 import displayChatPath from './chatPathDisplayReducer';
-import defaultChannel from './chatroomDefaultReducer';
+import defaultChannelSlug from './chatroomSlugDefaultReducer';
 import displayModal from './modalReducer';
 import accordion from './accordionReducer';
 import drawer from './drawerReducer';
@@ -16,7 +16,7 @@ const uiReducer = combineReducers({
   drawer,
   dropdown,
   isEditingMessage,
-  defaultChannel,
+  defaultChannelSlug,
 });
 
 export default uiReducer;

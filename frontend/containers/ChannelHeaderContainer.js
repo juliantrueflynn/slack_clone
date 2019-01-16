@@ -11,25 +11,25 @@ import { destroyChatroomSub, createChatroomSub } from '../actions/chatroomAction
 import { getChatroomsMap, getMessagesMap } from '../reducers/selectors';
 import ChannelHeader from '../components/ChannelHeader';
 
-const getChatTitle = (chatPath, chatroom) => {
-  if (chatPath === 'unreads') {
+const getChatTitle = (chatroomSlug, chatroom) => {
+  if (chatroomSlug === 'unreads') {
     return 'All Unreads';
   }
 
-  if (chatPath === 'threads') {
+  if (chatroomSlug === 'threads') {
     return 'All Threads';
   }
 
   return chatroom && chatroom.title;
 };
 
-const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
+const mapStateToProps = (state, { match: { params: { chatroomSlug } } }) => {
   const { members: usersMap, unreads: unreadsMap } = state.entities;
 
   const chatroomsMap = getChatroomsMap(state);
-  const chatroom = chatroomsMap[chatPath];
-  const defaultChatPath = state.ui.defaultChannel;
-  const isNotDefaultChannel = chatPath !== defaultChatPath;
+  const chatroom = chatroomsMap[chatroomSlug];
+  const defaultChatPath = state.ui.defaultChannelSlug;
+  const isNotDefaultChannel = chatroomSlug !== defaultChatPath;
   const dmChannelUser = chatroom && chatroom.hasDm ? usersMap[chatroom.dmUserSlug] : {};
 
   const { unreadsByChannel } = state;
@@ -46,10 +46,10 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
   const convoUnreadsLen = unreads.filter(unread => unread && unread.readableType === 'Message').length;
 
   return {
-    chatPath,
+    chatroomSlug,
     chatroomsMap,
     chatroom,
-    chatTitle: getChatTitle(chatPath, chatroom),
+    chatTitle: getChatTitle(chatroomSlug, chatroom),
     dmChannelUser,
     isNotDefaultChannel,
     messages,
@@ -63,7 +63,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { match: { params: { chatPath } } }) => ({
+const mapDispatchToProps = (dispatch, { match: { params: { chatroomSlug } } }) => ({
   openModal: (modalType, modalProps) => dispatch(updateModal(modalType, modalProps)),
   openProfileModal: () => dispatch(updateModal('MODAL_PROFILE')),
   openSearchModal: () => dispatch(updateModal('MODAL_SEARCH')),
@@ -73,9 +73,9 @@ const mapDispatchToProps = (dispatch, { match: { params: { chatPath } } }) => ({
   accordionOpen: accordionType => dispatch(accordionOpen('details', accordionType)),
   destroySearchQuery: () => dispatch(updateSearchQuery()),
   createChatroomSubRequest: chatroomId => (
-    dispatch(createChatroomSub.request({ chatroomId, chatroomSlug: chatPath }))
+    dispatch(createChatroomSub.request({ chatroomId, chatroomSlug }))
   ),
-  destroyChatroomSubRequest: () => dispatch(destroyChatroomSub.request(chatPath)),
+  destroyChatroomSubRequest: () => dispatch(destroyChatroomSub.request(chatroomSlug)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChannelHeader));

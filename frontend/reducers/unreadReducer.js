@@ -78,11 +78,11 @@ const unreadReducer = (state = _defaultState, action) => {
       return merge({}, state, nextState);
     }
     case UNREAD_CLEAR_ALL: {
-      const { chatPath, lastRead } = action;
+      const { chatroomSlug, lastRead } = action;
 
       nextState = {};
 
-      if (chatPath === 'threads') {
+      if (chatroomSlug === 'threads') {
         nextState = Object.values(state).filter(unread => (
           unread.readableType === 'Message' && unread.hasUnreads
         )).reduce((acc, curr) => ({
@@ -90,7 +90,7 @@ const unreadReducer = (state = _defaultState, action) => {
           [curr.slug]: { hasUnreads: false, lastRead: curr.lastActive }
         }), {});
       } else {
-        nextState[chatPath] = { hasUnreads: false, lastActive: lastRead };
+        nextState[chatroomSlug] = { hasUnreads: false, lastActive: lastRead };
       }
 
       return merge({}, state, nextState);

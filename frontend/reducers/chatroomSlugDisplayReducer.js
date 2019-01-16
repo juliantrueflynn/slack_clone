@@ -7,7 +7,7 @@ import {
 
 const _defaultState = null;
 
-const displayChatPathReducer = (state = _defaultState, action) => {
+const displayChatroomSlugReducer = (state = _defaultState, action) => {
   Object.freeze(state);
 
   switch (action.type) {
@@ -22,4 +22,4 @@ const displayChatPathReducer = (state = _defaultState, action) => {
   }
 };
 
-export default displayChatPathReducer;
+export default displayChatroomSlugReducer;

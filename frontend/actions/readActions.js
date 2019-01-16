@@ -21,7 +21,7 @@ export const destroyRead = {
 
 export const updateUnread = unread => actionCreator(UNREAD_UPDATE, { unread });
 
-export const clearAllUnread = (chatPath, lastRead = null) => actionCreator(
+export const clearAllUnread = (chatroomSlug, lastRead = null) => actionCreator(
   UNREAD_CLEAR_ALL,
-  { chatPath, lastRead },
+  { chatroomSlug, lastRead },
 );

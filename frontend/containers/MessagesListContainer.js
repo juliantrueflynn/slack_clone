@@ -12,7 +12,7 @@ const mapStateToProps = (state, { match: { params } }) => {
   const { dropdownType: ddType } = state.ui.dropdown;
   const isReactionDdOpen = !!(ddType && ddType.lastIndexOf('DROPDOWN_REACTION', 0) === 0);
 
-  const chatroom = state.entities.chatrooms[params.chatPath];
+  const chatroom = state.entities.chatrooms[params.chatroomSlug];
   const { title } = chatroom || {};
   const chatroomTitle = title ? `#${title}` : '';
 

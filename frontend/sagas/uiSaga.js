@@ -38,13 +38,13 @@ function* fetchDrawerEntities({ drawerType, drawerSlug }) {
       break;
     }
     case 'details': {
-      const chatPath = yield select(selectUIByDisplay, 'displayChatPath');
+      const chatroomSlug = yield select(selectUIByDisplay, 'displayChatPath');
 
-      if (chatPath === 'unreads' || chatPath === 'threads') {
+      if (chatroomSlug === 'unreads' || chatroomSlug === 'threads') {
         return;
       }
 
-      entitySlug = chatPath;
+      entitySlug = chatroomSlug;
       fetchActionFunc = fetchChatroom;
       break;
     }

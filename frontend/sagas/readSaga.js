@@ -49,8 +49,8 @@ function* readViewedEntity(readProps) {
   }
 }
 
-function* readUpdateByChat({ chatPath }) {
-  const chatroom = yield select(getChatPage, chatPath);
+function* readUpdateByChat({ chatroomSlug }) {
+  const chatroom = yield select(getChatPage, chatroomSlug);
   const { slug, id: readableId, isSub } = chatroom || {};
 
   if (chatroom && isSub) {

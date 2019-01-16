@@ -25,17 +25,17 @@ class ChatroomSwitch extends React.Component {
       match: { isExact },
       drawerPath,
       closeDrawer,
-      chatPath,
+      chatroomSlug,
       chatroom,
       isLoading,
     } = this.props;
 
-    if (chatPath !== prevProps.chatPath) {
+    if (chatroomSlug !== prevProps.chatroomSlug) {
       this.fetchChatroomData();
     }
 
     if (chatroom && drawerPath && isExact && !prevProps.isExact) {
-      if (chatPath === prevProps.chatPath) {
+      if (chatroomSlug === prevProps.chatroomSlug) {
         closeDrawer();
         return;
       }
@@ -80,7 +80,7 @@ class ChatroomSwitch extends React.Component {
 
   render() {
     const {
-      chatPath,
+      chatroomSlug,
       routes,
       messages,
       usersMap,
@@ -99,8 +99,8 @@ class ChatroomSwitch extends React.Component {
     const { isInitLoadingDone } = this.state;
 
     let chatType = 'channel';
-    if (chatPath === 'unreads' || chatPath === 'threads') {
-      chatType = chatPath;
+    if (chatroomSlug === 'unreads' || chatroomSlug === 'threads') {
+      chatType = chatroomSlug;
     }
 
     const pageClassNames = classNames('ChatroomSwitch', {
@@ -114,7 +114,7 @@ class ChatroomSwitch extends React.Component {
         <ChannelHeaderContainer />
         <div className="ChatroomSwitch__row">
           <div className="ChatroomSwitch__body">
-            {chatPath === 'unreads' && (
+            {chatroomSlug === 'unreads' && (
               <AllUnreads
                 messagesMap={messages}
                 isLoading={isLoading.chatroom}
@@ -122,7 +122,7 @@ class ChatroomSwitch extends React.Component {
                 clearAllUnread={clearAllUnread}
               />
             )}
-            {chatPath === 'threads' && (
+            {chatroomSlug === 'threads' && (
               <AllThreads
                 messages={messages}
                 usersMap={usersMap}

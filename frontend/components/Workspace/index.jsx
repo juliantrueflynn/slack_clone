@@ -23,7 +23,7 @@ class Workspace extends React.Component {
       history,
       workspaces,
       isLoading,
-      chatPath,
+      chatroomSlug,
       chatroom,
       workspace,
       workspaceSlug,
@@ -40,7 +40,7 @@ class Workspace extends React.Component {
     }
 
     if (match.isExact && chatroom && chatroom.workspaceSlug === workspace.slug) {
-      history.replace(`/${workspaceSlug}/messages/${chatPath}`);
+      history.replace(`/${workspaceSlug}/messages/${chatroomSlug}`);
     }
   }
 

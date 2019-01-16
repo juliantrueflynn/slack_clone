@@ -22,13 +22,13 @@ import { createChatroomSub } from '../actions/chatroomActions';
 import { clearAllUnread, fetchUnreads } from '../actions/readActions';
 import ChatroomSwitch from '../components/ChatroomSwitch';
 
-const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
-  const chatroom = getChatroomsMap(state)[chatPath];
+const mapStateToProps = (state, { match: { params: { chatroomSlug } } }) => {
+  const chatroom = getChatroomsMap(state)[chatroomSlug];
   let messages = [];
 
-  if (chatPath === 'unreads') {
+  if (chatroomSlug === 'unreads') {
     messages = getMessagesMap(state);
-  } else if (chatPath === 'threads') {
+  } else if (chatroomSlug === 'threads') {
     messages = getAllThreadViewMessages(state);
   } else {
     messages = getChatroomViewMessages(state);
@@ -46,7 +46,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
     currentUser: state.session.currentUser,
     isLoading: state.isLoading,
     drawerPath,
-    chatPath,
+    chatroomSlug,
     chatroom,
     messages,
     unreadsMap: state.entities.unreads,
@@ -55,27 +55,27 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
 };
 
 const mapDispatchToProps = (dispatch, { match: { params } }) => ({
-  updateChatPath: () => dispatch(updateChatPath(params.chatPath)),
+  updateChatPath: () => dispatch(updateChatPath(params.chatroomSlug)),
   fetchChatPageData: () => {
     let slug = params.workspaceSlug;
     let fetchChatPage;
 
-    if (params.chatPath === 'unreads') {
+    if (params.chatroomSlug === 'unreads') {
       fetchChatPage = fetchUnreads;
-    } else if (params.chatPath === 'threads') {
+    } else if (params.chatroomSlug === 'threads') {
       fetchChatPage = fetchUserThreads;
     } else {
-      slug = params.chatPath;
+      slug = params.chatroomSlug;
       fetchChatPage = fetchMessages;
     }
 
     return dispatch(fetchChatPage.request(slug));
   },
   createChatroomSubRequest: chatroomId => (
-    dispatch(createChatroomSub.request({ chatroomSlug: params.chatPath, chatroomId }))
+    dispatch(createChatroomSub.request({ chatroomSlug: params.chatroomSlug, chatroomId }))
   ),
   fetchHistoryRequest: lastId => (
-    dispatch(fetchMessages.request(params.chatPath, lastId))
+    dispatch(fetchMessages.request(params.chatroomSlug, lastId))
   ),
   updateScrollLocation: (chatroomSlug, scrollLoc) => (
     dispatch(updateScrollLocation(chatroomSlug, scrollLoc))

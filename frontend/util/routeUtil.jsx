@@ -36,7 +36,7 @@ export const routesConfig = [
     isProtected: true,
     routes: [
       {
-        path: '/:workspaceSlug/(messages)*/:chatPath',
+        path: '/:workspaceSlug/(messages)*/:chatroomSlug',
         component: ChatroomSwitchContainer,
         routes: [
           {

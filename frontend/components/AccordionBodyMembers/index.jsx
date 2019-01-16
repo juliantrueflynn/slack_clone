@@ -8,10 +8,10 @@ const AccordionBodyMembers = ({ members, usersMap, match: { params } }) => {
   const isEmpty = !members || !members.length;
   const emptyText = 'No members';
 
-  const { 0: pagePath, chatPath, workspaceSlug } = params;
+  const { 0: pagePath, chatroomSlug, workspaceSlug } = params;
   let teamUrl = `/${workspaceSlug}/${pagePath}`;
-  if (chatPath) {
-    teamUrl += `/${chatPath}`;
+  if (chatroomSlug) {
+    teamUrl += `/${chatroomSlug}`;
   }
   teamUrl += '/team';
 

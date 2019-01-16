@@ -63,4 +63,4 @@ export const updateScrollLocation = (chatroomSlug, scrollLoc) => actionCreator(
   { chatroomSlug, scrollLoc }
 );
 
-export const updateChatPath = chatPath => actionCreator(CHAT_PATH_UPDATE, { chatPath });
+export const updateChatPath = chatroomSlug => actionCreator(CHAT_PATH_UPDATE, { chatroomSlug });

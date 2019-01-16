@@ -38,7 +38,7 @@ class ChannelHeader extends React.Component {
       usersMap,
       searchQuery,
       openModal,
-      chatPath,
+      chatroomSlug,
       closeDropdown,
       dropdownProps,
       drawerType,
@@ -57,10 +57,10 @@ class ChannelHeader extends React.Component {
 
     let metaMenuItems = [];
 
-    if (chatPath === 'unreads') {
+    if (chatroomSlug === 'unreads') {
       const label = channelUnreadsLen ? `${channelUnreadsLen} unreads` : 'No new messages';
       metaMenuItems = [{ key: 'unreads', label }];
-    } else if (chatPath === 'threads') {
+    } else if (chatroomSlug === 'threads') {
       const label = convoUnreadsLen ? `${convoUnreadsLen} updated convos` : 'No new replies';
       metaMenuItems = [{ key: 'unreads', label }];
     } else if (chatroom && chatroom.hasDm) {

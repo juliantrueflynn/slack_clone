@@ -93,7 +93,7 @@ export const getChatroomsMap = createSelector(
 );
 
 export const getChatPage = createSelector(
-  [getChatroomsMap, getChatPath], (chatroomsMap, chatPath) => chatroomsMap[chatPath]
+  [getChatroomsMap, getChatPath], (chatroomsMap, chatroomSlug) => chatroomsMap[chatroomSlug]
 );
 
 const groupByMessageEntityType = (arr) => {
@@ -119,8 +119,8 @@ const groupByMessageEntityType = (arr) => {
 
 export const getChatroomViewMessages = createSelector(
   [getMessagesMap, getAllChatrooms, getChatPath],
-  (msgsMap, chatrooms, chatPath) => {
-    const chatroom = chatrooms[chatPath];
+  (msgsMap, chatrooms, chatroomSlug) => {
+    const chatroom = chatrooms[chatroomSlug];
     const roomMsgs = chatroom ? chatroom.messages : [];
 
     const msgs = roomMsgs.map(msgSlug => msgsMap[msgSlug]);
@@ -204,8 +204,8 @@ const getLastEntry = (msgsMap, slugs) => {
 
 export const getChatroomLastEntry = createSelector(
   [getAllMessages, getChatPath, getAllChatrooms],
-  (msgsMap, chatPath, chatroomsMap) => (
-    getLastEntry(msgsMap, chatroomsMap[chatPath] ? chatroomsMap[chatPath].messages : [])
+  (msgsMap, chatroomSlug, chatroomsMap) => (
+    getLastEntry(msgsMap, chatroomsMap[chatroomSlug] ? chatroomsMap[chatroomSlug].messages : [])
   )
 );
 
@@ -241,12 +241,12 @@ const getAllUnreadsViewChannels = (chatroomsMap, unreadsMap, unreadChMsgs) => {
 
 export const getChatViewChannels = createSelector(
   [getChatPath, getChatroomsMap, getAllUnreads, getAllUnreadsByChannel],
-  (chatPath, chatroomsMap, unreadsMap, unreadChannelMessages) => {
-    if (chatPath === 'unreads') {
+  (chatroomSlug, chatroomsMap, unreadsMap, unreadChannelMessages) => {
+    if (chatroomSlug === 'unreads') {
       return getAllUnreadsViewChannels(chatroomsMap, unreadsMap, unreadChannelMessages);
     }
 
-    if (chatPath === 'threads') {
+    if (chatroomSlug === 'threads') {
       return values(chatroomsMap).filter(ch => !ch.hasDm).reduce((acc, curr) => {
         acc[curr.slug] = chatroomsMap[curr.slug];
         return acc;
@@ -300,11 +300,11 @@ export const getDrawerPath = ({ ui: { drawer: { drawerType, drawerSlug } } }) =>
 };
 
 export const getChatPathUrl = ({ ui }) => {
-  const { displayWorkspaceSlug: workspaceSlug, displayChatPath: chatPath } = ui;
+  const { displayWorkspaceSlug: workspaceSlug, displayChatPath: chatroomSlug } = ui;
 
-  if (chatPath !== 'unreads' || chatPath !== 'threads') {
-    return `/${workspaceSlug}/messages/${chatPath}`;
+  if (chatroomSlug !== 'unreads' || chatroomSlug !== 'threads') {
+    return `/${workspaceSlug}/messages/${chatroomSlug}`;
   }
 
-  return `/${workspaceSlug}/${chatPath}`;
+  return `/${workspaceSlug}/${chatroomSlug}`;
 };
