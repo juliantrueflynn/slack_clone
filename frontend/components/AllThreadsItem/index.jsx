@@ -8,7 +8,7 @@ import './styles.css';
 
 const AllThreadsItem = ({
   convo,
-  users,
+  usersMap,
   currentUserSlug,
   createMessageRequest,
   workspaceSlug,
@@ -25,7 +25,7 @@ const AllThreadsItem = ({
         <MessageThreadAuthors
           parentAuthorSlug={convo.authorSlug}
           authors={convo.authors}
-          users={users}
+          usersMap={usersMap}
           currentUserSlug={currentUserSlug}
         />
       </header>

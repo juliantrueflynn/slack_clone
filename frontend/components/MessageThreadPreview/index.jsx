@@ -9,7 +9,7 @@ const MessageThreadPreview = ({
   slug,
   authors,
   lastMessageDate,
-  users,
+  usersMap,
   chatPathUrl,
   isThreadHidden,
 }) => {
@@ -23,7 +23,7 @@ const MessageThreadPreview = ({
   const day = date.dayOrdinal();
   const lastDate = `Last reply ${month} ${day}`;
 
-  const threadAuthors = authors.map(userSlug => users[userSlug]);
+  const threadAuthors = authors.map(userSlug => usersMap[userSlug]);
 
   if (!authors.every(userSlug => userSlug === authors[0])) {
     threadAuthors.shift();

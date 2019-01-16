@@ -4,7 +4,7 @@ import './styles.css';
 const MessageThreadAuthors = ({
   parentAuthorSlug,
   authors,
-  users,
+  usersMap,
   currentUserSlug,
 }) => {
   if (!authors) {
@@ -15,14 +15,14 @@ const MessageThreadAuthors = ({
     return <div className="MessageThreadAuthors">just you</div>;
   }
 
-  const parentAuthor = users[parentAuthorSlug];
+  const parentAuthor = usersMap[parentAuthorSlug];
   const parentUsername = parentAuthor && parentAuthor.username;
 
   const authorsNames = authors.filter(slug => (
     slug !== currentUserSlug && slug !== parentUsername
   )).reduce((acc, curr) => {
-    acc.push(users[curr].username);
-    return acc;
+    const authorName = usersMap[curr].username;
+    return [...acc, authorName];
   }, []);
 
   const seperator = authorsNames.length === 1 ? ' ' : ', ';

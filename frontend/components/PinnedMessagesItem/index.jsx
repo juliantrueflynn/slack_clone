@@ -7,7 +7,6 @@ import './styles.css';
 const PinnedMessagesItem = ({
   message,
   currentUserSlug,
-  users,
   url,
   destroyPinRequest,
 }) => (
@@ -18,7 +17,6 @@ const PinnedMessagesItem = ({
       </Button>
       <Message
         message={message}
-        users={users}
         currentUserSlug={currentUserSlug}
         url={url}
         shouldHideEngagement

@@ -8,7 +8,7 @@ const MessageHighlight = ({
   pinId,
   pinsMap,
   isFavorited,
-  users,
+  usersMap,
   currentUserSlug,
   chatPathUrl,
 }) => {
@@ -20,7 +20,7 @@ const MessageHighlight = ({
 
   if (pinId) {
     pin = pinsMap[pinId];
-    user = Object.assign({}, users[pin.userSlug]);
+    user = usersMap[pin.userSlug];
 
     if (currentUserSlug === user.slug) {
       user.username = 'you';

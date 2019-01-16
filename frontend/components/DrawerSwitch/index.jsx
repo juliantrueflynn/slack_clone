@@ -77,7 +77,7 @@ class DrawerSwitch extends React.Component {
       drawerType,
       chatroom,
       messages,
-      users,
+      usersMap,
       isLoading,
       currentUser,
       accordion,
@@ -105,8 +105,8 @@ class DrawerSwitch extends React.Component {
         workspaceSlug,
         currentUserSlug,
         openModal,
-        user: users[drawerSlug],
-        users,
+        user: usersMap[drawerSlug],
+        usersMap,
       },
       { component: FavoritesDrawer, path: 'favorites' },
       { component: MessageThreadDrawer, path: 'convo', createMessageRequest },
@@ -119,7 +119,7 @@ class DrawerSwitch extends React.Component {
         destroyPinRequest,
         currentUserSlug,
         openModal,
-        users,
+        usersMap,
       },
     ];
 

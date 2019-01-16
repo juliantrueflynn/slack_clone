@@ -42,7 +42,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
   }
 
   return {
-    users: state.entities.members,
+    usersMap: state.entities.members,
     currentUser: state.session.currentUser,
     isLoading: state.isLoading,
     drawerPath,

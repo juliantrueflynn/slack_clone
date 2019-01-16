@@ -83,7 +83,7 @@ class ChatPageSwitch extends React.Component {
       chatPath,
       routes,
       messages,
-      users,
+      usersMap,
       chatroom,
       chatrooms,
       currentUser,
@@ -117,7 +117,6 @@ class ChatPageSwitch extends React.Component {
             {chatPath === 'unreads' && (
               <AllUnreads
                 messagesMap={messages}
-                users={users}
                 isLoading={isLoading.chatroom}
                 chatrooms={chatrooms}
                 clearAllUnread={clearAllUnread}
@@ -126,7 +125,7 @@ class ChatPageSwitch extends React.Component {
             {chatPath === 'threads' && (
               <AllThreads
                 messages={messages}
-                users={users}
+                usersMap={usersMap}
                 isLoading={isLoading.chatroom}
                 currentUserSlug={currentUser.slug}
                 workspaceSlug={workspaceSlug}

@@ -27,9 +27,9 @@ export const getSubbedWorkspaces = createSelector(
 
 export const getMessagesMap = createSelector(
   [getAllMessages, getAllUsers, getIsEditingMessage],
-  (messages, users, isEditingMsgSlug) => (
+  (messages, usersMap, isEditingMsgSlug) => (
     values(messages).reduce((acc, curr) => {
-      const { username, avatarThumb } = users[curr.authorSlug] || {};
+      const { username, avatarThumb } = usersMap[curr.authorSlug] || {};
       const msg = { username, avatarThumb };
 
       if (curr.thread && curr.thread.length) {
@@ -63,20 +63,20 @@ export const getMessagesMap = createSelector(
 
 export const getChatroomsMap = createSelector(
   [getAllChatrooms, getCurrentUser, getAllUsers],
-  (chatroomsMap, currUser, users) => (
+  (chatroomsMap, currUser, usersMap) => (
     values(chatroomsMap).reduce((acc, curr) => {
       const chatroom = {};
 
       if (curr.hasDm) {
         const subsUserSlugs = curr.members.filter(slug => slug !== currUser.slug);
-        const subUser = subsUserSlugs[0] && users[subsUserSlugs[0]];
+        const subUser = subsUserSlugs[0] && usersMap[subsUserSlugs[0]];
 
         if (subUser) {
           chatroom.title = subUser.username;
           chatroom.dmUserSlug = subUser.slug;
         }
       } else {
-        const owner = users[curr.ownerSlug];
+        const owner = usersMap[curr.ownerSlug];
         chatroom.ownerName = owner && owner.username;
       }
 

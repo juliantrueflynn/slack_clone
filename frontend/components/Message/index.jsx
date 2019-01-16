@@ -78,7 +78,7 @@ class Message extends React.Component {
               pinId={pinId}
               pinsMap={pinsMap}
               isFavorited={favoriteId}
-              users={usersMap}
+              usersMap={usersMap}
               chatPathUrl={chatPathUrl}
               currentUserSlug={currentUserSlug}
             />
@@ -123,7 +123,7 @@ class Message extends React.Component {
                   <MessageThreadPreview
                     isThreadHidden={isThreadHidden}
                     chatPathUrl={chatPathUrl}
-                    users={usersMap}
+                    usersMap={usersMap}
                     thread={message.thread}
                     lastMessageDate={message.lastMessageDate}
                     authors={message.authors}

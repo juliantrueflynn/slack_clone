@@ -53,7 +53,7 @@ const mapStateToProps = (state, { match: { params } }) => {
     chatPath: state.ui.displayChatPath,
     isLoading: state.isLoading.drawer,
     messages,
-    users: state.entities.members,
+    usersMap: state.entities.members,
   };
 };
 

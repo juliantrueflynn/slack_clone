@@ -35,7 +35,7 @@ class ChannelHeader extends React.Component {
       channelUnreadsLen,
       convoUnreadsLen,
       dmChannelUser,
-      users,
+      usersMap,
       searchQuery,
       openModal,
       chatPath,
@@ -119,7 +119,7 @@ class ChannelHeader extends React.Component {
           openChannelEditModal={this.handleChannelEditModal}
           chatroom={chatroom}
           messages={messages}
-          users={users}
+          usersMap={usersMap}
           drawerType={drawerType}
           closeDrawer={closeDrawer}
           searchQuery={searchQuery}

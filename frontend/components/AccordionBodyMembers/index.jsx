@@ -4,7 +4,7 @@ import StatusIcon from '../StatusIcon';
 import Avatar from '../Avatar';
 import AccordionItemBody from '../AccordionItemBody';
 
-const AccordionBodyMembers = ({ members, users, match: { params } }) => {
+const AccordionBodyMembers = ({ members, usersMap, match: { params } }) => {
   const isEmpty = !members || !members.length;
   const emptyText = 'No members';
 
@@ -19,9 +19,9 @@ const AccordionBodyMembers = ({ members, users, match: { params } }) => {
     <AccordionItemBody isEmpty={isEmpty} emptyText={emptyText}>
       {members.map(userSlug => (
         <Link key={userSlug} to={`${teamUrl}/${userSlug}`} className="AccordionItem__sub">
-          <StatusIcon member={users[userSlug]} />
-          <Avatar avatarFor="details-drawer" user={users[userSlug]} size="22" />
-          {users[userSlug].username}
+          <StatusIcon member={usersMap[userSlug]} />
+          <Avatar avatarFor="details-drawer" user={usersMap[userSlug]} size="22" />
+          {usersMap[userSlug].username}
         </Link>
       ))}
     </AccordionItemBody>

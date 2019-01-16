@@ -24,13 +24,13 @@ const getChatTitle = (chatPath, chatroom) => {
 };
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
-  const { members: users, unreads: unreadsMap } = state.entities;
+  const { members: usersMap, unreads: unreadsMap } = state.entities;
 
   const chatroomsMap = getChatroomsMap(state);
   const chatroom = chatroomsMap[chatPath];
   const defaultChatPath = state.ui.defaultChannel;
   const isNotDefaultChannel = chatPath !== defaultChatPath;
-  const dmChannelUser = chatroom && chatroom.hasDm ? users[chatroom.dmUserSlug] : {};
+  const dmChannelUser = chatroom && chatroom.hasDm ? usersMap[chatroom.dmUserSlug] : {};
 
   const { unreadsByChannel } = state;
   const channelUnreadsLen = Object.values(unreadsByChannel).reduce((acc, curr) => {
@@ -55,7 +55,7 @@ const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
     messages,
     convoUnreadsLen,
     channelUnreadsLen,
-    users,
+    usersMap,
     currentUserSlug: state.session.currentUser.slug,
     modalType: state.ui.displayModal.modalType,
     drawerType: state.ui.drawer.drawerType,

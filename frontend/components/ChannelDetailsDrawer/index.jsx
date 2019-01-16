@@ -55,7 +55,7 @@ class ChannelDetailsDrawer extends React.Component {
     const {
       chatroom,
       messages,
-      users,
+      usersMap,
       isLoading,
       destroyPinRequest,
       openModal,
@@ -86,7 +86,7 @@ class ChannelDetailsDrawer extends React.Component {
         icon: faUsers,
         itemTitle: `${chatroom.members.length} Members`,
         name: 'members',
-        body: <AccordionBodyMembers members={chatroom.members} users={users} />
+        body: <AccordionBodyMembers members={chatroom.members} usersMap={usersMap} />
       });
     }
 
@@ -103,11 +103,13 @@ class ChannelDetailsDrawer extends React.Component {
       ),
     });
 
-    const user = users[chatroom.dmUserSlug];
+    const user = usersMap[chatroom.dmUserSlug];
 
     return (
       <div className="ChannelDetailsDrawer">
-        {chatroom.hasDm && user && <UserPreview user={user} avatarSize="52" avatarVersion="avatarLarge" />}
+        {chatroom.hasDm && user && (
+          <UserPreview user={user} avatarSize="52" avatarVersion="avatarLarge" />
+        )}
         {accordionItems.map(item => (
           <AccordionItem
             key={item.name}
