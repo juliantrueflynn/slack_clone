@@ -6,9 +6,9 @@ import Workspace from '../components/Workspace';
 
 const mapStateToProps = (state, { match: { params: { workspaceSlug } } }) => {
   const chatroomsMap = getChatroomsMap(state);
-  const { defaultChannelSlug, displayChatPath: currChatroomSlug } = state.ui;
-  const chatroomSlug = currChatroomSlug || defaultChannelSlug;
-  const chatroom = chatroomsMap[chatroomSlug] || chatroomsMap[defaultChannelSlug];
+  const { defaultChatroomSlug, displayChatroomSlug: currChatroomSlug } = state.ui;
+  const chatroomSlug = currChatroomSlug || defaultChatroomSlug;
+  const chatroom = chatroomsMap[chatroomSlug] || chatroomsMap[defaultChatroomSlug];
 
   return {
     isLoading: state.isLoading.workspace,

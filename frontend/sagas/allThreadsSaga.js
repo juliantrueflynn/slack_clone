@@ -25,7 +25,7 @@ function* fetchMessageForNewMessagesInView({ message }) {
     return;
   }
 
-  const currView = yield select(selectUIByDisplay, 'displayChatPath');
+  const currView = yield select(selectUIByDisplay, 'displayChatroomSlug');
 
   if (currView === 'threads') {
     const parent = yield select(selectEntityBySlug, 'messages', message.parentMessageSlug);

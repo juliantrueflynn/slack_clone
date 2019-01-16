@@ -17,7 +17,7 @@ const mapStateToProps = (state, { match: { url, params: { workspaceSlug } } }) =
 
   const chatroomsMap = getChatroomsMap(state);
   const chatrooms = Object.values(chatroomsMap);
-  const chatroomSlug = state.ui.displayChatPath;
+  const chatroomSlug = state.ui.displayChatroomSlug;
 
   let profileUrl = `${url}/${chatroomSlug}/team/${user.slug}`;
   if (chatroomsMap[chatroomSlug]) {

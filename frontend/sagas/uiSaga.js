@@ -38,7 +38,7 @@ function* fetchDrawerEntities({ drawerType, drawerSlug }) {
       break;
     }
     case 'details': {
-      const chatroomSlug = yield select(selectUIByDisplay, 'displayChatPath');
+      const chatroomSlug = yield select(selectUIByDisplay, 'displayChatroomSlug');
 
       if (chatroomSlug === 'unreads' || chatroomSlug === 'threads') {
         return;

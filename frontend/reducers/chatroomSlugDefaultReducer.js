@@ -2,7 +2,7 @@ import { WORKSPACE, SIGN_OUT, WORKSPACE_SUB } from '../actions/actionTypes';
 
 const _defaultState = null;
 
-const defaultChannelSlugReducer = (state = _defaultState, action) => {
+const defaultChatroomSlugReducer = (state = _defaultState, action) => {
   Object.freeze(state);
 
   switch (action.type) {
@@ -21,4 +21,4 @@ const defaultChannelSlugReducer = (state = _defaultState, action) => {
   }
 };
 
-export default defaultChannelSlugReducer;
+export default defaultChatroomSlugReducer;

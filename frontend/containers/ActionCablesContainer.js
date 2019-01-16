@@ -4,7 +4,7 @@ import { getChatroomsMap } from '../reducers/selectors';
 
 const mapStateToProps = (state) => {
   const chatrooms = Object.values(getChatroomsMap(state));
-  const chatroomSlug = state.ui.displayChatPath;
+  const chatroomSlug = state.ui.displayChatroomSlug;
   const workspaceSlug = state.ui.displayWorkspaceSlug;
 
   const chatroomActionCables = chatrooms.filter(ch => (

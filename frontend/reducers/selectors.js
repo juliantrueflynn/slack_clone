@@ -14,7 +14,7 @@ const getAllFavorites = state => state.entities.favorites;
 const getAllUnreadsByChannel = state => state.unreadsByChannel;
 export const getAllUnreads = state => state.entities.unreads;
 const getIsEditingMessage = state => state.ui.isEditingMessage;
-const getChatPath = state => state.ui.displayChatPath;
+const getChatPath = state => state.ui.displayChatroomSlug;
 export const getDrawer = state => state.ui.drawer;
 
 export const getSubbedWorkspaces = createSelector(
@@ -285,7 +285,7 @@ export const getDrawerPath = ({ ui: { drawer: { drawerType, drawerSlug } } }) =>
 };
 
 export const getChatPathUrl = ({ ui }) => {
-  const { displayWorkspaceSlug: workspaceSlug, displayChatPath: chatroomSlug } = ui;
+  const { displayWorkspaceSlug: workspaceSlug, displayChatroomSlug: chatroomSlug } = ui;
 
   if (chatroomSlug !== 'unreads' || chatroomSlug !== 'threads') {
     return `/${workspaceSlug}/messages/${chatroomSlug}`;

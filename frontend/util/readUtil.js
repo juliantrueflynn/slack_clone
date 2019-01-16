@@ -24,7 +24,7 @@ export function* isCurrentUserNotInConvo(authors) {
 }
 
 export function* isCurrentUserInView({ slug, readableType }) {
-  const chatroomSlug = yield select(selectUIByDisplay, 'displayChatPath');
+  const chatroomSlug = yield select(selectUIByDisplay, 'displayChatroomSlug');
 
   if (readableType === 'Chatroom') {
     return chatroomSlug === slug;

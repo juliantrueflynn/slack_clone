@@ -49,7 +49,7 @@ const mapStateToProps = (state, { match: { params } }) => {
     drawerType,
     drawerTitle,
     chatroom,
-    chatroomSlug: state.ui.displayChatPath,
+    chatroomSlug: state.ui.displayChatroomSlug,
     isLoading: state.isLoading.drawer,
     messages,
     usersMap: state.entities.members,

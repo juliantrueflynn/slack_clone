@@ -20,7 +20,7 @@ const mapStateToProps = (state) => {
     modalProps: state.ui.displayModal.modalProps,
     chatroomsMap: getChatroomsMap(state),
     chatrooms: getUnsubbedChannels(state),
-    chatroomSlug: state.ui.displayChatPath,
+    chatroomSlug: state.ui.displayChatroomSlug,
     messages,
     usersMap,
     user,
