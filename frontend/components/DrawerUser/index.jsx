@@ -3,7 +3,7 @@ import Button from '../Button';
 import StatusIcon from '../StatusIcon';
 import './styles.css';
 
-class UserDrawer extends React.Component {
+class DrawerUser extends React.Component {
   constructor(props) {
     super(props);
     this.handleButtonClick = this.handleButtonClick.bind(this);
@@ -48,27 +48,27 @@ class UserDrawer extends React.Component {
     }
 
     return (
-      <div className="UserDrawer">
-        <div className="UserDrawer__banner">
+      <div className="DrawerUser">
+        <div className="DrawerUser__banner">
           <img src={user.avatarBanner} alt={`${user.username} banner`} />
         </div>
-        <div className="UserDrawer__body">
-          <header className="UserDrawer__header">
-            <h2 className="UserDrawer__title">{user.username}</h2>
+        <div className="DrawerUser__body">
+          <header className="DrawerUser__header">
+            <h2 className="DrawerUser__title">{user.username}</h2>
             <StatusIcon member={user} />
           </header>
-          <div className="UserDrawer__intro">
+          <div className="DrawerUser__intro">
             <p>{profileText}</p>
           </div>
           {isNotCurrUser && (
-            <div className="UserDrawer__info">
-              <div className="UserDrawer__row">
-                <div className="UserDrawer__col">Email</div>
-                <div className="UserDrawer__col">{user.email}</div>
+            <div className="DrawerUser__info">
+              <div className="DrawerUser__row">
+                <div className="DrawerUser__col">Email</div>
+                <div className="DrawerUser__col">{user.email}</div>
               </div>
-              <div className="UserDrawer__row">
-                <div className="UserDrawer__col">Joined</div>
-                <div className="UserDrawer__col">{user.joinedAt}</div>
+              <div className="DrawerUser__row">
+                <div className="DrawerUser__col">Joined</div>
+                <div className="DrawerUser__col">{user.joinedAt}</div>
               </div>
             </div>
           )}
@@ -84,4 +84,4 @@ class UserDrawer extends React.Component {
   }
 }
 
-export default UserDrawer;
+export default DrawerUser;

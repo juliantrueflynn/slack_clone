@@ -2,17 +2,17 @@ import React from 'react';
 import MessagesListContainer from '../../containers/MessagesListContainer';
 import './styles.css';
 
-const FavoritesDrawer = ({ messages }) => {
+const DrawerFavorites = ({ messages }) => {
   if (!messages.length) {
     return (
-      <div className="FavoritesDrawer FavoritesDrawer--empty">
+      <div className="DrawerFavorites DrawerFavorites--empty">
         You haven&#8217;t favorited anything yet!
       </div>
     );
   }
 
   return (
-    <div className="FavoritesDrawer">
+    <div className="DrawerFavorites">
       <MessagesListContainer
         messages={messages}
         role="listitem"
@@ -23,4 +23,4 @@ const FavoritesDrawer = ({ messages }) => {
   );
 };
 
-export default FavoritesDrawer;
+export default DrawerFavorites;

@@ -1,9 +1,9 @@
 import React from 'react';
 import Drawer from '../Drawer';
-import UserDrawer from '../UserDrawer';
-import FavoritesDrawer from '../FavoritesDrawer';
-import MessageThreadDrawer from '../MessageThreadDrawer';
-import ChannelDetailsDrawer from '../ChannelDetailsDrawer';
+import DrawerUser from '../DrawerUser';
+import DrawerFavorites from '../DrawerFavorites';
+import DrawerConvo from '../DrawerConvo';
+import DrawerChannelDetails from '../DrawerChannelDetails';
 
 class DrawerSwitch extends React.Component {
   constructor(props) {
@@ -97,7 +97,7 @@ class DrawerSwitch extends React.Component {
     const currentUserSlug = currentUser.slug;
     const drawers = [
       {
-        component: UserDrawer,
+        component: DrawerUser,
         path: 'team',
         createChatroomRequest,
         history,
@@ -108,10 +108,10 @@ class DrawerSwitch extends React.Component {
         user: usersMap[drawerSlug],
         usersMap,
       },
-      { component: FavoritesDrawer, path: 'favorites' },
-      { component: MessageThreadDrawer, path: 'convo', createMessageRequest },
+      { component: DrawerFavorites, path: 'favorites' },
+      { component: DrawerConvo, path: 'convo', createMessageRequest },
       {
-        component: ChannelDetailsDrawer,
+        component: DrawerChannelDetails,
         path: 'details',
         chatroom,
         accordion,

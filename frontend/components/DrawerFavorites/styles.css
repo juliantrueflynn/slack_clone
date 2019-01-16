@@ -1,44 +1,44 @@
-.FavoritesDrawer .Message__container {
+.DrawerFavorites .Message__container {
   margin: 0;
   padding: 3px 10px 12px;
   background-color: #FFF;
 }
 
-.FavoritesDrawer .Message {
+.DrawerFavorites .Message {
   margin: 10px 8px;
   border-bottom: 1px solid #DFE6E9;
 }
 
-.FavoritesDrawer--empty {
+.DrawerFavorites--empty {
   text-align: center;
   color: #B2BEC3;
   margin: 30px 12px;
 }
 
-.FavoritesDrawer .MessageHoverMenu {
+.DrawerFavorites .MessageHoverMenu {
   padding: 0;
 }
 
-.FavoritesDrawer .MenuItem__convo,
-.FavoritesDrawer .MenuItem__dropdown,
-.FavoritesDrawer .MenuItem__reaction {
+.DrawerFavorites .MenuItem__convo,
+.DrawerFavorites .MenuItem__dropdown,
+.DrawerFavorites .MenuItem__reaction {
   display: none;
 }
 
-.FavoritesDrawer .MessageHoverMenu > .MenuItem {
+.DrawerFavorites .MessageHoverMenu > .MenuItem {
   border-left: 0;
 }
 
-.FavoritesDrawer .Message:first-child .MessageHoverMenu {
+.DrawerFavorites .Message:first-child .MessageHoverMenu {
   top: -5px;
 }
 
 @media screen and (max-width: 768px) {
-  .FavoritesDrawer .Message {
+  .DrawerFavorites .Message {
     margin: 10px -8px;
   }
 
-  .FavoritesDrawer .Message__container {
+  .DrawerFavorites .Message__container {
     padding: 3px 8px 12px;
     background-color: #FFF;
     border-bottom: 1px solid #DFE6E9;

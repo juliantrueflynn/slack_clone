@@ -7,7 +7,7 @@ import AccordionBodyMembers from '../AccordionBodyMembers';
 import AccordionBodyPins from '../AccordionBodyPins';
 import './styles.css';
 
-class ChannelDetailsDrawer extends React.Component {
+class DrawerChannelDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = { details: true, members: false, pinned: false };
@@ -106,7 +106,7 @@ class ChannelDetailsDrawer extends React.Component {
     const user = usersMap[chatroom.dmUserSlug];
 
     return (
-      <div className="ChannelDetailsDrawer">
+      <div className="DrawerChannelDetails">
         {chatroom.hasDm && user && (
           <UserPreview user={user} avatarSize="52" avatarVersion="avatarLarge" />
         )}
@@ -124,4 +124,4 @@ class ChannelDetailsDrawer extends React.Component {
   }
 }
 
-export default ChannelDetailsDrawer;
+export default DrawerChannelDetails;
