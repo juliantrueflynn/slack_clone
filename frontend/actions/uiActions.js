@@ -48,10 +48,7 @@ export const updateSearchQuery = (searchQuery = '') => (
   actionCreator(SEARCH_QUERY_UPDATE, { searchQuery })
 );
 
-export const updateDropdown = (dropdownType, dropdownProps) => actionCreator(
-  DROPDOWN_UPDATE,
-  { dropdownType, dropdownProps }
-);
+export const updateDropdown = dropdownType => actionCreator(DROPDOWN_UPDATE, { dropdownType });
 
 export const toggleMessageEditor = (messageSlug = null) => actionCreator(
   MESSAGE_EDITOR_TOGGLE,
