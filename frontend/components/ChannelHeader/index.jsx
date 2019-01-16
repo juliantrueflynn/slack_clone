@@ -36,7 +36,6 @@ class ChannelHeader extends React.Component {
       convoUnreadsLen,
       dmChannelUser,
       usersMap,
-      searchQuery,
       openModal,
       chatroomSlug,
       closeDropdown,
@@ -48,7 +47,6 @@ class ChannelHeader extends React.Component {
       createChatroomSubRequest,
       destroyChatroomSubRequest,
       openProfileModal,
-      openSearchModal,
       history,
       match,
     } = this.props;
@@ -122,11 +120,9 @@ class ChannelHeader extends React.Component {
           usersMap={usersMap}
           drawerType={drawerType}
           closeDrawer={closeDrawer}
-          searchQuery={searchQuery}
           destroySearchQuery={destroySearchQuery}
           createChatroomSubRequest={createChatroomSubRequest}
           destroyChatroomSubRequest={destroyChatroomSubRequest}
-          openSearchModal={openSearchModal}
           openProfileModal={openProfileModal}
           history={history}
           match={match}

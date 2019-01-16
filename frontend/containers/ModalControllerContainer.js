@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { getChatroomsMap, getMessagesMap, getUnsubbedChannels } from '../reducers/selectors';
-import { updateModal, fetchSearch, updateSearchQuery } from '../actions/uiActions';
+import { updateModal, updateSearchQuery } from '../actions/uiActions';
 import { fetchChatrooms, createChatroom, updateChatroom } from '../actions/chatroomActions';
 import { updateUser, updatePassword } from '../actions/userActions';
 import { createWorkspace } from '../actions/workspaceActions';
@@ -40,7 +40,6 @@ const mapDispatchToProps = dispatch => ({
   updateUserRequest: user => dispatch(updateUser.request(user)),
   updatePasswordRequest: password => dispatch(updatePassword.request(password)),
   createWorkspaceRequest: workspace => dispatch(createWorkspace.request(workspace)),
-  fetchSearchRequest: searchQuery => dispatch(fetchSearch.request(searchQuery)),
   updateSearchQuery: (searchQuery = '') => dispatch(updateSearchQuery(searchQuery)),
 });
 

@@ -30,7 +30,6 @@ class ModalController extends React.Component {
       updateUserRequest,
       updatePasswordRequest,
       createWorkspaceRequest,
-      fetchSearchRequest,
       updateSearchQuery,
     } = this.props;
 
@@ -78,7 +77,6 @@ class ModalController extends React.Component {
         chatroomsMap,
         usersMap,
         messages,
-        fetchSearchRequest,
         updateSearchQuery,
       }
     ];

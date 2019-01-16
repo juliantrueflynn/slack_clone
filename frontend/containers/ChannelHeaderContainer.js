@@ -4,7 +4,6 @@ import {
   updateModal,
   updateDrawer,
   accordionOpen,
-  updateSearchQuery,
   updateDropdown,
 } from '../actions/uiActions';
 import { destroyChatroomSub, createChatroomSub } from '../actions/chatroomActions';
@@ -59,19 +58,16 @@ const mapStateToProps = (state, { match: { params: { chatroomSlug } } }) => {
     currentUserSlug: state.session.currentUser.slug,
     modalType: state.ui.displayModal.modalType,
     drawerType: state.ui.drawer.drawerType,
-    searchQuery: state.search.searchQuery,
   };
 };
 
 const mapDispatchToProps = (dispatch, { match: { params: { chatroomSlug } } }) => ({
   openModal: (modalType, modalProps) => dispatch(updateModal(modalType, modalProps)),
   openProfileModal: () => dispatch(updateModal('MODAL_PROFILE')),
-  openSearchModal: () => dispatch(updateModal('MODAL_SEARCH')),
   openLeftSidebarModal: () => dispatch(updateModal('MODAL_LEFT_SIDEBAR', null)),
   closeDrawer: () => dispatch(updateDrawer(null)),
   closeDropdown: () => dispatch(updateDropdown(null)),
   accordionOpen: accordionType => dispatch(accordionOpen('details', accordionType)),
-  destroySearchQuery: () => dispatch(updateSearchQuery()),
   createChatroomSubRequest: chatroomId => (
     dispatch(createChatroomSub.request({ chatroomId, chatroomSlug }))
   ),

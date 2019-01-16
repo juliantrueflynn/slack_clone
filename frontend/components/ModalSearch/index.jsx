@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import SearchBar from '../SearchBar';
+import SearchBarContainer from '../../containers/SearchBarContainer';
 import Button from '../Button';
 import ScrollBar from '../ScrollBar';
 import ModalSearchResults from '../ModalSearchResults';
@@ -121,8 +121,6 @@ class ModalSearch extends React.Component {
       chatroomsMap,
       searchQuery,
       isLoading,
-      fetchSearchRequest,
-      updateSearchQuery,
       close,
     } = this.props;
     const {
@@ -143,9 +141,7 @@ class ModalSearch extends React.Component {
     return (
       <div className={overlayClassName}>
         <div className="ModalSearch__searchbar">
-          <SearchBar
-            searchSubmit={fetchSearchRequest}
-            destroySearchQuery={updateSearchQuery}
+          <SearchBarContainer
             setQuery={this.setQuery}
             searchQuery={query}
           />

@@ -30,10 +30,10 @@ class SearchBar extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const { searchSubmit, searchQuery } = this.props;
+    const { fetchSearchRequest, searchQuery } = this.props;
 
-    if (searchSubmit) {
-      searchSubmit(searchQuery);
+    if (fetchSearchRequest) {
+      fetchSearchRequest(searchQuery);
     }
   }
 
@@ -61,14 +61,12 @@ class SearchBar extends React.Component {
   }
 
   render() {
-    const { searchQuery, openSearchModal } = this.props;
-
-    const isDisabled = !!openSearchModal;
+    const { savedQuery, searchQuery, isDisabled } = this.props;
 
     const searchClassNames = classNames('SearchBar', {
-      'SearchBar--disabled': openSearchModal,
-      'SearchBar--queried': searchQuery,
-      'SearchBar--empty': !searchQuery,
+      'SearchBar--disabled': isDisabled,
+      'SearchBar--queried': savedQuery || searchQuery,
+      'SearchBar--empty': !savedQuery && !searchQuery,
     });
 
     return (
@@ -82,13 +80,13 @@ class SearchBar extends React.Component {
             type="text"
             ref={this.input}
             className="SearchBar__input"
-            value={searchQuery}
+            value={searchQuery || savedQuery}
             onChange={this.handleInputVal}
             placeholder="Search"
             disabled={isDisabled}
           />
         </div>
-        {searchQuery && (
+        {(savedQuery || searchQuery) && (
           <Button onClick={this.handleClearClick} buttonFor="clear" unStyled>
             {isDisabled || 'Clear'}
             {isDisabled && <FontAwesomeIcon icon="times" />}

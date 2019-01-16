@@ -1,7 +1,7 @@
 import React from 'react';
 import { faUserCog, faEllipsisV, faCog } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import SearchBar from '../SearchBar';
+import SearchBarContainer from '../../containers/SearchBarContainer';
 import Menu from '../Menu';
 import Button from '../Button';
 import RightSidebarModal from '../RightSidebarModal';
@@ -77,12 +77,9 @@ class ChannelHeaderNavbar extends React.Component {
       openChannelEditModal,
       chatTitle,
       drawerType,
-      openSearchModal,
       openProfileModal,
-      searchQuery,
       isNotDefaultChannel,
       dmChannelUser,
-      destroySearchQuery,
       closeDropdown,
       match: { url },
     } = this.props;
@@ -150,11 +147,7 @@ class ChannelHeaderNavbar extends React.Component {
     return (
       <nav className="ChannelHeaderNavbar">
         {chatroom && <Menu items={channelMenuItems} menuFor="edit" isRow unStyled />}
-        <SearchBar
-          searchQuery={searchQuery}
-          destroySearchQuery={destroySearchQuery}
-          openSearchModal={openSearchModal}
-        />
+        <SearchBarContainer isDisabled />
         <Menu menuFor="header-user" isRow items={userMenuItems} />
         <Button buttonFor="right-sidebar-mobile" unStyled onClick={this.handleSidebarModalToggle}>
           <FontAwesomeIcon icon={faEllipsisV} />
