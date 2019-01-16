@@ -87,6 +87,7 @@ class Message extends React.Component {
             toggleReaction={toggleReaction}
             chatPathUrl={chatPathUrl}
             message={message}
+            currentUserSlug={currentUserSlug}
             {...props}
           />
           <div className="Message__row">
