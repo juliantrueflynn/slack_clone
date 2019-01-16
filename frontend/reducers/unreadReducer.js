@@ -20,20 +20,19 @@ const unreadReducer = (state = _defaultState, action) => {
     case WORKSPACE.SHOW.RECEIVE: {
       const { chatrooms, reads } = action.workspace;
 
-      nextState = {};
-      chatrooms.forEach((ch) => {
-        nextState[ch.slug] = { lastActive: ch.lastActive, readableType: 'Chatroom' };
-      });
+      nextState = reads.reduce((acc, curr) => ({ ...acc, [curr.slug]: curr }), {});
 
-      reads.forEach((read) => {
-        nextState[read.slug] = { ...nextState[read.slug], ...read };
-      });
-
-      Object.values(nextState).forEach((unread) => {
-        nextState[unread.slug] = {
-          ...nextState[unread.slug],
-          hasUnreads: isDateOlderThanOther(unread.lastRead, unread.lastActive),
+      chatrooms.forEach(({ lastActive, slug }) => {
+        nextState[slug] = {
+          ...nextState[slug],
+          readableType: 'Chatroom',
+          lastActive,
+          slug,
         };
+      });
+
+      Object.values(nextState).forEach(({ slug, lastRead, lastActive }) => {
+        nextState[slug].hasUnreads = isDateOlderThanOther(lastRead, lastActive);
       });
 
       return nextState;
