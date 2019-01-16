@@ -4,7 +4,7 @@ import withWindowResize from '../../hoc/withWindowResize';
 import ScrollBar from '../ScrollBar';
 import './styles.css';
 
-class DropdownModal extends React.Component {
+class Dropdown extends React.Component {
   constructor(props) {
     super(props);
     this.handleAfterModalOpen = this.handleAfterModalOpen.bind(this);
@@ -59,4 +59,4 @@ class DropdownModal extends React.Component {
   }
 }
 
-export default withWindowResize(DropdownModal);
+export default withWindowResize(Dropdown);

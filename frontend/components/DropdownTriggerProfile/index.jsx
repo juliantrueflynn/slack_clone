@@ -1,11 +1,11 @@
 import React from 'react';
 import StatusIcon from '../StatusIcon';
-import DropdownModalTriggerContainer from '../../containers/DropdownModalTriggerContainer';
+import DropdownTriggerContainer from '../../containers/DropdownTriggerContainer';
 import Menu from '../Menu';
 import UserPreview from '../UserPreview';
 import './styles.css';
 
-const ProfileDropdownTrigger = ({
+const DropdownTriggerProfile = ({
   user,
   workspaceTitle,
   workspaces,
@@ -25,17 +25,17 @@ const ProfileDropdownTrigger = ({
   const ddMenuItems = ddDefaults.concat(workspaces);
 
   return (
-    <DropdownModalTriggerContainer
+    <DropdownTriggerContainer
       dropdownType="DROPDOWN_PROFILE"
       dropdownChild={<Menu items={ddMenuItems} />}
     >
-      <div className="ProfileDropdownTrigger__workspace">{workspaceTitle}</div>
-      <div className="ProfileDropdownTrigger__user">
+      <div className="DropdownTriggerProfile__workspace">{workspaceTitle}</div>
+      <div className="DropdownTriggerProfile__user">
         <StatusIcon member={user} size="sm" />
-        <div className="ProfileDropdownTrigger__username">{user.username}</div>
+        <div className="DropdownTriggerProfile__username">{user.username}</div>
       </div>
-    </DropdownModalTriggerContainer>
+    </DropdownTriggerContainer>
   );
 };
 
-export default ProfileDropdownTrigger;
+export default DropdownTriggerProfile;

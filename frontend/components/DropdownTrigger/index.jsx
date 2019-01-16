@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import Button from '../Button';
-import DropdownModal from '../DropdownModal';
+import Dropdown from '../Dropdown';
 
 class DropdownModalTrigger extends React.Component {
   constructor(props) {
@@ -85,14 +85,14 @@ class DropdownModalTrigger extends React.Component {
           {children}
         </Button>
         {isDdOpen && (
-          <DropdownModal
+          <Dropdown
             bemModifier={this.getBemModifier()}
             contentStyle={style}
             close={this.handleClose}
             updateModalStyles={this.updateModalStyles}
           >
             {dropdownChild}
-          </DropdownModal>
+          </Dropdown>
         )}
       </Fragment>
     );

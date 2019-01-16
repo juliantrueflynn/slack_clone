@@ -5,7 +5,7 @@ import StatusIcon from '../StatusIcon';
 import Button from '../Button';
 import LeftSidebarWidgets from '../LeftSidebarWidgets';
 import SuffixButton from '../SuffixButton';
-import ProfileDropdownTrigger from '../ProfileDropdownTrigger';
+import DropdownTriggerProfile from '../DropdownTriggerProfile';
 import Menu from '../Menu';
 import ScrollBar from '../ScrollBar';
 import Modal from '../Modal';
@@ -95,7 +95,7 @@ class LeftSidebar extends React.Component {
     const sidebarMenuItems = [
       {
         key: 'profile',
-        component: ProfileDropdownTrigger,
+        component: DropdownTriggerProfile,
         workspaceTitle: workspace.title,
         user,
         profileUrl,

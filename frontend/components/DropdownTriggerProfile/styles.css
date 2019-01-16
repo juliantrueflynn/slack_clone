@@ -12,7 +12,7 @@
   background-color: #3E2E3D;
 }
 
-.ProfileDropdownTrigger__workspace {
+.DropdownTriggerProfile__workspace {
   font-weight: bold;
   color: #FFF;
   margin-bottom: 3px;
@@ -22,20 +22,20 @@
   text-overflow: ellipsis;
 }
 
-.ProfileDropdownTrigger__user {
+.DropdownTriggerProfile__user {
   display: flex;
   flex-direction: row;
   font-size: .9em;
   align-items: center;
 }
 
-.ProfileDropdownTrigger__username {
+.DropdownTriggerProfile__username {
   color: rgba(255, 255, 255, 0.6);
 }
 
-.Btn__dropdown--profile.Btn__dropdown--active .ProfileDropdownTrigger__username,
-.Btn__dropdown--profile:hover .ProfileDropdownTrigger__username,
-.Btn__dropdown--profile:focus .ProfileDropdownTrigger__username {
+.Btn__dropdown--profile.Btn__dropdown--active .DropdownTriggerProfile__username,
+.Btn__dropdown--profile:hover .DropdownTriggerProfile__username,
+.Btn__dropdown--profile:focus .DropdownTriggerProfile__username {
   color: #FFF;
 }
 

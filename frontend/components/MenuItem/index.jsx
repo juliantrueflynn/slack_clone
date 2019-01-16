@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import Button from '../Button';
 import LinkWithDrawer from '../../util/linkUtil';
 import './styles.css';
-import DropdownModalTriggerContainer from '../../containers/DropdownModalTriggerContainer';
+import DropdownTriggerContainer from '../../containers/DropdownTriggerContainer';
 
 class MenuItem extends React.Component {
   constructor(props) {
@@ -84,10 +84,10 @@ class MenuItem extends React.Component {
         )}
         {itemType === 'dropdown' && (
           <div className={contentClassNames}>
-            <DropdownModalTriggerContainer dropdownType={dropdownType} {...itemProps}>
+            <DropdownTriggerContainer dropdownType={dropdownType} {...itemProps}>
               {itemIcon}
               {label}
-            </DropdownModalTriggerContainer>
+            </DropdownTriggerContainer>
           </div>
         )}
         {itemType === 'btn' && (

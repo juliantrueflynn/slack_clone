@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { updateDropdown } from '../actions/uiActions';
-import DropdownModalTrigger from '../components/DropdownModalTrigger';
+import DropdownTrigger from '../components/DropdownTrigger';
 
 const mapStateToProps = (state, { dropdownType }) => ({
   isDdOpen: state.ui.dropdown.dropdownType === dropdownType,
@@ -11,4 +11,4 @@ const mapDispatchToProps = (dispatch, { dropdownType }) => ({
   closeDropdown: () => dispatch(updateDropdown(null)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DropdownModalTrigger);
+export default connect(mapStateToProps, mapDispatchToProps)(DropdownTrigger);
