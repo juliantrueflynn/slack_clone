@@ -30,7 +30,7 @@ const unreadsByChannelReducer = (state = _defaultState, action) => {
         nextState[msg.chatroomSlug].push(msg.slug);
       });
 
-      return merge({}, state, nextState);
+      return nextState;
     }
     case CHATROOM.CREATE.RECEIVE:
       nextState = { [action.chatroom.chatroom.slug]: [] };
