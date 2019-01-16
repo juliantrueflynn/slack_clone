@@ -15,7 +15,7 @@ end
 parents = messages.with_parent
 
 json.reactions do
-  reactions = Reaction.with_message(parents).includes(:user)
+  reactions = Reaction.with_message(parents)
 
   json.array! reactions do |reaction|
     json.(reaction, :id, :emoji, :message_id, :message_slug, :user_slug)

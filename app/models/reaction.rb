@@ -8,7 +8,7 @@ class Reaction < ApplicationRecord
   has_one :chatroom, through: :message
 
   def self.with_message(message_id)
-    includes(:message).where(message_id: message_id)
+    includes(:message, :user).where(message_id: message_id)
   end
 
   def broadcast_name
