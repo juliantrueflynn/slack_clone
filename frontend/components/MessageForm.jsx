@@ -47,6 +47,10 @@ class MessageForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
+    if (this.hasEmptyMessageBody()) {
+      return;
+    }
+
     const { editorState } = this.state;
     const body = convertForSubmit(editorState);
     const {
@@ -71,6 +75,13 @@ class MessageForm extends React.Component {
     if (e.key === 'Enter' && !e.shiftKey) {
       this.handleSubmit(e);
     }
+  }
+
+  hasEmptyMessageBody() {
+    const { editorState } = this.state;
+    const plainBody = editorState.getCurrentContent().getPlainText();
+
+    return !plainBody.length;
   }
 
   render() {
