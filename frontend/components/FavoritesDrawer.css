@@ -9,6 +9,12 @@
   border-bottom: 1px solid #DFE6E9;
 }
 
+.FavoritesDrawer--empty {
+  text-align: center;
+  color: #B2BEC3;
+  margin: 30px 12px;
+}
+
 @media screen and (max-width: 768px) {
   .FavoritesDrawer .Message__container {
     padding: 3px 8px 12px;
