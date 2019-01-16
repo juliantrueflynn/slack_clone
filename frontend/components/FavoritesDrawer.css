@@ -3,9 +3,13 @@
 }
 
 .FavoritesDrawer .Message__container {
+  margin: 0;
   padding: 3px 10px 12px;
-  margin: 10px 8px;
   background-color: #FFF;
+}
+
+.FavoritesDrawer .Message {
+  margin: 10px 8px;
   border-bottom: 1px solid #DFE6E9;
 }
 
@@ -16,9 +20,12 @@
 }
 
 @media screen and (max-width: 768px) {
+  .FavoritesDrawer .Message {
+    margin: 10px -8px;
+  }
+
   .FavoritesDrawer .Message__container {
     padding: 3px 8px 12px;
-    margin: 10px -8px;
     background-color: #FFF;
     border-bottom: 1px solid #DFE6E9;
   }
