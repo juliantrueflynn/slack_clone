@@ -1,4 +1,4 @@
-.PageHome {
+.PublicViewHome {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -36,7 +36,7 @@
   display: none;
 }
 
-.PageHome .Btn__hero {
+.PublicViewHome .Btn__hero {
   margin-top: 10px;
   display: inline-block;
 }

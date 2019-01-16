@@ -3,14 +3,14 @@ import withPublicView from '../../hoc/withPublicView';
 import PublicWorkspaces from '../PublicWorkspaces';
 import './styles.css';
 
-const PageHome = ({
+const PublicViewHome = ({
   content: { workspaces, openWorkspaceModal },
   isLoggedIn,
   currentUser,
   createWorkspaceSubRequest,
   updateWorkspaceSubRequest,
 }) => (
-  <div className="PageHome PageView__body">
+  <div className="PublicViewHome PageView__body">
     <div className="PageHome__hero">
       <div className="PageHome__hero-content">
         <h1 className="PageHome__hero-title">
@@ -43,4 +43,4 @@ const PageHome = ({
   </div>
 );
 
-export default withPublicView(PageHome);
+export default withPublicView(PublicViewHome);

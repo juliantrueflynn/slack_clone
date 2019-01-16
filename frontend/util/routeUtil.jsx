@@ -6,7 +6,7 @@ import {
   Switch,
   withRouter,
 } from 'react-router-dom';
-import PageHome from '../components/PageHome';
+import PublicViewHome from '../components/PublicViewHome';
 import SessionForm from '../components/SessionForm';
 import WorkspaceContainer from '../containers/WorkspaceContainer';
 import ChatPageSwitchContainer from '../containers/ChatPageSwitchContainer';
@@ -15,7 +15,7 @@ import DrawerSwitchContainer from '../containers/DrawerSwitchContainer';
 export const routesConfig = [
   {
     path: '/',
-    component: PageHome,
+    component: PublicViewHome,
     exact: true,
   },
   {
