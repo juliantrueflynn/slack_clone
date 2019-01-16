@@ -60,9 +60,11 @@ function* chatroomCreate({ chatroom }) {
       response = yield call(dmChatCreate, chatroom);
     } else {
       response = yield call(apiCreate, 'chatrooms', chatroom);
+
+      const read = { readableId: response.chatroom.id, readableType: 'Chatroom' };
+      yield put(updateRead.request(read));
     }
 
-    yield put(updateRead.request({ readableId: response.chatroom.id, readableType: 'Chatroom' }));
     yield call(redirectOwner, response.chatroom);
   } catch (error) {
     yield put(action.createChatroom.failure(error));

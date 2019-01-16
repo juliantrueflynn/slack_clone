@@ -6,7 +6,12 @@ import {
   select,
   call,
 } from 'redux-saga/effects';
-import { READ, MESSAGE, CHAT_PATH_UPDATE } from '../actions/actionTypes';
+import {
+  READ,
+  CHAT_PATH_UPDATE,
+  CHATROOM,
+  MESSAGE,
+} from '../actions/actionTypes';
 import { apiCreate, apiUpdate, apiDestroy } from '../util/apiUtil';
 import { updateRead, destroyRead, updateUnread } from '../actions/readActions';
 import { selectEntityBySlug, getChatPage } from '../reducers/selectors';
@@ -51,6 +56,15 @@ function* readUpdateByChat({ chatPath }) {
   if (chatroom && isSub) {
     yield readViewedEntity({ readableType: 'Chatroom', readableId, slug });
   }
+}
+
+function* readCreateByNewChatroom({ chatroom: { chatroom } }) {
+  if (!chatroom.hasDm) {
+    return;
+  }
+
+  const read = { readableId: chatroom.id, readableType: 'Chatroom' };
+  yield put(updateRead.request(read));
 }
 
 function* readUpdateByMessageShow({ messages: { messages } }) {
@@ -110,6 +124,10 @@ function* watchChannelShowRequest() {
   yield takeLatest(CHAT_PATH_UPDATE, readUpdateByChat);
 }
 
+function* watchDmChatroomCreateReceive() {
+  yield takeLatest(CHATROOM.CREATE.RECEIVE, readCreateByNewChatroom);
+}
+
 function* watchMessageThread() {
   yield takeLatest(MESSAGE.SHOW.RECEIVE, readUpdateByMessageShow);
 }
@@ -126,6 +144,7 @@ export default function* readSaga() {
   yield all([
     fork(watchReadUpdateRequest),
     fork(watchReadDestroyRequest),
+    fork(watchDmChatroomCreateReceive),
     fork(watchMessageThread),
     fork(watchChannelShowRequest),
     fork(watchMessageCreateRequest),
