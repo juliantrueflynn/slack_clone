@@ -1,7 +1,3 @@
-.FavoritesDrawer .Message:first-child .MessageHoverMenu {
-  top: -5px;
-}
-
 .FavoritesDrawer .Message__container {
   margin: 0;
   padding: 3px 10px 12px;
@@ -17,6 +13,24 @@
   text-align: center;
   color: #B2BEC3;
   margin: 30px 12px;
+}
+
+.FavoritesDrawer .MessageHoverMenu {
+  padding: 0;
+}
+
+.FavoritesDrawer .MenuItem__convo,
+.FavoritesDrawer .MenuItem__dropdown,
+.FavoritesDrawer .MenuItem__reaction {
+  display: none;
+}
+
+.FavoritesDrawer .MessageHoverMenu > .MenuItem {
+  border-left: 0;
+}
+
+.FavoritesDrawer .Message:first-child .MessageHoverMenu {
+  top: -5px;
 }
 
 @media screen and (max-width: 768px) {

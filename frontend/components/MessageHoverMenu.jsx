@@ -15,19 +15,14 @@ class MessageHoverMenu extends React.Component {
   }
 
   getMenuItems() {
-    const {
-      message,
-      filterMenuItems,
-      chatPathUrl,
-      toggleFavorite,
-    } = this.props;
+    const { message, chatPathUrl, toggleFavorite } = this.props;
 
     const { id: messageId, slug, favoriteId } = message;
     const isEntryType = message.entityType === 'entry';
     const favIcon = favoriteId ? 'star' : farStar;
     const favClassName = favoriteId ? 'solid' : 'empty';
 
-    let menuItems = [
+    return [
       {
         key: 'reaction',
         icon: <FontAwesomeIcon icon={['far', 'smile']} fixedWidth />,
@@ -58,12 +53,6 @@ class MessageHoverMenu extends React.Component {
         condition: isEntryType,
       }
     ];
-
-    if (filterMenuItems && filterMenuItems.length) {
-      menuItems = menuItems.filter(item => !filterMenuItems.includes(item.key));
-    }
-
-    return menuItems;
   }
 
   getDdMenuItems() {

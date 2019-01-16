@@ -3,8 +3,6 @@ import MessagesListContainer from './MessagesListContainer';
 import './FavoritesDrawer.css';
 
 const FavoritesDrawer = ({ messages }) => {
-  const filterMenuItems = ['dropdown', 'reaction', 'convo'];
-
   if (!messages.length) {
     return (
       <div className="FavoritesDrawer FavoritesDrawer--empty">
@@ -18,7 +16,6 @@ const FavoritesDrawer = ({ messages }) => {
       <MessagesListContainer
         messages={messages}
         role="listitem"
-        filterMenuItems={filterMenuItems}
         isThreadHidden
         isHoverable
       />
