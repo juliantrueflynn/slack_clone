@@ -1,0 +1,20 @@
+import React from 'react';
+import './styles.css';
+
+const AccordionItemBody = ({ isEmpty, emptyText, children }) => {
+  if (isEmpty) {
+    return (
+      <div className="AccordionItemBody AccordionItemBody__empty">
+        {emptyText.toString()}
+      </div>
+    );
+  }
+
+  return (
+    <div className="AccordionItemBody">
+      {children}
+    </div>
+  );
+};
+
+export default AccordionItemBody;

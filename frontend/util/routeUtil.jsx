@@ -8,9 +8,9 @@ import {
 } from 'react-router-dom';
 import PageHome from '../components/PageHome';
 import SessionForm from '../components/SessionForm';
-import WorkspaceContainer from '../components/WorkspaceContainer';
-import ChatPageSwitchContainer from '../components/ChatPageSwitchContainer';
-import DrawerSwitchContainer from '../components/DrawerSwitchContainer';
+import WorkspaceContainer from '../containers/WorkspaceContainer';
+import ChatPageSwitchContainer from '../containers/ChatPageSwitchContainer';
+import DrawerSwitchContainer from '../containers/DrawerSwitchContainer';
 
 export const routesConfig = [
   {

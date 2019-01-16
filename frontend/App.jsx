@@ -12,8 +12,8 @@ import {
   faStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { routesConfig, PageRoutes } from './util/routeUtil';
-import ActionCablesContainer from './components/ActionCablesContainer';
-import ModalControllerContainer from './components/ModalControllerContainer';
+import ActionCablesContainer from './containers/ActionCablesContainer';
+import ModalControllerContainer from './containers/ModalControllerContainer';
 import './App.css';
 
 library.add(
