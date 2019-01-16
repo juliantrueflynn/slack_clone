@@ -11,8 +11,12 @@ class AvatarUploader < CarrierWave::Uploader::Base
     "images/default/" + [version_name, "default.jpg"].compact.join('_')
   end
 
+  def extension_whitelist
+    %w(jpg jpeg gif png)
+  end
+
   version :banner do
-    process :resize_to_fill => [500, 250]
+    process :resize_to_fill => [500, 0]
   end
 
   version :thumb do
