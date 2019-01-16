@@ -60,7 +60,11 @@ const userReducer = (state = {}, action) => {
 
       return merge({}, state, nextState);
     }
-    case USER.UPDATE.RECEIVE:
+    case USER.UPDATE.RECEIVE: {
+      const { id, slug, ...rest } = action.user;
+      nextState = { [slug]: { ...rest } };
+      return merge({}, state, nextState);
+    }
     case USER.SHOW.RECEIVE: {
       const { id, slug, ...rest } = action.user;
       const joinedAt = dateUtil(rest.joinedAt).monthDayYear();
