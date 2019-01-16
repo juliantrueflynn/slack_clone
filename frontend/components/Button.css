@@ -14,12 +14,17 @@
   padding: 8px 10px;
   color: #636E72;
   font-weight: 700;
-  box-shadow: 0px 0px 1px 0px rgba(0,0,0,0);
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
   transition: all ease-in-out .2s;
 }
 
+.Btn__styled:focus {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
+}
+
 .Btn__styled:hover {
-  box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
 }
 
 .Btn__green {
@@ -28,14 +33,12 @@
   color: #FFF;
 }
 
-.Btn__white {
-  background-color: #FFF;
+.Btn__green:focus {
+  box-shadow: 0 0 0 3px rgba(0, 184, 148, 0.4);
 }
 
-.Btn__purple {
-  background-color: #6C5CE7;
-  border-color: #5846E4;
-  color: #FFF;
+.Btn__white {
+  background-color: #FFF;
 }
 
 .Btn__xs {
