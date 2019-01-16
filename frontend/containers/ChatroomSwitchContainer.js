@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import {
   getChatroomsMap,
-  getChatViewChannels,
   getMessagesMap,
   getAllThreadViewMessages,
   getDrawerPath,
+  getAllUnreadsViewChannels,
 } from '../reducers/selectors';
 import {
   updateDrawer,
@@ -37,8 +37,10 @@ const mapStateToProps = (state, { match: { params } }) => {
     drawerPath = '';
   }
 
+  const chatrooms = chatroomSlug === 'unreads' ? getAllUnreadsViewChannels(state) : [];
+
   return {
-    chatrooms: getChatViewChannels(state),
+    chatrooms,
     chatroomSlug,
     chatroom,
     currentUser: state.session.currentUser,

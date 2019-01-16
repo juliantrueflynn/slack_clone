@@ -224,36 +224,21 @@ export const getUnsubbedChannels = createSelector(
   [getChatroomsMap], chatroomsMap => values(chatroomsMap).filter(ch => !ch.isSub && !ch.hasDm)
 );
 
-const getAllUnreadsViewChannels = (chatroomsMap, unreadsMap, unreadChMsgs) => {
-  const unreadChannelsMap = values(chatroomsMap).reduce((acc, curr) => {
-    acc[curr.slug] = { ...curr, unreadMessages: [] };
-    return acc;
-  }, {});
+export const getAllUnreadsViewChannels = createSelector(
+  [getChatroomsMap, getAllUnreads, getAllUnreadsByChannel],
+  (chatroomsMap, unreadsMap, unreadChannelMessages) => {
+    const unreadChannelsMap = values(chatroomsMap).reduce((acc, curr) => {
+      acc[curr.slug] = { ...curr, unreadMessages: [] };
+      return acc;
+    }, {});
 
-  return values(unreadsMap)
-    .filter(unread => unread && unread.readableType === 'Chatroom' && unread.hasUnreads)
-    .map(unread => ({
-      ...unreadChannelsMap[unread.slug],
-      unreadMessages: unreadChMsgs[unread.slug] || [],
-      lastActive: unread.lastActive,
-    }));
-};
-
-export const getChatViewChannels = createSelector(
-  [getChatPath, getChatroomsMap, getAllUnreads, getAllUnreadsByChannel],
-  (chatroomSlug, chatroomsMap, unreadsMap, unreadChannelMessages) => {
-    if (chatroomSlug === 'unreads') {
-      return getAllUnreadsViewChannels(chatroomsMap, unreadsMap, unreadChannelMessages);
-    }
-
-    if (chatroomSlug === 'threads') {
-      return values(chatroomsMap).filter(ch => !ch.hasDm).reduce((acc, curr) => {
-        acc[curr.slug] = chatroomsMap[curr.slug];
-        return acc;
-      }, {});
-    }
-
-    return [];
+    return values(unreadsMap)
+      .filter(unread => unread && unread.readableType === 'Chatroom' && unread.hasUnreads)
+      .map(unread => ({
+        ...unreadChannelsMap[unread.slug],
+        unreadMessages: unreadChannelMessages[unread.slug] || [],
+        lastActive: unread.lastActive,
+      }));
   }
 );
 
