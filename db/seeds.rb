@@ -137,13 +137,14 @@ end
 
 def seed_favorite_create
   user = chatroom_with_entries.users.sample
-  message = chatroom_with_entries.entries_parents.sample
-  user.favorites.find_or_create_by!(message_id: message.chatroom_id)
+  message = chatroom_with_entries.entries_parents.sample if user
+  user.favorites.find_or_create_by!(message_id: message.id) if message
 end
 
 def seed_reaction_create
   user = chatroom_with_entries.users.sample
   message = chatroom_with_entries.messages.sample
+  return unless user
   emoji = REACTIONS.sample
   user.reactions.find_or_create_by!(emoji: emoji, message_id: message.id) do |reaction|
     reaction.skip_broadcast = true
