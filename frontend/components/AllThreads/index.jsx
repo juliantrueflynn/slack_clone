@@ -4,6 +4,7 @@ import { faComments } from '@fortawesome/free-regular-svg-icons';
 import EmptyDisplay from '../EmptyDisplay';
 import ScrollBar from '../ScrollBar';
 import AllThreadsItem from '../AllThreadsItem';
+import './styles.css';
 
 const AllThreads = ({ messages, isLoading, ...props }) => {
   if (isLoading) {

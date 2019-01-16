@@ -20,7 +20,7 @@ import {
 } from '../actions/uiActions';
 import { createChatroomSub } from '../actions/chatroomActions';
 import { clearAllUnread, fetchUnreads } from '../actions/readActions';
-import ChatPageSwitch from '../components/ChatPageSwitch';
+import ChatroomSwitch from '../components/ChatroomSwitch';
 
 const mapStateToProps = (state, { match: { params: { chatPath } } }) => {
   const chatroom = getChatroomsMap(state)[chatPath];
@@ -86,4 +86,4 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
   createMessageRequest: message => dispatch(createMessage.request(message)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChatPageSwitch);
+export default connect(mapStateToProps, mapDispatchToProps)(ChatroomSwitch);

@@ -7,7 +7,7 @@ import Channel from '../Channel';
 import { PageRoutes } from '../../util/routeUtil';
 import './styles.css';
 
-class ChatPageSwitch extends React.Component {
+class ChatroomSwitch extends React.Component {
   constructor(props) {
     super(props);
     this.state = { isInitLoadingDone: false };
@@ -103,17 +103,17 @@ class ChatPageSwitch extends React.Component {
       chatType = chatPath;
     }
 
-    const pageClassNames = classNames('ChatPageSwitch', {
-      [`ChatPageSwitch__${chatType}`]: chatType,
-      'ChatPageSwitch__channel--dm': chatroom && chatroom.hasDm,
-      'ChatPageSwitch__channel--public': chatroom && !chatroom.hasDm,
+    const pageClassNames = classNames('ChatroomSwitch', {
+      [`ChatroomSwitch__${chatType}`]: chatType,
+      'ChatroomSwitch__channel--dm': chatroom && chatroom.hasDm,
+      'ChatroomSwitch__channel--public': chatroom && !chatroom.hasDm,
     });
 
     return (
       <div className={pageClassNames}>
         <ChannelHeaderContainer />
-        <div className="ChatPageSwitch__row">
-          <div className="ChatPageSwitch__body">
+        <div className="ChatroomSwitch__row">
+          <div className="ChatroomSwitch__body">
             {chatPath === 'unreads' && (
               <AllUnreads
                 messagesMap={messages}
@@ -154,4 +154,4 @@ class ChatPageSwitch extends React.Component {
   }
 }
 
-export default ChatPageSwitch;
+export default ChatroomSwitch;

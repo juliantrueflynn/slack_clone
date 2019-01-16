@@ -9,7 +9,7 @@ import {
 import PublicViewHome from '../components/PublicViewHome';
 import SessionForm from '../components/SessionForm';
 import WorkspaceContainer from '../containers/WorkspaceContainer';
-import ChatPageSwitchContainer from '../containers/ChatPageSwitchContainer';
+import ChatroomSwitchContainer from '../containers/ChatroomSwitchContainer';
 import DrawerSwitchContainer from '../containers/DrawerSwitchContainer';
 
 export const routesConfig = [
@@ -37,7 +37,7 @@ export const routesConfig = [
     routes: [
       {
         path: '/:workspaceSlug/(messages)*/:chatPath',
-        component: ChatPageSwitchContainer,
+        component: ChatroomSwitchContainer,
         routes: [
           {
             path: '/:workspaceSlug/(threads|unreads|messages/[A-Za-z0-9]{24})/:drawerType/:drawerSlug?',

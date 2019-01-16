@@ -1,16 +1,16 @@
-.ChatPageSwitch {
+.ChatroomSwitch {
   display: flex;
   flex-direction: column;
   min-width: 1px;
   flex-grow: 1;
 }
 
-.ChatPageSwitch__row {
+.ChatroomSwitch__row {
   display: flex;
   flex-grow: 1;
 }
 
-.ChatPageSwitch .ChatPageSwitch__body {
+.ChatroomSwitch .ChatroomSwitch__body {
   overflow: hidden;
   display: flex;
   flex: 1;
@@ -18,7 +18,7 @@
   flex-grow: 1;
 }
 
-.ChatPageSwitch .ChatPageSwitch__body > div {
+.ChatroomSwitch .ChatroomSwitch__body > div {
   position: absolute;
   top: 0;
   left: 0;
@@ -27,11 +27,7 @@
   overflow: hidden;
 }
 
-.ChatPageSwitch__threads .ChatPageSwitch__body {
-  background-color: #F7FAFC;
-}
-
-.ChatPageSwitch__empty {
+.ChatroomSwitch__empty {
   padding-left: 27px;
   padding-right: 27px;
   display: flex;
@@ -39,7 +35,7 @@
   flex: 1;
 }
 
-.ChatPageSwitch:not(.ChatPageSwitch__channel) .ScrollBar__container {
+.ChatroomSwitch:not(.ChatroomSwitch__channel) .ScrollBar__container {
   position: absolute;
   top: 0;
   left: 0;
