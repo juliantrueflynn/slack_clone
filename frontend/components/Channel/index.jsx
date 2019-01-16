@@ -1,6 +1,6 @@
 import React from 'react';
 import ChannelSubscribe from '../ChannelSubscribe';
-import MessageForm from '../MessageForm';
+import MessageFormContainer from '../../containers/MessageFormContainer';
 import ChannelScrollBarContainer from '../../containers/ChannelScrollBarContainer';
 import withWindowResize from '../../hoc/withWindowResize';
 
@@ -65,12 +65,7 @@ class Channel extends React.Component {
   }
 
   render() {
-    const {
-      isLoading,
-      chatroom,
-      createChatroomSubRequest,
-      createMessageRequest,
-    } = this.props;
+    const { isLoading, chatroom, createChatroomSubRequest } = this.props;
     const { hasInitLoadDone, height } = this.state;
     const { isSub, hasDm, title } = chatroom;
 
@@ -85,11 +80,7 @@ class Channel extends React.Component {
           {hasLoaded && <ChannelScrollBarContainer style={style} />}
         </div>
         {isSub && (
-          <MessageForm
-            chatroomId={chatroom.id}
-            placeholder={formPlaceholder}
-            createMessageRequest={createMessageRequest}
-          />
+          <MessageFormContainer chatroomId={chatroom.id} placeholder={formPlaceholder} />
         )}
         {hasLoaded && !isSub && !hasDm && (
           <ChannelSubscribe

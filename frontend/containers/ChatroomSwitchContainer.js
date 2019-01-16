@@ -12,7 +12,7 @@ import {
   updateScrollLocation,
   updateChatroomPath,
 } from '../actions/uiActions';
-import { fetchMessages, fetchUserThreads, createMessage } from '../actions/messageActions';
+import { fetchMessages, fetchUserThreads } from '../actions/messageActions';
 import { createChatroomSub } from '../actions/chatroomActions';
 import { clearAllUnread, fetchUnreads } from '../actions/readActions';
 import ChatroomSwitch from '../components/ChatroomSwitch';
@@ -83,7 +83,6 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => {
     clearAllUnread: (chSlug, lastRead) => dispatch(clearAllUnread(chSlug, lastRead)),
     closeDrawer: () => dispatch(updateDrawer(null)),
     openModal: modalType => dispatch(updateModal(modalType, null)),
-    createMessageRequest: message => dispatch(createMessage.request(message)),
   };
 };
 

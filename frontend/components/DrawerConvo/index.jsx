@@ -1,11 +1,11 @@
 import React from 'react';
 import MessagesListContainer from '../../containers/MessagesListContainer';
-import MessageForm from '../MessageForm';
+import MessageFormContainer from '../../containers/MessageFormContainer';
 import ScrollBar from '../ScrollBar';
 import withScrollManager from '../../hoc/withScrollManager';
 import './styles.css';
 
-const DrawerConvo = ({ messages, createMessageRequest, ...props }) => {
+const DrawerConvo = ({ messages, ...props }) => {
   const parentMessage = messages[0];
 
   if (!parentMessage) {
@@ -21,11 +21,10 @@ const DrawerConvo = ({ messages, createMessageRequest, ...props }) => {
           isThreadHidden
           isHoverable
         />
-        <MessageForm
+        <MessageFormContainer
           chatroomId={parentMessage.chatroomId}
           parentMessageId={parentMessage.id}
           parentMessageSlug={parentMessage.slug}
-          createMessageRequest={createMessageRequest}
           hasSubmitButton
         />
       </ScrollBar>

@@ -3,14 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LinkWithDrawer from '../../util/linkUtil';
 import MessageThreadAuthors from '../MessageThreadAuthors';
 import MessagesListContainer from '../../containers/MessagesListContainer';
-import MessageForm from '../MessageForm';
+import MessageFormContainer from '../../containers/MessageFormContainer';
 import './styles.css';
 
 const AllThreadsItem = ({
   convo,
   usersMap,
   currentUserSlug,
-  createMessageRequest,
   workspaceSlug,
 }) => {
   const chatroomUrl = `/${workspaceSlug}/messages/${convo.chatroomSlug}`;
@@ -38,11 +37,10 @@ const AllThreadsItem = ({
             isHoverable
           />
         </div>
-        <MessageForm
+        <MessageFormContainer
           chatroomId={convo.chatroomId}
           parentMessageId={convo.id}
           parentMessageSlug={convo.slug}
-          createMessageRequest={createMessageRequest}
           shouldInitOnClick
         />
       </div>

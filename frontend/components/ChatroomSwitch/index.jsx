@@ -90,7 +90,6 @@ class ChatroomSwitch extends React.Component {
       isLoading,
       clearAllUnread,
       createChatroomSubRequest,
-      createMessageRequest,
       workspaceSlug,
     } = this.props;
     const { isInitLoadingDone } = this.state;
@@ -126,7 +125,6 @@ class ChatroomSwitch extends React.Component {
                 isLoading={isLoading}
                 currentUserSlug={currentUser.slug}
                 workspaceSlug={workspaceSlug}
-                createMessageRequest={createMessageRequest}
               />
             )}
             {chatroom && (
@@ -134,7 +132,6 @@ class ChatroomSwitch extends React.Component {
                 isLoading={isLoading}
                 chatroom={chatroom}
                 createChatroomSubRequest={createChatroomSubRequest}
-                createMessageRequest={createMessageRequest}
               />
             )}
           </div>

@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { updateDrawer, updateModal } from '../actions/uiActions';
 import { createChatroom } from '../actions/chatroomActions';
-import { createMessage } from '../actions/messageActions';
 import { destroyPin } from '../actions/pinActions';
 import {
   getChatPage,
@@ -66,7 +65,6 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => {
     openModal: (modalType, modalProps = {}) => dispatch(updateModal(modalType, modalProps)),
     createChatroomRequest: dmChat => dispatch(createChatroom.request(dmChat)),
     destroyPinRequest: id => dispatch(destroyPin.request(id)),
-    createMessageRequest: message => dispatch(createMessage.request(message)),
   };
 };
 
