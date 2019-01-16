@@ -49,12 +49,12 @@ class ChatroomSwitch extends React.Component {
   }
 
   fetchChatroomData() {
-    const { chatroom, updateChatPath, fetchChatPageData } = this.props;
+    const { chatroom, updateChatroomPath, fetchChatroomData } = this.props;
 
-    updateChatPath();
+    updateChatroomPath();
 
     if (!chatroom || (chatroom && chatroom.shouldFetch)) {
-      fetchChatPageData();
+      fetchChatroomData();
     }
   }
 
@@ -89,12 +89,9 @@ class ChatroomSwitch extends React.Component {
       currentUser,
       isLoading,
       clearAllUnread,
-      openModal,
-      updateScrollLocation,
-      fetchHistoryRequest,
       createChatroomSubRequest,
       createMessageRequest,
-      match: { url, params: { workspaceSlug } },
+      workspaceSlug,
     } = this.props;
     const { isInitLoadingDone } = this.state;
 
@@ -117,7 +114,7 @@ class ChatroomSwitch extends React.Component {
             {chatroomSlug === 'unreads' && (
               <AllUnreads
                 messagesMap={messages}
-                isLoading={isLoading.chatroom}
+                isLoading={isLoading}
                 chatrooms={chatrooms}
                 clearAllUnread={clearAllUnread}
               />
@@ -126,7 +123,7 @@ class ChatroomSwitch extends React.Component {
               <AllThreads
                 messages={messages}
                 usersMap={usersMap}
-                isLoading={isLoading.chatroom}
+                isLoading={isLoading}
                 currentUserSlug={currentUser.slug}
                 workspaceSlug={workspaceSlug}
                 createMessageRequest={createMessageRequest}
@@ -134,16 +131,10 @@ class ChatroomSwitch extends React.Component {
             )}
             {chatroom && (
               <Channel
-                messages={messages}
                 isLoading={isLoading}
                 chatroom={chatroom}
-                currentUserSlug={currentUser.slug}
-                openModal={openModal}
-                fetchHistoryRequest={fetchHistoryRequest}
                 createChatroomSubRequest={createChatroomSubRequest}
                 createMessageRequest={createMessageRequest}
-                updateScrollLocation={updateScrollLocation}
-                matchUrl={url}
               />
             )}
           </div>

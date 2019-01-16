@@ -5,33 +5,29 @@ import {
   getMessagesMap,
   getAllThreadViewMessages,
   getDrawerPath,
-  getChatroomViewMessages,
 } from '../reducers/selectors';
-import {
-  fetchMessages,
-  createMessage,
-  fetchUserThreads,
-} from '../actions/messageActions';
 import {
   updateDrawer,
   updateModal,
   updateScrollLocation,
-  updateChatPath,
+  updateChatroomPath,
 } from '../actions/uiActions';
+import { fetchMessages, fetchUserThreads, createMessage } from '../actions/messageActions';
 import { createChatroomSub } from '../actions/chatroomActions';
 import { clearAllUnread, fetchUnreads } from '../actions/readActions';
 import ChatroomSwitch from '../components/ChatroomSwitch';
 
-const mapStateToProps = (state, { match: { params: { chatroomSlug } } }) => {
+const mapStateToProps = (state, { match: { params } }) => {
+  const { workspaceSlug, chatroomSlug } = params;
   const chatroom = getChatroomsMap(state)[chatroomSlug];
   let messages = [];
 
   if (chatroomSlug === 'unreads') {
     messages = getMessagesMap(state);
-  } else if (chatroomSlug === 'threads') {
+  }
+
+  if (chatroomSlug === 'threads') {
     messages = getAllThreadViewMessages(state);
-  } else {
-    messages = getChatroomViewMessages(state);
   }
 
   const { drawerType } = state.ui.drawer;
@@ -42,48 +38,51 @@ const mapStateToProps = (state, { match: { params: { chatroomSlug } } }) => {
   }
 
   return {
-    usersMap: state.entities.members,
-    currentUser: state.session.currentUser,
-    isLoading: state.isLoading,
-    drawerPath,
+    chatrooms: getChatViewChannels(state),
     chatroomSlug,
     chatroom,
+    currentUser: state.session.currentUser,
+    drawerPath,
     messages,
+    isLoading: state.isLoading.chatroom,
     unreadsMap: state.entities.unreads,
-    chatrooms: getChatViewChannels(state),
+    usersMap: state.entities.members,
+    workspaceSlug,
   };
 };
 
-const mapDispatchToProps = (dispatch, { match: { params } }) => ({
-  updateChatPath: () => dispatch(updateChatPath(params.chatroomSlug)),
-  fetchChatPageData: () => {
-    let slug = params.workspaceSlug;
-    let fetchChatPage;
+const mapDispatchToProps = (dispatch, { match: { params } }) => {
+  const { workspaceSlug, chatroomSlug } = params;
 
-    if (params.chatroomSlug === 'unreads') {
-      fetchChatPage = fetchUnreads;
-    } else if (params.chatroomSlug === 'threads') {
-      fetchChatPage = fetchUserThreads;
-    } else {
-      slug = params.chatroomSlug;
-      fetchChatPage = fetchMessages;
-    }
+  return {
+    updateChatroomPath: () => dispatch(updateChatroomPath(chatroomSlug)),
+    fetchChatroomData: () => {
+      let slug = workspaceSlug;
+      let fetchChatroomData;
 
-    return dispatch(fetchChatPage.request(slug));
-  },
-  createChatroomSubRequest: chatroomId => (
-    dispatch(createChatroomSub.request({ chatroomSlug: params.chatroomSlug, chatroomId }))
-  ),
-  fetchHistoryRequest: lastId => (
-    dispatch(fetchMessages.request(params.chatroomSlug, lastId))
-  ),
-  updateScrollLocation: (chatroomSlug, scrollLoc) => (
-    dispatch(updateScrollLocation(chatroomSlug, scrollLoc))
-  ),
-  clearAllUnread: (chatroomSlug, lastRead) => dispatch(clearAllUnread(chatroomSlug, lastRead)),
-  closeDrawer: () => dispatch(updateDrawer(null)),
-  openModal: modalType => dispatch(updateModal(modalType, null)),
-  createMessageRequest: message => dispatch(createMessage.request(message)),
-});
+      if (chatroomSlug === 'unreads') {
+        fetchChatroomData = fetchUnreads;
+      } else if (chatroomSlug === 'threads') {
+        fetchChatroomData = fetchUserThreads;
+      } else {
+        slug = chatroomSlug;
+        fetchChatroomData = fetchMessages;
+      }
+
+      return dispatch(fetchChatroomData.request(slug));
+    },
+    createChatroomSubRequest: chatroomId => (
+      dispatch(createChatroomSub.request({ chatroomSlug, chatroomId }))
+    ),
+    fetchHistoryRequest: lastId => dispatch(fetchMessages.request(chatroomSlug, lastId)),
+    updateScrollLocation: (chSlug, scrollLoc) => (
+      dispatch(updateScrollLocation(chSlug, scrollLoc))
+    ),
+    clearAllUnread: (chSlug, lastRead) => dispatch(clearAllUnread(chSlug, lastRead)),
+    closeDrawer: () => dispatch(updateDrawer(null)),
+    openModal: modalType => dispatch(updateModal(modalType, null)),
+    createMessageRequest: message => dispatch(createMessage.request(message)),
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatroomSwitch);

@@ -1,7 +1,7 @@
 import React from 'react';
 import ChannelSubscribe from '../ChannelSubscribe';
 import MessageForm from '../MessageForm';
-import ChannelScrollBar from '../ChannelScrollBar';
+import ChannelScrollBarContainer from '../../containers/ChannelScrollBarContainer';
 import withWindowResize from '../../hoc/withWindowResize';
 
 class Channel extends React.Component {
@@ -28,9 +28,8 @@ class Channel extends React.Component {
     const { chatroom: { isSub: prevIsSub, slug: prevSlug } } = prevProps;
 
     const hasResized = winHeight !== prevProps.windowHeight || winWidth !== prevProps.windowWidth;
-    const hasLoaded = isLoading.chatroom !== prevProps.isLoading.chatroom;
 
-    if (hasLoaded || chatroom.isSub !== prevIsSub || hasResized) {
+    if (isLoading !== prevProps.isLoading || chatroom.isSub !== prevIsSub || hasResized) {
       this.updateSizeDimensions();
     }
 
@@ -69,19 +68,13 @@ class Channel extends React.Component {
     const {
       isLoading,
       chatroom,
-      messages,
-      currentUserSlug,
-      openModal,
-      matchUrl,
-      updateScrollLocation,
       createChatroomSubRequest,
-      fetchHistoryRequest,
       createMessageRequest,
     } = this.props;
     const { hasInitLoadDone, height } = this.state;
     const { isSub, hasDm, title } = chatroom;
 
-    const hasLoaded = !isLoading.chatroom && hasInitLoadDone;
+    const hasLoaded = !isLoading && hasInitLoadDone;
     const placeholder = hasDm ? `@${title}` : `#${title}`;
     const formPlaceholder = placeholder && `Message ${placeholder}`;
     const style = { height };
@@ -89,19 +82,7 @@ class Channel extends React.Component {
     return (
       <div className="Channel" ref={this.container}>
         <div className="Channel__body">
-          {hasLoaded && (
-            <ChannelScrollBar
-              chatroom={chatroom}
-              messages={messages}
-              openModal={openModal}
-              currentUserSlug={currentUserSlug}
-              isFetching={isLoading.messages}
-              matchUrl={matchUrl}
-              updateScrollLocation={updateScrollLocation}
-              fetchHistoryRequest={fetchHistoryRequest}
-              style={style}
-            />
-          )}
+          {hasLoaded && <ChannelScrollBarContainer style={style} />}
         </div>
         {isSub && (
           <MessageForm
@@ -113,7 +94,6 @@ class Channel extends React.Component {
         {hasLoaded && !isSub && !hasDm && (
           <ChannelSubscribe
             createChatroomSubRequest={createChatroomSubRequest}
-            matchUrl={matchUrl}
             chatroomId={chatroom.id}
             chatroomTitle={chatroom.title}
             createdAt={chatroom.createdAt}

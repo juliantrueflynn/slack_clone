@@ -8,7 +8,7 @@ import {
 } from 'redux-saga/effects';
 import {
   READ,
-  CHAT_PATH_UPDATE,
+  CHATROOM_PATH_UPDATE,
   CHATROOM,
   MESSAGE,
 } from '../actions/actionTypes';
@@ -121,7 +121,7 @@ function* watchReadDestroyRequest() {
 }
 
 function* watchChannelShowRequest() {
-  yield takeLatest(CHAT_PATH_UPDATE, readUpdateByChat);
+  yield takeLatest(CHATROOM_PATH_UPDATE, readUpdateByChat);
 }
 
 function* watchDmChatroomCreateReceive() {

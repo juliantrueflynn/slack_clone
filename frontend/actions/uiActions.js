@@ -10,7 +10,7 @@ import {
   MODAL_UPDATE,
   MESSAGE_EDITOR_TOGGLE,
   SCROLL_LOCATION_UPDATE,
-  CHAT_PATH_UPDATE,
+  CHATROOM_PATH_UPDATE,
 } from './actionTypes';
 import { actionCreator } from '../util/actionsUtil';
 
@@ -60,4 +60,6 @@ export const updateScrollLocation = (chatroomSlug, scrollLoc) => actionCreator(
   { chatroomSlug, scrollLoc }
 );
 
-export const updateChatPath = chatroomSlug => actionCreator(CHAT_PATH_UPDATE, { chatroomSlug });
+export const updateChatroomPath = chatroomSlug => (
+  actionCreator(CHATROOM_PATH_UPDATE, { chatroomSlug })
+);

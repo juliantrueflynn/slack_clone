@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import Button from '../Button';
 import { dateUtil } from '../../util/dateUtil';
 import './styles.css';
@@ -19,7 +20,7 @@ class ChannelSubscribe extends React.Component {
       chatroomTitle,
       createdAt,
       ownerName,
-      matchUrl,
+      match: { url },
     } = this.props;
 
     const chatTitle = ` #${chatroomTitle}`;
@@ -31,7 +32,7 @@ class ChannelSubscribe extends React.Component {
       dateCreated = 'today';
     }
 
-    const detailsUrl = `${matchUrl}/details`;
+    const detailsUrl = `${url}/details`;
 
     return (
       <div className="ChannelSubscribe">
@@ -55,4 +56,4 @@ class ChannelSubscribe extends React.Component {
   }
 }
 
-export default ChannelSubscribe;
+export default withRouter(ChannelSubscribe);

@@ -11,7 +11,6 @@ class ChannelScrollBar extends React.Component {
     super(props);
     this.blurbRef = React.createRef();
     this.state = { scrollerHeight: 0, hasHistory: false };
-    this.getFirstMessage = this.getFirstMessage.bind(this);
     this.handleFetchHistory = this.handleFetchHistory.bind(this);
     this.updateScrollerHeight = this.updateScrollerHeight.bind(this);
     this.updateScrollTo = this.updateScrollTo.bind(this);
@@ -71,20 +70,13 @@ class ChannelScrollBar extends React.Component {
     }
   }
 
-  getFirstMessage() {
-    const { messages } = this.props;
-    const firstMsg = messages.sort((a, b) => a.id - b.id)[0];
-
-    return firstMsg || {};
-  }
-
   updateScrollerHeight(scrollerHeight) {
     this.setState({ scrollerHeight });
   }
 
   updateHasHistory() {
-    const { chatroom: { earliestMessageSlug } } = this.props;
-    const { slug } = this.getFirstMessage();
+    const { chatroom: { earliestMessageSlug }, firstMessage } = this.props;
+    const { slug } = firstMessage;
     const hasHistory = slug && slug !== earliestMessageSlug;
 
     this.setState({ hasHistory });
@@ -101,12 +93,11 @@ class ChannelScrollBar extends React.Component {
   }
 
   handleFetchHistory() {
-    const { fetchHistoryRequest, isFetching } = this.props;
+    const { fetchHistoryRequest, isFetching, firstMessage } = this.props;
     const { hasHistory } = this.state;
 
     if (hasHistory && !isFetching) {
-      const { id } = this.getFirstMessage();
-      fetchHistoryRequest(id);
+      fetchHistoryRequest(firstMessage.id);
     }
   }
 
@@ -120,7 +111,7 @@ class ChannelScrollBar extends React.Component {
       containerRef,
       scrollAtTop,
       scrollAtBottom,
-      matchUrl,
+      match: { url },
       style,
     } = this.props;
     const { hasHistory } = this.state;
@@ -143,7 +134,7 @@ class ChannelScrollBar extends React.Component {
             blurbRef={this.blurbRef}
             currentUserSlug={currentUserSlug}
             openModal={openModal}
-            matchUrl={matchUrl}
+            matchUrl={url}
           />
           <div className="ChannelScrollBar__loader">
             <span className="ChannelScrollBar__loader-txt">Loading...</span>

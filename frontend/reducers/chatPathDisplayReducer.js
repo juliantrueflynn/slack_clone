@@ -1,5 +1,5 @@
 import {
-  CHAT_PATH_UPDATE,
+  CHATROOM_PATH_UPDATE,
   WORKSPACE_SUB,
   WORKSPACE,
   SIGN_OUT,
@@ -11,7 +11,7 @@ const displayChatPathReducer = (state = _defaultState, action) => {
   Object.freeze(state);
 
   switch (action.type) {
-    case CHAT_PATH_UPDATE:
+    case CHATROOM_PATH_UPDATE:
       return action.chatroomSlug;
     case WORKSPACE_SUB.CREATE.REQUEST:
     case WORKSPACE.SHOW.REQUEST:

@@ -6,7 +6,7 @@ import {
   select,
   takeLatest,
 } from 'redux-saga/effects';
-import { CHATROOM_SUB, MESSAGE, CHAT_PATH_UPDATE } from '../actions/actionTypes';
+import { CHATROOM_SUB, MESSAGE, CHATROOM_PATH_UPDATE } from '../actions/actionTypes';
 import { createChatroomSub, updateChatroomSub, destroyChatroomSub } from '../actions/chatroomActions';
 import { apiCreate, apiDestroy, apiUpdate } from '../util/apiUtil';
 import { selectEntities, getCurrentUser, selectEntityBySlug } from '../reducers/selectors';
@@ -88,7 +88,7 @@ function* watchChannelSubDestroyRequest() {
 }
 
 function* watchMessageIndexReceive() {
-  yield takeLatest(CHAT_PATH_UPDATE, dmChatSubUpdateByChatPath);
+  yield takeLatest(CHATROOM_PATH_UPDATE, dmChatSubUpdateByChatPath);
 }
 
 function* watchMessageCreateReceive() {
