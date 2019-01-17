@@ -1,8 +1,16 @@
-.DrawerConvo .ScrollBar .Message:first-child .Message__container {
+.DrawerConvo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.DrawerConvo .Message:first-child .Message__container {
   padding: 10px 18px;
 }
 
-.DrawerConvo .ScrollBar .Message:not(:first-child) .Message__container {
+.DrawerConvo .Message:not(:first-child) .Message__container {
   padding: 6px 18px;
 }
 
