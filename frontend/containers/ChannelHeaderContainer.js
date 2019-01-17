@@ -27,7 +27,7 @@ const mapStateToProps = (state, { match: { params: { chatroomSlug } } }) => {
 
   const chatroomsMap = getChatroomsMap(state);
   const chatroom = chatroomsMap[chatroomSlug];
-  const defaultChatroomSlug = state.ui.defaultChatroomSlug;
+  const { defaultChatroomSlug } = state.ui;
   const isNotDefaultChannel = chatroomSlug !== defaultChatroomSlug;
   const dmChannelUser = chatroom && chatroom.hasDm ? usersMap[chatroom.dmUserSlug] : {};
 
