@@ -43,7 +43,7 @@ class Message extends React.Component {
       pinsMap,
       currentUserSlug,
       chatroomTitle,
-      chatPathUrl,
+      chatroomUrl,
       toggleReaction,
       toggleEditor,
       toggleMessageEditor,
@@ -56,7 +56,7 @@ class Message extends React.Component {
     } = this.props;
     const { hasHover } = this.state;
     const { isEditing, pinId, favoriteId } = message;
-    const authorUrl = `${chatPathUrl}/team/${message.authorSlug}`;
+    const authorUrl = `${chatroomUrl}/team/${message.authorSlug}`;
 
     const msgClassNames = classNames('Message', {
       'Message--editing': message.isEditing,
@@ -79,19 +79,19 @@ class Message extends React.Component {
               pinsMap={pinsMap}
               isFavorited={favoriteId}
               usersMap={usersMap}
-              chatPathUrl={chatPathUrl}
+              chatroomUrl={chatroomUrl}
               currentUserSlug={currentUserSlug}
             />
           )}
           <MessageHoverMenu
             toggleReaction={toggleReaction}
-            chatPathUrl={chatPathUrl}
+            chatroomUrl={chatroomUrl}
             message={message}
             currentUserSlug={currentUserSlug}
             {...props}
           />
           <div className="Message__row">
-            <Avatar baseUrl={chatPathUrl} user={message} />
+            <Avatar baseUrl={chatroomUrl} user={message} />
             <div className="Message__body">
               <div className="Message__content">
                 <div className="Message__meta">
@@ -122,7 +122,7 @@ class Message extends React.Component {
                   />
                   <MessageThreadPreview
                     isThreadHidden={isThreadHidden}
-                    chatPathUrl={chatPathUrl}
+                    chatroomUrl={chatroomUrl}
                     usersMap={usersMap}
                     thread={message.thread}
                     lastMessageDate={message.lastMessageDate}

@@ -14,7 +14,7 @@ const getAllFavorites = state => state.entities.favorites;
 const getAllUnreadsByChannel = state => state.unreadsByChannel;
 export const getAllUnreads = state => state.entities.unreads;
 const getIsEditingMessage = state => state.ui.isEditingMessage;
-const getChatPath = state => state.ui.displayChatroomSlug;
+const getChatroomSlug = state => state.ui.displayChatroomSlug;
 export const getDrawer = state => state.ui.drawer;
 
 export const getSubbedWorkspaces = createSelector(
@@ -93,7 +93,7 @@ export const getChatroomsMap = createSelector(
 );
 
 export const getChatPage = createSelector(
-  [getChatroomsMap, getChatPath], (chatroomsMap, chatroomSlug) => chatroomsMap[chatroomSlug]
+  [getChatroomsMap, getChatroomSlug], (chatroomsMap, chatroomSlug) => chatroomsMap[chatroomSlug]
 );
 
 const groupByMessageEntityType = (arr) => {
@@ -118,7 +118,7 @@ const groupByMessageEntityType = (arr) => {
 };
 
 export const getChatroomViewMessages = createSelector(
-  [getMessagesMap, getAllChatrooms, getChatPath],
+  [getMessagesMap, getAllChatrooms, getChatroomSlug],
   (msgsMap, chatrooms, chatroomSlug) => {
     const chatroom = chatrooms[chatroomSlug];
     const roomMsgs = chatroom ? chatroom.messages : [];
@@ -203,7 +203,7 @@ const getLastEntry = (msgsMap, slugs) => {
 };
 
 export const getChatroomLastEntry = createSelector(
-  [getAllMessages, getChatPath, getAllChatrooms],
+  [getAllMessages, getChatroomSlug, getAllChatrooms],
   (msgsMap, chatroomSlug, chatroomsMap) => (
     getLastEntry(msgsMap, chatroomsMap[chatroomSlug] ? chatroomsMap[chatroomSlug].messages : [])
   )
@@ -284,7 +284,7 @@ export const getDrawerPath = ({ ui: { drawer: { drawerType, drawerSlug } } }) =>
   return '';
 };
 
-export const getChatPathUrl = ({ ui }) => {
+export const getChatroomSlugUrl = ({ ui }) => {
   const { displayWorkspaceSlug: workspaceSlug, displayChatroomSlug: chatroomSlug } = ui;
 
   if (chatroomSlug !== 'unreads' || chatroomSlug !== 'threads') {

@@ -65,7 +65,7 @@ function* updateDmChatSubBySlug(chatroomSlug) {
   }
 }
 
-function* dmChatSubUpdateByChatPath({ chatroomSlug }) {
+function* dmChatSubUpdateByChatroomSlug({ chatroomSlug }) {
   if (chatroomSlug !== 'unreads' || chatroomSlug !== 'threads') {
     yield updateDmChatSubBySlug(chatroomSlug);
   }
@@ -88,7 +88,7 @@ function* watchChannelSubDestroyRequest() {
 }
 
 function* watchMessageIndexReceive() {
-  yield takeLatest(CHATROOM_PATH_UPDATE, dmChatSubUpdateByChatPath);
+  yield takeLatest(CHATROOM_PATH_UPDATE, dmChatSubUpdateByChatroomSlug);
 }
 
 function* watchMessageCreateReceive() {

@@ -5,7 +5,7 @@ import { createPin, destroyPin } from '../actions/pinActions';
 import { toggleReaction } from '../actions/reactionActions';
 import { toggleFavorite } from '../actions/favoriteActions';
 import { toggleMessageEditor, updateDropdown } from '../actions/uiActions';
-import { getChatPathUrl } from '../reducers/selectors';
+import { getChatroomSlugUrl } from '../reducers/selectors';
 import MessagesList from '../components/MessagesList';
 
 const mapStateToProps = (state, { match: { params } }) => {
@@ -24,7 +24,7 @@ const mapStateToProps = (state, { match: { params } }) => {
     isDdOpen: !!ddType,
     isReactionDdOpen,
     chatroomTitle,
-    chatPathUrl: getChatPathUrl(state),
+    chatroomUrl: getChatroomSlugUrl(state),
   };
 };
 

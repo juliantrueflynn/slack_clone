@@ -10,14 +10,14 @@ const MessageThreadPreview = ({
   authors,
   lastMessageDate,
   usersMap,
-  chatPathUrl,
+  chatroomUrl,
   isThreadHidden,
 }) => {
   if (!thread || !thread.length || isThreadHidden) {
     return null;
   }
 
-  const convoUrl = `${chatPathUrl}/convo/${slug}`;
+  const convoUrl = `${chatroomUrl}/convo/${slug}`;
   const date = dateUtil(lastMessageDate);
   const month = date.monthName({ month: 'short' });
   const day = date.dayOrdinal();

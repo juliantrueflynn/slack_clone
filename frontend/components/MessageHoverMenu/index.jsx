@@ -15,7 +15,7 @@ class MessageHoverMenu extends React.Component {
   }
 
   getMenuItems() {
-    const { message, chatPathUrl, toggleFavorite } = this.props;
+    const { message, chatroomUrl, toggleFavorite } = this.props;
 
     const { id: messageId, slug, favoriteId } = message;
     const isEntryType = message.entityType === 'entry';
@@ -32,7 +32,7 @@ class MessageHoverMenu extends React.Component {
       },
       {
         key: 'convo',
-        link: `${chatPathUrl}/convo/${slug}`,
+        link: `${chatroomUrl}/convo/${slug}`,
         icon: <FontAwesomeIcon icon={['far', 'comment']} fixedWidth />,
         hasNoDrawer: true,
         condition: isEntryType && !message.parentMessageId,
