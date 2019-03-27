@@ -97,6 +97,6 @@ class Message < ApplicationRecord
 
   def destroy_replies
     return if parent_message_id?
-    children_of(id).delete_all
+    Message.children_of(id).delete_all
   end
 end
