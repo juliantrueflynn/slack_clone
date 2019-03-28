@@ -1,7 +1,5 @@
 require 'faker'
 
-REACTIONS = %w(joy smile heart_eyes innocent +1 point_up).freeze
-
 def random_num(min: 3, max: 9)
   [*min.to_i..max.to_i].sample
 end
@@ -63,6 +61,7 @@ def seed_workspace_sub_update
   workspace_sub = WorkspaceSub.where.not(user_id: 1).with_is_member.sample
   workspace_sub.update!(is_member: false, skip_broadcast: true)
   chatrooms = workspace_sub.user.chatrooms.with_workspace(workspace_sub.workspace)
+
   chatrooms.each { |chatroom| read_destroy(chatroom, workspace_sub.user.id) }
 end
 
@@ -93,7 +92,9 @@ end
 def seed_chatroom_create
   workspace = Workspace.all.sample
   user = workspace.users.sample
+
   return unless workspace
+
   chatroom = user.created_chatrooms.create!(
     title: Faker::Company.unique.buzzword,
     topic: (rand < 0.2 ? Faker::Company.bs : nil),
@@ -106,6 +107,8 @@ end
 def seed_parent_message_create
   chatroom = Chatroom.left_joins(:users).distinct.sample
   user = chatroom.users.sample
+
+  return unless user
 
   loop do
     message = user.messages.create!(
@@ -123,16 +126,15 @@ def seed_child_message_create
   user = chatroom.users.sample
   parent = chatroom.entries_parents.sample
 
-  loop do
-    reply = parent.children.create!(
-      body: message_body,
-      author_id: user.id,
-      chatroom_id: chatroom.id,
-      skip_broadcast: true
-    )
-    read_create_or_update(parent, user.id)
-    break if rand < 0.7
-  end
+  return unless user && parent
+
+  reply = parent.children.create!(
+    body: message_body,
+    author_id: user.id,
+    chatroom_id: chatroom.id,
+    skip_broadcast: true
+  )
+  read_create_or_update(parent, user.id)
 end
 
 def seed_favorite_create
@@ -144,8 +146,10 @@ end
 def seed_reaction_create
   user = chatroom_with_entries.users.sample
   message = chatroom_with_entries.messages.sample
+
   return unless user
-  emoji = REACTIONS.sample
+
+  emoji = %w(joy smile heart_eyes innocent +1 point_up).sample
   user.reactions.find_or_create_by!(emoji: emoji, message_id: message.id) do |reaction|
     reaction.skip_broadcast = true
   end
