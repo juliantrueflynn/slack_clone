@@ -44,7 +44,7 @@ cd slack_clone
 bundle install
 
 # install all node dependencies
-npm install --prefix frontend
+npm install
 
 # create PostgreSQL database, migrate schema, and seed database
 rails db:setup
