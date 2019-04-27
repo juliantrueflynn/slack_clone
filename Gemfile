@@ -12,15 +12,11 @@ gem 'rails', '~> 5.1.5'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
-# Use SCSS for stylesheets
-# gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
-# Use CoffeeScript for .coffee assets and views
-# gem 'coffee-rails', '~> 4.2'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 gem 'oj'
@@ -28,7 +24,6 @@ gem 'oj'
 gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
-# gem 'jquery-rails'
 gem 'rack-cors'
 gem 'carrierwave', '~> 1.0'
 gem 'mini_magick'
@@ -41,10 +36,10 @@ gem 'faker'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '~> 2.13'
-  gem 'selenium-webdriver'
-  gem 'bullet', group: 'development'
+  gem 'rspec-rails', '~> 3.8'
+  gem 'shoulda-matchers'
+  gem 'rails-controller-testing'
+  gem 'factory_bot_rails', '~> 4.0'
 end
 
 group :development do
@@ -58,6 +53,7 @@ group :development do
   gem 'pry-rails'
   gem 'annotate'
   gem 'foreman'
+  gem 'bullet'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
