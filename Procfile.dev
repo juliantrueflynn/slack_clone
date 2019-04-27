@@ -1,2 +1,2 @@
 web: npm run build:dev
-api: bundle exec rails s
+api: bundle exec rails s -p 3000
