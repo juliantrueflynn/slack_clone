@@ -50,7 +50,7 @@ npm install
 rails db:setup
 
 # start the server, then open your browser to: http://localhost:3000
-rails s
+rake start
 ```
 
 ## Technologies
