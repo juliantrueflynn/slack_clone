@@ -44,13 +44,10 @@ cd slack_clone
 bundle install
 
 # install all node dependencies
-npm install
+npm install --prefix frontend
 
-# run migrations to setup PostgreSQL database and tables
-rails db:migrate
-
-# generate mock data so app is not so empty (optional)
-rails db:seed
+# create PostgreSQL database, migrate schema, and seed database
+rails db:setup
 
 # start the server, then open your browser to: http://localhost:3000
 rails s
@@ -58,11 +55,11 @@ rails s
 
 ## Technologies
 
-- Rails 5.1.5
-- React 16.5.2
-- ElasticSearch 6.1.0
-- Action Cable 5.1.6
-- React Router 4.3.1
-- Redux 3.7.2
-- Redux Saga 0.16.2
-- Draft JS 0.10.5
+- Rails
+- React
+- ElasticSearch
+- Action Cable
+- React Router
+- Redux
+- Redux Saga
+- Draft JS
