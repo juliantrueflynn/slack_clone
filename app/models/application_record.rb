@@ -22,7 +22,7 @@ class ApplicationRecord < ActiveRecord::Base
 
   def broadcast(action, **params)
     return if skip_broadcast?
-    ActionDispatcherJob.perform_later(self, action, params)
+    ActionDispatcherJob.perform_now(self, action, params)
   end
 
   private

@@ -80,7 +80,7 @@ class Message < ApplicationRecord
   before_validation :generate_slug, unless: :slug?
   after_create_commit :broadcast_create
   after_update_commit :broadcast_update
-  after_destroy :destroy_replies, :broadcast_destroy
+  after_destroy_commit :destroy_replies, :broadcast_destroy
 
   private
 

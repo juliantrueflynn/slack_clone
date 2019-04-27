@@ -27,5 +27,5 @@ class Pin < ApplicationRecord
   private
 
   after_create_commit :broadcast_create
-  after_destroy :broadcast_destroy
+  after_destroy_commit :broadcast_destroy
 end
