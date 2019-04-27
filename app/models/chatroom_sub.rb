@@ -32,7 +32,7 @@ class ChatroomSub < ApplicationRecord
   end
 
   after_create_commit :broadcast_create_sub, :generate_sub_message_create
-  after_destroy :generate_sub_message_destroy, :broadcast_destroy
+  after_destroy_commit :generate_sub_message_destroy, :broadcast_destroy
 
   private
 

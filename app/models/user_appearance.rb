@@ -27,7 +27,7 @@ class UserAppearance < ApplicationRecord
   end
 
   after_create_commit :broadcast_dispatch_create
-  after_destroy :broadcast_dispatch_destroy
+  after_destroy_commit :broadcast_dispatch_destroy
 
   private
 
