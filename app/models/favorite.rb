@@ -18,11 +18,11 @@ class Favorite < ApplicationRecord
     message.slug
   end
 
-  before_validation :generate_workspace_id
+  before_validation :generate_workspace_id, on: :create
 
   private
 
   def generate_workspace_id
-    self.workspace ||= message.workspace
+    self.workspace ||= message.workspace unless message.nil?
   end
 end

@@ -77,7 +77,7 @@ class Message < ApplicationRecord
     author_slugs.uniq
   end
 
-  before_validation :generate_slug, unless: :slug?
+  before_validation :generate_slug, on: :create, unless: :slug?
   after_create_commit :broadcast_create
   after_update_commit :broadcast_update
   after_destroy_commit :destroy_replies, :broadcast_destroy

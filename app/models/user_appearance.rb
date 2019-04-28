@@ -1,4 +1,6 @@
 class UserAppearance < ApplicationRecord
+  STATUS = %w(online offline).freeze
+
   attr_accessor :skip_broadcast
 
   validates_presence_of :user_id, :workspace_id, :status

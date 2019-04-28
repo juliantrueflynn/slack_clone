@@ -24,15 +24,16 @@ class Read < ApplicationRecord
   end
 
   def associated_entity
+    return if readable_type.nil?
     entity_obj = readable_type.constantize
     entity_obj.find_by_id(readable_id)
   end
 
   def slug
-    associated_entity.slug if associated_entity
+    associated_entity.slug unless associated_entity.nil?
   end
 
-  before_validation :ensure_workspace_id
+  before_validation :ensure_workspace_id, on: :create
   before_validation :generate_accessed_at
 
   private

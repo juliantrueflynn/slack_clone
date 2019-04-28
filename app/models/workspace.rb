@@ -1,14 +1,13 @@
 class Workspace < ApplicationRecord
+  DEFAULT_CHAT_TITLES = %w(general random).freeze
+
   attr_accessor :skip_broadcast
   
   validates_presence_of :title, :slug, :owner_id
   validates_uniqueness_of :slug
-  validates_length_of :title,
-    within: 3..55,
-    too_long: 'title too long (max: 55 characters)',
-    too_short: 'title too short (min: 3 characters)'
+  validates_length_of :title, within: 3..55
   validates_exclusion_of :slug,
-    in: %w(api create-workspace assets signin signout),
+    in: %w(api assets signin signout),
     message: "Taken, sorry!"
 
   belongs_to :owner, class_name: 'User'
@@ -90,8 +89,6 @@ class Workspace < ApplicationRecord
   def generate_default_chatrooms
     chatrooms.create(default_chatrooms_params)
   end
-
-  DEFAULT_CHAT_TITLES = %w(general random)
 
   def default_chatrooms_params
     DEFAULT_CHAT_TITLES.reduce([]) do |memo, ch_title|
