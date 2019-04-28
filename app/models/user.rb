@@ -2,8 +2,8 @@ class User < ApplicationRecord
   attr_accessor :skip_broadcast
   attr_reader :password
 
-  validates_presence_of :username, :email, :password_digest, :session_token
-  validates_uniqueness_of :username, :email
+  validates_presence_of :username, :email, :password_digest, :session_token, :slug
+  validates_uniqueness_of :username, :email, :slug
   validates_length_of :password, minimum: 6, allow_nil: true
 
   mount_uploader :avatar, AvatarUploader
@@ -57,7 +57,7 @@ class User < ApplicationRecord
     user_appearance.destroy!
   end
 
-  before_validation :generate_slug, unless: :slug?
+  before_validation :generate_slug, on: :create, unless: :slug?
   after_initialize :ensure_session_token
   after_update_commit :user_broadcast_update
 

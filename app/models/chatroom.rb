@@ -1,16 +1,12 @@
 class Chatroom < ApplicationRecord
+  ENTRIES_CACHE_SIZE = 15.freeze
+
   attr_accessor :skip_broadcast, :member_id
   attr_reader :member_ids
 
-  before_validation :generate_slug, unless: :slug?
-
   validates_presence_of :slug, :workspace_id
   validates_uniqueness_of :slug
-  validates_length_of :title,
-    within: 2..55,
-    too_long: 'title too long (max: 55 characters)',
-    too_short: 'title too short (min: 3 characters)',
-    allow_nil: true
+  validates_length_of :title, within: 2..55, allow_nil: true
 
   belongs_to :workspace
   belongs_to :owner,
@@ -24,9 +20,7 @@ class Chatroom < ApplicationRecord
     -> { with_entry_type.with_parent },
     class_name: 'Message'
   has_many :pins, through: :messages
-  has_many :reads,
-    -> { chatrooms },
-    foreign_key: :readable_id
+  has_many :reads, -> { chatrooms }, foreign_key: :readable_id
   
   alias_attribute :subs, :chatroom_subs
   
@@ -76,8 +70,6 @@ class Chatroom < ApplicationRecord
     messages.empty? ? nil : messages.first.slug
   end
 
-  ENTRIES_CACHE_SIZE = 15
-
   def older_messages(last_message_id)
     return messages if entries_parents.length <= ENTRIES_CACHE_SIZE
     last_id = last_message_id || messages.last.id
@@ -85,6 +77,7 @@ class Chatroom < ApplicationRecord
     messages_between(last_id, entries).or(Message.children_of(entries))
   end
 
+  before_validation :generate_slug, on: :create, unless: :slug?
   after_create_commit :generate_dm_chatroom_subs, :generate_chatroom_subs
   after_update_commit :broadcast_update_chatroom
 
