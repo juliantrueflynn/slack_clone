@@ -1,23 +1,23 @@
 class UserAppearance < ApplicationRecord
+  include Concerns::Broadcastable
+
   STATUS = %w(online offline).freeze
 
   attr_accessor :skip_broadcast
 
   validates_presence_of :user_id, :workspace_id, :status
-  validates_inclusion_of :status, in: %w(online offline)
+  validates_inclusion_of :status, in: STATUS
   validates_uniqueness_of :workspace_id, scope: :user_id
 
   belongs_to :user
   belongs_to :workspace
 
-  def self.by_workspace(workspace_id)
-    joins(:workspace).where(workspaces: { id: workspace_id })
-      .or(joins(:workspace).where(workspaces: { slug: workspace_id }))
-      .take
+  def self.by_workspace(id_or_slug)
+    with_workspace_id(id_or_slug).or(with_workspace_slug(id_or_slug)).take
   end
 
   def broadcast_name
-    "appearance_#{workspace_slug}"
+    "appearance_#{workspace.slug}"
   end
 
   def workspace_slug
@@ -32,6 +32,14 @@ class UserAppearance < ApplicationRecord
   after_destroy_commit :broadcast_dispatch_destroy
 
   private
+
+  def self.with_workspace_id(id)
+    joins(:workspace).where(workspaces: { id: id })
+  end
+
+  def self.with_workspace_slug(slug)
+    joins(:workspace).where(workspaces: { slug: slug })
+  end
 
   def broadcast_dispatch_create
     broadcast_create locals: { status: 'online' }

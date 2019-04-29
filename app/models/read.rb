@@ -7,10 +7,6 @@ class Read < ApplicationRecord
   belongs_to :chatroom, foreign_key: :readable_id, optional: true
   belongs_to :message, foreign_key: :readable_id, optional: true
 
-  def self.with_type(readable_type)
-    where(readable_type: readable_type)
-  end
-
   def self.messages
     with_type('Message')
   end
@@ -37,6 +33,10 @@ class Read < ApplicationRecord
   before_validation :generate_accessed_at
 
   private
+
+  def self.with_type(readable_type)
+    where(readable_type: readable_type)
+  end
 
   def ensure_workspace_id
     self.workspace_id ||= associated_entity.workspace.id if associated_entity

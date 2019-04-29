@@ -1,4 +1,6 @@
 class Pin < ApplicationRecord
+  include Concerns::Broadcastable
+
   attr_accessor :skip_broadcast
 
   validates_presence_of :message_id, :user_id
@@ -21,7 +23,7 @@ class Pin < ApplicationRecord
   end
 
   def chatroom_slug
-    chatroom ? chatroom.slug : nil
+    chatroom&.slug
   end
 
   private

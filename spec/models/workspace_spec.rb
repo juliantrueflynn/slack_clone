@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Workspace, type: :model do
   it { is_expected.to validate_presence_of :title }
   it { is_expected.to validate_presence_of :slug }
+  it { is_expected.to validate_exclusion_of(:slug).in_array(Workspace::EXCLUDE_SLUGS) }
   it do
     is_expected.to validate_length_of(:title).is_at_least(3).is_at_most(55)
   end

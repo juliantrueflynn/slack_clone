@@ -1,12 +1,12 @@
  class WorkspaceSub < ApplicationRecord
+  include Concerns::Broadcastable
+
   attr_accessor :skip_broadcast
 
   validates_presence_of :workspace_id, scope: :user_id
 
   belongs_to :user
   belongs_to :workspace
-
-  scope :with_is_member, -> { where(is_member: true) }
 
   def self.by_user(user_id)
     find_by_user_id(user_id)
@@ -17,7 +17,7 @@
   end
 
   def workspace_slug
-    workspace ? workspace.slug : nil
+    workspace&.slug
   end
 
   after_create_commit :generate_new_workspace_sub_defaults, :broadcast_create

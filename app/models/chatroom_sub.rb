@@ -1,4 +1,6 @@
 class ChatroomSub < ApplicationRecord
+  include Concerns::Broadcastable
+
   attr_accessor :skip_broadcast
 
   validates_presence_of :chatroom_id, scope: :user_id
@@ -37,7 +39,8 @@ class ChatroomSub < ApplicationRecord
   private
 
   def broadcast_create_sub
-    broadcast_create if workspace.chatrooms.length > 2
+    default_chatroom_length = Workspace::DEFAULT_CHAT_TITLES.length
+    broadcast_create if workspace.chatrooms.length > default_chatroom_length
   end
 
   def generate_sub_message(entity_type)
