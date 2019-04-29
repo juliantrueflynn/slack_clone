@@ -18,9 +18,7 @@ class Message < ApplicationRecord
   belongs_to :parent_message, class_name: 'Message', optional: true
   has_many :children, class_name: 'Message', foreign_key: :parent_message_id
   has_many :pins
-  has_many :reads,
-    -> { where(readable_type: 'Message') },
-    foreign_key: :readable_id
+  has_many :reads, -> { messages }, foreign_key: :readable_id
   has_one :workspace, through: :chatroom
 
   scope :with_parent, -> { where(parent_message_id: nil) }
@@ -89,8 +87,7 @@ class Message < ApplicationRecord
   def body_plain_text
     return if body.nil?
     body_json = ActiveSupport::JSON.decode(body)
-    lines = body_json['blocks'].pluck('text')
-    lines.join(' ')
+    body_json['blocks'].pluck('text').join(' ')
   end
 
   def destroy_replies
