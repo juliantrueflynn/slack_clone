@@ -1,13 +1,6 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
-  def generate_slug
-    loop do
-      self.slug = SecureRandom.hex(12)
-      break unless self.class.where(slug: slug).exists?
-    end
-  end
-
   def broadcast_create(**params)
     broadcast 'create', params
   end

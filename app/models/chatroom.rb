@@ -1,4 +1,6 @@
 class Chatroom < ApplicationRecord
+  include Concerns::Sluggable
+
   ENTRIES_CACHE_SIZE = 15.freeze
 
   attr_accessor :skip_broadcast, :member_id
@@ -63,7 +65,7 @@ class Chatroom < ApplicationRecord
   end
 
   def owner_slug
-    owner ? owner.slug : nil
+    owner&.slug
   end
 
   def earliest_message_slug
@@ -77,7 +79,6 @@ class Chatroom < ApplicationRecord
     messages_between(last_id, entries).or(Message.children_of(entries))
   end
 
-  before_validation :generate_slug, on: :create, unless: :slug?
   after_create_commit :generate_dm_chatroom_subs, :generate_chatroom_subs
   after_update_commit :broadcast_update_chatroom
 
@@ -114,7 +115,8 @@ class Chatroom < ApplicationRecord
   end
 
   def entries_before_message_id(message_id)
-    entries_parents.with_id_before(message_id)
+    entries_parents
+      .with_id_before(message_id)
       .order(id: :desc)
       .limit(ENTRIES_CACHE_SIZE)
   end

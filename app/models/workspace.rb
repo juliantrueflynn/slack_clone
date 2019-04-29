@@ -1,14 +1,13 @@
 class Workspace < ApplicationRecord
   DEFAULT_CHAT_TITLES = %w(general random).freeze
+  EXCLUDE_SLUGS = %w(api assets signin signout).freeze
 
   attr_accessor :skip_broadcast
   
   validates_presence_of :title, :slug, :owner_id
   validates_uniqueness_of :slug
   validates_length_of :title, within: 3..55
-  validates_exclusion_of :slug,
-    in: %w(api assets signin signout),
-    message: "Taken, sorry!"
+  validates_exclusion_of :slug, in: EXCLUDE_SLUGS
 
   belongs_to :owner, class_name: 'User'
   has_many :workspace_subs
@@ -26,11 +25,12 @@ class Workspace < ApplicationRecord
   end
 
   def broadcast_name
-    "app"
+    'app'
   end
 
   def members
-    users.select('users.*', 'user_appearances.status AS status')
+    users
+      .select('users.*', 'user_appearances.status AS status')
       .left_joins(:appears)
       .order(:id)
   end
@@ -41,12 +41,16 @@ class Workspace < ApplicationRecord
   end
 
   def user_convos_reads(user_id)
-    messages.select('messages.*', 'reads.accessed_at AS last_read')
+    messages
+      .select('messages.*', 'reads.accessed_at AS last_read')
       .convo_parents_with_author_id(user_id)
   end
 
   def user_unreads(user_id)
-    messages.with_entry_type.with_parent.joins(chatroom: :reads)
+    messages
+      .with_entry_type
+      .with_parent
+      .joins(chatroom: :reads)
       .where(reads: { user_id: user_id })
       .where('messages.created_at > reads.accessed_at')
   end
@@ -62,13 +66,10 @@ class Workspace < ApplicationRecord
   end
 
   def default_chatrooms_reads_params
-    default_chatrooms.reduce([]) do |memo, chatroom|
+    chatrooms_amount = DEFAULT_CHAT_TITLES.length
+    chatrooms.first(chatrooms_amount).reduce([]) do |memo, chatroom|
       memo << { readable_id: chatroom.id, readable_type: 'Chatroom' }
     end
-  end
-
-  def default_chatrooms
-    chatrooms.first(2)
   end
 
   after_create_commit :create_defaults_broadcast
@@ -91,8 +92,8 @@ class Workspace < ApplicationRecord
   end
 
   def default_chatrooms_params
-    DEFAULT_CHAT_TITLES.reduce([]) do |memo, ch_title|
-      memo << { title: ch_title, owner_id: owner_id, skip_broadcast: true }
+    DEFAULT_CHAT_TITLES.reduce([]) do |memo, title|
+      memo << { title: title, owner_id: owner_id, skip_broadcast: true }
     end
   end
 end

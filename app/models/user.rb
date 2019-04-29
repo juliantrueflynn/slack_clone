@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include Concerns::Sluggable
+
   attr_accessor :skip_broadcast
   attr_reader :password
 
@@ -8,12 +10,8 @@ class User < ApplicationRecord
 
   mount_uploader :avatar, AvatarUploader
 
-  has_many :created_workspaces,
-    class_name: 'Workspace',
-    foreign_key: :owner_id
-  has_many :created_chatrooms,
-    class_name: 'Chatroom',
-    foreign_key: :owner_id
+  has_many :created_workspaces, class_name: 'Workspace', foreign_key: :owner_id
+  has_many :created_chatrooms, class_name: 'Chatroom', foreign_key: :owner_id
   has_many :workspace_subs
   has_many :workspaces, through: :workspace_subs
   has_many :chatroom_subs
@@ -32,7 +30,7 @@ class User < ApplicationRecord
   end
 
   def broadcast_name
-    "app"
+    'app'
   end
 
   def password=(password)
@@ -57,7 +55,6 @@ class User < ApplicationRecord
     user_appearance.destroy!
   end
 
-  before_validation :generate_slug, on: :create, unless: :slug?
   after_initialize :ensure_session_token
   after_update_commit :user_broadcast_update
 

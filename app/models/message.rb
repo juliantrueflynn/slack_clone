@@ -1,23 +1,21 @@
 class Message < ApplicationRecord
   searchkick
 
+  include Concerns::Sluggable
+
+  ENTITY_TYPES = %w(entry sub_create sub_destroy).freeze
+
   attr_accessor :skip_broadcast
 
   validates_presence_of :slug, :author_id, :entity_type, :chatroom_id
   validates_uniqueness_of :slug
-  validates_length_of :body,
-    maximum: 50000,
-    too_long: 'is too long (max: 50000 characters)'
-  validates_inclusion_of :entity_type, in: %w(entry sub_create sub_destroy)
+  validates_length_of :body, maximum: 50000
+  validates_inclusion_of :entity_type, in: ENTITY_TYPES
 
   belongs_to :chatroom
   belongs_to :author, class_name: 'User'
-  belongs_to :parent_message,
-    class_name: 'Message',
-    optional: true
-  has_many :children,
-    class_name: 'Message',
-    foreign_key: :parent_message_id
+  belongs_to :parent_message, class_name: 'Message', optional: true
+  has_many :children, class_name: 'Message', foreign_key: :parent_message_id
   has_many :pins
   has_many :reads,
     -> { where(readable_type: 'Message') },
@@ -68,7 +66,7 @@ class Message < ApplicationRecord
   end
 
   def parent_message_slug
-    parent_message ? parent_message.slug : nil
+    parent_message&.slug
   end
 
   def convo_authors_slugs
@@ -77,7 +75,6 @@ class Message < ApplicationRecord
     author_slugs.uniq
   end
 
-  before_validation :generate_slug, on: :create, unless: :slug?
   after_create_commit :broadcast_create
   after_update_commit :broadcast_update
   after_destroy_commit :destroy_replies, :broadcast_destroy
@@ -91,8 +88,8 @@ class Message < ApplicationRecord
   def body_plain_text
     return if body.nil?
     body_json = ActiveSupport::JSON.decode(body)
-    lines = body_json["blocks"].pluck('text')
-    lines.join(" ")
+    lines = body_json['blocks'].pluck('text')
+    lines.join(' ')
   end
 
   def destroy_replies

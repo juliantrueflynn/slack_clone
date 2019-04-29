@@ -58,7 +58,7 @@ def seed_workspace_sub_create
 end
 
 def seed_workspace_sub_update
-  workspace_sub = WorkspaceSub.where.not(user_id: 1).with_is_member.sample
+  workspace_sub = WorkspaceSub.where.not(user_id: 1).where(is_member: true).sample
   workspace_sub.update!(is_member: false, skip_broadcast: true)
   chatrooms = workspace_sub.user.chatrooms.with_workspace(workspace_sub.workspace)
 

@@ -4,6 +4,10 @@ RSpec.describe Message, type: :model do
   it { is_expected.to validate_presence_of :author_id }
   it { is_expected.to validate_presence_of :entity_type }
   it { is_expected.to validate_presence_of :chatroom_id }
+  it do
+    is_expected.to validate_inclusion_of(:entity_type)
+      .in_array(Message::ENTITY_TYPES)
+  end
 
   describe 'with #slug' do
     subject { FactoryBot.create(:message) }

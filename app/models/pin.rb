@@ -21,7 +21,7 @@ class Pin < ApplicationRecord
   end
 
   def chatroom_slug
-    chatroom ? chatroom.slug : nil
+    chatroom&.slug
   end
 
   private
