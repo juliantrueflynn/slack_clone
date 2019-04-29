@@ -1,4 +1,6 @@
 class Workspace < ApplicationRecord
+  include Concerns::Broadcastable
+
   DEFAULT_CHAT_TITLES = %w(general random).freeze
   EXCLUDE_SLUGS = %w(api assets signin signout).freeze
 

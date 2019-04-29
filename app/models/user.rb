@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   include Concerns::Sluggable
+  include Concerns::Broadcastable
 
   attr_accessor :skip_broadcast
   attr_reader :password

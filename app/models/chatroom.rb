@@ -1,5 +1,6 @@
 class Chatroom < ApplicationRecord
   include Concerns::Sluggable
+  include Concerns::Broadcastable
 
   ENTRIES_CACHE_SIZE = 15.freeze
 

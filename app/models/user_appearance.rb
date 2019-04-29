@@ -1,4 +1,6 @@
 class UserAppearance < ApplicationRecord
+  include Concerns::Broadcastable
+
   STATUS = %w(online offline).freeze
 
   attr_accessor :skip_broadcast

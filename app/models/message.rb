@@ -2,6 +2,7 @@ class Message < ApplicationRecord
   searchkick
 
   include Concerns::Sluggable
+  include Concerns::Broadcastable
 
   ENTITY_TYPES = %w(entry sub_create sub_destroy).freeze
 

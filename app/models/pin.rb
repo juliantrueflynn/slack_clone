@@ -1,4 +1,6 @@
 class Pin < ApplicationRecord
+  include Concerns::Broadcastable
+
   attr_accessor :skip_broadcast
 
   validates_presence_of :message_id, :user_id

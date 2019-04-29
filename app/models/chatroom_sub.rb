@@ -1,4 +1,6 @@
 class ChatroomSub < ApplicationRecord
+  include Concerns::Broadcastable
+
   attr_accessor :skip_broadcast
 
   validates_presence_of :chatroom_id, scope: :user_id
